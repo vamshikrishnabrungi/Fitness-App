@@ -1661,18 +1661,6 @@ async def upsert_athlete_profile(payload: AthleteProfileUpsert, current_user: di
     return response
 
 
-@api_router.post('/onboarding/complete')
-async def complete_onboarding(payload: OnboardingComplete, current_user: dict = Depends(get_current_user)):
-    profile = payload.profile
-    if profile.onboarding_completed_at is None:
-        profile.onboarding_completed_at = datetime.utcnow()
-    profile_doc = await _upsert_athlete_profile(current_user, profile)
-    response = {'athlete_profile': profile_doc, 'onboarding_completed': True}
-    if payload.generate_program:
-        response.update(await _create_training_program(current_user, profile_doc.get('raw_profile') or {}))
-    return response
-
-
 @api_router.get('/coach/schemas')
 async def coach_ai_schemas(current_user: dict = Depends(get_current_user)):
     return _schema_response()
@@ -1881,66 +1869,6 @@ async def list_library_running_plan_rules(rule_type: Optional[str] = None, curre
 
 
 # -------------------- WORKOUTS --------------------
-@api_router.post('/workouts/generate-weekly')
-async def generate_weekly_plan(payload: Optional[Dict[str, Any]] = Body(default=None), current_user: dict = Depends(get_current_user)):
-    profile = _profile_from_payload(payload, current_user)
-    profile_doc = await _upsert_athlete_profile(current_user, profile)
-    return await _create_training_program(current_user, profile_doc.get('raw_profile') or {})
-
-
-@api_router.get('/workouts')
-async def list_workouts(current_user: dict = Depends(get_current_user)):
-    docs = await db.workouts.find({'user_id': current_user['id']}).sort('created_at', -1).to_list(100)
-    return [clean_doc(d) for d in docs]
-
-
-@api_router.get('/workouts/today')
-async def workout_today(current_user: dict = Depends(get_current_user)):
-    today = datetime.utcnow().strftime('%Y-%m-%d')
-    workout = await db.workouts.find_one({'user_id': current_user['id'], 'scheduled_date': today})
-    if not workout:
-        # create a simple placeholder
-        workout = Workout(
-            user_id=current_user['id'],
-            title='Full Body Strength',
-            category='Strength',
-            duration=45,
-            difficulty='Intermediate',
-            equipment=current_user.get('profile', {}).get('equipment', []),
-            exercises=[WorkoutExercise(name='Squat', sets=4, reps='8-10')],
-            ai_generated=False,
-            scheduled_date=today
-        ).model_dump()
-        await db.workouts.insert_one(workout)
-    return clean_doc(workout)
-
-
-@api_router.post('/workouts/{workout_id}/complete')
-async def complete_workout(workout_id: str, current_user: dict = Depends(get_current_user)):
-    workout = await db.workouts.find_one({'id': workout_id, 'user_id': current_user['id']})
-    if not workout:
-        raise HTTPException(status_code=404, detail='Workout not found')
-    if workout.get('completed'):
-        return {'message': 'Workout completed', 'already_completed': True}
-
-    await db.workouts.update_one(
-        {'id': workout_id, 'user_id': current_user['id']},
-        {'$set': {'completed': True, 'completed_at': datetime.utcnow()}},
-    )
-    return {'message': 'Workout completed'}
-
-
-@api_router.post('/workouts/{workout_id}/feedback')
-async def feedback_workout(workout_id: str, feedback: WorkoutFeedback, current_user: dict = Depends(get_current_user)):
-    result = await db.workouts.update_one(
-        {'id': workout_id, 'user_id': current_user['id']},
-        {'$set': {'user_feedback': feedback.model_dump()}}
-    )
-    if result.modified_count == 0:
-        raise HTTPException(status_code=404, detail='Workout not found')
-    return {'message': 'Feedback saved'}
-
-
 @api_router.get('/training-load')
 async def training_load(current_user: dict = Depends(get_current_user)):
     return {
@@ -3120,169 +3048,10 @@ async def get_moods(current_user: dict = Depends(get_current_user)):
 
 
 # -------------------- TERRA / RUN SOCIAL --------------------
-@api_router.post('/terra/clubs')
-async def create_run_club(payload: RunClubCreate, current_user: dict = Depends(get_current_user)):
-    name = payload.name.strip()
-    city = payload.city.strip()
-    if not name:
-        raise HTTPException(status_code=400, detail='Club name is required')
-    if not city:
-        raise HTTPException(status_code=400, detail='City is required')
-
-    now = datetime.utcnow()
-    club = {
-        'id': str(uuid.uuid4()),
-        'name': name,
-        'city': city,
-        'description': payload.description.strip() if payload.description else None,
-        'is_public': payload.is_public,
-        'owner_id': current_user['id'],
-        'member_ids': [current_user['id']],
-        'created_at': now,
-        'updated_at': now,
-    }
-    await db.run_clubs.insert_one(club)
-    return await _run_club_response(club, current_user)
-
-
-@api_router.get('/terra/clubs/my')
-async def my_run_clubs(current_user: dict = Depends(get_current_user)):
-    docs = await db.run_clubs.find({'member_ids': current_user['id']}).sort('created_at', -1).to_list(100)
-    return [await _run_club_response(doc, current_user) for doc in docs]
-
-
-@api_router.get('/terra/clubs/city')
-async def city_run_clubs(city: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    city_name = (city or _user_city(current_user)).strip()
-    docs = await db.run_clubs.find({'city': {'$regex': f'^{city_name}$', '$options': 'i'}}).sort('created_at', -1).to_list(100)
-    return [await _run_club_response(doc, current_user) for doc in docs]
-
-
-@api_router.post('/terra/clubs/{club_id}/join')
-async def join_run_club(club_id: str, current_user: dict = Depends(get_current_user)):
-    club = await db.run_clubs.find_one({'id': club_id})
-    if not club:
-        raise HTTPException(status_code=404, detail='Run club not found')
-    if not club.get('is_public', True) and club.get('owner_id') != current_user['id']:
-        raise HTTPException(status_code=403, detail='This club is private')
-    member_ids = [str(member_id) for member_id in club.get('member_ids', [])]
-    if current_user['id'] not in member_ids:
-        member_ids.append(current_user['id'])
-        await db.run_clubs.update_one(
-            {'id': club_id},
-            {'$set': {'member_ids': member_ids, 'updated_at': datetime.utcnow()}},
-        )
-        club['member_ids'] = member_ids
-    return await _run_club_response(club, current_user)
-
-
-@api_router.get('/terra/clubs/{club_id}/members/leaderboard')
-async def run_club_member_leaderboard(club_id: str, period: str = 'week', current_user: dict = Depends(get_current_user)):
-    club = await db.run_clubs.find_one({'id': club_id})
-    if not club:
-        raise HTTPException(status_code=404, detail='Run club not found')
-    if current_user['id'] not in club.get('member_ids', []) and not club.get('is_public', True):
-        raise HTTPException(status_code=403, detail='Not a club member')
-    return await _run_club_member_leaderboard(club, period)
-
-
-@api_router.get('/terra/clubs/leaderboard/city')
-async def run_club_city_leaderboard(city: Optional[str] = None, period: str = 'week', current_user: dict = Depends(get_current_user)):
-    city_name = (city or _user_city(current_user)).strip()
-    docs = await db.run_clubs.find({'city': {'$regex': f'^{city_name}$', '$options': 'i'}}).to_list(200)
-    rows = [await _run_club_response(doc, current_user, period) for doc in docs]
-    rows.sort(key=lambda row: (row['total_distance'], row['active_members'], row['total_runs']), reverse=True)
-    return [{**row, 'rank': index + 1} for index, row in enumerate(rows)]
-
-
-@api_router.get('/terra/stats')
-async def terra_stats(current_user: dict = Depends(get_current_user)):
-    return await _terra_stats_bundle(current_user)
-
-
-@api_router.get('/runs/stats')
-async def run_stats(current_user: dict = Depends(get_current_user)):
-    bundle = await _terra_stats_bundle(current_user)
-    return {
-        'total_distance': bundle['total_distance'],
-        'average_pace': bundle['average_pace'],
-        'fatigue': bundle['fatigue'],
-        'consistency': bundle['consistency'],
-        'history': bundle['history'],
-    }
-
-
-@api_router.get('/terra/runs')
-async def terra_runs(current_user: dict = Depends(get_current_user)):
-    docs = await _terra_user_run_docs(current_user['id'])
-    return [_terra_run_response(doc) for doc in docs]
-
-
-@api_router.post('/terra/runs')
-async def create_terra_run(payload: TerraRunCreate, current_user: dict = Depends(get_current_user)):
-    path = _terra_normalize_path(payload.gps_path)
-    now = datetime.utcnow()
-    start_dt = _parse_iso_datetime(payload.start_time)
-    end_dt = _parse_iso_datetime(payload.end_time)
-
-    duration_seconds = 0
-    if start_dt and end_dt:
-        duration_seconds = max(1, int(round((end_dt - start_dt).total_seconds())))
-    elif path and len(path) > 1:
-        first_ts = _parse_iso_datetime(path[0].get('timestamp'))
-        last_ts = _parse_iso_datetime(path[-1].get('timestamp'))
-        if first_ts and last_ts and last_ts > first_ts:
-            duration_seconds = max(1, int(round((last_ts - first_ts).total_seconds())))
-
-    if duration_seconds <= 0 and start_dt and not end_dt:
-        duration_seconds = max(1, int(round((now - start_dt).total_seconds())))
-
-    distance_km = 0.0
-    for index in range(1, len(path)):
-        distance_km += _terra_haversine_km(path[index - 1], path[index])
-    distance_km = round(distance_km, 3)
-
-    if distance_km <= 0 and duration_seconds > 0:
-        distance_km = round(max(0.25, duration_seconds / 900.0), 3)
-
-    is_loop = False
-    if len(path) >= 4:
-        is_loop = _terra_haversine_km(path[0], path[-1]) <= 0.1
-
-    territory_captured = 0.0
-    if path:
-        latitudes = [point['latitude'] for point in path]
-        longitudes = [point['longitude'] for point in path]
-        lat_span = max(latitudes) - min(latitudes)
-        lon_span = max(longitudes) - min(longitudes)
-        width_km = lat_span * 111.0
-        avg_latitude = sum(latitudes) / len(latitudes)
-        height_km = lon_span * 111.0 * cos(radians(avg_latitude))
-        base_area = abs(width_km * height_km)
-        if is_loop and base_area > 0:
-            territory_captured = round(max(0.001, base_area * 0.35), 4)
-        else:
-            territory_captured = round(max(0.001 if distance_km > 0 else 0.0, distance_km * 0.01), 4)
-
-    run_doc = {
-        'id': str(uuid.uuid4()),
-        'user_id': current_user['id'],
-        'gps_path': path,
-        'start_time': payload.start_time,
-        'end_time': payload.end_time,
-        'date': (start_dt or end_dt or now).strftime('%Y-%m-%d'),
-        'distance': distance_km,
-        'distance_km': distance_km,
-        'duration': duration_seconds,
-        'duration_sec': duration_seconds,
-        'territory_captured': territory_captured,
-        'territory_km2': territory_captured,
-        'is_loop': is_loop,
-        'created_at': now,
-        'updated_at': now,
-    }
-    await db.terra_runs.insert_one(run_doc)
-    return _terra_run_response(run_doc)
+# NOTE: run-club CRUD, run submission with H3 territory, run stats, and
+# territory endpoints now live in backend.routers.{clubs,runs,territory}.
+# The handlers for reflections, feed, leaderboards, training plans, and the
+# vault stay below.
 
 
 @api_router.get('/terra/reflections/{run_id}')
@@ -3514,6 +3283,27 @@ async def terra_vault(current_user: dict = Depends(get_current_user)):
 @api_router.get('/')
 async def root():
     return {'status': 'ok'}
+
+
+# ---------------------------------------------------------------------------
+# Modular routers (new architecture). These supersede the legacy handlers
+# that were previously inline in server.py.
+# ---------------------------------------------------------------------------
+from backend.routers.workouts import router as _workouts_router
+from backend.routers.runs import router as _runs_router
+from backend.routers.clubs import router as _clubs_router
+from backend.routers.territory import router as _territory_router
+
+api_router.include_router(_workouts_router)
+api_router.include_router(_runs_router)
+api_router.include_router(_clubs_router)
+api_router.include_router(_territory_router)
+
+
+@app.on_event('startup')
+async def startup_territory_indexes() -> None:
+    from backend.territory.claim import ensure_indexes
+    await ensure_indexes(db)
 
 
 app.include_router(api_router)
