@@ -1,0 +1,7 @@
+-r requirements-runtime.txt
+
+pytest==9.0.2
+flake8==7.3.0
+mypy==1.19.0
+black==25.11.0
+isort==7.0.0
