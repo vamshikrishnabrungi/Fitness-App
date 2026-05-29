@@ -1,28 +1,38 @@
-"""Workout & program routes.
+"""Workout & program routes with non-blocking AI upgrade.
 
-These supersede the in-server.py rule-only generators with the AI-driven
-``backend.ai.workout_ai`` pipeline. Endpoint contracts are unchanged.
+The challenge: Claude Sonnet 4.5 takes 90-110 seconds to produce a full
+4-week program. The preview-cluster ingress has a ~100s read timeout, so
+serving the AI call on the request path is unreliable.
+
+Strategy:
+    1. Build the rules-engine fallback synchronously (fast, deterministic)
+       and persist it. The user gets an immediately-usable plan.
+    2. Spawn an asyncio background task that calls the AI; when it
+       finishes, the same program document is upgraded in place (workouts
+       replaced) and ``status`` flips ``generating`` -> ``active``.
+    3. The frontend can either ignore the AI upgrade (the fallback is real
+       work the user can do) or poll ``GET /api/workouts/program-status``.
 """
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
 from fastapi import APIRouter, Depends, HTTPException
 
 from backend.ai import workout_ai
 from backend.core.db import db
 from backend.core.security import deep_clean, get_current_user
-from backend.helpers import clean_doc
-from backend.models import OnboardingComplete, AthleteProfileUpsert
+from backend.models import OnboardingComplete
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
 # ---------------------------------------------------------------------------
-# Helpers
+# Profile + builder helpers
 # ---------------------------------------------------------------------------
 
 async def _user_profile(user: dict) -> Dict[str, Any]:
@@ -32,27 +42,60 @@ async def _user_profile(user: dict) -> Dict[str, Any]:
     return dict(user.get('profile') or {})
 
 
-async def _build_program_for(user: dict, profile: Dict[str, Any]) -> Dict[str, Any]:
-    plan: Dict[str, Any]
+async def _upgrade_program_with_ai(user_id: str, program_id: str, profile: Dict[str, Any]) -> None:
+    """Run Claude in the background and replace the persisted program."""
     try:
         plan = await workout_ai.generate_program(profile)
-        logger.info('AI program generated for user=%s title=%s weeks=%d', user['id'], plan['title'], len(plan['weeks']))
-    except Exception as exc:  # pragma: no cover - network / quota
-        logger.warning('AI program generation failed (%s); falling back to rules engine', exc)
-        plan = workout_ai.fallback_program(profile)
+    except Exception as exc:
+        logger.warning(
+            'AI program upgrade failed for user=%s program=%s err=%s', user_id, program_id, exc,
+        )
+        await db.training_programs.update_one(
+            {'id': program_id},
+            {'$set': {'status': 'active', 'ai_error': str(exc), 'updated_at': datetime.utcnow()}},
+        )
+        return
+    try:
+        await workout_ai.persist_program(
+            db, user_id, profile, plan, program_id=program_id, initial_status='active',
+        )
+        logger.info('AI upgrade persisted for user=%s program=%s title=%s', user_id, program_id, plan['title'])
+    except Exception as exc:  # pragma: no cover
+        logger.exception('Failed to persist AI upgrade for user=%s: %s', user_id, exc)
+        await db.training_programs.update_one(
+            {'id': program_id},
+            {'$set': {'status': 'active', 'ai_error': str(exc), 'updated_at': datetime.utcnow()}},
+        )
 
-    persisted = await workout_ai.persist_program(db, user['id'], profile, plan)
+
+async def _build_program_for(user: dict, profile: Dict[str, Any]) -> Dict[str, Any]:
+    """Persist a fallback plan synchronously and trigger an async AI upgrade."""
+    fallback_plan = workout_ai.fallback_program(profile)
+    persisted = await workout_ai.persist_program(
+        db, user['id'], profile, fallback_plan, initial_status='generating',
+    )
+
+    program_id = persisted['program']['id']
+    if workout_ai.llm_available():
+        # fire-and-forget: AI runs in the background and upgrades the program
+        asyncio.create_task(_upgrade_program_with_ai(user['id'], program_id, profile))
+
     return {
         'program': deep_clean(persisted['program']),
         'blocks': deep_clean(persisted['blocks']),
         'weekly_plan': [deep_clean(w) for w in persisted['workouts']],
-        'source': plan.get('source', 'ai'),
-        'duration_weeks': plan.get('duration_weeks'),
-        'assumptions': plan.get('assumptions', []),
-        'safety_notes': plan.get('safety_notes', []),
-        'nutrition_focus': plan.get('nutrition_focus'),
-        'recovery_focus': plan.get('recovery_focus', []),
+        'source': fallback_plan.get('source', 'rules_engine'),
+        'ai_status': 'generating' if workout_ai.llm_available() else 'disabled',
+        'duration_weeks': fallback_plan.get('duration_weeks'),
+        'assumptions': fallback_plan.get('assumptions', []),
+        'safety_notes': fallback_plan.get('safety_notes', []),
+        'nutrition_focus': fallback_plan.get('nutrition_focus'),
+        'recovery_focus': fallback_plan.get('recovery_focus', []),
     }
+
+
+def workout_ai_available() -> bool:
+    return workout_ai.llm_available()
 
 
 # ---------------------------------------------------------------------------
@@ -118,6 +161,31 @@ async def generate_weekly_program(current_user: dict = Depends(get_current_user)
     return await _build_program_for(current_user, profile)
 
 
+@router.get('/workouts/program-status')
+async def program_status(current_user: dict = Depends(get_current_user)):
+    """Latest active/generating program for the current user."""
+    program = await db.training_programs.find_one(
+        {'user_id': current_user['id'], 'status': {'$in': ['active', 'generating']}},
+        sort=[('updated_at', -1)],
+    )
+    if not program:
+        return {'has_program': False}
+    program = deep_clean(program)
+    return {
+        'has_program': True,
+        'program_id': program['id'],
+        'status': program.get('status', 'active'),
+        'source': program.get('source', 'rules_engine'),
+        'ai_status': 'ready' if program.get('source') == 'ai' else (
+            'generating' if program.get('status') == 'generating' else 'fallback'
+        ),
+        'title': program.get('title'),
+        'duration_weeks': program.get('duration_weeks'),
+        'ai_error': program.get('ai_error'),
+        'updated_at': program.get('updated_at'),
+    }
+
+
 @router.post('/onboarding/complete')
 async def onboarding_complete(payload: OnboardingComplete, current_user: dict = Depends(get_current_user)):
     # 1) save profile to user + athlete_profiles
@@ -146,7 +214,6 @@ async def onboarding_complete(payload: OnboardingComplete, current_user: dict = 
         },
         upsert=True,
     )
-    # 2) build program
     if not payload.generate_program:
         return {'status': 'profile_saved', 'program': None}
     return await _build_program_for(current_user, profile_doc)

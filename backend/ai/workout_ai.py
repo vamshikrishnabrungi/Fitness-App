@@ -453,17 +453,31 @@ def fallback_program(profile: Dict[str, Any]) -> Dict[str, Any]:
 # Materialise plan into DB documents
 # ---------------------------------------------------------------------------
 
-async def persist_program(db: Any, user_id: str, profile: Dict[str, Any], plan: Dict[str, Any]) -> Dict[str, Any]:
-    """Save program + blocks + per-session workout docs. Returns summary."""
+async def persist_program(
+    db: Any,
+    user_id: str,
+    profile: Dict[str, Any],
+    plan: Dict[str, Any],
+    *,
+    program_id: Optional[str] = None,
+    initial_status: str = 'active',
+) -> Dict[str, Any]:
+    """Save program + blocks + per-session workout docs.
+
+    If ``program_id`` is provided, the existing program is upgraded in place
+    (workouts replaced, status set to ``initial_status``). Otherwise a new
+    program is created and any prior active programs are archived.
+    """
     now = datetime.utcnow()
-    program_id = str(uuid.uuid4())
+    is_upgrade = bool(program_id)
+    program_id = program_id or str(uuid.uuid4())
     program_doc = {
         'id': program_id,
         'user_id': user_id,
         'title': plan['title'],
         'goal': plan['goal'],
         'sports': plan.get('sports') or [],
-        'status': 'active',
+        'status': initial_status,
         'source': plan.get('source', 'ai'),
         'model': AI_WORKOUT_MODEL if plan.get('source') == 'ai' else None,
         'duration_weeks': plan.get('duration_weeks', 4),
@@ -474,17 +488,34 @@ async def persist_program(db: Any, user_id: str, profile: Dict[str, Any], plan: 
         'safety_notes': plan.get('safety_notes') or [],
         'assumptions': plan.get('assumptions') or [],
         'profile_snapshot': profile,
-        'created_at': now,
         'updated_at': now,
     }
 
-    # archive previous active programs
-    await db.training_programs.update_many(
-        {'user_id': user_id, 'status': 'active'},
-        {'$set': {'status': 'archived', 'archived_at': now}},
-    )
-    await db.training_programs.insert_one(dict(program_doc))
+    if is_upgrade:
+        await db.training_programs.update_one(
+            {'id': program_id}, {'$set': program_doc}, upsert=True,
+        )
+        # blow away old blocks + future incomplete workouts for this program
+        await db.program_blocks.delete_many({'program_id': program_id})
+        await db.workouts.delete_many({
+            'program_id': program_id,
+            'completed': {'$ne': True},
+        })
+    else:
+        program_doc['created_at'] = now
+        await db.training_programs.update_many(
+            {'user_id': user_id, 'status': 'active'},
+            {'$set': {'status': 'archived', 'archived_at': now}},
+        )
+        await db.training_programs.insert_one(dict(program_doc))
+        today_str = now.strftime('%Y-%m-%d')
+        await db.workouts.delete_many({
+            'user_id': user_id,
+            'completed': {'$ne': True},
+            'scheduled_date': {'$gte': today_str},
+        })
 
+    workout_docs: List[Dict[str, Any]] = []
     blocks_out: List[Dict[str, Any]] = []
     for block in plan.get('blocks') or []:
         block_doc = {
@@ -500,16 +531,7 @@ async def persist_program(db: Any, user_id: str, profile: Dict[str, Any], plan: 
         await db.program_blocks.insert_one(dict(block_doc))
         blocks_out.append(block_doc)
 
-    # only delete pending future workouts (don't trash history)
-    today_str = now.strftime('%Y-%m-%d')
-    await db.workouts.delete_many({
-        'user_id': user_id,
-        'completed': {'$ne': True},
-        'scheduled_date': {'$gte': today_str},
-    })
-
-    workout_docs: List[Dict[str, Any]] = []
-    week_one_start = now  # schedule first session today
+    week_one_start = now
     for week in plan.get('weeks') or []:
         week_number = int(week.get('week_number') or 1)
         for index, w in enumerate(week.get('workouts') or []):

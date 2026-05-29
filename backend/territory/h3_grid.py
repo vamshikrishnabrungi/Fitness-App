@@ -98,8 +98,6 @@ def cells_for_path(path: Sequence[Dict[str, Any]], resolution: int = H3_RESOLUTI
                         seen[c] = None
             elif cell not in seen:
                 seen[cell] = None
-            if cell not in seen:
-                seen[cell] = None
             prev_cell = cell
 
     return list(seen.keys())
