@@ -129,6 +129,7 @@ Use the provided knowledge_context as the approved compact exercise/rule catalog
 - Generate the requested weeks inside the current macro-plan phase instead of inventing a new program direction.
 - Prefer allowed_primary_exercises.
 - Use allowed_variations only when level, equipment, injury context, and session purpose justify them.
+- GROUNDING: select each warmup / main_work / cooldown exercise from allowed_primary_exercises or allowed_variations BY its exact "id", and copy that id into the exercise "exercise_id" field. Only use an exercise that is not in the pool when it is clinically necessary (e.g. a protocol-specified movement that is absent); then set exercise_id to null and name it precisely. Do not invent ids.
 - Use progression_paths and recent history when available.
 - If knowledge_context.athlete_state exists, let its trends drive progression: progress load when average_rpe is low and completion_rate is high; hold or deload when progression_signal is hold_or_deload / reduce_volume_or_difficulty, average_rpe is high, or pain is rising; respect pain_trends in exercise selection. Use strength_trends per exercise: keep progressing lifts that are 'progressing', change the stimulus (variation, rep range, or tempo) for lifts that are 'plateau', and reduce load or regress lifts that are 'regressing'.
 - Use sport_teaching_context to understand the user's sport role, current skill level, teaching priorities, tactical focus, safe progressions, and level gates.
@@ -825,6 +826,9 @@ async def generate_ai_training_program(
                 "must_fit_session_duration": True,
                 "must_prefer_retrieved_knowledge_when_relevant": bool(knowledge_context),
                 "must_prioritize_allowed_primary_exercises": True,
+                "must_select_allowed_pool_exercises_by_id": bool(
+                    (knowledge_context or {}).get("allowed_primary_exercises")
+                ),
                 "variations_require_clear_session_justification": True,
                 "must_use_progression_paths_and_recent_history_when_available": True,
                 "must_use_sport_teaching_context_for_sport_users_when_available": bool(

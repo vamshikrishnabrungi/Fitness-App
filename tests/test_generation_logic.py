@@ -164,6 +164,25 @@ def test_merge_rejects_wrong_final_week():
 
 # --------------------------- athlete_state / continuation summarizers ---------------------------
 
+def test_program_grounding_rate():
+    workouts = [
+        {"session_plan": {"main_work": [
+            {"name": "A", "knowledge_ref": {"exercise_id": "pex_1"}},
+            {"name": "B", "knowledge_ref": {"exercise_id": "pex_2"}},
+            {"name": "C"},  # off-pool / ungrounded
+        ]}},
+        {"session_plan": {"main_work": [{"name": "D", "knowledge_ref": {"exercise_id": "pex_3"}}]}},
+    ]
+    g = server._program_grounding(workouts)
+    assert g["total_main_exercises"] == 4
+    assert g["grounded_main_exercises"] == 3
+    assert g["grounding_rate"] == 0.75
+
+
+def test_program_grounding_empty_is_none():
+    assert server._program_grounding([])["grounding_rate"] is None
+
+
 def test_summarize_athlete_state_none():
     assert server.summarize_athlete_state_for_ai(None) == {}
 

@@ -754,6 +754,31 @@ def _workout_section_exercises(session: Dict[str, Any]) -> List[WorkoutExercise]
     return exercises
 
 
+def _session_grounding_counts(session_doc: Dict[str, Any]) -> tuple[int, int]:
+    """Count main_work exercises resolved to a library exercise_id (grounded) vs total."""
+    total = grounded = 0
+    for item in (session_doc.get('main_work') or []):
+        total += 1
+        if (item.get('knowledge_ref') or {}).get('exercise_id'):
+            grounded += 1
+    return grounded, total
+
+
+def _program_grounding(workouts: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Fraction of main-work exercises that resolved to a real library exercise (grounded selection).
+    A high rate means the AI selected from the vetted pool, so cues/media/source_refs resolve."""
+    grounded = total = 0
+    for workout in workouts:
+        g, t = _session_grounding_counts(workout.get('session_plan') or {})
+        grounded += g
+        total += t
+    return {
+        'grounded_main_exercises': grounded,
+        'total_main_exercises': total,
+        'grounding_rate': round(grounded / total, 2) if total else None,
+    }
+
+
 def _next_scheduled_date_for_day(day_name: str, base: datetime, used_dates: set[str]) -> str:
     weekdays = {
         'monday': 0,
@@ -934,6 +959,12 @@ async def _create_ai_training_program(current_user: dict, profile: Dict[str, Any
         await db.workouts.insert_one(workout)
         workouts.append(clean_doc(workout))
 
+    grounding = _program_grounding(workouts)
+    await db.training_programs.update_one({'id': program['id']}, {'$set': {'generation.grounding': grounding}})
+    logger.info("Program grounding rate=%s (%s/%s main exercises) program=%s",
+                grounding['grounding_rate'], grounding['grounded_main_exercises'],
+                grounding['total_main_exercises'], program['id'])
+
     return {
         'program': clean_doc(program),
         'macro_plan': clean_doc(macro_plan),
@@ -1094,6 +1125,11 @@ async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any
         await db.workouts.insert_one(workout)
         workouts.append(clean_doc(workout))
 
+    grounding = _program_grounding(workouts)
+    logger.info("Next-block grounding rate=%s (%s/%s main exercises) program=%s",
+                grounding['grounding_rate'], grounding['grounded_main_exercises'],
+                grounding['total_main_exercises'], program['id'])
+
     # Advance the macro-plan block based on which phase covers the new week.
     next_block = macro_plan.get('current_block') or 1
     active_phase = None
@@ -1123,6 +1159,7 @@ async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any
             'source': generation['source'],
             'continuation': True,
             'from_week': current_week,
+            'grounding': grounding,
         },
     }
 
