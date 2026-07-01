@@ -92,6 +92,7 @@ from backend.models import (
     MoodEntry,
     InjuryLog,
     InjuryLogCreate,
+    BenchmarkCreate,
     StrainSummary,
     RecoverySummary,
     BiologySummary,
@@ -820,9 +821,17 @@ def _score_program_rubric(
     complete = sum(1 for ex in all_ex if (ex.get('sets') and ex.get('reps')) or ex.get('duration'))
     d_complete = pct(complete, len(all_ex))
     # 2. Loaded (rep-based) main-work anchors to RPE or load guidance (not a bare guessed number).
-    #    Pure holds (duration-based) are excluded — they don't need a load anchor.
+    #    Pure holds (duration-based) are excluded. With real baselines, expect %/1RM-referenced loads.
+    has_1rm = bool((kc.get('benchmarks') or {}).get('strength_1rm_kg'))
     loaded = [ex for ex in main_ex if ex.get('sets') and ex.get('reps')]
-    anchored = sum(1 for ex in loaded if ex.get('rpe') or ex.get('load_guidance'))
+
+    def _load_anchored(ex: Dict[str, Any]) -> bool:
+        lg = str(ex.get('load_guidance') or '').lower()
+        if has_1rm:
+            return bool(ex.get('rpe')) or any(t in lg for t in ('%', '1rm', 'rep max', 'rm '))
+        return bool(ex.get('rpe') or ex.get('load_guidance'))
+
+    anchored = sum(1 for ex in loaded if _load_anchored(ex))
     d_load = pct(anchored, len(loaded))
     # 3. Injury context -> injury_modifications present per session.
     if has_injury:
@@ -923,6 +932,9 @@ async def _create_ai_training_program(current_user: dict, profile: Dict[str, Any
     compact_knowledge_context['athlete_state'] = summarize_athlete_state_for_ai(
         await db.athlete_states.find_one({'user_id': user_id})
     )
+    benchmarks_summary = summarize_benchmarks_for_ai(await get_latest_benchmarks(user_id))
+    compact_knowledge_context['benchmarks'] = benchmarks_summary
+    knowledge_context['benchmarks'] = benchmarks_summary
     workout_ai_max_weeks = int(os.environ.get('WORKOUT_AI_MAX_WEEKS', '1') or 1)
     workout_ai_max_attempts = int(os.environ.get('WORKOUT_AI_MAX_ATTEMPTS', '2') or 2)
     workout_ai_strict_library = os.environ.get('WORKOUT_AI_STRICT_LIBRARY_MATCHES', 'false').lower() in {'1', 'true', 'yes', 'on'}
@@ -1144,6 +1156,9 @@ async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any
     compact_knowledge_context['athlete_state'] = summarize_athlete_state_for_ai(
         await db.athlete_states.find_one({'user_id': user_id})
     )
+    benchmarks_summary = summarize_benchmarks_for_ai(await get_latest_benchmarks(user_id))
+    compact_knowledge_context['benchmarks'] = benchmarks_summary
+    knowledge_context['benchmarks'] = benchmarks_summary
 
     workout_ai_max_attempts = int(os.environ.get('WORKOUT_AI_MAX_ATTEMPTS', '2') or 2)
     workout_ai_strict_library = os.environ.get('WORKOUT_AI_STRICT_LIBRARY_MATCHES', 'false').lower() in {'1', 'true', 'yes', 'on'}
@@ -2799,6 +2814,57 @@ def summarize_athlete_state_for_ai(state: Optional[Dict[str, Any]]) -> Dict[str,
     }
 
 
+def _estimate_1rm(weight_kg: Any, reps: Any) -> Optional[float]:
+    """Estimate a one-rep max from a submaximal set (Epley). Returns None for invalid input."""
+    try:
+        w = float(weight_kg)
+        r = int(reps)
+    except (TypeError, ValueError):
+        return None
+    if w <= 0 or r <= 0:
+        return None
+    if r == 1:
+        return round(w, 1)
+    return round(w * (1 + r / 30.0), 1)
+
+
+async def get_latest_benchmarks(current_user_id: str) -> Dict[str, Any]:
+    """Reduce a user's benchmark history to the most-recent value for each metric."""
+    docs = await db.user_benchmarks.find({'user_id': current_user_id}).sort('date', -1).to_list(50)
+    if not docs:
+        return {}
+    one_rm: Dict[str, float] = {}
+    for doc in docs:  # newest first — keep the first (latest) est_1rm per lift
+        for lift in doc.get('lifts') or []:
+            key = str(lift.get('exercise') or '').strip().lower()
+            if key and key not in one_rm and lift.get('est_1rm_kg') is not None:
+                one_rm[key] = lift['est_1rm_kg']
+
+    def latest(field: str, sub: Optional[str] = None):
+        for doc in docs:
+            value = (doc.get(field) or {}).get(sub) if sub else doc.get(field)
+            if value is not None:
+                return value
+        return None
+
+    return {
+        'strength_1rm_kg': one_rm,
+        'cmj_cm': latest('cmj_cm'),
+        'broad_jump_cm': latest('broad_jump_cm'),
+        'single_leg_hop_lsi_pct': latest('single_leg_hop', 'lsi_pct'),
+        'visa_p': latest('visa_p'),
+        'visa_a': latest('visa_a'),
+        'measured_on': docs[0].get('date'),
+    }
+
+
+def summarize_benchmarks_for_ai(benchmarks: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """Compact benchmarks for the generation prompt (drop empty metrics)."""
+    if not benchmarks:
+        return {}
+    return {k: v for k, v in benchmarks.items() if v not in (None, {}, [])}
+
+
 async def _create_level_assessment_for_user(current_user: dict) -> Dict[str, Any]:
     profile = current_user.get('profile') or {}
     profile_doc = await db.athlete_profiles.find_one({'user_id': current_user['id']})
@@ -2851,6 +2917,57 @@ async def feedback_workout(workout_id: str, feedback: WorkoutFeedback, current_u
         assessment = await _create_level_assessment_for_user(current_user)
         return {'message': 'Feedback saved', 'level_assessment': clean_doc(assessment)}
     return {'message': 'Feedback saved'}
+
+
+@api_router.post('/athlete/benchmarks')
+async def create_benchmark(payload: BenchmarkCreate, current_user: dict = Depends(get_current_user)):
+    """Log a baseline testing session (rep-max lifts, jumps, hop symmetry, tendon questionnaires).
+
+    Estimated 1RMs and limb-symmetry are computed server-side so generation can prescribe loads as a
+    % of real capacity and gate progression on objective criteria instead of guessing."""
+    now = datetime.utcnow()
+    date_str = payload.date or now.strftime('%Y-%m-%d')
+    lifts = [
+        {
+            'exercise': lift.exercise,
+            'weight_kg': lift.weight_kg,
+            'reps': lift.reps,
+            'est_1rm_kg': _estimate_1rm(lift.weight_kg, lift.reps),
+        }
+        for lift in payload.lifts
+    ]
+    lsi_pct = None
+    left, right = payload.single_leg_hop_left_cm, payload.single_leg_hop_right_cm
+    if left and right and max(left, right) > 0:
+        lsi_pct = round(100 * min(left, right) / max(left, right), 1)
+    doc = {
+        'id': str(uuid.uuid4()),
+        'user_id': current_user['id'],
+        'date': date_str,
+        'lifts': lifts,
+        'cmj_cm': payload.cmj_cm,
+        'broad_jump_cm': payload.broad_jump_cm,
+        'single_leg_hop': {'left_cm': left, 'right_cm': right, 'lsi_pct': lsi_pct},
+        'visa_p': payload.visa_p,
+        'visa_a': payload.visa_a,
+        'notes': payload.notes,
+        'created_at': now,
+    }
+    await db.user_benchmarks.insert_one(doc)
+    return {
+        'message': 'Benchmark saved',
+        'benchmark': clean_doc(doc),
+        'summary': summarize_benchmarks_for_ai(await get_latest_benchmarks(current_user['id'])),
+    }
+
+
+@api_router.get('/athlete/benchmarks')
+async def list_benchmarks(current_user: dict = Depends(get_current_user)):
+    history = await db.user_benchmarks.find({'user_id': current_user['id']}).sort('date', -1).to_list(50)
+    return {
+        'latest': summarize_benchmarks_for_ai(await get_latest_benchmarks(current_user['id'])),
+        'history': [clean_doc(doc) for doc in history],
+    }
 
 
 @api_router.get('/athlete/level-assessment')

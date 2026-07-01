@@ -34,6 +34,7 @@ COLLECTIONS: List[str] = [
     'exercise_progression_graph',
     'user_exercise_history',
     'user_level_assessments',
+    'user_benchmarks',
     'source_sections',
     'knowledge_extraction_runs',
     'training_principles',
@@ -203,6 +204,10 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
         {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
         {'keys': [('user_id', ASCENDING), ('status', ASCENDING)]},
         {'keys': [('current_level', ASCENDING), ('recommended_level', ASCENDING)]},
+    ],
+    'user_benchmarks': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},
     ],
     'source_sections': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},

@@ -227,6 +227,40 @@ def test_program_grounding_empty_is_none():
     assert server._program_grounding([])["grounding_rate"] is None
 
 
+def test_estimate_1rm_epley():
+    assert server._estimate_1rm(100, 1) == 100.0          # 1RM = the weight
+    assert server._estimate_1rm(90, 5) == 105.0           # Epley: 90*(1+5/30)
+    assert server._estimate_1rm(0, 5) is None
+    assert server._estimate_1rm("x", 5) is None
+
+
+def test_summarize_benchmarks_drops_empties():
+    b = {"strength_1rm_kg": {"back squat": 100}, "cmj_cm": 45, "visa_p": None, "broad_jump_cm": None}
+    s = server.summarize_benchmarks_for_ai(b)
+    assert s["cmj_cm"] == 45 and s["strength_1rm_kg"] == {"back squat": 100}
+    assert "visa_p" not in s and "broad_jump_cm" not in s
+    assert server.summarize_benchmarks_for_ai(None) == {}
+
+
+def test_rubric_load_anchoring_requires_percent_when_baseline_exists():
+    base = {
+        "adaptation": {"why_this_session": "strength work"},
+        "session_plan": {
+            "warmup": [{"name": "Prep", "duration": "5 min"}],
+            "main_work": [{"name": "Back Squat", "sets": 4, "reps": "5", "load_guidance": "~78% of 1RM (78kg)",
+                           "knowledge_ref": {"exercise_id": "ex_bs"}}],
+            "cooldown": [{"name": "Stretch", "duration": "5 min"}],
+        },
+    }
+    profile = {}
+    # With a 1RM baseline, a %-referenced load scores full; a vague "moderate weight" would not.
+    kc_with = {"benchmarks": {"strength_1rm_kg": {"back squat": 100}}}
+    assert server._score_program_rubric([base], profile, kc_with, {"grounding_rate": 1.0})["dimensions"]["load_anchoring"] == 100
+    vague = {**base, "session_plan": {**base["session_plan"],
+             "main_work": [{"name": "Back Squat", "sets": 4, "reps": "5", "load_guidance": "moderate weight"}]}}
+    assert server._score_program_rubric([vague], profile, kc_with, {"grounding_rate": 1.0})["dimensions"]["load_anchoring"] == 0
+
+
 def test_summarize_athlete_state_none():
     assert server.summarize_athlete_state_for_ai(None) == {}
 

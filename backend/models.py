@@ -2,7 +2,15 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 import uuid
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
+
+
+def _coerce_string_list(value):
+    if value in (None, ''):
+        return []
+    if isinstance(value, list):
+        return value
+    return [str(value)]
 
 
 class UserProfile(BaseModel):
@@ -14,7 +22,6 @@ class UserProfile(BaseModel):
     date_of_birth: Optional[str] = None
     height_cm: Optional[float] = None
     weight_kg: Optional[float] = None
-    body_fat_percent: Optional[float] = None
     country: Optional[str] = None
     city: Optional[str] = None
     state: Optional[str] = None
@@ -64,15 +71,15 @@ class UserProfile(BaseModel):
 
 class UserCreate(BaseModel):
     email: EmailStr
-    password: str
-    name: str
-    otp_code: str
+    password: str = Field(..., max_length=128)
+    name: str = Field(..., max_length=100)
+    otp_code: str = Field(..., max_length=10)
     profile: Optional[UserProfile] = None
 
 
 class UserLogin(BaseModel):
     email: EmailStr
-    password: str
+    password: str = Field(..., max_length=128)
 
 
 class OtpRequest(BaseModel):
@@ -108,6 +115,9 @@ class OnboardingComplete(BaseModel):
 
 class WorkoutExercise(BaseModel):
     name: str
+    exercise_id: Optional[str] = None
+    source_refs: List[Dict[str, Any]] = []
+    purpose: Optional[str] = None
     sets: Optional[int] = None
     reps: Optional[str] = None
     duration: Optional[str] = None
@@ -138,20 +148,37 @@ class WorkoutFeedback(BaseModel):
     completion_percentage: int
     difficulty_feedback: str
     energy_level: str
+    pain_score: Optional[int] = None
+    rpe: Optional[float] = None
     notes: Optional[str] = None
 
 
 class ProgramExercisePrescription(BaseModel):
     name: str
+    exercise_id: Optional[str] = None
+    purpose: Optional[str] = None
     category: Optional[str] = None
     sets: Optional[int] = None
     reps: Optional[str] = None
     duration: Optional[str] = None
     load_guidance: Optional[str] = None
+    rpe: Optional[str] = None
     rest: Optional[str] = None
     tempo: Optional[str] = None
     coaching_notes: List[str] = []
     substitutions: List[str] = []
+
+    @field_validator('sets', mode='before')
+    @classmethod
+    def coerce_sets(cls, value):
+        if value in (None, ''):
+            return None
+        return int(value)
+
+    @field_validator('coaching_notes', 'substitutions', mode='before')
+    @classmethod
+    def coerce_exercise_lists(cls, value):
+        return _coerce_string_list(value)
 
 
 class ProgramWorkoutPrescription(BaseModel):
@@ -161,10 +188,22 @@ class ProgramWorkoutPrescription(BaseModel):
     duration_min: int
     intensity: str
     adaptation_targets: List[str] = []
+    sport_transfer: List[str] = []
+    why_this_session: Optional[str] = None
     warmup: List[ProgramExercisePrescription] = []
     main_work: List[ProgramExercisePrescription] = []
     cooldown: List[ProgramExercisePrescription] = []
     injury_modifications: List[str] = []
+
+    @field_validator('duration_min', mode='before')
+    @classmethod
+    def coerce_duration_min(cls, value):
+        return int(value)
+
+    @field_validator('adaptation_targets', 'sport_transfer', 'injury_modifications', mode='before')
+    @classmethod
+    def coerce_workout_lists(cls, value):
+        return _coerce_string_list(value)
 
 
 class ProgramWeekPlan(BaseModel):
@@ -174,6 +213,11 @@ class ProgramWeekPlan(BaseModel):
     progression_rule: str
     deload_note: Optional[str] = None
 
+    @field_validator('week_number', mode='before')
+    @classmethod
+    def coerce_week_number(cls, value):
+        return int(value)
+
 
 class ProgramBlockPlan(BaseModel):
     name: str
@@ -181,18 +225,43 @@ class ProgramBlockPlan(BaseModel):
     end_week: int
     emphasis: List[str]
 
+    @field_validator('start_week', 'end_week', mode='before')
+    @classmethod
+    def coerce_week_bounds(cls, value):
+        return int(value)
+
 
 class ProgramGenerationOutput(BaseModel):
     title: str
     goal: str
     sports: List[str] = []
     duration_weeks: int
+    athlete_analysis: Dict[str, Any] = {}
     blocks: List[ProgramBlockPlan]
     weeks: List[ProgramWeekPlan]
     nutrition_focus: Optional[str] = None
     recovery_focus: List[str] = []
     safety_notes: List[str] = []
     assumptions: List[str] = []
+
+    @field_validator('duration_weeks', mode='before')
+    @classmethod
+    def coerce_duration_weeks(cls, value):
+        return int(value)
+
+    @field_validator('sports', 'recovery_focus', 'safety_notes', 'assumptions', mode='before')
+    @classmethod
+    def coerce_program_lists(cls, value):
+        return _coerce_string_list(value)
+
+    @field_validator('athlete_analysis', mode='before')
+    @classmethod
+    def coerce_athlete_analysis(cls, value):
+        if value in (None, ''):
+            return {}
+        if isinstance(value, dict):
+            return value
+        return {'summary': str(value)}
 
 
 class DailySnapshotTotals(BaseModel):
@@ -276,6 +345,9 @@ class MealCreate(BaseModel):
     carbs: Optional[float] = None
     fat: Optional[float] = None
     fiber: Optional[float] = None
+    foods_identified: List[str] = []
+    status: Optional[str] = None
+    ai_analyzed: bool = False
 
 
 class QuickLog(BaseModel):
@@ -464,3 +536,49 @@ class RunClubCreate(BaseModel):
     city: str
     description: Optional[str] = None
     is_public: bool = True
+
+
+class JobStatus(BaseModel):
+    job_id: str
+    user_id: str
+    status: str  # pending, processing, completed, failed
+    result_program_id: Optional[str] = None
+    error_message: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class RunClubMembership(BaseModel):
+    club_id: str
+    user_id: str
+    role: str = "member"  # owner, admin, member
+    status: str = "active"  # active, pending, removed
+    joined_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class BenchmarkLift(BaseModel):
+    exercise: str
+    weight_kg: Optional[float] = None
+    reps: Optional[int] = None
+
+
+class BenchmarkCreate(BaseModel):
+    date: Optional[str] = None
+    lifts: List[BenchmarkLift] = Field(default_factory=list)
+    cmj_cm: Optional[float] = None            # countermovement jump height
+    broad_jump_cm: Optional[float] = None
+    single_leg_hop_left_cm: Optional[float] = None
+    single_leg_hop_right_cm: Optional[float] = None
+    visa_p: Optional[int] = None              # patellar tendon questionnaire (0-100)
+    visa_a: Optional[int] = None              # achilles tendon questionnaire (0-100)
+    notes: Optional[str] = None
+
+
+class CoachSubscription(BaseModel):
+    id: str
+    coach_id: str
+    client_id: str
+    status: str = "active"  # active, cancelled, past_due
+    monthly_price: float = 0.0
+    currency: str = "USD"
+    started_at: datetime = Field(default_factory=datetime.utcnow)
+    ended_at: Optional[datetime] = None
