@@ -779,6 +779,112 @@ def _program_grounding(workouts: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def _score_program_rubric(
+    workouts: List[Dict[str, Any]],
+    profile: Dict[str, Any],
+    knowledge_context: Optional[Dict[str, Any]],
+    grounding: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Deterministic S&C quality rubric scored on every program before it ships (0-100 per
+    dimension + weighted overall). Cheap, consistent, no extra AI call. Flags low dimensions."""
+    kc = knowledge_context or {}
+    protocols = kc.get('training_protocols') or []
+    has_injury = bool((profile.get('pain_areas') or []) or (profile.get('current_injuries') or []))
+    phase = str(profile.get('season_phase') or '').lower()
+    needs_testing = has_injury or any(term in phase for term in ('re_entry', 'return', 'recondition', 'rehab', 'bridge'))
+
+    def sessions_of(section: str):
+        for w in workouts:
+            for ex in ((w.get('session_plan') or {}).get(section) or []):
+                yield ex
+
+    all_ex = [ex for s in ('warmup', 'main_work', 'cooldown') for ex in sessions_of(s)]
+    main_ex = list(sessions_of('main_work'))
+
+    # Full program text (rationale + prescriptions) for concept-level checks.
+    text_parts: List[str] = []
+    for w in workouts:
+        ad = w.get('adaptation') or {}
+        text_parts.append(str(ad.get('why_this_session') or ''))
+        text_parts.append(str(w.get('description') or ''))
+        text_parts.extend(str(x) for x in (ad.get('injury_modifications') or []))
+    for ex in all_ex:
+        text_parts.extend([str(ex.get('purpose') or ''), str(ex.get('load_guidance') or ''), str(ex.get('tempo') or '')])
+        text_parts.extend(str(n) for n in (ex.get('coaching_notes') or []))
+    program_text = " ".join(text_parts).lower()
+
+    def pct(num: int, den: int) -> int:
+        return round(100 * num / den) if den else 100
+
+    # 1. Every exercise has (sets & reps) or a duration — catches the "3 x None" defect.
+    complete = sum(1 for ex in all_ex if (ex.get('sets') and ex.get('reps')) or ex.get('duration'))
+    d_complete = pct(complete, len(all_ex))
+    # 2. Loaded (rep-based) main-work anchors to RPE or load guidance (not a bare guessed number).
+    #    Pure holds (duration-based) are excluded — they don't need a load anchor.
+    loaded = [ex for ex in main_ex if ex.get('sets') and ex.get('reps')]
+    anchored = sum(1 for ex in loaded if ex.get('rpe') or ex.get('load_guidance'))
+    d_load = pct(anchored, len(loaded))
+    # 3. Injury context -> injury_modifications present per session.
+    if has_injury:
+        with_mods = sum(1 for w in workouts if (w.get('adaptation') or {}).get('injury_modifications'))
+        d_injury = pct(with_mods, len(workouts))
+    else:
+        d_injury = 100
+    # 4. Rehab/return context -> objective monitoring/testing referenced somewhere.
+    if needs_testing:
+        terms = ('lsi', 'symmetry', 'visa', ' test', 'assess', 'monitor', 'pain', 'hop test', 'jump height', 'questionnaire')
+        d_monitor = 100 if any(t in program_text for t in terms) else 40
+    else:
+        d_monitor = 100
+    # 5. Grounding (from lever #3).
+    d_ground = round((grounding.get('grounding_rate') or 0) * 100)
+    # 6. Session structure: warmup + main + cooldown present.
+    struct_ok = sum(
+        1 for w in workouts
+        if (w.get('session_plan') or {}).get('warmup') and (w.get('session_plan') or {}).get('main_work')
+        and (w.get('session_plan') or {}).get('cooldown')
+    )
+    d_struct = pct(struct_ok, len(workouts))
+    # 7. Protocol adherence (concept-level): did the program follow the retrieved protocols' METHOD
+    #    (isometric/tempo/LSI/pain-free/etc.), not their exact exercise names — robust to correctly
+    #    avoiding contraindicated recommended exercises (e.g. jumps for an injured knee).
+    _CONCEPTS = {
+        "isometric", "tempo", "eccentric", "slow", "hold", "pain-free", "lsi", "symmetry",
+        "visa", "monitor", "rpe", "rir", "progression", "deload", "nordic", "landing",
+        "neutral", "brace", "range", "single-leg", "unilateral", "gate",
+    }
+    concept_terms: set = set()
+    for p in protocols:
+        source = " ".join([
+            *(str(r) for r in (p.get('key_rules') or [])),
+            *(str(s.get('prescription') or '') for s in (p.get('stages') or [])),
+            *(str(m) for m in (p.get('monitoring') or [])),
+        ]).lower()
+        concept_terms.update(term for term in _CONCEPTS if term in source)
+    if concept_terms:
+        hits = sum(1 for term in concept_terms if term in program_text)
+        d_proto = pct(hits, len(concept_terms))
+    else:
+        d_proto = 100
+
+    dims = {
+        'exercise_completeness': d_complete,
+        'load_anchoring': d_load,
+        'injury_safety': d_injury,
+        'monitoring_testing': d_monitor,
+        'grounding': d_ground,
+        'session_structure': d_struct,
+        'protocol_adherence': d_proto,
+    }
+    weights = {
+        'exercise_completeness': 0.20, 'load_anchoring': 0.15, 'injury_safety': 0.15,
+        'monitoring_testing': 0.10, 'grounding': 0.15, 'session_structure': 0.10, 'protocol_adherence': 0.15,
+    }
+    overall = round(sum(dims[k] * weights[k] for k in dims))
+    flags = [f"{k}={v}" for k, v in dims.items() if v < 70]
+    return {'overall': overall, 'dimensions': dims, 'flags': flags}
+
+
 def _next_scheduled_date_for_day(day_name: str, base: datetime, used_dates: set[str]) -> str:
     weekdays = {
         'monday': 0,
@@ -960,10 +1066,13 @@ async def _create_ai_training_program(current_user: dict, profile: Dict[str, Any
         workouts.append(clean_doc(workout))
 
     grounding = _program_grounding(workouts)
-    await db.training_programs.update_one({'id': program['id']}, {'$set': {'generation.grounding': grounding}})
-    logger.info("Program grounding rate=%s (%s/%s main exercises) program=%s",
-                grounding['grounding_rate'], grounding['grounded_main_exercises'],
-                grounding['total_main_exercises'], program['id'])
+    quality_report = _score_program_rubric(workouts, profile, knowledge_context, grounding)
+    await db.training_programs.update_one(
+        {'id': program['id']},
+        {'$set': {'generation.grounding': grounding, 'generation.quality_report': quality_report}},
+    )
+    logger.info("Program quality=%s grounding=%s flags=%s program=%s",
+                quality_report['overall'], grounding['grounding_rate'], quality_report['flags'], program['id'])
 
     return {
         'program': clean_doc(program),
@@ -1126,9 +1235,9 @@ async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any
         workouts.append(clean_doc(workout))
 
     grounding = _program_grounding(workouts)
-    logger.info("Next-block grounding rate=%s (%s/%s main exercises) program=%s",
-                grounding['grounding_rate'], grounding['grounded_main_exercises'],
-                grounding['total_main_exercises'], program['id'])
+    quality_report = _score_program_rubric(workouts, profile, knowledge_context, grounding)
+    logger.info("Next-block quality=%s grounding=%s flags=%s program=%s",
+                quality_report['overall'], grounding['grounding_rate'], quality_report['flags'], program['id'])
 
     # Advance the macro-plan block based on which phase covers the new week.
     next_block = macro_plan.get('current_block') or 1
@@ -1160,6 +1269,7 @@ async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any
             'continuation': True,
             'from_week': current_week,
             'grounding': grounding,
+            'quality_report': quality_report,
         },
     }
 

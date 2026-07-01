@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 from collections import Counter
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -589,6 +590,40 @@ def _session_duration_cap() -> int:
         return 150
 
 
+_DURATION_RE = re.compile(r"(\d+\s*(?:-\s*\d+)?\s*(?:seconds|second|secs|sec|minutes|minute|mins|min|s)\b)", re.IGNORECASE)
+
+_TIME_BASED_KEYWORDS = {
+    "hold", "isometric", " iso", "plank", "carry", "hang", "wall sit", "bridge", "dead hang",
+    "stretch", "breathing", "interval", "walk", "jog", "run ", "sprint", "shuffle", "crawl",
+    "balance", "pose", "farmer", "pallof", "bird dog", "side plank", "hollow",
+}
+
+
+def _extract_duration_text(exercise: Any) -> Optional[str]:
+    haystack = " ".join(filter(None, [
+        str(exercise.load_guidance or ""),
+        " ".join(str(note) for note in (exercise.coaching_notes or [])),
+        str(exercise.name or ""),
+        str(exercise.tempo or ""),
+    ]))
+    match = _DURATION_RE.search(haystack)
+    return match.group(1).strip() if match else None
+
+
+def _looks_time_based(name: Any, category: Any) -> bool:
+    n = f" {str(name or '').lower()} "
+    if any(kw in n for kw in _TIME_BASED_KEYWORDS):
+        return True
+    return str(category or "").lower() in {"conditioning", "mobility", "recovery"}
+
+
+def _default_duration(name: Any, category: Any) -> str:
+    n = str(name or "").lower()
+    if any(k in n for k in ("interval", "walk", "jog", "run", "sprint", "shuffle")) or str(category or "").lower() == "conditioning":
+        return "1-2 min"
+    return "30-45 sec"
+
+
 def validate_program_quality(
     program: ProgramGenerationOutput,
     profile: Dict[str, Any],
@@ -717,6 +752,18 @@ def validate_program_quality(
                         exercise.rest = "60-90 sec"
                     if section_name == "main_work" and not exercise.load_guidance and exercise.sets:
                         exercise.load_guidance = "Use controlled reps in a pain-free range at the target session intensity."
+                    # Repair time-based/hold/interval exercises that specify neither reps nor duration
+                    # (the "3 x None" defect) by recovering a hold time from the text or a sane default.
+                    if can_repair and not exercise.reps and not exercise.duration:
+                        recovered = _extract_duration_text(exercise)
+                        if recovered:
+                            exercise.duration = recovered
+                            repairs.append("exercise_duration")
+                        elif _looks_time_based(exercise.name, workout.category):
+                            exercise.duration = _default_duration(exercise.name, workout.category)
+                            repairs.append("exercise_duration_default")
+                        else:
+                            soft_issues.append(f"{workout.title}: '{exercise.name}' has neither reps nor duration")
                     # Repair a missing exercise purpose with a specific-enough default before validating.
                     if can_repair and not str(exercise.purpose or "").strip():
                         section_label = {"warmup": "warm-up", "main_work": "main-set", "cooldown": "cooldown"}.get(section_name, section_name)

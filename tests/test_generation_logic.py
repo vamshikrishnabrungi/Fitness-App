@@ -8,7 +8,7 @@ from __future__ import annotations
 import pytest
 
 import backend.server as server
-from backend.ai_workout_service import validate_program_quality
+from backend.ai_workout_service import validate_program_quality, _extract_duration_text, _looks_time_based
 from backend.knowledge_retrieval import _compact_protocol, _merge_dedup_interleave, _semantic_hard_filter
 from backend.macro_plan_service import _merge_tuned_phases
 from backend.seed_training_protocols import PROTOCOLS
@@ -106,6 +106,50 @@ def test_tiered_autorepairs_missing_defaults(monkeypatch):
 
 
 # --------------------------- validator: strict / off ---------------------------
+
+def test_validator_repairs_time_based_exercise_duration(monkeypatch):
+    monkeypatch.setenv("WORKOUT_AI_VALIDATION_MODE", "tiered")
+    plank = ProgramExercisePrescription(name="RKC Plank", purpose="Build trunk stiffness for court contact", sets=3)
+    assert not plank.reps and not plank.duration
+    w1 = _workout(day="Monday")
+    w1.main_work.append(plank)
+    validate_program_quality(_program([w1, _workout(title="Upper", day="Thursday")]), PROFILE)
+    assert plank.duration  # "3 x None" defect repaired with a hold time
+
+
+def test_extract_duration_and_time_based_detection():
+    ex = ProgramExercisePrescription(name="Plank", purpose="trunk stability", load_guidance="hold for 30-45 sec, brace hard")
+    assert _extract_duration_text(ex) is not None
+    assert _looks_time_based("RKC Plank", "Strength") is True
+    assert _looks_time_based("Barbell Bench Press", "Strength") is False
+
+
+def test_score_program_rubric():
+    workouts = [{
+        "adaptation": {"why_this_session": "assess pain and knee LSI baseline", "injury_modifications": ["pain-free range"]},
+        "description": "monitor 24h knee response",
+        "session_plan": {
+            "warmup": [{"name": "Leg Swings", "duration": "30 sec"}],
+            "main_work": [
+                {"name": "Spanish Squat", "sets": 5, "duration": "45 sec",
+                 "purpose": "isometric hold, slow tempo tendon loading", "knowledge_ref": {"exercise_id": "ex_spanish"}},
+                {"name": "Box Squat", "sets": 3, "reps": "6", "rpe": "RPE 7", "knowledge_ref": {"exercise_id": "ex_box"}},
+            ],
+            "cooldown": [{"name": "Calf Stretch", "duration": "30 sec"}],
+        },
+    }]
+    profile = {"pain_areas": ["knee"], "season_phase": "re_entry"}
+    kc = {"training_protocols": [{"key_rules": ["Use isometric holds with slow tempo"],
+                                  "recommended_exercises": ["Spanish Squat"]}]}
+    r = server._score_program_rubric(workouts, profile, kc, {"grounding_rate": 1.0})
+    assert 0 <= r["overall"] <= 100
+    d = r["dimensions"]
+    assert d["grounding"] == 100
+    assert d["protocol_adherence"] == 100      # program followed the protocol's method (isometric/tempo)
+    assert d["monitoring_testing"] == 100      # LSI / monitor referenced
+    assert d["exercise_completeness"] == 100   # all have reps or duration
+    assert d["load_anchoring"] == 100          # only Box Squat is rep-based; it has RPE
+
 
 def test_strict_blocks_weak_why(monkeypatch):
     monkeypatch.setenv("WORKOUT_AI_VALIDATION_MODE", "strict")
