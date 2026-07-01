@@ -161,7 +161,7 @@ class FakeOpenAIClient:
 def make_client(monkeypatch, seed: dict[str, list[dict]] | None = None, ai_responses: list[str] | None = None):
     fake_db = FakeDB(seed)
     monkeypatch.setattr(server, 'db', fake_db)
-    monkeypatch.setattr(server, 'openai_client', FakeOpenAIClient(ai_responses or []))
+    monkeypatch.setattr(server, 'openai_client', FakeOpenAIClient(ai_responses or []), raising=False)
     server.app.dependency_overrides[server.get_current_user] = lambda: {
         'id': 'user-1',
         'email': 'athlete@example.com',
@@ -309,7 +309,8 @@ def test_guided_templates_programs_and_calendar_contract_uses_builtin_definition
     assert start_payload['current_day'] == 1
     assert start_payload['is_active'] is True
 
-    calendar_response = client.get('/api/journal/calendar?year=2026&month=3')
+    _gy, _gm, _gd = guided['date'].split('-')
+    calendar_response = client.get(f'/api/journal/calendar?year={_gy}&month={int(_gm)}')
     assert calendar_response.status_code == 200
     calendar = calendar_response.json()
     assert isinstance(calendar, dict)

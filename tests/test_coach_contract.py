@@ -104,6 +104,17 @@ class InMemoryCollection:
         self.docs.append(copy.deepcopy(doc))
         return SimpleNamespace(inserted_id=doc.get('id'))
 
+    async def delete_many(self, query: dict | None = None):
+        before = len(self.docs)
+        self.docs = [doc for doc in self.docs if not self._matches(doc, query or {})]
+        return SimpleNamespace(deleted_count=before - len(self.docs))
+
+    async def insert_many(self, docs):
+        docs = list(docs)
+        for doc in docs:
+            self.docs.append(copy.deepcopy(doc))
+        return SimpleNamespace(inserted_ids=[doc.get('id') for doc in docs])
+
     async def update_one(self, query: dict, update: dict, upsert: bool = False):
         for doc in self.docs:
             if self._matches(doc, query):

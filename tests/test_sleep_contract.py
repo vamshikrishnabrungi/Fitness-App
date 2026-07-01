@@ -151,7 +151,7 @@ class FakeOpenAIClient:
 def make_client(monkeypatch, seed: dict[str, list[dict]] | None = None):
     fake_db = FakeDB(seed)
     monkeypatch.setattr(server, 'db', fake_db)
-    monkeypatch.setattr(server, 'openai_client', FakeOpenAIClient())
+    monkeypatch.setattr(server, 'openai_client', FakeOpenAIClient(), raising=False)
     server.app.dependency_overrides[server.get_current_user] = lambda: {
         'id': 'user-1',
         'email': 'athlete@example.com',
@@ -268,7 +268,7 @@ def test_recovery_summary_reflects_sleep_quality_log(monkeypatch):
             {
                 'id': 'quick-recovery',
                 'user_id': 'user-1',
-                'date': '2026-03-30',
+                'date': datetime.utcnow().strftime('%Y-%m-%d'),  # recovery reads *today's* quick log
                 'mood': 'good',
                 'energy': 'high',
                 'stress': 'calm',

@@ -1,6 +1,9 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Body
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Body, Request, BackgroundTasks
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from starlette.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Any, Dict, List, Optional
 from datetime import datetime, timedelta
@@ -9,12 +12,13 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 import uuid
 import os
+import re
 import logging
 import json
 import asyncio
 from pathlib import Path
 from dotenv import load_dotenv
-from openai import OpenAI
+import httpx
 from backend.helpers import (
     clean_doc,
     _parse_iso_datetime,
@@ -57,6 +61,10 @@ from backend.helpers import (
     _terra_plan_weeks,
 )
 from backend.db_setup import ensure_database_schema
+from backend.ai_workout_service import generate_ai_training_program
+from backend.knowledge_retrieval import build_workout_knowledge_context, compact_context_for_ai
+from backend.level_progression import compute_user_level_assessment
+from backend.macro_plan_service import ensure_user_macro_plan, summarize_macro_plan_for_ai
 from backend.models import (
     UserProfile,
     UserCreate,
@@ -99,38 +107,38 @@ from backend.models import (
     TerraTrainingPlanCreate,
     RunClubCreate,
 )
-try:
-    from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent
-except Exception:
-    LlmChat = None  # type: ignore
-    UserMessage = None  # type: ignore
-    ImageContent = None  # type: ignore
-
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # -------------------- CONFIG --------------------
 MONGO_URL = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
 DB_NAME = os.environ.get('DB_NAME', 'sftc_database')
-JWT_SECRET = os.environ.get('JWT_SECRET', 'sftc-dev-secret')
+JWT_SECRET = os.environ.get('JWT_SECRET')
+if not JWT_SECRET:
+    raise ValueError("JWT_SECRET environment variable is required.")
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_DAYS = 30
-LLM_API_KEY = (
-    os.environ.get('OPENAI_API_KEY')
-    or os.environ.get('EXPO_PUBLIC_VIBECODE_OPENAI_API_KEY')
-    or os.environ.get('EMERGENT_LLM_KEY')
-)
-LLM_BASE_URL = os.environ.get('OPENAI_BASE_URL')
-LLM_MODEL = os.environ.get('MEAL_AI_MODEL', 'gpt-4o-mini')
-EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
+OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY')
+ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY')
+MEAL_AI_MODEL = os.environ.get('MEAL_AI_MODEL', 'openai/gpt-4o-mini')
+WORKOUT_AI_MODEL = os.environ.get('WORKOUT_AI_MODEL', 'claude-opus-4-8')
+OPENROUTER_SITE_URL = os.environ.get('OPENROUTER_SITE_URL', 'http://localhost')
+OPENROUTER_APP_NAME = os.environ.get('OPENROUTER_APP_NAME', 'SFTC')
 
 # -------------------- APP --------------------
 app = FastAPI(title='SFTC API', version='2.2.0')
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 api_router = APIRouter(prefix='/api')
+
+ALLOWED_ORIGINS = [origin.strip() for origin in os.environ.get("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:8081,exp://localhost:8081").split(",") if origin.strip()]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
@@ -147,8 +155,6 @@ db = client[DB_NAME]
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 security = HTTPBearer()
-_openai_key = os.environ.get('OPENAI_API_KEY') or os.environ.get('EXPO_PUBLIC_VIBECODE_OPENAI_API_KEY')
-openai_client = OpenAI(api_key=_openai_key, base_url=LLM_BASE_URL) if _openai_key else None
 
 
 @app.on_event('startup')
@@ -657,216 +663,547 @@ async def _upsert_athlete_profile(current_user: dict, profile: UserProfile) -> D
     return clean_doc(saved)
 
 
-def _profile_focus(profile: Dict[str, Any]) -> Dict[str, Any]:
-    sports = [str(item).strip().lower() for item in (profile.get('sports') or []) if str(item).strip()]
-    raw_goals = [*(profile.get('selected_goals') or []), *(profile.get('goals') or [])]
-    goals = [str(item).strip().lower() for item in raw_goals if str(item).strip()]
-    primary_goal = str(profile.get('primary_goal') or (goals[0] if goals else 'athletic performance')).lower()
-    is_runner = any(sport in ['running', 'runner', 'marathon', '5k', '10k'] for sport in sports + goals)
-    field_sport = any(sport in ['cricket', 'football', 'soccer', 'basketball', 'volleyball', 'tennis', 'badminton'] for sport in sports)
-    muscle_gain = any('muscle' in goal or 'strength' in goal for goal in goals) or 'muscle' in primary_goal
-    fat_loss = any('weight' in goal or 'fat' in goal or 'loss' in goal for goal in goals) or 'loss' in primary_goal
+def _exercise_reference_for_name(
+    name: str,
+    knowledge_context: Optional[Dict[str, Any]],
+    exercise_id: Optional[str] = None,
+) -> Optional[Dict[str, Any]]:
+    if not knowledge_context:
+        return None
+    ref = None
+    if exercise_id:
+        ref_by_id = knowledge_context.get('exercise_ref_by_id') or {}
+        ref = ref_by_id.get(str(exercise_id).strip())
+    if not ref:
+        ref_by_name = knowledge_context.get('exercise_ref_by_name') or {}
+        ref = ref_by_name.get(str(name).strip().lower())
+    if not ref:
+        return None
     return {
-        'sports': sports,
-        'goals': goals,
-        'primary_goal': primary_goal,
-        'is_runner': is_runner,
-        'field_sport': field_sport,
-        'muscle_gain': muscle_gain,
-        'fat_loss': fat_loss,
+        'exercise_id': ref.get('id'),
+        'exercise_name': ref.get('name'),
+        'source_refs': ref.get('source_refs') or [],
+        'library_enrichment': {
+            'summary': ref.get('summary'),
+            'coaching_cues': ref.get('coaching_cues') or [],
+            'common_errors': ref.get('common_errors') or [],
+            'substitutions': ref.get('substitutions') or [],
+            'regressions': ref.get('regressions') or [],
+            'progressions': ref.get('progressions') or [],
+            'use_when': ref.get('use_when') or [],
+            'avoid_when': ref.get('avoid_when') or [],
+        },
     }
 
 
-def _program_title(profile: Dict[str, Any]) -> str:
-    focus = _profile_focus(profile)
-    sports = [sport.title() for sport in (profile.get('sports') or []) if str(sport).strip()]
-    if len(sports) >= 2:
-        return f"{' + '.join(sports[:2])} Hybrid S&C"
-    if sports:
-        return f"{sports[0]} S&C Program"
-    if focus['muscle_gain']:
-        return 'Muscle Gain Strength Program'
-    if focus['fat_loss']:
-        return 'Fat Loss Conditioning Program'
-    return 'Athletic Foundation Program'
+def _attach_exercise_refs_to_session(session: Dict[str, Any], knowledge_context: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    if not knowledge_context:
+        return session
+    enriched = dict(session)
+    for section_name in ['warmup', 'main_work', 'cooldown']:
+        items = []
+        for item in enriched.get(section_name) or []:
+            item_doc = dict(item)
+            ref = _exercise_reference_for_name(
+                str(item_doc.get('name') or ''),
+                knowledge_context,
+                item_doc.get('exercise_id'),
+            )
+            if ref:
+                item_doc['knowledge_ref'] = {
+                    'exercise_id': ref.get('exercise_id'),
+                    'exercise_name': ref.get('exercise_name'),
+                    'source_refs': ref.get('source_refs') or [],
+                }
+                item_doc['library_enrichment'] = ref.get('library_enrichment') or {}
+            items.append(item_doc)
+        enriched[section_name] = items
+    return enriched
 
 
-def _session_count(profile: Dict[str, Any]) -> int:
-    requested = profile.get('training_days_per_week')
-    try:
-        requested_count = int(requested) if requested is not None else 4
-    except (TypeError, ValueError):
-        requested_count = 4
-    return min(6, max(3, requested_count))
+def _workout_section_exercises(session: Dict[str, Any]) -> List[WorkoutExercise]:
+    exercises: List[WorkoutExercise] = []
+    for section_name in ['warmup', 'main_work', 'cooldown']:
+        for item in session.get(section_name) or []:
+            coaching_notes = item.get('coaching_notes') or []
+            substitutions = item.get('substitutions') or []
+            notes_parts = []
+            if item.get('purpose'):
+                notes_parts.append(f"Purpose: {item['purpose']}")
+            if item.get('load_guidance'):
+                notes_parts.append(str(item['load_guidance']))
+            if item.get('rpe'):
+                notes_parts.append(f"RPE: {item['rpe']}")
+            if item.get('tempo'):
+                notes_parts.append(f"Tempo: {item['tempo']}")
+            if coaching_notes:
+                notes_parts.append(' '.join(str(note) for note in coaching_notes if str(note).strip()))
+            if substitutions:
+                notes_parts.append(f"Substitutions: {', '.join(str(sub) for sub in substitutions if str(sub).strip())}")
+            exercises.append(WorkoutExercise(
+                name=str(item.get('name') or 'Exercise'),
+                exercise_id=(item.get('knowledge_ref') or {}).get('exercise_id'),
+                source_refs=(item.get('knowledge_ref') or {}).get('source_refs') or [],
+                purpose=item.get('purpose'),
+                sets=item.get('sets'),
+                reps=item.get('reps'),
+                duration=item.get('duration'),
+                rest=item.get('rest'),
+                notes=' '.join(notes_parts).strip() or f"{section_name.replace('_', ' ').title()} block",
+            ))
+    return exercises
 
 
-def _session_duration(profile: Dict[str, Any]) -> int:
-    duration = profile.get('session_duration_min')
-    try:
-        return min(90, max(30, int(duration))) if duration is not None else 45
-    except (TypeError, ValueError):
-        return 45
+def _next_scheduled_date_for_day(day_name: str, base: datetime, used_dates: set[str]) -> str:
+    weekdays = {
+        'monday': 0,
+        'mon': 0,
+        'tuesday': 1,
+        'tue': 1,
+        'wednesday': 2,
+        'wed': 2,
+        'thursday': 3,
+        'thu': 3,
+        'friday': 4,
+        'fri': 4,
+        'saturday': 5,
+        'sat': 5,
+        'sunday': 6,
+        'sun': 6,
+    }
+    target = weekdays.get(str(day_name).strip().lower(), len(used_dates) % 7)
+    days_ahead = (target - base.weekday()) % 7
+    candidate = base + timedelta(days=days_ahead)
+    while candidate.strftime('%Y-%m-%d') in used_dates:
+        candidate += timedelta(days=7)
+    scheduled = candidate.strftime('%Y-%m-%d')
+    used_dates.add(scheduled)
+    return scheduled
 
 
-def _exercise_plan(profile: Dict[str, Any]) -> List[Dict[str, Any]]:
-    focus = _profile_focus(profile)
-    equipment = [str(item).lower() for item in (profile.get('equipment') or [])]
-    has_gym = any(item in equipment for item in ['gym', 'barbell', 'dumbbells', 'machine', 'kettlebell'])
-    lower_main = 'Back Squat' if has_gym else 'Goblet Squat'
-    hinge = 'Romanian Deadlift' if has_gym else 'Single-leg Hip Hinge'
-    press = 'Dumbbell Bench Press' if has_gym else 'Push-up'
-    pull = 'Seated Cable Row' if has_gym else 'Band Row'
-
-    plan = [
-        {
-            'category': 'Strength',
-            'title': 'Lower Strength + Core',
-            'exercises': [
-                WorkoutExercise(name=lower_main, sets=4, reps='6-8', rest='90 sec', notes='Controlled reps, leave 2 reps in reserve'),
-                WorkoutExercise(name=hinge, sets=3, reps='8-10', rest='75 sec'),
-                WorkoutExercise(name='Split Squat', sets=3, reps='8 each side', rest='60 sec'),
-                WorkoutExercise(name='Dead Bug', sets=3, reps='10 each side', rest='45 sec'),
-            ],
-        },
-        {
-            'category': 'Conditioning' if focus['fat_loss'] or focus['is_runner'] else 'Power',
-            'title': 'Speed, Agility + Conditioning',
-            'exercises': [
-                WorkoutExercise(name='Dynamic Warm-up', duration='8 min'),
-                WorkoutExercise(name='Acceleration Runs', sets=6, reps='20 m', rest='60 sec'),
-                WorkoutExercise(name='Lateral Shuffle to Sprint', sets=4, reps='each side', rest='60 sec'),
-                WorkoutExercise(name='Zone 2 Run' if focus['is_runner'] else 'Tempo Intervals', duration='20 min', notes='Finish with easy breathing, not exhaustion'),
-            ],
-        },
-        {
-            'category': 'Strength',
-            'title': 'Upper Strength + Shoulder Care',
-            'exercises': [
-                WorkoutExercise(name=press, sets=4, reps='8-10', rest='75 sec'),
-                WorkoutExercise(name=pull, sets=4, reps='10-12', rest='75 sec'),
-                WorkoutExercise(name='Half-kneeling Press', sets=3, reps='8 each side', rest='60 sec'),
-                WorkoutExercise(name='Face Pull', sets=3, reps='15', rest='45 sec'),
-            ],
-        },
-        {
-            'category': 'Mobility',
-            'title': 'Recovery + Mobility',
-            'exercises': [
-                WorkoutExercise(name='Breathing Reset', duration='5 min'),
-                WorkoutExercise(name='Hip Mobility Flow', duration='8 min'),
-                WorkoutExercise(name='Thoracic Rotation', sets=2, reps='10 each side'),
-                WorkoutExercise(name='Easy Walk or Cycle', duration='20 min'),
-            ],
-        },
-    ]
-
-    if focus['field_sport']:
-        plan.append({
-            'category': 'Power',
-            'title': 'Jump, Rotation + Change of Direction',
-            'exercises': [
-                WorkoutExercise(name='Pogo Jumps', sets=3, reps='20 sec', rest='45 sec'),
-                WorkoutExercise(name='Broad Jump', sets=4, reps='3', rest='75 sec'),
-                WorkoutExercise(name='Medicine Ball Rotational Throw' if has_gym else 'Rotational Shadow Throw', sets=4, reps='5 each side', rest='60 sec'),
-                WorkoutExercise(name='5-10-5 Shuttle', sets=5, reps='1 rep', rest='90 sec'),
-            ],
-        })
-    if focus['muscle_gain']:
-        plan.append({
-            'category': 'Hypertrophy',
-            'title': 'Full Body Muscle Builder',
-            'exercises': [
-                WorkoutExercise(name=lower_main, sets=3, reps='10-12', rest='75 sec'),
-                WorkoutExercise(name=press, sets=3, reps='10-12', rest='75 sec'),
-                WorkoutExercise(name=pull, sets=3, reps='12', rest='60 sec'),
-                WorkoutExercise(name='Farmer Carry' if has_gym else 'Loaded Carry', sets=4, reps='30 m', rest='60 sec'),
-            ],
-        })
-
-    return plan
-
-
-async def _create_training_program(current_user: dict, profile: Dict[str, Any]) -> Dict[str, Any]:
+async def _create_ai_training_program(current_user: dict, profile: Dict[str, Any]) -> Dict[str, Any]:
     now = datetime.utcnow()
     user_id = current_user['id']
-    duration = _session_duration(profile)
-    session_count = _session_count(profile)
-    title = _program_title(profile)
-    focus = _profile_focus(profile)
+    macro_plan = await ensure_user_macro_plan(db, user_id=user_id, profile=profile)
+    profile_for_retrieval = {**profile, 'user_id': user_id}
+    knowledge_context = await build_workout_knowledge_context(db, profile_for_retrieval)
+    compact_knowledge_context = compact_context_for_ai(knowledge_context)
+    compact_knowledge_context['macro_plan'] = summarize_macro_plan_for_ai(macro_plan)
+    compact_knowledge_context['athlete_state'] = summarize_athlete_state_for_ai(
+        await db.athlete_states.find_one({'user_id': user_id})
+    )
+    workout_ai_max_weeks = int(os.environ.get('WORKOUT_AI_MAX_WEEKS', '1') or 1)
+    workout_ai_max_attempts = int(os.environ.get('WORKOUT_AI_MAX_ATTEMPTS', '2') or 2)
+    workout_ai_strict_library = os.environ.get('WORKOUT_AI_STRICT_LIBRARY_MATCHES', 'false').lower() in {'1', 'true', 'yes', 'on'}
+
+    try:
+        generation = await generate_ai_training_program(
+            profile,
+            knowledge_context=compact_knowledge_context,
+            openrouter_key=OPENROUTER_API_KEY,
+            anthropic_key=ANTHROPIC_API_KEY,
+            model=WORKOUT_AI_MODEL,
+            max_weeks=workout_ai_max_weeks,
+            max_attempts=workout_ai_max_attempts,
+            strict_library_matches=workout_ai_strict_library,
+        )
+    except Exception as exc:
+        logger.warning('AI workout generation failed: %s', exc)
+        raise HTTPException(status_code=503, detail='AI workout generation failed. Please try again.') from exc
+    generated_program = generation['program']
+    program_doc = generated_program.model_dump()
+    knowledge_counts = knowledge_context.get('counts') or {}
 
     program = {
         'id': str(uuid.uuid4()),
         'user_id': user_id,
-        'title': title,
+        'title': generated_program.title,
         'status': 'active',
-        'source': 'rules_engine_v1',
-        'goal': focus['primary_goal'],
-        'sports': profile.get('sports', []),
-        'duration_weeks': 4,
+        'source': f"ai_workout_generator_v1:{generation['source']}",
+        'goal': generated_program.goal,
+        'sports': generated_program.sports,
+        'duration_weeks': generated_program.duration_weeks,
         'current_week': 1,
         'created_at': now,
         'updated_at': now,
         'profile_snapshot': profile,
-    }
-    block = {
-        'id': str(uuid.uuid4()),
-        'program_id': program['id'],
-        'user_id': user_id,
-        'name': 'Foundation Block',
-        'week_start': 1,
-        'week_end': 4,
-        'emphasis': ['movement quality', 'strength base', 'sport transfer', 'recovery'],
-        'created_at': now,
+        'macro_plan_id': macro_plan.get('id'),
+        'macro_plan_template_id': macro_plan.get('template_id'),
+        'generation': {
+            'fallback_used': generation.get('fallback_used', False),
+            'model': WORKOUT_AI_MODEL,
+            'max_weeks': generation.get('max_weeks'),
+            'max_attempts': generation.get('max_attempts'),
+            'strict_library_matches': generation.get('strict_library_matches', False),
+            'knowledge_context': {
+                'source_scope': knowledge_context.get('source_scope'),
+                'allowed_primary_exercises': knowledge_counts.get('allowed_primary_exercises'),
+                'allowed_variations': knowledge_counts.get('allowed_variations'),
+                'progression_paths': knowledge_counts.get('progression_paths'),
+                'recent_training_history': knowledge_counts.get('recent_training_history'),
+                'exercise_candidates': knowledge_counts.get('exercise_candidates', len(knowledge_context.get('exercise_candidates') or [])),
+                'programming_rules': knowledge_counts.get('programming_rules', len(knowledge_context.get('programming_rules') or [])),
+                'technical_models': knowledge_counts.get('technical_models'),
+                'technical_errors': knowledge_counts.get('technical_errors'),
+                'mobility_drills': knowledge_counts.get('mobility_drills'),
+                'recovery_rules': knowledge_counts.get('recovery_rules'),
+                'nutrition_principles': knowledge_counts.get('nutrition_principles'),
+                'macro_plan_template': macro_plan.get('template_id'),
+            },
+            'athlete_analysis': generated_program.athlete_analysis,
+            'nutrition_focus': generated_program.nutrition_focus,
+            'recovery_focus': generated_program.recovery_focus,
+            'safety_notes': generated_program.safety_notes,
+            'assumptions': generated_program.assumptions,
+        },
+        'plan': program_doc,
     }
 
-    await db.training_programs.update_many({'user_id': user_id, 'status': 'active'}, {'$set': {'status': 'archived', 'archived_at': now}})
+    await db.training_programs.update_many(
+        {'user_id': user_id, 'status': 'active'},
+        {'$set': {'status': 'archived', 'archived_at': now}},
+    )
     await db.training_programs.insert_one(program)
-    await db.program_blocks.insert_one(block)
-    await db.workouts.delete_many({'user_id': user_id, 'completed': {'$ne': True}, 'scheduled_date': {'$gte': now.strftime('%Y-%m-%d')}})
+    await db.workouts.delete_many({
+        'user_id': user_id,
+        'completed': {'$ne': True},
+        'scheduled_date': {'$gte': now.strftime('%Y-%m-%d')},
+    })
 
-    days = profile.get('preferred_training_days') or ['Monday', 'Tuesday', 'Wednesday', 'Friday', 'Saturday', 'Sunday']
-    sports = profile.get('sports') or []
-    templates = _exercise_plan(profile)
+    blocks = []
+    for block_plan in generated_program.blocks:
+        block = {
+            'id': str(uuid.uuid4()),
+            'program_id': program['id'],
+            'user_id': user_id,
+            'name': block_plan.name,
+            'week_start': block_plan.start_week,
+            'week_end': block_plan.end_week,
+            'emphasis': block_plan.emphasis,
+            'created_at': now,
+        }
+        await db.program_blocks.insert_one(block)
+        blocks.append(clean_doc(block))
+
     workouts = []
-    for i in range(session_count):
-        template = templates[i % len(templates)]
-        scheduled = now + timedelta(days=i)
-        day_label = days[i % len(days)] if days else scheduled.strftime('%A')
+    used_dates: set[str] = set()
+    week_one = generated_program.weeks[0] if generated_program.weeks else None
+    for index, session in enumerate((week_one.workouts if week_one else []) or []):
+        session_doc = _attach_exercise_refs_to_session(session.model_dump(), knowledge_context)
+        scheduled_date = _next_scheduled_date_for_day(session.day, now, used_dates)
+        injury_notes = session_doc.get('injury_modifications') or []
+        sport_transfer = session_doc.get('sport_transfer') or []
+        description_parts = [
+            f"{generated_program.title} session.",
+            str(session_doc.get('why_this_session') or '').strip(),
+            f"Targets: {', '.join(session_doc.get('adaptation_targets') or [])}." if session_doc.get('adaptation_targets') else '',
+            f"Sport transfer: {', '.join(sport_transfer)}." if sport_transfer else '',
+            f"Safety: {' '.join(injury_notes)}" if injury_notes else '',
+        ]
         workout = Workout(
             user_id=user_id,
-            title=f"{day_label}: {template['title']}",
-            category=template['category'],
-            duration=duration if template['category'] != 'Mobility' else min(duration, 40),
+            title=session.title,
+            category=session.category,
+            duration=session.duration_min,
             difficulty=str(profile.get('experience') or 'Intermediate').title(),
             equipment=profile.get('equipment') or [],
-            exercises=template['exercises'],
-            description=f"{title} session for {', '.join(sports[:2]) or focus['primary_goal']}.",
+            exercises=_workout_section_exercises(session_doc),
+            description=' '.join(part for part in description_parts if part).strip(),
             ai_generated=True,
-            scheduled_date=scheduled.strftime('%Y-%m-%d'),
+            scheduled_date=scheduled_date,
         ).model_dump()
         workout.update({
             'program_id': program['id'],
-            'block_id': block['id'],
+            'block_id': blocks[0]['id'] if blocks else None,
             'week_number': 1,
-            'session_number': i + 1,
-            'source': 'rules_engine_v1',
+            'session_number': index + 1,
+            'source': program['source'],
+            'intensity': session.intensity,
             'adaptation': {
-                'goal': focus['primary_goal'],
-                'sports': sports,
-                'injury_flags': {
-                    'pain_areas': profile.get('pain_areas') or [],
-                    'current_injuries': profile.get('current_injuries') or [],
-                },
+                'goal': generated_program.goal,
+                'sports': generated_program.sports,
+                'targets': session.adaptation_targets,
+                'sport_transfer': session.sport_transfer,
+                'why_this_session': session.why_this_session,
+                'injury_modifications': session.injury_modifications,
+                'progression_rule': week_one.progression_rule if week_one else None,
+                'week_theme': week_one.theme if week_one else None,
             },
+            'session_plan': session_doc,
         })
         await db.workouts.insert_one(workout)
         workouts.append(clean_doc(workout))
 
     return {
         'program': clean_doc(program),
-        'block': clean_doc(block),
+        'macro_plan': clean_doc(macro_plan),
+        'blocks': blocks,
         'weekly_plan': workouts,
+        'generation': {
+            'source': generation['source'],
+            'fallback_used': generation.get('fallback_used', False),
+            'error': generation.get('error'),
+        },
     }
+
+
+def _build_previous_block_summary(program: Dict[str, Any], week_workouts: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Compact summary of a completed week, fed back to the AI so the next block progresses from it."""
+    sessions = []
+    for w in week_workouts:
+        fb = w.get('user_feedback') or {}
+        adaptation = w.get('adaptation') or {}
+        main = [e.get('name') for e in (w.get('exercises') or []) if isinstance(e, dict) and e.get('name')][:6]
+        sessions.append({
+            'title': w.get('title'),
+            'category': w.get('category'),
+            'duration_min': w.get('duration'),
+            'main_exercises': main,
+            'completed': bool(w.get('completed')),
+            'completion_percentage': fb.get('completion_percentage'),
+            'rpe': fb.get('rpe') if fb.get('rpe') is not None else fb.get('intensity_rating'),
+            'pain_score': fb.get('pain_score'),
+            'sport_transfer': adaptation.get('sport_transfer') or [],
+        })
+    week_number = max((w.get('week_number') or 1) for w in week_workouts) if week_workouts else 1
+    return {
+        'program_title': program.get('title'),
+        'goal': program.get('goal'),
+        'completed_week_number': week_number,
+        'sessions': sessions,
+    }
+
+
+async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate the NEXT week of the active program, progressing from the last completed week.
+
+    Unlike _create_ai_training_program this does NOT archive or wipe anything: it appends a new
+    week and advances the program / macro-plan week counters.
+    """
+    now = datetime.utcnow()
+    user_id = current_user['id']
+    program = await db.training_programs.find_one(
+        {'user_id': user_id, 'status': 'active'}, sort=[('created_at', -1)]
+    )
+    if not program:
+        raise HTTPException(status_code=404, detail='No active program to continue')
+
+    existing_workouts = await db.workouts.find({'user_id': user_id, 'program_id': program['id']}).to_list(500)
+    max_week = max((w.get('week_number') or 1) for w in existing_workouts) if existing_workouts else 1
+    # current_week is the source of truth (advanced transactionally at the end); fall back to max.
+    current_week = int(program.get('current_week') or max_week)
+    next_week = current_week + 1
+    week_workouts = [w for w in existing_workouts if (w.get('week_number') or 1) == current_week]
+    previous_block_summary = _build_previous_block_summary(program, week_workouts)
+
+    macro_plan = await ensure_user_macro_plan(db, user_id=user_id, profile=profile)
+    profile_for_retrieval = {**profile, 'user_id': user_id}
+    knowledge_context = await build_workout_knowledge_context(db, profile_for_retrieval)
+    compact_knowledge_context = compact_context_for_ai(knowledge_context)
+    compact_knowledge_context['macro_plan'] = summarize_macro_plan_for_ai(macro_plan)
+    compact_knowledge_context['athlete_state'] = summarize_athlete_state_for_ai(
+        await db.athlete_states.find_one({'user_id': user_id})
+    )
+
+    workout_ai_max_attempts = int(os.environ.get('WORKOUT_AI_MAX_ATTEMPTS', '2') or 2)
+    workout_ai_strict_library = os.environ.get('WORKOUT_AI_STRICT_LIBRARY_MATCHES', 'false').lower() in {'1', 'true', 'yes', 'on'}
+
+    try:
+        generation = await generate_ai_training_program(
+            profile,
+            knowledge_context=compact_knowledge_context,
+            openrouter_key=OPENROUTER_API_KEY,
+            anthropic_key=ANTHROPIC_API_KEY,
+            model=WORKOUT_AI_MODEL,
+            max_weeks=1,
+            max_attempts=workout_ai_max_attempts,
+            strict_library_matches=workout_ai_strict_library,
+            previous_block_summary=previous_block_summary,
+        )
+    except Exception as exc:
+        logger.warning('AI next-block generation failed: %s', exc)
+        raise HTTPException(status_code=503, detail='AI next-block generation failed. Please try again.') from exc
+
+    generated_program = generation['program']
+    new_week = generated_program.weeks[0] if generated_program.weeks else None
+    if not new_week:
+        raise HTTPException(status_code=503, detail='AI did not return a next week')
+
+    blocks = await db.program_blocks.find(
+        {'user_id': user_id, 'program_id': program['id']}
+    ).sort('week_start', 1).to_list(50)
+
+    def _block_for_week(week_num: int) -> Optional[Dict[str, Any]]:
+        for b in blocks:
+            if (b.get('week_start') or 1) <= week_num <= (b.get('week_end') or week_num):
+                return b
+        return blocks[-1] if blocks else None
+
+    block = _block_for_week(next_week)
+    # Clear any partial week left by a previously failed attempt so retries are idempotent.
+    await db.workouts.delete_many({'user_id': user_id, 'program_id': program['id'], 'week_number': next_week})
+    used_dates = {
+        w.get('scheduled_date') for w in existing_workouts
+        if w.get('scheduled_date') and (w.get('week_number') or 1) != next_week
+    }
+    workouts = []
+    for index, session in enumerate(new_week.workouts or []):
+        session_doc = _attach_exercise_refs_to_session(session.model_dump(), knowledge_context)
+        scheduled_date = _next_scheduled_date_for_day(session.day, now, used_dates)
+        injury_notes = session_doc.get('injury_modifications') or []
+        sport_transfer = session_doc.get('sport_transfer') or []
+        description_parts = [
+            f"{generated_program.title} session.",
+            str(session_doc.get('why_this_session') or '').strip(),
+            f"Targets: {', '.join(session_doc.get('adaptation_targets') or [])}." if session_doc.get('adaptation_targets') else '',
+            f"Sport transfer: {', '.join(sport_transfer)}." if sport_transfer else '',
+            f"Safety: {' '.join(injury_notes)}" if injury_notes else '',
+        ]
+        workout = Workout(
+            user_id=user_id,
+            title=session.title,
+            category=session.category,
+            duration=session.duration_min,
+            difficulty=str(profile.get('experience') or 'Intermediate').title(),
+            equipment=profile.get('equipment') or [],
+            exercises=_workout_section_exercises(session_doc),
+            description=' '.join(part for part in description_parts if part).strip(),
+            ai_generated=True,
+            scheduled_date=scheduled_date,
+        ).model_dump()
+        workout.update({
+            'program_id': program['id'],
+            'block_id': block['id'] if block else None,
+            'week_number': next_week,
+            'session_number': index + 1,
+            'source': program.get('source'),
+            'intensity': session.intensity,
+            'adaptation': {
+                'goal': generated_program.goal,
+                'sports': generated_program.sports,
+                'targets': session.adaptation_targets,
+                'sport_transfer': session.sport_transfer,
+                'why_this_session': session.why_this_session,
+                'injury_modifications': session.injury_modifications,
+                'progression_rule': new_week.progression_rule,
+                'week_theme': new_week.theme,
+            },
+            'session_plan': session_doc,
+            'continuation_of_week': current_week,
+        })
+        await db.workouts.insert_one(workout)
+        workouts.append(clean_doc(workout))
+
+    # Advance the macro-plan block based on which phase covers the new week.
+    next_block = macro_plan.get('current_block') or 1
+    active_phase = None
+    for phase in macro_plan.get('phases') or []:
+        if (phase.get('start_week') or 1) <= next_week <= (phase.get('end_week') or next_week):
+            next_block = phase.get('block') or next_block
+            active_phase = phase.get('phase')
+            break
+
+    await db.training_programs.update_one(
+        {'id': program['id']},
+        {'$set': {'current_week': next_week, 'current_block': next_block, 'updated_at': now}},
+    )
+    if macro_plan.get('id'):
+        await db.macro_plans.update_one(
+            {'id': macro_plan['id']},
+            {'$set': {'current_week': next_week, 'current_block': next_block, 'updated_at': now}},
+        )
+
+    return {
+        'program_id': program['id'],
+        'week_number': next_week,
+        'block_number': next_block,
+        'phase': active_phase,
+        'weekly_plan': workouts,
+        'generation': {
+            'source': generation['source'],
+            'continuation': True,
+            'from_week': current_week,
+        },
+    }
+
+
+async def _run_next_block_with_durability(current_user: dict, profile: Dict[str, Any], program_id: str, next_week: int) -> None:
+    """Run continuation generation with a job record (observability) and a retry, always releasing the
+    generation claim afterwards so a manual /workouts/generate-next can recover from a failure."""
+    job_id = str(uuid.uuid4())
+    await db.job_status.insert_one({
+        'job_id': job_id,
+        'user_id': current_user['id'],
+        'kind': 'next_block',
+        'program_id': program_id,
+        'target_week': next_week,
+        'status': 'processing',
+        'created_at': datetime.utcnow(),
+    })
+    attempts = max(1, int(os.environ.get('WORKOUT_AI_CONTINUATION_ATTEMPTS', '2') or 2))
+    last_error = None
+    for attempt in range(1, attempts + 1):
+        try:
+            result = await _extend_ai_training_program(current_user, profile)
+            await db.job_status.update_one(
+                {'job_id': job_id},
+                {'$set': {'status': 'completed', 'result_week': result.get('week_number')}},
+            )
+            await db.training_programs.update_one({'id': program_id}, {'$unset': {'generating_week': ''}})
+            logger.info("Next-block generation completed user=%s week=%s", current_user['id'], result.get('week_number'))
+            return
+        except Exception as exc:
+            last_error = exc
+            logger.warning("Next-block generation attempt %s/%s failed: %s", attempt, attempts, exc)
+    await db.job_status.update_one(
+        {'job_id': job_id},
+        {'$set': {'status': 'failed', 'error_message': str(last_error)[:400]}},
+    )
+    await db.training_programs.update_one({'id': program_id}, {'$unset': {'generating_week': ''}})
+
+
+async def _maybe_generate_next_block(current_user: dict) -> None:
+    """Auto-trigger after a workout completes: if the current week is fully completed and the next
+    week does not exist yet, generate the next block. Failure-isolated (never breaks completion) and
+    concurrency-safe via an atomic claim on the program (prevents double-generation)."""
+    try:
+        user_id = current_user['id']
+        program = await db.training_programs.find_one(
+            {'user_id': user_id, 'status': 'active'}, sort=[('created_at', -1)]
+        )
+        if not program:
+            return
+        workouts = await db.workouts.find({'user_id': user_id, 'program_id': program['id']}).to_list(500)
+        if not workouts:
+            return
+        current_week = int(program.get('current_week') or max((w.get('week_number') or 1) for w in workouts))
+        # Horizon comes from the macro plan length (program.duration_weeks is trimmed to 1 per generation).
+        macro = await db.macro_plans.find_one({'id': program.get('macro_plan_id')}) or {}
+        horizon = int(macro.get('duration_weeks') or 12)
+        if current_week >= max(1, horizon):
+            return
+        week_workouts = [w for w in workouts if (w.get('week_number') or 1) == current_week]
+        if not week_workouts or not all(w.get('completed') for w in week_workouts):
+            return
+        next_week = current_week + 1
+        if any((w.get('week_number') or 1) == next_week for w in workouts):
+            return  # next week already generated
+
+        # Atomic claim: only the first caller for this target week proceeds (TOCTOU / double-gen guard).
+        claim = await db.training_programs.update_one(
+            {'id': program['id'], 'generating_week': {'$ne': next_week}},
+            {'$set': {'generating_week': next_week}},
+        )
+        if claim.modified_count == 0:
+            logger.info("Next-block for week=%s already claimed/in-progress; skipping", next_week)
+            return
+
+        profile_doc = await db.athlete_profiles.find_one({'user_id': user_id})
+        profile = (profile_doc or {}).get('raw_profile') or current_user.get('profile') or {}
+        logger.info("Auto-generating next block user=%s after completed week=%s", user_id, current_week)
+        await _run_next_block_with_durability(current_user, profile, program['id'], next_week)
+    except Exception as exc:
+        logger.warning("Auto next-block trigger skipped/failed: %s", exc)
 
 
 def _date_window(date_str: Optional[str] = None) -> tuple[str, datetime, datetime]:
@@ -1247,51 +1584,7 @@ def _daily_coach_fallback(snapshot: Dict[str, Any]) -> DailyCoachAnalysis:
 
 
 async def _ai_daily_coach_analysis(snapshot: Dict[str, Any]) -> Optional[DailyCoachAnalysis]:
-    if not openai_client:
-        return None
-
-    compact = _compact_snapshot_for_ai(snapshot)
-    schema = DailyCoachAnalysis.model_json_schema()
-    prompt = (
-        "You are an evidence-based strength and conditioning coach for a fitness app. "
-        "Analyze the athlete's daily snapshot and return ONLY valid JSON matching the provided schema. "
-        "Be practical, concise, and conservative with injury or pain. "
-        "Do not invent data that is missing. Use questions_for_user for missing important inputs."
-    )
-    user_text = json.dumps(
-        {
-            'schema': schema,
-            'snapshot': compact,
-        },
-        default=str,
-    )
-
-    def _call_openai() -> str:
-        response = openai_client.chat.completions.create(
-            model=LLM_MODEL,
-            response_format={'type': 'json_object'},
-            messages=[
-                {'role': 'system', 'content': prompt},
-                {'role': 'user', 'content': user_text},
-            ],
-            temperature=0.2,
-        )
-        return (response.choices[0].message.content or '{}').strip()
-
-    try:
-        raw = await asyncio.to_thread(_call_openai)
-        if raw.startswith('```json'):
-            raw = raw[7:]
-        if raw.startswith('```'):
-            raw = raw[3:]
-        if raw.endswith('```'):
-            raw = raw[:-3]
-        parsed = json.loads(raw.strip())
-        parsed['date'] = str(parsed.get('date') or snapshot.get('date'))
-        return DailyCoachAnalysis(**parsed)
-    except Exception as exc:
-        logger.warning(f'Daily coach AI failed, falling back to rules analysis: {exc}')
-        return None
+    return None
 
 
 async def _save_daily_analysis(
@@ -1307,7 +1600,7 @@ async def _save_daily_analysis(
         'user_id': current_user['id'],
         'snapshot_id': snapshot.get('id'),
         'source': source,
-        'model': LLM_MODEL if source == 'ai' else None,
+        'model': MEAL_AI_MODEL if source == 'ai' else None,
         'created_at': now,
         'updated_at': now,
     })
@@ -1455,17 +1748,18 @@ async def _sleep_user_summary(user_id: str) -> Dict[str, Any]:
 
 
 def _manual_meal_result(payload: "MealCreate") -> Dict[str, Any]:
+    foods_identified = [str(food).strip() for food in (payload.foods_identified or []) if str(food).strip()]
     return {
         'name': payload.name or 'Meal',
-        'foods_identified': [payload.name] if payload.name else ['Meal'],
+        'foods_identified': foods_identified or ([payload.name] if payload.name else ['Meal']),
         'calories': _to_non_negative_int(payload.calories, 0),
         'protein': _to_non_negative_float(payload.protein, 0),
         'carbs': _to_non_negative_float(payload.carbs, 0),
         'fat': _to_non_negative_float(payload.fat, 0),
         'fiber': _to_non_negative_float(payload.fiber, 0),
-        'status': 'Logged',
+        'status': payload.status or 'Logged',
         'portion_size': '1 serving',
-        'confidence': 'manual',
+        'confidence': 'ai-reviewed' if payload.ai_analyzed else 'manual',
         'notes': 'Manual nutrition entry',
     }
 
@@ -1482,51 +1776,48 @@ async def _ai_analyze_meal(payload: "MealCreate") -> Dict[str, Any]:
         f"Meal type: {payload.meal_type}. Name hint: {payload.name or 'not provided'}."
     )
 
-    if openai_client:
-        content: List[Dict[str, Any]] = [{'type': 'text', 'text': user_text}]
-        if payload.image_base64:
-            content.append({
-                'type': 'image_url',
-                'image_url': {'url': f'data:image/jpeg;base64,{payload.image_base64}'}
-            })
+    if not OPENROUTER_API_KEY:
+        raise HTTPException(status_code=503, detail='No AI key configured (OPENROUTER_API_KEY)')
 
-        def _call_openai() -> str:
-            response = openai_client.chat.completions.create(
-                model=LLM_MODEL,
-                response_format={'type': 'json_object'},
-                messages=[
-                    {'role': 'system', 'content': prompt},
-                    {'role': 'user', 'content': content},
-                ],
-                temperature=0.2,
-            )
-            return (response.choices[0].message.content or '{}').strip()
+    content: Any = user_text
+    if payload.image_base64:
+        image_data = payload.image_base64
+        if not image_data.startswith('data:'):
+            image_data = f"data:image/jpeg;base64,{image_data}"
+        content = [
+            {"type": "text", "text": user_text},
+            {"type": "image_url", "image_url": {"url": image_data}},
+        ]
 
-        raw = await asyncio.to_thread(_call_openai)
-    else:
-        if not EMERGENT_LLM_KEY:
-            raise HTTPException(status_code=503, detail='No AI key configured (OPENAI_API_KEY or EMERGENT_LLM_KEY)')
-        if not (LlmChat and UserMessage and ImageContent):
-            raise HTTPException(status_code=503, detail='emergentintegrations is not installed')
-
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
-            session_id=f"meal-{uuid.uuid4()}",
-            system_message=prompt
+    request_body = {
+        "model": MEAL_AI_MODEL,
+        "messages": [
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": content},
+        ],
+        "temperature": 0.2,
+        "max_tokens": 900,
+        "usage": {"include": True},
+    }
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": OPENROUTER_SITE_URL,
+        "X-Title": OPENROUTER_APP_NAME,
+    }
+    async with httpx.AsyncClient(timeout=60) as client:
+        response = await client.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers=headers,
+            json=request_body,
         )
-        chat.with_model("openai", LLM_MODEL)
+    if response.status_code >= 400:
+        logger.warning("OpenRouter meal analysis failed status=%s body=%s", response.status_code, response.text[:800])
+        raise HTTPException(status_code=503, detail='AI meal analysis failed. Please try again.')
 
-        file_contents = []
-        if payload.image_base64:
-            file_contents = [ImageContent(image_base64=payload.image_base64)]
-
-        raw_resp = await chat.send_message(
-            UserMessage(
-                text=user_text,
-                file_contents=file_contents if file_contents else None
-            )
-        )
-        raw = str(raw_resp).strip()
+    data = response.json()
+    logger.info("OpenRouter meal analysis model=%s usage=%s", data.get("model"), data.get("usage"))
+    raw = str(data["choices"][0]["message"]["content"]).strip()
 
     if raw.startswith('```json'):
         raw = raw[7:]
@@ -1657,7 +1948,7 @@ async def upsert_athlete_profile(payload: AthleteProfileUpsert, current_user: di
     profile_doc = await _upsert_athlete_profile(current_user, payload.profile)
     response = {'athlete_profile': profile_doc}
     if payload.generate_program:
-        response.update(await _create_training_program(current_user, profile_doc.get('raw_profile') or {}))
+        response.update(await _create_ai_training_program(current_user, profile_doc.get('raw_profile') or {}))
     return response
 
 
@@ -1669,7 +1960,7 @@ async def complete_onboarding(payload: OnboardingComplete, current_user: dict = 
     profile_doc = await _upsert_athlete_profile(current_user, profile)
     response = {'athlete_profile': profile_doc, 'onboarding_completed': True}
     if payload.generate_program:
-        response.update(await _create_training_program(current_user, profile_doc.get('raw_profile') or {}))
+        response.update(await _create_ai_training_program(current_user, profile_doc.get('raw_profile') or {}))
     return response
 
 
@@ -1713,11 +2004,19 @@ async def create_daily_analysis(date: Optional[str] = None, current_user: dict =
 async def library_summary(current_user: dict = Depends(get_current_user)):
     collections = [
         'exercise_library',
+        'primary_exercise_library',
+        'exercise_variation_library',
+        'exercise_progression_graph',
+        'user_exercise_history',
+        'user_level_assessments',
         'movement_patterns',
         'physical_qualities',
         'sport_profiles',
         'sport_roles',
         'sport_training_rules',
+        'sport_teaching_progressions',
+        'sport_skill_assessments',
+        'sport_level_transition_rules',
         'workout_templates',
         'injury_modifications',
         'progression_rules',
@@ -1760,6 +2059,55 @@ async def list_library_exercises(
     return [clean_doc(doc) for doc in docs]
 
 
+@api_router.get('/library/primary-exercises')
+async def list_primary_exercises(
+    category: Optional[str] = None,
+    equipment: Optional[str] = None,
+    level: Optional[str] = None,
+    pattern: Optional[str] = None,
+    current_user: dict = Depends(get_current_user),
+):
+    query: Dict[str, Any] = {}
+    if category:
+        query['category'] = category
+    if equipment:
+        query['equipment'] = equipment
+    if level:
+        query['default_user_level'] = level
+    if pattern:
+        query['patterns'] = pattern
+    docs = await db.primary_exercise_library.find(query).sort('name', 1).to_list(500)
+    return [clean_doc(doc) for doc in docs]
+
+
+@api_router.get('/library/exercise-variations')
+async def list_exercise_variations(
+    base_exercise: Optional[str] = None,
+    equipment: Optional[str] = None,
+    level: Optional[str] = None,
+    variation_type: Optional[str] = None,
+    current_user: dict = Depends(get_current_user),
+):
+    query: Dict[str, Any] = {}
+    if base_exercise:
+        query['base_exercise'] = base_exercise
+    if equipment:
+        query['equipment'] = equipment
+    if level:
+        query['default_user_level'] = level
+    if variation_type:
+        query['variation_type'] = variation_type
+    docs = await db.exercise_variation_library.find(query).sort('name', 1).to_list(500)
+    return [clean_doc(doc) for doc in docs]
+
+
+@api_router.get('/library/exercise-progressions')
+async def list_exercise_progressions(base_exercise: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+    query = {'base_exercise': base_exercise} if base_exercise else {}
+    docs = await db.exercise_progression_graph.find(query).sort([('base_exercise', 1), ('from_exercise_name', 1)]).to_list(500)
+    return [clean_doc(doc) for doc in docs]
+
+
 @api_router.get('/library/sports')
 async def list_library_sports(sport: Optional[str] = None, current_user: dict = Depends(get_current_user)):
     query = {'sport': sport} if sport else {}
@@ -1778,6 +2126,63 @@ async def list_library_sport_roles(sport: Optional[str] = None, current_user: di
 async def list_library_sport_training_rules(sport: Optional[str] = None, current_user: dict = Depends(get_current_user)):
     query = {'sport': sport} if sport else {}
     docs = await db.sport_training_rules.find(query).sort([('sport', 1), ('id', 1)]).to_list(300)
+    return [clean_doc(doc) for doc in docs]
+
+
+@api_router.get('/library/sport-teaching-progressions')
+async def list_library_sport_teaching_progressions(
+    sport: Optional[str] = None,
+    domain: Optional[str] = None,
+    level: Optional[str] = None,
+    role: Optional[str] = None,
+    current_user: dict = Depends(get_current_user),
+):
+    query: Dict[str, Any] = {}
+    if sport:
+        query['sport'] = sport
+    if domain:
+        query['domain'] = domain
+    if level:
+        query['level'] = level
+    if role:
+        query['role_tags'] = role
+    docs = await db.sport_teaching_progressions.find(query).sort([('sport', 1), ('domain', 1), ('level', 1)]).to_list(300)
+    return [clean_doc(doc) for doc in docs]
+
+
+@api_router.get('/library/sport-skill-assessments')
+async def list_library_sport_skill_assessments(
+    sport: Optional[str] = None,
+    domain: Optional[str] = None,
+    current_user: dict = Depends(get_current_user),
+):
+    query: Dict[str, Any] = {}
+    if sport:
+        query['sport'] = sport
+    if domain:
+        query['domain'] = domain
+    docs = await db.sport_skill_assessments.find(query).sort([('sport', 1), ('domain', 1)]).to_list(200)
+    return [clean_doc(doc) for doc in docs]
+
+
+@api_router.get('/library/sport-level-transition-rules')
+async def list_library_sport_level_transition_rules(
+    sport: Optional[str] = None,
+    from_level: Optional[str] = None,
+    to_level: Optional[str] = None,
+    role: Optional[str] = None,
+    current_user: dict = Depends(get_current_user),
+):
+    query: Dict[str, Any] = {}
+    if sport:
+        query['sport'] = sport
+    if from_level:
+        query['from_level'] = from_level
+    if to_level:
+        query['to_level'] = to_level
+    if role:
+        query['applies_to'] = role
+    docs = await db.sport_level_transition_rules.find(query).sort([('sport', 1), ('from_level', 1), ('to_level', 1)]).to_list(200)
     return [clean_doc(doc) for doc in docs]
 
 
@@ -1880,18 +2285,154 @@ async def list_library_running_plan_rules(rule_type: Optional[str] = None, curre
     return [clean_doc(doc) for doc in docs]
 
 
+# -------------------- MACRO PLAN --------------------
+@api_router.get('/macro-plan/active')
+async def get_active_macro_plan(current_user: dict = Depends(get_current_user)):
+    macro_plan = await db.macro_plans.find_one(
+        {'user_id': current_user['id'], 'status': 'active'},
+        sort=[('created_at', -1)],
+    )
+    if not macro_plan:
+        raise HTTPException(status_code=404, detail='No active macro plan found')
+    athlete_state = await db.athlete_states.find_one({'user_id': current_user['id']})
+    return {
+        'macro_plan': clean_doc(macro_plan),
+        'athlete_state': clean_doc(athlete_state) if athlete_state else None,
+    }
+
+
+@api_router.post('/macro-plan/generate')
+async def generate_macro_plan(payload: Optional[Dict[str, Any]] = Body(default=None), current_user: dict = Depends(get_current_user)):
+    if payload:
+        profile = _profile_from_payload(payload, current_user)
+        profile_doc = await _upsert_athlete_profile(current_user, profile)
+        profile_payload = profile_doc.get('raw_profile') or {}
+    else:
+        profile_doc = await db.athlete_profiles.find_one({'user_id': current_user['id']})
+        profile_payload = (profile_doc or {}).get('raw_profile') or current_user.get('profile') or {}
+    macro_plan = await ensure_user_macro_plan(
+        db,
+        user_id=current_user['id'],
+        profile=profile_payload,
+        force_new=True,
+    )
+    athlete_state = await db.athlete_states.find_one({'user_id': current_user['id']})
+    return {
+        'macro_plan': clean_doc(macro_plan),
+        'athlete_state': clean_doc(athlete_state) if athlete_state else None,
+    }
+
+
 # -------------------- WORKOUTS --------------------
 @api_router.post('/workouts/generate-weekly')
-async def generate_weekly_plan(payload: Optional[Dict[str, Any]] = Body(default=None), current_user: dict = Depends(get_current_user)):
+@limiter.limit("2/minute")
+async def generate_weekly_plan(request: Request, payload: Optional[Dict[str, Any]] = Body(default=None), current_user: dict = Depends(get_current_user)):
+    """Generate (or regenerate) the active program's first week synchronously.
+
+    Previously this enqueued an ARQ job to a worker that is not run locally; generation now happens
+    inline (matching /onboarding/complete) so the plan actually materializes."""
     profile = _profile_from_payload(payload, current_user)
     profile_doc = await _upsert_athlete_profile(current_user, profile)
-    return await _create_training_program(current_user, profile_doc.get('raw_profile') or {})
+    return await _create_ai_training_program(current_user, profile_doc.get('raw_profile') or {})
+
+
+@api_router.post('/workouts/generate-next')
+@limiter.limit("4/minute")
+async def generate_next_block(request: Request, current_user: dict = Depends(get_current_user)):
+    """Manually generate the next block for the active program, progressing from the last week.
+
+    The same logic also runs automatically in the background when a week is fully completed."""
+    profile_doc = await db.athlete_profiles.find_one({'user_id': current_user['id']})
+    profile = (profile_doc or {}).get('raw_profile') or current_user.get('profile') or {}
+    return await _extend_ai_training_program(current_user, profile)
+
+
+@api_router.get('/workouts/generate-status/{job_id}')
+async def get_generation_status(job_id: str, current_user: dict = Depends(get_current_user)):
+    job_status = await db.job_status.find_one({"job_id": job_id, "user_id": current_user["id"]})
+    if not job_status:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    return {
+        "job_id": job_status["job_id"],
+        "status": job_status["status"],
+        "result_program_id": job_status.get("result_program_id"),
+        "error_message": job_status.get("error_message")
+    }
+
+
+@api_router.get('/programs/active')
+async def active_program(current_user: dict = Depends(get_current_user)):
+    program = await db.training_programs.find_one(
+        {'user_id': current_user['id'], 'status': 'active'},
+        sort=[('created_at', -1)],
+    )
+    if not program:
+        raise HTTPException(status_code=404, detail='No active program found')
+    workouts = await db.workouts.find({
+        'user_id': current_user['id'],
+        'program_id': program['id'],
+    }).sort([('week_number', 1), ('session_number', 1)]).to_list(200)
+    blocks = await db.program_blocks.find({
+        'user_id': current_user['id'],
+        'program_id': program['id'],
+    }).sort('week_start', 1).to_list(20)
+    return {
+        'program': clean_doc(program),
+        'blocks': [clean_doc(block) for block in blocks],
+        'workouts': [clean_doc(workout) for workout in workouts],
+    }
 
 
 @api_router.get('/workouts')
 async def list_workouts(current_user: dict = Depends(get_current_user)):
-    docs = await db.workouts.find({'user_id': current_user['id']}).sort('created_at', -1).to_list(100)
+    docs = await db.workouts.find({'user_id': current_user['id']}).sort([('scheduled_date', 1), ('session_number', 1), ('created_at', -1)]).to_list(100)
     return [clean_doc(d) for d in docs]
+
+
+def _train_section_for_workout(workout: Dict[str, Any], profile: Dict[str, Any]) -> str:
+    category = str(workout.get('category') or '').lower()
+    title = str(workout.get('title') or '').lower()
+    targets = [str(item).lower() for item in ((workout.get('adaptation') or {}).get('targets') or [])]
+    sports = [str(item).lower() for item in profile.get('sports') or []]
+    is_runner = any(item in ['running', 'runner'] for item in sports) or 'runner' in title or 'run' in title
+    if is_runner and any(term in title or term in ' '.join(targets) for term in ['speed', 'hamstring', 'glute', 'lower', 'calf', 'landing', 'mechanics']):
+        return 'The Run Down'
+    if category in ['power', 'conditioning'] or any(term in title for term in ['speed', 'jump', 'rotation', 'condition']):
+        return 'Power'
+    if category in ['mobility', 'recovery', 'flexibility'] or any(term in title for term in ['mobility', 'recovery', 'reset']):
+        return 'Mobility'
+    if any(sport in title for sport in sports) or sports:
+        return 'Strength for Your Sport'
+    return 'Lock in and Lift'
+
+
+@api_router.get('/workouts/recommended')
+async def recommended_workout_sections(current_user: dict = Depends(get_current_user)):
+    profile = current_user.get('profile') or {}
+    docs = await db.workouts.find({
+        'user_id': current_user['id'],
+        'completed': {'$ne': True},
+    }).sort([('scheduled_date', 1), ('session_number', 1), ('created_at', -1)]).to_list(100)
+    sections: Dict[str, Dict[str, Any]] = {}
+    section_copy = {
+        'The Run Down': 'Balanced sessions for runners to build endurance, strength, mechanics, and resilience.',
+        'Power': 'Explosive work for speed, jumping, cutting, and repeatable athletic output.',
+        'Strength for Your Sport': 'Strength and accessory sessions that support your selected sports.',
+        'Mobility': 'Lower-intensity sessions to recover, restore range, and keep training consistent.',
+        'Lock in and Lift': 'Focused strength sessions for durable muscle and performance.',
+    }
+    for workout in docs:
+        section = _train_section_for_workout(workout, profile)
+        if section not in sections:
+            sections[section] = {
+                'id': section.lower().replace(' ', '-'),
+                'title': section,
+                'description': section_copy.get(section, 'Recommended sessions for you.'),
+                'workouts': [],
+            }
+        sections[section]['workouts'].append(clean_doc(workout))
+    return list(sections.values())
 
 
 @api_router.get('/workouts/today')
@@ -1899,46 +2440,282 @@ async def workout_today(current_user: dict = Depends(get_current_user)):
     today = datetime.utcnow().strftime('%Y-%m-%d')
     workout = await db.workouts.find_one({'user_id': current_user['id'], 'scheduled_date': today})
     if not workout:
-        # create a simple placeholder
-        workout = Workout(
-            user_id=current_user['id'],
-            title='Full Body Strength',
-            category='Strength',
-            duration=45,
-            difficulty='Intermediate',
-            equipment=current_user.get('profile', {}).get('equipment', []),
-            exercises=[WorkoutExercise(name='Squat', sets=4, reps='8-10')],
-            ai_generated=False,
-            scheduled_date=today
-        ).model_dump()
-        await db.workouts.insert_one(workout)
+        raise HTTPException(status_code=404, detail='No AI-generated workout scheduled for today')
     return clean_doc(workout)
 
 
+async def _record_workout_exercise_history(current_user: dict, workout: Dict[str, Any], feedback: Optional[Dict[str, Any]] = None) -> None:
+    now = datetime.utcnow()
+    date_str = str(workout.get('completed_at') or now.strftime('%Y-%m-%d'))[:10]
+    exercises = workout.get('exercises') or []
+    if not exercises:
+        return
+    await db.user_exercise_history.delete_many({
+        'user_id': current_user['id'],
+        'workout_id': workout.get('id'),
+    })
+    intensity = None
+    completion_percentage = None
+    pain_score = None
+    if feedback:
+        intensity = feedback.get('rpe') if feedback.get('rpe') is not None else feedback.get('intensity_rating')
+        completion_percentage = feedback.get('completion_percentage')
+        pain_score = feedback.get('pain_score')
+    entries = []
+    for exercise in exercises:
+        if not isinstance(exercise, dict):
+            continue
+        entries.append({
+            'id': str(uuid.uuid4()),
+            'user_id': current_user['id'],
+            'date': date_str,
+            'workout_id': workout.get('id'),
+            'program_id': workout.get('program_id'),
+            'exercise_id': exercise.get('exercise_id'),
+            'exercise_name': exercise.get('name'),
+            'sets': exercise.get('sets'),
+            'reps': exercise.get('reps'),
+            'duration': exercise.get('duration'),
+            'load': exercise.get('load') or exercise.get('load_guidance'),
+            'rpe': intensity,
+            'pain_score': pain_score,
+            'completion_percentage': completion_percentage,
+            'completed': True,
+            'source': workout.get('source') or 'workout_completion',
+            'created_at': now,
+        })
+    if entries:
+        await db.user_exercise_history.insert_many(entries)
+
+
+def _parse_load_value(value: Any) -> Optional[float]:
+    """Extract a numeric working load (kg/lb) from a history entry. Returns None for
+    bodyweight / RPE-only / guidance-text loads so they don't pollute the trend."""
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).lower()
+    if 'rpe' in text or '%' in text or 'bodyweight' in text:
+        return None
+    match = re.search(r'(\d+(?:\.\d+)?)', text)
+    return float(match.group(1)) if match else None
+
+
+def _reps_first_int(value: Any) -> Optional[int]:
+    if isinstance(value, (int, float)):
+        return int(value)
+    match = re.search(r'\d+', str(value or ''))
+    return int(match.group()) if match else None
+
+
+def _compute_strength_trends(history: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Per-exercise load (or volume fallback) progression from logged history.
+
+    Groups by exercise, compares earliest vs latest data point over the window, and classifies
+    each as progressing / plateau / regressing. Prefers actual load; falls back to sets*reps volume
+    when numeric loads were not logged."""
+    by_ex: Dict[str, Dict[str, Any]] = {}
+    for h in history:
+        key = h.get('exercise_id') or str(h.get('exercise_name') or '').strip().lower()
+        if not key:
+            continue
+        load = _parse_load_value(h.get('load'))
+        reps = _reps_first_int(h.get('reps'))
+        sets = h.get('sets') if isinstance(h.get('sets'), (int, float)) else _reps_first_int(h.get('sets'))
+        entry = by_ex.setdefault(key, {'name': h.get('exercise_name') or key, 'loads': [], 'volumes': []})
+        if load is not None:
+            entry['loads'].append((h.get('date'), load))
+        if sets and reps:
+            entry['volumes'].append((h.get('date'), float(sets) * float(reps) * float(load or 1)))
+
+    trends: List[Dict[str, Any]] = []
+    for data in by_ex.values():
+        use_load = len(data['loads']) >= 2
+        series = data['loads'] if use_load else (data['volumes'] if len(data['volumes']) >= 2 else [])
+        if len(series) < 2:
+            continue
+        first, last = series[0][1], series[-1][1]
+        if first <= 0:
+            continue
+        change = (last - first) / first
+        direction = 'progressing' if change > 0.03 else 'regressing' if change < -0.03 else 'plateau'
+        trends.append({
+            'exercise': data['name'],
+            'metric': 'load' if use_load else 'volume',
+            'direction': direction,
+            'from': round(first, 1),
+            'to': round(last, 1),
+            'change_pct': round(change * 100, 1),
+            'data_points': len(series),
+        })
+    return sorted(trends, key=lambda t: -t['data_points'])[:8]
+
+
+async def update_athlete_state(current_user: dict) -> Dict[str, Any]:
+    """Recompute the rolling athlete_state from real training data (completion, RPE, pain, readiness).
+
+    Called after workout completion/feedback so the next generation can progress from trends rather
+    than guesswork. Failure-isolated: never raises into the completion flow."""
+    try:
+        user_id = current_user['id']
+        now = datetime.utcnow()
+        d28 = (now - timedelta(days=28)).strftime('%Y-%m-%d')
+        d14 = (now - timedelta(days=14)).strftime('%Y-%m-%d')
+
+        # Completion rate (28d): completed vs scheduled workouts.
+        recent = await db.workouts.find({'user_id': user_id, 'scheduled_date': {'$gte': d28}}).to_list(500)
+        scheduled = [w for w in recent if w.get('scheduled_date')]
+        completed = [w for w in scheduled if w.get('completed')]
+        completion_rate = round(len(completed) / len(scheduled), 2) if scheduled else None
+
+        # Rolling RPE / pain (14d) from logged exercise history.
+        hist = await db.user_exercise_history.find({'user_id': user_id, 'date': {'$gte': d14}}).to_list(1000)
+        rpes = [float(h['rpe']) for h in hist if h.get('rpe') is not None]
+        pains = [float(h['pain_score']) for h in hist if h.get('pain_score') is not None]
+        avg_rpe = round(sum(rpes) / len(rpes), 1) if rpes else None
+        avg_pain = round(sum(pains) / len(pains), 1) if pains else None
+
+        # Pain trends from active injuries + recent soreness reports.
+        active_injuries = await db.injury_logs.find({'user_id': user_id, 'is_active': True}).to_list(50)
+        quick = await db.quick_logs.find({'user_id': user_id, 'date': {'$gte': d14}}).sort('date', -1).to_list(50)
+        soreness: Dict[str, int] = {}
+        for q in quick:
+            for region in (q.get('soreness_regions') or []):
+                key = str(region).lower()
+                soreness[key] = soreness.get(key, 0) + 1
+        pain_trends = [
+            {'area': inj.get('body_area'), 'severity': inj.get('severity'),
+             'pain_scale': inj.get('pain_scale'), 'trend': 'active_injury'}
+            for inj in active_injuries
+        ]
+        for area, count in soreness.items():
+            if not any(p.get('area') and area in str(p['area']).lower() for p in pain_trends):
+                pain_trends.append({'area': area, 'severity': 'soreness', 'trend': f'reported {count}x/14d'})
+
+        latest = quick[0] if quick else None
+        readiness = {
+            'energy': latest.get('energy') if latest else None,
+            'stress': latest.get('stress') if latest else None,
+            'sleep_quality': latest.get('sleep_quality') if latest else None,
+            'fatigue_flag': bool(avg_rpe and avg_rpe >= 8.5) or bool(completion_rate is not None and completion_rate < 0.5),
+        }
+
+        # Per-exercise load/volume progression over a longer (56d) window.
+        d56 = (now - timedelta(days=56)).strftime('%Y-%m-%d')
+        long_hist = await db.user_exercise_history.find(
+            {'user_id': user_id, 'date': {'$gte': d56}}
+        ).sort('date', 1).to_list(2000)
+        strength_trends = _compute_strength_trends(long_hist)
+
+        # Progression signal the AI consumes to decide progress vs hold vs deload.
+        if completion_rate is not None and completion_rate < 0.5:
+            progression_signal = 'reduce_volume_or_difficulty'
+        elif (avg_rpe is not None and avg_rpe >= 8.5) or (avg_pain is not None and avg_pain >= 5):
+            progression_signal = 'hold_or_deload'
+        elif avg_rpe is not None and avg_rpe <= 6 and (completion_rate is None or completion_rate >= 0.8):
+            progression_signal = 'progress_load'
+        else:
+            progression_signal = 'progress_steady'
+
+        update = {
+            'completion_rate_28d': completion_rate,
+            'sessions_completed_28d': len(completed),
+            'average_rpe_14d': avg_rpe,
+            'average_pain_14d': avg_pain,
+            'pain_trends': pain_trends,
+            'strength_trends': strength_trends,
+            'readiness': readiness,
+            'progression_signal': progression_signal,
+            'updated_at': now,
+        }
+        await db.athlete_states.update_one({'user_id': user_id}, {'$set': update}, upsert=True)
+        return update
+    except Exception as exc:
+        logger.warning("update_athlete_state failed for user=%s: %s", current_user.get('id'), exc)
+        return {}
+
+
+def summarize_athlete_state_for_ai(state: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """Compact athlete_state for the generation prompt."""
+    if not state:
+        return {}
+    return {
+        'completion_rate_28d': state.get('completion_rate_28d'),
+        'sessions_completed_28d': state.get('sessions_completed_28d'),
+        'average_rpe_14d': state.get('average_rpe_14d'),
+        'average_pain_14d': state.get('average_pain_14d'),
+        'pain_trends': (state.get('pain_trends') or [])[:6],
+        'strength_trends': (state.get('strength_trends') or [])[:8],
+        'readiness': state.get('readiness') or {},
+        'progression_signal': state.get('progression_signal'),
+    }
+
+
+async def _create_level_assessment_for_user(current_user: dict) -> Dict[str, Any]:
+    profile = current_user.get('profile') or {}
+    profile_doc = await db.athlete_profiles.find_one({'user_id': current_user['id']})
+    if profile_doc and profile_doc.get('raw_profile'):
+        profile = profile_doc['raw_profile']
+    return await compute_user_level_assessment(
+        db,
+        user_id=current_user['id'],
+        profile=profile,
+        persist=True,
+    )
+
+
 @api_router.post('/workouts/{workout_id}/complete')
-async def complete_workout(workout_id: str, current_user: dict = Depends(get_current_user)):
+async def complete_workout(workout_id: str, background_tasks: BackgroundTasks, current_user: dict = Depends(get_current_user)):
     workout = await db.workouts.find_one({'id': workout_id, 'user_id': current_user['id']})
     if not workout:
         raise HTTPException(status_code=404, detail='Workout not found')
     if workout.get('completed'):
         return {'message': 'Workout completed', 'already_completed': True}
 
+    completed_at = datetime.utcnow()
     await db.workouts.update_one(
         {'id': workout_id, 'user_id': current_user['id']},
-        {'$set': {'completed': True, 'completed_at': datetime.utcnow()}},
+        {'$set': {'completed': True, 'completed_at': completed_at}},
     )
-    return {'message': 'Workout completed'}
+    workout['completed'] = True
+    workout['completed_at'] = completed_at
+    await _record_workout_exercise_history(current_user, workout, workout.get('user_feedback'))
+    await update_athlete_state(current_user)
+    assessment = await _create_level_assessment_for_user(current_user)
+    # Auto-generate the next block in the background once the current week is fully completed.
+    background_tasks.add_task(_maybe_generate_next_block, current_user)
+    return {'message': 'Workout completed', 'level_assessment': clean_doc(assessment)}
 
 
 @api_router.post('/workouts/{workout_id}/feedback')
 async def feedback_workout(workout_id: str, feedback: WorkoutFeedback, current_user: dict = Depends(get_current_user)):
+    feedback_doc = feedback.model_dump()
     result = await db.workouts.update_one(
         {'id': workout_id, 'user_id': current_user['id']},
-        {'$set': {'user_feedback': feedback.model_dump()}}
+        {'$set': {'user_feedback': feedback_doc}}
     )
     if result.modified_count == 0:
         raise HTTPException(status_code=404, detail='Workout not found')
+    workout = await db.workouts.find_one({'id': workout_id, 'user_id': current_user['id']})
+    if workout and workout.get('completed'):
+        await _record_workout_exercise_history(current_user, workout, feedback_doc)
+        await update_athlete_state(current_user)
+        assessment = await _create_level_assessment_for_user(current_user)
+        return {'message': 'Feedback saved', 'level_assessment': clean_doc(assessment)}
     return {'message': 'Feedback saved'}
+
+
+@api_router.get('/athlete/level-assessment')
+async def get_user_level_assessment(refresh: bool = False, current_user: dict = Depends(get_current_user)):
+    if not refresh:
+        existing = await db.user_level_assessments.find_one(
+            {'user_id': current_user['id']},
+            sort=[('created_at', -1)],
+        )
+        if existing:
+            return clean_doc(existing)
+    return clean_doc(await _create_level_assessment_for_user(current_user))
 
 
 @api_router.get('/training-load')
@@ -1989,7 +2766,120 @@ async def program_summary(current_user: dict = Depends(get_current_user)):
 @api_router.get('/lessons')
 async def list_lessons(current_user: dict = Depends(get_current_user)):
     docs = await db.lessons.find({}).sort('title', 1).to_list(200)
-    return [clean_doc(d) for d in docs]
+    if docs:
+        return [clean_doc(d) for d in docs]
+
+    profile = current_user.get('profile') or {}
+    user_sports = [
+        str(sport).strip().lower()
+        for sport in (profile.get('sports') or [])
+        if str(sport).strip()
+    ]
+    user_level = str(profile.get('experience') or '').strip().lower()
+    query: Dict[str, Any] = {}
+    if user_sports:
+        query['sport'] = {'$in': user_sports}
+    if user_level in {'beginner', 'intermediate', 'advanced'}:
+        query['level'] = user_level
+
+    progressions = await db.sport_teaching_progressions.find(query).sort(
+        [('sport', 1), ('level', 1), ('domain', 1)]
+    ).to_list(120)
+
+    if not progressions:
+        fallback_query: Dict[str, Any] = {}
+        if user_sports:
+            fallback_query['sport'] = {'$in': user_sports}
+        progressions = await db.sport_teaching_progressions.find(fallback_query).sort(
+            [('sport', 1), ('level', 1), ('domain', 1)]
+        ).to_list(120)
+
+    level_rank = {'beginner': 0, 'intermediate': 1, 'advanced': 2}
+    if user_level in level_rank:
+        progressions = sorted(
+            progressions,
+            key=lambda doc: (
+                0 if str(doc.get('level') or '').lower() == user_level else 1,
+                str(doc.get('sport') or ''),
+                level_rank.get(str(doc.get('level') or '').lower(), 9),
+                str(doc.get('domain') or ''),
+            ),
+        )
+    else:
+        progressions = sorted(
+            progressions,
+            key=lambda doc: (
+                str(doc.get('sport') or ''),
+                level_rank.get(str(doc.get('level') or '').lower(), 9),
+                str(doc.get('domain') or ''),
+            ),
+        )
+
+    def _lesson_domain_label(raw_domain: Any) -> str:
+        label = str(raw_domain or 'fundamentals').replace('_', ' ').title()
+        return (
+            label
+            .replace(' Snc', ' S&C')
+            .replace(' Iq', ' IQ')
+            .replace(' Mma', ' MMA')
+        )
+
+    lessons: List[Dict[str, Any]] = []
+    for doc in progressions:
+        sport = str(doc.get('sport') or 'sport').replace('_', ' ').title()
+        domain = _lesson_domain_label(doc.get('domain'))
+        level = str(doc.get('level') or 'all levels').replace('_', ' ').title()
+        learning_goal = str(doc.get('learning_goal') or doc.get('summary') or '').strip()
+        teaching_priorities = [
+            str(item).strip()
+            for item in (doc.get('teaching_priorities') or [])
+            if str(item).strip()
+        ]
+        typical_drills = [
+            str(item).strip()
+            for item in (doc.get('typical_drills') or doc.get('practice_design') or [])
+            if str(item).strip()
+        ]
+        tactical_focus = [
+            str(item).strip()
+            for item in (doc.get('tactical_focus') or [])
+            if str(item).strip()
+        ]
+
+        base_description = learning_goal or ', '.join(teaching_priorities[:3]) or f'{sport} lesson progression.'
+        lessons.append({
+            'id': f"{doc.get('id') or uuid.uuid4()}_fundamentals",
+            'sport': sport,
+            'title': f"{domain}: {level} Foundation",
+            'category': 'Fundamentals',
+            'description': base_description,
+            'difficulty': level,
+            'duration': 10,
+        })
+
+        if typical_drills:
+            lessons.append({
+                'id': f"{doc.get('id') or uuid.uuid4()}_drills",
+                'sport': sport,
+                'title': f"{domain}: Practice Drills",
+                'category': 'Drills',
+                'description': ', '.join(typical_drills[:4]),
+                'difficulty': level,
+                'duration': 12,
+            })
+
+        if tactical_focus:
+            lessons.append({
+                'id': f"{doc.get('id') or uuid.uuid4()}_tactics",
+                'sport': sport,
+                'title': f"{domain}: Tactical Focus",
+                'category': 'Tactics',
+                'description': ', '.join(tactical_focus[:4]),
+                'difficulty': level,
+                'duration': 8,
+            })
+
+    return lessons[:200]
 
 
 @api_router.get('/goals')
@@ -2001,10 +2891,11 @@ async def get_goals(current_user: dict = Depends(get_current_user)):
 # -------------------- NUTRITION --------------------
 @api_router.post('/meals/analyze')
 async def analyze_meal(payload: MealCreate, save: bool = True, current_user: dict = Depends(get_current_user)):
-    manual_only = payload.calories is not None and payload.image_base64 is None
+    manual_only = payload.calories is not None
     ai_analyzed = False
     if manual_only:
         result = _manual_meal_result(payload)
+        ai_analyzed = bool(payload.ai_analyzed)
     else:
         try:
             result = await _ai_analyze_meal(payload)
@@ -2247,6 +3138,7 @@ async def coach_send_request(payload: Dict[str, Any], current_user: dict = Depen
             raise HTTPException(status_code=409, detail='Client already connected')
         request_update = {
             'message': payload.get('message'),
+            'monthly_price': float(payload.get('monthly_price', 0.0)),
             'status': 'pending',
             'updated_at': now,
         }
@@ -2264,12 +3156,43 @@ async def coach_send_request(payload: Dict[str, Any], current_user: dict = Depen
         'client_id': client_id,
         'client_name': client_user.get('name', ''),
         'message': payload.get('message'),
+        'monthly_price': float(payload.get('monthly_price', 0.0)),
         'status': 'pending',
         'created_at': now,
         'updated_at': now,
     }
     await db.coach_requests.insert_one(request_doc)
     return clean_doc(request_doc)
+
+
+@api_router.post('/coach/requests/{request_id}/accept')
+async def client_accept_coach_request(request_id: str, current_user: dict = Depends(get_current_user)):
+    request = await db.coach_requests.find_one({'id': request_id, 'client_id': current_user['id']})
+    if not request:
+        raise HTTPException(status_code=404, detail='Request not found')
+    
+    if request.get('status') == 'accepted':
+        return clean_doc(request)
+        
+    now = datetime.utcnow()
+    await db.coach_requests.update_one(
+        {'id': request_id},
+        {'$set': {'status': 'accepted', 'updated_at': now}}
+    )
+    
+    sub_id = str(uuid.uuid4())
+    await db.coach_subscriptions.insert_one({
+        'id': sub_id,
+        'coach_id': request['coach_id'],
+        'client_id': current_user['id'],
+        'status': 'active',
+        'monthly_price': request.get('monthly_price', 0.0),
+        'currency': 'USD',
+        'started_at': now
+    })
+    
+    request['status'] = 'accepted'
+    return clean_doc(request)
 
 
 @api_router.post('/coach/workouts')
@@ -2434,9 +3357,9 @@ async def my_coach_goals(current_user: dict = Depends(get_current_user)):
 
 
 @api_router.post('/coach/workouts/{workout_id}/complete')
-async def complete_coach_workout(workout_id: str, current_user: dict = Depends(get_current_user)):
+async def complete_coach_workout(workout_id: str, background_tasks: BackgroundTasks, current_user: dict = Depends(get_current_user)):
     _require_client_user(current_user)
-    return await complete_workout(workout_id, current_user)
+    return await complete_workout(workout_id, background_tasks, current_user)
 
 
 # -------------------- HEALTH + LOGS --------------------
@@ -2934,61 +3857,7 @@ def _journal_patterns(inspected_entries: List[Dict[str, Any]], quick_logs: List[
 
 
 async def _journal_ai_insights(period: str, entries: List[Dict[str, Any]], quick_logs: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    if not openai_client:
-        return None
-
-    snippet_lines = []
-    for entry in entries[:8]:
-        text = _journal_entry_text(entry)
-        if text:
-            snippet_lines.append(f"{entry.get('entry_type', 'entry')}: {text[:500]}")
-    for log in quick_logs[:5]:
-        snippet_lines.append(
-            f"quick_log: mood={log.get('mood')}, energy={log.get('energy')}, stress={log.get('stress')}, note={str(log.get('note') or '')[:200]}"
-        )
-
-    prompt = (
-        "Summarize journal patterns for an athlete. Return only valid JSON with keys "
-        "summary, strength, improvement, recommendation. Keep each value concise."
-    )
-    user_text = (
-        f"Period: {period}\n"
-        f"Entries: {len(entries)}\n"
-        f"Quick logs: {len(quick_logs)}\n"
-        "Snippets:\n"
-        + "\n".join(snippet_lines[:12])
-    )
-
-    def _call_openai() -> str:
-        response = openai_client.chat.completions.create(
-            model=LLM_MODEL,
-            response_format={'type': 'json_object'},
-            messages=[
-                {'role': 'system', 'content': prompt},
-                {'role': 'user', 'content': user_text},
-            ],
-            temperature=0.2,
-        )
-        return (response.choices[0].message.content or '{}').strip()
-
-    try:
-        raw = await asyncio.to_thread(_call_openai)
-        if raw.startswith('```json'):
-            raw = raw[7:]
-        if raw.startswith('```'):
-            raw = raw[3:]
-        if raw.endswith('```'):
-            raw = raw[:-3]
-        parsed = json.loads(raw.strip())
-        return {
-            'summary': str(parsed.get('summary') or '').strip(),
-            'strength': str(parsed.get('strength') or '').strip() or None,
-            'improvement': str(parsed.get('improvement') or '').strip() or None,
-            'recommendation': str(parsed.get('recommendation') or '').strip() or None,
-        }
-    except Exception as exc:
-        logger.warning(f'Journal AI insights failed, falling back to heuristic summary: {exc}')
-        return None
+    return None
 
 
 @api_router.post('/ai/journal/search')
@@ -3119,6 +3988,105 @@ async def get_moods(current_user: dict = Depends(get_current_user)):
     return [clean_doc(d) for d in docs]
 
 
+@api_router.get('/coach/clients/{client_id}/progress')
+async def coach_client_progress(client_id: str, current_user: dict = Depends(get_current_user)):
+    _require_coach_user(current_user)
+    if not await _coach_client_is_accepted(current_user['id'], client_id):
+        raise HTTPException(status_code=403, detail='Not authorized to view this client')
+        
+    ninety_days_ago = datetime.utcnow() - timedelta(days=90)
+    
+    health_metrics = await db.health_metrics.find({
+        'user_id': client_id,
+        'date': {'$gte': ninety_days_ago.strftime('%Y-%m-%d')}
+    }).sort('date', 1).to_list(100)
+    
+    weight_trend = [
+        {'date': doc['date'], 'weight_kg': doc.get('weight_kg')} 
+        for doc in health_metrics if doc.get('weight_kg')
+    ]
+    
+    runs = await db.terra_runs.find({
+        'user_id': client_id,
+        'start_time': {'$gte': ninety_days_ago.isoformat()}
+    }).sort('start_time', 1).to_list(100)
+    
+    run_trend = [
+        {
+            'date': run['start_time'][:10], 
+            'distance_meters': run.get('distance_meters', 0),
+            'duration_seconds': run.get('active_duration_seconds', 0)
+        } 
+        for run in runs
+    ]
+    
+    return {
+        'weight_trend': weight_trend,
+        'run_trend': run_trend
+    }
+
+
+@api_router.get('/coach/clients/{client_id}/history')
+async def coach_client_history(client_id: str, limit: int = 50, current_user: dict = Depends(get_current_user)):
+    _require_coach_user(current_user)
+    if not await _coach_client_is_accepted(current_user['id'], client_id):
+        raise HTTPException(status_code=403, detail='Not authorized to view this client')
+        
+    workout_sessions = await db.workout_sessions.find({'user_id': client_id}).sort('start_time', -1).limit(limit).to_list(limit)
+    programs = await db.training_programs.find({'user_id': client_id}).sort('created_at', -1).limit(5).to_list(5)
+    quick_logs = await db.quick_logs.find({'user_id': client_id}).sort('date', -1).limit(limit).to_list(limit)
+    
+    return {
+        'workout_sessions': [clean_doc(ws) for ws in workout_sessions],
+        'training_programs': [clean_doc(p) for p in programs],
+        'quick_logs': [clean_doc(ql) for ql in quick_logs]
+    }
+
+
+@api_router.get('/coach/analytics')
+async def coach_analytics(current_user: dict = Depends(get_current_user)):
+    _require_coach_user(current_user)
+    
+    subscriptions = await db.coach_subscriptions.find({'coach_id': current_user['id']}).to_list(1000)
+    
+    mrr = 0.0
+    total_revenue = 0.0
+    active_clients = 0
+    now = datetime.utcnow()
+    
+    for sub in subscriptions:
+        if sub.get('status') == 'active':
+            mrr += sub.get('monthly_price', 0.0)
+            active_clients += 1
+            
+        start_date = sub.get('started_at')
+        if start_date:
+            end_date = sub.get('ended_at') or now
+            months_active = max(1, (end_date.year - start_date.year) * 12 + end_date.month - start_date.month)
+            total_revenue += sub.get('monthly_price', 0.0) * months_active
+            
+    requests = await db.coach_requests.find({
+        'coach_id': current_user['id'],
+        'status': 'accepted'
+    }).to_list(1000)
+    
+    growth_map = {}
+    for req in requests:
+        month = req['updated_at'].strftime('%Y-%m')
+        if month not in growth_map:
+            growth_map[month] = 0
+        growth_map[month] += 1
+        
+    growth_series = [{'month': k, 'new_clients': v} for k, v in sorted(growth_map.items())]
+    
+    return {
+        'mrr': round(mrr, 2),
+        'total_revenue': round(total_revenue, 2),
+        'active_clients': active_clients,
+        'growth_series': growth_series
+    }
+
+
 # -------------------- TERRA / RUN SOCIAL --------------------
 @api_router.post('/terra/clubs')
 async def create_run_club(payload: RunClubCreate, current_user: dict = Depends(get_current_user)):
@@ -3142,6 +4110,13 @@ async def create_run_club(payload: RunClubCreate, current_user: dict = Depends(g
         'updated_at': now,
     }
     await db.run_clubs.insert_one(club)
+    await db.run_club_memberships.insert_one({
+        'club_id': club['id'],
+        'user_id': current_user['id'],
+        'role': 'owner',
+        'status': 'active',
+        'joined_at': now
+    })
     return await _run_club_response(club, current_user)
 
 
@@ -3163,8 +4138,22 @@ async def join_run_club(club_id: str, current_user: dict = Depends(get_current_u
     club = await db.run_clubs.find_one({'id': club_id})
     if not club:
         raise HTTPException(status_code=404, detail='Run club not found')
-    if not club.get('is_public', True) and club.get('owner_id') != current_user['id']:
-        raise HTTPException(status_code=403, detail='This club is private')
+    if not club.get('is_public', True):
+        # Private club: check if membership already exists
+        existing_membership = await db.run_club_memberships.find_one({'club_id': club_id, 'user_id': current_user['id']})
+        if existing_membership:
+            raise HTTPException(status_code=400, detail='Membership already requested or active')
+        
+        await db.run_club_memberships.insert_one({
+            'club_id': club_id,
+            'user_id': current_user['id'],
+            'role': 'member',
+            'status': 'pending',
+            'joined_at': datetime.utcnow()
+        })
+        return {"status": "pending_approval", "message": "Request to join sent to club admins."}
+    
+    # Public club
     member_ids = [str(member_id) for member_id in club.get('member_ids', [])]
     if current_user['id'] not in member_ids:
         member_ids.append(current_user['id'])
@@ -3173,7 +4162,108 @@ async def join_run_club(club_id: str, current_user: dict = Depends(get_current_u
             {'$set': {'member_ids': member_ids, 'updated_at': datetime.utcnow()}},
         )
         club['member_ids'] = member_ids
+        
+        await db.run_club_memberships.insert_one({
+            'club_id': club_id,
+            'user_id': current_user['id'],
+            'role': 'member',
+            'status': 'active',
+            'joined_at': datetime.utcnow()
+        })
     return await _run_club_response(club, current_user)
+
+
+@api_router.get('/terra/clubs/{club_id}/members')
+async def get_run_club_members(club_id: str, current_user: dict = Depends(get_current_user)):
+    club = await db.run_clubs.find_one({'id': club_id})
+    if not club:
+        raise HTTPException(status_code=404, detail='Run club not found')
+        
+    memberships = await db.run_club_memberships.find({'club_id': club_id, 'status': {'$ne': 'removed'}}).to_list(1000)
+    user_ids = [m['user_id'] for m in memberships]
+    users = await db.users.find({'id': {'$in': user_ids}}).to_list(1000)
+    user_map = {u['id']: u for u in users}
+    
+    results = []
+    for m in memberships:
+        user_info = user_map.get(m['user_id'])
+        if user_info:
+            results.append({
+                'user_id': m['user_id'],
+                'name': user_info.get('name') or user_info.get('email', 'Runner'),
+                'role': m.get('role', 'member'),
+                'status': m.get('status', 'active'),
+                'joined_at': m.get('joined_at')
+            })
+    return results
+
+
+@api_router.put('/terra/clubs/{club_id}/members/{user_id}/approve')
+async def approve_run_club_member(club_id: str, user_id: str, current_user: dict = Depends(get_current_user)):
+    club = await db.run_clubs.find_one({'id': club_id})
+    if not club:
+        raise HTTPException(status_code=404, detail='Run club not found')
+        
+    admin_membership = await db.run_club_memberships.find_one({'club_id': club_id, 'user_id': current_user['id']})
+    if not admin_membership or admin_membership.get('role') not in ('owner', 'admin'):
+        raise HTTPException(status_code=403, detail='Must be a club admin to approve members')
+        
+    membership = await db.run_club_memberships.find_one({'club_id': club_id, 'user_id': user_id, 'status': 'pending'})
+    if not membership:
+        raise HTTPException(status_code=404, detail='Pending membership not found')
+        
+    await db.run_club_memberships.update_one(
+        {'_id': membership['_id']},
+        {'$set': {'status': 'active', 'joined_at': datetime.utcnow()}}
+    )
+    
+    member_ids = club.get('member_ids', [])
+    if user_id not in member_ids:
+        member_ids.append(user_id)
+        await db.run_clubs.update_one({'id': club_id}, {'$set': {'member_ids': member_ids}})
+        
+    return {"status": "approved", "user_id": user_id}
+
+
+@api_router.delete('/terra/clubs/{club_id}/members/{user_id}')
+async def remove_run_club_member(club_id: str, user_id: str, current_user: dict = Depends(get_current_user)):
+    club = await db.run_clubs.find_one({'id': club_id})
+    if not club:
+        raise HTTPException(status_code=404, detail='Run club not found')
+        
+    if current_user['id'] != user_id:
+        admin_membership = await db.run_club_memberships.find_one({'club_id': club_id, 'user_id': current_user['id']})
+        if not admin_membership or admin_membership.get('role') not in ('owner', 'admin'):
+            raise HTTPException(status_code=403, detail='Must be an admin to remove other members')
+            
+    await db.run_club_memberships.update_one(
+        {'club_id': club_id, 'user_id': user_id},
+        {'$set': {'status': 'removed'}}
+    )
+    
+    member_ids = club.get('member_ids', [])
+    if user_id in member_ids:
+        member_ids.remove(user_id)
+        await db.run_clubs.update_one({'id': club_id}, {'$set': {'member_ids': member_ids}})
+        
+    return {"status": "removed", "user_id": user_id}
+
+
+@api_router.get('/terra/clubs/{club_id}/feed')
+async def run_club_feed(club_id: str, limit: int = 20, current_user: dict = Depends(get_current_user)):
+    club = await db.run_clubs.find_one({'id': club_id})
+    if not club:
+        raise HTTPException(status_code=404, detail='Run club not found')
+        
+    membership = await db.run_club_memberships.find_one({'club_id': club_id, 'user_id': current_user['id']})
+    if (not membership or membership.get('status') != 'active') and not club.get('is_public', True):
+        raise HTTPException(status_code=403, detail='Must be an active member to view the feed')
+        
+    member_ids = club.get('member_ids', [])
+    if not member_ids:
+        return []
+    runs = await db.terra_runs.find({'user_id': {'$in': member_ids}}).sort('start_time', -1).limit(limit).to_list(limit)
+    return [clean_doc(run) for run in runs]
 
 
 @api_router.get('/terra/clubs/{club_id}/members/leaderboard')
