@@ -5,6 +5,7 @@ hybrid-macro phase-merge invariants, and the athlete-state / previous-block summ
 """
 from __future__ import annotations
 
+import re
 import pytest
 
 import backend.server as server
@@ -12,6 +13,7 @@ from backend.ai_workout_service import validate_program_quality, _extract_durati
 from backend.knowledge_retrieval import _compact_protocol, _merge_dedup_interleave, _semantic_hard_filter
 from backend.macro_plan_service import _merge_tuned_phases
 from backend.seed_training_protocols import PROTOCOLS
+from backend.seed_macro_plan_templates import TEMPLATES as MACRO_TEMPLATES
 from backend.models import (
     ProgramBlockPlan,
     ProgramExercisePrescription,
@@ -331,6 +333,27 @@ def test_protocol_seed_data_is_wellformed():
             assert stage.get("prescription"), f"{p['id']} stage missing prescription"
         assert p["id"] not in ids, "duplicate protocol id"
         ids.add(p["id"])
+
+
+def test_macro_templates_wellformed_and_cited():
+    ids = set()
+    for t in MACRO_TEMPLATES:
+        for field in ("id", "name", "macro_length_weeks", "phase_sequence", "applies_when", "source_refs"):
+            assert t.get(field), f"{t.get('id')} missing {field}"
+        assert t["id"] not in ids, "duplicate template id"
+        ids.add(t["id"])
+        # phases must be contiguous from week 1 and cover the full macro length
+        expected_start = 1
+        for ph in t["phase_sequence"]:
+            assert ph.get("primary_goals") and ph.get("progression_logic")
+            nums = [int(x) for x in re.findall(r"\d+", str(ph.get("weeks")))]
+            start, end = (nums[0], nums[-1]) if nums else (0, 0)
+            assert start == expected_start, f"{t['id']} phase '{ph.get('phase')}' starts at {start}, expected {expected_start}"
+            assert end >= start
+            expected_start = end + 1
+        assert expected_start - 1 == t["macro_length_weeks"], f"{t['id']} phases end at {expected_start - 1} != {t['macro_length_weeks']}"
+        # every template must carry at least one cited source with a URL
+        assert t["source_refs"] and all(r.get("url") for r in t["source_refs"])
 
 
 def test_compact_protocol_shape_and_truncation():

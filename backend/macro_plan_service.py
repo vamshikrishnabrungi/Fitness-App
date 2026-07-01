@@ -193,10 +193,40 @@ def _template_score(template: Dict[str, Any], profile: Dict[str, Any], sports: S
         score += 50
         reasons.append("advanced_speed_power_context")
 
+    # --- research-backed goal-specific templates (fill the coverage gaps) ---
+    if template_id == "template_hypertrophy_physique_16w" and any(
+        term in goals for term in ["muscle", "hypertroph", "physique", "bodybuild", "aesthet", "get bigger", "gain mass"]
+    ):
+        score += 62
+        reasons.append("hypertrophy_goal")
+    if template_id == "template_fatloss_recomp_12w" and any(
+        term in goals for term in ["fat loss", "fat-loss", "lose fat", "weight loss", "lose weight", "recomp", "get lean", "lean out", "cut", "shred", "tone up", "slim"]
+    ):
+        score += 66
+        reasons.append("fat_loss_goal")
+    if template_id == "template_endurance_base_16w" and (
+        any(term in goals for term in ["endurance", "marathon", "half marathon", "10k", "5k", "aerobic", "run a", "distance run", "cardio fitness"])
+        or set(sports).intersection({"running_endurance", "running", "triathlon"})
+    ):
+        score += 60
+        reasons.append("endurance_goal")
+    if template_id == "template_hybrid_strength_endurance_12w" and any(
+        term in goals for term in ["hybrid", "hyrox", "functional fitness", "crossfit", "strength and endurance", "tactical", "military", "spartan", "obstacle", "engine"]
+    ):
+        # Above the endurance template: "endurance" is a substring of "strength and endurance",
+        # so a hybrid goal also trips the endurance rule — hybrid must win that tie.
+        score += 68
+        reasons.append("hybrid_goal")
+    if template_id == "template_strength_peaking_14w" and level != "beginner" and any(
+        term in goals for term in ["powerlifting", "power lifting", "peak", "1rm", "max strength", "meet", "competition lift", "strongest", "total"]
+    ):
+        score += 60
+        reasons.append("strength_peaking_goal")
+
     if has_pain and template_id not in {"template_return_to_training_8w", "template_beginner_foundation_24w"}:
         score -= 35
         reasons.append("pain_penalty")
-    if level == "beginner" and template_id in {"template_power_conversion_12w", "template_speed_agility_16w"}:
+    if level == "beginner" and template_id in {"template_power_conversion_12w", "template_speed_agility_16w", "template_strength_peaking_14w"}:
         score -= 50
         reasons.append("beginner_complexity_penalty")
 
