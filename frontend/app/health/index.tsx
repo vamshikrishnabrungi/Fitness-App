@@ -141,6 +141,13 @@ export default function HealthHubScreen() {
                         <Ionicons name="medkit-outline" size={20} color={colors.textPrimary} />
                         <Text style={styles.actionText}>Log Injury</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => router.push('/health/benchmarks' as any)}
+                    >
+                        <Ionicons name="barbell-outline" size={20} color={colors.textPrimary} />
+                        <Text style={styles.actionText}>Baseline Testing</Text>
+                    </TouchableOpacity>
                 </View>
 
                 {/* C. Vitals Grid */}
