@@ -171,6 +171,7 @@ Output compactness rules:
 - Cooldowns should target the session just done: mobility for the muscles/joints worked plus parasympathetic downregulation (e.g. nasal or box breathing), not a generic stretch list.
 - Sequence the training WEEK for recovery: do not place two high-CNS or same-primary-pattern heavy sessions on consecutive days; put power and heavy-strength sessions when the athlete is freshest and separate them with easier or different-focus days.
 - If the input contains a deload_directive, this week is a scheduled DELOAD — follow it exactly (cut total volume, keep intensity light-to-moderate, prioritize recovery, do not add load).
+- VOLUME LANDMARKS (hypertrophy / muscle-gain goals): distribute weekly sets per major muscle group within the evidence-based productive range — start an accumulation block near MEV (~10 hard sets/muscle/week) and progress toward MRV (~18-20 sets/muscle/week) across the block, then cut ~50% on the deload. Spread those sets across the week's sessions; 6-20 reps at 1-3 RIR; do not exceed ~20-22 hard sets/muscle/week.
 - Warm-ups must PREPARE the session, not be generic: follow RAMP — raise (light dynamic movement), then ACTIVATE the muscles the main work will load (e.g. glute activation / banded lateral walks before squats and hinges; scapular + rotator-cuff work like band pull-aparts, face pulls, or Y-T-W before pressing/overhead; trunk bracing like dead bug / bird dog before loaded spine work), and mobilize the key joints. Prefer resistance-band and activation drills from the pool.
 - If the athlete has pain_areas or current_injuries, include at least one targeted prehab/activation drill for that area in the warmup (e.g. banded clamshell / hip work for knee pain; cuff + scapular work for shoulder pain; hip-hinge patterning + bracing for low-back pain).
 - Do not include long explanations, source summaries, or repeated reasoning in the output.
@@ -648,7 +649,7 @@ SESSION_BLUEPRINTS: Dict[str, Dict[str, Any]] = {
               "notes": "Thorough activation + potentiation warm-up. Keep volume LOW with explosive-concentric intent; place jumps/throws/plyometrics FIRST while fresh; consider a heavy+explosive contrast pair for advanced athletes; stop the set when output drops."},
     "hypertrophy": {"warmup": "2-3", "main": "4-6", "cooldown": "1-2", "requires_main": True,
                     "rest": "60-90 sec (up to 2 min on big compounds)",
-                    "notes": "8-15 reps, controlled eccentric tempo, 1-3 RIR; order compounds before isolation."},
+                    "notes": "8-15 reps, controlled eccentric tempo, 1-3 RIR; order compounds before isolation. Target ~10 hard sets per major muscle/week early in a block, progressing toward ~18-20 by the end."},
     "conditioning": {"warmup": "2-3", "main": "2-4", "cooldown": "1-2", "requires_main": True,
                      "rest": "prescribe an explicit work:rest ratio per interval",
                      "notes": "State the energy system targeted; use timed intervals with a work:rest ratio, not endless circuits."},
