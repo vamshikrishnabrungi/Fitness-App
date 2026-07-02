@@ -2633,14 +2633,29 @@ async def _record_workout_exercise_history(current_user: dict, workout: Dict[str
     intensity = None
     completion_percentage = None
     pain_score = None
+    performed: Dict[str, Dict[str, Any]] = {}
     if feedback:
         intensity = feedback.get('rpe') if feedback.get('rpe') is not None else feedback.get('intensity_rating')
         completion_percentage = feedback.get('completion_percentage')
         pain_score = feedback.get('pain_score')
+        for p in (feedback.get('performed_exercises') or []):
+            if not isinstance(p, dict):
+                continue
+            if p.get('exercise_id'):
+                performed[str(p['exercise_id'])] = p
+            if p.get('name'):
+                performed[re.sub(r'[^a-z0-9]+', ' ', str(p['name']).lower()).strip()] = p
     entries = []
     for exercise in exercises:
         if not isinstance(exercise, dict):
             continue
+        # Prefer the athlete's actual logged load/reps (numeric) over the prescribed text, so
+        # strength_trends is driven by real performance.
+        perf = performed.get(str(exercise.get('exercise_id'))) or performed.get(
+            re.sub(r'[^a-z0-9]+', ' ', str(exercise.get('name') or '').lower()).strip()
+        )
+        actual_load = perf.get('weight_kg') if perf else None
+        actual_reps = perf.get('reps') if perf else None
         entries.append({
             'id': str(uuid.uuid4()),
             'user_id': current_user['id'],
@@ -2650,9 +2665,10 @@ async def _record_workout_exercise_history(current_user: dict, workout: Dict[str
             'exercise_id': exercise.get('exercise_id'),
             'exercise_name': exercise.get('name'),
             'sets': exercise.get('sets'),
-            'reps': exercise.get('reps'),
+            'reps': actual_reps if actual_reps is not None else exercise.get('reps'),
             'duration': exercise.get('duration'),
-            'load': exercise.get('load') or exercise.get('load_guidance'),
+            'load': actual_load if actual_load is not None else (exercise.get('load') or exercise.get('load_guidance')),
+            'logged_load_kg': actual_load,
             'rpe': intensity,
             'pain_score': pain_score,
             'completion_percentage': completion_percentage,
@@ -2711,6 +2727,7 @@ def _compute_strength_trends(history: List[Dict[str, Any]]) -> List[Dict[str, An
         series = data['loads'] if use_load else (data['volumes'] if len(data['volumes']) >= 2 else [])
         if len(series) < 2:
             continue
+        series = sorted(series, key=lambda point: point[0] or "")  # chronological, independent of caller order
         first, last = series[0][1], series[-1][1]
         if first <= 0:
             continue

@@ -142,6 +142,13 @@ class Workout(BaseModel):
     user_feedback: Optional[Dict[str, Any]] = None
 
 
+class PerformedExercise(BaseModel):
+    name: str
+    exercise_id: Optional[str] = None
+    weight_kg: Optional[float] = None      # actual working load lifted
+    reps: Optional[int] = None             # actual reps completed
+
+
 class WorkoutFeedback(BaseModel):
     workout_id: str
     intensity_rating: int
@@ -151,6 +158,7 @@ class WorkoutFeedback(BaseModel):
     pain_score: Optional[int] = None
     rpe: Optional[float] = None
     notes: Optional[str] = None
+    performed_exercises: List[PerformedExercise] = Field(default_factory=list)
 
 
 class ProgramExercisePrescription(BaseModel):
