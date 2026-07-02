@@ -161,6 +161,8 @@ Output compactness rules:
 - Exercise purpose must be one short string under 150 characters.
 - injury_modifications must be a list of at most 3 short strings.
 - For each workout use at most 3 warmup drills, 4 main_work exercises, and 2 cooldown drills.
+- Warm-ups must PREPARE the session, not be generic: follow RAMP — raise (light dynamic movement), then ACTIVATE the muscles the main work will load (e.g. glute activation / banded lateral walks before squats and hinges; scapular + rotator-cuff work like band pull-aparts, face pulls, or Y-T-W before pressing/overhead; trunk bracing like dead bug / bird dog before loaded spine work), and mobilize the key joints. Prefer resistance-band and activation drills from the pool.
+- If the athlete has pain_areas or current_injuries, include at least one targeted prehab/activation drill for that area in the warmup (e.g. banded clamshell / hip work for knee pain; cuff + scapular work for shoulder pain; hip-hinge patterning + bracing for low-back pain).
 - Do not include long explanations, source summaries, or repeated reasoning in the output.
 
 Return ONLY valid JSON matching the schema. No markdown or commentary.

@@ -36,6 +36,15 @@ CONDITIONAL = {
 EQUIP_WORDS = {"barbell": "barbell", "dumbbell": "dumbbells", "kettlebell": "kettlebell",
                "cable": "cable", "landmine": "landmine", "band": "band"}
 
+# Unambiguous movement-pattern tags for exercises that currently have none. (Upper Back
+# Extensions intentionally omitted — thoracic vs hip extension is ambiguous → coach review.)
+PATTERN_CORRECTIONS = {
+    "good morning": ["hinge"],
+    "seated good morning": ["hinge"],
+    "clean shrug": ["olympic_lift", "pull"],
+    "clean rack support": ["olympic_lift"],
+}
+
 
 def _db():
     url, name = "mongodb://localhost:27017", "test_database"
@@ -114,9 +123,27 @@ def batch_c_equipment(db, dry) -> int:
     return changed
 
 
+def batch_d_patterns(db, dry) -> int:
+    print("BATCH D — add missing movement-pattern tags (unambiguous only)")
+    corr = {_norm(k): v for k, v in PATTERN_CORRECTIONS.items()}
+    changed = 0
+    for col in COLLECTIONS:
+        field = "movement_patterns" if col == "exercise_library" else "patterns"
+        for d in db[col].find({}, {"name": 1, "patterns": 1, "movement_patterns": 1}):
+            key = _norm(d.get("name"))
+            if key in corr and not (d.get("patterns") or d.get("movement_patterns")):
+                print(f"  {col}: {d.get('name')}: {field}={corr[key]}")
+                if not dry:
+                    db[col].update_one({"_id": d["_id"]}, {"$set": {field: corr[key]}})
+                changed += 1
+    print(f"  → {changed} records {'would be ' if dry else ''}updated")
+    return changed
+
+
 def main(dry: bool) -> None:
     db = _db()
-    total = batch_b_muscles(db, dry) + batch_a_non_movement(db, dry) + batch_c_equipment(db, dry)
+    total = (batch_b_muscles(db, dry) + batch_a_non_movement(db, dry)
+             + batch_c_equipment(db, dry) + batch_d_patterns(db, dry))
     print(f"\n{'DRY-RUN: ' if dry else ''}total records touched: {total}")
 
 
