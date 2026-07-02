@@ -168,6 +168,9 @@ Output compactness rules:
   * RAMP-UP SETS: for heavy compound main lifts (strength/power), put ramp-up guidance in load_guidance (e.g. "2-3 progressive warm-up sets ramping to the top working set"), not just the working sets.
   * CONTRAST / POTENTIATION: on power days for intermediate+ athletes you may pair a heavy strength lift with a biomechanically similar explosive movement (e.g. heavy squat then box jump).
   * CONDITIONING: always name the target energy system and give an explicit work:rest ratio (e.g. 1:1 for threshold, 1:3-1:5 for speed/alactic), not an open-ended circuit.
+- Cooldowns should target the session just done: mobility for the muscles/joints worked plus parasympathetic downregulation (e.g. nasal or box breathing), not a generic stretch list.
+- Sequence the training WEEK for recovery: do not place two high-CNS or same-primary-pattern heavy sessions on consecutive days; put power and heavy-strength sessions when the athlete is freshest and separate them with easier or different-focus days.
+- If the input contains a deload_directive, this week is a scheduled DELOAD — follow it exactly (cut total volume, keep intensity light-to-moderate, prioritize recovery, do not add load).
 - Warm-ups must PREPARE the session, not be generic: follow RAMP — raise (light dynamic movement), then ACTIVATE the muscles the main work will load (e.g. glute activation / banded lateral walks before squats and hinges; scapular + rotator-cuff work like band pull-aparts, face pulls, or Y-T-W before pressing/overhead; trunk bracing like dead bug / bird dog before loaded spine work), and mobilize the key joints. Prefer resistance-band and activation drills from the pool.
 - If the athlete has pain_areas or current_injuries, include at least one targeted prehab/activation drill for that area in the warmup (e.g. banded clamshell / hip work for knee pain; cuff + scapular work for shoulder pain; hip-hinge patterning + bracing for low-back pain).
 - Do not include long explanations, source summaries, or repeated reasoning in the output.
@@ -907,6 +910,7 @@ async def generate_ai_training_program(
     max_attempts: int = 1,
     strict_library_matches: bool = False,
     previous_block_summary: Optional[Dict[str, Any]] = None,
+    deload_week: bool = False,
 ) -> Dict[str, Any]:
     def _user_payload(previous_error: Optional[str] = None) -> Dict[str, Any]:
         payload = {
@@ -953,6 +957,12 @@ async def generate_ai_training_program(
             },
             "required_output": "Return only JSON. No markdown. No explanation.",
         }
+        if deload_week:
+            payload["deload_directive"] = (
+                "This is a scheduled DELOAD week: reduce total training volume ~40-50% (fewer sets and/or "
+                "exercises), keep 1-2 heavier top sets at moderate RPE (6-7) to retain the movement pattern, "
+                "prioritize movement quality and recovery, and DO NOT add load or introduce new high-CNS work."
+            )
         if previous_block_summary:
             payload["continuation"] = {
                 "mode": "next_block",

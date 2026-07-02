@@ -1163,6 +1163,17 @@ async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any
     workout_ai_max_attempts = int(os.environ.get('WORKOUT_AI_MAX_ATTEMPTS', '2') or 2)
     workout_ai_strict_library = os.environ.get('WORKOUT_AI_STRICT_LIBRARY_MATCHES', 'false').lower() in {'1', 'true', 'yes', 'on'}
 
+    # Deload enforcement: force a deload week on a fixed cadence OR when athlete_state says to back off.
+    state_doc = await db.athlete_states.find_one({'user_id': user_id}) or {}
+    deload_every = int(os.environ.get('WORKOUT_AI_DELOAD_EVERY', '4') or 4)
+    is_deload = (
+        state_doc.get('progression_signal') in ('hold_or_deload', 'reduce_volume_or_difficulty')
+        or (deload_every > 0 and next_week % deload_every == 0)
+    )
+    if is_deload:
+        logger.info("Week %s is a DELOAD (signal=%s, cadence every %s) user=%s",
+                    next_week, state_doc.get('progression_signal'), deload_every, user_id)
+
     try:
         generation = await generate_ai_training_program(
             profile,
@@ -1174,6 +1185,7 @@ async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any
             max_attempts=workout_ai_max_attempts,
             strict_library_matches=workout_ai_strict_library,
             previous_block_summary=previous_block_summary,
+            deload_week=is_deload,
         )
     except Exception as exc:
         logger.warning('AI next-block generation failed: %s', exc)
@@ -1245,6 +1257,7 @@ async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any
             },
             'session_plan': session_doc,
             'continuation_of_week': current_week,
+            'is_deload_week': is_deload,
         })
         await db.workouts.insert_one(workout)
         workouts.append(clean_doc(workout))
@@ -1283,6 +1296,7 @@ async def _extend_ai_training_program(current_user: dict, profile: Dict[str, Any
             'source': generation['source'],
             'continuation': True,
             'from_week': current_week,
+            'is_deload_week': is_deload,
             'grounding': grounding,
             'quality_report': quality_report,
         },
