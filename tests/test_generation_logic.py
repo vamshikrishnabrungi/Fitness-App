@@ -153,6 +153,33 @@ def test_score_program_rubric():
     assert d["load_anchoring"] == 100          # only Box Squat is rep-based; it has RPE
 
 
+def test_session_blueprint_mapping_and_rest_by_goal():
+    from backend.ai_workout_service import _session_blueprint, _default_rest
+    assert _session_blueprint("Power")["requires_main"] is True
+    assert _session_blueprint("Recovery")["requires_main"] is False
+    assert _session_blueprint("Mobility")["requires_main"] is False
+    assert _session_blueprint("Plyometric Depth Jumps")["warmup"] == "3-4"   # maps to power
+    assert _session_blueprint("Hypertrophy")["main"] == "4-6"
+    assert _session_blueprint("anything-else")["requires_main"] is True       # defaults to strength
+    assert _default_rest("Strength") != _default_rest("Hypertrophy")          # rest varies by goal
+    assert "recovery" in _default_rest("Power").lower()
+
+
+def test_recovery_session_allows_empty_main_work(monkeypatch):
+    monkeypatch.setenv("WORKOUT_AI_VALIDATION_MODE", "tiered")
+
+    def drill(n):
+        return ProgramExercisePrescription(name=n, purpose="mobility flow drill for the recovery day", duration="60 sec")
+
+    rec = ProgramWorkoutPrescription(
+        day="Monday", title="Recovery Flow", category="Recovery", duration_min=30, intensity="easy",
+        adaptation_targets=["recovery"], sport_transfer=["tissue recovery for court demands"],
+        why_this_session="Low-intensity mobility flow to aid recovery and lateral court movement between sessions",
+        warmup=[drill("Cat-Cow")], main_work=[], cooldown=[drill("Box Breathing")], injury_modifications=[])
+    # Empty main_work on a recovery session must NOT hard-fail (it would for a strength session).
+    assert validate_program_quality(_program([rec, _workout(title="Upper", day="Thursday")]), PROFILE)
+
+
 def test_strict_blocks_weak_why(monkeypatch):
     monkeypatch.setenv("WORKOUT_AI_VALIDATION_MODE", "strict")
     p = _program([

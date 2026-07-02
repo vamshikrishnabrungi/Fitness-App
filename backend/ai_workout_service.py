@@ -160,7 +160,9 @@ Output compactness rules:
 - why_this_session must be one short string under 220 characters.
 - Exercise purpose must be one short string under 150 characters.
 - injury_modifications must be a list of at most 3 short strings.
-- For each workout use at most 3 warmup drills, 4 main_work exercises, and 2 cooldown drills.
+- Structure each session BY ITS CATEGORY using knowledge_context.session_blueprints (per-type warmup/main/cooldown counts, rest, and notes). Do NOT apply one fixed structure to every session: strength = ramp to a top set, 3-5 mains, 2-4 min rest; power = low-volume explosive work, full recovery, plyometrics first while fresh; hypertrophy = 4-6 mains, 60-90s rest, controlled tempo; conditioning = intervals with an explicit work:rest ratio; mobility/recovery = a drill FLOW where main_work may be EMPTY (never force a lift).
+- Order main_work correctly: power / plyometric / Olympic lifts first (while fresh), then primary strength, then accessories, then any conditioning finisher.
+- Prescribe rest that matches the goal per the blueprint (strength/power longer, hypertrophy/conditioning shorter) — do not default everything to 60-90 sec.
 - Warm-ups must PREPARE the session, not be generic: follow RAMP — raise (light dynamic movement), then ACTIVATE the muscles the main work will load (e.g. glute activation / banded lateral walks before squats and hinges; scapular + rotator-cuff work like band pull-aparts, face pulls, or Y-T-W before pressing/overhead; trunk bracing like dead bug / bird dog before loaded spine work), and mobilize the key joints. Prefer resistance-band and activation drills from the pool.
 - If the athlete has pain_areas or current_injuries, include at least one targeted prehab/activation drill for that area in the warmup (e.g. banded clamshell / hip work for knee pain; cuff + scapular work for shoulder pain; hip-hinge patterning + bracing for low-back pain).
 - Do not include long explanations, source summaries, or repeated reasoning in the output.
@@ -205,9 +207,9 @@ def _json_schema() -> Dict[str, Any]:
                         "adaptation_targets": ["string <= 60 chars"],
                         "sport_transfer": ["string <= 120 chars"],
                         "why_this_session": "string <= 220 chars",
-                        "warmup": "list of <= 3 exercise objects",
-                        "main_work": "list of <= 4 exercise objects",
-                        "cooldown": "list of <= 2 exercise objects",
+                        "warmup": "list of exercise objects (count per session_blueprints for this category; may be empty for a lift-only session)",
+                        "main_work": "list of exercise objects (count per session_blueprints; MAY BE EMPTY for mobility/recovery sessions)",
+                        "cooldown": "list of exercise objects (count per session_blueprints for this category)",
                         "injury_modifications": ["string <= 120 chars"],
                     }
                 ],
@@ -627,6 +629,56 @@ def _default_duration(name: Any, category: Any) -> str:
     return "30-45 sec"
 
 
+# Per-session-type structure. Drives BOTH the prompt (how to build the session) and the validator
+# (what to require) so structure adapts to workout type instead of a single fixed cap.
+SESSION_BLUEPRINTS: Dict[str, Dict[str, Any]] = {
+    "strength": {"warmup": "2-3", "main": "3-5", "cooldown": "1-2", "requires_main": True,
+                 "rest": "2-4 min on heavy compounds, ~90 sec on accessories",
+                 "notes": "Ramp up to the top-set load. Order: activation -> primary compound(s) -> accessories."},
+    "power": {"warmup": "3-4", "main": "3-4", "cooldown": "1-2", "requires_main": True,
+              "rest": "full recovery, 2-3 min between explosive efforts",
+              "notes": "Thorough activation + potentiation warm-up. Keep volume LOW and every rep explosive; place jumps/throws/plyometrics FIRST while fresh; stop the set when output drops."},
+    "hypertrophy": {"warmup": "2-3", "main": "4-6", "cooldown": "1-2", "requires_main": True,
+                    "rest": "60-90 sec (up to 2 min on big compounds)",
+                    "notes": "8-15 reps, controlled eccentric tempo, 1-3 RIR; order compounds before isolation."},
+    "conditioning": {"warmup": "2-3", "main": "2-4", "cooldown": "1-2", "requires_main": True,
+                     "rest": "prescribe an explicit work:rest ratio per interval",
+                     "notes": "State the energy system targeted; use timed intervals with a work:rest ratio, not endless circuits."},
+    "mobility": {"warmup": "0-1", "main": "0", "cooldown": "0-1", "requires_main": False,
+                 "rest": "brief, controlled breathing",
+                 "notes": "A mobility / movement-quality FLOW, not a lift. Put the drills in warmup and/or cooldown; main_work may be empty."},
+    "recovery": {"warmup": "0-1", "main": "0", "cooldown": "0-2", "requires_main": False,
+                 "rest": "easy",
+                 "notes": "Low-intensity recovery flow; no heavy loading; main_work may be empty."},
+    "sport": {"warmup": "2-4", "main": "2-4", "cooldown": "1-2", "requires_main": False,
+              "rest": "as appropriate to the drill",
+              "notes": "Sport-specific prep that primes the sport's key movement patterns, plus skill/tactical work — not a generic gym warm-up."},
+}
+
+
+def _session_blueprint(category: Any) -> Dict[str, Any]:
+    c = str(category or "").lower()
+    if "power" in c or "plyo" in c or "ballistic" in c:
+        key = "power"
+    elif "hypertroph" in c:
+        key = "hypertrophy"
+    elif "condition" in c or "metcon" in c or "cardio" in c:
+        key = "conditioning"
+    elif "mobility" in c or "flex" in c or "stretch" in c:
+        key = "mobility"
+    elif "recovery" in c or "regen" in c or "rest" in c:
+        key = "recovery"
+    elif "sport" in c or "skill" in c:
+        key = "sport"
+    else:
+        key = "strength"
+    return SESSION_BLUEPRINTS[key]
+
+
+def _default_rest(category: Any) -> str:
+    return _session_blueprint(category)["rest"]
+
+
 def validate_program_quality(
     program: ProgramGenerationOutput,
     profile: Dict[str, Any],
@@ -728,8 +780,7 @@ def validate_program_quality(
                 ]
                 if weak_transfers:
                     soft_issues.append(f"{workout.title}: weak sport_transfer values {weak_transfers}")
-            if not workout.main_work:
-                hard_issues.append(f"{workout.title}: missing main_work")
+            blueprint = _session_blueprint(workout.category)
             if preferred_day_set and _normalize_day(workout.day) not in preferred_day_set:
                 soft_issues.append(f"{workout.title}: day '{workout.day}' is not in preferred days {preferred_days}")
             if injury_text and not workout.injury_modifications:
@@ -746,13 +797,17 @@ def validate_program_quality(
                 ("cooldown", workout.cooldown),
             ]:
                 if not section:
-                    if section_name == "main_work":
-                        hard_issues.append(f"{workout.title}: missing {section_name}")
-                    else:
-                        soft_issues.append(f"{workout.title}: missing {section_name}")
+                    # Requirement depends on the session type: a mobility/recovery day legitimately
+                    # has no main_work; a strength day should not be missing it.
+                    if section_name == "main_work" and blueprint["requires_main"]:
+                        hard_issues.append(f"{workout.title}: missing main_work")
+                    elif section_name == "warmup" and not blueprint["warmup"].startswith("0"):
+                        soft_issues.append(f"{workout.title}: missing warmup")
+                    elif section_name == "cooldown" and not blueprint["cooldown"].startswith("0"):
+                        soft_issues.append(f"{workout.title}: missing cooldown")
                 for exercise in section:
                     if section_name == "main_work" and not exercise.rest and exercise.sets:
-                        exercise.rest = "60-90 sec"
+                        exercise.rest = _default_rest(workout.category)
                     if section_name == "main_work" and not exercise.load_guidance and exercise.sets:
                         exercise.load_guidance = "Use controlled reps in a pain-free range at the target session intensity."
                     # Repair time-based/hold/interval exercises that specify neither reps nor duration
@@ -852,6 +907,7 @@ async def generate_ai_training_program(
         payload = {
             "profile": _profile_brief(profile),
             "knowledge_context": knowledge_context or {},
+            "session_blueprints": SESSION_BLUEPRINTS,
             "required_schema": _json_schema(),
             "schedule_rules": {
                 "training_days_per_week": _requested_session_count(profile),
