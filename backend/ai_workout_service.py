@@ -163,6 +163,11 @@ Output compactness rules:
 - Structure each session BY ITS CATEGORY using knowledge_context.session_blueprints (per-type warmup/main/cooldown counts, rest, and notes). Do NOT apply one fixed structure to every session: strength = ramp to a top set, 3-5 mains, 2-4 min rest; power = low-volume explosive work, full recovery, plyometrics first while fresh; hypertrophy = 4-6 mains, 60-90s rest, controlled tempo; conditioning = intervals with an explicit work:rest ratio; mobility/recovery = a drill FLOW where main_work may be EMPTY (never force a lift).
 - Order main_work correctly: power / plyometric / Olympic lifts first (while fresh), then primary strength, then accessories, then any conditioning finisher.
 - Prescribe rest that matches the goal per the blueprint (strength/power longer, hypertrophy/conditioning shorter) — do not default everything to 60-90 sec.
+- Prescription depth (populate the tempo/load_guidance/rpe fields, do not leave them generic):
+  * TEMPO by goal: controlled eccentric (e.g. tempo "3-0-1") on hypertrophy and primary strength lifts; explosive concentric ("X", move as fast as possible) on power/speed work; slow eccentric + isometric holds on tendon/rehab work.
+  * RAMP-UP SETS: for heavy compound main lifts (strength/power), put ramp-up guidance in load_guidance (e.g. "2-3 progressive warm-up sets ramping to the top working set"), not just the working sets.
+  * CONTRAST / POTENTIATION: on power days for intermediate+ athletes you may pair a heavy strength lift with a biomechanically similar explosive movement (e.g. heavy squat then box jump).
+  * CONDITIONING: always name the target energy system and give an explicit work:rest ratio (e.g. 1:1 for threshold, 1:3-1:5 for speed/alactic), not an open-ended circuit.
 - Warm-ups must PREPARE the session, not be generic: follow RAMP — raise (light dynamic movement), then ACTIVATE the muscles the main work will load (e.g. glute activation / banded lateral walks before squats and hinges; scapular + rotator-cuff work like band pull-aparts, face pulls, or Y-T-W before pressing/overhead; trunk bracing like dead bug / bird dog before loaded spine work), and mobilize the key joints. Prefer resistance-band and activation drills from the pool.
 - If the athlete has pain_areas or current_injuries, include at least one targeted prehab/activation drill for that area in the warmup (e.g. banded clamshell / hip work for knee pain; cuff + scapular work for shoulder pain; hip-hinge patterning + bracing for low-back pain).
 - Do not include long explanations, source summaries, or repeated reasoning in the output.
@@ -634,10 +639,10 @@ def _default_duration(name: Any, category: Any) -> str:
 SESSION_BLUEPRINTS: Dict[str, Dict[str, Any]] = {
     "strength": {"warmup": "2-3", "main": "3-5", "cooldown": "1-2", "requires_main": True,
                  "rest": "2-4 min on heavy compounds, ~90 sec on accessories",
-                 "notes": "Ramp up to the top-set load. Order: activation -> primary compound(s) -> accessories."},
+                 "notes": "Prescribe 2-3 ramp-up sets to the top working set. Controlled eccentric tempo on primary lifts. Order: activation -> primary compound(s) -> accessories."},
     "power": {"warmup": "3-4", "main": "3-4", "cooldown": "1-2", "requires_main": True,
               "rest": "full recovery, 2-3 min between explosive efforts",
-              "notes": "Thorough activation + potentiation warm-up. Keep volume LOW and every rep explosive; place jumps/throws/plyometrics FIRST while fresh; stop the set when output drops."},
+              "notes": "Thorough activation + potentiation warm-up. Keep volume LOW with explosive-concentric intent; place jumps/throws/plyometrics FIRST while fresh; consider a heavy+explosive contrast pair for advanced athletes; stop the set when output drops."},
     "hypertrophy": {"warmup": "2-3", "main": "4-6", "cooldown": "1-2", "requires_main": True,
                     "rest": "60-90 sec (up to 2 min on big compounds)",
                     "notes": "8-15 reps, controlled eccentric tempo, 1-3 RIR; order compounds before isolation."},
