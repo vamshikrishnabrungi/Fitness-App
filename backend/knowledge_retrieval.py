@@ -2218,10 +2218,13 @@ async def _retrieve_collection_context(
     if query_terms:
         query = {"$or": [{field: {"$in": query_terms}} for field in query_fields]}
 
+    # Exclude non-movement/principle entries (flagged is_movement=False) from drill selection.
+    exclude = {"is_movement": {"$ne": False}} if collection_name == "mobility_drills" else {}
+
     fetch_limit = max(limit * 20, 220) if collection_name == "programming_rules" else max(limit * 5, 50)
-    docs = await db[collection_name].find(query).to_list(fetch_limit)
+    docs = await db[collection_name].find({**exclude, **query}).to_list(fetch_limit)
     if len(docs) < min(5, limit):
-        docs = await db[collection_name].find({}).to_list(fetch_limit)
+        docs = await db[collection_name].find(exclude).to_list(fetch_limit)
 
     ranked: List[Tuple[int, List[str], Dict[str, Any]]] = []
     for doc in docs:

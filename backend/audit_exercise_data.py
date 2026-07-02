@@ -79,8 +79,10 @@ def audit(db) -> int:
     print(f"  {len(dup)} ids shared across collections (dedup opportunity)")
     issues += len(dup)
 
-    print("\n== NON-MOVEMENT ENTRIES (not real drills) ==")
-    nm = list(db.mobility_drills.find({"category": {"$in": ["mobility_principles", "principle", "knowledge", "concept"]}}, {"name": 1}))
+    print("\n== NON-MOVEMENT ENTRIES (not real drills, not yet flagged is_movement=False) ==")
+    nm = list(db.mobility_drills.find(
+        {"category": {"$in": ["mobility_principles", "principle", "knowledge", "concept"]},
+         "is_movement": {"$ne": False}}, {"name": 1}))
     print(f"  {len(nm)}: {[d.get('name') for d in nm][:8]}")
     issues += len(nm)
 

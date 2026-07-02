@@ -18,7 +18,7 @@ import os
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from backend import build_exercise_embeddings, seed_macro_plan_templates, seed_training_protocols
+from backend import build_exercise_embeddings, fix_exercise_data, seed_macro_plan_templates, seed_training_protocols
 from backend.db_setup import ensure_database_schema
 from backend.embeddings import embeddings_enabled
 
@@ -58,8 +58,11 @@ def main() -> None:
         embedded, skipped = build_exercise_embeddings.build(build_exercise_embeddings._db())
         print(f"     embedded {embedded}, already up-to-date {skipped}")
     else:
-        print("4/4 embeddings disabled (EXERCISE_EMBEDDINGS_ENABLED=false) — skipping; "
+        print("4/5 embeddings disabled (EXERCISE_EMBEDDINGS_ENABLED=false) — skipping; "
               "semantic retrieval will fall back to keyword matching.")
+
+    print("5/5 applying confirmed exercise-data fixes (muscle mislabels, non-movement flags)…")
+    fix_exercise_data.main(dry=False)
 
     print("Bootstrap complete ✅")
 
