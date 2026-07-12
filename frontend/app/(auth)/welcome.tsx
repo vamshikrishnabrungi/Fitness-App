@@ -31,13 +31,13 @@ export default function WelcomeScreen() {
 
         {/* Logo at top left */}
         <View style={[styles.logoContainer, { top: insets.top + 20 }]}>
-          <Text style={styles.logo}>SFTC</Text>
+          <Text style={styles.logo}>Runlete</Text>
         </View>
 
         {/* Bottom content */}
         <View style={[styles.content, { paddingBottom: insets.bottom + 32 }]}>
           {/* Title */}
-          <Text style={styles.title}>SFTC</Text>
+          <Text style={styles.title}>Runlete</Text>
           <Text style={styles.subtitle}>
             Strength starts here. Train{'\n'}with us.
           </Text>

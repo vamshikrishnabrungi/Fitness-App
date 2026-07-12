@@ -151,7 +151,7 @@ export default function LoginScreen() {
           keyboardShouldPersistTaps="handled"
         >
           {/* Logo */}
-          <Text style={styles.logo}>SFTC</Text>
+          <Text style={styles.logo}>Runlete</Text>
 
           {step === 'email' ? (
             <>
@@ -184,7 +184,7 @@ export default function LoginScreen() {
 
               {/* Terms */}
               <Text style={styles.termsText}>
-                By continuing, I agree to SFTC&apos;s{' '}
+                By continuing, I agree to Runlete&apos;s{' '}
                 <Text style={styles.link} onPress={() => router.push('/privacy-policy')}>
                   Privacy Policy
                 </Text>{' '}

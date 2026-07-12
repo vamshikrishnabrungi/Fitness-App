@@ -1,4 +1,4 @@
-// SFTC Premium Theme - Nike-inspired
+// Runlete Premium Theme - Nike-inspired
 // Generous whitespace, relaxed typography, premium feel
 
 export const colors = {

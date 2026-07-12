@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,21 +7,35 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SettingsRow } from '../../src/components/SettingsRow';
 import { GlassCard } from '../../src/components/GlassCard';
 import { Button } from '../../src/components/Button';
 import { LogoutModal } from '../../src/components/LogoutModal';
 import { useAuthStore } from '../../src/store/authStore';
+import { api } from '../../src/utils/api';
 import { colors, typography, spacing, borderRadius } from '../../src/utils/theme';
+
+interface ProfileStats {
+  workouts: number;
+  streak_days: number;
+  hours: number;
+}
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { user, logout, toggleMode } = useAuthStore();
-  const [switching, setSwitching] = useState(false);
+  const { user, logout } = useAuthStore();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [stats, setStats] = useState<ProfileStats | null>(null);
+
+  // Refetch whenever the tab regains focus so stats stay current after workouts.
+  useFocusEffect(
+    React.useCallback(() => {
+      api.get<ProfileStats>('/profile/stats').then(setStats).catch(() => {});
+    }, [])
+  );
 
   const handleLogout = async () => {
     try {
@@ -36,19 +50,6 @@ export default function ProfileScreen() {
       router.replace('/(auth)/welcome');
     }
   };
-
-  const handleToggleMode = async () => {
-    setSwitching(true);
-    try {
-      await toggleMode();
-    } catch (error) {
-      console.error('Error toggling mode:', error);
-    } finally {
-      setSwitching(false);
-    }
-  };
-
-  const isCoach = user?.mode === 'coach';
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -77,94 +78,33 @@ export default function ProfileScreen() {
         <GlassCard style={styles.statsCard}>
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>24</Text>
+              <Text style={styles.statValue}>{stats?.workouts ?? 0}</Text>
               <Text style={styles.statLabel}>Workouts</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>7</Text>
+              <Text style={styles.statValue}>{stats?.streak_days ?? 0}</Text>
               <Text style={styles.statLabel}>Day Streak</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>18</Text>
+              <Text style={styles.statValue}>{stats?.hours ?? 0}</Text>
               <Text style={styles.statLabel}>Hours</Text>
             </View>
           </View>
         </GlassCard>
 
-        {/* Mode Toggle */}
-        <View style={styles.settingsGroup}>
-          <View style={styles.modeContainer}>
-            <Text style={styles.modeLabel}>Mode</Text>
-            <View style={styles.modeToggle}>
-              <TouchableOpacity
-                style={[
-                  styles.modeButton,
-                  !isCoach && styles.modeButtonActive,
-                ]}
-                onPress={isCoach ? handleToggleMode : undefined}
-                disabled={switching}
-              >
-                <Text
-                  style={[
-                    styles.modeButtonText,
-                    !isCoach && styles.modeButtonTextActive,
-                  ]}
-                >
-                  User
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.modeButton,
-                  isCoach && styles.modeButtonActive,
-                ]}
-                onPress={!isCoach ? handleToggleMode : undefined}
-                disabled={switching}
-              >
-                <Text
-                  style={[
-                    styles.modeButtonText,
-                    isCoach && styles.modeButtonTextActive,
-                  ]}
-                >
-                  Coach
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          {isCoach && (
-            <TouchableOpacity
-              style={styles.coachDashboardButton}
-              onPress={() => router.push('/coach')}
-            >
-              <Ionicons name="clipboard-outline" size={20} color={colors.textPrimary} />
-              <Text style={styles.coachDashboardText}>Open Coach Dashboard</Text>
-              <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
-            </TouchableOpacity>
-          )}
-        </View>
-
-        {/* Settings Group 1 - User */}
+        {/* Account */}
         <View style={styles.sectionDivider} />
         <View style={styles.settingsGroup}>
           <SettingsRow
             title="Edit Profile"
-            onPress={() => { }}
-          />
-          <SettingsRow
-            title="My Goals"
-            onPress={() => { }}
-          />
-          <SettingsRow
-            title="Body Measurements"
-            onPress={() => { }}
+            onPress={() => router.push('/profile/edit' as any)}
             isLast
           />
         </View>
 
-        {/* Settings Group - Wellness */}
+        {/* Training */}
         <View style={styles.sectionDivider} />
         <View style={styles.settingsGroup}>
           <SettingsRow
@@ -174,50 +114,20 @@ export default function ProfileScreen() {
           <SettingsRow
             title="📊 Analytics"
             onPress={() => router.push('/analytics')}
-          />
-          <SettingsRow
-            title="🏋️ From My Coach"
-            onPress={() => router.push('/my-coach')}
             isLast
           />
         </View>
 
-        {/* Settings Group 2 - Preferences */}
+        {/* Legal */}
         <View style={styles.sectionDivider} />
         <View style={styles.settingsGroup}>
-          <SettingsRow
-            title="Units of Measure"
-            onPress={() => { }}
-          />
-          <SettingsRow
-            title="Workout Settings"
-            onPress={() => { }}
-          />
-          <SettingsRow
-            title="Notification Preferences"
-            onPress={() => { }}
-          />
-          <SettingsRow
-            title="Privacy"
-            onPress={() => { }}
-            isLast
-          />
-        </View>
-
-        {/* Settings Group 3 - Support */}
-        <View style={styles.sectionDivider} />
-        <View style={styles.settingsGroup}>
-          <SettingsRow
-            title="Help & Support"
-            onPress={() => { }}
-          />
           <SettingsRow
             title="Terms of Service"
-            onPress={() => { }}
+            onPress={() => router.push('/terms-of-use')}
           />
           <SettingsRow
             title="Privacy Policy"
-            onPress={() => { }}
+            onPress={() => router.push('/privacy-policy')}
             isLast
           />
         </View>
@@ -235,7 +145,7 @@ export default function ProfileScreen() {
         </View>
 
         {/* App Info */}
-        <Text style={styles.appVersion}>SFTC v1.0.0</Text>
+        <Text style={styles.appVersion}>Runlete v1.0.0</Text>
       </ScrollView>
 
       {/* Logout Confirmation Modal */}
@@ -326,39 +236,6 @@ const styles = StyleSheet.create({
     height: 12, // Nike-style section divider
     backgroundColor: colors.surfaceSecondary,
   },
-  modeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: spacing.xl,
-    paddingHorizontal: spacing.page,
-    backgroundColor: colors.background,
-  },
-  modeLabel: {
-    ...typography.body,
-    color: colors.textPrimary,
-  },
-  modeToggle: {
-    flexDirection: 'row',
-    backgroundColor: colors.separator,
-    borderRadius: borderRadius.full,
-    padding: 2,
-  },
-  modeButton: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: borderRadius.full,
-  },
-  modeButtonActive: {
-    backgroundColor: colors.textPrimary,
-  },
-  modeButtonText: {
-    ...typography.captionMedium,
-    color: colors.textSecondary,
-  },
-  modeButtonTextActive: {
-    color: colors.badgeFilledText,
-  },
   signOutContainer: {
     marginTop: spacing.lg,
   },
@@ -367,19 +244,5 @@ const styles = StyleSheet.create({
     color: colors.textTertiary,
     textAlign: 'center',
     marginTop: spacing.xxl,
-  },
-  coachDashboardButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-    gap: spacing.md,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.separator,
-  },
-  coachDashboardText: {
-    flex: 1,
-    ...typography.body,
-    color: colors.textPrimary,
   },
 });

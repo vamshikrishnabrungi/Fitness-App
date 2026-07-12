@@ -12,5 +12,7 @@ httpx==0.28.1
 python-multipart==0.0.20
 beautifulsoup4==4.12.3
 slowapi==0.1.9
+# Optional error monitoring. Active only when SENTRY_DSN is set (see server.py).
+sentry-sdk[fastapi]==2.20.0
 # Optional: local semantic exercise retrieval (Stage-2). Degrades gracefully if absent.
 fastembed==0.3.6

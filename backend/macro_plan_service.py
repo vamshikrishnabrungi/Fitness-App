@@ -352,7 +352,7 @@ def _assumptions(profile: Dict[str, Any], sports: Sequence[str], sport_profiles:
 
 
 MACRO_TUNING_SYSTEM_PROMPT = """
-You are SFTC's periodization editor. A rule-based engine has already selected an expert macro-cycle
+You are Runlete's periodization editor. A rule-based engine has already selected an expert macro-cycle
 template and its phase sequence. Your ONLY job is to TUNE that template to this specific athlete.
 
 You MUST:

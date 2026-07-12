@@ -156,7 +156,7 @@ const fmtRelative = (v?: string | null) => {
   return `${Math.floor(h / 24)}d ago`;
 };
 
-const feelingEmoji: Record<string, string> = { great: '🔥', good: '👍', tired: '😮‍💨', struggling: '😤' };
+const feelingEmoji: Record<string, string> = { great: '✓', good: 'OK', tired: 'Tired', struggling: 'Hard' };
 
 export default function TerraRunScreen() {
   const insets = useSafeAreaInsets();
@@ -360,7 +360,7 @@ export default function TerraRunScreen() {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabsScroll} contentContainerStyle={styles.tabsContent}>
         {TABS.map((t) => (
           <TouchableOpacity key={t.key} style={[styles.tab, activeTab === t.key && styles.tabActive]} onPress={() => setActiveTab(t.key)}>
-            <Ionicons name={t.icon as any} size={16} color={activeTab === t.key ? '#fff' : colors.textTertiary} />
+            <Ionicons name={t.icon as any} size={16} color={activeTab === t.key ? colors.background : colors.textTertiary} />
             <Text style={[styles.tabText, activeTab === t.key && styles.tabTextActive]}>{t.label}</Text>
           </TouchableOpacity>
         ))}
@@ -371,10 +371,10 @@ export default function TerraRunScreen() {
         style={styles.scroll}
         contentContainerStyle={[styles.scrollContent, { paddingBottom: insets.bottom + 100 }]}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accentOrange} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.textPrimary} />}
       >
         {loading ? (
-          <ActivityIndicator size="large" color={colors.accentOrange} style={{ marginTop: 80 }} />
+          <ActivityIndicator size="large" color={colors.textPrimary} style={{ marginTop: 80 }} />
         ) : (
           <>
             {/* ─────────── OVERVIEW ─────────── */}
@@ -399,10 +399,10 @@ export default function TerraRunScreen() {
                 {/* Stats grid */}
                 <View style={styles.statsGrid}>
                   {[
-                    { icon: 'footsteps-outline', color: colors.accentOrange, val: String(stats?.total_runs ?? 0), lbl: 'Total Runs' },
+                    { icon: 'footsteps-outline', color: colors.textPrimary, val: String(stats?.total_runs ?? 0), lbl: 'Total Runs' },
                     { icon: 'speedometer-outline', color: colors.accentBlue, val: `${stats?.total_distance?.toFixed(1) ?? '0'}`, lbl: 'km Distance' },
                     { icon: 'map-outline', color: colors.statusSuccess, val: `${stats?.total_territory?.toFixed(2) ?? '0'}`, lbl: 'sq km Territory' },
-                    { icon: 'flash-outline', color: '#D35400', val: `${stats?.consistency ?? 0}%`, lbl: 'Consistency' },
+                    { icon: 'flash-outline', color: colors.textPrimary, val: `${stats?.consistency ?? 0}%`, lbl: 'Consistency' },
                   ].map((s) => (
                     <GlassCard key={s.lbl} style={styles.statCard}>
                       <Ionicons name={s.icon as any} size={22} color={s.color} />
@@ -443,6 +443,21 @@ export default function TerraRunScreen() {
                     </View>
                   </GlassCard>
                 )}
+
+                {/* Run Clubs Entry */}
+                <TouchableOpacity onPress={() => router.push('/run/clubs' as any)}>
+                  <GlassCard style={{ ...(styles.compCard as object), marginTop: 16 }}>
+                    <View style={styles.compRow}>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.compName}>Run Clubs</Text>
+                        <Text style={styles.compPrize}>Discover and join local groups</Text>
+                      </View>
+                      <View style={styles.compDays}>
+                         <Ionicons name="people-outline" size={32} color={colors.textPrimary} />
+                      </View>
+                    </View>
+                  </GlassCard>
+                </TouchableOpacity>
               </View>
             )}
 
@@ -467,11 +482,11 @@ export default function TerraRunScreen() {
                           <TouchableOpacity key={run.id} onPress={() => router.push({ pathname: '/run/[id]' as any, params: { id: run.id } })}>
                             <GlassCard style={styles.runCard}>
                               <View style={styles.runCardLeft}>
-                                <View style={[styles.runIcon, { backgroundColor: run.is_loop ? colors.accentOrange + '20' : colors.accentBlue + '20' }]}>
+                                <View style={[styles.runIcon, { backgroundColor: run.is_loop ? colors.surfaceSecondary : colors.accentBlue + '20' }]}>
                                   <Ionicons
                                     name={run.is_loop ? 'git-compare-outline' : 'trending-up-outline'}
                                     size={20}
-                                    color={run.is_loop ? colors.accentOrange : colors.accentBlue}
+                                    color={run.is_loop ? colors.textPrimary : colors.accentBlue}
                                   />
                                 </View>
                                 <View>
@@ -489,7 +504,7 @@ export default function TerraRunScreen() {
                                   <Text style={styles.runMetricLbl}>time</Text>
                                 </View>
                                 <View style={styles.runMetric}>
-                                  <Text style={[styles.runMetricVal, { color: colors.accentOrange }]}>{run.territory_captured.toFixed(3)}</Text>
+                                  <Text style={[styles.runMetricVal, { color: colors.textPrimary }]}>{run.territory_captured.toFixed(3)}</Text>
                                   <Text style={styles.runMetricLbl}>km²</Text>
                                 </View>
                               </View>
@@ -569,7 +584,7 @@ export default function TerraRunScreen() {
                 <View style={styles.sectionRow}>
                   <Text style={styles.sectionTitle}>Your Clubs</Text>
                   <TouchableOpacity style={styles.addPlanBtn} onPress={() => setShowCreateClub(true)}>
-                    <Ionicons name="add" size={18} color={colors.accentOrange} />
+                    <Ionicons name="add" size={18} color={colors.textPrimary} />
                     <Text style={styles.addPlanText}>Create</Text>
                   </TouchableOpacity>
                 </View>
@@ -614,7 +629,7 @@ export default function TerraRunScreen() {
                       ) : (
                         <TouchableOpacity style={styles.joinBtn} onPress={() => joinClub(selectedClub)} disabled={joiningClub === selectedClub.id}>
                           {joiningClub === selectedClub.id
-                            ? <ActivityIndicator size="small" color="#000" />
+                            ? <ActivityIndicator size="small" color={colors.background} />
                             : <Text style={styles.joinBtnText}>Join</Text>}
                         </TouchableOpacity>
                       )}
@@ -676,7 +691,7 @@ export default function TerraRunScreen() {
                       {!club.is_member && (
                         <TouchableOpacity style={styles.joinBtn} onPress={() => joinClub(club)} disabled={joiningClub === club.id}>
                           {joiningClub === club.id
-                            ? <ActivityIndicator size="small" color="#000" />
+                            ? <ActivityIndicator size="small" color={colors.background} />
                             : <Text style={styles.joinBtnText}>Join</Text>}
                         </TouchableOpacity>
                       )}
@@ -732,8 +747,8 @@ export default function TerraRunScreen() {
                     disabled={!postText.trim() || posting}
                   >
                     {posting
-                      ? <ActivityIndicator size="small" color="#000" />
-                      : <><Ionicons name="send" size={16} color="#000" /><Text style={styles.postBtnText}>Post</Text></>}
+                      ? <ActivityIndicator size="small" color={colors.background} />
+                      : <><Ionicons name="send" size={16} color={colors.background} /><Text style={styles.postBtnText}>Post</Text></>}
                   </TouchableOpacity>
                 </GlassCard>
 
@@ -765,7 +780,7 @@ export default function TerraRunScreen() {
                         {/* Attached run */}
                         {post.run && (
                           <View style={styles.postRunStrip}>
-                            <Ionicons name="footsteps-outline" size={14} color={colors.accentOrange} />
+                            <Ionicons name="footsteps-outline" size={14} color={colors.textPrimary} />
                             <Text style={styles.postRunText}>
                               {post.run.distance.toFixed(1)} km · {fmtDuration(post.run.duration)} · {post.run.territory_captured.toFixed(3)} km²
                             </Text>
@@ -775,7 +790,7 @@ export default function TerraRunScreen() {
                         {/* Actions */}
                         <View style={styles.postActions}>
                           <TouchableOpacity style={styles.postAction} onPress={() => toggleLike(post.id)}>
-                            <Ionicons name="heart-outline" size={18} color={colors.accentOrange} />
+                            <Ionicons name="heart-outline" size={18} color={colors.textPrimary} />
                             <Text style={styles.postActionText}>{post.likes.length}</Text>
                           </TouchableOpacity>
                           <TouchableOpacity
@@ -816,8 +831,8 @@ export default function TerraRunScreen() {
                                 disabled={submittingComment === post.id}
                               >
                                 {submittingComment === post.id
-                                  ? <ActivityIndicator size="small" color={colors.accentOrange} />
-                                  : <Ionicons name="send" size={16} color={colors.accentOrange} />}
+                                  ? <ActivityIndicator size="small" color={colors.textPrimary} />
+                                  : <Ionicons name="send" size={16} color={colors.textPrimary} />}
                               </TouchableOpacity>
                             </View>
                           </View>
@@ -835,7 +850,7 @@ export default function TerraRunScreen() {
                 <View style={styles.sectionRow}>
                   <Text style={styles.sectionTitle}>Training Plans</Text>
                   <TouchableOpacity style={styles.addPlanBtn} onPress={() => setShowCreatePlan(true)}>
-                    <Ionicons name="add" size={18} color={colors.accentOrange} />
+                    <Ionicons name="add" size={18} color={colors.textPrimary} />
                     <Text style={styles.addPlanText}>New Plan</Text>
                   </TouchableOpacity>
                 </View>
@@ -884,8 +899,8 @@ export default function TerraRunScreen() {
         onPress={() => router.push('/run/track')}
         activeOpacity={0.85}
       >
-        <LinearGradient colors={[colors.accentOrange, '#FF8E53']} style={styles.fabGrad}>
-          <Ionicons name="play" size={20} color="#000" />
+        <LinearGradient colors={[colors.textPrimary, '#2B2B2B']} style={styles.fabGrad}>
+          <Ionicons name="play" size={20} color={colors.background} />
           <Text style={styles.fabText}>Start Run</Text>
         </LinearGradient>
       </TouchableOpacity>
@@ -904,7 +919,7 @@ export default function TerraRunScreen() {
             <Text style={styles.modalLabel}>Club Name</Text>
             <TextInput
               style={styles.modalInput}
-              placeholder="SFTC Hyderabad Runners"
+              placeholder="Runlete Hyderabad Runners"
               placeholderTextColor={colors.textTertiary}
               value={clubName}
               onChangeText={setClubName}
@@ -935,7 +950,7 @@ export default function TerraRunScreen() {
               disabled={!clubName.trim() || !clubCity.trim() || creatingClub}
             >
               {creatingClub
-                ? <ActivityIndicator size="small" color="#000" />
+                ? <ActivityIndicator size="small" color={colors.background} />
                 : <Text style={styles.createPlanBtnText}>Create Club</Text>}
             </TouchableOpacity>
           </View>
@@ -977,7 +992,7 @@ export default function TerraRunScreen() {
               disabled={creatingPlan}
             >
               {creatingPlan
-                ? <ActivityIndicator size="small" color="#000" />
+                ? <ActivityIndicator size="small" color={colors.background} />
                 : <Text style={styles.createPlanBtnText}>Create Plan</Text>}
             </TouchableOpacity>
           </View>
@@ -1001,9 +1016,9 @@ const styles = StyleSheet.create({
   tabsScroll: { maxHeight: 48 },
   tabsContent: { paddingHorizontal: spacing.lg, gap: spacing.sm, alignItems: 'center' },
   tab: { flexDirection: 'row', alignItems: 'center', gap: 5, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: borderRadius.full, backgroundColor: colors.surface },
-  tabActive: { backgroundColor: colors.accentOrange },
+  tabActive: { backgroundColor: colors.textPrimary },
   tabText: { ...typography.caption, color: colors.textTertiary, fontWeight: '600' },
-  tabTextActive: { color: '#fff' },
+  tabTextActive: { color: colors.background },
 
   // Scroll
   scroll: { flex: 1 },
@@ -1017,12 +1032,12 @@ const styles = StyleSheet.create({
   // XP Card
   xpCard: { padding: spacing.lg },
   xpTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
-  xpLevelLabel: { ...typography.caption, color: colors.accentOrange, fontWeight: '700', letterSpacing: 1 },
+  xpLevelLabel: { ...typography.caption, color: colors.textSecondary, fontWeight: '700', letterSpacing: 1 },
   xpNumbers: { ...typography.h3, color: colors.textPrimary, marginTop: 2 },
-  xpBadge: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.accentOrange + '20', alignItems: 'center', justifyContent: 'center' },
+  xpBadge: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.surfaceSecondary, alignItems: 'center', justifyContent: 'center' },
   xpBadgeText: { fontSize: 22 },
   xpTrack: { height: 8, backgroundColor: colors.surface, borderRadius: 4, overflow: 'hidden', marginBottom: spacing.xs },
-  xpFill: { height: '100%', backgroundColor: colors.accentOrange, borderRadius: 4 },
+  xpFill: { height: '100%', backgroundColor: colors.textPrimary, borderRadius: 4 },
   xpHint: { ...typography.caption, color: colors.textTertiary },
 
   // Stats grid
@@ -1036,7 +1051,7 @@ const styles = StyleSheet.create({
   chart: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', height: 80, marginTop: spacing.md },
   chartCol: { flex: 1, alignItems: 'center', gap: 4 },
   chartBarTrack: { width: 20, height: 60, backgroundColor: colors.surface, borderRadius: 4, overflow: 'hidden', justifyContent: 'flex-end' },
-  chartBarFill: { backgroundColor: colors.accentOrange, width: '100%', borderRadius: 4 },
+  chartBarFill: { backgroundColor: colors.textPrimary, width: '100%', borderRadius: 4 },
   chartDay: { ...typography.caption, color: colors.textTertiary, fontSize: 10 },
   chartVal: { fontSize: 9, color: colors.textSecondary },
 
@@ -1045,9 +1060,9 @@ const styles = StyleSheet.create({
   compRow: { flexDirection: 'row', alignItems: 'center' },
   compName: { ...typography.h4, color: colors.textPrimary },
   compPrize: { ...typography.caption, color: colors.textSecondary, marginTop: 4 },
-  compDays: { alignItems: 'center', backgroundColor: colors.accentOrange + '20', paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: borderRadius.md },
-  compDaysNum: { ...typography.h3, color: colors.accentOrange },
-  compDaysLbl: { ...typography.caption, color: colors.accentOrange, fontSize: 10 },
+  compDays: { alignItems: 'center', backgroundColor: colors.surfaceSecondary, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: borderRadius.md },
+  compDaysNum: { ...typography.h3, color: colors.textPrimary },
+  compDaysLbl: { ...typography.caption, color: colors.textSecondary, fontSize: 10 },
 
   // Vault
   vaultScroll: { gap: spacing.sm, paddingVertical: spacing.sm },
@@ -1069,24 +1084,24 @@ const styles = StyleSheet.create({
   runMetric: { alignItems: 'center' },
   runMetricVal: { ...typography.h4, color: colors.textPrimary },
   runMetricLbl: { ...typography.caption, color: colors.textTertiary, fontSize: 10 },
-  offlineBadge: { backgroundColor: colors.accentOrange + '20', paddingHorizontal: spacing.sm, paddingVertical: 2, borderRadius: borderRadius.full },
-  offlineBadgeText: { ...typography.caption, color: colors.accentOrange, fontSize: 10 },
+  offlineBadge: { backgroundColor: colors.surfaceSecondary, paddingHorizontal: spacing.sm, paddingVertical: 2, borderRadius: borderRadius.full },
+  offlineBadgeText: { ...typography.caption, color: colors.textSecondary, fontSize: 10 },
 
   // Empty states
   emptyState: { alignItems: 'center', paddingVertical: spacing.xxxl, gap: spacing.md },
   emptyTitle: { ...typography.h4, color: colors.textSecondary },
   emptySub: { ...typography.caption, color: colors.textTertiary, textAlign: 'center' },
-  emptyBtn: { backgroundColor: colors.accentOrange, paddingHorizontal: spacing.xl, paddingVertical: spacing.sm, borderRadius: borderRadius.full, marginTop: spacing.sm },
-  emptyBtnText: { color: '#000', fontWeight: '700' },
+  emptyBtn: { backgroundColor: colors.textPrimary, paddingHorizontal: spacing.xl, paddingVertical: spacing.sm, borderRadius: borderRadius.full, marginTop: spacing.sm },
+  emptyBtnText: { color: colors.background, fontWeight: '700' },
 
   // Leaderboard
   lbToggle: { flexDirection: 'row', backgroundColor: colors.surface, borderRadius: borderRadius.full, padding: 3, marginBottom: spacing.md },
   lbToggleBtn: { flex: 1, paddingVertical: spacing.sm, borderRadius: borderRadius.full, alignItems: 'center' },
-  lbToggleBtnActive: { backgroundColor: colors.accentOrange },
+  lbToggleBtnActive: { backgroundColor: colors.textPrimary },
   lbToggleText: { ...typography.caption, color: colors.textSecondary, fontWeight: '600' },
-  lbToggleTextActive: { color: '#000' },
+  lbToggleTextActive: { color: colors.background },
   lbCard: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.md, marginBottom: spacing.sm },
-  lbCardMe: { borderWidth: 1, borderColor: colors.accentOrange + '60' },
+  lbCardMe: { borderWidth: 1, borderColor: colors.textPrimary },
   lbCardPlaceholder: { opacity: 0.5 },
   rankBadge: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
   rankGold: { backgroundColor: '#FFD70020' },
@@ -1095,13 +1110,13 @@ const styles = StyleSheet.create({
   rankText: { fontSize: 16, fontWeight: '700', color: colors.textPrimary },
   lbNameRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   lbName: { ...typography.body, color: colors.textPrimary, fontWeight: '600' },
-  lbNameMe: { color: colors.accentOrange },
+  lbNameMe: { color: colors.textPrimary },
   lbMeta: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
   lbStats: { alignItems: 'flex-end' },
   lbDistance: { ...typography.body, color: colors.textPrimary, fontWeight: '700' },
   lbTerritory: { ...typography.caption, color: colors.textTertiary },
-  meBadge: { backgroundColor: colors.accentOrange, paddingHorizontal: spacing.xs, paddingVertical: 1, borderRadius: 4 },
-  meBadgeText: { fontSize: 10, color: '#000', fontWeight: '700' },
+  meBadge: { backgroundColor: colors.textPrimary, paddingHorizontal: spacing.xs, paddingVertical: 1, borderRadius: 4 },
+  meBadgeText: { fontSize: 10, color: colors.background, fontWeight: '700' },
   ghostBadge: { backgroundColor: colors.textTertiary + '30', paddingHorizontal: spacing.xs, paddingVertical: 1, borderRadius: 4 },
   ghostText: { fontSize: 10, color: colors.textTertiary },
 
@@ -1163,18 +1178,18 @@ const styles = StyleSheet.create({
   // Social
   composerCard: { padding: spacing.md, marginBottom: spacing.md },
   composerInput: { ...typography.body, color: colors.textPrimary, minHeight: 60, textAlignVertical: 'top', marginBottom: spacing.md },
-  postBtn: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, backgroundColor: colors.accentOrange, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: borderRadius.full, alignSelf: 'flex-end' },
+  postBtn: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, backgroundColor: colors.textPrimary, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: borderRadius.full, alignSelf: 'flex-end' },
   postBtnDisabled: { opacity: 0.4 },
-  postBtnText: { color: '#000', fontWeight: '700', fontSize: 13 },
+  postBtnText: { color: colors.background, fontWeight: '700', fontSize: 13 },
   postCard: { padding: spacing.md, marginBottom: spacing.md },
   postHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm },
-  postAvatar: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.accentOrange + '30', alignItems: 'center', justifyContent: 'center' },
-  postAvatarText: { ...typography.body, color: colors.accentOrange, fontWeight: '700' },
+  postAvatar: { width: 38, height: 38, borderRadius: 19, backgroundColor: colors.surfaceSecondary, alignItems: 'center', justifyContent: 'center' },
+  postAvatarText: { ...typography.body, color: colors.textPrimary, fontWeight: '700' },
   postAuthor: { ...typography.body, color: colors.textPrimary, fontWeight: '600' },
   postTime: { ...typography.caption, color: colors.textTertiary },
   postContent: { ...typography.body, color: colors.textPrimary, lineHeight: 22, marginBottom: spacing.sm },
-  postRunStrip: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, backgroundColor: colors.accentOrange + '15', padding: spacing.sm, borderRadius: borderRadius.sm, marginBottom: spacing.sm },
-  postRunText: { ...typography.caption, color: colors.accentOrange },
+  postRunStrip: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, backgroundColor: colors.surfaceSecondary, padding: spacing.sm, borderRadius: borderRadius.sm, marginBottom: spacing.sm },
+  postRunText: { ...typography.caption, color: colors.textPrimary },
   postActions: { flexDirection: 'row', gap: spacing.lg, borderTopWidth: 1, borderTopColor: colors.separator, paddingTop: spacing.sm },
   postAction: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   postActionText: { ...typography.caption, color: colors.textSecondary },
@@ -1189,23 +1204,23 @@ const styles = StyleSheet.create({
 
   // Plans
   addPlanBtn: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  addPlanText: { ...typography.caption, color: colors.accentOrange, fontWeight: '600' },
+  addPlanText: { ...typography.caption, color: colors.textPrimary, fontWeight: '600' },
   planCard: { padding: spacing.lg, marginBottom: spacing.sm },
   planHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md },
-  planGoalBadge: { backgroundColor: colors.accentOrange, paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: borderRadius.full },
-  planGoalText: { color: '#000', fontWeight: '700', fontSize: 13 },
+  planGoalBadge: { backgroundColor: colors.textPrimary, paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: borderRadius.full },
+  planGoalText: { color: colors.background, fontWeight: '700', fontSize: 13 },
   planLevel: { ...typography.caption, color: colors.textSecondary, textTransform: 'capitalize' },
   planProgress: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
   planWeek: { ...typography.caption, color: colors.textSecondary },
-  planPct: { ...typography.caption, color: colors.accentOrange, fontWeight: '600' },
+  planPct: { ...typography.caption, color: colors.textPrimary, fontWeight: '600' },
   planTrack: { height: 6, backgroundColor: colors.surface, borderRadius: 3, overflow: 'hidden', marginBottom: spacing.sm },
-  planFill: { height: '100%', backgroundColor: colors.accentOrange, borderRadius: 3 },
+  planFill: { height: '100%', backgroundColor: colors.textPrimary, borderRadius: 3 },
   planSessions: { ...typography.caption, color: colors.textTertiary },
 
   // FAB
-  fab: { position: 'absolute', right: spacing.lg, borderRadius: borderRadius.full, overflow: 'hidden', elevation: 8, shadowColor: colors.accentOrange, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.4, shadowRadius: 8 },
+  fab: { position: 'absolute', right: spacing.lg, borderRadius: borderRadius.full, overflow: 'hidden', elevation: 8, shadowColor: '#000000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.18, shadowRadius: 8 },
   fabGrad: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, paddingHorizontal: spacing.xl, paddingVertical: spacing.md },
-  fabText: { color: '#000', fontWeight: '800', fontSize: 15 },
+  fabText: { color: colors.background, fontWeight: '800', fontSize: 15 },
 
   // Modal
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' },
@@ -1217,9 +1232,9 @@ const styles = StyleSheet.create({
   modalTextArea: { minHeight: 80, textAlignVertical: 'top' },
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   chip: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: borderRadius.full, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
-  chipActive: { backgroundColor: colors.accentOrange, borderColor: colors.accentOrange },
+  chipActive: { backgroundColor: colors.textPrimary, borderColor: colors.textPrimary },
   chipText: { ...typography.caption, color: colors.textSecondary, fontWeight: '600' },
-  chipTextActive: { color: '#000' },
-  createPlanBtn: { backgroundColor: colors.accentOrange, paddingVertical: spacing.md, borderRadius: borderRadius.full, alignItems: 'center', marginTop: spacing.sm },
-  createPlanBtnText: { color: '#000', fontWeight: '800', fontSize: 15 },
+  chipTextActive: { color: colors.background },
+  createPlanBtn: { backgroundColor: colors.textPrimary, paddingVertical: spacing.md, borderRadius: borderRadius.full, alignItems: 'center', marginTop: spacing.sm },
+  createPlanBtnText: { color: colors.background, fontWeight: '800', fontSize: 15 },
 });

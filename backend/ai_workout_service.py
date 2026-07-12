@@ -122,7 +122,7 @@ DAY_ALIASES = {
 
 
 WORKOUT_GENERATION_SYSTEM_PROMPT = """
-You are SFTC's elite strength-and-conditioning program architect.
+You are Runlete's elite strength-and-conditioning program architect.
 Create athlete-grade programs from the user's profile, not generic templates.
 
 Use the provided knowledge_context as the approved compact exercise/rule catalog:
@@ -1059,7 +1059,7 @@ async def generate_ai_training_program(
             "Authorization": f"Bearer {openrouter_key}",
             "Content-Type": "application/json",
             "HTTP-Referer": os.environ.get("OPENROUTER_SITE_URL", "http://localhost"),
-            "X-Title": os.environ.get("OPENROUTER_APP_NAME", "SFTC"),
+            "X-Title": os.environ.get("OPENROUTER_APP_NAME", "Runlete"),
         }
 
         async with httpx.AsyncClient(timeout=120) as client:

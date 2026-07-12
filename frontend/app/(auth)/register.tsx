@@ -172,7 +172,7 @@ export default function RegisterScreen() {
           keyboardShouldPersistTaps="handled"
         >
           {/* Logo */}
-          <Text style={styles.logo}>SFTC</Text>
+          <Text style={styles.logo}>Runlete</Text>
 
           {step === 'email' ? (
             <>
@@ -205,7 +205,7 @@ export default function RegisterScreen() {
 
               {/* Terms */}
               <Text style={styles.termsText}>
-                By continuing, I agree to SFTC&apos;s{' '}
+                By continuing, I agree to Runlete&apos;s{' '}
                 <Text style={styles.link} onPress={() => router.push('/privacy-policy')}>
                   Privacy Policy
                 </Text>{' '}
@@ -227,7 +227,7 @@ export default function RegisterScreen() {
           ) : (
             <>
               {/* Details Step */}
-              <Text style={styles.title}>Now let&apos;s make you a SFTC Member.</Text>
+              <Text style={styles.title}>Now let&apos;s make you a Runlete Member.</Text>
 
               <Text style={styles.sentCodeText}>
                 We&apos;ve sent a code to{'\n'}
@@ -375,7 +375,7 @@ export default function RegisterScreen() {
                   />
                 </View>
               </View>
-              <Text style={styles.dobHint}>Get a SFTC Member Reward on your birthday.</Text>
+              <Text style={styles.dobHint}>Get a Runlete Member Reward on your birthday.</Text>
 
               {/* Checkboxes */}
               <TouchableOpacity
@@ -386,7 +386,7 @@ export default function RegisterScreen() {
                   {agreeToEmails && <Ionicons name="checkmark" size={14} color="#FFFFFF" />}
                 </View>
                 <Text style={styles.checkboxText}>
-                  Sign up for emails to get updates from SFTC on products, offers and your Member benefits.
+                  Sign up for emails to get updates from Runlete on products, offers and your Member benefits.
                 </Text>
               </TouchableOpacity>
 
@@ -398,7 +398,7 @@ export default function RegisterScreen() {
                   {agreeToTerms && <Ionicons name="checkmark" size={14} color="#FFFFFF" />}
                 </View>
                 <Text style={styles.checkboxText}>
-                  I agree to SFTC&apos;s{' '}
+                  I agree to Runlete&apos;s{' '}
                   <Text style={styles.link} onPress={() => router.push('/privacy-policy')}>
                     Privacy Policy
                   </Text>{' '}

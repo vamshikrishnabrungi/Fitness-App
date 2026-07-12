@@ -23,17 +23,6 @@ from backend.helpers import (
     clean_doc,
     _parse_iso_datetime,
     _normalize_tags,
-    _journal_word_count,
-    _journal_responses_text,
-    _journal_entry_text,
-    _journal_entry_response,
-    _journal_program_definitions,
-    _journal_template_definitions,
-    _journal_template_by_id,
-    _journal_program_by_id,
-    _journal_program_day,
-    _journal_entry_date_for,
-    _journal_searchable_text,
     _optional_float,
     _to_non_negative_int,
     _to_non_negative_float,
@@ -98,9 +87,6 @@ from backend.models import (
     BiologySummary,
     ProgramSummary,
     Lesson,
-    DeepJournalCreate,
-    GuidedJournalCreate,
-    JournalSearchRequest,
     TerraGpsPoint,
     TerraRunCreate,
     TerraReflectionCreate,
@@ -123,11 +109,23 @@ OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY')
 ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY')
 MEAL_AI_MODEL = os.environ.get('MEAL_AI_MODEL', 'openai/gpt-4o-mini')
 WORKOUT_AI_MODEL = os.environ.get('WORKOUT_AI_MODEL', 'claude-opus-4-8')
+# Per-user rolling-24h cap on AI workout generations (cost guard). Set to 0 to disable.
+WORKOUT_AI_DAILY_QUOTA = int(os.environ.get('WORKOUT_AI_DAILY_QUOTA', '25') or 25)
 OPENROUTER_SITE_URL = os.environ.get('OPENROUTER_SITE_URL', 'http://localhost')
-OPENROUTER_APP_NAME = os.environ.get('OPENROUTER_APP_NAME', 'SFTC')
+OPENROUTER_APP_NAME = os.environ.get('OPENROUTER_APP_NAME', 'Runlete')
 
 # -------------------- APP --------------------
-app = FastAPI(title='SFTC API', version='2.2.0')
+# Optional error monitoring. Inert unless SENTRY_DSN is set AND sentry-sdk is installed.
+SENTRY_DSN = os.environ.get('SENTRY_DSN')
+if SENTRY_DSN:
+    try:
+        import sentry_sdk
+        sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=0.1,
+                        environment=os.environ.get('ENVIRONMENT', 'production'))
+    except ImportError:
+        logging.getLogger(__name__).warning('SENTRY_DSN set but sentry-sdk not installed; skipping.')
+
+app = FastAPI(title='Runlete API', version='2.2.0')
 
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
@@ -554,7 +552,6 @@ def user_response(user: dict) -> dict:
         'id': user['id'],
         'email': user['email'],
         'name': user['name'],
-        'mode': user.get('mode', 'user'),
         'profile': user.get('profile', {}),
         'created_at': user.get('created_at')
     }
@@ -1477,7 +1474,6 @@ async def _build_daily_snapshot(current_user: dict, date: Optional[str] = None) 
             {'logged_at': {'$gte': start, '$lt': end}},
         ],
     }).sort('logged_at', -1).to_list(50)
-    coach_assignments = await db.coach_workouts.find({'client_id': user_id, 'scheduled_date': date_str}).sort('created_at', -1).to_list(50)
 
     sleep_metrics = [_sleep_session_metrics(session) for session in sleep_sessions]
     avg_sleep_hours = None
@@ -1521,7 +1517,6 @@ async def _build_daily_snapshot(current_user: dict, date: Optional[str] = None) 
         moods=[clean_doc(doc) for doc in moods],
         injuries=[clean_doc(doc) for doc in injuries],
         health_metrics=[clean_doc(doc) for doc in health_metrics],
-        coach_assignments=[clean_doc(doc) for doc in coach_assignments],
         totals=totals,
         readiness_inputs={
             'energy': latest_quick_log.get('energy'),
@@ -1802,28 +1797,6 @@ async def _generate_daily_analysis(current_user: dict, date: Optional[str] = Non
     return await _save_daily_analysis(current_user, snapshot, analysis, source)
 
 
-def _user_mode(user: dict) -> str:
-    return str(user.get('mode') or 'user').strip().lower()
-
-
-def _require_coach_user(current_user: dict) -> None:
-    if _user_mode(current_user) != 'coach':
-        raise HTTPException(status_code=403, detail='Coach access required')
-
-
-def _require_client_user(current_user: dict) -> None:
-    if _user_mode(current_user) == 'coach':
-        raise HTTPException(status_code=403, detail='Client access required')
-
-
-async def _coach_client_request(coach_id: str, client_id: str) -> Optional[dict]:
-    return await db.coach_requests.find_one({'coach_id': coach_id, 'client_id': client_id}, sort=[('created_at', -1)])
-
-
-async def _coach_client_is_accepted(coach_id: str, client_id: str) -> bool:
-    request = await _coach_client_request(coach_id, client_id)
-    return bool(request and request.get('status') == 'accepted')
-
 
 async def create_and_store_otp(email: str) -> str:
     code = f"{uuid.uuid4().int % 1000000:06d}"
@@ -2027,13 +2000,15 @@ async def _ai_analyze_meal(payload: "MealCreate") -> Dict[str, Any]:
 
 # -------------------- AUTH --------------------
 @api_router.post('/auth/request-otp')
-async def request_otp(payload: OtpRequest):
+@limiter.limit("5/minute")
+async def request_otp(request: Request, payload: OtpRequest):
     await create_and_store_otp(payload.email)
     return {'status': 'otp_sent'}
 
 
 @api_router.post('/auth/register')
-async def register(payload: UserCreate):
+@limiter.limit("5/minute")
+async def register(request: Request, payload: UserCreate):
     if await db.users.find_one({'email': payload.email}):
         raise HTTPException(status_code=409, detail='Email already registered')
     if not await verify_latest_otp(payload.email, payload.otp_code):
@@ -2045,7 +2020,6 @@ async def register(payload: UserCreate):
         'email': payload.email,
         'name': payload.name,
         'hashed_password': hash_password(payload.password),
-        'mode': 'user',
         'profile': profile,
         'created_at': datetime.utcnow()
     }
@@ -2055,7 +2029,8 @@ async def register(payload: UserCreate):
 
 
 @api_router.post('/auth/login')
-async def login(payload: UserLogin):
+@limiter.limit("10/minute")
+async def login(request: Request, payload: UserLogin):
     user = await db.users.find_one({'email': payload.email})
     if not user or not verify_password(payload.password, user['hashed_password']):
         raise HTTPException(status_code=401, detail='Invalid email or password')
@@ -2064,7 +2039,8 @@ async def login(payload: UserLogin):
 
 
 @api_router.post('/auth/login-otp')
-async def login_otp(payload: OtpVerify):
+@limiter.limit("10/minute")
+async def login_otp(request: Request, payload: OtpVerify):
     user = await db.users.find_one({'email': payload.email})
     if not user or not await verify_latest_otp(payload.email, payload.code):
         raise HTTPException(status_code=401, detail='Invalid email or code')
@@ -2073,7 +2049,8 @@ async def login_otp(payload: OtpVerify):
 
 
 @api_router.post('/auth/reset-password')
-async def reset_password(payload: PasswordReset):
+@limiter.limit("5/minute")
+async def reset_password(request: Request, payload: PasswordReset):
     user = await db.users.find_one({'email': payload.email})
     if not user:
         raise HTTPException(status_code=404, detail='User not found')
@@ -2091,13 +2068,44 @@ async def me(current_user: dict = Depends(get_current_user)):
     return user_response(current_user)
 
 
+def _current_day_streak(completed_dates: set[str]) -> int:
+    """Consecutive-day streak ending today or yesterday, from a set of 'YYYY-MM-DD' strings."""
+    if not completed_dates:
+        return 0
+    days = sorted((datetime.strptime(d, '%Y-%m-%d').date() for d in completed_dates), reverse=True)
+    today = datetime.utcnow().date()
+    if days[0] < today - timedelta(days=1):
+        return 0  # last workout was before yesterday → streak broken
+    streak = 1
+    for prev, cur in zip(days, days[1:]):
+        if cur == prev - timedelta(days=1):
+            streak += 1
+        else:
+            break
+    return streak
+
+
+@api_router.get('/profile/stats')
+async def profile_stats(current_user: dict = Depends(get_current_user)):
+    """Real headline stats for the profile screen: completed workouts, day streak, total hours."""
+    workouts = await db.workouts.find(
+        {'user_id': current_user['id'], 'completed': True},
+        {'duration_min': 1, 'completed_at': 1},
+    ).to_list(2000)
+    total_minutes = sum(int(w.get('duration_min') or 0) for w in workouts)
+    dates = {str(w['completed_at'])[:10] for w in workouts if w.get('completed_at')}
+    return {
+        'workouts': len(workouts),
+        'streak_days': _current_day_streak(dates),
+        'hours': round(total_minutes / 60),
+    }
+
+
 @api_router.put('/auth/profile')
 async def update_profile(update: UserUpdate, current_user: dict = Depends(get_current_user)):
     update_dict = {}
     if update.name:
         update_dict['name'] = update.name
-    if update.mode:
-        update_dict['mode'] = update.mode
     if update.profile:
         update_dict['profile'] = _profile_dict(update.profile)
 
@@ -2500,6 +2508,20 @@ async def generate_macro_plan(payload: Optional[Dict[str, Any]] = Body(default=N
 
 
 # -------------------- WORKOUTS --------------------
+async def _enforce_ai_generation_quota(user_id: str) -> None:
+    """Rolling-24h per-user cap on expensive AI workout generations. Cost guard for prod."""
+    if WORKOUT_AI_DAILY_QUOTA <= 0:
+        return
+    since = datetime.utcnow() - timedelta(days=1)
+    used = await db.ai_generation_log.count_documents({'user_id': user_id, 'created_at': {'$gte': since}})
+    if used >= WORKOUT_AI_DAILY_QUOTA:
+        raise HTTPException(
+            status_code=429,
+            detail=f'Daily workout-generation limit reached ({WORKOUT_AI_DAILY_QUOTA}/day). Try again later.',
+        )
+    await db.ai_generation_log.insert_one({'user_id': user_id, 'created_at': datetime.utcnow()})
+
+
 @api_router.post('/workouts/generate-weekly')
 @limiter.limit("2/minute")
 async def generate_weekly_plan(request: Request, payload: Optional[Dict[str, Any]] = Body(default=None), current_user: dict = Depends(get_current_user)):
@@ -2507,6 +2529,7 @@ async def generate_weekly_plan(request: Request, payload: Optional[Dict[str, Any
 
     Previously this enqueued an ARQ job to a worker that is not run locally; generation now happens
     inline (matching /onboarding/complete) so the plan actually materializes."""
+    await _enforce_ai_generation_quota(current_user['id'])
     profile = _profile_from_payload(payload, current_user)
     profile_doc = await _upsert_athlete_profile(current_user, profile)
     return await _create_ai_training_program(current_user, profile_doc.get('raw_profile') or {})
@@ -2518,6 +2541,7 @@ async def generate_next_block(request: Request, current_user: dict = Depends(get
     """Manually generate the next block for the active program, progressing from the last week.
 
     The same logic also runs automatically in the background when a week is fully completed."""
+    await _enforce_ai_generation_quota(current_user['id'])
     profile_doc = await db.athlete_profiles.find_one({'user_id': current_user['id']})
     profile = (profile_doc or {}).get('raw_profile') or current_user.get('profile') or {}
     return await _extend_ai_training_program(current_user, profile)
@@ -3357,306 +3381,6 @@ async def sleep_stats(current_user: dict = Depends(get_current_user)):
     }
 
 
-@api_router.get('/coach/clients')
-async def coach_clients(current_user: dict = Depends(get_current_user)):
-    _require_coach_user(current_user)
-
-    accepted_requests = await db.coach_requests.find({
-        'coach_id': current_user['id'],
-        'status': 'accepted',
-    }).sort('created_at', -1).to_list(100)
-
-    client_ids = []
-    for request in accepted_requests:
-        client_id = request.get('client_id')
-        if client_id and client_id not in client_ids:
-            client_ids.append(client_id)
-    if not client_ids:
-        return []
-
-    clients = await db.users.find({'id': {'$in': client_ids}}).to_list(100)
-    result = []
-    for client in clients:
-        workouts = await db.workouts.find({'user_id': client['id']}).to_list(100)
-        completed = len([w for w in workouts if w.get('completed')])
-        result.append({
-            'id': client['id'],
-            'name': client.get('name', ''),
-            'email': client.get('email', ''),
-            'avatar': None,
-            'profile': client.get('profile', {}),
-            'total_workouts': len(workouts),
-            'completed_workouts': completed,
-            'compliance_rate': round((completed / len(workouts)) * 100, 1) if workouts else 0,
-        })
-    return result
-
-
-@api_router.get('/coach/search-users')
-async def coach_search_users(query: str = '', current_user: dict = Depends(get_current_user)):
-    _require_coach_user(current_user)
-
-    term = query.strip()
-    if len(term) < 2:
-        return []
-
-    docs = await db.users.find({
-        'id': {'$ne': current_user['id']},
-        'mode': {'$ne': 'coach'},
-        '$or': [
-            {'name': {'$regex': term, '$options': 'i'}},
-            {'email': {'$regex': term, '$options': 'i'}},
-        ],
-    }).to_list(20)
-    return [{'id': d['id'], 'name': d.get('name', ''), 'email': d.get('email', '')} for d in docs]
-
-
-@api_router.post('/coach/send-request')
-async def coach_send_request(payload: Dict[str, Any], current_user: dict = Depends(get_current_user)):
-    _require_coach_user(current_user)
-
-    client_id = payload.get('client_id')
-    if not client_id:
-        raise HTTPException(status_code=400, detail='client_id is required')
-    if client_id == current_user['id']:
-        raise HTTPException(status_code=400, detail='client_id cannot match coach')
-
-    client_user = await db.users.find_one({'id': client_id})
-    if not client_user:
-        raise HTTPException(status_code=404, detail='Client not found')
-
-    existing_request = await _coach_client_request(current_user['id'], client_id)
-    now = datetime.utcnow()
-    if existing_request:
-        existing_status = existing_request.get('status')
-        if existing_status == 'accepted':
-            raise HTTPException(status_code=409, detail='Client already connected')
-        request_update = {
-            'message': payload.get('message'),
-            'monthly_price': float(payload.get('monthly_price', 0.0)),
-            'status': 'pending',
-            'updated_at': now,
-        }
-        await db.coach_requests.update_one(
-            {'id': existing_request['id'], 'coach_id': current_user['id'], 'client_id': client_id},
-            {'$set': request_update},
-        )
-        existing_request.update(request_update)
-        return clean_doc(existing_request)
-
-    request_doc = {
-        'id': str(uuid.uuid4()),
-        'coach_id': current_user['id'],
-        'coach_name': current_user.get('name', 'Coach'),
-        'client_id': client_id,
-        'client_name': client_user.get('name', ''),
-        'message': payload.get('message'),
-        'monthly_price': float(payload.get('monthly_price', 0.0)),
-        'status': 'pending',
-        'created_at': now,
-        'updated_at': now,
-    }
-    await db.coach_requests.insert_one(request_doc)
-    return clean_doc(request_doc)
-
-
-@api_router.post('/coach/requests/{request_id}/accept')
-async def client_accept_coach_request(request_id: str, current_user: dict = Depends(get_current_user)):
-    request = await db.coach_requests.find_one({'id': request_id, 'client_id': current_user['id']})
-    if not request:
-        raise HTTPException(status_code=404, detail='Request not found')
-    
-    if request.get('status') == 'accepted':
-        return clean_doc(request)
-        
-    now = datetime.utcnow()
-    await db.coach_requests.update_one(
-        {'id': request_id},
-        {'$set': {'status': 'accepted', 'updated_at': now}}
-    )
-    
-    sub_id = str(uuid.uuid4())
-    await db.coach_subscriptions.insert_one({
-        'id': sub_id,
-        'coach_id': request['coach_id'],
-        'client_id': current_user['id'],
-        'status': 'active',
-        'monthly_price': request.get('monthly_price', 0.0),
-        'currency': 'USD',
-        'started_at': now
-    })
-    
-    request['status'] = 'accepted'
-    return clean_doc(request)
-
-
-@api_router.post('/coach/workouts')
-async def coach_create_workout(payload: Dict[str, Any], current_user: dict = Depends(get_current_user)):
-    _require_coach_user(current_user)
-
-    client_id = payload.get('client_id')
-    if not client_id:
-        raise HTTPException(status_code=400, detail='client_id is required')
-    if not await _coach_client_is_accepted(current_user['id'], client_id):
-        raise HTTPException(status_code=403, detail='Client connection required')
-
-    workout = Workout(
-        user_id=client_id,
-        title=payload.get('title') or 'Coach Workout',
-        category=payload.get('workout_type') or 'Workout',
-        duration=_to_non_negative_int(payload.get('duration'), 45),
-        difficulty=payload.get('difficulty') or 'Intermediate',
-        equipment=[],
-        exercises=[
-            WorkoutExercise(
-                name=str(ex.get('name', 'Exercise'))
-            )
-            for ex in payload.get('exercises', [])
-            if isinstance(ex, dict)
-        ],
-        description=payload.get('description'),
-        ai_generated=False,
-        scheduled_date=datetime.utcnow().strftime('%Y-%m-%d'),
-    )
-    workout_doc = workout.model_dump()
-    workout_doc.update({
-        'source': 'coach',
-        'assigned_by': current_user['id'],
-        'assigned_by_name': current_user.get('name', 'Coach'),
-    })
-    await db.workouts.insert_one(workout_doc)
-    return clean_doc(workout_doc)
-
-
-@api_router.post('/coach/meals')
-async def coach_create_meal(payload: Dict[str, Any], current_user: dict = Depends(get_current_user)):
-    _require_coach_user(current_user)
-
-    client_id = payload.get('client_id')
-    if not client_id:
-        raise HTTPException(status_code=400, detail='client_id is required')
-    if not await _coach_client_is_accepted(current_user['id'], client_id):
-        raise HTTPException(status_code=403, detail='Client connection required')
-
-    meal = {
-        'id': str(uuid.uuid4()),
-        'coach_id': current_user['id'],
-        'coach_name': current_user.get('name', 'Coach'),
-        'client_id': client_id,
-        'title': payload.get('title') or 'Meal Plan',
-        'description': payload.get('description'),
-        'meal_type': payload.get('meal_type') or 'lunch',
-        'total_calories': _to_non_negative_int(payload.get('total_calories'), 0),
-        'is_completed': False,
-        'created_at': datetime.utcnow(),
-    }
-    await db.coach_meals.insert_one(meal)
-    return clean_doc(meal)
-
-
-@api_router.post('/coach/goals')
-async def coach_create_goal(payload: Dict[str, Any], current_user: dict = Depends(get_current_user)):
-    _require_coach_user(current_user)
-
-    client_id = payload.get('client_id')
-    if not client_id:
-        raise HTTPException(status_code=400, detail='client_id is required')
-    if not await _coach_client_is_accepted(current_user['id'], client_id):
-        raise HTTPException(status_code=403, detail='Client connection required')
-
-    goal = {
-        'id': str(uuid.uuid4()),
-        'coach_id': current_user['id'],
-        'coach_name': current_user.get('name', 'Coach'),
-        'client_id': client_id,
-        'title': payload.get('title') or 'Goal',
-        'description': payload.get('description'),
-        'goal_type': payload.get('goal_type') or 'general_fitness',
-        'target_value': payload.get('target_value'),
-        'unit': payload.get('unit'),
-        'target_date': payload.get('target_date'),
-        'current_value': None,
-        'is_completed': False,
-        'created_at': datetime.utcnow(),
-    }
-    await db.coach_goals.insert_one(goal)
-    return clean_doc(goal)
-
-
-@api_router.get('/client/pending-requests')
-async def client_pending_requests(current_user: dict = Depends(get_current_user)):
-    _require_client_user(current_user)
-
-    docs = await db.coach_requests.find({
-        'client_id': current_user['id'],
-        'status': 'pending',
-    }).sort('created_at', -1).to_list(100)
-    return [clean_doc(d) for d in docs]
-
-
-@api_router.post('/client/respond-request/{request_id}')
-async def client_respond_request(request_id: str, approve: bool = True, current_user: dict = Depends(get_current_user)):
-    _require_client_user(current_user)
-
-    request = await db.coach_requests.find_one({'id': request_id, 'client_id': current_user['id']})
-    if not request:
-        raise HTTPException(status_code=404, detail='Request not found')
-    if request.get('status') != 'pending':
-        raise HTTPException(status_code=409, detail='Request is not pending')
-
-    status = 'accepted' if approve else 'declined'
-    await db.coach_requests.update_one(
-        {'id': request_id, 'client_id': current_user['id']},
-        {'$set': {'status': status, 'responded_at': datetime.utcnow(), 'updated_at': datetime.utcnow()}},
-    )
-    return {'message': f'Request {status}'}
-
-
-@api_router.get('/my-coach-workouts')
-async def my_coach_workouts(current_user: dict = Depends(get_current_user)):
-    _require_client_user(current_user)
-
-    docs = await db.workouts.find({
-        'user_id': current_user['id'],
-        'source': 'coach',
-    }).sort('created_at', -1).to_list(100)
-    return [
-        {
-            'id': doc['id'],
-            'title': doc.get('title', ''),
-            'description': doc.get('description'),
-            'workout_type': doc.get('category', ''),
-            'difficulty': doc.get('difficulty', ''),
-            'duration': doc.get('duration', 0),
-            'scheduled_date': doc.get('scheduled_date'),
-            'is_completed': doc.get('completed', False),
-        }
-        for doc in docs
-    ]
-
-
-@api_router.get('/my-coach-meals')
-async def my_coach_meals(current_user: dict = Depends(get_current_user)):
-    _require_client_user(current_user)
-
-    docs = await db.coach_meals.find({'client_id': current_user['id']}).sort('created_at', -1).to_list(100)
-    return [clean_doc(d) for d in docs]
-
-
-@api_router.get('/my-coach-goals')
-async def my_coach_goals(current_user: dict = Depends(get_current_user)):
-    _require_client_user(current_user)
-
-    docs = await db.coach_goals.find({'client_id': current_user['id']}).sort('created_at', -1).to_list(100)
-    return [clean_doc(d) for d in docs]
-
-
-@api_router.post('/coach/workouts/{workout_id}/complete')
-async def complete_coach_workout(workout_id: str, background_tasks: BackgroundTasks, current_user: dict = Depends(get_current_user)):
-    _require_client_user(current_user)
-    return await complete_workout(workout_id, background_tasks, current_user)
-
-
 # -------------------- HEALTH + LOGS --------------------
 @api_router.post('/health/metrics')
 async def log_health_metric(payload: Dict[str, Any], current_user: dict = Depends(get_current_user)):
@@ -3833,432 +3557,35 @@ async def list_quick_logs(year: Optional[int] = None, current_user: dict = Depen
     return [clean_doc(doc) for doc in docs]
 
 
-# -------------------- JOURNAL --------------------
-@api_router.get('/journal/templates')
-async def journal_templates(current_user: dict = Depends(get_current_user)):
-    return [dict(template) for template in _journal_template_definitions()]
-
-
-@api_router.get('/journal/programs')
-async def journal_programs(current_user: dict = Depends(get_current_user)):
-    programs = [dict(program) for program in _journal_program_definitions()]
-    docs = await db.journal_program_enrollments.find({'user_id': current_user['id']}).sort('updated_at', -1).to_list(100)
-    active_enrollments = []
-    for doc in docs:
-        if not doc.get('is_active', True):
-            continue
-        enrollment = clean_doc(doc)
-        enrollment['current_day'] = _journal_program_day(doc, doc.get('program_id', ''))
-        active_enrollments.append(enrollment)
-    return {'programs': programs, 'active_enrollments': active_enrollments}
-
-
-@api_router.post('/journal/programs/{program_id}/start')
-async def start_journal_program(program_id: str, current_user: dict = Depends(get_current_user)):
-    program = _journal_program_by_id(program_id)
-    if not program:
-        raise HTTPException(status_code=404, detail='Program not found')
-
-    existing = await db.journal_program_enrollments.find_one({
-        'user_id': current_user['id'],
-        'program_id': program_id,
-    })
-    if existing and existing.get('is_active', True):
-        raise HTTPException(status_code=409, detail='Already enrolled in this program')
-
-    now = datetime.utcnow()
-    enrollment = {
-        'id': str(uuid.uuid4()),
-        'user_id': current_user['id'],
-        'program_id': program_id,
-        'program_name': program['name'],
-        'current_day': 1,
-        'is_active': True,
-        'start_date': now,
-        'updated_at': now,
-        'duration_days': program['duration_days'],
-    }
-    if existing:
-        enrollment['id'] = existing['id']
-        await db.journal_program_enrollments.update_one(
-            {'id': existing['id'], 'user_id': current_user['id']},
-            {'$set': enrollment},
-            upsert=True,
-        )
-    else:
-        await db.journal_program_enrollments.insert_one(enrollment)
-    return clean_doc(enrollment)
-
-
-@api_router.post('/journal/deep')
-async def create_deep_journal_entry(payload: DeepJournalCreate, current_user: dict = Depends(get_current_user)):
-    now = datetime.utcnow()
-    entry = {
-        'id': str(uuid.uuid4()),
-        'user_id': current_user['id'],
-        'entry_type': 'deep',
-        'title': payload.title.strip() if payload.title else None,
-        'content': payload.content.strip(),
-        'tags': _normalize_tags(payload.tags),
-        'is_pinned': bool(payload.is_pinned),
-        'date': now.strftime('%Y-%m-%d'),
-        'created_at': now,
-        'updated_at': now,
-        'word_count': _journal_word_count(payload.content),
-    }
-    await db.journal_entries.insert_one(entry)
-    return clean_doc(entry)
-
-
-@api_router.get('/journal/deep')
-async def list_deep_journal_entries(limit: int = 20, current_user: dict = Depends(get_current_user)):
-    docs = await db.journal_entries.find({
-        'user_id': current_user['id'],
-        'entry_type': 'deep',
-    }).sort('created_at', -1).to_list(max(1, min(limit, 200)))
-    return [_journal_entry_response(doc) for doc in docs]
-
-
-@api_router.get('/journal/deep/{entry_id}')
-async def get_deep_journal_entry(entry_id: str, current_user: dict = Depends(get_current_user)):
-    entry = await db.journal_entries.find_one({
-        'id': entry_id,
-        'user_id': current_user['id'],
-        'entry_type': 'deep',
-    })
-    if not entry:
-        raise HTTPException(status_code=404, detail='Journal entry not found')
-    return _journal_entry_response(entry)
-
-
-@api_router.put('/journal/deep/{entry_id}')
-async def update_deep_journal_entry(entry_id: str, payload: DeepJournalCreate, current_user: dict = Depends(get_current_user)):
-    update_doc = {
-        'title': payload.title.strip() if payload.title else None,
-        'content': payload.content.strip(),
-        'tags': _normalize_tags(payload.tags),
-        'is_pinned': bool(payload.is_pinned),
-        'updated_at': datetime.utcnow(),
-        'word_count': _journal_word_count(payload.content),
-    }
-    result = await db.journal_entries.update_one(
-        {'id': entry_id, 'user_id': current_user['id'], 'entry_type': 'deep'},
-        {'$set': update_doc},
-    )
-    if result.modified_count == 0:
-        raise HTTPException(status_code=404, detail='Journal entry not found')
-    entry = await db.journal_entries.find_one({'id': entry_id, 'user_id': current_user['id'], 'entry_type': 'deep'})
-    return _journal_entry_response(entry)
-
-
-@api_router.delete('/journal/deep/{entry_id}')
-async def delete_deep_journal_entry(entry_id: str, current_user: dict = Depends(get_current_user)):
-    result = await db.journal_entries.delete_one({'id': entry_id, 'user_id': current_user['id'], 'entry_type': 'deep'})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail='Journal entry not found')
-    return {'message': 'Journal entry deleted'}
-
-
-@api_router.post('/journal/guided')
-async def create_guided_journal_entry(payload: GuidedJournalCreate, current_user: dict = Depends(get_current_user)):
-    template = _journal_template_by_id(payload.template_id)
-    now = datetime.utcnow()
-    responses = {str(k): str(v).strip() for k, v in payload.responses.items()}
-    content = _journal_responses_text(responses)
-    tags = [template['category']] if template else ['guided']
-    if payload.program_id:
-        tags.append(str(payload.program_id))
-    if payload.cbt_distortion:
-        tags.append('cbt')
-    entry = {
-        'id': str(uuid.uuid4()),
-        'user_id': current_user['id'],
-        'entry_type': 'guided',
-        'title': payload.template_name or (template['name'] if template else 'Guided Journal'),
-        'content': content,
-        'responses': responses,
-        'template_id': payload.template_id,
-        'template_name': payload.template_name or (template['name'] if template else None),
-        'program_id': payload.program_id,
-        'program_day': payload.program_day,
-        'cbt_distortion': payload.cbt_distortion,
-        'tags': _normalize_tags(tags),
-        'is_pinned': False,
-        'date': now.strftime('%Y-%m-%d'),
-        'created_at': now,
-        'updated_at': now,
-        'word_count': _journal_word_count(content),
-    }
-    await db.journal_entries.insert_one(entry)
-
-    if payload.program_id:
-        enrollment = await db.journal_program_enrollments.find_one({
-            'user_id': current_user['id'],
-            'program_id': payload.program_id,
-        })
-        program = _journal_program_by_id(payload.program_id)
-        duration = int(program['duration_days']) if program else 7
-        next_day = max(1, min(duration, _to_non_negative_int(payload.program_day, 1) + 1))
-        if enrollment:
-            await db.journal_program_enrollments.update_one(
-                {'id': enrollment['id'], 'user_id': current_user['id']},
-                {'$set': {'current_day': next_day, 'updated_at': now, 'is_active': True}},
-            )
-        else:
-            await db.journal_program_enrollments.insert_one({
-                'id': str(uuid.uuid4()),
-                'user_id': current_user['id'],
-                'program_id': payload.program_id,
-                'program_name': payload.template_name or (program['name'] if program else payload.program_id),
-                'current_day': next_day,
-                'is_active': True,
-                'start_date': now,
-                'updated_at': now,
-                'duration_days': duration,
-            })
-
-    return clean_doc(entry)
-
-
-@api_router.get('/journal/on-this-day')
-async def journal_on_this_day(current_user: dict = Depends(get_current_user)):
-    today = datetime.utcnow()
-    docs = await db.journal_entries.find({
-        'user_id': current_user['id'],
-    }).sort('created_at', -1).to_list(200)
-    matches = []
-    for doc in docs:
-        created_at = _parse_iso_datetime(doc.get('created_at'))
-        if not created_at:
-            continue
-        if created_at.month == today.month and created_at.day == today.day and created_at.year < today.year:
-            item = _journal_entry_response(doc)
-            item['years_ago'] = max(1, today.year - created_at.year)
-            matches.append(item)
-    return matches[:20]
-
-
-@api_router.get('/journal/calendar')
-async def journal_calendar(year: Optional[int] = None, month: Optional[int] = None, current_user: dict = Depends(get_current_user)):
-    now = datetime.utcnow()
-    year = year or now.year
-    month = month or now.month
-    month_start = datetime(year, month, 1)
-    next_month = datetime(year + 1, 1, 1) if month == 12 else datetime(year, month + 1, 1)
-    month_end = next_month - timedelta(seconds=1)
-
-    calendar: Dict[str, Dict[str, Any]] = {}
-
-    journal_entries = await db.journal_entries.find({
-        'user_id': current_user['id'],
-        'date': {'$gte': month_start.strftime('%Y-%m-%d'), '$lte': month_end.strftime('%Y-%m-%d')},
-    }).to_list(500)
-    for entry in journal_entries:
-        date_key = str(entry.get('date') or month_start.strftime('%Y-%m-%d'))
-        bucket = calendar.setdefault(date_key, {'quick_log': False, 'guided': 0, 'deep': 0, 'mood': None})
-        if entry.get('entry_type') == 'guided':
-            bucket['guided'] += 1
-        elif entry.get('entry_type') == 'deep':
-            bucket['deep'] += 1
-
-    quick_logs = await db.quick_logs.find({
-        'user_id': current_user['id'],
-        'date': {'$gte': month_start.strftime('%Y-%m-%d'), '$lte': month_end.strftime('%Y-%m-%d')},
-    }).to_list(500)
-    for log in quick_logs:
-        date_key = str(log.get('date'))
-        bucket = calendar.setdefault(date_key, {'quick_log': False, 'guided': 0, 'deep': 0, 'mood': None})
-        bucket['quick_log'] = True
-        bucket['mood'] = log.get('mood') or bucket['mood']
-
-    mood_entries = await db.moods.find({
-        'user_id': current_user['id'],
-        'date': {'$gte': month_start.strftime('%Y-%m-%d'), '$lte': month_end.strftime('%Y-%m-%d')},
-    }).sort('timestamp', -1).to_list(500)
-    for mood_entry in mood_entries:
-        date_key = str(mood_entry.get('date'))
-        bucket = calendar.setdefault(date_key, {'quick_log': False, 'guided': 0, 'deep': 0, 'mood': None})
-        if not bucket.get('mood'):
-            mood_value = mood_entry.get('mood_emoji') or mood_entry.get('mood_value')
-            if isinstance(mood_value, int):
-                mood_value = {5: 'great', 4: 'good', 3: 'okay', 2: 'bad', 1: 'awful'}.get(mood_value, 'okay')
-            bucket['mood'] = mood_value if isinstance(mood_value, str) else bucket['mood']
-
-    return calendar
-
-
-# -------------------- AI JOURNAL --------------------
-def _journal_search_matches(entry: Dict[str, Any], query: str) -> bool:
-    haystack = _journal_searchable_text(entry)
-    if query in haystack:
-        return True
-    return any(query in str(tag).lower() for tag in (entry.get('tags') or []))
-
-
-def _journal_result_summary(results: List[Dict[str, Any]], query: str) -> str:
-    if not results:
-        return f"No journal entries matched '{query}'. Try different keywords or search by mood, workout, or event."
-    type_counts = Counter(result['type'] for result in results)
-    parts = [f"Found {len(results)} match{'es' if len(results) != 1 else ''} for '{query}'."]
-    if type_counts:
-        parts.append(", ".join(f"{count} {kind.replace('_', ' ')}" for kind, count in type_counts.items()))
-    return " ".join(parts)
-
-
-def _journal_patterns(inspected_entries: List[Dict[str, Any]], quick_logs: List[Dict[str, Any]]) -> Dict[str, Any]:
-    mood_counts = Counter()
-    for log in quick_logs:
-        mood = str(log.get('mood') or '').strip()
-        if mood:
-            mood_counts[mood] += 1
-
-    tag_counts = Counter()
-    for entry in inspected_entries:
-        for tag in entry.get('tags') or []:
-            tag_counts[str(tag)] += 1
-
-    positive = mood_counts.get('great', 0) + mood_counts.get('good', 0)
-    negative = mood_counts.get('bad', 0) + mood_counts.get('awful', 0)
-    guided_count = sum(1 for entry in inspected_entries if entry.get('entry_type') == 'guided')
-    deep_count = sum(1 for entry in inspected_entries if entry.get('entry_type') == 'deep')
-    quick_count = len(quick_logs)
-
-    summary = f"{len(inspected_entries)} journal entries and {quick_count} quick logs in this period."
-    if mood_counts:
-        summary += f" Mood leaned {mood_counts.most_common(1)[0][0]}."
-
-    strength = 'You are building a reflection habit.' if len(inspected_entries) + quick_count >= 5 else 'Your logging habit is still small, which makes patterns hard to spot.'
-    if positive > negative:
-        strength = 'Your recent mood trend looks more positive than negative.'
-    elif deep_count >= guided_count and deep_count > 0:
-        strength = 'Your free-write entries show strong self-reflection depth.'
-
-    improvement = 'Add a quick log on tougher days so patterns become easier to see.'
-    if guided_count == 0:
-        improvement = 'Try one guided journal entry this week to surface a more structured pattern.'
-    elif negative > positive:
-        improvement = 'Capture one recovery-focused note after harder days to offset the negative trend.'
-
-    recommendation = 'Keep it simple: one quick log after training and one longer reflection each week.'
-    if tag_counts:
-        recommendation = f"Lean into the themes you write about most: {tag_counts.most_common(2)[0][0]}."
-
-    return {
-        'summary': summary,
-        'strength': strength,
-        'improvement': improvement,
-        'recommendation': recommendation,
-    }
-
-
-async def _journal_ai_insights(period: str, entries: List[Dict[str, Any]], quick_logs: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
-    return None
-
-
-@api_router.post('/ai/journal/search')
-async def ai_journal_search(payload: JournalSearchRequest, current_user: dict = Depends(get_current_user)):
-    query = payload.query.strip().lower()
-    if not query:
-        return {'results': [], 'summary': 'Enter a search term to find matching journal entries.'}
-
-    journal_entries = await db.journal_entries.find({'user_id': current_user['id']}).sort('created_at', -1).to_list(200)
-    quick_logs = await db.quick_logs.find({'user_id': current_user['id']}).sort('date', -1).to_list(100)
-
-    results: List[Dict[str, Any]] = []
-    for entry in journal_entries:
-        if _journal_search_matches(entry, query):
-            results.append({
-                'id': entry['id'],
-                'type': entry.get('entry_type', 'deep'),
-                'text': _journal_entry_text(entry) or entry.get('content') or entry.get('title') or '',
-                'date': entry.get('date') or _journal_entry_date_for(entry),
-            })
-
-    for log in quick_logs:
-        haystack = " ".join([
-            str(log.get('mood') or ''),
-            str(log.get('energy') or ''),
-            str(log.get('stress') or ''),
-            str(log.get('note') or ''),
-        ]).lower()
-        if query in haystack:
-            results.append({
-                'id': log['id'],
-                'type': 'quick_log',
-                'text': f"Mood: {log.get('mood')}, Energy: {log.get('energy')}, Stress: {log.get('stress')}, Note: {log.get('note') or ''}".strip(),
-                'date': log.get('date'),
-            })
-
-    results = sorted(results, key=lambda item: item.get('date') or '', reverse=True)[:max(1, min(payload.limit, 50))]
-    summary = _journal_result_summary(results, query)
-    return {'results': results, 'summary': summary}
-
-
-@api_router.get('/ai/journal/insights')
-async def ai_journal_insights(period: str = 'week', current_user: dict = Depends(get_current_user)):
-    period_normalized = period if period in {'week', 'month'} else 'week'
-    now = datetime.utcnow()
-    days_back = 7 if period_normalized == 'week' else 30
-    start_date = (now - timedelta(days=days_back)).strftime('%Y-%m-%d')
-    journal_entries = await db.journal_entries.find({
-        'user_id': current_user['id'],
-        'date': {'$gte': start_date, '$lte': now.strftime('%Y-%m-%d')},
-    }).sort('created_at', -1).to_list(200)
-    quick_logs = await db.quick_logs.find({
-        'user_id': current_user['id'],
-        'date': {'$gte': start_date, '$lte': now.strftime('%Y-%m-%d')},
-    }).sort('date', -1).to_list(100)
-
-    ai_result = await _journal_ai_insights(period_normalized, journal_entries, quick_logs)
-    if ai_result is None or not ai_result.get('summary'):
-        ai_result = _journal_patterns(journal_entries, quick_logs)
-
-    return {'insights': ai_result, 'period': period_normalized}
-
-
 @api_router.post('/ai/coach/chat')
 async def ai_coach_chat(payload: Dict[str, Any], current_user: dict = Depends(get_current_user)):
     message = str(payload.get('message') or '').strip()
     if not message:
         raise HTTPException(status_code=400, detail='message is required')
 
-    insights_response = await ai_journal_insights(period='week', current_user=current_user)
-    insights = insights_response.get('insights') if isinstance(insights_response, dict) else {}
-    journal_entries = await db.journal_entries.find({'user_id': current_user['id']}).sort('created_at', -1).to_list(5)
-    recent_snippets = [text for text in (_journal_entry_text(entry) for entry in journal_entries) if text][:3]
+    now = datetime.utcnow()
+    start_date = (now - timedelta(days=7)).strftime('%Y-%m-%d')
+    quick_logs = await db.quick_logs.find({
+        'user_id': current_user['id'],
+        'date': {'$gte': start_date, '$lte': now.strftime('%Y-%m-%d')},
+    }).sort('date', -1).to_list(100)
+    mood_counts = Counter(str(log.get('mood') or '').strip() for log in quick_logs if log.get('mood'))
+    top_mood = mood_counts.most_common(1)[0][0] if mood_counts else None
 
     lowered = message.lower()
-    focus = 'consistency'
     if any(term in lowered for term in ('sleep', 'recover', 'recovery', 'rest')):
-        focus = 'recovery'
+        reply = 'Keep recovery simple: protect sleep, reduce intensity for a day if needed, and choose one calming routine you can repeat.'
     elif any(term in lowered for term in ('anxious', 'anxiety', 'stress', 'nervous', 'race')):
-        focus = 'mindset'
+        reply = 'Treat nerves as useful energy. Narrow your attention to one controllable cue, one simple action, and one reminder that your preparation already counts.'
     elif any(term in lowered for term in ('plan', 'week', 'training', 'workout')):
-        focus = 'training'
-
-    summary = str((insights or {}).get('summary') or '').strip()
-    strength = str((insights or {}).get('strength') or '').strip()
-    improvement = str((insights or {}).get('improvement') or '').strip()
-    recommendation = str((insights or {}).get('recommendation') or '').strip()
-
-    reply_parts = []
-    if focus == 'recovery':
-        reply_parts.append(recommendation or 'Keep recovery simple: protect sleep, reduce intensity for a day if needed, and choose one calming routine you can repeat.')
-    elif focus == 'mindset':
-        reply_parts.append('Treat nerves as useful energy. Narrow your attention to one controllable cue, one simple action, and one reminder that your preparation already counts.')
-    elif focus == 'training':
-        reply_parts.append(summary or 'Keep your training week balanced: one priority session, one supportive session, one recovery-focused day, and avoid stacking hard efforts without a clear reason.')
+        reply = 'Keep your training week balanced: one priority session, one supportive session, one recovery-focused day, and avoid stacking hard efforts without a clear reason.'
     else:
-        reply_parts.append(summary or 'Progress usually comes from repeatable basics. Keep the next step small enough to execute even on a low-motivation day.')
+        reply = 'Progress usually comes from repeatable basics. Keep the next step small enough to execute even on a low-motivation day.'
 
-    if strength:
-        reply_parts.append(f"One strength I'm seeing: {strength}.")
-    if improvement:
-        reply_parts.append(f"Primary focus next: {improvement}.")
-    if recent_snippets:
-        reply_parts.append(f"Recent journal theme: {recent_snippets[0][:160]}.")
-
-    return {'response': ' '.join(part for part in reply_parts if part).strip()}
+    parts = [reply]
+    if top_mood:
+        parts.append(f"Your recent mood has leaned {top_mood} — factor that into how hard you push this week.")
+    return {'response': ' '.join(parts)}
 
 
 @api_router.post('/mood')
@@ -4281,105 +3608,6 @@ async def create_mood(payload: MoodCreate, current_user: dict = Depends(get_curr
 async def get_moods(current_user: dict = Depends(get_current_user)):
     docs = await db.moods.find({'user_id': current_user['id']}).sort('timestamp', -1).to_list(200)
     return [clean_doc(d) for d in docs]
-
-
-@api_router.get('/coach/clients/{client_id}/progress')
-async def coach_client_progress(client_id: str, current_user: dict = Depends(get_current_user)):
-    _require_coach_user(current_user)
-    if not await _coach_client_is_accepted(current_user['id'], client_id):
-        raise HTTPException(status_code=403, detail='Not authorized to view this client')
-        
-    ninety_days_ago = datetime.utcnow() - timedelta(days=90)
-    
-    health_metrics = await db.health_metrics.find({
-        'user_id': client_id,
-        'date': {'$gte': ninety_days_ago.strftime('%Y-%m-%d')}
-    }).sort('date', 1).to_list(100)
-    
-    weight_trend = [
-        {'date': doc['date'], 'weight_kg': doc.get('weight_kg')} 
-        for doc in health_metrics if doc.get('weight_kg')
-    ]
-    
-    runs = await db.terra_runs.find({
-        'user_id': client_id,
-        'start_time': {'$gte': ninety_days_ago.isoformat()}
-    }).sort('start_time', 1).to_list(100)
-    
-    run_trend = [
-        {
-            'date': run['start_time'][:10], 
-            'distance_meters': run.get('distance_meters', 0),
-            'duration_seconds': run.get('active_duration_seconds', 0)
-        } 
-        for run in runs
-    ]
-    
-    return {
-        'weight_trend': weight_trend,
-        'run_trend': run_trend
-    }
-
-
-@api_router.get('/coach/clients/{client_id}/history')
-async def coach_client_history(client_id: str, limit: int = 50, current_user: dict = Depends(get_current_user)):
-    _require_coach_user(current_user)
-    if not await _coach_client_is_accepted(current_user['id'], client_id):
-        raise HTTPException(status_code=403, detail='Not authorized to view this client')
-        
-    workout_sessions = await db.workout_sessions.find({'user_id': client_id}).sort('start_time', -1).limit(limit).to_list(limit)
-    programs = await db.training_programs.find({'user_id': client_id}).sort('created_at', -1).limit(5).to_list(5)
-    quick_logs = await db.quick_logs.find({'user_id': client_id}).sort('date', -1).limit(limit).to_list(limit)
-    
-    return {
-        'workout_sessions': [clean_doc(ws) for ws in workout_sessions],
-        'training_programs': [clean_doc(p) for p in programs],
-        'quick_logs': [clean_doc(ql) for ql in quick_logs]
-    }
-
-
-@api_router.get('/coach/analytics')
-async def coach_analytics(current_user: dict = Depends(get_current_user)):
-    _require_coach_user(current_user)
-    
-    subscriptions = await db.coach_subscriptions.find({'coach_id': current_user['id']}).to_list(1000)
-    
-    mrr = 0.0
-    total_revenue = 0.0
-    active_clients = 0
-    now = datetime.utcnow()
-    
-    for sub in subscriptions:
-        if sub.get('status') == 'active':
-            mrr += sub.get('monthly_price', 0.0)
-            active_clients += 1
-            
-        start_date = sub.get('started_at')
-        if start_date:
-            end_date = sub.get('ended_at') or now
-            months_active = max(1, (end_date.year - start_date.year) * 12 + end_date.month - start_date.month)
-            total_revenue += sub.get('monthly_price', 0.0) * months_active
-            
-    requests = await db.coach_requests.find({
-        'coach_id': current_user['id'],
-        'status': 'accepted'
-    }).to_list(1000)
-    
-    growth_map = {}
-    for req in requests:
-        month = req['updated_at'].strftime('%Y-%m')
-        if month not in growth_map:
-            growth_map[month] = 0
-        growth_map[month] += 1
-        
-    growth_series = [{'month': k, 'new_clients': v} for k, v in sorted(growth_map.items())]
-    
-    return {
-        'mrr': round(mrr, 2),
-        'total_revenue': round(total_revenue, 2),
-        'active_clients': active_clients,
-        'growth_series': growth_series
-    }
 
 
 # -------------------- TERRA / RUN SOCIAL --------------------

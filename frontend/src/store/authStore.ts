@@ -6,12 +6,13 @@ interface User {
   id: string;
   email: string;
   name: string;
-  mode: 'user' | 'coach';
   profile: {
     sport?: string;
     goals?: string[];
     equipment?: string[];
     fitness_level?: string;
+    weight_kg?: number;
+    height_cm?: number;
     weight?: number;
     height?: number;
     age?: number;
@@ -38,7 +39,6 @@ interface AuthState {
   logout: () => Promise<void>;
   loadAuth: () => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
-  toggleMode: () => Promise<void>;
   clearOnboardingFlag: () => Promise<void>;
 }
 
@@ -108,13 +108,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   updateProfile: async (data: Partial<User>) => {
     const response = await api.put<User>('/auth/profile', data);
-    set({ user: response });
-  },
-
-  toggleMode: async () => {
-    const currentMode = get().user?.mode || 'user';
-    const newMode = currentMode === 'user' ? 'coach' : 'user';
-    const response = await api.put<User>('/auth/profile', { mode: newMode });
     set({ user: response });
   },
 }));

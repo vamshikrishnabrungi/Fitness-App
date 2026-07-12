@@ -100,7 +100,6 @@ class PasswordReset(BaseModel):
 class UserUpdate(BaseModel):
     name: Optional[str] = None
     profile: Optional[UserProfile] = None
-    mode: Optional[str] = None
 
 
 class AthleteProfileUpsert(BaseModel):
@@ -308,7 +307,6 @@ class DailyActivitySnapshot(BaseModel):
     moods: List[Dict[str, Any]] = []
     injuries: List[Dict[str, Any]] = []
     health_metrics: List[Dict[str, Any]] = []
-    coach_assignments: List[Dict[str, Any]] = []
     totals: DailySnapshotTotals = Field(default_factory=DailySnapshotTotals)
     readiness_inputs: Dict[str, Any] = {}
     data_quality: Dict[str, Any] = {}
@@ -485,27 +483,6 @@ class Lesson(BaseModel):
     duration: Optional[int] = None
 
 
-class DeepJournalCreate(BaseModel):
-    title: Optional[str] = None
-    content: str
-    tags: List[str] = Field(default_factory=list)
-    is_pinned: bool = False
-
-
-class GuidedJournalCreate(BaseModel):
-    template_id: str
-    template_name: Optional[str] = None
-    responses: Dict[str, str] = Field(default_factory=dict)
-    program_id: Optional[str] = None
-    program_day: Optional[int] = None
-    cbt_distortion: Optional[str] = None
-
-
-class JournalSearchRequest(BaseModel):
-    query: str
-    limit: int = 10
-
-
 class TerraGpsPoint(BaseModel):
     latitude: float
     longitude: float
@@ -579,14 +556,3 @@ class BenchmarkCreate(BaseModel):
     visa_p: Optional[int] = None              # patellar tendon questionnaire (0-100)
     visa_a: Optional[int] = None              # achilles tendon questionnaire (0-100)
     notes: Optional[str] = None
-
-
-class CoachSubscription(BaseModel):
-    id: str
-    coach_id: str
-    client_id: str
-    status: str = "active"  # active, cancelled, past_due
-    monthly_price: float = 0.0
-    currency: str = "USD"
-    started_at: datetime = Field(default_factory=datetime.utcnow)
-    ended_at: Optional[datetime] = None

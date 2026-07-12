@@ -1,17 +1,19 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "Runlete",
+    "slug": "runlete",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "frontend",
+    "scheme": "runlete",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.runlete.app"
     },
     "android": {
+      "package": "com.runlete.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000"
@@ -28,8 +30,15 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow Terra Run to use your location to track runs, distance, and territory.",
-          "locationWhenInUsePermission": "Allow Terra Run to use your location to track runs, distance, and territory."
+          "locationAlwaysAndWhenInUsePermission": "Allow Runlete to use your location to track runs, distance, and territory.",
+          "locationWhenInUsePermission": "Allow Runlete to use your location to track runs, distance, and territory."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Runlete to access your photos so you can analyze meal images.",
+          "cameraPermission": "Allow Runlete to open the camera so you can scan meals."
         }
       ],
       [

@@ -85,14 +85,8 @@ COLLECTIONS: List[str] = [
     'terra_reflections',
     'terra_feed_posts',
     'terra_training_plans',
-    'coach_requests',
-    'coach_relationships',
-    'coach_workouts',
-    'coach_subscriptions',
-    'coach_meals',
-    'coach_goals',
-    'journal_entries',
     'lessons',
+    'ai_generation_log',
 ]
 
 
@@ -474,42 +468,14 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
     ],
-    'coach_requests': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('status', ASCENDING)]},
-        {'keys': [('coach_id', ASCENDING), ('status', ASCENDING)]},
-    ],
-    'coach_relationships': [
-        {'keys': [('coach_id', ASCENDING), ('client_id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('status', ASCENDING)]},
-    ],
-    'coach_workouts': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('scheduled_date', DESCENDING)]},
-        {'keys': [('coach_id', ASCENDING), ('created_at', DESCENDING)]},
-    ],
-    'coach_subscriptions': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('coach_id', ASCENDING), ('status', ASCENDING)]},
-        {'keys': [('coach_id', ASCENDING), ('client_id', ASCENDING)]},
-    ],
-    'coach_meals': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('date', DESCENDING)]},
-    ],
-    'coach_goals': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('created_at', DESCENDING)]},
-    ],
-    'journal_entries': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},
-        {'keys': [('user_id', ASCENDING), ('entry_type', ASCENDING)]},
-        {'keys': [('tags', ASCENDING)]},
-    ],
     'lessons': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('sport', ASCENDING), ('category', ASCENDING)]},
+    ],
+    'ai_generation_log': [
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        # TTL: auto-purge quota records after 2 days (quota window is rolling 24h).
+        {'keys': [('created_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 172800}},
     ],
 }
 
