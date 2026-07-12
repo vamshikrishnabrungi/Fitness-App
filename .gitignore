@@ -100,3 +100,22 @@ android-sdk/ -e
 # Environment files
 *.env
 *.env.*
+
+# --- Large / copyrighted reference source material (keep OUT of git history) ---
+/*.pdf
+/*.epub
+/*.jpeg
+/*.jpg
+/*.webp
+/pylometrics/
+
+# AI generation scratch artifacts
+backend/anthropic_week1_*.json
+backend/openrouter_week1_*.json
+
+# ...but DO track the env template (overrides the *.env.* rule above)
+!backend/.env.example
+!frontend/.env.example
+
+# Local API key scratch — never commit
+backend/openai_keys_to_test.txt
