@@ -105,10 +105,10 @@ const formatPace = (distKm: number, durationSec: number) => {
 type ScreenState = 'permission' | 'ready' | 'running' | 'paused';
 
 const FEELINGS = [
-  { key: 'great', emoji: '🔥', label: 'Great' },
-  { key: 'good', emoji: '👍', label: 'Good' },
-  { key: 'tired', emoji: '😮‍💨', label: 'Tired' },
-  { key: 'struggling', emoji: '😤', label: 'Hard' },
+  { key: 'great', emoji: '✓', label: 'Great' },
+  { key: 'good', emoji: 'OK', label: 'Good' },
+  { key: 'tired', emoji: '...', label: 'Tired' },
+  { key: 'struggling', emoji: '!', label: 'Hard' },
 ];
 
 export default function TrackRunScreen() {
@@ -381,7 +381,7 @@ export default function TrackRunScreen() {
         </View>
         <View style={styles.readyContent}>
           <View style={styles.gpsIndicator}>
-            <Ionicons name="navigate-circle-outline" size={80} color={gpsReady ? colors.statusSuccess : colors.accentOrange} />
+            <Ionicons name="navigate-circle-outline" size={80} color={gpsReady ? colors.statusSuccess : colors.textPrimary} />
           </View>
           <Text style={styles.readyTitle}>Ready to Run</Text>
           <Text style={styles.readySubtitle}>
@@ -394,7 +394,7 @@ export default function TrackRunScreen() {
               { icon: 'repeat-outline', text: 'Loops capture more territory' },
             ].map((tip) => (
               <View key={tip.text} style={styles.tipRow}>
-                <Ionicons name={tip.icon as any} size={18} color={colors.accentOrange} />
+                <Ionicons name={tip.icon as any} size={18} color={colors.textPrimary} />
                 <Text style={styles.tipText}>{tip.text}</Text>
               </View>
             ))}
@@ -402,7 +402,7 @@ export default function TrackRunScreen() {
         </View>
         <View style={[styles.readyFooter, { paddingBottom: insets.bottom + 40 }]}>
           <TouchableOpacity style={styles.bigStartButton} onPress={startRun}>
-            <Ionicons name="play" size={32} color="#000" />
+            <Ionicons name="play" size={32} color={colors.background} />
             <Text style={styles.bigStartText}>START RUN</Text>
           </TouchableOpacity>
         </View>
@@ -465,7 +465,7 @@ export default function TrackRunScreen() {
       {/* Loop badge */}
       {isLoop && (
         <View style={styles.loopBadge}>
-          <Ionicons name="git-compare" size={14} color={colors.accentOrange} />
+          <Ionicons name="git-compare" size={14} color={colors.textPrimary} />
           <Text style={styles.loopText}>LOOP DETECTED · TERRITORY BOOST</Text>
         </View>
       )}
@@ -476,7 +476,7 @@ export default function TrackRunScreen() {
           <Ionicons name="close" size={24} color="white" />
         </TouchableOpacity>
         <View style={styles.statusBadge}>
-          <View style={[styles.statusDot, { backgroundColor: screen === 'running' ? colors.statusSuccess : colors.accentOrange }]} />
+          <View style={[styles.statusDot, { backgroundColor: screen === 'running' ? colors.statusSuccess : colors.textPrimary }]} />
           <Text style={styles.statusText}>{screen === 'running' ? 'TRACKING' : 'PAUSED'}</Text>
         </View>
         <View style={styles.xpBadge}>
@@ -509,7 +509,7 @@ export default function TrackRunScreen() {
           <View style={styles.statDivider} />
           <View style={styles.statBlock}>
             <Text style={styles.metaLabel}>TERR.</Text>
-            <Text style={[styles.statValue, { color: colors.accentOrange }]}>{territory.toFixed(3)}</Text>
+            <Text style={[styles.statValue, { color: colors.textPrimary }]}>{territory.toFixed(3)}</Text>
           </View>
         </View>
       </View>
@@ -523,7 +523,7 @@ export default function TrackRunScreen() {
         ) : (
           <View style={styles.pausedControls}>
             <TouchableOpacity style={styles.resumeButton} onPress={resumeRun}>
-              <Ionicons name="play" size={36} color="#000" />
+              <Ionicons name="play" size={36} color={colors.background} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.finishButton} onPress={handleFinish}>
               <Ionicons name="flag" size={20} color="white" />
@@ -536,7 +536,7 @@ export default function TrackRunScreen() {
       {/* Summary Modal */}
       <Modal visible={showSummary} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
-          <LinearGradient colors={[colors.accentOrange, '#FF8E53']} style={styles.summaryCard}>
+          <LinearGradient colors={[colors.textPrimary, '#2B2B2B']} style={styles.summaryCard}>
             <Ionicons name="checkmark-circle" size={56} color="white" />
             <Text style={styles.summaryTitle}>Run Complete!</Text>
             <Text style={styles.summarySync}>
@@ -625,7 +625,7 @@ const styles = StyleSheet.create({
   // Permission
   permTitle: { ...typography.h3, color: colors.textPrimary, marginTop: spacing.lg, textAlign: 'center' },
   permSubtitle: { ...typography.body, color: colors.textSecondary, textAlign: 'center', marginTop: spacing.sm, marginBottom: spacing.xl },
-  permButton: { backgroundColor: colors.accentOrange, paddingHorizontal: spacing.xl, paddingVertical: spacing.md, borderRadius: borderRadius.full },
+  permButton: { backgroundColor: colors.textPrimary, paddingHorizontal: spacing.xl, paddingVertical: spacing.md, borderRadius: borderRadius.full },
   permButtonText: { color: 'white', fontWeight: '700' },
   // Ready screen
   readyHeader: { paddingHorizontal: spacing.lg, paddingBottom: spacing.md },
@@ -637,19 +637,19 @@ const styles = StyleSheet.create({
   tipRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: 'rgba(255,255,255,0.07)', padding: spacing.md, borderRadius: borderRadius.md },
   tipText: { ...typography.body, color: 'rgba(255,255,255,0.8)' },
   readyFooter: { alignItems: 'center' },
-  bigStartButton: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.accentOrange, paddingHorizontal: spacing.xxxl, paddingVertical: spacing.lg, borderRadius: borderRadius.full },
-  bigStartText: { color: '#000', fontSize: 18, fontWeight: '800', letterSpacing: 2 },
+  bigStartButton: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.textPrimary, paddingHorizontal: spacing.xxxl, paddingVertical: spacing.lg, borderRadius: borderRadius.full },
+  bigStartText: { color: colors.background, fontSize: 18, fontWeight: '800', letterSpacing: 2 },
   // Grid / path
   gridLine: { position: 'absolute', width: 1, height: '100%', backgroundColor: 'rgba(255,255,255,0.03)' },
-  pathDot: { position: 'absolute', width: 8, height: 8, borderRadius: 4, backgroundColor: colors.accentOrange },
+  pathDot: { position: 'absolute', width: 8, height: 8, borderRadius: 4, backgroundColor: colors.textPrimary },
   // Pulse
   pulseContainer: { position: 'absolute', top: height * 0.35, left: width / 2 - 40, width: 80, height: 80, alignItems: 'center', justifyContent: 'center' },
-  pulseRing: { position: 'absolute', borderWidth: 2, borderColor: colors.accentOrange, borderRadius: 100 },
+  pulseRing: { position: 'absolute', borderWidth: 2, borderColor: colors.textPrimary, borderRadius: 100 },
   pulseOuter: { width: 80, height: 80, opacity: 0.3 },
   pulseInner: { width: 50, height: 50, opacity: 0.6 },
-  pulseDot: { width: 16, height: 16, borderRadius: 8, backgroundColor: colors.accentOrange },
+  pulseDot: { width: 16, height: 16, borderRadius: 8, backgroundColor: colors.textPrimary },
   loopBadge: { position: 'absolute', top: 110, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)', paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: borderRadius.full, gap: spacing.xs },
-  loopText: { color: colors.accentOrange, fontSize: 11, fontWeight: '700', letterSpacing: 1 },
+  loopText: { color: colors.textPrimary, fontSize: 11, fontWeight: '700', letterSpacing: 1 },
   closeButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.1)', justifyContent: 'center', alignItems: 'center' },
   // Run header
   runHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: spacing.lg, paddingBottom: spacing.md },
@@ -658,12 +658,12 @@ const styles = StyleSheet.create({
   statusText: { color: 'white', fontSize: 11, fontWeight: '700', letterSpacing: 1 },
   xpBadge: { alignItems: 'flex-end', backgroundColor: 'rgba(255,107,107,0.25)', paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: borderRadius.md },
   xpLabel: { color: 'rgba(255,255,255,0.6)', fontSize: 9, fontWeight: '700', letterSpacing: 1 },
-  xpValue: { color: colors.accentOrange, fontSize: 16, fontWeight: '800' },
+  xpValue: { color: colors.textPrimary, fontSize: 16, fontWeight: '800' },
   // Main stats
   mainStats: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   metaLabel: { color: 'rgba(255,255,255,0.5)', fontSize: 11, fontWeight: '700', letterSpacing: 2, marginBottom: 4 },
   distanceValue: { color: 'white', fontSize: 76, fontWeight: '800', letterSpacing: -2 },
-  distanceUnit: { fontSize: 24, color: colors.accentOrange, fontWeight: '600' },
+  distanceUnit: { fontSize: 24, color: colors.textPrimary, fontWeight: '600' },
   secondaryStats: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.xl, backgroundColor: 'rgba(255,255,255,0.08)', paddingVertical: spacing.lg, paddingHorizontal: spacing.xl, borderRadius: borderRadius.xl, gap: spacing.lg },
   statBlock: { alignItems: 'center', minWidth: 52 },
   statValue: { color: 'white', fontSize: 18, fontWeight: '700' },
@@ -672,7 +672,7 @@ const styles = StyleSheet.create({
   controls: { alignItems: 'center', justifyContent: 'flex-end', height: 160 },
   pauseButton: { width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.15)', borderWidth: 3, borderColor: 'white', justifyContent: 'center', alignItems: 'center' },
   pausedControls: { flexDirection: 'row', alignItems: 'center', gap: spacing.xl },
-  resumeButton: { width: 80, height: 80, borderRadius: 40, backgroundColor: colors.accentOrange, justifyContent: 'center', alignItems: 'center' },
+  resumeButton: { width: 80, height: 80, borderRadius: 40, backgroundColor: colors.textPrimary, justifyContent: 'center', alignItems: 'center' },
   finishButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#ff3b30', paddingHorizontal: spacing.xl, paddingVertical: spacing.md, borderRadius: borderRadius.full, gap: spacing.sm },
   finishText: { color: 'white', fontWeight: '700', letterSpacing: 1 },
   // Modals
@@ -697,7 +697,7 @@ const styles = StyleSheet.create({
   reflectionTitle: { ...typography.h3, color: colors.textPrimary, textAlign: 'center', marginBottom: spacing.lg },
   feelingsRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: spacing.xl },
   feelingBtn: { alignItems: 'center', padding: spacing.md, borderRadius: borderRadius.md, backgroundColor: colors.surface, minWidth: 68 },
-  feelingBtnActive: { backgroundColor: colors.accentOrange },
+  feelingBtnActive: { backgroundColor: colors.textPrimary },
   feelingEmoji: { fontSize: 28, marginBottom: 4 },
   feelingLabel: { ...typography.caption, color: colors.textSecondary },
   notesLabel: { ...typography.body, color: colors.textSecondary, marginBottom: spacing.sm },

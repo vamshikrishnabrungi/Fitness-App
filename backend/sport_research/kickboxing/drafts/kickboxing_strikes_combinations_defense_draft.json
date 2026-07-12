@@ -1,0 +1,247 @@
+{
+  "research_goal": "Create backend-ready kickboxing strike mechanics, combinations, entries, exits, kick defense, and countering knowledge for SFTC.",
+  "sport": "kickboxing",
+  "domains_covered": [
+    "kickboxing_punch_mechanics",
+    "kickboxing_kick_mechanics",
+    "kickboxing_kick_defense_checks",
+    "kickboxing_combinations_entries_exits",
+    "kickboxing_defense_countering"
+  ],
+  "source_refs": [
+    {
+      "title": "WAKO Rules",
+      "organization_or_author": "World Association of Kickboxing Organizations",
+      "url": "https://www.wako.sport/rules/",
+      "source_type": "official_rules",
+      "notes": "Used for kickboxing discipline context and legal technique differences."
+    },
+    {
+      "title": "GLORY Rules",
+      "organization_or_author": "GLORY Kickboxing",
+      "url": "https://glorykickboxing.com/rules",
+      "source_type": "official_professional_rules",
+      "notes": "Used for K-1 style scoring, knockdown, knee, clinch, and effective striking context."
+    },
+    {
+      "title": "Kinematic Analysis of the Roundhouse Kick in Muay Thai",
+      "organization_or_author": "Gavagan and Sayers",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3737916/",
+      "source_type": "peer_reviewed_biomechanics_article",
+      "notes": "Used for hip rotation, pivot, and lower-limb sequencing context for round kicks."
+    },
+    {
+      "title": "Impact Force and Velocities for Kicking Strikes in Combat Sports",
+      "organization_or_author": "Vagner et al.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8196733/",
+      "source_type": "peer_reviewed_biomechanics_article",
+      "notes": "Used for progressive kicking load and impact-safety context."
+    }
+  ],
+  "technical_principles": [
+    {
+      "id": "kickboxing_principle_strike_return_to_stance",
+      "summary": "Every punch or kick must return the athlete to a stance that can defend the next punch, kick, knee, counter, or exit."
+    },
+    {
+      "id": "kickboxing_principle_combinations_need_exit",
+      "summary": "Kickboxing combinations should usually finish with a defensive responsibility: guard return, angle exit, distance reset, check readiness, or legal clinch/knee position."
+    },
+    {
+      "id": "kickboxing_principle_rule_set_changes_targets",
+      "summary": "Low-kick and K-1 users need leg-attack and checking systems; point fighters need entry/exit speed and scoring precision; full-contact users need volume, guard, and above-waist kick mechanics."
+    }
+  ],
+  "backend_records": {
+    "sport_training_rules": [
+      {
+        "id": "kickboxing_rule_punch_mechanics_with_kick_defense",
+        "sport": "kickboxing",
+        "domain": "kickboxing_punch_mechanics",
+        "category": "technical_rule",
+        "rule": "Punch mechanics must preserve stance, guard, and kick-defense readiness; do not teach boxing-only head movement or stance habits that expose knees, kicks, or low kicks.",
+        "recommended_action": [
+          "Use jab, cross, hook, and uppercut mechanics with guard return and stance recovery.",
+          "Add kick-defense checks after punching entries for low-kick and K-1 users."
+        ],
+        "blocked_action": [
+          "boxing-only deep slips as default",
+          "long flurries without exit",
+          "square stance after punching"
+        ],
+        "retrieval_tags": ["kickboxing", "punch_mechanics", "guard", "kick_defense"]
+      },
+      {
+        "id": "kickboxing_rule_kick_mechanics_recovery",
+        "sport": "kickboxing",
+        "domain": "kickboxing_kick_mechanics",
+        "category": "technical_rule",
+        "rule": "Teach kicks with pivot, hip rotation, guarded torso, target control, and recovery to stance before progressing impact, height, or volume.",
+        "recommended_action": [
+          "Start with low or body-height round kicks before repeated head kicks.",
+          "Use technical pad or bag volume before hard sparring contact."
+        ],
+        "blocked_action": [
+          "high-volume head kicks for beginners",
+          "hard low-kick exchanges before checking mechanics",
+          "spinning attacks before balance and recovery"
+        ],
+        "retrieval_tags": ["kickboxing", "kick_mechanics", "round_kick", "stance_recovery"]
+      },
+      {
+        "id": "kickboxing_rule_defense_before_hard_sparring",
+        "sport": "kickboxing",
+        "domain": "kickboxing_defense_countering",
+        "category": "sparring_readiness",
+        "rule": "Hard sparring should not be prescribed until the athlete can defend basic punches and kicks, keep balance under contact, and exit safely.",
+        "recommended_action": [
+          "Use technical sparring, partner feeds, defensive drills, and controlled counters first.",
+          "Assess guard return, check mechanics, and calm reset under pressure."
+        ],
+        "blocked_action": [
+          "hard sparring by default",
+          "fatigue sparring for beginners",
+          "counter drills before basic defense"
+        ],
+        "retrieval_tags": ["kickboxing", "sparring", "defense", "beginner_safety"]
+      }
+    ],
+    "planning_rules": [
+      {
+        "id": "kickboxing_plan_punch_kick_defense_session_structure",
+        "sport": "kickboxing",
+        "category": "session_design",
+        "applies_to": ["kickboxing", "combat_sports"],
+        "priority": 86,
+        "rule": "A kickboxing technical session should connect warm-up movement, isolated strike mechanics, combination work, defensive response, and exit/reset practice.",
+        "recommended_action": [
+          "Pair offensive combinations with checks, guard returns, or angle exits.",
+          "Keep high-speed work low fatigue and high quality."
+        ],
+        "blocked_action": [
+          "random bag rounds without technical focus",
+          "conditioning circuits that erase guard and stance quality"
+        ],
+        "retrieval_tags": ["kickboxing", "session_design", "technical_quality"]
+      },
+      {
+        "id": "kickboxing_plan_low_kick_progression_gate",
+        "sport": "kickboxing",
+        "category": "rule_set_specificity",
+        "applies_to": ["kickboxing", "low_kick", "k1"],
+        "priority": 91,
+        "rule": "Low-kick and K-1 athletes should learn low-kick setup, checking, withdrawal, and countering before hard leg-contact volume.",
+        "recommended_action": [
+          "Use shadow, pad, shield, and low-contact partner check drills before sparring volume.",
+          "Progress contact gradually based on shin, knee, hip, and ankle tolerance."
+        ],
+        "blocked_action": [
+          "hard low-kick sparring for beginners",
+          "large leg-contact volume spikes",
+          "low kicks with unresolved knee or ankle pain"
+        ],
+        "retrieval_tags": ["kickboxing", "low_kick", "k1", "load_management"]
+      }
+    ],
+    "teaching_progressions": [
+      {
+        "id": "kickboxing_progression_basic_punch_to_kick_chain",
+        "sport": "kickboxing",
+        "domain": "kickboxing_combinations_entries_exits",
+        "level": "beginner",
+        "learning_goal": "Build a basic punch-to-kick chain while preserving stance, guard, and exit.",
+        "progression_steps": [
+          "Shadowbox jab-cross with guard return.",
+          "Add rear round kick after cross with controlled balance.",
+          "Add reset step after kick.",
+          "Add partner/pad cue for defensive check or exit.",
+          "Use light technical sparring only after stance recovery is reliable."
+        ],
+        "avoid_until_ready": [
+          "full-power kick after every punch",
+          "head kick finish",
+          "hard sparring"
+        ],
+        "progression_signals": [
+          "hands return after every strike",
+          "kick lands without falling in",
+          "athlete can reset or angle out on cue"
+        ],
+        "retrieval_tags": ["kickboxing", "beginner", "combination", "punch_to_kick"]
+      },
+      {
+        "id": "kickboxing_progression_check_counter",
+        "sport": "kickboxing",
+        "domain": "kickboxing_kick_defense_checks",
+        "level": "intermediate",
+        "learning_goal": "Turn low-kick defense into a safe countering opportunity.",
+        "progression_steps": [
+          "Solo check mechanics with posture and guard.",
+          "Partner low-contact low-kick feed to check.",
+          "Check then return cross or low kick.",
+          "Add angle exit after counter.",
+          "Apply in controlled sparring rounds."
+        ],
+        "avoid_until_ready": [
+          "hard low-kick exchange",
+          "checking with collapsed posture",
+          "countering while square"
+        ],
+        "progression_signals": [
+          "stable check position",
+          "no knee or shin pain escalation",
+          "counter lands without losing stance"
+        ],
+        "retrieval_tags": ["kickboxing", "check", "counter", "low_kick"]
+      }
+    ],
+    "sport_skill_assessments": [
+      {
+        "id": "kickboxing_assessment_strike_recovery",
+        "sport": "kickboxing",
+        "domain": "kickboxing_kick_mechanics",
+        "summary": "Assess whether the athlete can throw basic punches and round kicks while returning to stance and guard.",
+        "metrics": [
+          "guard return after jab-cross",
+          "balance after rear round kick",
+          "ability to reset stance on coach cue",
+          "no pain escalation with technical volume"
+        ],
+        "hold_if": [
+          "falls forward after kicks",
+          "hands drop during every kick",
+          "cannot check after punching",
+          "knee, hip, ankle, or shin pain worsens"
+        ],
+        "retrieval_tags": ["kickboxing", "assessment", "strike_recovery"]
+      }
+    ],
+    "sport_level_transition_rules": [
+      {
+        "id": "kickboxing_transition_beginner_to_intermediate_striking",
+        "sport": "kickboxing",
+        "domain": "kickboxing_level_progression",
+        "from_level": "beginner",
+        "to_level": "intermediate",
+        "minimum_evidence": [
+          "8+ technical sessions completed",
+          "basic punch and kick mechanics are stable",
+          "can defend/check basic attacks in partner drills",
+          "no worsening pain trend"
+        ],
+        "promote_when": [
+          "athlete keeps stance and guard under moderate fatigue",
+          "athlete can combine attack, defense, and exit",
+          "coach/user feedback reports controlled contact readiness"
+        ],
+        "hold_when": [
+          "hard contact anxiety or unsafe reactions",
+          "repeated stance collapse",
+          "head, wrist, shoulder, hip, knee, ankle, or shin symptoms worsen"
+        ],
+        "backend_action": "Unlock simple sparring constraints, counter drills, rule-set-specific combinations, and moderate-intensity round conditioning.",
+        "retrieval_tags": ["kickboxing", "level_transition", "beginner", "intermediate"]
+      }
+    ]
+  }
+}

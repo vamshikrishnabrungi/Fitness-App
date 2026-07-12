@@ -1,0 +1,346 @@
+[
+  {
+    "batch_number": 1,
+    "items": [
+      {
+        "name": "Push Jerk in Snatch",
+        "slug": "push-jerk-in-snatch"
+      },
+      {
+        "name": "Push Jerk in Split",
+        "slug": "push-jerk-in-split"
+      },
+      {
+        "name": "Push Press Behind the Neck",
+        "slug": "push-press-behind-the-neck"
+      },
+      {
+        "name": "Quarter-eagle Chest Pass",
+        "slug": "quarter-eagle-chest-pass"
+      },
+      {
+        "name": "Rebound Jerk",
+        "slug": "rebound-jerk"
+      },
+      {
+        "name": "Ring Dip",
+        "slug": "ring-dip"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Push Jerk in Snatch, Push Jerk in Split, Push Press Behind the Neck, Quarter-eagle Chest Pass, Rebound Jerk, Ring Dip.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 2,
+    "items": [
+      {
+        "name": "Ring Muscle-Up",
+        "slug": "ring-muscle-up"
+      },
+      {
+        "name": "Ring Turned-Out Support Hold",
+        "slug": "ring-turned-out-support-hold"
+      },
+      {
+        "name": "Segment Clean",
+        "slug": "segment-clean"
+      },
+      {
+        "name": "Segment Power Clean",
+        "slug": "segment-power-clean"
+      },
+      {
+        "name": "Segment Power Snatch",
+        "slug": "segment-power-snatch"
+      },
+      {
+        "name": "Segment Snatch",
+        "slug": "segment-snatch"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Ring Muscle-Up, Ring Turned-Out Support Hold, Segment Clean, Segment Power Clean, Segment Power Snatch, Segment Snatch.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 3,
+    "items": [
+      {
+        "name": "Single-leg Bounding",
+        "slug": "single-leg-bounding"
+      },
+      {
+        "name": "Single-leg Depth Jump",
+        "slug": "single-leg-depth-jump"
+      },
+      {
+        "name": "Single-leg Hops",
+        "slug": "single-leg-hops"
+      },
+      {
+        "name": "Single-leg Lateral Jump",
+        "slug": "single-leg-lateral-jump"
+      },
+      {
+        "name": "Single-leg Push-off",
+        "slug": "single-leg-push-off"
+      },
+      {
+        "name": "Single-leg Squat",
+        "slug": "single-leg-squat"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Single-leg Bounding, Single-leg Depth Jump, Single-leg Hops, Single-leg Lateral Jump, Single-leg Push-off, Single-leg Squat.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 4,
+    "items": [
+      {
+        "name": "Skin The Cat",
+        "slug": "skin-the-cat"
+      },
+      {
+        "name": "Slow Pull Clean",
+        "slug": "slow-pull-clean"
+      },
+      {
+        "name": "Slow Pull Snatch",
+        "slug": "slow-pull-snatch"
+      },
+      {
+        "name": "Snatch Balance",
+        "slug": "snatch-balance"
+      },
+      {
+        "name": "Snatch Bench Pull",
+        "slug": "snatch-bench-pull"
+      },
+      {
+        "name": "Snatch Deadlift",
+        "slug": "snatch-deadlift"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Skin The Cat, Slow Pull Clean, Slow Pull Snatch, Snatch Balance, Snatch Bench Pull, Snatch Deadlift.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 5,
+    "items": [
+      {
+        "name": "Snatch Deadlift on Riser",
+        "slug": "snatch-deadlift-on-riser"
+      },
+      {
+        "name": "Snatch Deadlift to Power Position",
+        "slug": "snatch-deadlift-to-power-position"
+      },
+      {
+        "name": "Snatch from Power Position",
+        "slug": "snatch-from-power-position"
+      },
+      {
+        "name": "Snatch High-Pull",
+        "slug": "snatch-high-pull"
+      },
+      {
+        "name": "Snatch High-Pull on Riser",
+        "slug": "snatch-high-pull-on-riser"
+      },
+      {
+        "name": "Snatch Lift-off",
+        "slug": "snatch-lift-off"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Snatch Deadlift on Riser, Snatch Deadlift to Power Position, Snatch from Power Position, Snatch High-Pull, Snatch High-Pull on Riser, Snatch Lift-off.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 6,
+    "items": [
+      {
+        "name": "Snatch Long Pull",
+        "slug": "snatch-long-pull"
+      },
+      {
+        "name": "Snatch on Riser",
+        "slug": "snatch-on-riser"
+      },
+      {
+        "name": "Snatch Power Jerk",
+        "slug": "snatch-power-jerk"
+      },
+      {
+        "name": "Snatch Press",
+        "slug": "snatch-press"
+      },
+      {
+        "name": "Snatch Pull",
+        "slug": "snatch-pull"
+      },
+      {
+        "name": "Snatch Pull on Riser",
+        "slug": "snatch-pull-on-riser"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Snatch Long Pull, Snatch on Riser, Snatch Power Jerk, Snatch Press, Snatch Pull, Snatch Pull on Riser.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 7,
+    "items": [
+      {
+        "name": "Snatch Pull-Down",
+        "slug": "snatch-pull-down"
+      },
+      {
+        "name": "Snatch Push Press",
+        "slug": "snatch-push-press"
+      },
+      {
+        "name": "Snatch Segment Deadlift",
+        "slug": "snatch-segment-deadlift"
+      },
+      {
+        "name": "Snatch Segment Pull",
+        "slug": "snatch-segment-pull"
+      },
+      {
+        "name": "Snatch Shrug",
+        "slug": "snatch-shrug"
+      },
+      {
+        "name": "Snatch Transition Deadlift",
+        "slug": "snatch-transition-deadlift"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Snatch Pull-Down, Snatch Push Press, Snatch Segment Deadlift, Snatch Segment Pull, Snatch Shrug, Snatch Transition Deadlift.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 8,
+    "items": [
+      {
+        "name": "Snatch with No Brush",
+        "slug": "snatch-with-no-brush"
+      },
+      {
+        "name": "Snatch with No Jump",
+        "slug": "snatch-with-no-jump"
+      },
+      {
+        "name": "Split Clean",
+        "slug": "split-clean"
+      },
+      {
+        "name": "Split Snatch",
+        "slug": "split-snatch"
+      },
+      {
+        "name": "Split Squat with Cycle",
+        "slug": "split-squat-with-cycle"
+      },
+      {
+        "name": "Split-pike Jump",
+        "slug": "split-pike-jump"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Snatch with No Brush, Snatch with No Jump, Split Clean, Split Snatch, Split Squat with Cycle, Split-pike Jump.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 9,
+    "items": [
+      {
+        "name": "Squat Jerk",
+        "slug": "squat-jerk"
+      },
+      {
+        "name": "Stage Clean",
+        "slug": "stage-clean"
+      },
+      {
+        "name": "Stage Snatch",
+        "slug": "stage-snatch"
+      },
+      {
+        "name": "Standing Triple Jump",
+        "slug": "standing-triple-jump"
+      },
+      {
+        "name": "Standing Triple Jump with Barrier Jump",
+        "slug": "standing-triple-jump-with-barrier-jump"
+      },
+      {
+        "name": "Step to Split",
+        "slug": "step-to-split"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Squat Jerk, Stage Clean, Stage Snatch, Standing Triple Jump, Standing Triple Jump with Barrier Jump, Step to Split.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 10,
+    "items": [
+      {
+        "name": "Step-close Jump and Reach",
+        "slug": "step-close-jump-and-reach"
+      },
+      {
+        "name": "Straddle Front Lever",
+        "slug": "straddle-front-lever"
+      },
+      {
+        "name": "Straddle Planche",
+        "slug": "straddle-planche"
+      },
+      {
+        "name": "Straddle V-Sit",
+        "slug": "straddle-v-sit"
+      },
+      {
+        "name": "Straight-pike Jump",
+        "slug": "straight-pike-jump"
+      },
+      {
+        "name": "Tall Clean",
+        "slug": "tall-clean"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Step-close Jump and Reach, Straddle Front Lever, Straddle Planche, Straddle V-Sit, Straight-pike Jump, Tall Clean.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 11,
+    "items": [
+      {
+        "name": "Tall Jerk",
+        "slug": "tall-jerk"
+      },
+      {
+        "name": "Tall Snatch",
+        "slug": "tall-snatch"
+      },
+      {
+        "name": "Tuck Back Lever",
+        "slug": "tuck-back-lever"
+      },
+      {
+        "name": "Tuck Planche",
+        "slug": "tuck-planche"
+      },
+      {
+        "name": "Tucked Planche Swing",
+        "slug": "tucked-planche-swing"
+      },
+      {
+        "name": "V-Sit",
+        "slug": "v-sit"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of six exact exercise movement thumbnails in this exact row-major order: Tall Jerk, Tall Snatch, Tuck Back Lever, Tuck Planche, Tucked Planche Swing, V-Sit.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  },
+  {
+    "batch_number": 12,
+    "items": [
+      {
+        "name": "Walk to Split",
+        "slug": "walk-to-split"
+      },
+      {
+        "name": "Wave Squat",
+        "slug": "wave-squat"
+      }
+    ],
+    "prompt": "Use case: scientific-educational\nAsset type: exercise thumbnail contact sheet for a mobile fitness app\nPrimary request: Create a clean 2 columns by 3 rows grid of 2 exact exercise movement thumbnails in this exact row-major order: Walk to Split, Wave Squat.\nLeave remaining unused cells as blank white cells with no person.\nStyle/medium: premium black-and-white fitness instruction illustrations, realistic human anatomy simplified into clear line art, no cartoon exaggeration.\nComposition/framing: each used cell shows one full-body person performing the named exercise in the correct position, centered, isolated, same camera angle consistency, generous padding. White background, thin light gray cell boundaries.\nText: no text, no labels, no logos.\nConstraints: movements must be technically recognizable and different from each other; use equipment only when the exercise requires it; no color accents; no watermark."
+  }
+]

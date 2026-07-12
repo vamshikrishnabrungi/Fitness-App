@@ -1,0 +1,1000 @@
+{
+  "metadata": {
+    "domain": "volleyball_snc_injury_macro_planning",
+    "sport": "volleyball",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready volleyball strength-and-conditioning, injury-risk, load-management, macro-planning, readiness-adjustment, and return-to-play rules for indoor six-player volleyball across beginner, intermediate, and advanced levels, with explicit role-specific implications."
+  },
+  "source_refs": [
+    {
+      "id": "src_fivb_medical_injury_prevention",
+      "title": "Principles of Prevention and Treatment of Common Volleyball Injuries",
+      "url": "https://www.fivb.com/wp-content/uploads/2024/03/FIVB_Medical_Injury_Prevention.pdf",
+      "source_type": "official_medical_resource",
+      "organization_or_author": "FIVB Medical Commission",
+      "notes": "Used for volleyball injury priorities: ankle sprains, patellar tendinopathy, shoulder overload, low back pain, prevention principles, and medical referral framing."
+    },
+    {
+      "id": "src_fivb_coaches_level_ii",
+      "title": "FIVB Coaches Manual Level II",
+      "url": "https://www.fivb.com/wp-content/uploads/2024/03/Coaches_Manual_Level_II_EN.pdf",
+      "source_type": "official_coaching_manual",
+      "organization_or_author": "Federation Internationale de Volleyball",
+      "notes": "Used for physical preparation as one component of performance, volleyball-specific movement demands, team preparation, and integration of physical work with skill and tactical training."
+    },
+    {
+      "id": "src_usav_conditioning",
+      "title": "Conditioning",
+      "url": "https://usavolleyball.org/resource/conditioning/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for volleyball-specific conditioning: short explosive actions, approach jumps, block jumps, dashes, recovery intervals, and year-round aerobic support."
+    },
+    {
+      "id": "src_usav_stretching",
+      "title": "10 Muscle Groups Every Volleyball Player Must Stretch",
+      "url": "https://usavolleyball.org/resource/10-muscle-groups-every-volleyball-player-must-stretch/",
+      "source_type": "national_federation_sports_medicine_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for mobility priorities around hips, calves, quads, hamstrings, adductors, low back, abdomen, and shoulders, and for placing mobility after dynamic warm-up and after volleyball activity."
+    },
+    {
+      "id": "src_usav_band_practice",
+      "title": "Don't Skip Band Practice",
+      "url": "https://usavolleyball.org/resource/dont-skip-band-practice/",
+      "source_type": "national_federation_s_and_c_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for shoulder protection, lower-trap/scapular emphasis, trunk anti-rotation, lateral power, and low-rep power work without fatigue."
+    },
+    {
+      "id": "src_usav_off_hand_hitting",
+      "title": "Teach Off-Hand Hitting",
+      "url": "https://usavolleyball.org/resource/teach-off-hand-hitting/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for landing-risk logic when hitters reach off-axis in the air and cannot reposition before landing; supports safer emergency attack solutions."
+    },
+    {
+      "id": "src_volleyball_canada_vdm",
+      "title": "Volleyball Development Matrix",
+      "url": "https://volleyball.ca/uploads/About/LTAD/VDM_May_8_2023_EN.pdf",
+      "source_type": "national_federation_long_term_development_resource",
+      "organization_or_author": "Volleyball Canada",
+      "notes": "Used for youth growth-spurt load control, strength session frequency by development stage, speed work with full recovery, jump-load monitoring, pain-scale referral guidance, and long-term athlete development."
+    },
+    {
+      "id": "src_rebelo_external_load_scoping",
+      "title": "Beyond the Jump: A Scoping Review of External Training Load Metrics in Volleyball",
+      "url": "https://journals.sagepub.com/doi/10.1177/19417381241237738",
+      "source_type": "peer_reviewed_scoping_review",
+      "organization_or_author": "Rebelo, Pereira, Nakamura, and Valente-dos-Santos",
+      "notes": "Used for the principle that volleyball load monitoring should extend beyond sagittal jump counts to role-specific, multidirectional, and player-specific external load."
+    },
+    {
+      "id": "src_lin_collegiate_load",
+      "title": "Quantifying Internal and External Training Loads in Collegiate Male Volleyball Players During a Competitive Season",
+      "url": "https://link.springer.com/article/10.1186/s13102-024-00958-7",
+      "source_type": "peer_reviewed_training_load_study",
+      "organization_or_author": "Lin, Wu, Wu, Chen, and Chang",
+      "notes": "Used for internal/external load interaction, sRPE plus wearable jump data, mesocycle variation, and the finding that high jump count can associate with higher internal load and lower jump height."
+    },
+    {
+      "id": "src_akyildiz_within_week_load",
+      "title": "Within-Week Differences in External Training Load Demands in Elite Volleyball Players",
+      "url": "https://link.springer.com/article/10.1186/s13102-022-00568-1",
+      "source_type": "peer_reviewed_training_load_study",
+      "organization_or_author": "Akyildiz, de Oliveira Castro, Cene, Laporta, Parim, Altundag, Akarcesme, Guidetti, Miale, Silva, Nobari, and Clemente",
+      "notes": "Used for match-day-minus planning, internal and external load differences across microcycle days, and reducing jumping intensity on the day before competition."
+    },
+    {
+      "id": "src_skazalski_jump_demands",
+      "title": "High Jump Demands in Professional Volleyball: Large Variability Exists Between Players and Player Positions",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29956376/",
+      "source_type": "peer_reviewed_jump_load_study",
+      "organization_or_author": "Skazalski, Whiteley, and Bahr",
+      "notes": "Used for individual jump-load variability, position-specific jump demands, setter jump volume, opposite high-intensity jumps, and the need to monitor individual weekly jump load."
+    },
+    {
+      "id": "src_sheppard_repeated_effort_test",
+      "title": "Development of a Repeated-Effort Test for Elite Men's Volleyball",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19168929/",
+      "source_type": "peer_reviewed_performance_test",
+      "organization_or_author": "Sheppard, Gabbett, Taylor, Dorman, Lebedew, and Borgeaud",
+      "notes": "Used for repeated jump and movement ability as a volleyball-specific performance quality that should be tested and trained with game-like work-rest logic."
+    },
+    {
+      "id": "src_verhagen_balance_board",
+      "title": "The Effect of a Proprioceptive Balance Board Training Program for the Prevention of Ankle Sprains: A Prospective Controlled Trial",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15310562/",
+      "source_type": "peer_reviewed_injury_prevention_trial",
+      "organization_or_author": "Verhagen, van der Beek, Twisk, Bouter, Bahr, and van Mechelen",
+      "notes": "Used for ankle sprain recurrence prevention through proprioceptive balance-board training, especially for players with prior ankle sprain history."
+    },
+    {
+      "id": "src_wolfe_swing_volume",
+      "title": "Volleyball Overhead Swing Volume and Injury Frequency Over the Course of a Season",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30746295/",
+      "source_type": "peer_reviewed_shoulder_load_study",
+      "organization_or_author": "Wolfe, Poole, Villasante Tezanos, English, and Uhl",
+      "notes": "Used for overhead serve and attack count tracking, practice-vs-match swing exposure, preseason swing-load concern, and shoulder workload monitoring."
+    },
+    {
+      "id": "src_hurd_interval_hitting",
+      "title": "Data-Based Interval Hitting Program for Female College Volleyball Players",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23015917/",
+      "source_type": "peer_reviewed_return_to_hit_resource",
+      "organization_or_author": "Hurd, Hunter-Giordano, Axe, and Snyder-Mackler",
+      "notes": "Used for stepwise return-to-hitting and serving progressions that control intensity, time, and number of ball strikes by position."
+    },
+    {
+      "id": "src_malliaras_patellar_tendinopathy",
+      "title": "Patellar Tendinopathy: Clinical Diagnosis, Load Management, and Advice for Challenging Case Presentations",
+      "url": "https://www.jospt.org/doi/10.2519/jospt.2015.5987",
+      "source_type": "peer_reviewed_clinical_guidance",
+      "organization_or_author": "Malliaras, Cook, Purdam, and Rio",
+      "notes": "Used for patellar tendon load management, progressive tendon loading, pain-monitoring logic, 24-hour response, and return-to-sport after tolerating full training."
+    },
+    {
+      "id": "src_wilk_shoulder_rts",
+      "title": "Return to Sport Participation Criteria Following Shoulder Injury: A Clinical Commentary",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7735686/",
+      "source_type": "peer_reviewed_clinical_commentary",
+      "organization_or_author": "Wilk, Bagwell, Davies, and Arrigo",
+      "notes": "Used for criteria-based shoulder return-to-sport domains: pain, range of motion, strength, functional performance, kinetic chain, and sport-specific exposure."
+    },
+    {
+      "id": "src_zahradnik_block_landing",
+      "title": "Lower Extremity Mechanics During Landing After a Volleyball Block as a Risk Factor for Anterior Cruciate Ligament Injury",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24993160/",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Zahradnik, Jandacka, Uchytil, Farana, and Hamill",
+      "notes": "Used for ACL-risk mechanics during block landings and the need to coach step-back, two-foot, and crowded-net landings progressively."
+    },
+    {
+      "id": "src_zhao_unanticipated_block_jump",
+      "title": "Biomechanic Differences Between Anticipated and Unanticipated Volleyball Block Jump: Implications for Lower Limb Injury Risk",
+      "url": "https://www.mdpi.com/2075-1729/14/11/1357",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Zhao, Liu, Dan, Xu, and Li",
+      "notes": "Used for unanticipated and non-dominant direction block-jump risk logic and for progressing from planned landing drills to reactive block scenarios."
+    },
+    {
+      "id": "src_fittoplay_common_injuries",
+      "title": "The Most Common Injuries in Volleyball",
+      "url": "https://fittoplay.org/sports/volleyball/the-most-common-injuries/",
+      "source_type": "sports_medicine_education_resource",
+      "organization_or_author": "FitToPlay / Oslo Sports Trauma Research Center collaboration",
+      "notes": "Used as a clinician-facing injury pattern cross-check: ankle sprains, finger sprains, jumper's knee, shoulder, low back, patellofemoral pain, and ACL concerns."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "volleyball_load_is_multichannel",
+      "concept": "Volleyball load is not just conditioning volume; it is a combination of jump count, jump intensity, landing quality, overhead contacts, low defensive postures, short accelerations, decelerations, travel, psychological stress, and recovery status.",
+      "backend_use": "Represent court load through separate load channels instead of one generic session difficulty score.",
+      "source_ids": ["src_rebelo_external_load_scoping", "src_lin_collegiate_load", "src_akyildiz_within_week_load"]
+    },
+    {
+      "id": "jump_count_requires_intensity_and_role_context",
+      "concept": "A jump count is more useful when paired with jump type, height/intensity, role, practice phase, and recent weekly trend. A setter may accumulate many lower or moderate jumps, while opposites and pins may perform fewer but more maximal attack or serve jumps.",
+      "backend_use": "Attach jump-type and role tags to volleyball sessions: block_jump, approach_jump, jump_set, jump_serve, transition_jump, and reactive_jump.",
+      "source_ids": ["src_skazalski_jump_demands", "src_akyildiz_within_week_load"]
+    },
+    {
+      "id": "landing_quality_is_a_training_gate",
+      "concept": "High-volume jumping, live blocking, jump serving, and chaotic transition should be gated by the athlete's ability to land with controlled trunk, hip, knee, ankle, and spacing around teammates and opponents.",
+      "backend_use": "Use landing-control readiness gates before assigning advanced plyometrics or dense live net play.",
+      "source_ids": ["src_zahradnik_block_landing", "src_zhao_unanticipated_block_jump", "src_usav_off_hand_hitting"]
+    },
+    {
+      "id": "repeated_jump_ability_is_quality_under_repetition",
+      "concept": "Repeated jump ability is not simply doing many jumps; it is preserving jump height, movement speed, alignment, and decision quality across volleyball-specific efforts and short rally-like recoveries.",
+      "backend_use": "Progress repeated jump blocks only when performance drop-off, pain, and landing quality stay inside acceptable thresholds.",
+      "source_ids": ["src_sheppard_repeated_effort_test", "src_lin_collegiate_load"]
+    },
+    {
+      "id": "tendon_load_needs_slow_strength_and_fast_exposure",
+      "concept": "Patellar tendon capacity is built through progressive strength and energy-storage loading, while volleyball itself adds fast stretch-shortening loads. Removing all load can decondition the tendon, but jumping through worsening pain can exceed capacity.",
+      "backend_use": "Create tendon-sensitive plans that reduce high-fast jumping while maintaining tolerable heavy slow strength or isometric work when clinically appropriate.",
+      "source_ids": ["src_malliaras_patellar_tendinopathy", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "id": "overhead_volume_needs_contact_counts",
+      "concept": "Hitting, jump serving, float serving, and emergency overhead contacts accumulate shoulder stress differently. Practices can create more overhead swings than matches, so shoulder load cannot be inferred only from competition schedule.",
+      "backend_use": "Track total overhead contacts and high-intensity contacts separately from general practice duration.",
+      "source_ids": ["src_wolfe_swing_volume", "src_hurd_interval_hitting", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "id": "match_week_training_preserves_court_quality",
+      "concept": "In-season gym work should support match readiness and not compete with high-quality serving, receiving, hitting, blocking, and tactical training. Heavy eccentric lower-body work, maximal jump testing, and novel exercises should move away from match day.",
+      "backend_use": "Use match-day-minus rules to constrain strength, plyometric, and conditioning prescriptions.",
+      "source_ids": ["src_akyildiz_within_week_load", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "tournament_week_is_a_survival_and_repeatability_problem",
+      "concept": "Tournament weeks create dense match exposure, uncertain schedules, repeated warm-ups, limited sleep, travel stress, and less useful recovery time. Training priority shifts from adaptation to readiness, tissue tolerance, nutrition, mobility, and post-match downregulation.",
+      "backend_use": "Switch tournament-week plans to activation, mobility, low-volume power primers, and readiness adjustments instead of new overload.",
+      "source_ids": ["src_volleyball_canada_vdm", "src_akyildiz_within_week_load", "src_usav_conditioning"]
+    },
+    {
+      "id": "beginners_need_capacity_before_specialization",
+      "concept": "Beginners need safe landing, basic strength, movement literacy, mobility, simple aerobic support, and low-volume skill exposure before high-volume jump serving, maximal attack reps, or aggressive plyometrics.",
+      "backend_use": "Keep beginner volleyball S&C plans movement-quality biased and cap jump and overhead volume aggressively.",
+      "source_ids": ["src_volleyball_canada_vdm", "src_usav_conditioning", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "intermediate_players_need_role_capacity",
+      "concept": "Intermediate players should move from general capacity to role-specific tolerance: setters need repeated movement-to-ball and shoulder endurance; middles need block-transition repeatability; pins need attack, receive, and landing volume; liberos need low-stance, hip, trunk, and deceleration capacity.",
+      "backend_use": "Select S&C emphasis from role plus current court workload rather than only from generic level.",
+      "source_ids": ["src_rebelo_external_load_scoping", "src_skazalski_jump_demands"]
+    },
+    {
+      "id": "advanced_players_need_individualized_load_windows",
+      "concept": "Advanced players may require high exposures, but the weekly distribution must be individualized because the same team session can create very different jump, swing, deceleration, and readiness consequences by role and athlete history.",
+      "backend_use": "Use personal baselines, recent spikes, pain history, and role-specific match plan to adjust advanced training.",
+      "source_ids": ["src_skazalski_jump_demands", "src_lin_collegiate_load", "src_rebelo_external_load_scoping"]
+    },
+    {
+      "id": "return_to_play_is_criteria_based_not_calendar_based",
+      "concept": "Return to jump or return to serve/hit should progress from symptoms and objective control toward staged sport exposure. Calendar time alone is not enough; pain, range, strength, functional performance, technical quality, and 24-hour response matter.",
+      "backend_use": "Generate return-to-play records with criteria, stage gates, and rollback triggers.",
+      "source_ids": ["src_malliaras_patellar_tendinopathy", "src_wilk_shoulder_rts", "src_hurd_interval_hitting"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "volleyball_load_accounting_model",
+      "name": "Volleyball Load Accounting Model",
+      "model": {
+        "external_load_channels": ["jump_count", "jump_intensity", "landing_density", "overhead_contact_count", "approach_volume", "block_jump_volume", "lateral_accel_decel", "low_stance_minutes", "dive_floor_contact", "travel_and_match_density"],
+        "internal_load_channels": ["session_rpe", "localized_pain", "perceived_leg_heaviness", "shoulder_fatigue", "sleep_quality", "stress", "readiness_score"],
+        "context_tags": ["role", "level", "microcycle_day", "season_phase", "surface", "recent_return_from_injury", "tournament_week", "growth_spurt_flag"]
+      },
+      "coaching_translation": "A hard volleyball session may be hard because of jump volume, shoulder contacts, defensive volume, cognitive intensity, or poor recovery. The backend should preserve those distinctions.",
+      "source_ids": ["src_rebelo_external_load_scoping", "src_lin_collegiate_load", "src_volleyball_canada_vdm"]
+    },
+    {
+      "id": "jump_load_taxonomy",
+      "name": "Jump And Landing Volume Taxonomy",
+      "model": {
+        "jump_types": [
+          {"type": "approach_jump", "typical_roles": ["outside_hitter", "opposite", "middle_blocker"], "primary_stress": ["knee_extensor", "patellar_tendon", "ankle_foot", "hip_power", "shoulder_if_attacking"]},
+          {"type": "block_jump", "typical_roles": ["middle_blocker", "outside_hitter", "opposite", "setter_front_row"], "primary_stress": ["ankle_sprain_risk", "acl_landing_risk", "patellar_tendon", "finger_hand"]},
+          {"type": "jump_set", "typical_roles": ["setter"], "primary_stress": ["calf_ankle", "knee", "shoulder_fingers", "landing_under_cognitive_load"]},
+          {"type": "jump_serve", "typical_roles": ["pin_hitter", "opposite", "serving_specialist", "advanced_all_roles"], "primary_stress": ["shoulder", "trunk_rotation", "patellar_tendon", "landing"]},
+          {"type": "reactive_transition_jump", "typical_roles": ["all_front_row_attackers"], "primary_stress": ["fatigue_landing", "timing_error", "knee_ankle", "low_back"]}
+        ],
+        "landing_quality_checks": ["quiet_contact_when_appropriate", "knee_tracks_over_toes", "trunk_control", "hip_knee_flexion_available", "bilateral_or_planned_step_back_control", "no_drift_under_net_or_into_teammate"]
+      },
+      "level_implications": {
+        "beginner": "Use low-volume planned jumps, teach landing before fatigue, and avoid jump-serving or live block-transition volume until control is visible.",
+        "intermediate": "Introduce role-specific jump categories and track weekly jump count trends.",
+        "advanced": "Monitor individual jump count, intensity, weekly spikes, and position-specific match demands."
+      },
+      "source_ids": ["src_skazalski_jump_demands", "src_zahradnik_block_landing", "src_zhao_unanticipated_block_jump"]
+    },
+    {
+      "id": "overhead_contact_taxonomy",
+      "name": "Overhead Contact Load Taxonomy",
+      "model": {
+        "contact_types": ["standing_float_serve", "jump_float_serve", "jump_topspin_serve", "warmup_attack", "controlled_attack", "max_attack", "out_of_system_attack", "roll_shot", "overhead_set", "emergency_overhead_contact"],
+        "load_modifiers": ["contact_intensity", "approach_speed", "ball_contact_force", "trunk_extension_rotation", "fatigue_state", "technical_quality", "time_since_last_high_volume_overhead_day"],
+        "monitoring_unit": "total_contacts_by_type_per_session_and_week"
+      },
+      "role_specific_notes": {
+        "outside_hitter": "Usually high attack and serve volume plus serve-receive fatigue; monitor max swings and shoulder response.",
+        "opposite": "Often high-intensity right-side and back-row attacks; monitor jump serve plus attack combination.",
+        "middle_blocker": "Lower total attack attempts may still include high-speed first-tempo swings and heavy block-jump volume.",
+        "setter": "Many overhead settings create endurance demands even without many max swings; monitor fingers, wrists, shoulders, and neck posture.",
+        "libero_defensive_specialist": "Lower attack volume but may serve, overhead set out of system, and absorb floor-contact load.",
+        "serving_specialist": "Cold-entry serving load requires shoulder warm-up and readiness despite low total match minutes."
+      },
+      "source_ids": ["src_wolfe_swing_volume", "src_hurd_interval_hitting", "src_wilk_shoulder_rts"]
+    },
+    {
+      "id": "repeated_jump_ability_model",
+      "name": "Repeated Jump Ability Model",
+      "model": {
+        "goal": "Maintain useful jump height, fast repositioning, and landing control across rally-like repeated efforts.",
+        "inputs": ["baseline_jump_or_reach", "repeated_effort_test_dropoff", "movement_speed", "session_rpe", "landing_errors", "pain_response"],
+        "training_progression": ["single_high_quality_jump", "short_cluster_jumps_with_full_rest", "volleyball_specific_approach_or_block_clusters", "reactive_jump_plus_transition", "fatigue_resistant_jump_decision_drills"],
+        "stop_or_reduce_signals": ["jump_height_drop_excessive_for_athlete", "knee_or_tendon_pain_increases", "landings_get_stiff_or_valgus", "athlete_loses_spacing_under_net", "RPE_unusually_high_for_same_work"]
+      },
+      "source_ids": ["src_sheppard_repeated_effort_test", "src_lin_collegiate_load", "src_usav_conditioning"]
+    },
+    {
+      "id": "season_phase_macro_model",
+      "name": "Volleyball Season Phase Macro Model",
+      "model": {
+        "off_season": ["restore tissue tolerance", "build lower-body strength", "build trunk and shoulder capacity", "develop aerobic base", "address mobility limits", "progress plyometrics from low to moderate volume"],
+        "pre_season": ["convert strength to volleyball power", "ramp jump and overhead exposure gradually", "integrate role-specific repeated efforts", "monitor spike in swing and jump volume", "avoid sudden tournament-like density without preparation"],
+        "in_season": ["maintain strength and power", "protect court quality", "microdose speed and power", "adjust around match day", "track readiness and localized pain", "treat high court load as primary stressor"],
+        "tournament_week": ["minimize new overload", "prime not fatigue", "prioritize sleep nutrition hydration mobility", "track warm-up and match exposure", "use post-match recovery and next-day readiness checks"]
+      },
+      "level_implications": {
+        "beginner": "Seasons should still include broad athletic development and safe movement rather than year-round specialization.",
+        "intermediate": "Preseason should gradually expose role-specific jump, serve, and attack loads before full competition density.",
+        "advanced": "Macro planning should use individual load histories and competition schedule constraints."
+      },
+      "source_ids": ["src_fivb_coaches_level_ii", "src_volleyball_canada_vdm", "src_akyildiz_within_week_load"]
+    },
+    {
+      "id": "return_to_jump_stage_model",
+      "name": "Return-To-Jump Stage Model",
+      "model": {
+        "stage_0": "Medical assessment and pain-irritability classification for acute injury, persistent pain, swelling, instability, or neurological symptoms.",
+        "stage_1": "Restore pain-tolerable strength, range, balance, and isometric or slow resistance capacity.",
+        "stage_2": "Introduce bilateral landing mechanics, low amplitude pogo or snap-down work, and controlled deceleration.",
+        "stage_3": "Progress to single-leg landing, lateral landing, approach rhythm, and planned block landings with low volume.",
+        "stage_4": "Add volleyball-specific approach, block, jump-set, or jump-serve exposure with monitored count and 24-hour response.",
+        "stage_5": "Return to full practice and competition only after role-specific jump volume is tolerated without symptom escalation or technique breakdown."
+      },
+      "rollback_triggers": ["pain_increases_during_session", "next_day_pain_or_stiffness_worse", "swelling_or_instability", "landing_quality_regresses", "jump_height_or_confidence_drops_substantially"],
+      "source_ids": ["src_malliaras_patellar_tendinopathy", "src_zahradnik_block_landing", "src_verhagen_balance_board"]
+    },
+    {
+      "id": "return_to_serve_hit_stage_model",
+      "name": "Return-To-Serve-And-Hit Stage Model",
+      "model": {
+        "stage_0": "Medical clearance for significant shoulder, elbow, neck, back, or neurological symptoms.",
+        "stage_1": "Pain-free daily shoulder range, scapular control, trunk control, and baseline rotator cuff strength/endurance.",
+        "stage_2": "Controlled low-intensity ball contacts: toss, catch, set-like contacts, light serves, and arm swing patterning.",
+        "stage_3": "Interval serving and hitting at partial intensity with fixed contacts, full rest, and technical supervision.",
+        "stage_4": "Position-specific contact progression: setters emphasize repeated overhead control, pins and opposites emphasize attack and serve counts, middles emphasize quick tempo and block-transition context.",
+        "stage_5": "Full practice and match return after volume and intensity approximate role demands without pain, strength loss, or next-day symptom escalation."
+      },
+      "monitoring": ["contacts_by_type", "intensity_percent", "pain_during", "pain_next_day", "range_of_motion_after", "strength_endurance_after", "technical_quality"],
+      "source_ids": ["src_hurd_interval_hitting", "src_wilk_shoulder_rts", "src_wolfe_swing_volume"]
+    },
+    {
+      "id": "readiness_adjustment_model",
+      "name": "Volleyball Readiness Adjustment Model",
+      "model": {
+        "green": "Normal readiness, no meaningful localized pain, stable sleep and energy, normal warm-up jump/serve feel; proceed with planned load.",
+        "yellow": "Mild localized symptoms, unusual soreness, poor sleep, or abnormal heaviness; reduce high-impact or overhead volume 20-40 percent and preserve technical quality.",
+        "orange": "Pain persists across days, worsens with volleyball-specific load, or changes mechanics; remove high-fast exposure and refer to qualified clinician when appropriate.",
+        "red": "Instability, swelling, sharp pain, neurological symptoms, suspected concussion, acute traumatic injury, or inability to perform basic function; stop sport exposure and require medical evaluation."
+      },
+      "body_region_overrides": {
+        "knee_patellar_tendon": "Reduce high-fast jumping first; keep tolerable slow strength only if symptoms allow and clinician guidance supports it.",
+        "ankle": "Remove chaotic net landings and cutting if instability or swelling is present.",
+        "shoulder": "Reduce serves, attacks, and overhead gym work before reducing lower-body support work.",
+        "low_back": "Reduce jump serving, high-volume attacking, loaded spinal extension/rotation, and fatigue conditioning.",
+        "finger_hand": "Modify blocking, setting, and high-velocity ball contacts; assess for fracture/dislocation when acute trauma occurs."
+      },
+      "source_ids": ["src_volleyball_canada_vdm", "src_fivb_medical_injury_prevention", "src_wilk_shoulder_rts"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "md_minus_1_no_fatigue_rule",
+      "rule": "On the day before a meaningful match, avoid high-volume plyometrics, repeated maximal jumps, heavy eccentric lower-body strength, and dense conditioning that changes serving, passing, or landing quality.",
+      "rationale": "Elite load studies show meaningful within-week load differences and practical tapering before matches; volleyball skill quality depends on freshness and precise timing.",
+      "backend_action": "When match_day_minus equals 1, cap plyometric intensity to activation-level work and cap lower-body strength to light or moderate non-fatiguing work.",
+      "source_ids": ["src_akyildiz_within_week_load", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "md_minus_2_power_microdose_rule",
+      "rule": "Two days before a match can include low-volume, high-quality power or speed exposure only if the athlete is green-ready and court load is not already high.",
+      "rationale": "Short neural exposures can maintain sharpness, but adding jumps on top of a heavy court session can reduce readiness.",
+      "backend_action": "Allow 2-4 low-volume power clusters or short accelerations, then remove extra plyometric volume when court practice includes live block or attack volume.",
+      "source_ids": ["src_akyildiz_within_week_load", "src_usav_conditioning"]
+    },
+    {
+      "id": "post_match_recovery_first_rule",
+      "rule": "The day after a high-exposure match should prioritize recovery, mobility, easy aerobic circulation, tissue checks, and technical cleanup unless the athlete had low match involvement.",
+      "rationale": "Volleyball exposure is highly individual; a libero, bench player, or serving specialist may have different needs from a middle or six-rotation outside hitter.",
+      "backend_action": "Use match exposure by role and actual participation to assign recovery, maintenance, or supplemental training.",
+      "source_ids": ["src_rebelo_external_load_scoping", "src_skazalski_jump_demands"]
+    },
+    {
+      "id": "tournament_week_no_new_overload_rule",
+      "rule": "During tournament week, do not introduce new exercises, new max testing, new jump progressions, or new high-contact hitting blocks.",
+      "rationale": "Dense competition requires repeatability and symptom control more than new adaptation; novelty raises soreness and coordination costs.",
+      "backend_action": "Replace overload prescriptions with short activation, shoulder care, mobility, hydration/nutrition reminders, and post-match readiness checks.",
+      "source_ids": ["src_volleyball_canada_vdm", "src_usav_stretching"]
+    },
+    {
+      "id": "role_jump_exposure_rule",
+      "rule": "If the player's role includes heavy live blocking or transition attack in practice, reduce supplemental plyometric volume that day even when the gym plan appears moderate.",
+      "rationale": "Court jumps are already plyometric exposures; extra jumps may duplicate the highest-risk load channel.",
+      "backend_action": "Subtract planned court jump categories from the daily jump budget before adding gym jumps.",
+      "source_ids": ["src_skazalski_jump_demands", "src_lin_collegiate_load"]
+    },
+    {
+      "id": "overhead_contact_budget_rule",
+      "rule": "If a practice includes high serve or attack volume, do not add heavy overhead pressing, high-volume medicine-ball overhead throws, or extra max-effort serving in the same 24-hour window.",
+      "rationale": "Shoulder workload is cumulative across serving, hitting, setting, and gym work.",
+      "backend_action": "Use overhead contact count plus shoulder readiness to choose rotator cuff/scapular support rather than additional overhead loading.",
+      "source_ids": ["src_wolfe_swing_volume", "src_usav_band_practice", "src_wilk_shoulder_rts"]
+    },
+    {
+      "id": "growth_spurt_jump_reduction_rule",
+      "rule": "During rapid growth phases or clear maturation-related coordination changes, reduce on-court jump volume and emphasize landing mechanics, balance, coordination, technique, and controlled strength.",
+      "rationale": "Long-term development guidance flags growth spurts as periods where lower-limb stress should be managed carefully.",
+      "backend_action": "When growth_spurt_flag is true, block advanced plyometric progressions and reduce repeated-jump density.",
+      "source_ids": ["src_volleyball_canada_vdm"]
+    },
+    {
+      "id": "reactive_block_progression_rule",
+      "rule": "Do not load high-volume reactive swing blocking until the athlete can control planned block landings, step-back landings, and lateral landings without drifting under the net.",
+      "rationale": "Unanticipated block actions and step-back landings can increase lower-limb risk mechanics.",
+      "backend_action": "Gate advanced block-defense drills behind planned landing competence and ankle/knee readiness.",
+      "source_ids": ["src_zahradnik_block_landing", "src_zhao_unanticipated_block_jump"]
+    },
+    {
+      "id": "pain_24_hour_response_rule",
+      "rule": "For patellar tendon or other load-sensitive pain, the response during the next 24 hours is a planning input; a session that feels tolerable but causes next-day symptom escalation exceeded current capacity.",
+      "rationale": "Tendon rehabilitation guidance uses load response, including delayed response, to progress or regress training.",
+      "backend_action": "If next_day_pain_increase is true, reduce high-fast loading and repeat or regress the previous tolerated stage.",
+      "source_ids": ["src_malliaras_patellar_tendinopathy"]
+    },
+    {
+      "id": "cold_entry_serving_specialist_rule",
+      "rule": "Serving specialists need a shoulder and trunk readiness plan even when total playing time is low, because cold-entry serving asks for high precision and often high intent without a long match rhythm.",
+      "rationale": "Low minutes do not guarantee low acute shoulder or psychological load.",
+      "backend_action": "Assign pre-entry band, trunk, and low-intensity serve ramp work when serving_specialist role is selected.",
+      "source_ids": ["src_usav_band_practice", "src_hurd_interval_hitting"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "lower_body_max_strength",
+      "name": "Lower-Body Max Strength",
+      "description": "Foundational strength in squatting, hinging, lunging, calf/soleus work, and trunk-braced positions supports takeoff, landing, deceleration, and repeated practice tolerance.",
+      "priority_by_role": {
+        "setter": "moderate_high",
+        "outside_hitter": "high",
+        "opposite": "high",
+        "middle_blocker": "high",
+        "libero": "moderate",
+        "defensive_specialist": "moderate",
+        "serving_specialist": "moderate"
+      },
+      "level_implications": {
+        "beginner": "Bodyweight and light loaded movement quality before heavy loading.",
+        "intermediate": "Progress bilateral and unilateral strength two to three times weekly outside dense match periods.",
+        "advanced": "Maintain or build strength around court demands with individualized loading and readiness checks."
+      },
+      "source_ids": ["src_volleyball_canada_vdm", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "explosive_power_and_rate_of_force",
+      "name": "Explosive Power And Rate Of Force Development",
+      "description": "Volleyball rewards rapid force expression for approach jumps, block jumps, jump serves, short accelerations, and emergency changes of direction.",
+      "priority_by_role": {
+        "setter": "moderate_high",
+        "outside_hitter": "high",
+        "opposite": "high",
+        "middle_blocker": "high",
+        "libero": "moderate_high",
+        "defensive_specialist": "moderate_high",
+        "serving_specialist": "moderate_high"
+      },
+      "programming_notes": ["Use low-rep, high-quality outputs.", "Stop power work before fatigue changes speed or alignment.", "Prefer microdoses in-season."],
+      "source_ids": ["src_usav_conditioning", "src_usav_band_practice", "src_volleyball_canada_vdm"]
+    },
+    {
+      "id": "repeated_jump_capacity",
+      "name": "Repeated Jump Capacity",
+      "description": "Ability to perform multiple approach, block, jump-set, and transition jumps while preserving useful height, timing, and landing control.",
+      "priority_by_role": {
+        "setter": "high",
+        "outside_hitter": "high",
+        "opposite": "high",
+        "middle_blocker": "high",
+        "libero": "low",
+        "defensive_specialist": "low_moderate",
+        "serving_specialist": "role_dependent"
+      },
+      "role_specific_notes": ["Setters may accumulate many jump sets and block exposures.", "Middles must repeat block-transition efforts.", "Opposites and pins often require high-intensity attack and serve jumps.", "Liberos still need elastic ankle and hip capacity, but not large planned jump budgets."],
+      "source_ids": ["src_skazalski_jump_demands", "src_sheppard_repeated_effort_test"]
+    },
+    {
+      "id": "landing_deceleration_capacity",
+      "name": "Landing And Deceleration Capacity",
+      "description": "Controlled absorption through ankle, knee, hip, and trunk under two-foot, single-leg, lateral, step-back, and crowded-net landings.",
+      "priority_by_role": {
+        "setter": "moderate_high",
+        "outside_hitter": "high",
+        "opposite": "high",
+        "middle_blocker": "high",
+        "libero": "moderate_high",
+        "defensive_specialist": "moderate_high",
+        "serving_specialist": "moderate"
+      },
+      "level_implications": {
+        "beginner": "Teach landing shapes and spacing before live jumping.",
+        "intermediate": "Add lateral and transition landings with fatigue managed.",
+        "advanced": "Prepare for reactive and unanticipated landings while monitoring weekly jump spikes."
+      },
+      "source_ids": ["src_zahradnik_block_landing", "src_zhao_unanticipated_block_jump", "src_usav_off_hand_hitting"]
+    },
+    {
+      "id": "ankle_foot_stiffness_and_balance",
+      "name": "Ankle-Foot Stiffness, Balance, And Proprioception",
+      "description": "The ankle-foot complex must tolerate repeated landings, quick first steps, lateral shuffles, and net-zone perturbations while reducing recurrent sprain risk.",
+      "priority_by_role": {
+        "setter": "moderate_high",
+        "outside_hitter": "high",
+        "opposite": "high",
+        "middle_blocker": "high",
+        "libero": "high",
+        "defensive_specialist": "high",
+        "serving_specialist": "moderate"
+      },
+      "programming_notes": ["Include calf and soleus strength.", "Use balance progressions especially after prior ankle sprain.", "Do not replace landing mechanics with balance drills; use both."],
+      "source_ids": ["src_verhagen_balance_board", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "id": "shoulder_scapular_durability",
+      "name": "Shoulder And Scapular Durability",
+      "description": "Rotator cuff, scapular control, thoracic mobility, and trunk linkage support serving, hitting, setting, and high-volume overhead practice.",
+      "priority_by_role": {
+        "setter": "high",
+        "outside_hitter": "high",
+        "opposite": "high",
+        "middle_blocker": "moderate_high",
+        "libero": "moderate",
+        "defensive_specialist": "moderate",
+        "serving_specialist": "high"
+      },
+      "programming_notes": ["Prioritize lower trap, serratus, rotator cuff endurance, posterior shoulder mobility, and trunk anti-rotation.", "Avoid adding heavy overhead gym stress after high swing days."],
+      "source_ids": ["src_usav_band_practice", "src_wolfe_swing_volume", "src_wilk_shoulder_rts"]
+    },
+    {
+      "id": "trunk_hip_power_and_control",
+      "name": "Trunk And Hip Power Control",
+      "description": "Volleyball actions link lower-body force, trunk stiffness or rotation, and upper-body contact. Poor trunk and hip control can shift load toward knee, shoulder, or low back.",
+      "priority_by_role": {
+        "setter": "moderate_high",
+        "outside_hitter": "high",
+        "opposite": "high",
+        "middle_blocker": "high",
+        "libero": "high",
+        "defensive_specialist": "high",
+        "serving_specialist": "high"
+      },
+      "source_ids": ["src_usav_band_practice", "src_usav_stretching", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "id": "multidirectional_speed_agility",
+      "name": "Multidirectional Speed And Agility",
+      "description": "Short accelerations, decelerations, lateral shuffles, crossover steps, block footwork, defensive pursuit, and setter release routes require speed that is trained with full recovery and technical intent.",
+      "priority_by_role": {
+        "setter": "high",
+        "outside_hitter": "moderate_high",
+        "opposite": "moderate_high",
+        "middle_blocker": "high",
+        "libero": "high",
+        "defensive_specialist": "high",
+        "serving_specialist": "moderate"
+      },
+      "level_implications": {
+        "beginner": "Use games and short movement patterns after warm-up.",
+        "intermediate": "Use role-specific first-step, shuffle, crossover, and recovery routes.",
+        "advanced": "Use reactive perception-action speed with adequate rest and low volume near matches."
+      },
+      "source_ids": ["src_volleyball_canada_vdm", "src_usav_conditioning", "src_rebelo_external_load_scoping"]
+    },
+    {
+      "id": "low_stance_and_floor_defense_capacity",
+      "name": "Low-Stance And Floor-Defense Capacity",
+      "description": "Liberos, defensive specialists, setters, and serve-receive passers spend time in low postures, rapid reaction steps, dives, sprawls, and repeated recoveries that may not show in jump counts.",
+      "priority_by_role": {
+        "setter": "moderate_high",
+        "outside_hitter": "moderate_high",
+        "opposite": "moderate",
+        "middle_blocker": "moderate",
+        "libero": "high",
+        "defensive_specialist": "high",
+        "serving_specialist": "moderate"
+      },
+      "backend_note": "Load models must not underload liberos merely because planned jump count is lower.",
+      "source_ids": ["src_rebelo_external_load_scoping", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "mobility_recovery_and_tissue_care",
+      "name": "Mobility, Recovery, And Tissue Care",
+      "description": "Volleyball players need enough hip, ankle, thoracic, shoulder, and posterior-chain mobility to access efficient positions, plus recovery habits that let high-quality court skill repeat across the week.",
+      "priority_by_role": {
+        "setter": "high",
+        "outside_hitter": "high",
+        "opposite": "high",
+        "middle_blocker": "high",
+        "libero": "high",
+        "defensive_specialist": "high",
+        "serving_specialist": "high"
+      },
+      "programming_notes": ["Use dynamic warm-up before sport.", "Use targeted static or mobility work after training or in separate sessions.", "Add recovery emphasis during tournament weeks and high-travel weeks."],
+      "source_ids": ["src_usav_stretching", "src_volleyball_canada_vdm"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "ankle_sprain_net_landing_risk",
+      "name": "Ankle Sprain From Net-Zone Landing",
+      "mechanism": "Landing on another player's foot or landing with uncontrolled inversion after blocking or attacking near the net.",
+      "high_risk_roles": ["middle_blocker", "outside_hitter", "opposite", "front_row_setter"],
+      "risk_modifiers": ["prior_ankle_sprain", "crowded_net_drills", "fatigue", "poor_landing_spacing", "lack_of_balance_training"],
+      "prevention_or_management": ["Teach net spacing and safe landing.", "Use balance and proprioception work for players with sprain history.", "Progress reactive blocking gradually.", "Use bracing or taping decisions with medical staff when appropriate."],
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_verhagen_balance_board", "src_fittoplay_common_injuries"]
+    },
+    {
+      "id": "patellar_tendon_overload_risk",
+      "name": "Patellar Tendon Overload",
+      "mechanism": "Repeated high-fast knee extensor loading from approach jumps, block jumps, jump serves, and hard-surface landing without sufficient tendon capacity or recovery.",
+      "high_risk_roles": ["middle_blocker", "outside_hitter", "opposite", "setter_with_high_jump_set_load"],
+      "risk_modifiers": ["rapid_jump_volume_spike", "preseason_ramp", "growth_spurt", "poor_calf_hip_strength", "limited_ankle_mobility", "playing_through_next_day_pain"],
+      "prevention_or_management": ["Track jump count and next-day tendon response.", "Use heavy slow resistance or isometric options when clinically appropriate.", "Reduce high-fast jumping during reactive tendon phases.", "Return to full sport only when full training is tolerated without symptom escalation."],
+      "source_ids": ["src_malliaras_patellar_tendinopathy", "src_skazalski_jump_demands", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "id": "acl_landing_risk",
+      "name": "ACL And Knee Ligament Landing Risk",
+      "mechanism": "Off-axis, low-control, single-leg, stiff, valgus, or unanticipated landing mechanics during blocks, attacks, emergency hits, and fatigue states.",
+      "high_risk_roles": ["outside_hitter", "opposite", "middle_blocker", "front_row_setter"],
+      "risk_modifiers": ["reaching_in_air", "late_set_adjustment", "unanticipated_block_direction", "poor_hip_knee_control", "fatigue", "insufficient_landing_practice"],
+      "prevention_or_management": ["Teach landing mechanics before high jump density.", "Train off-hand and safer emergency hit options.", "Progress planned landings before reactive block landings.", "Use neuromuscular and strength work for hip, knee, ankle, and trunk control."],
+      "source_ids": ["src_zahradnik_block_landing", "src_zhao_unanticipated_block_jump", "src_usav_off_hand_hitting"]
+    },
+    {
+      "id": "shoulder_overuse_hitting_serving_risk",
+      "name": "Shoulder Overuse From Hitting And Serving",
+      "mechanism": "Cumulative overhead contacts, high-intensity attacks, jump serves, fatigue-altered mechanics, poor scapular control, and insufficient recovery.",
+      "high_risk_roles": ["outside_hitter", "opposite", "serving_specialist", "middle_blocker", "setter"],
+      "risk_modifiers": ["preseason_swing_spike", "practice_volume_exceeds_match_volume", "back_to_back_high_swing_days", "heavy_overhead_gym_after_hitting", "loss_of_range_or_strength"],
+      "prevention_or_management": ["Track overhead contacts by type.", "Use rotator cuff, lower-trap, serratus, trunk, and posterior shoulder work.", "Separate high-volume hitting from heavy overhead lifting.", "Use interval return-to-hit progressions after injury."],
+      "source_ids": ["src_wolfe_swing_volume", "src_usav_band_practice", "src_hurd_interval_hitting", "src_wilk_shoulder_rts"]
+    },
+    {
+      "id": "low_back_extension_rotation_risk",
+      "name": "Low Back Extension And Rotation Load",
+      "mechanism": "Repeated spiking, jump serving, emergency overhead saves, defensive extension, and fatigue compensation can increase low-back stress.",
+      "high_risk_roles": ["outside_hitter", "opposite", "serving_specialist", "setter", "libero"],
+      "risk_modifiers": ["poor_hip_mobility", "weak_trunk_control", "high_jump_serve_volume", "long_tournament_days", "returning_from_back_pain"],
+      "prevention_or_management": ["Build trunk anti-extension and anti-rotation capacity.", "Maintain hip and thoracic mobility.", "Reduce jump serve and maximal swing volume when back symptoms are present.", "Use medical referral for neurological symptoms or persistent pain."],
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_usav_band_practice", "src_usav_stretching"]
+    },
+    {
+      "id": "finger_thumb_hand_trauma_risk",
+      "name": "Finger, Thumb, And Hand Trauma",
+      "mechanism": "Blocking high-velocity attacks, setting mishandled balls, emergency digs, and ball contact to extended or poorly braced fingers.",
+      "high_risk_roles": ["setter", "middle_blocker", "outside_hitter", "opposite", "libero"],
+      "risk_modifiers": ["live_blocking_before_hand_skill", "fatigue", "cold_hands", "poor_finger_spacing", "previous_sprain"],
+      "prevention_or_management": ["Progress block-hand technique and close-range contact drills.", "Warm up hands and fingers.", "Modify ball-contact volume after sprain.", "Refer for suspected fracture, dislocation, tendon injury, or persistent swelling."],
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_fittoplay_common_injuries"]
+    },
+    {
+      "id": "libero_hidden_load_risk",
+      "name": "Libero Hidden Load",
+      "mechanism": "Low jump counts can hide high low-stance time, accelerations, decelerations, dives, sprawls, hip/back stress, and serve-receive cognitive load.",
+      "high_risk_roles": ["libero", "defensive_specialist"],
+      "risk_modifiers": ["long_serve_receive_practices", "high_floor_contact_day", "limited_hip_mobility", "underestimated_recovery_needs"],
+      "prevention_or_management": ["Track low-stance and defensive contacts.", "Train hips, trunk, adductors, wrists, and shoulder support.", "Include recovery despite lower jump volume."],
+      "source_ids": ["src_rebelo_external_load_scoping", "src_usav_stretching"]
+    },
+    {
+      "id": "setter_cumulative_load_risk",
+      "name": "Setter Cumulative Movement And Overhead Load",
+      "mechanism": "Setters combine repeated movement to second contact, overhead setting, jump setting, front-row blocking, dump/attack decisions, and high cognitive load.",
+      "high_risk_roles": ["setter"],
+      "risk_modifiers": ["5_1_full_match_role", "high_jump_set_volume", "poor_pass_quality_practice", "finger_or_shoulder_history", "decision_fatigue"],
+      "prevention_or_management": ["Monitor jump sets and overhead contacts.", "Build shoulder endurance and finger/wrist tolerance.", "Use recovery blocks after long tactical practices.", "Avoid extra overhead gym volume after high setting days."],
+      "source_ids": ["src_skazalski_jump_demands", "src_rebelo_external_load_scoping", "src_wolfe_swing_volume"]
+    },
+    {
+      "id": "preseason_ramp_overload_risk",
+      "name": "Preseason Ramp Overload",
+      "mechanism": "Rapid increases in court hours, jump volume, overhead swings, and tournament-like scrimmage density before tissues have adapted.",
+      "high_risk_roles": ["all_roles"],
+      "risk_modifiers": ["offseason_low_activity", "tryouts", "two_a_day_practices", "large_swing_count_increase", "growth_spurt", "limited_sleep"],
+      "prevention_or_management": ["Ramp jump and swing exposure gradually.", "Use readiness checks.", "Keep strength work supportive rather than maximal during sudden court increases.", "Avoid combining max testing with high-volume court days."],
+      "source_ids": ["src_wolfe_swing_volume", "src_lin_collegiate_load", "src_volleyball_canada_vdm"]
+    },
+    {
+      "id": "weekly_jump_spike_risk",
+      "name": "Weekly Jump Spike",
+      "mechanism": "A sudden rise in weekly jumps or return to jumps after a low/no-jump week can exceed tendon, muscle, and coordination readiness.",
+      "high_risk_roles": ["setter", "middle_blocker", "outside_hitter", "opposite"],
+      "risk_modifiers": ["return_from_injury", "bench_player_sudden_playing_time", "extra_private_training", "tournament_week", "added_plyometrics"],
+      "prevention_or_management": ["Compare planned weekly jump load to personal recent baseline.", "Reduce supplemental jumps when court jump volume spikes.", "Use staged return-to-jump after absence."],
+      "source_ids": ["src_skazalski_jump_demands", "src_lin_collegiate_load"]
+    },
+    {
+      "id": "fatigue_technical_degradation_risk",
+      "name": "Fatigue-Driven Technical Degradation",
+      "mechanism": "High internal load can reduce jump height, change landing stiffness, alter arm swing, reduce passing posture, and slow perception-action decisions.",
+      "high_risk_roles": ["all_roles"],
+      "risk_modifiers": ["high_session_rpe", "poor_sleep", "dense_matches", "long_practice", "heat_or_travel", "low_energy_availability"],
+      "prevention_or_management": ["Use session RPE and readiness.", "Stop power work when speed or alignment drops.", "Separate conditioning from high-skill fatigue if technique becomes unsafe."],
+      "source_ids": ["src_lin_collegiate_load", "src_volleyball_canada_vdm"]
+    },
+    {
+      "id": "over_specialization_youth_risk",
+      "name": "Youth Over-Specialization And Growth-Spurt Load Risk",
+      "mechanism": "High year-round volleyball volume during growth, insufficient strength foundation, and repeated jumps or overhead contacts without broad athletic development.",
+      "high_risk_roles": ["youth_all_roles"],
+      "risk_modifiers": ["single_sport_year_round", "rapid_growth", "high_tournament_volume", "insufficient_strength_training", "pain_persisting_multiple_days"],
+      "prevention_or_management": ["Reduce jump volume during rapid growth.", "Emphasize strength, coordination, balance, mobility, and multi-sport or broad movement development.", "Refer when pain persists or escalates."],
+      "source_ids": ["src_volleyball_canada_vdm", "src_fivb_medical_injury_prevention"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "beginner_snc_priorities",
+      "level": "beginner",
+      "recommendation": "Prioritize movement literacy, landing mechanics, basic strength, simple balance, shoulder/scapular preparation, low-volume jumping, mobility habits, and enjoyable conditioning games.",
+      "avoid": ["jump-serve volume", "maximal plyometric circuits", "high-volume hitting blocks", "complex Olympic lifts", "fatigue conditioning that destroys landing or passing quality"],
+      "role_specific_notes": ["All beginners need general capacity before narrow specialization.", "Potential setters should build shoulder and finger tolerance slowly.", "Potential attackers should learn approach rhythm and landing before maximal swings.", "Potential liberos should build hip and trunk endurance without excessive floor impacts."],
+      "source_ids": ["src_volleyball_canada_vdm", "src_usav_conditioning", "src_usav_stretching"]
+    },
+    {
+      "id": "intermediate_snc_priorities",
+      "level": "intermediate",
+      "recommendation": "Build role-specific strength, repeated jump capacity, controlled plyometrics, multidirectional speed, shoulder durability, ankle/calf capacity, and weekly load awareness.",
+      "avoid": ["adding all plyometric types at once", "heavy lower-body fatigue close to matches", "untracked extra skills sessions", "ignoring mild shoulder or tendon symptoms"],
+      "role_specific_notes": ["Setters need movement-to-ball, jump-set, and shoulder endurance.", "Middles need block-transition and lateral landing progressions.", "Pins need attack-landing and overhead count management.", "Liberos need low-stance, deceleration, adductor, trunk, and recovery work."],
+      "source_ids": ["src_skazalski_jump_demands", "src_rebelo_external_load_scoping", "src_usav_band_practice"]
+    },
+    {
+      "id": "advanced_snc_priorities",
+      "level": "advanced",
+      "recommendation": "Individualize load windows, maintain high strength and power, microdose speed/power in-season, track jump and swing exposure, and adjust daily readiness around match and tournament demands.",
+      "avoid": ["novel soreness-producing exercises close to competition", "max jump testing during congested weeks", "ignoring personal load spikes", "treating all players on the roster as having the same exposure"],
+      "role_specific_notes": ["Opposites may need high-intensity jump management.", "Setters may need high-volume jump-set monitoring.", "Six-rotation outsides need combined receive, attack, serve, and landing recovery.", "Bench players need supplemental maintenance but must ramp carefully before sudden match exposure."],
+      "source_ids": ["src_lin_collegiate_load", "src_skazalski_jump_demands", "src_akyildiz_within_week_load"]
+    },
+    {
+      "id": "offseason_training_implication",
+      "season_phase": "off_season",
+      "recommendation": "Use the offseason to restore health, build lower-body strength, calf/soleus capacity, trunk stiffness, shoulder durability, aerobic support, mobility, and progressive plyometric foundations.",
+      "programming_notes": ["Lower court density allows more strength development.", "Plyometrics should progress from extensive low amplitude to more intensive volleyball-specific contacts.", "Address individual deficits before preseason."],
+      "source_ids": ["src_fivb_coaches_level_ii", "src_volleyball_canada_vdm"]
+    },
+    {
+      "id": "preseason_training_implication",
+      "season_phase": "pre_season",
+      "recommendation": "Preseason should bridge general capacity to volleyball exposure by gradually ramping approach jumps, block jumps, serves, attacks, role-specific repeated efforts, and tactical practice density.",
+      "programming_notes": ["Monitor sudden increases in swings and jumps.", "Reduce gym overload when court volume jumps.", "Introduce tournament-like density only after athletes tolerate smaller exposures."],
+      "source_ids": ["src_wolfe_swing_volume", "src_lin_collegiate_load", "src_volleyball_canada_vdm"]
+    },
+    {
+      "id": "inseason_training_implication",
+      "season_phase": "in_season",
+      "recommendation": "In-season training should preserve strength and power with low to moderate volume, keep speed exposures short and fresh, and adjust lower-body and overhead work around match-day-minus constraints.",
+      "programming_notes": ["Court sessions supply much of the plyometric and skill-specific load.", "Use gym work for maintenance, tissue capacity, and readiness support.", "Keep heavy eccentrics away from match day."],
+      "source_ids": ["src_akyildiz_within_week_load", "src_usav_conditioning"]
+    },
+    {
+      "id": "tournament_week_training_implication",
+      "season_phase": "tournament_week",
+      "recommendation": "Tournament week plans should be short, familiar, recovery-biased, and readiness-driven: activation, mobility, shoulder care, ankle prep, hydration, sleep, nutrition, and post-match downshifting.",
+      "programming_notes": ["Count warm-ups and extra skill contacts as load.", "Do not add conditioning punishment between matches.", "Use athlete-specific recovery based on actual playing time and symptoms."],
+      "source_ids": ["src_volleyball_canada_vdm", "src_usav_stretching", "src_rebelo_external_load_scoping"]
+    },
+    {
+      "id": "return_to_jump_training_implication",
+      "recommendation": "Return-to-jump should be staged from strength and low-amplitude landings to role-specific approach, block, jump-set, and jump-serve exposure. Progress only when 24-hour response, alignment, confidence, and performance remain stable.",
+      "body_regions": ["patellar_tendon", "ankle", "acl_knee", "low_back"],
+      "source_ids": ["src_malliaras_patellar_tendinopathy", "src_zahradnik_block_landing", "src_verhagen_balance_board"]
+    },
+    {
+      "id": "return_to_serve_hit_training_implication",
+      "recommendation": "Return-to-serve and return-to-hit should use an interval model that fixes contact count and intensity, separates serve and attack exposure when needed, and progresses toward the player's role-specific match and practice demands.",
+      "body_regions": ["shoulder", "elbow", "low_back", "trunk"],
+      "source_ids": ["src_hurd_interval_hitting", "src_wilk_shoulder_rts", "src_wolfe_swing_volume"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "volleyball_physical_demand",
+      "record_id": "jump_landing_load_demand",
+      "name": "Jump And Landing Load Demand",
+      "payload_fields": {
+        "demand_channels": ["approach_jump", "block_jump", "jump_set", "jump_serve", "transition_jump"],
+        "priority_roles": ["middle_blocker", "outside_hitter", "opposite", "setter"],
+        "level_scaling": {
+          "beginner": "planned low-volume jumps and landing skill",
+          "intermediate": "role-specific jump categories and weekly tracking",
+          "advanced": "individual jump count, intensity, and spike monitoring"
+        },
+        "linked_risks": ["patellar_tendon_overload_risk", "ankle_sprain_net_landing_risk", "acl_landing_risk"]
+      }
+    },
+    {
+      "record_type": "volleyball_physical_demand",
+      "record_id": "overhead_swing_contact_demand",
+      "name": "Overhead Swing And Contact Demand",
+      "payload_fields": {
+        "contact_types": ["serve", "jump_serve", "attack", "roll_shot", "overhead_set", "emergency_contact"],
+        "priority_roles": ["outside_hitter", "opposite", "setter", "serving_specialist", "middle_blocker"],
+        "monitoring": ["contacts_by_type", "intensity", "pain_during", "next_day_response"],
+        "linked_risks": ["shoulder_overuse_hitting_serving_risk", "low_back_extension_rotation_risk"]
+      }
+    },
+    {
+      "record_type": "volleyball_physical_demand",
+      "record_id": "low_stance_defensive_demand",
+      "name": "Low-Stance And Defensive Movement Demand",
+      "payload_fields": {
+        "priority_roles": ["libero", "defensive_specialist", "outside_hitter", "setter"],
+        "load_channels": ["low_stance_minutes", "lateral_accelerations", "decelerations", "dives", "floor_contacts", "serve_receive_repetitions"],
+        "backend_note": "Do not infer low workload from low jump count."
+      }
+    },
+    {
+      "record_type": "volleyball_injury_risk_rule",
+      "record_id": "ankle_sprain_landing_rule",
+      "name": "Ankle Sprain Landing Risk Rule",
+      "payload_fields": {
+        "if": ["prior_ankle_sprain OR crowded_net_landing_drills OR ankle_swelling_or_instability"],
+        "then": ["reduce_reactive_net_jumps", "add_balance_proprioception", "check_medical_or_taping_bracing_plan", "avoid_chaotic_blocking_until_stable"],
+        "source_ids": ["src_fivb_medical_injury_prevention", "src_verhagen_balance_board"]
+      }
+    },
+    {
+      "record_type": "volleyball_injury_risk_rule",
+      "record_id": "patellar_tendon_jump_load_rule",
+      "name": "Patellar Tendon Jump Load Rule",
+      "payload_fields": {
+        "if": ["patellar_tendon_pain", "next_day_knee_pain_increase", "weekly_jump_spike", "growth_spurt_flag"],
+        "then": ["reduce_high_fast_jumps", "preserve_tolerable_slow_strength_when_appropriate", "track_24_hour_response", "avoid_max_jump_testing"],
+        "source_ids": ["src_malliaras_patellar_tendinopathy", "src_skazalski_jump_demands"]
+      }
+    },
+    {
+      "record_type": "volleyball_injury_risk_rule",
+      "record_id": "shoulder_overhead_contact_rule",
+      "name": "Shoulder Overhead Contact Rule",
+      "payload_fields": {
+        "if": ["high_overhead_contact_day", "shoulder_pain", "loss_of_range", "preseason_swing_spike"],
+        "then": ["reduce_serves_and_attacks", "avoid_extra_overhead_lifting", "add_scapular_rotator_cuff_support", "use_interval_return_if_injured"],
+        "source_ids": ["src_wolfe_swing_volume", "src_hurd_interval_hitting", "src_wilk_shoulder_rts"]
+      }
+    },
+    {
+      "record_type": "volleyball_injury_risk_rule",
+      "record_id": "acl_reactive_landing_rule",
+      "name": "ACL Reactive Landing Risk Rule",
+      "payload_fields": {
+        "if": ["poor_landing_alignment", "unanticipated_block_progression", "off_axis_attack_reaching", "fatigue_landing_errors"],
+        "then": ["return_to_planned_landings", "reduce_jump_density", "train_hip_knee_ankle_control", "delay_chaotic_block_transition"],
+        "source_ids": ["src_zahradnik_block_landing", "src_zhao_unanticipated_block_jump", "src_usav_off_hand_hitting"]
+      }
+    },
+    {
+      "record_type": "volleyball_macro_planning_rule",
+      "record_id": "offseason_capacity_block",
+      "name": "Offseason Capacity Block",
+      "payload_fields": {
+        "season_phase": "off_season",
+        "primary_priorities": ["lower_body_strength", "calf_soleus_capacity", "trunk_control", "shoulder_durability", "mobility", "aerobic_base", "progressive_plyometric_foundation"],
+        "avoid": ["ignoring_pain_history", "jump_volume_without_landing_skill", "all_skill_no_strength"],
+        "level_scaling": ["beginner_foundation", "intermediate_progressive_loading", "advanced_individual_deficit_block"]
+      }
+    },
+    {
+      "record_type": "volleyball_macro_planning_rule",
+      "record_id": "preseason_ramp_rule",
+      "name": "Preseason Court Load Ramp Rule",
+      "payload_fields": {
+        "season_phase": "pre_season",
+        "primary_priorities": ["gradual_jump_ramp", "gradual_overhead_contact_ramp", "role_specific_repeated_efforts", "friendly_match_tolerance", "readiness_monitoring"],
+        "adjustments": ["reduce_gym_overload_when_court_volume_spikes", "avoid_two_a_day_max_intensity_stacks", "monitor_preseason_swing_counts"]
+      }
+    },
+    {
+      "record_type": "volleyball_macro_planning_rule",
+      "record_id": "inseason_match_week_rule",
+      "name": "In-Season Match Week Rule",
+      "payload_fields": {
+        "season_phase": "in_season",
+        "md_minus_3_to_4": "main strength maintenance or moderate power if court load allows",
+        "md_minus_2": "low-volume power or speed microdose only if readiness is green",
+        "md_minus_1": "activation, mobility, shoulder care, tactical sharpness, no fatigue",
+        "match_day": "warm-up, readiness, post-match downregulation",
+        "md_plus_1": "recovery or supplemental work based on actual participation"
+      }
+    },
+    {
+      "record_type": "volleyball_macro_planning_rule",
+      "record_id": "tournament_week_rule",
+      "name": "Tournament Week Rule",
+      "payload_fields": {
+        "season_phase": "tournament_week",
+        "training_bias": "readiness_and_recovery",
+        "allowed": ["short_activation", "band_shoulder_care", "ankle_prep", "mobility", "easy_aerobic_flush", "nutrition_hydration_sleep_prompts"],
+        "blocked": ["new_exercises", "heavy_eccentrics", "max_jump_testing", "extra_conditioning_punishment", "large_hitting_or_serving_addons"]
+      }
+    },
+    {
+      "record_type": "volleyball_return_to_play_rule",
+      "record_id": "return_to_jump_rule",
+      "name": "Return To Jump Rule",
+      "payload_fields": {
+        "entry_requirements": ["medical_clearance_when_indicated", "no_red_flags", "basic_strength_and_range", "pain_tolerable_and_stable"],
+        "progression": ["strength_and_isometrics", "bilateral_landing", "single_leg_and_lateral_landing", "planned_volleyball_jumps", "reactive_role_specific_jumps", "full_practice"],
+        "progression_criteria": ["no_symptom_escalation_during", "no_next_day_worsening", "landing_quality_stable", "confidence_stable", "performance_dropoff_acceptable"],
+        "rollback_triggers": ["swelling", "instability", "sharp_pain", "next_day_pain_increase", "landing_quality_breakdown"]
+      }
+    },
+    {
+      "record_type": "volleyball_return_to_play_rule",
+      "record_id": "return_to_serve_hit_rule",
+      "name": "Return To Serve And Hit Rule",
+      "payload_fields": {
+        "entry_requirements": ["pain_free_or_clinician_allowed_range", "shoulder_strength_endurance_restored", "scapular_and_trunk_control", "sport_contact_tolerance_started"],
+        "progression": ["dry_arm_swing", "light_ball_contacts", "partial_intensity_interval_serves", "partial_intensity_interval_attacks", "position_specific_contact_counts", "full_practice", "match_return"],
+        "monitoring": ["contact_count", "intensity_percent", "pain", "next_day_response", "range_of_motion", "strength_endurance", "mechanics"],
+        "role_variants": {
+          "setter": "higher repeated overhead set tolerance",
+          "outside_hitter": "higher attack and serve exposure",
+          "opposite": "high-intensity right-side and back-row attack exposure",
+          "middle_blocker": "quick-tempo attack plus block-transition exposure",
+          "serving_specialist": "serve intensity and cold-entry routine"
+        }
+      }
+    },
+    {
+      "record_type": "volleyball_return_to_play_rule",
+      "record_id": "return_after_ankle_sprain_rule",
+      "name": "Return After Ankle Sprain Rule",
+      "payload_fields": {
+        "criteria": ["no_swelling_or_instability_with_basic_movement", "pain_free_or_clinician_allowed_range", "single_leg_balance_control", "hop_and_landing_control", "sport_specific_lateral_and_net_landings_tolerated"],
+        "progression": ["range_strength_balance", "linear_hops", "lateral_hops", "planned_block_or_approach_landings", "reactive_net_play", "full_role_practice"],
+        "prevention_addons": ["balance_training", "calf_soleus_strength", "landing_spacing", "taping_or_bracing_plan_when_indicated"]
+      }
+    },
+    {
+      "record_type": "volleyball_readiness_adjustment_rule",
+      "record_id": "knee_tendon_readiness_adjustment",
+      "name": "Knee And Patellar Tendon Readiness Adjustment",
+      "payload_fields": {
+        "green": "planned jump and lower-body training allowed",
+        "yellow": "reduce high-fast jump volume 20-40 percent and keep technical quality",
+        "orange": "remove high-fast jumps and use clinician-guided tendon loading",
+        "red": "stop sport exposure and seek medical evaluation for acute injury, swelling, instability, or severe pain",
+        "data_inputs": ["pain_during", "pain_next_day", "jump_count_trend", "landing_quality", "growth_spurt_flag"]
+      }
+    },
+    {
+      "record_type": "volleyball_readiness_adjustment_rule",
+      "record_id": "shoulder_readiness_adjustment",
+      "name": "Shoulder Readiness Adjustment",
+      "payload_fields": {
+        "green": "planned overhead contacts and shoulder support work allowed",
+        "yellow": "reduce serve/attack counts and avoid extra overhead gym loading",
+        "orange": "replace overhead contacts with scapular, cuff, trunk, and lower-body work; consider clinician input",
+        "red": "stop overhead work for sharp pain, neurological symptoms, instability, or major range/strength loss",
+        "data_inputs": ["overhead_contact_count", "pain_during", "pain_next_day", "range_of_motion", "strength_endurance", "recent_swing_spike"]
+      }
+    },
+    {
+      "record_type": "volleyball_readiness_adjustment_rule",
+      "record_id": "ankle_readiness_adjustment",
+      "name": "Ankle Readiness Adjustment",
+      "payload_fields": {
+        "green": "planned jumping and lateral work allowed",
+        "yellow": "reduce chaotic landings and add balance/calf work",
+        "orange": "remove live net jumping, cutting, and reactive hops until stability returns",
+        "red": "medical evaluation for swelling, instability, inability to bear weight, suspected fracture, or acute traumatic sprain",
+        "data_inputs": ["swelling", "instability", "single_leg_balance", "hop_tolerance", "prior_sprain_history"]
+      }
+    },
+    {
+      "record_type": "volleyball_readiness_adjustment_rule",
+      "record_id": "fatigue_congested_schedule_adjustment",
+      "name": "Fatigue And Congested Schedule Adjustment",
+      "payload_fields": {
+        "if": ["poor_sleep", "high_session_rpe", "travel", "multi_match_week", "jump_height_or_movement_quality_drop"],
+        "then": ["reduce_optional_volume", "keep_power_low_volume", "prioritize_recovery", "avoid_new_exercises", "monitor_next_session_response"],
+        "role_specific": {
+          "starter_high_minutes": "recovery_and_maintenance_bias",
+          "bench_low_minutes": "supplemental_low_soreness_work_if_green",
+          "serving_specialist": "activation_and_shoulder_readiness_bias"
+        }
+      }
+    }
+  ]
+}

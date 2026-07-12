@@ -1,0 +1,2990 @@
+{
+  "metadata": {
+    "domain": "football_level_teaching",
+    "sport": "soccer",
+    "version": "draft_v1",
+    "research_goal": "Create a backend-ready level-based teaching draft for association football/soccer that integrates Wave 1 technical, tactical, role, rule, goalkeeping, and performance drafts with official coaching resources and peer-reviewed evidence. The draft defines beginner, intermediate, and advanced expectations, prerequisites, drills, avoid-until-ready gates, assessment signals, position-specific progressions, and transition rules for ball mastery, receiving, passing, dribbling and 1v1, finishing, chance creation, defending and pressing, match IQ, goalkeeping, and football strength and conditioning."
+  },
+  "source_refs": [
+    {
+      "title": "Ages 4-8: Coaching children to master ball control",
+      "url": "https://www.fifatrainingcentre.com/en/practice/grassroots/grassroots-and-youth-football-essentials/grassroots-coaching-essentials/coaching-children-to-master-ball-control.php",
+      "source_type": "official_coach_education_article",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for beginner touch volume, confidence, play-based ball familiarity, and progressive ball-control activities."
+    },
+    {
+      "title": "Mastering ball control",
+      "url": "https://www.fifatrainingcentre.com/en/practice/elite-sessions/in-possession/mastering-ball-control.php",
+      "source_type": "official_coach_education_session",
+      "organization_or_author": "FIFA Training Centre / Branimir Ujevic",
+      "notes": "Used for ball mastery as a staged control library: close control, feints, recognizing space, and pressure progression."
+    },
+    {
+      "title": "Passing and receiving",
+      "url": "https://www.fifatrainingcentre.com/en/practice/elite-sessions/in-possession/john-peacock-passing-and-receiving.php",
+      "source_type": "official_coach_education_session",
+      "organization_or_author": "FIFA Training Centre / John Peacock",
+      "notes": "Used for scanning before receiving, body orientation, first touch, pass weight, timing, and support angles."
+    },
+    {
+      "title": "Technical: Using a first touch to evade pressure",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fu17wwcfu17wwc-24/2024/technical-using-a-first-touch-to-evade-pressure.php",
+      "source_type": "official_tournament_technical_analysis",
+      "organization_or_author": "FIFA Technical Study Group",
+      "notes": "Used for first touch as a pressure-escape and next-action tool."
+    },
+    {
+      "title": "Passing circuit: Receiving between the lines",
+      "url": "https://www.fifatrainingcentre.com/en/practice/talent-coach-programme/build-and-progress/passing-circuit-receiving-between-the-lines.php",
+      "source_type": "official_talent_development_session",
+      "organization_or_author": "FIFA Talent Coach Programme",
+      "notes": "Used for receiving between lines, side-on shape, back-foot receiving, scanning, and progressing play."
+    },
+    {
+      "title": "Karl Aksum on scanning",
+      "url": "https://www.fifatrainingcentre.com/en/environment/science-explained/high-performance/play/karl-aksum-scanning.php",
+      "source_type": "official_science_explainer",
+      "organization_or_author": "FIFA Training Centre / Karl Marius Aksum",
+      "notes": "Used for scanning as information pickup rather than empty head movement."
+    },
+    {
+      "title": "Scanning, Contextual Factors, and Association With Performance in English Premier League Footballers",
+      "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.714720/full",
+      "source_type": "peer_reviewed_research",
+      "organization_or_author": "Jordet, Aksum, Pedersen, Walvekar, Trivedi, McCall, Ivarsson, and Priestley",
+      "notes": "Used for linking scan timing and context to performance outcomes."
+    },
+    {
+      "title": "Dribbling to beat an opponent",
+      "url": "https://www.fifatrainingcentre.com/en/practice/futsal/block-1/dribbling-to-beat-an-opponent.php",
+      "source_type": "official_coach_education_practice",
+      "organization_or_author": "FIFA Training Centre / Jorge Bras",
+      "notes": "Used for 1v1 attacking, deception, change of direction, and exit-touch progressions."
+    },
+    {
+      "title": "Look for the 1v1",
+      "url": "https://www.fifatrainingcentre.com/en/practice/grassroots/12-to-15/look-for-the-1v1.php",
+      "source_type": "official_grassroots_practice",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for youth 1v1 confidence, risk-taking, and attacking decisions."
+    },
+    {
+      "title": "Champions League performance insights: Going 1v1",
+      "url": "https://www.uefa.com/uefachampionsleague/news/028a-1a1bf7e6d9ae-9ea32505034e-1000--champions-league-performance-insights-going-1v1/",
+      "source_type": "official_technical_observer_article",
+      "organization_or_author": "UEFA",
+      "notes": "Used for advanced 1v1 threat, isolation, and final-third wide attacker implications."
+    },
+    {
+      "title": "Finishing: From 1v1 to 3v3",
+      "url": "https://www.fifatrainingcentre.com/en/practice/elite-sessions/finishing-from-1v1-to-3v3.php",
+      "source_type": "official_coaching_session",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for finishing progression from simple shots to live attacking scenarios."
+    },
+    {
+      "title": "High value chance creation from low cut-back, push, and driven crosses/passes",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fifa-u-17-world-cup-dominican-republic-2024/high-value-chance-creation-from-low-cut-back-push-and-driven-crosses-passes.php",
+      "source_type": "official_technical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for cutbacks, low crosses, final-third scanning, and high-value chance creation."
+    },
+    {
+      "title": "Attacking the cross",
+      "url": "https://www.fifatrainingcentre.com/en/practice/elite-sessions/attacking-the-cross.php",
+      "source_type": "official_coaching_session",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for delivery, runner timing, box occupation, and reaction after crosses."
+    },
+    {
+      "title": "UEFA Under-17 EURO 2024 Technical Report: Crosses",
+      "url": "https://www.uefatechnicalreports.com/under-17-technical-reports/2024/technical-topics/crosses/",
+      "source_type": "official_technical_report",
+      "organization_or_author": "UEFA",
+      "notes": "Used for youth crossing trends, delivery zones, and attacker movement."
+    },
+    {
+      "title": "The biomechanics of kicking in soccer: a review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20509089/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Lees, Asai, Andersen, Nunome, and Sterzing",
+      "notes": "Used for kicking mechanics, force development, and load considerations in shooting and long passing."
+    },
+    {
+      "title": "Law 11 - Offside",
+      "url": "https://www.theifab.com/laws/latest/offside/",
+      "source_type": "official_law",
+      "organization_or_author": "IFAB",
+      "notes": "Used for attacking runs, defensive line timing, and offside gates."
+    },
+    {
+      "title": "Law 12 - Fouls and Misconduct",
+      "url": "https://www.theifab.com/laws/latest/fouls-and-misconduct/",
+      "source_type": "official_law",
+      "organization_or_author": "IFAB",
+      "notes": "Used for tackling safety gates, reckless challenge filters, and foul/card awareness."
+    },
+    {
+      "title": "Defending in 1v1: Orientating attackers away from goal",
+      "url": "https://www.fifatrainingcentre.com/en/practice/talent-coach-programme/deny-and-protect/defending-in-1v1-orientating-attackers-away-from-goal.php",
+      "source_type": "official_coaching_practice",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for stance, delay, body shape, and force-direction defending."
+    },
+    {
+      "title": "Irene Paredes: Timing the tackle",
+      "url": "https://www.fifatrainingcentre.com/en/game/individual-qualities/world-class-skills/irene-paredes-timing-the-tackle.php",
+      "source_type": "official_technical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for tackle timing, patience, and reading attacker touch."
+    },
+    {
+      "title": "Investigating the increased use of the high press",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fcwc/2025/team-analyses/increased-use-of-high-press-and-pressing-strategies.php",
+      "source_type": "official_technical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for advanced pressing triggers, compact team shape, and coordinated high press."
+    },
+    {
+      "title": "Controlling the game without the ball: The mid-block and compactness",
+      "url": "https://www.fifatrainingcentre.com/en/fwc2022/technical-and-tactical-analysis/controlling-the-game-without-the-ball--the-mid-block-and-compactness.php",
+      "source_type": "official_technical_report_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for compactness, mid-block teaching, and pressure-cover-balance rules."
+    },
+    {
+      "title": "Variations and flexibility in build-up play",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/olympic-football-tournament/moft/variations-and-flexibility-in-build-up-play.php",
+      "source_type": "official_tournament_tactical_analysis",
+      "organization_or_author": "FIFA Training Centre / FIFA Technical Experts",
+      "notes": "Used for build-up progression, goalkeeper involvement, and adapting to pressing shapes."
+    },
+    {
+      "title": "Preparing and executing counter-pressing",
+      "url": "https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/preparing-and-executing-counter-pressing.php",
+      "source_type": "official_coach_education_session",
+      "organization_or_author": "FIFA Training Centre / Anne Pochert",
+      "notes": "Used for counterpressing readiness, immediate reaction after loss, and recovery decisions."
+    },
+    {
+      "title": "What are the principles of football?",
+      "url": "https://learn.englandfootball.com/articles-and-resources/coaching/resources/2022/What-are-the-principles-of-football",
+      "source_type": "national_federation_coach_education",
+      "organization_or_author": "England Football Learning / The FA",
+      "notes": "Used for attacking, defending, transition, and age-appropriate principle teaching."
+    },
+    {
+      "title": "FIFA World Cup Qatar 2022: Technical and tactical overview",
+      "url": "https://www.fifatrainingcentre.com/en/fwc2022/technical-and-tactical-analysis/technical-tactical-overview.php",
+      "source_type": "official_tournament_technical_analysis",
+      "organization_or_author": "FIFA Training Centre / FIFA Technical Study Group",
+      "notes": "Used for advanced game-model, phase, and match-IQ progression."
+    },
+    {
+      "title": "Goalkeeper explosiveness from the set position and goal prevention",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fifa-womens-world-cup/2023/post-tournament-analysis/goal-preventions.php",
+      "source_type": "official_technical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for goalkeeper set position, explosive saves, and goal-prevention assessment."
+    },
+    {
+      "title": "Goalkeepers take a more strategic approach to offering, receiving and distributing the ball",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fifa-womens-world-cup/2023/post-tournament-analysis/offering.php",
+      "source_type": "official_technical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for goalkeeper build-up, offering, receiving, and distribution progressions."
+    },
+    {
+      "title": "UEFA Goalkeeper Coaching: An integrated and collaborative approach",
+      "url": "https://editorial.uefa.com/resources/0285-190a81f7e091-323e8bfbc968-1000/uefa_goalkeeper_coaching_en.pdf",
+      "source_type": "confederation_coaching_resource",
+      "organization_or_author": "UEFA Technical Development Unit and UEFA Goalkeeper Advisory Group",
+      "notes": "Used for integrating goalkeeper training with team model and collaborative coaching."
+    },
+    {
+      "title": "A Contextualised Physical Analysis of the FIFA World Cup Qatar 2022",
+      "url": "https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/background-and-method.php",
+      "source_type": "official_physical_analysis",
+      "organization_or_author": "FIFA Training Centre / Dr Paul Bradley",
+      "notes": "Used for contextual match demands, position demands, and match-load framing."
+    },
+    {
+      "title": "High-Intensity Efforts in Elite Soccer Matches and Associated Movement Patterns, Technical Skills and Tactical Actions",
+      "url": "https://researchonline.ljmu.ac.uk/id/eprint/4143/3/High-Intensity%20Efforts%20in%20Elite%20Soccer%20Matches%20and%20Associated%20Movement%20Patterns%2C%20Technical%20Skills%20and%20Tactical%20Actions.%20Information%20for%20Position-Specific%20Training%20Drills..pdf",
+      "source_type": "peer_reviewed_research",
+      "organization_or_author": "Ade, Harley, and Bradley",
+      "notes": "Used for high-intensity action patterns and position-specific conditioning."
+    },
+    {
+      "title": "High-speed Running and Sprinting in Professional Adult Soccer",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36860737/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Gualtieri, Rampinini, Dello Iacono, and Beato",
+      "notes": "Used for sprint exposure, high-speed running, and conditioning progression."
+    },
+    {
+      "title": "FIFA 11+: An Effective Programme to Prevent Football Injuries in Various Player Groups Worldwide",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25878073/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Bizzini and Dvorak",
+      "notes": "Used for warm-up, neuromuscular control, injury-prevention progressions, and adherence implications."
+    },
+    {
+      "title": "Injury Prevention and Health Promotion",
+      "url": "https://inside.fifa.com/health-and-medical/injury-prevention",
+      "source_type": "official_medical_resource",
+      "organization_or_author": "FIFA",
+      "notes": "Used for FIFA injury-prevention governance and player health framing."
+    },
+    {
+      "title": "Hamstring Injury Rates Have Increased During Recent Seasons and Now Constitute 24% of All Injuries in Men's Professional Football",
+      "url": "https://bjsm.bmj.com/content/57/5/292",
+      "source_type": "peer_reviewed_injury_surveillance",
+      "organization_or_author": "Ekstrand, Bengtsson, Walden, Davison, Khan, and Hagglund",
+      "notes": "Used for hamstring risk emphasis in high-speed, sprint, and match-density planning."
+    },
+    {
+      "title": "Wave 1: Ball Mastery, First Touch, Passing Draft",
+      "url": "backend/sport_research/football/drafts/ball_mastery_first_touch_passing_draft.json",
+      "source_type": "local_wave_1_context_file",
+      "organization_or_author": "SFTC football research Wave 1",
+      "notes": "Used as local structured context for ball mastery, receiving, passing, and scanning records."
+    },
+    {
+      "title": "Wave 1: Dribbling, 1v1, Carrying, Turning Draft",
+      "url": "backend/sport_research/football/drafts/dribbling_1v1_carrying_turning_draft.json",
+      "source_type": "local_wave_1_context_file",
+      "organization_or_author": "SFTC football research Wave 1",
+      "notes": "Used as local structured context for dribbling, 1v1, carrying, shielding, turning, and dribble/pass decisions."
+    },
+    {
+      "title": "Wave 1: Shooting, Finishing, Crossing, Chance Creation Draft",
+      "url": "backend/sport_research/football/drafts/shooting_finishing_crossing_chance_creation_draft.json",
+      "source_type": "local_wave_1_context_file",
+      "organization_or_author": "SFTC football research Wave 1",
+      "notes": "Used as local structured context for shooting, finishing, crossing, cutbacks, heading, and chance creation."
+    },
+    {
+      "title": "Wave 1: Defending, Pressing, Tackling, Duels Draft",
+      "url": "backend/sport_research/football/drafts/defending_pressing_tackling_duels_draft.json",
+      "source_type": "local_wave_1_context_file",
+      "organization_or_author": "SFTC football research Wave 1",
+      "notes": "Used as local structured context for defending, pressing, tackling, duels, and safety filters."
+    },
+    {
+      "title": "Wave 1: Team Tactics, Formations, Match IQ Draft",
+      "url": "backend/sport_research/football/drafts/team_tactics_formations_match_iq_draft.json",
+      "source_type": "local_wave_1_context_file",
+      "organization_or_author": "SFTC football research Wave 1",
+      "notes": "Used as local structured context for formations, phases, build-up, pressing systems, rest defense, set pieces, game states, and KPIs."
+    },
+    {
+      "title": "Wave 1: Goalkeeping Draft",
+      "url": "backend/sport_research/football/drafts/goalkeeping_draft.json",
+      "source_type": "local_wave_1_context_file",
+      "organization_or_author": "SFTC football research Wave 1",
+      "notes": "Used as local structured context for goalkeeper technique, tactics, physical demands, assessments, and progressions."
+    },
+    {
+      "title": "Wave 1: Positions, Roles, Demands Draft",
+      "url": "backend/sport_research/football/drafts/positions_roles_demands_draft.json",
+      "source_type": "local_wave_1_context_file",
+      "organization_or_author": "SFTC football research Wave 1",
+      "notes": "Used as local structured context for goalkeeper, defender, midfielder, winger, striker, and false-nine role progressions."
+    },
+    {
+      "title": "Wave 1: Rules, Match Structure, Game Model Draft",
+      "url": "backend/sport_research/football/drafts/rules_match_structure_game_model_draft.json",
+      "source_type": "local_wave_1_context_file",
+      "organization_or_author": "SFTC football research Wave 1",
+      "notes": "Used as local structured context for IFAB law constraints, match structure, restarts, zones, phases, and formation teaching."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "level_based_progression_is_domain_specific",
+      "concept": "A player can be advanced in one football domain and beginner in another.",
+      "backend_use": "Unlock progressions by domain evidence rather than by a single global label.",
+      "examples": [
+        "a fast winger may be advanced in 1v1 but beginner in defensive recovery body shape",
+        "a goalkeeper may be advanced in shot stopping but intermediate in build-up distribution"
+      ]
+    },
+    {
+      "id": "perception_action_before_pattern_repetition",
+      "concept": "Football skill is not only technical execution; it depends on scanning, pressure, space, timing, and the next action.",
+      "backend_use": "Prefer representative drills once basic movement safety is present."
+    },
+    {
+      "id": "ball_mastery_supports_every_outfield_skill",
+      "concept": "Close control, surface variety, two-footed touches, change of pace, and ball protection create the base for receiving, dribbling, passing, and finishing.",
+      "backend_use": "Beginner plans should include frequent ball contacts without over-specializing by position."
+    },
+    {
+      "id": "first_touch_is_first_decision",
+      "concept": "Receiving should set up the next action: protect, turn, pass forward, combine, carry, finish, or reset.",
+      "backend_use": "Assess first touch by next-action quality, not by whether the ball merely stops."
+    },
+    {
+      "id": "opposed_pressure_changes_skill_level",
+      "concept": "A skill demonstrated in a cone drill is not yet game-ready until it survives opponent pressure, direction, transition, and fatigue.",
+      "backend_use": "Use unopposed, semi-opposed, opposed, and game-transfer stages inside each level."
+    },
+    {
+      "id": "decision_cost_matters",
+      "concept": "Advanced actions must improve football outcomes relative to their risk: line-breaking pass, dribble, shot, cross, press, or goalkeeper distribution.",
+      "backend_use": "Record error cost and tactical return in assessments."
+    },
+    {
+      "id": "role_specificity_increases_with_level",
+      "concept": "Beginners need broad football literacy; intermediate players add position priorities; advanced players train role, system, opponent, and match-state details.",
+      "backend_use": "Do not let early specialization remove emergency skills."
+    },
+    {
+      "id": "law_and_safety_constraints_are_skill_gates",
+      "concept": "Offside, goalkeeper restrictions, foul/card law, heading guidance, and tackle safety constrain what should be taught and when.",
+      "backend_use": "Attach IFAB and safety gates to advanced defending, finishing, set-piece, and goalkeeper tasks."
+    },
+    {
+      "id": "match_iq_progresses_from_rules_to_game_model",
+      "concept": "Football understanding moves from knowing rules and simple principles to reading phases, exploiting space, managing risk, and adapting to opponents.",
+      "backend_use": "Assess tactical reasoning in small-sided and 11v11 contexts."
+    },
+    {
+      "id": "conditioning_serves_football_quality",
+      "concept": "S&C should support repeated high-quality football actions: sprint, decelerate, duel, jump, kick, change direction, recover, and make decisions under fatigue.",
+      "backend_use": "Avoid conditioning that degrades technical learning or spikes injury risk."
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "football_ball_mastery_level_model",
+      "model": "Progress from confidence and surface variety to pressured manipulation, disguise, and game-transfer control.",
+      "level_path": {
+        "beginner": "stationary and slow-moving touches, both feet, simple turns, safe stopping",
+        "intermediate": "traffic dribbling, weak-foot rules, change of speed, pressure escape",
+        "advanced": "opposed tight-space control, deception before and after receiving, role-specific control under contact"
+      }
+    },
+    {
+      "id": "football_receiving_level_model",
+      "model": "Progress from controlling the ball to receiving with body orientation, scan information, pressure management, and next-action intent.",
+      "level_path": {
+        "beginner": "two-touch control and pass to large target",
+        "intermediate": "receive across body, safe foot, back-foot/front-foot choices under pressure",
+        "advanced": "receive between lines, disguise, first-time or one-touch action, escape under contact"
+      }
+    },
+    {
+      "id": "football_passing_level_model",
+      "model": "Progress from inside-foot accuracy to weighted, timed, line-breaking, long, and combination passing.",
+      "level_path": {
+        "beginner": "short passing mechanics and move after pass",
+        "intermediate": "target-foot passing, rondos, wall pass, through pass, lofted or driven pass introduction",
+        "advanced": "third-player play, switch of play, disguised pass, tempo control, pressure-specific risk choices"
+      }
+    },
+    {
+      "id": "football_dribbling_1v1_level_model",
+      "model": "Progress from close control to recognizing when to beat, carry, shield, combine, or release.",
+      "level_path": {
+        "beginner": "control and simple moves against passive pressure",
+        "intermediate": "isolate defender, change pace, attack space, protect ball, finish or pass after move",
+        "advanced": "role-specific 1v1, overload manipulation, contact balance, end-product efficiency"
+      }
+    },
+    {
+      "id": "football_finishing_level_model",
+      "model": "Progress from contact quality to shot selection, goalkeeper manipulation, first-time finishing, movement, and rebound behavior.",
+      "level_path": {
+        "beginner": "short-distance strikes from controlled service",
+        "intermediate": "finishing after movement, varied angles, both feet, live goalkeeper cues",
+        "advanced": "one-touch, high-speed, pressure finishing, shot value, disguise, rebounds, and match-state choices"
+      }
+    },
+    {
+      "id": "football_crossing_chance_creation_level_model",
+      "model": "Progress from delivery mechanics to scanning, target-zone selection, runner timing, cutbacks, second balls, and transition defense.",
+      "level_path": {
+        "beginner": "deliver from wide channel to large area and attack front/middle/back spaces",
+        "intermediate": "low cross, driven cross, cutback, early cross, late runner timing",
+        "advanced": "opponent-specific box occupation, disguise, weak-side occupation, rest-defense connection"
+      }
+    },
+    {
+      "id": "football_defending_pressing_level_model",
+      "model": "Progress from individual stance and delay to unit pressing, compactness, counterpressing, and lawful duel behavior.",
+      "level_path": {
+        "beginner": "goal-side, slow down, jockey, force away from goal, safe tackling rules",
+        "intermediate": "pressure-cover-balance, intercept, screen lanes, coordinated pressing triggers",
+        "advanced": "team press, mid/low block, rest-defense response, trap design, transition decisions"
+      }
+    },
+    {
+      "id": "football_match_iq_level_model",
+      "model": "Progress from rules and simple principles to phase recognition, formation roles, game-state management, scouting, and KPI interpretation.",
+      "level_path": {
+        "beginner": "rules, zones, support, width/depth, compact defending",
+        "intermediate": "formations, phase roles, pressing cues, overloads, transition choices",
+        "advanced": "scout plan, opponent adjustment, rotation-specific roles, set-piece and game-state management"
+      }
+    },
+    {
+      "id": "football_goalkeeper_level_model",
+      "model": "Progress from set shape, handling, footwork, and basic distribution to advanced goal prevention, space defending, crosses, communication, and build-up role.",
+      "level_path": {
+        "beginner": "ready position, catch, scoop, basic dive shape, roll/pass distribution",
+        "intermediate": "set timing, angle, 1v1, cross decision, driven distribution, communication",
+        "advanced": "sweeper-keeper, pressure build-up, high claims, rebound control, defensive organization"
+      }
+    },
+    {
+      "id": "football_snc_level_model",
+      "model": "Progress from movement competency and injury-prevention habits to role-specific speed, repeatability, strength, power, and in-season load management.",
+      "level_path": {
+        "beginner": "warm-up habits, landing, sprint mechanics, basic strength, mobility, low fatigue",
+        "intermediate": "acceleration, deceleration, change of direction, repeated sprint exposure, unilateral strength",
+        "advanced": "position-specific high-speed exposure, microcycle planning, return-to-play staging, load monitoring"
+      }
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "scan_before_receiving_rule",
+      "rule": "Receiver should scan before ball arrival when time and safety allow, then choose body shape and first touch from pressure and space.",
+      "level_emphasis": {
+        "beginner": "look up and name target",
+        "intermediate": "check shoulder before receiving and play away from pressure",
+        "advanced": "scan multiple times, disguise, and act before pressure closes"
+      }
+    },
+    {
+      "id": "receive_to_next_action_rule",
+      "rule": "First touch should prepare the intended next action rather than simply stopping the ball.",
+      "applies_to": [
+        "receiving",
+        "passing",
+        "dribbling",
+        "finishing"
+      ]
+    },
+    {
+      "id": "play_forward_if_secure_rule",
+      "rule": "Prefer forward progression when body shape, pressure, and support make it secure; reset when progression risk is higher than reward.",
+      "applies_to": [
+        "passing",
+        "match_iq",
+        "goalkeeper_distribution"
+      ]
+    },
+    {
+      "id": "commit_before_release_rule",
+      "rule": "In 1v1 and overload situations, commit a defender before passing, crossing, or cutting back when this creates a better chance.",
+      "applies_to": [
+        "dribbling_1v1",
+        "chance_creation"
+      ]
+    },
+    {
+      "id": "shot_value_rule",
+      "rule": "Finishing decisions should account for distance, angle, pressure, goalkeeper position, passing options, rebound space, and game state.",
+      "applies_to": [
+        "shooting_finishing",
+        "match_iq"
+      ]
+    },
+    {
+      "id": "cutback_before_blind_cross_rule",
+      "rule": "When the byline or half-space entry allows it, scan for cutback and low driven options before serving a blind aerial cross.",
+      "applies_to": [
+        "crossing_chance_creation"
+      ]
+    },
+    {
+      "id": "pressure_cover_balance_rule",
+      "rule": "The nearest defender pressures, the next player covers, and the unit balances central or goal-side risk.",
+      "applies_to": [
+        "defending_pressing",
+        "match_iq"
+      ]
+    },
+    {
+      "id": "pressing_trigger_rule",
+      "rule": "Press when a cue appears and support is connected: poor touch, backwards pass, receiver facing own goal, pass into trap, or isolated wide receiver.",
+      "applies_to": [
+        "defending_pressing",
+        "match_iq"
+      ]
+    },
+    {
+      "id": "counterpress_or_recover_rule",
+      "rule": "After losing the ball, counterpress only if nearby players can close ball, lanes, and forward options; otherwise recover behind the ball.",
+      "applies_to": [
+        "defending_pressing",
+        "match_iq",
+        "snc"
+      ]
+    },
+    {
+      "id": "rest_defense_rule",
+      "rule": "Attacking practice should include protection against counterattack through staggered cover, central security, and recovery roles.",
+      "applies_to": [
+        "chance_creation",
+        "match_iq"
+      ]
+    },
+    {
+      "id": "goalkeeper_distribution_risk_rule",
+      "rule": "Goalkeeper distribution should match pressure, available support, score context, and team build-up ability.",
+      "applies_to": [
+        "goalkeeping",
+        "match_iq"
+      ]
+    },
+    {
+      "id": "legal_challenge_rule",
+      "rule": "Defensive duels must be taught through IFAB law constraints: control, timing, no excessive force, and no reckless follow-through.",
+      "applies_to": [
+        "defending_pressing",
+        "tackling"
+      ]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "acceleration_and_reacceleration",
+      "demand": "Repeated short accelerations and reaccelerations after a touch, tackle, press, or transition.",
+      "level_implication": "Introduce mechanics and low-volume starts at beginner level; progress to reactive and position-specific doses."
+    },
+    {
+      "id": "high_speed_running_and_sprinting",
+      "demand": "Wide players, forwards, fullbacks, center backs defending space, and transition moments require high-speed exposure.",
+      "level_implication": "Avoid sudden sprint spikes; advanced players need planned exposure in the weekly cycle."
+    },
+    {
+      "id": "deceleration_and_change_of_direction",
+      "demand": "Pressing, dribbling, defending, shooting preparation, and receiving turns all require braking and cutting.",
+      "level_implication": "Teach braking alignment before repeated max-effort change-of-direction work."
+    },
+    {
+      "id": "unilateral_strength_and_balance",
+      "demand": "Kicking, shielding, landing, cutting, and contact duels are often single-leg or asymmetrical.",
+      "level_implication": "Progress from balance and split-squat patterns to loaded and reactive single-leg strength."
+    },
+    {
+      "id": "trunk_and_hip_control",
+      "demand": "Passing, shooting, aerial control, shielding, and duels require trunk stiffness and hip rotation control.",
+      "level_implication": "Develop through basic bracing and rotation control before high-volume kicking and contact drills."
+    },
+    {
+      "id": "aerial_jump_landing_contact",
+      "demand": "Heading, goalkeeping claims, set pieces, and aerial duels involve jumping, landing, and contact.",
+      "level_implication": "Use age and heading guidance, landing quality, and collision management as progression gates."
+    },
+    {
+      "id": "repeated_kicking_load",
+      "demand": "Long passing, shooting, crossing, clearances, and goalkeeper distribution create hip flexor, adductor, quad, and trunk load.",
+      "level_implication": "Track spikes in high-force kicking, especially when adding long-range, weak-foot, or fatigued finishing work."
+    },
+    {
+      "id": "goalkeeper_explosive_lateral_load",
+      "demand": "Goalkeepers need lateral pushes, dives, low saves, high claims, recoveries, and landing tolerance.",
+      "level_implication": "Build save technique and fall tolerance before high-volume power service."
+    },
+    {
+      "id": "aerobic_and_repeated_sprint_recovery",
+      "demand": "Players need the capacity to repeat technical and tactical actions across match duration.",
+      "level_implication": "Use football-specific games and intervals without removing technical quality from key sessions."
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "hamstring_sprint_spike",
+      "risk": "Rapid increases in sprinting, high-speed running, or fatigued pressing can raise hamstring risk.",
+      "mitigation": "Progress sprint exposure, include posterior-chain strength, and monitor next-day response."
+    },
+    {
+      "id": "adductor_groin_kicking_and_cutting",
+      "risk": "High kicking volume, cutting, slide tackles, and lateral defending load the adductor and groin complex.",
+      "mitigation": "Progress kicking and COD volume; use strength and symptom monitoring before advanced loads."
+    },
+    {
+      "id": "ankle_contact_and_surface_risk",
+      "risk": "Tackles, landing on another foot, uneven surfaces, and rapid cuts can overload ankle and foot structures.",
+      "mitigation": "Train landing, balance, footwear-surface awareness, and reduce uncontrolled duel volume."
+    },
+    {
+      "id": "knee_acl_cutting_landing_duel",
+      "risk": "High-speed cutting, pressing deceleration, awkward landings, and contact duels can increase knee risk.",
+      "mitigation": "Use neuromuscular warm-up, landing mechanics, hip-knee-ankle control, and fatigue gates."
+    },
+    {
+      "id": "heading_and_aerial_collision",
+      "risk": "Heading and aerial challenges can involve head impact, neck load, and collision risk.",
+      "mitigation": "Follow age guidance, teach timing and landing, limit unnecessary heading volume, and stop for symptoms."
+    },
+    {
+      "id": "goalkeeper_dive_collision",
+      "risk": "Dives, posts, rebounds, and crowded boxes create shoulder, wrist, hip, and head-contact risk.",
+      "mitigation": "Teach fall mechanics, safe service, claim/punch/stay decision rules, and crowded-box progressions."
+    },
+    {
+      "id": "tackling_reckless_force",
+      "risk": "Late, uncontrolled, two-footed, or excessive-force challenges are safety and law risks.",
+      "mitigation": "Teach delay, tackle timing, lawful contact, and decision to contain instead of tackle."
+    },
+    {
+      "id": "fatigue_degraded_decision_quality",
+      "risk": "Fatigue can degrade touch, tackle timing, shot choice, and landing mechanics.",
+      "mitigation": "Separate conditioning stress from new technical learning when quality collapses."
+    },
+    {
+      "id": "youth_growth_maturation",
+      "risk": "Growth spurts can temporarily reduce coordination and increase sensitivity to kicking, sprinting, and jumping volume.",
+      "mitigation": "Use flexible progressions, lower volume spikes, and emphasize movement quality."
+    },
+    {
+      "id": "match_density_and_return_to_play",
+      "risk": "Congested fixtures and premature return can combine high speed, contact, and fatigue before tissue capacity is restored.",
+      "mitigation": "Stage return-to-run, return-to-sprint, return-to-kick, return-to-contact, and return-to-play."
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "beginner_training_should_be_ball_rich_and_game_linked",
+      "implication": "Beginners need many touches, simple rules, direction, goals, and small games rather than long isolated explanations.",
+      "practice_design": "Use ball-each warm-ups, partner passing, gates, 1v1 channels, 2v2/3v3 games, and frequent success constraints."
+    },
+    {
+      "id": "intermediate_training_should_add_pressure_and_decision",
+      "implication": "Intermediate work should preserve technique while adding defender cues, support angles, role responsibilities, and transition.",
+      "practice_design": "Use rondos, positional games, directional small-sided games, and phase-specific constraints."
+    },
+    {
+      "id": "advanced_training_should_be_role_system_and_opponent_specific",
+      "implication": "Advanced players should train the details they will face in their position, team game model, opponent plan, and match state.",
+      "practice_design": "Use unit work, 8v8 to 11v11 phase play, scout-team behaviors, video-tagged review, and KPI feedback."
+    },
+    {
+      "id": "progress_opposition_before_speed_or_volume",
+      "implication": "A drill should usually become more representative before simply becoming faster, longer, or more fatiguing.",
+      "practice_design": "Add pressure, direction, transition, and score before adding maximal volume."
+    },
+    {
+      "id": "assess_skill_by_transfer",
+      "implication": "Backend assessments should weight live success, decision rationale, and next-action outcome above isolated technique alone.",
+      "practice_design": "Use drill success plus small-sided or match clip evidence."
+    },
+    {
+      "id": "teach_advanced_actions_with_error_cost",
+      "implication": "Line-breaking passes, 1v1 dribbles, shots, crosses, presses, and goalkeeper build-up actions are advanced only if the benefit justifies the risk.",
+      "practice_design": "Track success, turnover location, counterattack exposure, and chance quality."
+    },
+    {
+      "id": "integrate_goalkeepers_early",
+      "implication": "Goalkeepers should not train only isolated saves; they must be included in build-up, defending space, communication, and transition.",
+      "practice_design": "Add goalkeeper roles to rondos, phase play, finishing, crossing, and defensive-line games."
+    },
+    {
+      "id": "attach_law_awareness_to_skill",
+      "implication": "Rules should be taught where they affect action: offside runs, goalkeeper handling, fouls, cards, restarts, throw-ins, penalties, and set pieces.",
+      "practice_design": "Use law-triggered constraints during realistic games rather than separate quiz-only instruction."
+    },
+    {
+      "id": "dose_high_force_kicking_and_heading",
+      "implication": "Long passing, shooting, crossing, clearances, and heading need volume management, especially for youth or returning players.",
+      "practice_design": "Limit high-force repetitions, rotate sides, use technical submaximal work, and track soreness."
+    },
+    {
+      "id": "snc_should_match_role_demands",
+      "implication": "Conditioning should reflect role demands: wide repeated sprints, midfield repeated accelerations, center-back aerial and recovery sprint load, striker high-intensity finishing runs, goalkeeper explosive lateral work.",
+      "practice_design": "Use position-specific exposure after common movement foundations are stable."
+    },
+    {
+      "id": "regression_is_part_of_progression",
+      "implication": "When pain, decision quality, legal safety, or tactical transfer drops, the backend should step down task complexity instead of pushing the planned level.",
+      "practice_design": "Increase space, remove live defender, lower speed, reduce volume, or return to smaller target demands."
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "collection": "sport_teaching_progressions",
+      "records": [
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_ball_mastery",
+          "sport": "soccer",
+          "domain": "ball_mastery",
+          "source_ref_titles": [
+            "Ages 4-8: Coaching children to master ball control",
+            "Mastering ball control",
+            "Wave 1: Ball Mastery, First Touch, Passing Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "pain-free walking, jogging, stopping, and turning",
+                "can balance briefly on each foot",
+                "can make basic contact with inside, sole, and laces",
+                "understands simple stop, go, and space commands"
+              ],
+              "expectations": [
+                "keep the ball close while walking or slow jogging",
+                "use both feet for simple touches",
+                "stop and start without falling or losing the ball far away",
+                "look up briefly before changing direction",
+                "protect the ball from light passive pressure"
+              ],
+              "typical_drills": [
+                "ball-each free dribble with color or number calls",
+                "inside-outside touch ladder",
+                "sole stop, pull, and turn gates",
+                "shark-and-islands dribble game",
+                "1v1 keep-ball in a large square with passive defender"
+              ],
+              "avoid_until_ready_gates": [
+                "do not teach long skill move chains before simple control survives movement",
+                "do not punish creativity when the ball stays safe",
+                "do not use tight-contact duels before balance and stopping are safe"
+              ],
+              "assessment_signals": [
+                "player can keep ball within two steps during a 20 meter slow dribble",
+                "uses both feet without constant prompting",
+                "can stop ball on command and restart in a new direction",
+                "eyes lift from ball at least once before a decision"
+              ],
+              "position_specific_progression": {
+                "all_outfield": [
+                  "train broad touch confidence before assigning position-only technical work"
+                ],
+                "goalkeeper": [
+                  "include foot receiving and inside-foot passing as part of distribution foundation"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "basic close control at jogging speed",
+                "can stop, turn, and restart safely",
+                "can protect the ball with body shape",
+                "understands when space is open or crowded"
+              ],
+              "expectations": [
+                "change direction and pace with inside, outside, and sole surfaces",
+                "use weak foot in realistic constraints",
+                "scan before entering traffic",
+                "escape pressure with a first or second touch",
+                "carry ball into open space without overdribbling"
+              ],
+              "typical_drills": [
+                "traffic dribbling with scanning call-outs",
+                "gates with mandatory weak-foot exit",
+                "1v1 escape boxes",
+                "four-corner turn and accelerate game",
+                "rondo escape touch into a gate"
+              ],
+              "avoid_until_ready_gates": [
+                "do not add high-speed cuts if braking alignment collapses",
+                "do not require weak-foot-only play so long that decisions become unrealistic",
+                "do not progress to tight-contact duels if the player cannot protect with body between defender and ball"
+              ],
+              "assessment_signals": [
+                "successful turns under light pressure",
+                "weak-foot touches are functional enough to escape or pass",
+                "ball loss rate decreases in traffic games",
+                "player accelerates after escape touch"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "open body to carry away from first line of pressure"
+                ],
+                "fullback_wingback": [
+                  "carry down line and inside while scanning winger and midfielder"
+                ],
+                "midfielder": [
+                  "use body shape to receive, protect, and escape central pressure"
+                ],
+                "winger_forward": [
+                  "link ball mastery to 1v1 isolation and end product"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "control survives live pressure and contact",
+                "two-footed touch library supports position role",
+                "can scan before and during carry",
+                "deceleration and reacceleration quality remain stable"
+              ],
+              "expectations": [
+                "use disguise, feint, and body shape to manipulate defenders",
+                "control ball in tight areas while protecting from contact",
+                "change rhythm to break pressure or draw an opponent",
+                "choose carry, pass, dribble, or reset by game context",
+                "retain ball quality under fatigue and match speed"
+              ],
+              "typical_drills": [
+                "opposed tight-space rondo with escape gate",
+                "position-specific receive-turn-carry under contact",
+                "3v3 plus neutrals in congested central zone",
+                "carry to commit defender then release",
+                "video-tagged control actions from match clips"
+              ],
+              "avoid_until_ready_gates": [
+                "do not reward unnecessary skill moves that slow team attack",
+                "do not overload change-of-direction volume when groin, ankle, or knee quality declines",
+                "do not progress to advanced manipulation if simple pass/carry decision is poor"
+              ],
+              "assessment_signals": [
+                "retains possession under live pressure",
+                "uses disguise with clear tactical effect",
+                "escape touches lead to forward action or secure reset",
+                "low turnover rate in central or defensive-third pressure"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "carry through first press only when cover and passing lanes support it"
+                ],
+                "defensive_midfielder": [
+                  "receive on half-turn, protect, and escape to switch or progress"
+                ],
+                "attacking_midfielder": [
+                  "tight-space manipulation to create line-breaking pass or shot"
+                ],
+                "winger_wide_forward": [
+                  "1v1 disguise linked to cutback, cross, or shot"
+                ],
+                "striker_false_nine": [
+                  "back-to-goal protection, roll, layoff, and turn choices"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_first_touch_receiving",
+          "sport": "soccer",
+          "domain": "first_touch_receiving",
+          "source_ref_titles": [
+            "Passing and receiving",
+            "Technical: Using a first touch to evade pressure",
+            "Passing circuit: Receiving between the lines",
+            "Karl Aksum on scanning",
+            "Wave 1: Ball Mastery, First Touch, Passing Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "can cushion a rolling ball with inside foot",
+                "can pass back to a large target",
+                "understands open body versus closed body in simple terms",
+                "can look away from ball briefly without panic"
+              ],
+              "expectations": [
+                "first touch stays close enough for second touch",
+                "receive with both feet from simple angles",
+                "look before receiving when time allows",
+                "receive and pass to a visible support player",
+                "use body between ball and light pressure"
+              ],
+              "typical_drills": [
+                "partner two-touch receive and pass",
+                "receive through a gate then pass",
+                "coach shows color before pass arrives",
+                "receive and turn to mini goal",
+                "2v1 keep-ball with large space"
+              ],
+              "avoid_until_ready_gates": [
+                "do not demand one-touch play before two-touch control is stable",
+                "do not overcoach back-foot receiving when pressure makes front-foot protection safer",
+                "do not progress to blind turns before scan habits are visible"
+              ],
+              "assessment_signals": [
+                "first touch is playable on most controlled passes",
+                "player can call target before or as ball arrives",
+                "receives with inside of both feet",
+                "turnovers after first touch are decreasing"
+              ],
+              "position_specific_progression": {
+                "all_outfield": [
+                  "learn first touch to control, protect, pass, and turn"
+                ],
+                "goalkeeper": [
+                  "receive back pass across body and play safe outlet with both feet"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "two-touch control is stable",
+                "can scan before receiving in drills",
+                "understands pressure side and safe foot",
+                "can receive from different pass speeds"
+              ],
+              "expectations": [
+                "receive across body when forward play is available",
+                "use front-foot or outside-foot escape when pressure blocks back foot",
+                "check away and arrive to receive",
+                "play one-touch only when scan and pass speed allow it",
+                "receive in rondos and directional games with next-action intent"
+              ],
+              "typical_drills": [
+                "rondo with scan or shoulder-check scoring",
+                "receive across body into target gate",
+                "safe-foot pressure-side game",
+                "check away, receive, and play forward",
+                "3v2 or 4v2 positional possession"
+              ],
+              "avoid_until_ready_gates": [
+                "do not allow one-touch constraints to reward blind turnovers",
+                "do not label every front-foot touch as wrong",
+                "do not progress to tight between-lines receiving if player stands marked and static"
+              ],
+              "assessment_signals": [
+                "scan-to-action rate improves",
+                "first touch beats or protects from first defender",
+                "player selects back foot, front foot, or set pass from pressure cue",
+                "progressive action after receiving increases"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "receive from goalkeeper while open to both sides and aware of pressing striker"
+                ],
+                "fullback_wingback": [
+                  "receive on touchline with body shape to play inside, down line, or back"
+                ],
+                "midfielder": [
+                  "receive between lines and escape central pressure"
+                ],
+                "winger_wide_forward": [
+                  "receive wide to attack defender or combine inside"
+                ],
+                "striker": [
+                  "receive with back to goal, set, roll, or protect"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "scan habits transfer to live play",
+                "first touch remains effective under pressure and fatigue",
+                "can receive aerial, bouncing, fast, or disguised passes",
+                "understands team positional spacing"
+              ],
+              "expectations": [
+                "receive between lines with disguise and pressure awareness",
+                "use no-touch, first-time, set, or roll actions when context demands",
+                "hide intention while preparing the next action",
+                "receive under contact without losing balance",
+                "connect receiving choice to third-player and line-breaking play"
+              ],
+              "typical_drills": [
+                "between-lines positional game with live defenders",
+                "third-player receive and bounce patterns under pressure",
+                "pressure-side changes during ball travel",
+                "one-touch, no-touch, or turn decision game",
+                "match-clip review of pre-receive scans and first touch"
+              ],
+              "avoid_until_ready_gates": [
+                "do not use advanced disguise if it delays obvious forward action",
+                "do not overload central receiving if turnover creates repeated counterattack exposure",
+                "do not progress aerial receiving volume when neck, trunk, or contact safety is poor"
+              ],
+              "assessment_signals": [
+                "receives under match pressure and keeps team advantage",
+                "scan information is visible in first-touch choice",
+                "can explain why one-touch, turn, set, or protect was chosen",
+                "between-lines turnovers decrease while progression increases"
+              ],
+              "position_specific_progression": {
+                "defensive_midfielder": [
+                  "receive while screening counterattack risk and finding switch options"
+                ],
+                "central_attacking_midfielder": [
+                  "receive in pockets and play before pressure arrives"
+                ],
+                "winger_inside_forward": [
+                  "receive across body to attack half-space or isolate fullback"
+                ],
+                "striker_false_nine": [
+                  "drop, receive, set third player, spin, or turn based on center-back pressure"
+                ],
+                "goalkeeper": [
+                  "receive under press and choose bounce, switch, clip, or clearance by risk"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_passing",
+          "sport": "soccer",
+          "domain": "passing",
+          "source_ref_titles": [
+            "Passing and receiving",
+            "Passing circuit: Receiving between the lines",
+            "The biomechanics of kicking in soccer: a review",
+            "Variations and flexibility in build-up play",
+            "Wave 1: Ball Mastery, First Touch, Passing Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "can stand balanced beside ball",
+                "can swing leg without pain",
+                "can identify a target",
+                "can receive a gentle return pass"
+              ],
+              "expectations": [
+                "use inside-foot pass with firm ankle",
+                "pass to a large target from short distance",
+                "move after passing",
+                "communicate simple support",
+                "understand that pass weight changes by distance"
+              ],
+              "typical_drills": [
+                "partner inside-foot passing",
+                "pass through gates",
+                "pass and follow",
+                "triangle passing with two-touch control",
+                "3v1 keep-away with large space"
+              ],
+              "avoid_until_ready_gates": [
+                "do not add long passing before short-contact mechanics are stable",
+                "do not force one-touch passing if the player cannot scan or control",
+                "do not judge passing only by stationary partner reps"
+              ],
+              "assessment_signals": [
+                "short passes reach target zone consistently",
+                "plant foot and body face target enough for accuracy",
+                "player moves to support after pass",
+                "pass weight is playable for receiver"
+              ],
+              "position_specific_progression": {
+                "all_outfield": [
+                  "learn short pass, receive, support angle, and simple give-and-go"
+                ],
+                "goalkeeper": [
+                  "learn rollout, side-foot pass, and safe outlet selection"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "short passing is reliable under light pressure",
+                "can scan target and pressure",
+                "can receive across body",
+                "has basic kicking tolerance"
+              ],
+              "expectations": [
+                "pass to correct foot based on receiver pressure",
+                "use wall pass, layoff, through ball, and switch introduction",
+                "vary weight and timing",
+                "play out of rondo or small-sided pressure",
+                "use both feet when the picture demands it"
+              ],
+              "typical_drills": [
+                "4v2 rondo with target-foot scoring",
+                "wall pass around passive then active defender",
+                "through-ball timing to runner",
+                "diagonal passing circuit",
+                "build-up game against front two press"
+              ],
+              "avoid_until_ready_gates": [
+                "do not add lofted or driven volume if kicking mechanics or soreness worsen",
+                "do not reward line-breaking passes that ignore counterattack risk",
+                "do not require complex patterns without reading defender behavior"
+              ],
+              "assessment_signals": [
+                "target-foot accuracy under pressure",
+                "successful wall-pass timing",
+                "progressive pass success without high central turnover rate",
+                "player adjusts pass weight to receiver speed"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "split press with firm pass, switch, or safe reset"
+                ],
+                "fullback_wingback": [
+                  "play down line, inside to midfielder, or switch from wide base"
+                ],
+                "midfielder": [
+                  "line-breaking pass, set pass, and third-player support"
+                ],
+                "winger_forward": [
+                  "final pass after committing defender"
+                ],
+                "striker": [
+                  "layoff, set, and slip pass to runner"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "pass selection transfers to live game speed",
+                "can pass short and medium under pressure with both feet",
+                "can strike longer passes without load symptoms",
+                "understands team build-up and rest-defense risk"
+              ],
+              "expectations": [
+                "use disguised, third-player, line-breaking, switch, clipped, and driven passes by context",
+                "control tempo with pass speed and timing",
+                "adapt distribution to opponent press and match state",
+                "combine one-touch and two-touch without forcing either",
+                "protect team if high-risk pass fails"
+              ],
+              "typical_drills": [
+                "positional play with line-breaking gates",
+                "third-player escape against pressing trap",
+                "switch-play from overloaded side",
+                "11v11 build-up phase against different pressing fronts",
+                "video-coded progressive-pass review"
+              ],
+              "avoid_until_ready_gates": [
+                "do not chase highlight passes when simple progression is open",
+                "do not load repeated long diagonals after heavy shooting or crossing day",
+                "do not unlock goalkeeper or center-back risky build-up if teammates cannot provide angles"
+              ],
+              "assessment_signals": [
+                "progressive pass value improves without turnover cost spike",
+                "receiver can play next action because pass weight and foot are correct",
+                "player identifies pressing shape before passing",
+                "third-player and switch actions appear in live play"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "break first line, switch, or draw press while managing rest defense"
+                ],
+                "fullback_wingback": [
+                  "inside diagonal, down-line ball, or early cross-pass by pressure"
+                ],
+                "defensive_midfielder": [
+                  "receive under pressure and connect both sides with low turnover risk"
+                ],
+                "attacking_midfielder": [
+                  "disguise final pass and third-player combinations"
+                ],
+                "striker_false_nine": [
+                  "one-touch set, reverse pass, and spin timing"
+                ],
+                "goalkeeper": [
+                  "distribution choice against press: short build, clipped outlet, switch, or long release"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_dribbling_1v1",
+          "sport": "soccer",
+          "domain": "dribbling_1v1",
+          "source_ref_titles": [
+            "Dribbling to beat an opponent",
+            "Look for the 1v1",
+            "Champions League performance insights: Going 1v1",
+            "Wave 1: Dribbling, 1v1, Carrying, Turning Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "basic ball mastery while moving",
+                "can stop and change direction safely",
+                "can identify open space",
+                "understands not to kick ball beyond reach"
+              ],
+              "expectations": [
+                "dribble into space with close touches",
+                "try simple move or direction change against passive defender",
+                "shield ball with body",
+                "know when a pass is easier than dribbling",
+                "finish action with pass, shot, or stop"
+              ],
+              "typical_drills": [
+                "1v1 to end line with large channel",
+                "traffic dribble and escape",
+                "shield ball for three seconds",
+                "dribble or pass decision game",
+                "2v2 small goals"
+              ],
+              "avoid_until_ready_gates": [
+                "do not demand advanced feints before close control and exit touch",
+                "do not create collision-heavy duels in tight spaces",
+                "do not discourage safe risk-taking when the player is learning to beat an opponent"
+              ],
+              "assessment_signals": [
+                "keeps ball close while changing direction",
+                "attempts to attack open space",
+                "uses body to protect ball",
+                "recovers or reacts after losing ball"
+              ],
+              "position_specific_progression": {
+                "all_outfield": [
+                  "everyone learns carry, protect, and beat a defender in simple space"
+                ],
+                "goalkeeper": [
+                  "limited dribble escape in build-up only after passing safety is stable"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "close control survives light pressure",
+                "can accelerate after a move",
+                "can shield with balance",
+                "can pass after committing defender"
+              ],
+              "expectations": [
+                "attack defender's front foot or blind side",
+                "change pace after feint",
+                "carry to commit defender then pass or shoot",
+                "use turning skills under pressure",
+                "recognize when not to dribble"
+              ],
+              "typical_drills": [
+                "1v1 to two goals",
+                "2v1 commit-and-release",
+                "wide channel beat-and-cross game",
+                "central turn under pressure into pass",
+                "transition game where dribble creates overload"
+              ],
+              "avoid_until_ready_gates": [
+                "do not add repeated max-effort cutting if braking mechanics fail",
+                "do not reward dribbles that remove better passing options",
+                "do not let defenders tackle recklessly in development duels"
+              ],
+              "assessment_signals": [
+                "beating defender leads to useful next action",
+                "player can explain dribble versus pass choice",
+                "turnover location risk is managed",
+                "change of speed is visible after move"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "carry through pressure only with cover and forward lane"
+                ],
+                "fullback_wingback": [
+                  "overlap, underlap, or carry inside based on winger position"
+                ],
+                "midfielder": [
+                  "turn or carry to break line then release"
+                ],
+                "winger_wide_forward": [
+                  "isolate fullback and create cross, cutback, or shot"
+                ],
+                "striker": [
+                  "roll defender, protect, and drive into shooting window"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "1v1 success transfers to live match-speed situations",
+                "can absorb contact and stay balanced",
+                "understands isolation, overload, and underload contexts",
+                "can deliver end product after high-speed dribble"
+              ],
+              "expectations": [
+                "use disguise, rhythm changes, and defender manipulation",
+                "win high-value 1v1s in final third or break pressure in build-up",
+                "combine dribble with pass, shot, cross, or counterpress reaction",
+                "manage risk based on field zone and rest defense",
+                "repeat high-intensity duels without technical collapse"
+              ],
+              "typical_drills": [
+                "wide isolation with live fullback and covering defender",
+                "central 3v3 plus targets with dribble-break bonus",
+                "1v1 to cutback/shot after long sprint",
+                "matchup-specific defender analysis",
+                "duel sequences with immediate transition defense"
+              ],
+              "avoid_until_ready_gates": [
+                "do not force dribble in defensive third without secure support",
+                "do not add fatigue duel blocks if touch and tackle safety collapse",
+                "do not progress to contact-heavy isolation if ankle, groin, or knee symptoms appear"
+              ],
+              "assessment_signals": [
+                "positive 1v1 outcome rate by zone",
+                "end product after dribble improves chance quality",
+                "player uses dribble to manipulate opponent structure",
+                "defensive reaction after lost dribble is immediate"
+              ],
+              "position_specific_progression": {
+                "fullback_wingback": [
+                  "drive past press into crossing or underlap window"
+                ],
+                "defensive_midfielder": [
+                  "use limited carry to escape pressure, not unnecessary central risk"
+                ],
+                "attacking_midfielder": [
+                  "draw multiple defenders then release final pass"
+                ],
+                "winger_wide_forward": [
+                  "isolation, weak-foot exit, cutback, inside shot, and counterpress"
+                ],
+                "striker_false_nine": [
+                  "separate in box or roll out of back-to-goal pressure"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_shooting_finishing",
+          "sport": "soccer",
+          "domain": "shooting_finishing",
+          "source_ref_titles": [
+            "Finishing: From 1v1 to 3v3",
+            "The biomechanics of kicking in soccer: a review",
+            "High value chance creation from low cut-back, push, and driven crosses/passes",
+            "Wave 1: Shooting, Finishing, Crossing, Chance Creation Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "can strike ball pain-free from short distance",
+                "can balance on plant foot",
+                "understands aim at goal and follow shot",
+                "can receive simple pass before shooting"
+              ],
+              "expectations": [
+                "make clean contact with laces or inside foot",
+                "shoot from short distance with large target",
+                "keep body balanced through strike",
+                "follow rebound",
+                "try both feet at low volume"
+              ],
+              "typical_drills": [
+                "stationary ball to big target",
+                "receive and shoot from central zone",
+                "dribble then shoot",
+                "inside-foot placement game",
+                "shoot and follow rebound"
+              ],
+              "avoid_until_ready_gates": [
+                "do not overload full-power shooting before contact is safe",
+                "do not judge finishing without allowing enough target size for success",
+                "do not add aerial heading or volleys without age and safety clearance"
+              ],
+              "assessment_signals": [
+                "clean contact rate improves",
+                "shots travel toward goal with balance",
+                "player follows rebounds",
+                "shooting volume is pain-free"
+              ],
+              "position_specific_progression": {
+                "all_outfield": [
+                  "learn basic striking, placement, and rebound reaction"
+                ],
+                "goalkeeper": [
+                  "participates as server or shot-stopper with safe service speed"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "basic striking is reliable",
+                "can shoot after dribble or pass",
+                "can read goalkeeper position at simple level",
+                "kicking volume is tolerated"
+              ],
+              "expectations": [
+                "finish from varied angles and distances",
+                "use inside, laces, driven, placed, first-time, and weak-foot options",
+                "select shot or pass based on pressure and goalkeeper",
+                "time movement to receive cutbacks or through balls",
+                "attack rebounds and second balls"
+              ],
+              "typical_drills": [
+                "1v1 finishing versus goalkeeper",
+                "angled finishing from both sides",
+                "cutback finish with late arrival",
+                "through-ball run and finish",
+                "2v1 shot or square pass decision"
+              ],
+              "avoid_until_ready_gates": [
+                "do not force weak-foot power if contact quality and hip control fail",
+                "do not add high-volume first-time shooting when groin or quad soreness appears",
+                "do not reward low-value shots when a clear pass creates a better chance"
+              ],
+              "assessment_signals": [
+                "shot on target rate by scenario improves",
+                "player uses appropriate surface for distance and angle",
+                "finishing decision accounts for goalkeeper and teammate",
+                "movement creates separation before shot"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "set-piece finishing and controlled long-range only when role-relevant"
+                ],
+                "fullback_wingback": [
+                  "arrive late at far post and shoot after overlaps"
+                ],
+                "midfielder": [
+                  "shoot from cutbacks, edge of box, and late runs"
+                ],
+                "winger_wide_forward": [
+                  "inside-foot far-post finish, near-post shot, and rebound attack"
+                ],
+                "striker": [
+                  "1v1, one-touch, back-shoulder, and quick-release finishing"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "finishing decisions transfer to live play",
+                "can shoot accurately under pressure and fatigue",
+                "understands expected value and game state",
+                "can vary finish to manipulate goalkeeper"
+              ],
+              "expectations": [
+                "finish first-time, under contact, from varied body shapes, and after high-speed actions",
+                "use shot disguise, goalkeeper manipulation, and rebound awareness",
+                "choose high-value shots or create better chance for teammate",
+                "execute role-specific finishing patterns under match pressure",
+                "manage high-force kicking load across week"
+              ],
+              "typical_drills": [
+                "high-speed transition finish",
+                "crowded-box cutback and rebound game",
+                "1v1 goalkeeper manipulation",
+                "role-specific finishing from match clips",
+                "finishing under score and fatigue constraints"
+              ],
+              "avoid_until_ready_gates": [
+                "do not chase shot power at expense of chance quality",
+                "do not stack heavy shooting after sprint-heavy or crossing-heavy sessions if symptoms appear",
+                "do not use heading or acrobatic finishes without safety, surface, and collision controls"
+              ],
+              "assessment_signals": [
+                "chance quality and conversion improve by shot type",
+                "shot selection reduces blocked and low-value attempts",
+                "player uses goalkeeper cues rather than pre-decided finish",
+                "power and accuracy hold late in session without pain response"
+              ],
+              "position_specific_progression": {
+                "striker": [
+                  "near-post, far-post, one-touch, 1v1, rebound, and blind-side movement menu"
+                ],
+                "winger_wide_forward": [
+                  "inside finish, back-post finish, low-cross attack, and second-ball reaction"
+                ],
+                "attacking_midfielder": [
+                  "arrive in pockets for cutback and edge-of-box shooting"
+                ],
+                "central_midfielder": [
+                  "late box arrival and controlled shots after layoff"
+                ],
+                "defenders": [
+                  "set-piece finishing, second-ball strikes, and transition recovery after shot"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_crossing_chance_creation",
+          "sport": "soccer",
+          "domain": "crossing_chance_creation",
+          "source_ref_titles": [
+            "High value chance creation from low cut-back, push, and driven crosses/passes",
+            "Attacking the cross",
+            "UEFA Under-17 EURO 2024 Technical Report: Crosses",
+            "Law 11 - Offside",
+            "Wave 1: Shooting, Finishing, Crossing, Chance Creation Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "can pass or strike from wide area",
+                "understands goal, box, and teammates attacking space",
+                "can look up before delivery",
+                "can time run without colliding"
+              ],
+              "expectations": [
+                "deliver ball from wide channel into large target area",
+                "attack front, middle, or far-post spaces",
+                "look up before crossing if time allows",
+                "react after delivery",
+                "understand simple offside line"
+              ],
+              "typical_drills": [
+                "wide pass into box target zones",
+                "2v0 cross and finish with called zone",
+                "front-post and back-post run timing",
+                "small-sided game with wide scoring zones",
+                "cross then recover game"
+              ],
+              "avoid_until_ready_gates": [
+                "do not use high aerial crossing volume before striking mechanics and safety are stable",
+                "do not teach all attackers to run to same zone",
+                "do not ignore transition defense after cross"
+              ],
+              "assessment_signals": [
+                "delivery reaches playable area",
+                "attackers spread across target zones",
+                "player looks up before delivery when not under heavy pressure",
+                "team reacts to rebound or clearance"
+              ],
+              "position_specific_progression": {
+                "all_outfield": [
+                  "learn wide creation, box occupation, and transition reaction"
+                ],
+                "goalkeeper": [
+                  "learn basic starting position and communication on crosses"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "wide delivery is playable",
+                "can strike low, driven, or lofted ball at moderate volume",
+                "understands offside and runner timing",
+                "can scan box before final action"
+              ],
+              "expectations": [
+                "select low cross, cutback, early cross, driven cross, or pass inside",
+                "coordinate runner timing with delivery location",
+                "use overlaps and underlaps",
+                "create chances after committing defender",
+                "maintain rest-defense roles after final ball"
+              ],
+              "typical_drills": [
+                "winger and fullback overlap/underlap crossing",
+                "cutback to penalty spot and edge runner",
+                "3v2 wide-to-box chance creation",
+                "early cross to striker run behind line",
+                "cross and counterattack transition game"
+              ],
+              "avoid_until_ready_gates": [
+                "do not encourage blind crosses when a cutback or reset is higher value",
+                "do not add repeated crossing volume if hip flexor, groin, or trunk symptoms emerge",
+                "do not progress to complex rotations if players cannot time basic runs onside"
+              ],
+              "assessment_signals": [
+                "delivery choice matches defender and goalkeeper position",
+                "cutbacks find late runners more often",
+                "runner timing avoids offside and arrives as ball arrives",
+                "team has at least one rest-defense player connected"
+              ],
+              "position_specific_progression": {
+                "fullback_wingback": [
+                  "overlap, early cross, low driven cross, and recovery after delivery"
+                ],
+                "winger_wide_forward": [
+                  "1v1 to cutback, inswing/outswing delivery, and back-post attack"
+                ],
+                "midfielder": [
+                  "late box arrival and edge-of-box support"
+                ],
+                "striker": [
+                  "front-post, blind-side, double movement, and rebound attack"
+                ],
+                "center_back": [
+                  "set-piece attacking and rest-defense positioning on open-play crosses"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "crossing and final-pass choices are effective in live play",
+                "players understand opponent defensive line and goalkeeper tendencies",
+                "team has box occupation and rest-defense rules",
+                "kicking and sprint load is monitored"
+              ],
+              "expectations": [
+                "create high-value chances through disguised delivery, cutbacks, third-man runs, and zone occupation",
+                "adapt crossing plan to opponent block, goalkeeper, and match state",
+                "combine wide overloads with weak-side occupation",
+                "attack second balls and counterpress or recover after clearance",
+                "track chance quality rather than only crosses completed"
+              ],
+              "typical_drills": [
+                "opponent-specific wide chance creation phase",
+                "five-lane box occupation with cutback options",
+                "weak-side winger back-post timing",
+                "set-piece and open-play second-ball continuation",
+                "video-coded crossing outcome review"
+              ],
+              "avoid_until_ready_gates": [
+                "do not overuse crossing if chance quality and rest-defense outcomes are poor",
+                "do not load repeated max deliveries when high-speed and shooting work already create fatigue",
+                "do not add heading volume without age, medical, and safety filters"
+              ],
+              "assessment_signals": [
+                "xG or chance-quality proxy improves from wide entries",
+                "delivery zones are selected from scan information",
+                "box occupation covers front, central, far, cutback, and rebound spaces",
+                "counterattack exposure after crosses is controlled"
+              ],
+              "position_specific_progression": {
+                "fullback_wingback": [
+                  "timed overlap/underlap and delivery by opponent winger/fullback behavior"
+                ],
+                "winger_wide_forward": [
+                  "isolation, half-space entry, disguised cutback, and far-post attack"
+                ],
+                "attacking_midfielder": [
+                  "third-player run into cutback lane and edge occupation"
+                ],
+                "striker": [
+                  "manipulate center backs with double movement and attack high-value zones"
+                ],
+                "defensive_midfielder_center_back": [
+                  "rest-defense positioning and second-ball control"
+                ],
+                "goalkeeper": [
+                  "read cross source pressure and organize claim/punch/stay positioning"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_defending_pressing",
+          "sport": "soccer",
+          "domain": "defending_pressing",
+          "source_ref_titles": [
+            "Law 12 - Fouls and Misconduct",
+            "Defending in 1v1: Orientating attackers away from goal",
+            "Irene Paredes: Timing the tackle",
+            "Investigating the increased use of the high press",
+            "Controlling the game without the ball: The mid-block and compactness",
+            "Preparing and executing counter-pressing",
+            "Wave 1: Defending, Pressing, Tackling, Duels Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "can move backward and sideways safely",
+                "understands goal-side and ball-side",
+                "can slow down before defender-player contact",
+                "knows basic foul and safe contact rules"
+              ],
+              "expectations": [
+                "get between attacker and goal",
+                "slow attacker rather than stab for every ball",
+                "jockey with balanced stance",
+                "force attacker away from goal when possible",
+                "attempt safe tackle only when ball is available"
+              ],
+              "typical_drills": [
+                "1v1 delay to end line",
+                "shadow jockey mirror",
+                "force wide defending channel",
+                "2v2 goal-side recovery game",
+                "safe tackle timing from heavy touch"
+              ],
+              "avoid_until_ready_gates": [
+                "do not teach slide tackling as a beginner default",
+                "do not encourage reckless contact to win possession",
+                "do not add full-speed duels before deceleration and body control are safe"
+              ],
+              "assessment_signals": [
+                "defender slows attack and stays balanced",
+                "body shape forces away from goal or central danger",
+                "fewer uncontrolled lunges",
+                "player can explain foul versus fair challenge in simple terms"
+              ],
+              "position_specific_progression": {
+                "all_outfield": [
+                  "learn goal-side recovery, delay, safe challenge, and immediate reaction after regain"
+                ],
+                "goalkeeper": [
+                  "learn communication, starting position, and basic 1v1 set without reckless collision"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "1v1 delay stance is stable",
+                "can tackle safely from correct timing",
+                "understands cover and balance",
+                "can repeat accelerations and decelerations with quality"
+              ],
+              "expectations": [
+                "apply pressure-cover-balance in pairs and units",
+                "screen passing lanes and intercept",
+                "recognize pressing triggers",
+                "defend crosses and central zones by role",
+                "counterpress only when support is connected"
+              ],
+              "typical_drills": [
+                "2v2 pressure-cover defending",
+                "4v4 plus neutrals pressing shape",
+                "passing-lane interception game",
+                "wide trap pressing game",
+                "transition: counterpress or recover"
+              ],
+              "avoid_until_ready_gates": [
+                "do not add high press if lines are disconnected",
+                "do not value ball wins that create fouls or injury risk",
+                "do not use repeated defensive sprint blocks if mechanics degrade"
+              ],
+              "assessment_signals": [
+                "pressing trigger recognition improves",
+                "cover player closes dangerous lane",
+                "tackle timing is controlled",
+                "team regain or forces predictable play without losing compactness"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "delay, cover depth, line control, aerial duel, and stepping to intercept"
+                ],
+                "fullback_wingback": [
+                  "defend wide 1v1, back-post awareness, and pressing trap"
+                ],
+                "defensive_midfielder": [
+                  "screen central lane, counterpress, and protect center backs"
+                ],
+                "central_midfielder": [
+                  "press from inside-out or outside-in by team rule"
+                ],
+                "winger_forward": [
+                  "pressing angle to force opponent into trap"
+                ],
+                "striker": [
+                  "start press, curve run, and block pivot pass"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "individual and unit defending transfer to match speed",
+                "players understand team pressing and block model",
+                "high-intensity defensive actions are tolerated",
+                "legal challenge discipline is stable"
+              ],
+              "expectations": [
+                "execute high press, mid-block, low-block, and counterpress plans",
+                "adapt line height and compactness to opponent and game state",
+                "trap opponents with coordinated angles and cover",
+                "win duels without reckless force",
+                "connect defensive phase to first pass after regain"
+              ],
+              "typical_drills": [
+                "11v11 press against defined build-up shape",
+                "mid-block to counterattack phase play",
+                "low-block defending crosses and second balls",
+                "counterpress wave game",
+                "opponent scout pressing rehearsal"
+              ],
+              "avoid_until_ready_gates": [
+                "do not high press when back line, midfield, and goalkeeper are not connected",
+                "do not chase aggressive duels if foul/card profile is unsafe",
+                "do not maintain high-intensity pressing volume when hamstring, groin, or fatigue markers worsen"
+              ],
+              "assessment_signals": [
+                "press creates predictable opponent choices or regains",
+                "compactness is maintained across lines",
+                "foul/card risk remains controlled",
+                "first action after regain creates progression rather than immediate turnover"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "line height, covering depth, aerial duel, and defending space behind"
+                ],
+                "fullback_wingback": [
+                  "wide trap, back-post coverage, and recovery sprint management"
+                ],
+                "defensive_midfielder": [
+                  "central screen, counterpress, rest-defense anchor"
+                ],
+                "central_midfielder": [
+                  "pressing jump timing and cover of pivot lanes"
+                ],
+                "winger_wide_forward": [
+                  "press fullback/center-back with curved run and transition outlet"
+                ],
+                "striker": [
+                  "set team press direction and block goalkeeper or pivot options"
+                ],
+                "goalkeeper": [
+                  "sweeper positioning and communication behind high line"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_match_iq_tactics",
+          "sport": "soccer",
+          "domain": "match_iq_tactics",
+          "source_ref_titles": [
+            "What are the principles of football?",
+            "FIFA World Cup Qatar 2022: Technical and tactical overview",
+            "Variations and flexibility in build-up play",
+            "Preparing and executing counter-pressing",
+            "Law 11 - Offside",
+            "Wave 1: Team Tactics, Formations, Match IQ Draft",
+            "Wave 1: Rules, Match Structure, Game Model Draft",
+            "Wave 1: Positions, Roles, Demands Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "understands direction of attack and basic rules",
+                "can identify teammate and opponent",
+                "can play small-sided games safely",
+                "can listen to simple team cue"
+              ],
+              "expectations": [
+                "know basic rules: goal, throw-in, corner, goal kick, foul, offside introduction",
+                "use width and depth in simple terms",
+                "support player with the ball",
+                "recover behind ball when possession is lost",
+                "rotate through positions for broad learning"
+              ],
+              "typical_drills": [
+                "3v3 or 4v4 with wide gates",
+                "numbers-up support game",
+                "attack-defend-transition freeze moments",
+                "simple restart games",
+                "position rotation small-sided tournament"
+              ],
+              "avoid_until_ready_gates": [
+                "do not overload beginners with complex formation language",
+                "do not specialize roles before broad ball and game literacy",
+                "do not teach tactics only on a board without playing cues"
+              ],
+              "assessment_signals": [
+                "player supports ball instead of hiding",
+                "recognizes when team has or lost possession",
+                "understands simple restart decisions",
+                "uses space wider or deeper when crowded"
+              ],
+              "position_specific_progression": {
+                "all_positions": [
+                  "rotate roles: goalkeeper optional, defender, midfielder, attacker, wide and central spaces"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "basic rules and support concepts are understood",
+                "can identify common positions",
+                "can play directional small-sided games with transition",
+                "can explain a simple tactical cue"
+              ],
+              "expectations": [
+                "understand formation roles in 7v7, 9v9, or 11v11",
+                "recognize phases: in possession, out of possession, attacking transition, defensive transition, restarts",
+                "use basic pressing, build-up, counterattack, and compact block principles",
+                "identify overload, underload, and switch opportunities",
+                "connect technical choice to game state"
+              ],
+              "typical_drills": [
+                "positional game with zones",
+                "build-up versus front one or front two",
+                "counterattack after regain",
+                "mid-block shape to outlet pass",
+                "set-piece second-ball continuation"
+              ],
+              "avoid_until_ready_gates": [
+                "do not lock a player into one role if emergency skills disappear",
+                "do not add scout plans before players can execute core team principles",
+                "do not use statistics without a clear action linked to them"
+              ],
+              "assessment_signals": [
+                "player describes role in each phase",
+                "team shape improves after turnovers",
+                "simple pressing triggers are recognized",
+                "formation role does not prevent creative problem solving"
+              ],
+              "position_specific_progression": {
+                "goalkeeper": [
+                  "build-up support, defensive line communication, restart decisions"
+                ],
+                "center_back": [
+                  "line control, switching play, rest defense"
+                ],
+                "fullback_wingback": [
+                  "wide width, overlap/underlap, recovery positioning"
+                ],
+                "midfielders": [
+                  "spacing, scanning, pressure support, switching and counterpressing"
+                ],
+                "wingers_forwards": [
+                  "stretch line, press angle, final-third choices"
+                ],
+                "strikers": [
+                  "press trigger, depth threat, link play, box occupation"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "formation and phase responsibilities transfer to match play",
+                "player can interpret opponent behavior",
+                "team has common language for game model",
+                "athlete can use video or KPI feedback constructively"
+              ],
+              "expectations": [
+                "adapt tactical choices to opponent, score, time, field zone, and match momentum",
+                "execute game model in build-up, possession, press, block, transition, and set pieces",
+                "use scouting cues without losing core principles",
+                "understand rest defense and counterpress risk",
+                "interpret performance data as action guidance"
+              ],
+              "typical_drills": [
+                "11v11 phase play with opponent model",
+                "game-state scenarios: protecting lead, chasing goal, playing against high press",
+                "formation comparison sessions",
+                "set-piece plus transition rehearsal",
+                "video review with player decision explanations"
+              ],
+              "avoid_until_ready_gates": [
+                "do not add tactical complexity that players cannot execute at game speed",
+                "do not change plan after one noisy event without evidence",
+                "do not let advanced positional rotations remove rest-defense protection"
+              ],
+              "assessment_signals": [
+                "player explains decisions using phase, pressure, support, and risk",
+                "team adjusts to opponent without losing compactness or spacing",
+                "KPIs are linked to training action",
+                "role execution holds under score pressure and fatigue"
+              ],
+              "position_specific_progression": {
+                "goalkeeper": [
+                  "build-up trigger, line height connection, distribution by press"
+                ],
+                "center_back": [
+                  "opponent striker manipulation, line height, and first pass after regain"
+                ],
+                "fullback_wingback": [
+                  "inverted, overlapping, or reserved role by game model"
+                ],
+                "defensive_midfielder": [
+                  "balance possession support with counterattack protection"
+                ],
+                "central_attacking_midfielder": [
+                  "between-lines occupation, final pass timing, counterpress reaction"
+                ],
+                "winger_wide_forward": [
+                  "width, isolation, pressing trap, far-post occupation"
+                ],
+                "striker_false_nine": [
+                  "depth threat, drop-to-link, press direction, and center-back manipulation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_goalkeeping",
+          "sport": "soccer",
+          "domain": "goalkeeping",
+          "source_ref_titles": [
+            "Goalkeeper explosiveness from the set position and goal prevention",
+            "Goalkeepers take a more strategic approach to offering, receiving and distributing the ball",
+            "UEFA Goalkeeper Coaching: An integrated and collaborative approach",
+            "Wave 1: Goalkeeping Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "can move, kneel, and fall to side safely on appropriate surface",
+                "can catch or block a softly served ball",
+                "understands goalkeeper handling area basics",
+                "can pass or roll to teammate"
+              ],
+              "expectations": [
+                "use ready position and set before shot",
+                "catch, basket, scoop, or parry soft shots safely",
+                "move feet before diving",
+                "communicate simple keeper or away calls",
+                "roll or pass to safe teammate"
+              ],
+              "typical_drills": [
+                "ready-set-catch from coach service",
+                "low scoop and basket catch",
+                "footwork across cones then save",
+                "roll and pass distribution to target",
+                "small-sided game with goalkeeper included"
+              ],
+              "avoid_until_ready_gates": [
+                "do not serve hard shots before handling shape and confidence are present",
+                "do not teach repeated full dives on unsafe surfaces",
+                "do not isolate goalkeeper from team play"
+              ],
+              "assessment_signals": [
+                "sets before shot on most repetitions",
+                "catches or safely parries controlled shots",
+                "recovers to feet safely",
+                "uses simple communication"
+              ],
+              "position_specific_progression": {
+                "goalkeeper": [
+                  "foundation in handling, set position, footwork, distribution, and safe falling"
+                ],
+                "outfield_players": [
+                  "learn goalkeeper interaction: back-pass angle, rebound reaction, and follow-up pressure"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "basic handling and set position are stable",
+                "can dive safely at controlled speed",
+                "can distribute by hand and foot",
+                "understands defensive line and box space"
+              ],
+              "expectations": [
+                "adjust angle and depth before shot",
+                "save low, mid, and high shots with appropriate technique",
+                "decide claim, punch, parry, or stay on crosses",
+                "defend 1v1 with patience and set timing",
+                "offer for back pass and distribute under light pressure"
+              ],
+              "typical_drills": [
+                "angle play shot-stopping",
+                "collapse dive and extension dive progression",
+                "1v1 decision corridor",
+                "cross claim/punch/stay with traffic added gradually",
+                "goalkeeper in build-up rondo"
+              ],
+              "avoid_until_ready_gates": [
+                "do not add crowded crossing if timing and communication are absent",
+                "do not use long distribution volume if kicking symptoms appear",
+                "do not encourage reckless 1v1 collisions"
+              ],
+              "assessment_signals": [
+                "set timing matches shooter cues",
+                "save selection fits ball height and speed",
+                "distribution choice is safe and purposeful",
+                "communicates early with defenders"
+              ],
+              "position_specific_progression": {
+                "goalkeeper": [
+                  "link shot stopping, defending space, crosses, and distribution to team tactics"
+                ],
+                "center_backs": [
+                  "offer passing angles and respond to goalkeeper commands"
+                ],
+                "fullbacks_midfielders": [
+                  "create outlets and protect central turnover risk during build-up"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "goalkeeper actions transfer to match speed",
+                "can read pressure and space before distribution",
+                "can tolerate explosive lateral, dive, and kick load",
+                "has command language with back line"
+              ],
+              "expectations": [
+                "prevent goals through positioning, set timing, and explosive saves",
+                "defend space behind high line as sweeper-keeper",
+                "manage crosses under pressure with claim, punch, or stay decision",
+                "distribute to break press or control tempo",
+                "organize defensive line, set pieces, and transition moments"
+              ],
+              "typical_drills": [
+                "shot stopping after repositioning and screen",
+                "sweeper-keeper through-ball game",
+                "crosses with blockers, runners, and second ball",
+                "pressured build-up with goalkeeper plus back line",
+                "match-clip decision review"
+              ],
+              "avoid_until_ready_gates": [
+                "do not play high sweeper role if defender line and communication are disconnected",
+                "do not add high-volume dives after symptoms in shoulder, wrist, hip, back, or head contact",
+                "do not force short build-up if risk exceeds team capacity"
+              ],
+              "assessment_signals": [
+                "goal prevention actions match shot and space context",
+                "distribution breaks lines without excessive central turnovers",
+                "cross decisions reduce second-shot danger",
+                "defensive organization improves before shots occur"
+              ],
+              "position_specific_progression": {
+                "goalkeeper": [
+                  "opponent-specific distribution, advanced shot prevention, space defending, and set-piece command"
+                ],
+                "back_line": [
+                  "coordinate line height, cover, back pass, and emergency clearance with goalkeeper"
+                ],
+                "midfield_forwards": [
+                  "understand goalkeeper distribution targets and pressing restarts"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "soccer_teaching_strength_conditioning",
+          "sport": "soccer",
+          "domain": "football_strength_conditioning",
+          "source_ref_titles": [
+            "A Contextualised Physical Analysis of the FIFA World Cup Qatar 2022",
+            "High-Intensity Efforts in Elite Soccer Matches and Associated Movement Patterns, Technical Skills and Tactical Actions",
+            "High-speed Running and Sprinting in Professional Adult Soccer",
+            "FIFA 11+: An Effective Programme to Prevent Football Injuries in Various Player Groups Worldwide",
+            "Injury Prevention and Health Promotion",
+            "Hamstring Injury Rates Have Increased During Recent Seasons and Now Constitute 24% of All Injuries in Men's Professional Football",
+            "Wave 1: Positions, Roles, Demands Draft"
+          ],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": [
+                "pain-free basic movement",
+                "can jog, stop, and change direction at low speed",
+                "can perform bodyweight squat, hinge, lunge, and plank variants with coaching",
+                "understands warm-up and recovery basics"
+              ],
+              "expectations": [
+                "build movement literacy and warm-up habit",
+                "learn landing, braking, sprint posture, and cutting basics",
+                "develop basic mobility, balance, trunk control, and unilateral strength",
+                "keep conditioning playful and football-linked",
+                "report pain or unusual soreness"
+              ],
+              "typical_drills": [
+                "FIFA 11+ style neuromuscular warm-up",
+                "low-level skipping, hopping, landing, and balance",
+                "acceleration mechanics over short distance",
+                "bodyweight strength circuit",
+                "small-sided games with adequate rest"
+              ],
+              "avoid_until_ready_gates": [
+                "do not use fatigue as the main beginner coaching tool",
+                "do not add maximal sprint, jump, or heavy strength work before movement quality",
+                "do not ignore pain in youth growth periods"
+              ],
+              "assessment_signals": [
+                "basic landing and braking are controlled",
+                "warm-up can be performed without constant instruction",
+                "technical quality stays acceptable in small games",
+                "no adverse pain response after normal sessions"
+              ],
+              "position_specific_progression": {
+                "all_positions": [
+                  "common foundation before role-specific conditioning"
+                ],
+                "goalkeeper": [
+                  "add safe falling, lateral movement, and shoulder/wrist preparation gradually"
+                ]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": [
+                "basic movement quality is stable",
+                "can sprint, decelerate, and cut at moderate speed",
+                "can tolerate regular football practice load",
+                "can track soreness or readiness"
+              ],
+              "expectations": [
+                "develop acceleration, deceleration, repeated sprint ability, and change of direction",
+                "build unilateral lower-body, trunk, hamstring, adductor, calf, and hip capacity",
+                "use progressive high-speed exposure",
+                "match conditioning to football actions and positions",
+                "manage weekly kicking, sprint, jump, and contact load"
+              ],
+              "typical_drills": [
+                "acceleration and deceleration technique blocks",
+                "reactive agility and COD games",
+                "tempo runs or football intervals",
+                "unilateral strength and hamstring/adductor accessories",
+                "position-specific small-sided games with work-rest targets"
+              ],
+              "avoid_until_ready_gates": [
+                "do not spike high-speed running after low-speed weeks",
+                "do not combine heavy lower-body fatigue with new high-skill finishing or tackling work",
+                "do not use adult load assumptions for youth maturation status"
+              ],
+              "assessment_signals": [
+                "speed and COD quality remain stable under moderate fatigue",
+                "player tolerates sprint and kicking progression",
+                "24 to 48 hour response is acceptable",
+                "position-specific actions improve without technique collapse"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "aerial power, recovery sprint, hip turning, and strength in duels"
+                ],
+                "fullback_wingback": [
+                  "repeated high-speed overlap and recovery exposure"
+                ],
+                "midfielders": [
+                  "repeated accelerations, decelerations, aerobic recovery, and contact tolerance"
+                ],
+                "wingers_forwards": [
+                  "max velocity exposure, sharp acceleration, cutting, and finishing under speed"
+                ],
+                "goalkeeper": [
+                  "lateral power, reaction, fall tolerance, repeated dive recovery, and distribution load"
+                ]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": [
+                "movement quality and strength base are stable",
+                "training and match load can be tracked",
+                "athlete tolerates position-specific sprint, kick, jump, and contact demands",
+                "return-to-play gates are understood after injury"
+              ],
+              "expectations": [
+                "individualize speed, strength, power, aerobic, and recovery work by role and calendar",
+                "maintain high-speed and sprint exposure without excessive spikes",
+                "use microcycle planning around match day and congested fixtures",
+                "stage return from injury through run, sprint, kick, contact, and football decision exposure",
+                "protect technical and tactical quality in high-load periods"
+              ],
+              "typical_drills": [
+                "position-specific speed exposure within football patterns",
+                "repeated sprint and transition games with monitoring",
+                "strength and power maintenance blocks",
+                "matchday-minus load planning",
+                "return-to-play staged field progression"
+              ],
+              "avoid_until_ready_gates": [
+                "do not chase fitness metrics while football skill quality deteriorates",
+                "do not return to full match load from straight-line running alone",
+                "do not stack sprint, eccentric, high-force kicking, and congested match loads without recovery planning"
+              ],
+              "assessment_signals": [
+                "role-specific high-intensity outputs are maintained",
+                "movement quality holds late in training or match",
+                "load spikes are identified and adjusted",
+                "return-to-play stages are completed without symptom recurrence"
+              ],
+              "position_specific_progression": {
+                "center_back": [
+                  "recovery sprint, aerial contact, turning, and clearance kicking load"
+                ],
+                "fullback_wingback": [
+                  "wide high-speed repeated efforts with crossing and recovery"
+                ],
+                "midfielders": [
+                  "repeated acceleration and deceleration with aerobic repeatability"
+                ],
+                "wingers_wide_forwards": [
+                  "max velocity, 1v1 cutting, high-speed crossing/finishing, and counterpress response"
+                ],
+                "strikers": [
+                  "explosive separation, repeated high-intensity runs, contact balance, and finishing after sprint"
+                ],
+                "goalkeeper": [
+                  "explosive lateral power, repeated dive exposure, high claim contact, distribution volume, and shoulder/wrist/hip resilience"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "records": [
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_ball_mastery",
+          "sport": "soccer",
+          "domain": "ball_mastery",
+          "metrics": [
+            "controlled_touch_rate",
+            "weak_foot_usage",
+            "turn_success_under_pressure",
+            "escape_touch_success",
+            "ball_loss_rate_in_tight_space",
+            "head_up_scan_frequency",
+            "contact_balance"
+          ],
+          "level_signals": {
+            "beginner": [
+              "keeps ball close while moving slowly",
+              "uses both feet in simple tasks",
+              "can stop and restart on command",
+              "protects ball from passive pressure"
+            ],
+            "intermediate": [
+              "changes pace and direction under light pressure",
+              "uses weak foot functionally",
+              "escapes traffic and accelerates",
+              "chooses carry or pass by space"
+            ],
+            "advanced": [
+              "controls in tight live pressure",
+              "uses disguise and body protection",
+              "retains possession under contact",
+              "control action creates tactical advantage"
+            ]
+          },
+          "red_flags": [
+            "eyes stay down in live situations",
+            "touches repeatedly expose ball to defender",
+            "skill moves slow the attack without purpose",
+            "ankle, groin, knee, or hip symptoms worsen after COD volume"
+          ]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_first_touch_receiving",
+          "sport": "soccer",
+          "domain": "first_touch_receiving",
+          "metrics": [
+            "scan_before_receive_rate",
+            "first_touch_playable_rate",
+            "first_touch_away_from_pressure",
+            "receive_and_play_forward_rate",
+            "turnover_after_receive",
+            "one_touch_decision_accuracy",
+            "between_lines_success"
+          ],
+          "level_signals": {
+            "beginner": [
+              "first touch stays playable",
+              "receiver can find visible support",
+              "basic two-touch receive and pass works",
+              "looks up before receiving when unpressured"
+            ],
+            "intermediate": [
+              "body shape and target foot respond to pressure",
+              "receives across body or protects correctly",
+              "uses first touch to escape or progress",
+              "scan information affects next action"
+            ],
+            "advanced": [
+              "receives between lines under live pressure",
+              "uses disguise, no-touch, one-touch, or set action by cue",
+              "turns scan into faster team action",
+              "keeps advantage while under contact"
+            ]
+          },
+          "red_flags": [
+            "blind turns into pressure",
+            "first touch consistently stops under body",
+            "one-touch constraint creates repeated turnovers",
+            "player scans but cannot explain what information was used"
+          ]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_passing",
+          "sport": "soccer",
+          "domain": "passing",
+          "metrics": [
+            "short_pass_accuracy",
+            "target_foot_accuracy",
+            "pass_weight_quality",
+            "progressive_pass_success",
+            "line_breaking_pass_turnover_cost",
+            "wall_pass_success",
+            "third_player_combination_success",
+            "long_pass_load_response"
+          ],
+          "level_signals": {
+            "beginner": [
+              "inside-foot short pass reaches large target",
+              "pass weight is playable",
+              "player moves after pass",
+              "basic receive-pass sequence works"
+            ],
+            "intermediate": [
+              "passes to safe foot under pressure",
+              "uses wall pass, layoff, and through ball from cue",
+              "adjusts weight and timing",
+              "rondo decisions transfer to directional game"
+            ],
+            "advanced": [
+              "breaks lines or switches play when context supports it",
+              "uses third-player combinations",
+              "controls tempo and disguise",
+              "risk and turnover location are managed"
+            ]
+          },
+          "red_flags": [
+            "underhit central passes under pressure",
+            "long passing volume causes soreness",
+            "pattern passing ignores defender behavior",
+            "progressive pass success comes with unsafe transition exposure"
+          ]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_dribbling_1v1",
+          "sport": "soccer",
+          "domain": "dribbling_1v1",
+          "metrics": [
+            "successful_take_on_rate",
+            "end_product_after_dribble",
+            "dribble_or_pass_decision_accuracy",
+            "turnover_zone_risk",
+            "change_of_speed_quality",
+            "shielding_success",
+            "counterpress_after_loss"
+          ],
+          "level_signals": {
+            "beginner": [
+              "dribbles into open space",
+              "tries simple move and keeps ball close",
+              "uses body to shield",
+              "reacts after loss"
+            ],
+            "intermediate": [
+              "beats or commits defender then passes, shoots, or crosses",
+              "knows when not to dribble",
+              "turns under pressure",
+              "uses change of pace after move"
+            ],
+            "advanced": [
+              "wins role-specific 1v1s with end product",
+              "manipulates opponent structure",
+              "dribbles safely by field zone",
+              "repeats high-intensity duels with stable quality"
+            ]
+          },
+          "red_flags": [
+            "dribbles into pressure with open pass available",
+            "turnovers in defensive third repeat",
+            "defenders tackle recklessly during drills",
+            "cutting quality worsens under fatigue"
+          ]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_shooting_finishing",
+          "sport": "soccer",
+          "domain": "shooting_finishing",
+          "metrics": [
+            "clean_contact_rate",
+            "shot_on_target_rate",
+            "shot_selection_quality",
+            "finish_type_variety",
+            "one_touch_finish_success",
+            "goalkeeper_cue_use",
+            "rebound_follow_rate",
+            "high_force_kicking_load_response"
+          ],
+          "level_signals": {
+            "beginner": [
+              "balanced contact from short distance",
+              "shots travel toward goal",
+              "follows rebounds",
+              "shooting is pain-free"
+            ],
+            "intermediate": [
+              "finishes from varied angles and feeds",
+              "uses correct surface by situation",
+              "reads goalkeeper and teammate",
+              "times movement before shot"
+            ],
+            "advanced": [
+              "uses first-time and disguised finishes",
+              "selects high-value shot or pass",
+              "finishes under pressure, contact, and speed",
+              "manages power and accuracy under fatigue"
+            ]
+          },
+          "red_flags": [
+            "power focus causes poor contact and pain",
+            "low-value shooting ignores clear assist",
+            "heading or acrobatic finishes introduced without safety controls",
+            "groin, quad, hip flexor, or trunk symptoms after volume"
+          ]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_crossing_chance_creation",
+          "sport": "soccer",
+          "domain": "crossing_chance_creation",
+          "metrics": [
+            "playable_delivery_rate",
+            "delivery_choice_quality",
+            "cutback_success",
+            "box_occupation_quality",
+            "runner_timing_onside_rate",
+            "chance_quality_created",
+            "second_ball_reaction",
+            "rest_defense_connected"
+          ],
+          "level_signals": {
+            "beginner": [
+              "delivery reaches large target area",
+              "attackers occupy different zones",
+              "simple offside awareness exists",
+              "team reacts after cross"
+            ],
+            "intermediate": [
+              "chooses low cross, cutback, early cross, or reset by cue",
+              "runner timing improves",
+              "overlap and underlap create delivery window",
+              "transition defense is included"
+            ],
+            "advanced": [
+              "wide entries create high-value chances",
+              "delivery adapts to goalkeeper and defensive line",
+              "box occupation covers cutback, far post, and rebound",
+              "counterattack exposure after cross is controlled"
+            ]
+          },
+          "red_flags": [
+            "blind crosses despite open cutback",
+            "all attackers arrive in same lane",
+            "crossing volume spikes kicking soreness",
+            "cross practice ignores second ball and transition"
+          ]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_defending_pressing",
+          "sport": "soccer",
+          "domain": "defending_pressing",
+          "metrics": [
+            "delay_success",
+            "force_direction_success",
+            "tackle_timing_quality",
+            "foul_card_risk",
+            "interception_or_screen_success",
+            "pressing_trigger_recognition",
+            "unit_compactness",
+            "counterpress_or_recover_decision"
+          ],
+          "level_signals": {
+            "beginner": [
+              "gets goal-side and slows attacker",
+              "jockeys without lunging",
+              "safe challenge awareness",
+              "recovers behind ball after loss"
+            ],
+            "intermediate": [
+              "uses pressure-cover-balance",
+              "screens and intercepts passing lanes",
+              "recognizes pressing cues",
+              "counterpresses only when connected"
+            ],
+            "advanced": [
+              "executes high press, mid-block, low-block, and counterpress plans",
+              "adapts line height and compactness",
+              "wins duels lawfully",
+              "first pass after regain is purposeful"
+            ]
+          },
+          "red_flags": [
+            "repeated reckless or late tackles",
+            "pressing line disconnected from cover",
+            "defensive success measured only by ball wins",
+            "high-intensity defensive volume causes mechanics to collapse"
+          ]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_match_iq_tactics",
+          "sport": "soccer",
+          "domain": "match_iq_tactics",
+          "metrics": [
+            "rule_understanding",
+            "phase_identification",
+            "role_responsibility_accuracy",
+            "support_and_spacing_quality",
+            "pressing_or_block_decision",
+            "transition_reaction",
+            "game_state_decision_quality",
+            "scout_plan_execution",
+            "kpi_to_action_link"
+          ],
+          "level_signals": {
+            "beginner": [
+              "knows direction, simple restarts, and support ideas",
+              "uses width or depth when space is crowded",
+              "recovers after possession loss",
+              "rotates through positions"
+            ],
+            "intermediate": [
+              "understands formation role and phases",
+              "recognizes pressing and transition cues",
+              "can explain simple tactical choice",
+              "uses overload and switch concepts"
+            ],
+            "advanced": [
+              "adapts to opponent, score, time, and field zone",
+              "executes game model without losing principles",
+              "uses scouting and KPIs as action cues",
+              "role decisions hold under match pressure"
+            ]
+          },
+          "red_flags": [
+            "complex formation language replaces football decisions",
+            "tactical plan exceeds player execution capacity",
+            "data is collected without training action",
+            "position specialization removes broad game literacy"
+          ]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_goalkeeping",
+          "sport": "soccer",
+          "domain": "goalkeeping",
+          "metrics": [
+            "set_position_timing",
+            "handling_security",
+            "save_selection_quality",
+            "rebound_control",
+            "cross_decision_accuracy",
+            "one_v_one_decision_quality",
+            "distribution_decision_quality",
+            "defensive_communication",
+            "dive_and_landing_quality"
+          ],
+          "level_signals": {
+            "beginner": [
+              "sets before controlled shot",
+              "handles or parries safely",
+              "moves feet before save",
+              "uses simple communication"
+            ],
+            "intermediate": [
+              "adjusts angle and depth",
+              "selects save technique by ball path",
+              "decides claim, punch, parry, or stay",
+              "distributes under light pressure"
+            ],
+            "advanced": [
+              "prevents goals through positioning and explosive response",
+              "defends space behind line",
+              "breaks or controls press through distribution",
+              "organizes line and set pieces"
+            ]
+          },
+          "red_flags": [
+            "hard service before handling confidence",
+            "unsafe diving surface or repeated collision",
+            "short build-up forced into high-risk turnovers",
+            "shoulder, wrist, hip, back, or head symptoms ignored"
+          ]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "soccer_assessment_strength_conditioning",
+          "sport": "soccer",
+          "domain": "football_strength_conditioning",
+          "metrics": [
+            "warm_up_adherence",
+            "landing_and_braking_quality",
+            "sprint_mechanics_quality",
+            "change_of_direction_quality",
+            "unilateral_strength_control",
+            "high_speed_exposure",
+            "repeated_effort_tolerance",
+            "kicking_or_heading_load_response",
+            "soreness_24_48_hour_response",
+            "return_to_play_stage_completion"
+          ],
+          "level_signals": {
+            "beginner": [
+              "performs warm-up safely",
+              "lands and brakes with control at low speed",
+              "basic strength patterns are coachable",
+              "small-sided conditioning does not ruin skill quality"
+            ],
+            "intermediate": [
+              "tolerates progressive sprint, COD, and strength work",
+              "role-specific action capacity improves",
+              "load response is tracked",
+              "movement quality holds under moderate fatigue"
+            ],
+            "advanced": [
+              "position-specific physical outputs are maintained",
+              "microcycle manages sprint, kick, contact, and recovery load",
+              "return-to-play is staged through football-specific demands",
+              "performance and tissue response guide progression"
+            ]
+          },
+          "red_flags": [
+            "conditioning is used while technique collapses",
+            "rapid high-speed running spike",
+            "pain response is ignored",
+            "return to match play based only on straight-line running"
+          ]
+        }
+      ]
+    },
+    {
+      "collection": "sport_level_transition_rules",
+      "records": [
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "soccer_global_beginner_to_intermediate",
+          "sport": "soccer",
+          "from_level": "beginner",
+          "to_level": "intermediate",
+          "required_evidence": [
+            "basic ball control, receiving, short passing, and dribbling are playable in small-sided games",
+            "player understands direction, simple rules, support, goal-side defending, and transition reaction",
+            "first touch and passing are safe enough to add light pressure",
+            "player can accelerate, stop, turn, and land without obvious safety issue",
+            "training volume is pain-free and the player can report discomfort"
+          ],
+          "do_not_progress_if": [
+            "isolated technique works but collapses immediately in small-sided play",
+            "player cannot control deceleration or contact in 1v1 situations",
+            "foul or reckless contact behavior is common",
+            "pain, dizziness, head symptoms, or persistent soreness is present",
+            "rules and direction of play are not understood well enough for opposed drills"
+          ],
+          "backend_action": "unlock intermediate pressure, rondos, 1v1 duels, positional roles, crossing choices, basic pressing triggers, and progressive S&C while keeping broad skill exposure."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "soccer_global_intermediate_to_advanced",
+          "sport": "soccer",
+          "from_level": "intermediate",
+          "to_level": "advanced",
+          "required_evidence": [
+            "technical actions hold under live pressure, direction, score, and fatigue",
+            "player can explain decisions using pressure, space, support, field zone, role, and game state",
+            "role-specific responsibilities transfer to 9v9 or 11v11 game contexts",
+            "advanced action improves outcome without unacceptable turnover, foul, or injury cost",
+            "load monitoring or coach observation supports position-specific sprint, kick, jump, contact, and recovery demands"
+          ],
+          "do_not_progress_if": [
+            "advanced task increases errors without tactical benefit",
+            "player needs closed drill cues but cannot read live cues",
+            "role specialization removes essential emergency skills",
+            "high-speed, kicking, heading, or contact volume produces poor 24 to 48 hour response",
+            "scout or tactical instructions exceed execution capacity"
+          ],
+          "backend_action": "unlock advanced role-specific, opponent-specific, phase-play, game-state, KPI-informed, and individualized S&C progressions."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "soccer_domain_readiness_gate_matrix",
+          "sport": "soccer",
+          "from_level": "beginner",
+          "to_level": "advanced",
+          "domain_gates": {
+            "ball_mastery": {
+              "beginner_to_intermediate": [
+                "ball remains close while moving",
+                "both feet are functional",
+                "player can stop, turn, and restart safely"
+              ],
+              "intermediate_to_advanced": [
+                "control survives live pressure",
+                "escape touch leads to useful next action",
+                "COD load is tolerated"
+              ]
+            },
+            "first_touch_receiving": {
+              "beginner_to_intermediate": [
+                "first touch is playable",
+                "receiver can scan or name target",
+                "two-touch receive-pass sequence works"
+              ],
+              "intermediate_to_advanced": [
+                "first touch responds to pressure cue",
+                "between-lines receiving is secure",
+                "one-touch or no-touch actions are decision-led"
+              ]
+            },
+            "passing": {
+              "beginner_to_intermediate": [
+                "short pass accuracy and weight are stable",
+                "player moves after pass",
+                "can pass under light pressure"
+              ],
+              "intermediate_to_advanced": [
+                "progressive pass success is positive after turnover cost",
+                "third-player and switch options are recognized",
+                "long or driven passing load is tolerated"
+              ]
+            },
+            "dribbling_1v1": {
+              "beginner_to_intermediate": [
+                "close control and shielding are safe",
+                "player attacks space and tries to beat defender",
+                "basic dribble/pass choice exists"
+              ],
+              "intermediate_to_advanced": [
+                "1v1 outcomes create end product",
+                "risk by field zone is understood",
+                "repeated duel load is tolerated"
+              ]
+            },
+            "shooting_finishing": {
+              "beginner_to_intermediate": [
+                "clean contact and balance are stable",
+                "player follows rebound",
+                "shooting is pain-free"
+              ],
+              "intermediate_to_advanced": [
+                "shot selection accounts for goalkeeper and teammates",
+                "finishing works under speed and pressure",
+                "high-force kicking load is managed"
+              ]
+            },
+            "crossing_chance_creation": {
+              "beginner_to_intermediate": [
+                "wide delivery reaches playable area",
+                "runners occupy different zones",
+                "simple offside awareness exists"
+              ],
+              "intermediate_to_advanced": [
+                "delivery choice creates higher-value chances",
+                "box occupation and rest defense are coordinated",
+                "crossing and heading loads are safe"
+              ]
+            },
+            "defending_pressing": {
+              "beginner_to_intermediate": [
+                "defender can delay and stay balanced",
+                "safe tackling behavior is present",
+                "goal-side recovery is understood"
+              ],
+              "intermediate_to_advanced": [
+                "unit pressing and block behavior are connected",
+                "legal duel discipline holds",
+                "high-intensity defensive load is tolerated"
+              ]
+            },
+            "match_iq_tactics": {
+              "beginner_to_intermediate": [
+                "player understands rules, direction, support, and transition basics",
+                "small-sided spacing improves"
+              ],
+              "intermediate_to_advanced": [
+                "player executes role in each phase",
+                "game-state and opponent cues affect decisions",
+                "KPI or video feedback links to action"
+              ]
+            },
+            "goalkeeping": {
+              "beginner_to_intermediate": [
+                "ready set position and basic handling are safe",
+                "basic distribution is reliable",
+                "safe falling foundation exists"
+              ],
+              "intermediate_to_advanced": [
+                "goalkeeper integrates shot stopping, crosses, 1v1s, and build-up",
+                "communication organizes back line",
+                "dive, kick, and contact loads are tolerated"
+              ]
+            },
+            "football_strength_conditioning": {
+              "beginner_to_intermediate": [
+                "warm-up and basic movement are safe",
+                "deceleration and landing are controlled",
+                "normal practice is pain-free"
+              ],
+              "intermediate_to_advanced": [
+                "role-specific speed, COD, strength, and repeated effort are stable",
+                "load response is monitored",
+                "return-to-play gates are respected"
+              ]
+            }
+          },
+          "backend_action": "Use the domain gate matching the requested workout or teaching target; do not unlock all advanced content because one domain is advanced."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "soccer_avoid_until_ready_rule",
+          "sport": "soccer",
+          "rule": "Hold or regress advanced football tasks when prerequisites, law awareness, physical tolerance, or game-transfer evidence are missing.",
+          "task_gates": [
+            {
+              "task": "one_touch_play_under_pressure",
+              "minimum_gate": "player scans before receiving, pass speed is manageable, and one-touch choice improves team outcome"
+            },
+            {
+              "task": "line_breaking_pass_from_defensive_third",
+              "minimum_gate": "receiver body shape, support angles, and rest defense are present"
+            },
+            {
+              "task": "high_speed_1v1_isolation",
+              "minimum_gate": "close control, deceleration, contact balance, and end-product decision are stable"
+            },
+            {
+              "task": "high_volume_power_shooting_or_crossing",
+              "minimum_gate": "kicking mechanics are stable, recent load is appropriate, and no groin, hip, quad, trunk, or foot symptoms are present"
+            },
+            {
+              "task": "attacking_heading_or_aerial_duels",
+              "minimum_gate": "age and policy allow it, technique is taught progressively, collision risk is controlled, and symptoms are absent"
+            },
+            {
+              "task": "slide_tackling_or_full_contact_duels",
+              "minimum_gate": "lawful challenge understanding, deceleration control, tackle timing, and safety supervision are present"
+            },
+            {
+              "task": "high_press_or_counterpress",
+              "minimum_gate": "team distances, cover, goalkeeper/back-line connection, and repeated high-intensity tolerance are present"
+            },
+            {
+              "task": "goalkeeper_sweeper_keeper_or_pressured_short_build_up",
+              "minimum_gate": "goalkeeper distribution, defender support, communication, and turnover risk management are stable"
+            },
+            {
+              "task": "advanced_scout_plan",
+              "minimum_gate": "players can execute the simpler game-model principle during live play"
+            }
+          ],
+          "backend_action": "If a gate fails, recommend the nearest lower-level drill variant and reassess using the relevant skill assessment record."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "soccer_position_specificity_timing",
+          "sport": "soccer",
+          "rule": "Increase position specificity only after broad football literacy and safe movement are present.",
+          "level_guidance": {
+            "beginner": [
+              "all outfield players train receiving, passing, dribbling, defending, finishing, support, and transition",
+              "goalkeepers learn basic handling and distribution but still participate in team build-up and game understanding",
+              "positions are teaching labels rather than permanent specialization"
+            ],
+            "intermediate": [
+              "primary position priorities are added while emergency all-around skills are maintained",
+              "players learn responsibilities by phase: in possession, out of possession, attacking transition, defensive transition, and restarts",
+              "S&C begins reflecting role demands without removing common foundations"
+            ],
+            "advanced": [
+              "training is role-, system-, opponent-, and match-state specific",
+              "microcycle and load planning reflect position demands",
+              "players still maintain enough broad competence to solve game problems outside their default role"
+            ]
+          },
+          "backend_action": "Avoid early over-specialization in beginner plans; apply role filters progressively from intermediate onward."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "soccer_regression_and_return_rule",
+          "sport": "soccer",
+          "rule": "Regression is required when pain, movement quality, legal safety, decision quality, or tactical transfer falls below the current level standard.",
+          "regress_triggers": [
+            "pain during or after session",
+            "head impact symptoms, dizziness, or confusion",
+            "landing, braking, or tackle mechanics degrade",
+            "advanced skill increases turnover, foul, or counterattack risk",
+            "decision accuracy fails under live cues",
+            "sprint, kick, jump, heading, dive, or contact volume produces poor 24 to 48 hour response"
+          ],
+          "regression_actions": [
+            "increase space or target size",
+            "reduce speed, volume, contact, or power",
+            "remove live defender or goalkeeper temporarily",
+            "return to two-touch or lower-force variant",
+            "restore simpler team shape or tactical cue",
+            "use medical referral when symptoms persist, worsen, or involve head injury"
+          ],
+          "return_to_progression_signals": [
+            "pain-free staged exposure",
+            "movement quality and skill transfer return under representative cues",
+            "relevant assessment metrics meet previous level gate",
+            "athlete can explain decision, law, and safety constraints"
+          ],
+          "backend_action": "Create adaptive soccer workouts that step down task complexity while preserving football specificity whenever safe."
+        }
+      ]
+    }
+  ]
+}

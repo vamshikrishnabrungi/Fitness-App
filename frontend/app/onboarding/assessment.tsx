@@ -22,6 +22,18 @@ const TESTS = [
   { key: 'plank', label: 'Plank', unit: 'sec', icon: 'timer-outline' as const, placeholder: '0', description: 'Best clean hold.' },
 ];
 
+const parseRunPaceSeconds = (value: string): number | null => {
+  const clean = value.toLowerCase().replace('/km', '').replace('min/km', '').trim();
+  if (!clean) return null;
+  if (clean.includes(':')) {
+    const [minutes, seconds] = clean.split(':');
+    const total = Number(minutes) * 60 + Number(seconds);
+    return Number.isFinite(total) ? Math.round(total) : null;
+  }
+  const minutes = Number(clean);
+  return Number.isFinite(minutes) ? Math.round(minutes * 60) : null;
+};
+
 export default function AssessmentScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -29,8 +41,12 @@ export default function AssessmentScreen() {
   const [pushups, setPushups] = useState(fitnessAssessment.pushups?.toString() || '');
   const [pullups, setPullups] = useState(fitnessAssessment.pullups?.toString() || '');
   const [squats, setSquats] = useState(fitnessAssessment.squats?.toString() || '');
-  const [plank, setPlank] = useState(fitnessAssessment.plank?.toString() || '');
-  const [runPace, setRunPace] = useState(fitnessAssessment.runPace || '');
+  const [plank, setPlank] = useState(fitnessAssessment.plank_seconds?.toString() || '');
+  const [runPace, setRunPace] = useState(
+    fitnessAssessment.run_pace_seconds_per_km
+      ? `${Math.floor(fitnessAssessment.run_pace_seconds_per_km / 60)}:${String(fitnessAssessment.run_pace_seconds_per_km % 60).padStart(2, '0')}`
+      : ''
+  );
   const isBeginner = experience === 'beginner';
   const values = { pushups, pullups, squats, plank };
   const setters = { setPushups, setPullups, setSquats, setPlank };
@@ -40,8 +56,8 @@ export default function AssessmentScreen() {
       pushups: parseInt(pushups, 10) || 0,
       pullups: parseInt(pullups, 10) || 0,
       squats: parseInt(squats, 10) || 0,
-      plank: parseInt(plank, 10) || 0,
-      runPace,
+      plank_seconds: parseInt(plank, 10) || 0,
+      run_pace_seconds_per_km: parseRunPaceSeconds(runPace),
     });
     router.push('/onboarding/generating');
   };
@@ -79,7 +95,7 @@ export default function AssessmentScreen() {
                       value={values[test.key as keyof typeof values]}
                       onChangeText={setters[setterName]}
                       placeholder={test.placeholder}
-                      placeholderTextColor="#A7A29A"
+                      placeholderTextColor={colors.textTertiary}
                       keyboardType="number-pad"
                       maxLength={3}
                     />
@@ -96,7 +112,7 @@ export default function AssessmentScreen() {
             value={runPace}
             onChangeText={setRunPace}
             placeholder="6:30/km or 10:00/mile"
-            placeholderTextColor="#A7A29A"
+            placeholderTextColor={colors.textTertiary}
           />
 
           <CoachNote text="These numbers are only a starting signal. Daily feedback and activity will keep adjusting your plan." />
@@ -126,9 +142,9 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   testTitle: {
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 21,
-    fontWeight: '700',
+    fontWeight: '600',
     color: colors.textPrimary,
   },
   testDescription: {
@@ -148,14 +164,14 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     backgroundColor: colors.background,
     color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
+    fontSize: 17,
+    fontWeight: '600',
     textAlign: 'center',
   },
   unit: {
     fontSize: 14,
     lineHeight: 19,
-    fontWeight: '700',
+    fontWeight: '600',
     color: coachColors.muted,
   },
   paceInput: {
@@ -165,7 +181,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     color: colors.textPrimary,
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '500',
   },
   skipButton: {
     alignItems: 'center',
@@ -174,7 +190,7 @@ const styles = StyleSheet.create({
   skipText: {
     fontSize: 15,
     lineHeight: 20,
-    fontWeight: '700',
+    fontWeight: '600',
     color: coachColors.muted,
   },
 });

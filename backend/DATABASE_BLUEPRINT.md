@@ -381,16 +381,14 @@ mongod --dbpath ~/data/sftc-mongo
 
 Backend startup calls `ensure_database_schema(db)` from `backend/db_setup.py`, creating collections and indexes automatically.
 
-Seed the local knowledge base:
+Build the app-facing exercise catalog after source exercise ingestion:
 
 ```bash
-python -m backend.seed_knowledge_base
+python -m backend.build_exercise_catalog
 ```
 
-The seed script also reads `deep-research-report.md` when present and imports its source registry, starter sport records, sport roles, and sport-specific AI rules.
-
-Use `--reset` only when you want to replace existing seeded library records:
+Use `--dry-run` to inspect catalog counts without writing:
 
 ```bash
-python -m backend.seed_knowledge_base --reset
+python -m backend.build_exercise_catalog --dry-run
 ```

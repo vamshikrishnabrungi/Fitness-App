@@ -1,0 +1,99 @@
+{
+  "metadata": {
+    "domain": "tactical_iq_strategy",
+    "sport": "boxing",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready boxing tactical knowledge covering range, rhythm, pressure, counterpunching, southpaw/orthodox matchups, ring generalship, feints, traps, corner adjustments, and level-based tactical IQ.",
+    "researched_on": "2026-06-21"
+  },
+  "source_refs": [
+    {
+      "title": "Boxing",
+      "url": "https://olympics.com/en/sports/boxing/",
+      "source_type": "official_sport_education",
+      "organization_or_author": "Olympics",
+      "notes": "Used for scoring, ring, knockdown, and competition context."
+    },
+    {
+      "title": "Performance Aspects and Physiological Responses in Male Amateur Boxing Competitions",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28081033/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Slimani et al.",
+      "notes": "Used for technical-tactical analysis and performance response context."
+    },
+    {
+      "title": "Amateur boxing: physical and physiological attributes",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25358529/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Davis et al.",
+      "notes": "Used for physical attributes that support boxing tactical execution."
+    },
+    {
+      "title": "England Boxing Coaching Resources",
+      "url": "https://www.englandboxing.org/coaches/coaching-resources/",
+      "source_type": "coaching_education",
+      "organization_or_author": "England Boxing",
+      "notes": "Used as a coaching education reference category."
+    },
+    {
+      "title": "Home - World Boxing",
+      "url": "https://worldboxing.org/",
+      "source_type": "international_federation",
+      "organization_or_author": "World Boxing",
+      "notes": "Used for international federation context."
+    }
+  ],
+  "key_concepts": [
+    {"id": "range_is_tactical_variable", "summary": "Long, mid, and inside range change punch selection, defense, footwork, and energy cost."},
+    {"id": "rhythm_control", "summary": "Boxers win exchanges by changing rhythm, timing entries, breaking opponent rhythm, and varying tempo."},
+    {"id": "ring_generalship", "summary": "Controlling space, exits, and where exchanges happen is a scoring and safety skill."},
+    {"id": "styles_create_tasks", "summary": "Out-boxer, pressure fighter, counterpuncher, boxer-puncher, and inside fighter profiles create different training demands."},
+    {"id": "southpaw_orthodox_problem", "summary": "Open-stance matchups change lead-foot battle, jab lanes, rear-hand line, and outside angle priorities."},
+    {"id": "corner_feedback_loop", "summary": "Between-round tactical adjustments should become teachable decision rules for the app."}
+  ],
+  "technical_models": [
+    {"id": "boxing_range_model", "ranges": ["out_of_range", "long_range", "mid_range", "inside_range", "clinch_range"]},
+    {"id": "boxing_style_archetype_model", "styles": ["out_boxer", "pressure_fighter", "counterpuncher", "boxer_puncher", "inside_fighter"]},
+    {"id": "boxing_entry_exit_model", "skills": ["jab_entry", "feint_entry", "angle_entry", "counter_entry", "pivot_exit", "step_back_exit", "clinch_reset"]},
+    {"id": "boxing_feint_model", "types": ["hand_feint", "foot_feint", "level_feint", "shoulder_feint", "rhythm_feint"]},
+    {"id": "boxing_corner_strategy_model", "inputs": ["score_state", "damage_state", "opponent_pattern", "fatigue", "round_number"]}
+  ],
+  "tactical_rules": [
+    {"id": "rule_do_not_exchange_without_exit", "rule": "Combinations should end with guard return, angle, step-out, clinch, or defensive responsibility."},
+    {"id": "rule_pressure_requires_cutting_ring", "rule": "Pressure is not chasing; teach angle cutting and exit denial before high-volume pressure rounds."},
+    {"id": "rule_counter_requires_trigger", "rule": "Counterpunching drills need a specific trigger: jab, cross, lazy return, predictable step, or overcommit."},
+    {"id": "rule_feints_before_entries", "rule": "Intermediate and advanced athletes should use feints to collect reactions before entries."},
+    {"id": "rule_southpaw_open_stance", "rule": "Open-stance work should teach lead-foot position, rear-hand line, and outside angle without overloading beginners."},
+    {"id": "rule_score_state_changes_plan", "rule": "If ahead, prioritize clean scoring, exits, and risk control; if behind, increase initiative without reckless exchanges."}
+  ],
+  "physical_demands": [
+    {"id": "range_change_acceleration", "quality": "short burst entry and exit speed"},
+    {"id": "reactive_defense", "quality": "visual processing, trunk movement, and head movement timing"},
+    {"id": "pressure_endurance", "quality": "sustain footwork and punch volume without technical collapse"},
+    {"id": "counterpunch_power", "quality": "rapid force after defensive action"},
+    {"id": "inside_fighting_strength", "quality": "trunk, shoulder, forearm, and neck robustness"}
+  ],
+  "injury_or_load_risks": [
+    {"id": "reckless_exchange_head_risk", "risk": "Tactical immaturity can increase unnecessary head contact."},
+    {"id": "pressure_fatigue_guard_drop", "risk": "High-pressure rounds can create fatigue-based guard errors."},
+    {"id": "inside_fighting_neck_shoulder_load", "risk": "Inside work and clinch-like contact increase neck and shoulder load."},
+    {"id": "open_stance_foot_clash", "risk": "Southpaw/orthodox matchups can increase foot clashes and balance disruptions."},
+    {"id": "counter_drill_contact_escalation", "risk": "Counterpunching drills can escalate contact if constraints are not clear."}
+  ],
+  "training_implications": [
+    {"id": "teach_styles_as_tasks", "summary": "Use style archetypes to build specific tactical problems, not labels for identity."},
+    {"id": "use_constraint_sparring", "summary": "Tactical skills should progress through constrained rounds before open sparring."},
+    {"id": "separate_tactics_from_hard_contact", "summary": "Tactical learning can happen with touch sparring, pads, shadow, and partner drills."},
+    {"id": "include_round_scenarios", "summary": "Use ahead/behind/even/hurt/tired scenarios for match IQ training."},
+    {"id": "record_opponent_patterns", "summary": "Future user progress should store recurring tactical issues and successful solutions."}
+  ],
+  "backend_records_to_create": [
+    {"collection": "sport_training_rules", "id": "boxing_range_model"},
+    {"collection": "sport_training_rules", "id": "boxing_style_archetype_model"},
+    {"collection": "sport_training_rules", "id": "boxing_open_stance_rule"},
+    {"collection": "sport_teaching_progressions", "id": "boxing_teach_tactical_iq_intermediate"},
+    {"collection": "sport_skill_assessments", "id": "boxing_assess_range_and_exits"},
+    {"collection": "planning_rules", "id": "boxing_rule_contact_safe_tactics"}
+  ]
+}
+

@@ -1,0 +1,825 @@
+{
+  "sport": "cricket",
+  "domain": "pace_bowling_skill_workload",
+  "executive_summary": "Pace bowling is a high-force, high-skill role that combines run-up rhythm, delivery-stride mechanics, wrist and seam control, tactical deception, and carefully managed workload. The useful backend model should treat pace bowling as repeated sprint-plus-throw exposures with large lower-limb, trunk, shoulder, and lumbar stress. Technical coaching should preserve individual action style while improving repeatable momentum transfer, alignment, release control, and deceleration. Tactical advice should adapt to ball age, pitch, batter handedness, scoring phase, field support, and legal constraints. Workload rules should be conservative for youth bowlers, avoid sudden spikes after layoffs, track match and training balls separately, and reduce heavy gym stress around high bowling load.",
+  "key_concepts": [
+    {
+      "id": "pace_bowling_integrated_model",
+      "concept": "Pace bowling is not only ball speed.",
+      "detail": "Effective pace bowling blends speed, control, movement, bounce, disguise, field support, and repeatability under fatigue. Backend advice should avoid rewarding maximum effort balls if accuracy, recovery, or injury risk is poor.",
+      "sources": ["Applied Sciences 2024 systematic review on cricket fast bowling biomechanics", "ECB Recreational Fast Bowling Guidance 2024"]
+    },
+    {
+      "id": "delivery_chain_phases",
+      "concept": "The delivery is a linked chain.",
+      "detail": "Run-up, gather or bound, back-foot contact, front-foot contact, trunk rotation and lateral flexion, arm path, wrist and seam position, release, and follow-through should be modeled as connected phases rather than isolated body positions.",
+      "sources": ["Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "individual_action_tolerance",
+      "concept": "A safe action is not one universal template.",
+      "detail": "Bowlers differ in height, mobility, strength, run-up speed, action type, and tactical role. Technical changes should prioritize pain-free repeatability, alignment, and release control rather than forcing every bowler into the same side-on or front-on shape.",
+      "sources": ["Injuries in cricket, PMC", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "momentum_transfer",
+      "concept": "Run-up speed must be usable at release.",
+      "detail": "A faster approach helps only when the bowler can stabilize the delivery stride and transfer horizontal momentum through the front side into trunk and arm speed. Over-running the crease commonly costs control and may increase braking stress.",
+      "sources": ["Relationships between fast bowling technique and ball release speed in cricket", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "accuracy_as_capacity",
+      "concept": "Line and length are workload-sensitive skills.",
+      "detail": "Fatigue can reduce trunk control, front-leg mechanics, wrist position, and release repeatability. Workload planning should protect the quality of bowling practice, not only count balls.",
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "front_foot_contact_load",
+      "concept": "Front-foot contact is a major load event.",
+      "detail": "The front leg acts as a braking and transfer segment. High ground reaction forces, knee position, foot angle, and trunk position at front-foot contact are relevant to performance and injury risk.",
+      "sources": ["Optimising the front foot contact phase of the cricket fast bowling technique", "Sports 2024 study on follow-through strategies in fast bowling"]
+    },
+    {
+      "id": "trunk_as_power_and_risk",
+      "concept": "The trunk creates speed and concentrates risk.",
+      "detail": "Hip-shoulder separation, trunk rotation, extension, and lateral flexion contribute to ball speed, but excessive counter-rotation or poorly controlled trunk loading can increase lumbar stress, especially in growing bowlers or fatigued bowlers.",
+      "sources": ["Injuries in cricket, PMC", "Management of lumbar bone stress injury in cricket fast bowlers"]
+    },
+    {
+      "id": "seam_wrist_stability",
+      "concept": "Movement begins with wrist and seam control.",
+      "detail": "Swing, seam, scrambled seam, cutters, and reverse swing all depend on release orientation, wrist firmness, finger pressure, ball condition, and enough disguise that the batter cannot pre-read the variation.",
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "Mehta 1985 aerodynamics of sports balls"]
+    },
+    {
+      "id": "stock_ball_before_variations",
+      "concept": "The stock ball anchors tactics.",
+      "detail": "A pace bowler needs a repeatable ball that threatens a chosen line and length before adding slower balls, bouncers, yorkers, cutters, or wide lines. Variations work best when they contrast with a credible stock threat.",
+      "sources": ["ECB Coaches' Safety Pack 2019", "ICC Playing Conditions"]
+    },
+    {
+      "id": "variation_disguise",
+      "concept": "Disguise matters more than variation count.",
+      "detail": "Cutters, slower balls, bouncers, and yorkers should be delivered with similar run-up rhythm and arm speed where practical. Obvious deceleration or altered run-up can give the batter early information.",
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "ball_age_tactics",
+      "concept": "Ball age changes the bowling problem.",
+      "detail": "A newer ball can support conventional swing and seam; an older dry ball may support cutters, cross-seam, reverse swing, or defensive one-side fields; a wet ball reduces grip and can make yorkers and slower balls harder to execute.",
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "MCC Law 41 Unfair Play"]
+    },
+    {
+      "id": "legal_ball_management",
+      "concept": "Ball condition work must stay legal.",
+      "detail": "Polishing, drying, and cleaning the ball are constrained by the Laws and playing conditions. Backend advice should never recommend artificial substances, deliberate abrasion, or illegal condition changes.",
+      "sources": ["MCC Law 41 Unfair Play", "ICC Playing Conditions"]
+    },
+    {
+      "id": "workload_is_capacity",
+      "concept": "Some bowling load is protective when progressed.",
+      "detail": "Fast bowlers need enough regular bowling to develop tissue capacity and technical repeatability. Risk rises when a bowler has too little recent bowling and then receives a sudden spike in overs or high-intensity spells.",
+      "sources": ["Hulin et al. 2014 BJSM acute workload study", "Dennis et al. 2003 bowling workload and injury risk"]
+    },
+    {
+      "id": "youth_growth_risk",
+      "concept": "Youth fast bowlers need growth-sensitive limits.",
+      "detail": "Adolescent bowlers are vulnerable to lumbar bone stress, especially around growth spurts, high bowling volumes, limited recovery, and bowling through back pain. Age-based limits should be treated as guardrails, not performance targets.",
+      "sources": ["Cricket Australia Junior Pace Bowling Guidelines", "ECB Fast Bowling Regulations for players aged 19 and below"]
+    },
+    {
+      "id": "field_is_part_of_the_ball",
+      "concept": "A delivery plan includes the field.",
+      "detail": "Line, length, variation, and field must match. A bowler using outswing, bouncers, cutters, or yorkers needs catchers and boundary protection that support the intended dismissal and scoring constraint.",
+      "sources": ["ICC Playing Conditions", "ECB Coaches' Safety Pack 2019"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "run_up_rhythm_model",
+      "phase": "run_up",
+      "model": "Use a repeatable, progressive run-up that reaches controllable speed at the crease.",
+      "coaching_notes": "The run-up should build rhythm rather than create a late sprint. The bowler should hit the same take-off point, arrive balanced, and feel able to bowl a target ball without rushing the final strides.",
+      "common_errors": ["starting too fast", "changing stride pattern under pressure", "jumping from inconsistent take-off marks", "over-running the crease"],
+      "sources": ["Relationships between fast bowling technique and ball release speed in cricket", "ECB Recreational Fast Bowling Guidance 2024"]
+    },
+    {
+      "id": "run_up_speed_control",
+      "phase": "run_up",
+      "model": "Match approach velocity to strength and braking capacity.",
+      "coaching_notes": "Higher run-up speed may support ball speed, but only if the front leg and trunk can organize the delivery stride. Younger or less strong bowlers often need rhythm and alignment before chasing extra approach speed.",
+      "common_errors": ["adding run-up speed before accuracy is stable", "long final stride that collapses the front side", "fatigue-related no-balls"],
+      "sources": ["Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "gather_bound_direction",
+      "phase": "gather_bound",
+      "model": "The bound should organize the body toward the target, not become a high vertical jump.",
+      "coaching_notes": "A useful gather keeps the head and hips moving down the pitch, lets the front arm organize the line, and prepares a stable back-foot contact. Excess height can slow horizontal momentum and increase landing forces.",
+      "common_errors": ["bounding upward", "collapsing on landing", "rotating away from target before back-foot contact"],
+      "sources": ["Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "back_foot_contact_alignment",
+      "phase": "back_foot_contact",
+      "model": "Back-foot contact sets up trunk alignment, front-arm position, and the delivery line.",
+      "coaching_notes": "At back-foot contact the bowler should be balanced enough to transition into front-foot contact without falling across the crease. Head position and non-bowling arm direction help preserve the intended line.",
+      "common_errors": ["back foot landing too closed for the bowler's action", "head falling outside the base", "front arm drifting away from the target"],
+      "sources": ["Applied Sciences 2024 systematic review on cricket fast bowling biomechanics", "Injuries in cricket, PMC"]
+    },
+    {
+      "id": "back_foot_contact_action_type",
+      "phase": "back_foot_contact",
+      "model": "Action type should be monitored for excessive mismatch rather than labeled automatically unsafe.",
+      "coaching_notes": "Front-on, side-on, and mixed features exist on a continuum. The practical red flags are pain, large counter-rotation, poor repeatability, and fatigue-related loss of alignment, especially in adolescent bowlers.",
+      "common_errors": ["forcing a side-on shape without mobility", "large shoulder counter-rotation against hip position", "ignoring back symptoms because speed is improving"],
+      "sources": ["Management of lumbar bone stress injury in cricket fast bowlers", "Injuries in cricket, PMC"]
+    },
+    {
+      "id": "front_foot_contact_bracing",
+      "phase": "front_foot_contact",
+      "model": "Front-foot contact should create a stable braking block that transfers momentum upward and forward.",
+      "coaching_notes": "The front leg does not have to be locked, but it should resist excessive collapse. A well-timed brace lets the pelvis and trunk rotate around a firm base and helps preserve release height.",
+      "common_errors": ["front knee collapsing deeply", "planting too far across the body", "braking so abruptly that the trunk jars or folds"],
+      "sources": ["Optimising the front foot contact phase of the cricket fast bowling technique", "Sports 2024 study on follow-through strategies in fast bowling"]
+    },
+    {
+      "id": "front_foot_line_and_crease",
+      "phase": "front_foot_contact",
+      "model": "Plant the front foot on a line that supports the chosen angle and avoids illegal overstepping.",
+      "coaching_notes": "Over and around the wicket change the tactical angle, but the bowler still needs a repeatable front-foot plant and safe landing. Repeated front-foot no-balls are often a rhythm and run-up problem, not only a crease-awareness problem.",
+      "common_errors": ["drifting wider each ball", "front foot crossing the body then forcing late trunk rotation", "changing the run-up mark without checking rhythm"],
+      "sources": ["ICC Playing Conditions", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "trunk_rotation_lateral_flexion",
+      "phase": "trunk_mechanics",
+      "model": "Use controlled hip-shoulder separation and trunk lateral flexion to create release speed.",
+      "coaching_notes": "The trunk contributes to ball speed through sequential rotation and side flexion. The goal is fast, coordinated movement, not uncontrolled twisting. Pain or asymmetry after spells should change training load immediately.",
+      "common_errors": ["excessive counter-rotation", "late trunk snap without front-side support", "collapsing sideways at release"],
+      "sources": ["Applied Sciences 2024 systematic review on cricket fast bowling biomechanics", "Management of lumbar bone stress injury in cricket fast bowlers"]
+    },
+    {
+      "id": "front_arm_and_non_bowling_side",
+      "phase": "arm_path",
+      "model": "The front arm creates line, timing, and trunk rotation.",
+      "coaching_notes": "A strong front-arm pull can help the trunk rotate around the front side and stabilize the head. The cue should be directional and controlled; yanking the front side open can pull the ball down leg or reduce seam control.",
+      "common_errors": ["front arm falling early", "opening the chest before the front foot is stable", "pulling the head off line"],
+      "sources": ["Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "bowling_arm_path",
+      "phase": "arm_path",
+      "model": "The bowling arm path should be fast, legal, and consistent with the bowler's natural slot.",
+      "coaching_notes": "Arm path and release height vary by bowler. The backend should track accuracy, pain, and ball outcome rather than prescribing a fixed high-arm slot for all bowlers.",
+      "common_errors": ["dropping the arm slot when tired", "forcing a vertical arm without shoulder mobility", "throwing-like action that risks illegal elbow extension"],
+      "sources": ["ICC Playing Conditions", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "wrist_behind_ball_stock_seam",
+      "phase": "wrist_seam",
+      "model": "For a stock seam ball, keep the wrist firm behind the ball and fingers close to the seam.",
+      "coaching_notes": "A stable wrist and upright seam improve the chance of consistent swing or seam deviation. The cue is control of release orientation, not squeezing the ball so hard that the arm slows down.",
+      "common_errors": ["wrist collapsing to leg side", "seam wobbling without intent", "fingers spreading too wide for control"],
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "Mehta 1985 aerodynamics of sports balls"]
+    },
+    {
+      "id": "release_height_and_late_release",
+      "phase": "release",
+      "model": "Release should be high, late enough to hit the intended length, and aligned with the target.",
+      "coaching_notes": "A stable head, braced front side, and fast arm path support a repeatable release point. Full balls and yorkers usually need precise visual targeting and release timing, not just a different grip.",
+      "common_errors": ["releasing early and dragging short", "falling away from target", "overstriding and losing release height"],
+      "sources": ["Relationships between fast bowling technique and ball release speed in cricket", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "follow_through_deceleration",
+      "phase": "follow_through",
+      "model": "Follow-through should dissipate forces down the pitch.",
+      "coaching_notes": "The body should continue toward the target and decelerate smoothly. Abrupt stopping, twisting off the pitch, or falling away can indicate poor force management or fatigue.",
+      "common_errors": ["stopping after release", "spinning across the pitch", "landing off balance and unable to field"],
+      "sources": ["Sports 2024 study on follow-through strategies in fast bowling"]
+    },
+    {
+      "id": "outswing_grip_seam",
+      "phase": "grip_variation",
+      "model": "Outswing uses an upright seam angled toward the slips for the same-side batter, with the wrist behind and slightly tilted to hold seam direction.",
+      "coaching_notes": "For a right-arm bowler to a right-hand batter, the seam is commonly presented toward slip and the release must keep the seam stable. Legal ball polishing and natural roughness can support airflow, but swing is not guaranteed by grip alone.",
+      "common_errors": ["wrist falling across the ball", "seam not staying upright", "overpitching because swing is expected"],
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "Mehta 1985 aerodynamics of sports balls"]
+    },
+    {
+      "id": "inswing_grip_seam",
+      "phase": "grip_variation",
+      "model": "Inswing reverses the seam angle toward the leg side for the same-side batter and aims to bring stumps and pads into play.",
+      "coaching_notes": "For a right-arm bowler to a right-hand batter, the seam is commonly angled toward fine leg with the wrist still strong behind the ball. The tactical line should start outside off or middle depending on swing amount and field.",
+      "common_errors": ["starting too straight and sliding down leg", "collapsing the wrist to force swing", "losing off-stump threat"],
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics"]
+    },
+    {
+      "id": "cross_seam_and_scrambled_seam",
+      "phase": "grip_variation",
+      "model": "Cross-seam and scrambled-seam balls trade clean swing for unpredictable seam contact and bounce.",
+      "coaching_notes": "Cross-seam presents the seam more across the pitch contact area; scrambled seam lets the seam wobble or rotate less predictably. Both can be useful on dry, uneven, slow, or flat pitches and when conventional swing is unavailable.",
+      "common_errors": ["using cross-seam without a length plan", "slowing the arm", "confusing scrambled seam with accidental poor release"],
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "ECB Recreational Fast Bowling Guidance 2024"]
+    },
+    {
+      "id": "cutters_and_slower_balls",
+      "phase": "grip_variation",
+      "model": "Cutters and slower balls should change pace or spin while preserving arm speed and run-up rhythm.",
+      "coaching_notes": "Off-cutters and leg-cutters use finger pressure and side rotation; split-finger and back-of-hand balls reduce speed through grip and release changes. These are most useful when the pitch grips or the batter is pre-committed to pace.",
+      "common_errors": ["telegraphing with a slower run-up", "pitching too short on a slow pitch", "using too many variations before controlling stock length"],
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024", "ECB Coaches' Safety Pack 2019"]
+    },
+    {
+      "id": "yorker_bouncer_reverse_swing",
+      "phase": "grip_variation",
+      "model": "Yorker, bouncer, and reverse-swing plans require distinct release and risk control.",
+      "coaching_notes": "Yorkers need a full, precise target and late release; bouncers need legal height, field support, and enough surprise; reverse swing needs an older dry ball, legal ball care, high pace, and seam stability, with movement often opposite the seam presentation seen in conventional swing.",
+      "common_errors": ["missing yorkers into slot balls", "using bouncers without legal or field awareness", "confusing reverse swing with illegal ball alteration"],
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "MCC Law 41 Unfair Play", "ICC Playing Conditions"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "new_ball_attack_top_off",
+      "context": "new_ball",
+      "rule": "With a hard new ball, make top of off stump and the outside edge the default threat.",
+      "application": "Use fuller good lengths when there is swing, slightly harder lengths when seam movement or bounce is more likely. Support with slips, gully, point, and a straight mid-off or mid-on depending on swing direction.",
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "ECB Coaches' Safety Pack 2019"]
+    },
+    {
+      "id": "outswing_to_same_side_batter",
+      "context": "new_ball_swing",
+      "rule": "Outswing plans need patience outside off stump.",
+      "application": "To a same-side batter, repeat a corridor line that makes leaving hard and drives risky. Avoid chasing magical swing by overpitching; the field should reward edges and misdrives.",
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics"]
+    },
+    {
+      "id": "inswing_stumps_pads_plan",
+      "context": "new_ball_swing",
+      "rule": "Inswing plans should keep bowled and lbw in play without feeding leg-side runs.",
+      "application": "Start the ball wide enough that swing brings it to off, middle, or pad. Use straight catchers and leg-side protection appropriate to the format.",
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "ICC Playing Conditions"]
+    },
+    {
+      "id": "green_or_damp_pitch",
+      "context": "pitch_condition",
+      "rule": "On green or damp seam-friendly pitches, hit a controlled seam length and let the surface work.",
+      "application": "Use upright or slightly scrambled seam, fourth-stump lines, and catching fields. Do not bowl too full if lateral movement is already strong.",
+      "sources": ["Applied Sciences 2024 systematic review on cricket fast bowling biomechanics", "ECB Coaches' Safety Pack 2019"]
+    },
+    {
+      "id": "hard_bouncy_pitch",
+      "context": "pitch_condition",
+      "rule": "On hard bouncy pitches, back-of-a-length can be attacking.",
+      "application": "Target the splice, rib area, and top of off with a surprise bouncer. Protect fine leg and square leg when bowling short, and keep a catching option for fend or glove chances.",
+      "sources": ["ICC Playing Conditions", "MCC Law 41 Unfair Play"]
+    },
+    {
+      "id": "slow_low_pitch",
+      "context": "pitch_condition",
+      "rule": "On slow low pitches, short balls lose threat and fuller stump lines gain value.",
+      "application": "Use cutters, wobble seam, yorkers, and stumps-to-stumps plans. Force batters to generate pace instead of giving width.",
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024"]
+    },
+    {
+      "id": "dry_rough_pitch_old_ball",
+      "context": "old_ball_pitch",
+      "rule": "On abrasive dry pitches, prepare for reverse swing, cutters, and cross-seam before the ball is too wet or soft.",
+      "application": "Legally maintain one side, keep the seam stable when attempting reverse swing, and set fields that protect one side of the wicket.",
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "MCC Law 41 Unfair Play"]
+    },
+    {
+      "id": "wet_ball_or_dew",
+      "context": "conditions",
+      "rule": "When the ball is wet, simplify plans and reduce reliance on fine grip changes.",
+      "application": "Prioritize hard length, wide yorker if controllable, and clear defensive fields. Cutters and slower balls can become high-risk if the ball slips.",
+      "sources": ["ICC Playing Conditions", "ECB Recreational Fast Bowling Guidance 2024"]
+    },
+    {
+      "id": "left_right_handed_batter_adjustment",
+      "context": "batter_handedness",
+      "rule": "Handedness changes both angle and dismissal route.",
+      "application": "A right-arm over plan to a right-hand batter often threatens outside edge with away movement; to a left-hand batter it may angle across or swing back. The backend should prompt the bowler to define whether the plan is edge, lbw, bowled, body-line pressure, or miscued drive.",
+      "sources": ["ICC Playing Conditions", "Flow 2023 review and reassessment of cricket ball swing aerodynamics"]
+    },
+    {
+      "id": "around_wicket_angle",
+      "context": "crease_use",
+      "rule": "Around the wicket is a tactical angle change, not a default fix.",
+      "application": "Use it to cramp batters, attack rough, create lbw and bowled angles, or change the release picture. Check front-foot landing and follow-through so the angle change does not create no-balls or loss of balance.",
+      "sources": ["ICC Playing Conditions", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "old_ball_one_side_field",
+      "context": "old_ball_control",
+      "rule": "With an older ball, defending one side of the wicket often beats chasing perfect movement.",
+      "application": "If reverse swing or cutters are inconsistent, bowl a line that makes the batter hit to the protected side. Fields should match the miss: mistimed drive, pull, ramp, edge, or pad.",
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics", "ICC Playing Conditions"]
+    },
+    {
+      "id": "death_yorker_wide_yorker_mix",
+      "context": "death_bowling",
+      "rule": "At the death, choose yorker, wide yorker, hard length, slower bouncer, or cutter according to field and batter strengths.",
+      "application": "Do not bowl a variation without a matching boundary field. Wide yorkers need off-side protection; straight yorkers need straight and leg-side awareness; slower bouncers need square protection and legal height control.",
+      "sources": ["ICC Playing Conditions", "MCC Law 41 Unfair Play"]
+    },
+    {
+      "id": "death_precommit_plan",
+      "context": "death_bowling",
+      "rule": "One clear ball plan is better than changing during the run-up.",
+      "application": "Decide target, field, and miss before starting. Late indecision often produces slot balls or wides.",
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024"]
+    },
+    {
+      "id": "bouncer_as_setup",
+      "context": "short_ball",
+      "rule": "Use the bouncer as a setup or scoring constraint, not as repeated uncontrolled aggression.",
+      "application": "The short ball should push the batter back, create fend or hook risks, and open fuller lengths. It must respect dangerous-bowling and short-pitched delivery limits in the relevant competition.",
+      "sources": ["MCC Law 41 Unfair Play", "ICC Playing Conditions"]
+    },
+    {
+      "id": "cutter_plan_by_surface",
+      "context": "variations",
+      "rule": "Cutters are strongest when the surface grips or the batter is using pace.",
+      "application": "Bowl cutters into the pitch when the batter is setting early for straight pace. If the pitch skids, use them sparingly and favor yorker or hard length.",
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024"]
+    },
+    {
+      "id": "scrambled_seam_to_reduce_prediction",
+      "context": "seam_variation",
+      "rule": "Scrambled seam can remove the batter's clean seam-reading cue.",
+      "application": "Use it on a good length when conventional swing has stopped or when the batter is leaving well. The goal is uncertainty off the pitch, not a slower ball.",
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics"]
+    },
+    {
+      "id": "field_support_outswing",
+      "context": "field_setting",
+      "rule": "Outswing fields should make the edge and misdrive valuable.",
+      "application": "Use slips, gully, backward point, cover, and mid-off according to format and scoring pressure. If the field has no catching support, the line may need to become more defensive.",
+      "sources": ["ICC Playing Conditions", "ECB Coaches' Safety Pack 2019"]
+    },
+    {
+      "id": "field_support_inswing",
+      "context": "field_setting",
+      "rule": "Inswing fields should support stumps, pads, and straight mis-hits.",
+      "application": "Common support includes mid-on, midwicket, fine leg, and straight catchers where format allows. The line must not give easy leg-side singles if the field is attacking outside off.",
+      "sources": ["ICC Playing Conditions"]
+    },
+    {
+      "id": "field_support_short_ball",
+      "context": "field_setting",
+      "rule": "Short-ball fields need boundary and catching logic before the ball is bowled.",
+      "application": "Deep square leg, fine leg, deep third, or short-leg style catchers may be relevant depending on format, safety, and competition rules. The bowler should know whether the expected error is top edge, fend, hook, or ducked leave.",
+      "sources": ["MCC Law 41 Unfair Play", "ICC Playing Conditions"]
+    },
+    {
+      "id": "set_up_sequence",
+      "context": "batter_plan",
+      "rule": "A setup sequence should create expectation before changing it.",
+      "application": "Examples include several fourth-stump outswing balls before a straight inswinger, hard length before yorker, or pace-on length before a cutter. The change should be tactical, not random.",
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "run_up_acceleration_capacity",
+      "demand": "Repeated acceleration and rhythm at submaximal sprint speeds.",
+      "why_it_matters": "The run-up is repeated many times in spells and must remain consistent under fatigue. Sprint mechanics and rhythm support ball speed and no-ball control.",
+      "sources": ["The athletic profile of fast bowling in cricket: a review"]
+    },
+    {
+      "id": "front_leg_braking_strength",
+      "demand": "Eccentric and isometric braking strength through ankle, knee, hip, and trunk.",
+      "why_it_matters": "The front leg must absorb and redirect high loads at front-foot contact without excessive collapse or painful jarring.",
+      "sources": ["Optimising the front foot contact phase of the cricket fast bowling technique", "Sports 2024 study on follow-through strategies in fast bowling"]
+    },
+    {
+      "id": "lower_body_power",
+      "demand": "Lower-body force production and stiffness.",
+      "why_it_matters": "Jump, sprint, and strength qualities help produce run-up speed, delivery-stride stability, and repeated spell intensity.",
+      "sources": ["The athletic profile of fast bowling in cricket: a review"]
+    },
+    {
+      "id": "trunk_strength_and_control",
+      "demand": "Rotational power, anti-rotation strength, lateral flexion control, and trunk endurance.",
+      "why_it_matters": "The trunk links lower-body momentum to the arm while protecting the lumbar spine during high-speed rotation and side flexion.",
+      "sources": ["Management of lumbar bone stress injury in cricket fast bowlers", "Injury Prevention Strategies in Cricket"]
+    },
+    {
+      "id": "hip_thoracic_mobility",
+      "demand": "Usable hip and thoracic mobility with control.",
+      "why_it_matters": "Mobility supports action alignment, hip-shoulder separation, and safe deceleration, but only when paired with strength and motor control.",
+      "sources": ["Injury Prevention Strategies in Cricket", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "shoulder_scapular_capacity",
+      "demand": "Shoulder range, scapular control, rotator cuff strength, and high-speed arm tolerance.",
+      "why_it_matters": "Pace bowlers repeatedly accelerate and decelerate the arm while also fielding and throwing. Shoulder capacity must be planned with total throwing load.",
+      "sources": ["Injuries in cricket, PMC", "Injury Prevention Strategies in Cricket"]
+    },
+    {
+      "id": "wrist_finger_grip_capacity",
+      "demand": "Finger pressure, wrist stiffness, grip endurance, and fine release control.",
+      "why_it_matters": "Swing, seam, cutters, and slower balls require precise hand position at speed, especially late in spells.",
+      "sources": ["Flow 2023 review and reassessment of cricket ball swing aerodynamics"]
+    },
+    {
+      "id": "posterior_chain_and_calf_capacity",
+      "demand": "Hamstring, glute, calf, and Achilles capacity for sprinting, landing, and follow-through.",
+      "why_it_matters": "Fast bowlers repeatedly accelerate, brace, and decelerate; lower-limb soft tissue capacity is a practical limiter in training blocks and match weeks.",
+      "sources": ["Injuries in cricket, PMC", "Injury Prevention Strategies in Cricket"]
+    },
+    {
+      "id": "aerobic_recovery_base",
+      "demand": "Aerobic support for repeated spells and recovery between overs.",
+      "why_it_matters": "Pace bowling is explosive, but match days require repeated high-intensity efforts with walking recovery, fielding, and heat stress.",
+      "sources": ["The athletic profile of fast bowling in cricket: a review", "Injury Prevention Strategies in Cricket"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "lumbar_bone_stress_youth",
+      "risk": "Lumbar bone stress injury is a key fast-bowling risk, especially in adolescents.",
+      "warning_signs": ["localized low-back pain", "pain with bowling or extension", "symptoms after workload spike", "pain that persists after rest"],
+      "backend_response": "Escalate to medical review, stop bowling through back pain, and avoid loading advice that adds bowling or axial stress until cleared.",
+      "sources": ["Management of lumbar bone stress injury in cricket fast bowlers", "Cricket Australia Junior Pace Bowling Guidelines"]
+    },
+    {
+      "id": "workload_spike",
+      "risk": "Rapid increases in bowling load increase injury risk.",
+      "warning_signs": ["returning from break straight into match spells", "doubling recent weekly overs", "high-intensity nets after low recent load"],
+      "backend_response": "Flag spikes and recommend staged build-up rather than sudden match-volume exposure.",
+      "sources": ["Hulin et al. 2014 BJSM acute workload study", "Dennis et al. 2003 bowling workload and injury risk"]
+    },
+    {
+      "id": "too_little_chronic_load",
+      "risk": "Very low recent bowling load can reduce readiness for competition.",
+      "warning_signs": ["no recent spells", "fitness training only", "bowler returning from holiday or exam period"],
+      "backend_response": "Build bowling exposure progressively before full spells; do not assume gym fitness equals bowling readiness.",
+      "sources": ["Hulin et al. 2014 BJSM acute workload study"]
+    },
+    {
+      "id": "consecutive_days_youth",
+      "risk": "Too many bowling days or consecutive days raise youth workload risk.",
+      "warning_signs": ["bowling on most days", "school plus club plus representative cricket", "nets after match spells"],
+      "backend_response": "Apply age-based daily, weekly, and rest-day limits, and treat multi-team schedules as one combined workload.",
+      "sources": ["Cricket Australia Junior Pace Bowling Guidelines", "ECB Fast Bowling Regulations for players aged 19 and below"]
+    },
+    {
+      "id": "growth_spurt_load_mismatch",
+      "risk": "Growth spurts can temporarily reduce coordination and tissue tolerance.",
+      "warning_signs": ["rapid height change", "new loss of rhythm", "back or knee pain", "sudden drop in control"],
+      "backend_response": "Use conservative bowling and strength progressions during growth periods and prioritize pain-free technique.",
+      "sources": ["Cricket Australia Junior Pace Bowling Guidelines", "Management of lumbar bone stress injury in cricket fast bowlers"]
+    },
+    {
+      "id": "mixed_action_counter_rotation",
+      "risk": "Large shoulder-hip counter-rotation may increase lumbar loading in some bowlers.",
+      "warning_signs": ["back pain with a mixed action", "fatigue-related twisting", "large shoulder turn against hip line"],
+      "backend_response": "Avoid simplistic action labels, but flag painful or excessive counter-rotation for qualified coaching or medical review.",
+      "sources": ["Injuries in cricket, PMC", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "front_foot_contact_overload",
+      "risk": "Repeated high front-foot contact forces can overload lower limb and spine tissues.",
+      "warning_signs": ["sore shin, knee, ankle, or back after spells", "front knee collapse", "abrupt stop after release"],
+      "backend_response": "Reduce concurrent high-impact plyometrics or heavy lower-body eccentrics during high bowling weeks.",
+      "sources": ["Optimising the front foot contact phase of the cricket fast bowling technique", "Sports 2024 study on follow-through strategies in fast bowling"]
+    },
+    {
+      "id": "side_strain_trunk_load",
+      "risk": "Side strain and abdominal wall injury risk rises with high-speed trunk rotation and lateral flexion.",
+      "warning_signs": ["rib or side pain", "pain on coughing or rotation", "sudden sharp pain while bowling"],
+      "backend_response": "Stop high-speed bowling if acute side pain appears and avoid rotational power work until assessed.",
+      "sources": ["Injuries in cricket, PMC", "Injury Prevention Strategies in Cricket"]
+    },
+    {
+      "id": "hamstring_calf_soft_tissue",
+      "risk": "Run-up sprinting and delivery deceleration stress hamstrings, calves, and Achilles tendon.",
+      "warning_signs": ["tightness during run-up", "reduced stride length", "calf soreness after spells"],
+      "backend_response": "Account for total sprinting, fielding, and bowling volume before prescribing speed or plyometric work.",
+      "sources": ["Injuries in cricket, PMC", "The athletic profile of fast bowling in cricket: a review"]
+    },
+    {
+      "id": "shoulder_elbow_throwing_load",
+      "risk": "Bowling plus fielding throws can exceed shoulder and elbow capacity.",
+      "warning_signs": ["shoulder soreness after matches", "loss of throwing velocity", "front shoulder or elbow pain"],
+      "backend_response": "Track throwing and bowling together, especially for all-rounders and boundary fielders.",
+      "sources": ["Injuries in cricket, PMC", "Injury Prevention Strategies in Cricket"]
+    },
+    {
+      "id": "fatigue_technique_drift",
+      "risk": "Fatigue can change action, line, length, and landing mechanics.",
+      "warning_signs": ["late-spell no-balls", "loss of seam position", "falling across the crease", "short balls becoming unplanned"],
+      "backend_response": "End or shorten spells when technical quality drops below useful practice quality, not only when the target ball count is reached.",
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    },
+    {
+      "id": "illegal_or_unsafe_short_pitched_bowling",
+      "risk": "Short-pitched bowling can become unsafe or illegal if excessive or poorly controlled.",
+      "warning_signs": ["repeated head-height balls", "loss of control", "bowling short without protective field or age-appropriate rules"],
+      "backend_response": "Tie bouncer practice to competition rules, safety equipment, batter level, and coach supervision.",
+      "sources": ["MCC Law 41 Unfair Play", "ICC Playing Conditions"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "track_total_bowling_load",
+      "implication": "Track balls or overs across matches, nets, warm-ups, and informal practice.",
+      "implementation": "Store date, balls, overs, spell pattern, intensity, format, surface, symptoms, and perceived exertion. Multi-team youth schedules must combine all bowling.",
+      "sources": ["Cricket Australia Junior Pace Bowling Guidelines", "ECB Fast Bowling Regulations for players aged 19 and below"]
+    },
+    {
+      "id": "apply_ca_youth_guidelines",
+      "implication": "Use Cricket Australia's youth 1-3-5 and 2-4-6 structures as protective defaults.",
+      "implementation": "For ages 10-13, Cricket Australia describes 1 day of rest after bowling, 3 target days per week, and 5 max days per week; for ages 14-18, it describes 2 rest days, 4 target days, and 6 max days. These are guardrails, not targets.",
+      "sources": ["Cricket Australia Junior Pace Bowling Guidelines"]
+    },
+    {
+      "id": "apply_ecb_youth_limits",
+      "implication": "Use ECB age-based daily and weekly fast-bowling limits where relevant.",
+      "implementation": "ECB guidance for players 19 and below gives maximum overs per spell and per day by age group, and recommends weekly targets, no more than four bowling days per week, and only one consecutive pair of bowling days.",
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024", "ECB Fast Bowling Regulations for players aged 19 and below"]
+    },
+    {
+      "id": "preseason_build_up",
+      "implication": "Build bowling before competition rather than relying on general fitness.",
+      "implementation": "Use a staged pre-season bowling plan that starts with low-volume rhythm spells and progresses intensity, length, and variation work. Longer build-ups are safer after a layoff or for youth bowlers.",
+      "sources": ["Cricket Australia Junior Pace Bowling Guidelines", "ECB Recreational Fast Bowling Guidance 2024"]
+    },
+    {
+      "id": "planned_bowling_breaks",
+      "implication": "Schedule recovery periods instead of year-round high load.",
+      "implementation": "For youth and developing bowlers, include regular breaks from pace bowling and longer post-season unload periods, while preserving general athletic development.",
+      "sources": ["Cricket Australia Junior Pace Bowling Guidelines"]
+    },
+    {
+      "id": "adult_workload_spike_guardrail",
+      "implication": "Adult bowlers still need spike protection.",
+      "implementation": "Use recent bowling history to limit sudden increases, especially after injury, travel, rain-interrupted periods, or selection changes that create unexpected long spells.",
+      "sources": ["Hulin et al. 2014 BJSM acute workload study", "Dennis et al. 2003 bowling workload and injury risk"]
+    },
+    {
+      "id": "high_bowling_week_gym_adjustment",
+      "implication": "Reduce competing stress when bowling load is high.",
+      "implementation": "During high-volume or high-intensity bowling weeks, trim heavy axial loading, high-impact plyometrics, maximal sprint volume, and aggressive trunk rotation work. Maintain light strength, mobility, and tissue prep where tolerated.",
+      "sources": ["Injury Prevention Strategies in Cricket", "Management of lumbar bone stress injury in cricket fast bowlers"]
+    },
+    {
+      "id": "low_bowling_week_gym_opportunity",
+      "implication": "Use low bowling weeks for strength and power development.",
+      "implementation": "Place heavier lower-body strength, posterior-chain work, rotational power progressions, and sprint development when bowling volume is lower and there is enough recovery before the next spell.",
+      "sources": ["The athletic profile of fast bowling in cricket: a review", "Injury Prevention Strategies in Cricket"]
+    },
+    {
+      "id": "variation_progression",
+      "implication": "Progress variations after stock-ball control.",
+      "implementation": "Teach one variation at a time, beginning with slower pace at lower volume, then integrate into target practice with the same run-up rhythm. Do not overload youth bowlers with many novelty grips.",
+      "sources": ["ECB Recreational Fast Bowling Guidance 2024", "ECB Coaches' Safety Pack 2019"]
+    },
+    {
+      "id": "death_bowling_practice_design",
+      "implication": "Death bowling should be practiced under constraints, not only in open nets.",
+      "implementation": "Use target zones for yorker, wide yorker, slower bouncer, and hard length with a pre-set field and score scenario. Count misses that become slot balls or wides as tactical errors.",
+      "sources": ["ICC Playing Conditions", "ECB Recreational Fast Bowling Guidance 2024"]
+    },
+    {
+      "id": "lumbar_symptom_protocol",
+      "implication": "Back pain in fast bowlers is a stop signal, especially for youth.",
+      "implementation": "If a bowler reports localized or persistent back pain, remove high-speed bowling and heavy spinal loading from recommendations and direct medical evaluation.",
+      "sources": ["Management of lumbar bone stress injury in cricket fast bowlers", "Cricket Australia Junior Pace Bowling Guidelines"]
+    },
+    {
+      "id": "skill_to_snc_transfer",
+      "implication": "S&C should support the delivery model without pretending to replace it.",
+      "implementation": "Prioritize lower-body strength and stiffness, trunk control, sprint rhythm, shoulder durability, hip and thoracic mobility, and braking capacity. Then integrate those qualities into bowling-specific rhythm and target work.",
+      "sources": ["The athletic profile of fast bowling in cricket: a review", "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "sport_role",
+      "id": "cricket_role_pace_bowler",
+      "summary": "Role profile for pace bowlers with sub-roles including new-ball bowler, strike bowler, death bowler, swing bowler, seam bowler, and hit-the-deck bowler."
+    },
+    {
+      "record_type": "sport_skill_model",
+      "id": "cricket_skill_pace_bowling_delivery_chain",
+      "summary": "Technical phase model from run-up through follow-through with linked coaching cues and common errors."
+    },
+    {
+      "record_type": "sport_skill_model",
+      "id": "cricket_skill_pace_bowling_swing_seam_variations",
+      "summary": "Grip, seam, wrist, and release models for outswing, inswing, upright seam, scrambled seam, cross-seam, cutters, slower balls, yorker, bouncer, and reverse swing."
+    },
+    {
+      "record_type": "sport_tactical_rule",
+      "id": "cricket_tactical_pace_new_ball_top_off",
+      "summary": "New-ball line, length, and field plan for attacking top of off and outside edge."
+    },
+    {
+      "record_type": "sport_tactical_rule",
+      "id": "cricket_tactical_pace_death_bowling_options",
+      "summary": "Death-over decision tree linking yorker, wide yorker, hard length, slower bouncer, and cutter to field and batter strengths."
+    },
+    {
+      "record_type": "sport_condition_rule",
+      "id": "cricket_condition_pace_pitch_ball_age",
+      "summary": "Rules for pace bowling changes by green pitch, hard pitch, slow low pitch, dry abrasive pitch, wet ball, and ball age."
+    },
+    {
+      "record_type": "sport_workload_rule",
+      "id": "cricket_workload_youth_pace_bowling_limits",
+      "summary": "Youth pace bowling age-based rest, target days, weekly caps, and multi-team workload aggregation."
+    },
+    {
+      "record_type": "sport_workload_rule",
+      "id": "cricket_workload_pace_bowling_spike_guardrail",
+      "summary": "Recent-load logic to flag sudden increases after layoffs or low bowling exposure."
+    },
+    {
+      "record_type": "sport_injury_rule",
+      "id": "cricket_injury_fast_bowler_lumbar_bone_stress",
+      "summary": "Back-pain safety rule for fast bowlers with youth escalation and bowling/gym restriction guidance."
+    },
+    {
+      "record_type": "sport_injury_rule",
+      "id": "cricket_injury_pace_bowler_side_strain",
+      "summary": "Side-strain risk rule tied to trunk rotation, lateral flexion, high-speed bowling, and acute rib or side pain."
+    },
+    {
+      "record_type": "sport_training_rule",
+      "id": "cricket_training_high_bowling_week_gym_trim",
+      "summary": "Match-week and high-load-week gym adjustments for lower body, trunk, sprint, and plyometric work."
+    },
+    {
+      "record_type": "sport_training_rule",
+      "id": "cricket_training_pace_variation_progression",
+      "summary": "Progression from stock-ball control to one variation at a time, then scenario integration."
+    },
+    {
+      "record_type": "sport_practice_template",
+      "id": "cricket_practice_pace_death_bowling_targets",
+      "summary": "Scenario-based death-bowling practice with target zones, fields, score pressure, and miss classification."
+    },
+    {
+      "record_type": "sport_tests_benchmarks",
+      "id": "cricket_tests_pace_bowler_readiness",
+      "summary": "Potential readiness markers including recent overs, symptoms, sprint rhythm, jump or strength trend, shoulder status, and bowling accuracy under fatigue."
+    }
+  ],
+  "open_questions": [
+    {
+      "question": "How should the app regionalize youth workload limits when Cricket Australia, ECB, school, and local league rules differ?",
+      "reason": "Official limits vary by governing body and age band; the backend may need jurisdiction-specific profiles."
+    },
+    {
+      "question": "What minimum source standard should be used for grip-specific variation coaching?",
+      "reason": "Biomechanics and aerodynamics sources explain mechanisms, but many exact grip cues come from coaching tradition rather than controlled studies."
+    },
+    {
+      "question": "Should adult workload advice use acute:chronic workload ratios, absolute overs, or simpler spike flags?",
+      "reason": "Research supports spike risk, but exact thresholds may not transfer cleanly across recreational, academy, and professional contexts."
+    },
+    {
+      "question": "How should bowling load interact with all-rounder batting and fielding workload?",
+      "reason": "Total cricket load includes batting volume, sprints, dives, and throws, not only overs bowled."
+    },
+    {
+      "question": "How should the backend represent action-type risk without overdiagnosing mixed actions?",
+      "reason": "Action classification is useful, but pain, workload, maturity, strength, and coaching context are also important."
+    },
+    {
+      "question": "What user-facing language should distinguish legal ball maintenance from illegal ball alteration?",
+      "reason": "Reverse swing and old-ball plans need careful wording to avoid unsafe or illegal recommendations."
+    },
+    {
+      "question": "What return-to-bowling protocol should be used after lumbar bone stress injury?",
+      "reason": "Return-to-play should be individualized and medical-led; the app should store conservative prompts but avoid replacing clinical care."
+    }
+  ],
+  "source_refs": [
+    {
+      "title": "Cricket Australia Junior Pace Bowling Guidelines",
+      "url": "https://play.cricket.com.au/community/resources/player-safety/junior-bowling-guidelines",
+      "source_type": "official governing body guideline",
+      "notes": "Used for youth rest-day, bowling-day, post-season break, pre-season build-up, and back-pain caution concepts."
+    },
+    {
+      "title": "ECB Recreational Fast Bowling Guidance 2024",
+      "url": "https://resources.ecb.co.uk/ecb/document/2024/06/14/292038a2-ac47-4655-bdf7-454c79d285eb/Recreational-Fast-Bowling-Guidance-2024.pdf",
+      "source_type": "official governing body guideline",
+      "notes": "Used for youth workload, weekly bowling day guidance, spell management, and recreational fast bowling safety framing."
+    },
+    {
+      "title": "ECB Fast Bowling Regulations for players aged 19 and below",
+      "url": "https://resources.ecb.co.uk/ecb/document/2025/05/08/5dae7f2d-3b61-434d-94cd-88bed79e22d7/Fast-Bowling-Regulations-for-players-aged-19-and-below-1.pdf",
+      "source_type": "official governing body regulation",
+      "notes": "Used for age-based daily and spell-limit concepts for youth pace bowlers."
+    },
+    {
+      "title": "ECB Coaches' Safety Pack 2019",
+      "url": "https://resources.ecb.co.uk/ecb/document/2025/08/21/2dbcb990-1b06-4164-949a-2b4f201045fe/ECB_Coaches-_Safety_Pack_2019.pdf",
+      "source_type": "official coaching safety resource",
+      "notes": "Used for coaching-safety framing, planning, field support, and youth development context."
+    },
+    {
+      "title": "MCC Law 41: Unfair Play",
+      "url": "https://www.lords.org/mcc/the-laws/unfair-play",
+      "source_type": "official laws of cricket",
+      "notes": "Used for legal constraints around dangerous bowling, short-pitched bowling, and ball condition management."
+    },
+    {
+      "title": "ICC Playing Conditions",
+      "url": "https://www.icc-cricket.com/about/cricket/rules-and-regulations/playing-conditions",
+      "source_type": "official playing conditions",
+      "notes": "Used for competition-rule awareness, legal delivery framing, and format-sensitive tactical caveats."
+    },
+    {
+      "title": "Applied Sciences 2024 systematic review on cricket fast bowling biomechanics",
+      "url": "https://www.mdpi.com/2076-3417/14/15/6752",
+      "source_type": "peer-reviewed biomechanics review",
+      "notes": "Used for delivery phase model, action variability, ball speed factors, and technical-mechanics synthesis."
+    },
+    {
+      "title": "Relationships between fast bowling technique and ball release speed in cricket",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22813926/",
+      "source_type": "peer-reviewed biomechanics paper",
+      "notes": "Used for run-up speed, release speed, and technical-performance relationships."
+    },
+    {
+      "title": "Optimising the front foot contact phase of the cricket fast bowling technique",
+      "url": "https://doi.org/10.1080/02640414.2012.736628",
+      "source_type": "peer-reviewed biomechanics paper",
+      "notes": "Used for front-foot contact and front-leg bracing concepts."
+    },
+    {
+      "title": "Sports 2024 study on follow-through strategies in fast bowling",
+      "url": "https://www.mdpi.com/2075-4663/12/12/316",
+      "source_type": "peer-reviewed biomechanics paper",
+      "notes": "Used for follow-through and ground reaction force/deceleration concepts."
+    },
+    {
+      "title": "Flow 2023 review and reassessment of cricket ball swing aerodynamics",
+      "url": "https://www.cambridge.org/core/journals/flow/article/review-and-reassessment-of-the-aerodynamics-of-cricket-ball-swing/389B2E66A420FF51FAB3EC2186AFE0AE",
+      "source_type": "peer-reviewed aerodynamics review",
+      "notes": "Used for conventional swing, reverse swing, seam angle, roughness, and ball-condition concepts."
+    },
+    {
+      "title": "Mehta 1985: Aerodynamics of sports balls",
+      "url": "https://people.stfx.ca/smackenz/courses/HK474/Labs/Jump%20Float%20Lab/Mehta%201985%20Aerodynamics%20of%20sports%20balls.pdf",
+      "source_type": "aerodynamics research paper",
+      "notes": "Used for cricket ball swing physics, seam orientation, and surface roughness concepts."
+    },
+    {
+      "title": "Dennis et al. 2003 bowling workload and injury risk",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14609154/",
+      "source_type": "peer-reviewed sports medicine paper",
+      "notes": "Used for fast-bowling workload and injury-risk relationship."
+    },
+    {
+      "title": "Hulin et al. 2014 BJSM acute workload study",
+      "url": "https://bjsm.bmj.com/content/48/8/708",
+      "source_type": "peer-reviewed sports medicine paper",
+      "notes": "Used for acute workload spikes, chronic load readiness, and injury-risk concepts in elite fast bowlers."
+    },
+    {
+      "title": "Orchard et al. 2009 fast bowling workload and injury lag",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19346405/",
+      "source_type": "peer-reviewed sports medicine paper",
+      "notes": "Used for the concept that bowling workloads may relate to injuries after a delay, supporting proactive monitoring."
+    },
+    {
+      "title": "Orchard et al. 2015 Cricket Australia injury consensus statement",
+      "url": "https://peterbrukner.com/wp-content/uploads/2024/11/Br-J-Sports-Med-2015-Orchard-bjsports-2014-093683.pdf",
+      "source_type": "sports medicine consensus statement",
+      "notes": "Used for injury definitions, workload terminology, and cricket-specific injury surveillance context."
+    },
+    {
+      "title": "Management of lumbar bone stress injury in cricket fast bowlers",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10798616/",
+      "source_type": "peer-reviewed clinical review",
+      "notes": "Used for lumbar bone stress risk, back-pain escalation, and return-to-bowling caution."
+    },
+    {
+      "title": "Injuries in cricket, PMC",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5958448/",
+      "source_type": "peer-reviewed injury review",
+      "notes": "Used for common cricket injuries, fast bowler risk patterns, and role-specific injury context."
+    },
+    {
+      "title": "Injury Prevention Strategies in Cricket",
+      "url": "https://journals.lww.com/nsca-scj/fulltext/2018/10000/injury_prevention_strategies_in_cricket.4.aspx",
+      "source_type": "strength and conditioning review",
+      "notes": "Used for S&C planning, injury prevention, mobility, strength, and workload interaction concepts."
+    },
+    {
+      "title": "The athletic profile of fast bowling in cricket: a review",
+      "url": "https://repository.usfca.edu/context/ess/article/1041/viewcontent/The_Athletic_Profile_of_Fast_Bowling_in_Cricket__A_review.pdf",
+      "source_type": "sports science review",
+      "notes": "Used for fast bowler physical qualities including strength, power, sprint ability, and conditioning needs."
+    }
+  ]
+}

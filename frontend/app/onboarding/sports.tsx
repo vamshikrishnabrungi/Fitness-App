@@ -14,6 +14,8 @@ const SPORTS = [
   'Table Tennis', 'Tennis', 'Volleyball', 'Yoga',
 ];
 
+const noWebFocus = { outlineStyle: 'none' } as any;
+
 export default function SportsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -112,7 +114,7 @@ function SportChip({
     <TouchableOpacity
       activeOpacity={0.84}
       onPress={onPress}
-      style={[styles.sportChip, selected && styles.sportChipSelected]}
+      style={[styles.sportChip, noWebFocus, selected && styles.sportChipSelected]}
     >
       <Text style={[styles.sportChipText, selected && styles.sportChipTextSelected]} numberOfLines={2}>
         {label}
@@ -124,7 +126,7 @@ function SportChip({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F6F4EF',
+    backgroundColor: colors.background,
   },
   progressWrap: {
     flexDirection: 'row',
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 4,
     borderRadius: 2,
-    backgroundColor: 'rgba(17,17,17,0.08)',
+    backgroundColor: colors.separator,
   },
   progressFill: {
     width: '37.5%',
@@ -149,8 +151,8 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 15,
     lineHeight: 20,
-    fontWeight: '700',
-    color: '#8D8880',
+    fontWeight: '600',
+    color: colors.textTertiary,
   },
   scrollView: {
     flex: 1,
@@ -167,9 +169,9 @@ const styles = StyleSheet.create({
     paddingBottom: 22,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 16 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0,
     shadowRadius: 28,
-    elevation: 4,
+    elevation: 0,
   },
   coachRow: {
     flexDirection: 'row',
@@ -178,9 +180,9 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   coachMark: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: colors.textPrimary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -188,22 +190,22 @@ const styles = StyleSheet.create({
   eyebrow: {
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: '800',
-    letterSpacing: 0.8,
-    color: '#8D8880',
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    color: colors.textTertiary,
   },
   title: {
-    fontSize: 29,
-    lineHeight: 35,
-    fontWeight: '700',
+    fontSize: 27,
+    lineHeight: 33,
+    fontWeight: '600',
     color: colors.textPrimary,
-    letterSpacing: -0.2,
+    letterSpacing: 0,
     marginBottom: 12,
   },
   subtitle: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#756F67',
+    color: colors.textSecondary,
     marginBottom: 22,
   },
   sectionHeader: {
@@ -215,14 +217,14 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     lineHeight: 20,
-    fontWeight: '800',
+    fontWeight: '600',
     color: colors.textPrimary,
   },
   sectionMeta: {
     fontSize: 13,
     lineHeight: 18,
-    fontWeight: '700',
-    color: '#9A948B',
+    fontWeight: '600',
+    color: colors.textTertiary,
   },
   sportGrid: {
     flexDirection: 'row',
@@ -236,19 +238,19 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
     borderColor: 'transparent',
-    backgroundColor: '#F3F2EF',
+    backgroundColor: colors.surfaceSecondary,
     paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   sportChipSelected: {
-    backgroundColor: '#FBF7EF',
+    backgroundColor: colors.background,
     borderColor: colors.textPrimary,
   },
   sportChipText: {
     fontSize: 13,
     lineHeight: 17,
-    fontWeight: '800',
+    fontWeight: '600',
     color: colors.textPrimary,
     textAlign: 'center',
   },
@@ -257,29 +259,29 @@ const styles = StyleSheet.create({
   },
   insight: {
     borderRadius: 16,
-    backgroundColor: '#F8F6F2',
+    backgroundColor: colors.surfaceSecondary,
     padding: 14,
     marginTop: 22,
   },
   insightLabel: {
     fontSize: 11,
     lineHeight: 15,
-    fontWeight: '800',
+    fontWeight: '700',
     letterSpacing: 0.6,
-    color: '#9A948B',
+    color: colors.textTertiary,
     textTransform: 'uppercase',
     marginBottom: 5,
   },
   insightText: {
     fontSize: 13,
     lineHeight: 19,
-    fontWeight: '600',
-    color: '#5F5A52',
+    fontWeight: '500',
+    color: colors.textSecondary,
   },
   bottom: {
     paddingHorizontal: 26,
     paddingTop: 18,
-    backgroundColor: '#F6F4EF',
+    backgroundColor: colors.background,
   },
   continueButton: {
     height: 62,
@@ -294,14 +296,14 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   continueButtonDisabled: {
-    backgroundColor: '#A7A29A',
+    backgroundColor: colors.textTertiary,
     shadowOpacity: 0,
     elevation: 0,
   },
   continueText: {
-    fontSize: 18,
+    fontSize: 17,
     lineHeight: 23,
-    fontWeight: '800',
+    fontWeight: '700',
     color: colors.background,
   },
   continueTextDisabled: {

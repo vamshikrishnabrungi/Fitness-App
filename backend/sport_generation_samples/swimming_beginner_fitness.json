@@ -1,0 +1,302 @@
+{
+  "profile_name": "swimming_beginner_fitness",
+  "generated_at": "2026-06-27T10:15:30.169518+00:00",
+  "model": "claude-haiku-4-5-20251001",
+  "source": "anthropic",
+  "sports": [
+    "swimming"
+  ],
+  "input_profile": {
+    "user_id": "sample_swimming_beginner_fitness",
+    "sports": [
+      "Swimming"
+    ],
+    "sport_details": [
+      {
+        "sport": "Swimming",
+        "role": "Beginner Swimmer"
+      }
+    ],
+    "experience": "beginner",
+    "selected_goals": [
+      "General Fitness",
+      "Endurance"
+    ],
+    "primary_goal": "General Fitness",
+    "training_location": "pool",
+    "equipment": [
+      "pool",
+      "kickboard"
+    ],
+    "training_days_per_week": 1,
+    "session_duration_min": 45,
+    "pain_areas": [
+      "shoulder"
+    ],
+    "current_injuries": [
+      {
+        "area": "shoulder",
+        "severity": "mild",
+        "note": "occasional discomfort after swimming"
+      }
+    ],
+    "preferred_training_days": [
+      "Monday"
+    ],
+    "sleep_avg_hours": 7,
+    "stress_level": "moderate"
+  },
+  "knowledge_context_summary": {
+    "programming_rule_ids": [
+      "swimming_deep_rule_beginner_safety_learn_to_swim_physical_demands_safe_entry_exit_strength_and_mobility",
+      "swimming_deep_rule_event_programming_periodization_key_concepts_open_water_is_endurance_plus_navigation_and_pack_tactics",
+      "swimming_deep_rule_event_programming_periodization_key_concepts_middle_distance_is_dual_demand",
+      "swimming_deep_rule_event_programming_periodization_key_concepts_level_gates_prevent_unsafe_programming"
+    ],
+    "teaching_progression_ids": [
+      "swimming_teach_water_confidence_safety_beginner",
+      "swimming_teach_swimming_strength_conditioning_beginner",
+      "swimming_teach_starts_turns_underwaters_beginner",
+      "swimming_teach_open_water_triathlon_beginner"
+    ],
+    "assessment_ids": [
+      "swimming_assess_water_confidence_safety",
+      "swimming_deep_assess_beginner_safety_learn_to_swim"
+    ]
+  },
+  "program": {
+    "title": "Beginner Swimming Foundation Week 1",
+    "goal": "Build water confidence, breathing control, and basic shoulder stability for safe swimming progression",
+    "sports": [
+      "Swimming"
+    ],
+    "duration_weeks": 1,
+    "athlete_analysis": {
+      "profile_summary": "Beginner swimmer (1 session/week, 45 min) with mild occasional shoulder discomfort post-swimming. Goals: general fitness and endurance. Needs water confidence, breathing mechanics, and shoulder durability before load progression.",
+      "primary_constraints": [
+        "Mild shoulder discomfort after swimming—limit overhead volume and prioritize rotator cuff control",
+        "Beginner water confidence—focus on short repeats, recovery, and technique quality over distance",
+        "Single session per week—maximize quality and safety signaling rather than volume"
+      ],
+      "sport_demands": [
+        "Water confidence and breathing rhythm under fatigue—essential gate before structured sets",
+        "Scapular control and rotator cuff capacity—prevents shoulder irritation during freestyle",
+        "Trunk control and anti-extension stability—maintains body position and reduces injury risk"
+      ],
+      "block_priority": "Water Confidence & Shoulder Durability Foundation. Establish safe breathing, floating, and water entry/exit mechanics. Build rotator cuff and scapular stability via dry-land work. Assess 24-hour symptom response to guide next week's load."
+    },
+    "blocks": [
+      {
+        "name": "Water Confidence & Shoulder Durability Foundation",
+        "start_week": 1,
+        "end_week": 1,
+        "emphasis": [
+          "water_confidence",
+          "breathing_control",
+          "shoulder_stability",
+          "safe_entry_exit",
+          "short_successful_repetitions"
+        ]
+      }
+    ],
+    "weeks": [
+      {
+        "week_number": 1,
+        "theme": "Water confidence and shoulder stability baseline",
+        "workouts": [
+          {
+            "day": "Monday",
+            "title": "Pool: Water Confidence, Breathing, Shoulder Stability Prep",
+            "category": "Sport",
+            "duration_min": 45,
+            "intensity": "easy",
+            "adaptation_targets": [
+              "water_confidence",
+              "breathing_rhythm",
+              "floating",
+              "body_position",
+              "shoulder_control"
+            ],
+            "sport_transfer": [
+              "Rhythmic breathing and face immersion reduce panic and build stroke efficiency",
+              "Scapular control and rotator cuff activation prevent shoulder strain during freestyle",
+              "Floating and streamline position lay foundation for efficient body alignment"
+            ],
+            "why_this_session": "Establish safe water entry/exit, rhythmic breathing, and floating before progressing volume. Rotator cuff prep reduces post-swim shoulder discomfort.",
+            "warmup": [
+              {
+                "name": "Pool Entry & Shallow Water Familiarization",
+                "exercise_id": null,
+                "purpose": "Practice safe entry using steps or ladder, walk in waist-deep water, confirm water comfort and no panic triggers",
+                "category": null,
+                "sets": null,
+                "reps": null,
+                "duration": "5 min",
+                "load_guidance": null,
+                "rpe": "RPE 2–3",
+                "rest": null,
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Bubble Breathing Drill",
+                "exercise_id": null,
+                "purpose": "Exhale bubbles through nose and mouth at wall; inhale to side. Build breath rhythm and face-immersion confidence.",
+                "category": null,
+                "sets": 3,
+                "reps": "10 breaths",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": "RPE 3–4",
+                "rest": "30 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Float and Recover",
+                "exercise_id": null,
+                "purpose": "Supine or prone float holding wall, practice controlled breathing and horizontal body position awareness",
+                "category": null,
+                "sets": 2,
+                "reps": "15–20 sec",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": "RPE 2–3",
+                "rest": "45 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "main_work": [
+              {
+                "name": "Wall-Supported Glide & Recover",
+                "exercise_id": null,
+                "purpose": "Push off wall, glide 10–15 m with body streamline, walk back, recover. Build streamline position and push-off confidence.",
+                "category": null,
+                "sets": 4,
+                "reps": "1 glide + walk back",
+                "duration": null,
+                "load_guidance": "Use controlled reps in a pain-free range at the target session intensity.",
+                "rpe": "RPE 3–4",
+                "rest": "60–90 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Kick with Kickboard (Flutter)",
+                "exercise_id": null,
+                "purpose": "Hold kickboard, flutter kick 15–20 m, walk back, recover. Activate legs, practice rhythmic breathing every 3–4 kicks.",
+                "category": null,
+                "sets": 3,
+                "reps": "1 kick set + walk back",
+                "duration": null,
+                "load_guidance": "Use controlled reps in a pain-free range at the target session intensity.",
+                "rpe": "RPE 3–4",
+                "rest": "90 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Stroke Practice: Bubble Breathing + Arm Movement (Supported)",
+                "exercise_id": null,
+                "purpose": "In waist-deep water, practice one-arm recovery with wall support, exhale underwater, breathe to side. Limit to controlled tempo; stop if shoulder discomfort increases.",
+                "category": null,
+                "sets": 3,
+                "reps": "10 strokes per arm",
+                "duration": null,
+                "load_guidance": "Use controlled reps in a pain-free range at the target session intensity.",
+                "rpe": "RPE 3–4",
+                "rest": "90 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Pool Exit Practice",
+                "exercise_id": null,
+                "purpose": "Practice safe exit using steps or ladder, no rushing. Confirm confidence and no discomfort before leaving pool.",
+                "category": null,
+                "sets": 1,
+                "reps": null,
+                "duration": "2 min",
+                "load_guidance": "Use controlled reps in a pain-free range at the target session intensity.",
+                "rpe": "RPE 2–3",
+                "rest": "60-90 sec",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "cooldown": [
+              {
+                "name": "Side-Lying Dumbbell External Rotation",
+                "exercise_id": "ex_side_lying_dumbbell_external_rotation",
+                "purpose": "Light rotator cuff activation (1–3 lb dumbbells or bodyweight). Reduce shoulder irritation post-swim.",
+                "category": null,
+                "sets": 2,
+                "reps": "12–15 per side",
+                "duration": null,
+                "load_guidance": "Start with 1–2 lb dumbbell; if unavailable, use bodyweight isometric hold",
+                "rpe": "RPE 3–4",
+                "rest": "45 sec between sets",
+                "tempo": "2 sec up, 2 sec down",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Inchworm Walkout",
+                "exercise_id": "mob_drill_inchworm",
+                "purpose": "Gentle posterior-chain and shoulder mobility refresh post-pool. Low spine load, controlled breathing.",
+                "category": null,
+                "sets": 2,
+                "reps": "5–8 reps",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": "RPE 3–4",
+                "rest": "45 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "injury_modifications": [
+              "If shoulder discomfort worsens during arm work, reduce stroke repeats and focus on kicking and breathing drills instead",
+              "Avoid overhead work or pressing motions if shoulder pain is present; skip arm-recovery practice and extend water-entry familiarization time",
+              "Do external rotation only if pain-free; substitute with gentle isometric shoulder holds at neutral if discomfort appears"
+            ]
+          }
+        ],
+        "progression_rule": "Beginner swimmers need water confidence, rhythmic breathing, and floating control before load progression. Limit to short repeats (25 m or less) with full recovery. Dry-land shoulder work 2–3× per week supports durability without pool fatigue.",
+        "deload_note": null
+      }
+    ],
+    "nutrition_focus": "Ensure adequate hydration before and after pool session. Focus on protein + carbohydrate within 1–2 hours post-swim to support recovery and shoulder durability.",
+    "recovery_focus": [
+      "Post-swim shower to remove chlorine and reduce skin irritation",
+      "Light low-intensity movement (walking, easy stretching) on non-pool days to reduce stiffness",
+      "Monitor 24-hour shoulder response; if discomfort persists or worsens, reduce next week's stroke volume and extend recovery",
+      "Ensure 7+ hours sleep to support adaptation and reduce fatigue-driven pain flare"
+    ],
+    "safety_notes": [
+      "Beginner swimmers must never train unsupervised; confirm pool has lifeguard or training partner present",
+      "If breath-holding, panic, or unsafe water behavior appears, stop session immediately and reassess water confidence",
+      "Shoulder discomfort is mild and occasional; monitor post-swim soreness daily. If pain persists >24 hours or worsens, defer arm-heavy work and consult sports medicine",
+      "Do not progress to longer repeats, faster pace, or high-intensity sets until water confidence is stable (4+ weeks of safe, controlled sessions)"
+    ],
+    "assumptions": [
+      "Athlete has access to a pool with lifeguard and shallow end for beginner training",
+      "Mild shoulder discomfort is post-exertional and not limiting function; no structural diagnosis required to start",
+      "1 session per week is the only training day; dry-land shoulder work (external rotation, mobility) may occur on separate days if desired",
+      "Athlete can comfortably float and has no acute fear of water; water-confidence teaching progressions apply",
+      "Kickboard and pool access are guaranteed for the full week"
+    ]
+  },
+  "workout_titles": [
+    "Pool: Water Confidence, Breathing, Shoulder Stability Prep"
+  ]
+}

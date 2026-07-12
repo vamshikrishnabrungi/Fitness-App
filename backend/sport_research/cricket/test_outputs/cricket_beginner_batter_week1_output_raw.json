@@ -1,0 +1,520 @@
+{
+  "title": "Cricket Return-to-Training Block 1: Re-Entry Week 1",
+  "goal": "Sport Performance (lean muscle gain support) for a recreational top-order cricket batsman, rebuilding movement quality and low-impact capacity while protecting a mild right knee.",
+  "sports": ["Cricket"],
+  "duration_weeks": 1,
+  "athlete_analysis": "22-year-old male beginner, top-order batsman, training 5 gym days/week with cricket practice plus a Sunday match. Macro plan is in Block 1 (re_entry, weeks 1-2) with goals of pain monitoring, movement quality, and low-impact capacity. Right knee shows mild, occasional discomfort after long running and deep fatigue jumps, so this week uses no impact plyometrics or fatigue running and prioritizes hip control, hamstring/calf-soleus capacity, and trunk stiffness. Assessment shows a true beginner (1 pull-up, 12 push-ups, 45s plank, 25 bodyweight squats), so loads stay submaximal and pattern-focused using RPE/RIR and pain-free range. Sleep averages 6.5h with moderate stress, so we cap session intensity, avoid novel high-skill loading, and keep one variable progressing at a time. Saturday is kept light because Sunday is match day (avoid heavy legs day before match). Equipment (barbell, dumbbells, cable, bench, pull-up bar) supports goblet/landmine squats, dumbbell presses, machine/cable rows, calf capacity, and anti-rotation core. Sport transfer targets front-foot control, strike-rotation footwork, and fielding deceleration without aggravating the knee.",
+  "blocks": [
+    {
+      "block": 1,
+      "phase": "re_entry",
+      "weeks": [1],
+      "focus": "Re-establish movement quality, build low-impact lower-body and trunk capacity, and protect the right knee while monitoring 24-hour pain response.",
+      "progression_logic": "Progress only if 24-hour pain response stays at baseline. Hold or regress load/volume immediately if knee discomfort increases. One variable changed per week."
+    }
+  ],
+  "weeks": [
+    {
+      "week": 1,
+      "phase": "re_entry",
+      "deload": false,
+      "workouts": [
+        {
+          "day": "Monday",
+          "title": "Lower-Body Movement Quality & Knee-Safe Strength",
+          "category": "Strength",
+          "duration_min": 75,
+          "intensity": "moderate",
+          "adaptation_targets": ["hip control", "hamstring and glute capacity", "trunk stiffness", "knee-friendly squat mechanics"],
+          "sport_transfer": "Front-foot batting stability and fielding deceleration depend on hip control, knee tracking, and a stiff trunk. Goblet and landmine squats teach a balanced, knee-safe load position for repeated front-foot strides.",
+          "why_this_session": "Re-entry week opens with low-impact, high-control lower-body work to rebuild squat and hinge quality without stressing the mild right knee through impact or deep fatigue.",
+          "warmup": [
+            {
+              "name": "Bird Dog",
+              "purpose": "Activate trunk anti-rotation and hip control to prepare the spine for loaded patterns.",
+              "sets": 2,
+              "reps": "6 per side",
+              "duration": null,
+              "rest": "30s",
+              "load_guidance": "Bodyweight, slow and controlled.",
+              "tempo": "2s reach, 2s hold",
+              "coaching_notes": "Reach long not high, keep hips square, no lumbar extension.",
+              "substitutions": ["Dead Bug", "Bird Dog with pause"]
+            },
+            {
+              "name": "Lateral Leg Swing",
+              "purpose": "Open frontal-plane hip range for cricket fielding cuts and squat setup.",
+              "sets": 1,
+              "reps": "10 per side",
+              "duration": null,
+              "rest": "20s",
+              "load_guidance": "Bodyweight, controlled rhythm.",
+              "tempo": "Controlled",
+              "coaching_notes": "Keep pelvis mostly level, no momentum-only kicking.",
+              "substitutions": ["World's Greatest Stretch", "Leg swings front-to-back"]
+            }
+          ],
+          "main_work": [
+            {
+              "name": "Goblet Squat",
+              "purpose": "Teach knee tracking, depth control, and upright torso with a knee-friendly front load.",
+              "sets": 3,
+              "reps": "8-10",
+              "duration": null,
+              "rest": "90s",
+              "load_guidance": "Stop 2-3 reps in reserve; depth only to pain-free range for the right knee.",
+              "tempo": "3-1-1",
+              "coaching_notes": "Hold weight to chest, open knees with control, keep heels planted. Stop set if knee discomfort appears.",
+              "substitutions": ["Landmine Squat", "Box Squat to comfortable depth"]
+            },
+            {
+              "name": "Dumbbell Hip Thrust",
+              "purpose": "Build glute and hamstring strength to offload the knee and power front-foot drive.",
+              "sets": 3,
+              "reps": "10-12",
+              "duration": null,
+              "rest": "75s",
+              "load_guidance": "Moderate dumbbell, 2 RIR, full hip extension without low-back arch.",
+              "tempo": "2-1-2",
+              "coaching_notes": "Chin tucked, ribs down, squeeze glutes at top. Hold dumbbell steady on hips.",
+              "substitutions": ["Cable Pull-Through", "Bodyweight Hip Thrust"]
+            },
+            {
+              "name": "Single-Leg Calf Raise",
+              "purpose": "Build calf-soleus and ankle capacity to support deceleration and protect the knee during running.",
+              "sets": 3,
+              "reps": "10-12 per leg",
+              "duration": null,
+              "rest": "60s",
+              "load_guidance": "Bodyweight or light dumbbell, full controlled range.",
+              "tempo": "2-1-2",
+              "coaching_notes": "Use support for balance, rise through first two toes, no Achilles pain.",
+              "substitutions": ["Standing Calf Raise", "Leg Press Calf Raise"]
+            },
+            {
+              "name": "Pallof Press Overhead Reach",
+              "purpose": "Train anti-rotation and anti-extension trunk control for batting rotation and fielding bracing.",
+              "sets": 3,
+              "reps": "8 per side",
+              "duration": null,
+              "rest": "60s",
+              "load_guidance": "Light cable/band; own the press-out before reaching.",
+              "tempo": "Controlled, 2s overhead hold",
+              "coaching_notes": "Reach up without ribs flaring, resist the pull, breathe steady.",
+              "substitutions": ["Pallof Press", "Half-Kneeling Pallof Press"]
+            }
+          ],
+          "cooldown": [
+            {
+              "name": "Calf Stretches (soleus bottom-squat lean)",
+              "purpose": "Restore ankle dorsiflexion used in squat depth and front-foot stride.",
+              "sets": 1,
+              "reps": null,
+              "duration": "45s per side",
+              "rest": "0s",
+              "load_guidance": null,
+              "tempo": "Hold",
+              "coaching_notes": "Lean knee forward gently, stop short of any knee or ankle pain.",
+              "substitutions": ["Wall calf stretch"]
+            }
+          ],
+          "injury_modifications": ["Keep all squat depth pain-free for the right knee; reduce range before reducing load.", "Stop any set if knee discomfort appears and log 24-hour response.", "No impact or jumping this session."]
+        },
+        {
+          "day": "Tuesday",
+          "title": "Upper-Body Push/Pull & Shoulder Durability",
+          "category": "Strength",
+          "duration_min": 75,
+          "intensity": "moderate",
+          "adaptation_targets": ["horizontal pushing strength", "upper-back capacity", "scapular control", "shoulder durability"],
+          "sport_transfer": "A durable, controlled shoulder girdle supports throwing, bat-face control, and repeated fielding throws. Rows and face pulls build posterior shoulder capacity that protects the throwing arm.",
+          "why_this_session": "Upper-body strength rebuild with balanced push/pull and scapular work, keeping the knee fully rested between lower-body days.",
+          "warmup": [
+            {
+              "name": "Band Pull-Apart",
+              "purpose": "Activate posterior shoulder and scapular control before pressing.",
+              "sets": 2,
+              "reps": "15",
+              "duration": null,
+              "rest": "30s",
+              "load_guidance": "Light band, smooth control.",
+              "tempo": "Controlled",
+              "coaching_notes": "Keep ribs down, no neck tension.",
+              "substitutions": ["Prone Y-T-W Raise", "Face Pull (light)"]
+            },
+            {
+              "name": "Serratus Cable Punch",
+              "purpose": "Prime scapular protraction for healthy pressing mechanics.",
+              "sets": 2,
+              "reps": "10 per side",
+              "duration": null,
+              "rest": "30s",
+              "load_guidance": "Light cable.",
+              "tempo": "Controlled reach",
+              "coaching_notes": "Reach shoulder blade around ribs without twisting trunk.",
+              "substitutions": ["Push-Up Plus", "Band serratus punch"]
+            }
+          ],
+          "main_work": [
+            {
+              "name": "Dumbbell Bench Press",
+              "purpose": "Build horizontal pressing strength with a natural arm path and shoulder control.",
+              "sets": 3,
+              "reps": "8-10",
+              "duration": null,
+              "rest": "90s",
+              "load_guidance": "2 RIR, lower until upper arms near torso level under control.",
+              "tempo": "2-1-1",
+              "coaching_notes": "Set dumbbells over elbows before first rep, shoulder blades set on bench.",
+              "substitutions": ["Machine Chest Press", "Dumbbell Floor Press"]
+            },
+            {
+              "name": "Chest-Supported Machine Row",
+              "purpose": "Build upper-back strength with low low-back fatigue to balance pressing.",
+              "sets": 3,
+              "reps": "10-12",
+              "duration": null,
+              "rest": "75s",
+              "load_guidance": "2 RIR, control the path, no shoulder roll.",
+              "tempo": "2-1-2",
+              "coaching_notes": "Set chest pad so arms start long, drive elbows along handle path.",
+              "substitutions": ["Machine Row", "One-Arm Dumbbell Row"]
+            },
+            {
+              "name": "Face Pull",
+              "purpose": "Train scapular retraction and external rotation to protect the throwing shoulder.",
+              "sets": 3,
+              "reps": "12-15",
+              "duration": null,
+              "rest": "60s",
+              "load_guidance": "Light-moderate, smooth tempo.",
+              "tempo": "2-1-2",
+              "coaching_notes": "Set cable near face height, pull rope toward eyes, keep ribs and neck calm.",
+              "substitutions": ["Band Pull-Apart", "Prone Y-T-W Raise"]
+            },
+            {
+              "name": "Dumbbell Lateral Raise",
+              "purpose": "Develop lateral deltoid for balanced shoulder strength and durability.",
+              "sets": 2,
+              "reps": "12-15",
+              "duration": null,
+              "rest": "45s",
+              "load_guidance": "Light, control neck tension.",
+              "tempo": "2-1-2",
+              "coaching_notes": "Slight elbow bend, raise in scapular plane, stop if any shoulder pinch.",
+              "substitutions": ["Cable lateral raise", "Machine Shoulder Press (light)"]
+            }
+          ],
+          "cooldown": [
+            {
+              "name": "Leaning Bar Hang",
+              "purpose": "Decompress and stretch the shoulder girdle after pressing and pulling.",
+              "sets": 1,
+              "reps": null,
+              "duration": "30s x 2",
+              "rest": "30s",
+              "load_guidance": null,
+              "tempo": "Relaxed hold",
+              "coaching_notes": "Toes on floor, take only comfortable shoulder range.",
+              "substitutions": ["Doorway pec stretch"]
+            }
+          ],
+          "injury_modifications": ["No lower-body impact; knee fully rested.", "Reduce lateral raise/press load if any shoulder pinch occurs."]
+        },
+        {
+          "day": "Wednesday",
+          "title": "Rotational Core, Calves & Low-Impact Conditioning",
+          "category": "Conditioning",
+          "duration_min": 75,
+          "intensity": "moderate",
+          "adaptation_targets": ["rotational trunk control", "calf-soleus capacity", "aerobic base", "knee-safe conditioning"],
+          "sport_transfer": "Controlled rotation drives bat speed and fielding pivots; low-impact aerobic work builds the conditioning base for long fielding sessions without loading the knee.",
+          "why_this_session": "Mid-week session trains rotational control and tissue capacity while keeping conditioning low-impact (cycle/row) to respect the macro plan's gradual-impact rule and the knee.",
+          "warmup": [
+            {
+              "name": "World's Greatest Stretch",
+              "purpose": "Mobilize hips, hamstrings, ankles, and thoracic spine before rotational work.",
+              "sets": 1,
+              "reps": "5 per side",
+              "duration": null,
+              "rest": "20s",
+              "load_guidance": "Bodyweight.",
+              "tempo": "Own each position",
+              "coaching_notes": "Keep breathing, do not force range.",
+              "substitutions": ["Lateral Leg Swing", "Hip flow drills"]
+            },
+            {
+              "name": "Bird Dog",
+              "purpose": "Reinforce trunk stability before loaded rotation.",
+              "sets": 2,
+              "reps": "6 per side",
+              "duration": null,
+              "rest": "30s",
+              "load_guidance": "Bodyweight.",
+              "tempo": "2s hold",
+              "coaching_notes": "Hips square, reach long.",
+              "substitutions": ["Dead Bug"]
+            }
+          ],
+          "main_work": [
+            {
+              "name": "Landmine Rotation",
+              "purpose": "Train controlled loaded rotation and deceleration for batting and throwing transfer.",
+              "sets": 3,
+              "reps": "8 per side",
+              "duration": null,
+              "rest": "75s",
+              "load_guidance": "Light plate, rotate feet and hips with the bar, 3 RIR.",
+              "tempo": "Controlled, no snapping",
+              "coaching_notes": "Hold bar end close, no low-back rotation pain, move from hips not arms.",
+              "substitutions": ["Pallof Press (anti-rotation)", "Cable chop (light)"]
+            },
+            {
+              "name": "Standing Calf Raise",
+              "purpose": "Build calf hypertrophy and tissue capacity to support running and knee protection.",
+              "sets": 3,
+              "reps": "12-15",
+              "duration": null,
+              "rest": "60s",
+              "load_guidance": "Moderate, full stretch and full raise.",
+              "tempo": "2-1-2",
+              "coaching_notes": "Knees softly straight, control the bottom stretch.",
+              "substitutions": ["Leg Press Calf Raise", "Single-Leg Calf Raise"]
+            },
+            {
+              "name": "Pallof Press Overhead Reach",
+              "purpose": "Anti-rotation and anti-extension endurance for trunk durability in long innings.",
+              "sets": 3,
+              "reps": "8 per side",
+              "duration": null,
+              "rest": "60s",
+              "load_guidance": "Light, controlled.",
+              "tempo": "2s overhead hold",
+              "coaching_notes": "No rib flare, own the press-out first.",
+              "substitutions": ["Pallof Press", "Dead Bug with reach"]
+            },
+            {
+              "name": "Low-Impact Aerobic Intervals (stationary bike or rower)",
+              "purpose": "Build aerobic base for fielding endurance without knee impact.",
+              "sets": 6,
+              "reps": null,
+              "duration": "1 min moderate / 1 min easy",
+              "rest": "Active easy spin between efforts",
+              "load_guidance": "Moderate efforts at RPE 6-7, pain-free; never sprint-loaded on the knee.",
+              "tempo": "Smooth cadence",
+              "coaching_notes": "Stop if knee discomfort appears; bike preferred over rower if knee flexion is sensitive.",
+              "substitutions": ["Brisk incline walk", "Elliptical intervals"]
+            }
+          ],
+          "cooldown": [
+            {
+              "name": "Calf Stretches (gastroc and soleus)",
+              "purpose": "Restore ankle range after calf loading and conditioning.",
+              "sets": 1,
+              "reps": null,
+              "duration": "45s per side",
+              "rest": "0s",
+              "load_guidance": null,
+              "tempo": "Hold",
+              "coaching_notes": "Gentle, pain-free range only.",
+              "substitutions": ["Wall calf stretch"]
+            }
+          ],
+          "injury_modifications": ["Conditioning is low-impact only (no running/jumping) per re-entry phase and knee status.", "Keep landmine rotation pain-free for low back and knee.", "Reduce intervals to 4 if sleep was poor."]
+        },
+        {
+          "day": "Friday",
+          "title": "Full-Body Strength & Hip Control",
+          "category": "Strength",
+          "duration_min": 75,
+          "intensity": "moderate-hard",
+          "adaptation_targets": ["loaded squat pattern", "horizontal push and pull", "hip and trunk stiffness", "lat and posterior chain capacity"],
+          "sport_transfer": "A guided landmine squat reinforces a knee-safe front-foot load position, while pressing, rowing, and pullovers build the upper-body durability needed for throwing and bat control.",
+          "why_this_session": "Main full-body strength day placed mid-week with two full recovery days before the Saturday primer and Sunday match, building capacity while keeping the knee protected.",
+          "warmup": [
+            {
+              "name": "Band Pull-Apart",
+              "purpose": "Wake up the scapular stabilizers before pressing and rowing.",
+              "sets": 2,
+              "reps": "15",
+              "duration": null,
+              "rest": "30s",
+              "load_guidance": "Light band.",
+              "tempo": "Controlled",
+              "coaching_notes": "Ribs down, smooth tempo.",
+              "substitutions": ["Face Pull (light)"]
+            },
+            {
+              "name": "Lateral Leg Swing",
+              "purpose": "Prepare hips for loaded squatting and lateral fielding patterns.",
+              "sets": 1,
+              "reps": "10 per side",
+              "duration": null,
+              "rest": "20s",
+              "load_guidance": "Bodyweight.",
+              "tempo": "Controlled",
+              "coaching_notes": "Pelvis level, no forced range.",
+              "substitutions": ["World's Greatest Stretch"]
+            }
+          ],
+          "main_work": [
+            {
+              "name": "Landmine Squat",
+              "purpose": "Teach a knee-friendly loaded squat with a guided bar arc and front load.",
+              "sets": 3,
+              "reps": "8-10",
+              "duration": null,
+              "rest": "90s",
+              "load_guidance": "2 RIR, depth to pain-free range, lean slightly into the arc.",
+              "tempo": "3-1-1",
+              "coaching_notes": "Hold sleeve to sternum, control bar path, heels planted. Stop if knee discomfort appears.",
+              "substitutions": ["Goblet Squat", "Box Squat"]
+            },
+            {
+              "name": "Machine Chest Press",
+              "purpose": "Train horizontal pushing with low stability demand to manage fatigue on a strength day.",
+              "sets": 3,
+              "reps": "10-12",
+              "duration": null,
+              "rest": "75s",
+              "load_guidance": "2 RIR, handles start at mid-chest.",
+              "tempo": "2-1-1",
+              "coaching_notes": "Shoulder blades against pad, no shrug.",
+              "substitutions": ["Dumbbell Bench Press", "Dumbbell Floor Press"]
+            },
+            {
+              "name": "Machine Row",
+              "purpose": "Build back strength and size with a controlled path after squatting fatigue.",
+              "sets": 3,
+              "reps": "10-12",
+              "duration": null,
+              "rest": "75s",
+              "load_guidance": "2 RIR, pull elbows back without rolling shoulders.",
+              "tempo": "2-1-2",
+              "coaching_notes": "Fit handles to torso, controlled return.",
+              "substitutions": ["Chest-Supported Machine Row", "One-Arm Dumbbell Row"]
+            },
+            {
+              "name": "Dumbbell Pullover",
+              "purpose": "Train lats and serratus through a long arc for overhead shoulder capacity and trunk control.",
+              "sets": 2,
+              "reps": "12",
+              "duration": null,
+              "rest": "60s",
+              "load_guidance": "Light-moderate, lower only to controlled shoulder range.",
+              "tempo": "3-1-1",
+              "coaching_notes": "Ribs down, no rib flare, stop short of shoulder discomfort.",
+              "substitutions": ["Single-Arm Cable Pulldown", "Straight-arm pulldown"]
+            }
+          ],
+          "cooldown": [
+            {
+              "name": "Leaning Bar Hang",
+              "purpose": "Decompress shoulders and lats after pressing and pullovers.",
+              "sets": 1,
+              "reps": null,
+              "duration": "30s x 2",
+              "rest": "30s",
+              "load_guidance": null,
+              "tempo": "Relaxed",
+              "coaching_notes": "Comfortable range only.",
+              "substitutions": ["Doorway pec stretch"]
+            }
+          ],
+          "injury_modifications": ["Keep landmine squat depth pain-free for the right knee.", "No impact work; this is the last loaded leg session before match day.", "Log 24-hour knee response before progressing next week."]
+        },
+        {
+          "day": "Saturday",
+          "title": "Pre-Match Primer: Mobility, Activation & Cricket Movement Prep",
+          "category": "Mobility",
+          "duration_min": 60,
+          "intensity": "easy",
+          "adaptation_targets": ["movement quality", "hip and trunk activation", "scapular readiness", "low-fatigue neural primer"],
+          "sport_transfer": "Light activation and cricket-specific movement rehearsal prime front-foot footwork, fielding ready-position, and throwing mechanics so the athlete arrives fresh and sharp for Sunday's match.",
+          "why_this_session": "Match-day-minus-1 rule requires avoiding heavy legs, exhaustive conditioning, and novel high-impact work. This is a low-volume primer that keeps the knee fresh and reinforces sport patterns without fatigue.",
+          "warmup": [
+            {
+              "name": "World's Greatest Stretch",
+              "purpose": "Full-body dynamic prep for hips, hamstrings, ankles, and thoracic rotation.",
+              "sets": 1,
+              "reps": "5 per side",
+              "duration": null,
+              "rest": "20s",
+              "load_guidance": "Bodyweight.",
+              "tempo": "Own each position",
+              "coaching_notes": "Keep breathing, no forcing range.",
+              "substitutions": ["Lateral Leg Swing", "Hip openers"]
+            }
+          ],
+          "main_work": [
+            {
+              "name": "Bird Dog",
+              "purpose": "Light trunk activation to prime bracing for batting and fielding.",
+              "sets": 2,
+              "reps": "6 per side",
+              "duration": null,
+              "rest": "30s",
+              "load_guidance": "Bodyweight, low effort.",
+              "tempo": "2s hold",
+              "coaching_notes": "Hips square, reach long, no fatigue.",
+              "substitutions": ["Dead Bug"]
+            },
+            {
+              "name": "Band Pull-Apart",
+              "purpose": "Activate posterior shoulder for throwing readiness without load.",
+              "sets": 2,
+              "reps": "12",
+              "duration": null,
+              "rest": "30s",
+              "load_guidance": "Light band.",
+              "tempo": "Controlled",
+              "coaching_notes": "Ribs down, smooth.",
+              "substitutions": ["Face Pull (very light)"]
+            },
+            {
+              "name": "Shadow Batting to Target Line (cricket movement rehearsal)",
+              "purpose": "Rehearse front-foot defense and drive footwork and head position for match readiness.",
+              "sets": 3,
+              "reps": "6 strides per set",
+              "duration": null,
+              "rest": "45s",
+              "load_guidance": "No load; controlled, low-intensity technical rehearsal only.",
+              "tempo": "Deliberate",
+              "coaching_notes": "Complete trigger before release, level eyes, head toward contact line, straight bat path. Keep it crisp, not tiring.",
+              "substitutions": ["Slow front-foot defense shadow", "Back-foot punch shadow"]
+            },
+            {
+              "name": "Fielding Ready-Position & Long Barrier Rehearsal (low speed)",
+              "purpose": "Prime hips-low ready position and safe stopping technique for Sunday fielding.",
+              "sets": 3,
+              "reps": "5 reps per set",
+              "duration": null,
+              "rest": "45s",
+              "load_guidance": "Low speed, predictable; no diving or full-speed deceleration to protect the knee.",
+              "tempo": "Controlled",
+              "coaching_notes": "Eyes to ball, hips low, soft hands, body behind ball. No fatigue or impact reps.",
+              "substitutions": ["Rolling pickup walkthrough", "Approach-angle cone walkthrough"]
+            }
+          ],
+          "cooldown": [
+            {
+              "name": "Calf Stretches (light) and Lateral Leg Swing",
+              "purpose": "Leave hips and ankles loose and relaxed for match day.",
+              "sets": 1,
+              "reps": "8 swings per side",
+              "duration": "30s calf stretch per side",
+              "rest": "0s",
+              "load_guidance": null,
+              "tempo": "Easy",
+              "coaching_notes": "Gentle, pain-free, no deep stretching to fatigue.",
+              "substitutions": ["Easy walk"]
+            }
+          ],
+          "injury_modifications": ["No heavy legs, no impact, no diving the day before the match (MD-1 rule).", "Keep total volume low to arrive fresh for Sunday.", "Skip or shorten if knee is sore; substitute a pure mobility/recovery flow."]
+        }
+      ]
+    }
+  ],
+  "nutrition_focus": "Support lean muscle gain on a vegetarian diet with a small calorie surplus (~250-350 kcal). Target ~1.6-2.0 g/kg protein (~120-150 g) using dairy (milk, paneer, curd, whey), legumes, soy, and eggs if acceptable. Anchor protein and carbohydrate around evening training and the Sunday match. Milk is a convenient vegetarian weight-gain and recovery aid. Prioritize whole-food carbs for training energy and hydrate well for Hyderabad heat.",
+  "recovery_focus": "Sleep is the priority lever at 6.5h average; aim to add 30-60 min toward 7.5-8h to protect a beginner's progress and knee recovery. Use light foam rolling for calves and quads (expect some discomfort that eases over weeks), monitor 24-hour knee response after each lower-body day, and keep moderate stress in check with consistent wind-down. On low-sleep days, cut volume 20-40% and keep technical work submaximal.",
+  "safety_notes": ["Right knee is mild and only flares after long running or deep fatigue jumps; this week uses no running impact, no jumping, and pain-free squat depth.", "Stop any set if knee discomfort appears and reduce range before load. Hold or regress if 24-hour pain

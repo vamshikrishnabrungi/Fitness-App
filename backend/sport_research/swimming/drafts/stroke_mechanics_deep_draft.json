@@ -1,0 +1,1383 @@
+{
+  "metadata": {
+    "domain": "stroke_mechanics_deep",
+    "sport": "swimming",
+    "version": "draft_v1",
+    "researched_on": "2026-06-23",
+    "agent_scope": "stroke mechanics, breathing, body position, catch/pull/kick, errors, cues, drills, and level progressions for freestyle, backstroke, breaststroke, and butterfly",
+    "research_goal": "Create backend-ready swimming coaching knowledge for stroke mechanics that can support safe beginner learning, fitness swimming, competitive stroke refinement, stroke-specific load management, drill selection, and beginner/intermediate/advanced progressions without prescribing unsafe breath-holding, high-volume butterfly, or volume that exceeds water-skill readiness."
+  },
+  "source_refs": [
+    {
+      "id": "world_aquatics_competition_regulations_2026",
+      "title": "World Aquatics Competition Regulations",
+      "url": "https://www.worldaquatics.com/rules/competition-regulations",
+      "source_type": "official_rules_portal",
+      "organization_or_author": "World Aquatics",
+      "notes": "Used for current official competition-regulation context and stroke-legality constraints that shape breaststroke, butterfly, backstroke, freestyle, medley, turn, and finish rules."
+    },
+    {
+      "id": "usa_swimming_adm_competence_progressions",
+      "title": "USA Swimming American Development Model: Competence Progressions",
+      "url": "https://www.usaswimming.org/docs/default-source/coaching-resourcesdocuments/adm-competence-progressions.pdf",
+      "source_type": "official_athlete_development_pdf",
+      "organization_or_author": "USA Swimming",
+      "notes": "Used for level progressions, streamline and breakout readiness, freestyle and backstroke breathing, early vertical forearm, one-arm and six-count-switch drills, butterfly and breaststroke progressions, stroke count, distance per stroke, stroke rate, and race-skill development."
+    },
+    {
+      "id": "usa_swimming_stroke_turn_situations_2025",
+      "title": "Situations and Resolutions: Stroke and Turn",
+      "url": "https://www.usaswimming.org/docs/default-source/officialsdocuments/officials-training-resources/situations-and-resolutions/situations-and-resolutions-stroke-and-turn.pdf",
+      "source_type": "official_officiating_training_pdf",
+      "organization_or_author": "USA Swimming National Officials Committee",
+      "notes": "Used for legal/illegal stroke variants, especially breaststroke pull and kick constraints, head-surface requirements, butterfly/breaststroke simultaneous touch concepts, and practical rule examples."
+    },
+    {
+      "id": "swim_england_expected_standards",
+      "title": "Swim England Expected Standards",
+      "url": "https://www.swimming.org/swimengland/swim-england-expected-standards/",
+      "source_type": "official_teaching_standards",
+      "organization_or_author": "Swim England",
+      "notes": "Used for the BLABT teaching frame: body position, legs, arms, breathing, and timing, plus staged expectations from basic 10 m stroke work to fuller 25 m stroke competency."
+    },
+    {
+      "id": "swim_england_front_crawl_technique",
+      "title": "Improving Your Front Crawl Technique",
+      "url": "https://www.swimming.org/masters/improving-front-crawl-technique/",
+      "source_type": "official_technique_article",
+      "organization_or_author": "Swim England",
+      "notes": "Used for front-crawl body line, head alignment, rotation, arm entry, pull timing, kick size, breathing timing, and common breathing/body-position implications."
+    },
+    {
+      "id": "swim_england_backstroke_technique",
+      "title": "Improving Your Backstroke Technique",
+      "url": "https://www.swimming.org/masters/improving-your-backstroke-technique/",
+      "source_type": "official_technique_article",
+      "organization_or_author": "Swim England",
+      "notes": "Used for backstroke body position, hip height, head stillness, shoulder/hip rotation, arm entry, pull path, kick rhythm, and breathing rhythm."
+    },
+    {
+      "id": "swim_england_breaststroke_technique",
+      "title": "Improving Your Breaststroke Technique",
+      "url": "https://www.swimming.org/masters/improving-your-breaststroke-technique/",
+      "source_type": "official_technique_article",
+      "organization_or_author": "Swim England",
+      "notes": "Used for breaststroke horizontal line, neck relaxation, high-elbow outsweep, compact arm pull, kick dominance, foot turn-out, glide, and breathing with shoulder rise rather than head lifting."
+    },
+    {
+      "id": "swim_england_butterfly_technique",
+      "title": "Butterfly Stroke Technique",
+      "url": "https://www.swimming.org/masters/advanced-butterfly-stroke-technique/",
+      "source_type": "official_technique_article",
+      "organization_or_author": "Swim England",
+      "notes": "Used for butterfly body wave, hand entry, simultaneous sweeps, dolphin kick from hips, two-kick timing, front and side breathing options, and low-surface recovery."
+    },
+    {
+      "id": "swimming_australia_swimming_rules",
+      "title": "Swimming Australia Swimming Rules",
+      "url": "https://prod.swimming.org.au/sites/default/files/assets/documents/Swimming-Australia-Swimming-Rules.pdf",
+      "source_type": "official_rules_pdf",
+      "organization_or_author": "Swimming Australia",
+      "notes": "Used as an additional official federation rules reference for stroke legality, individual medley order, relay medley order, and race conduct."
+    },
+    {
+      "id": "asca_level_2_strokes_school",
+      "title": "ASCA Level 2: The Strokes School",
+      "url": "https://swimmingcoach.org/level2information",
+      "source_type": "coach_education_program",
+      "organization_or_author": "American Swimming Coaches Association",
+      "notes": "Used for coach-education framing: biomechanics, scientific principles, and teaching progressions for butterfly, backstroke, breaststroke, and freestyle."
+    },
+    {
+      "id": "asca_technique_talks_library",
+      "title": "ASCA Technique Talks Library",
+      "url": "https://swimmingcoach.org/techniquetalks",
+      "source_type": "coach_education_library",
+      "organization_or_author": "American Swimming Coaches Association",
+      "notes": "Used for coach-facing topic coverage around freestyle, butterfly, breaststroke training, tempo, stroke rate, and teaching the catch."
+    },
+    {
+      "id": "toussaint_beek_front_crawl_biomechanics",
+      "title": "Biomechanics of Competitive Front Crawl Swimming",
+      "url": "https://link.springer.com/article/10.2165/00007256-199213010-00002",
+      "source_type": "peer_reviewed_biomechanics_review",
+      "organization_or_author": "Toussaint and Beek, Sports Medicine",
+      "notes": "Used for the propulsion-drag framework, hand orientation/sculling, propelling efficiency, power output, and distance per stroke as a useful indicator of technical efficiency."
+    },
+    {
+      "id": "front_crawl_velocity_hydrodynamics_review",
+      "title": "How Do Swimmers Control Their Front Crawl Swimming Velocity? Current Knowledge and Gaps from Hydrodynamic Perspectives",
+      "url": "https://www.tandfonline.com/doi/full/10.1080/14763141.2021.1959946",
+      "source_type": "peer_reviewed_biomechanics_review",
+      "organization_or_author": "Sports Biomechanics authors",
+      "notes": "Used for synthesis of velocity control, propulsive and resistive forces, and the need to connect stroke-rate, stroke-length, and drag management rather than cueing power alone."
+    },
+    {
+      "id": "wanivenhaus_competitive_swimming_injuries",
+      "title": "Epidemiology of Injuries and Prevention Strategies in Competitive Swimmers",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23016094/",
+      "source_type": "peer_reviewed_sports_medicine_review",
+      "organization_or_author": "Wanivenhaus, Fox, Chaudhury, and Rodeo",
+      "notes": "Used for shoulder, low-back, breaststroke-knee, and overuse-risk framing in competitive swimming."
+    },
+    {
+      "id": "tovin_swimmers_shoulder",
+      "title": "Prevention and Treatment of Swimmer's Shoulder",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2953356/",
+      "source_type": "peer_reviewed_clinical_commentary",
+      "organization_or_author": "Tovin, North American Journal of Sports Physical Therapy",
+      "notes": "Used for shoulder biomechanics, rotator cuff and scapular-control needs, overuse mechanisms, and rehabilitation/prevention implications."
+    },
+    {
+      "id": "breaststroke_swimmers_knee",
+      "title": "Breaststroke Swimmer's Knee: A Biomechanical and Arthroscopic Study",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7396051/",
+      "source_type": "peer_reviewed_sports_medicine_study",
+      "organization_or_author": "Kennedy and Hawkins",
+      "notes": "Used for breaststroke medial-knee risk and the need to manage kick mechanics, breaststroke volume, and symptom response."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "swimming_propulsion_drag_exchange",
+      "concept": "Swimming speed is a balance between useful propulsion and drag reduction.",
+      "details": "The app should not cue swimmers to pull harder without also managing head position, body line, rotation, streamlining, breathing disruption, kick amplitude, and stroke timing. Poor alignment can erase gains from stronger pulling.",
+      "backend_tags": ["propulsion", "drag", "efficiency"],
+      "source_ref_ids": ["toussaint_beek_front_crawl_biomechanics", "front_crawl_velocity_hydrodynamics_review"]
+    },
+    {
+      "id": "blabt_teaching_frame",
+      "concept": "Use body position, legs, arms, breathing, and timing as the default teaching checklist.",
+      "details": "A swimmer can appear to have an arm problem when the root cause is body position, breathing timing, or leg action. BLABT gives the backend a compact way to diagnose and retrieve stroke records.",
+      "backend_tags": ["teaching_model", "body_position", "timing"],
+      "source_ref_ids": ["swim_england_expected_standards"]
+    },
+    {
+      "id": "breathing_is_a_stroke_skill",
+      "concept": "Breathing must be trained as rhythm, exhalation, body-line control, and anxiety control.",
+      "details": "Breath holding, late exhalation, or lifting the head commonly causes sinking legs, rushed recovery, panic, and early fatigue. Breathing skill should precede long continuous swim prescriptions for beginners.",
+      "backend_tags": ["breathing", "beginner_safety", "rhythm"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "head_position_controls_body_line",
+      "concept": "Head position strongly influences hips, legs, drag, and neck load.",
+      "details": "Freestyle and backstroke generally need a quiet head aligned with the body; breaststroke and butterfly breathing should rise with the shoulders or body wave rather than by craning the neck.",
+      "backend_tags": ["head_position", "body_line", "neck_load"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_backstroke_technique", "swim_england_breaststroke_technique", "swim_england_butterfly_technique"]
+    },
+    {
+      "id": "rotation_links_body_and_pull",
+      "concept": "Freestyle and backstroke use long-axis rotation to connect the trunk, shoulder, arm path, and breathing.",
+      "details": "A flat swimmer often compensates with wide recovery, crossing midline, low hips, or shoulder strain. Rotation should come from the trunk and hips with a stable head rather than from swinging the arm alone.",
+      "backend_tags": ["rotation", "freestyle", "backstroke", "shoulder_health"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_backstroke_technique", "tovin_swimmers_shoulder"]
+    },
+    {
+      "id": "catch_sets_propulsive_direction",
+      "concept": "The catch is about holding water and directing force backward, not pressing down.",
+      "details": "Dropped-elbow or downward-pressing catches lift the chest, drop the hips, and waste shoulder load. Early forearm engagement, patient reach, and hand/forearm orientation should be progressed before hard pulling or paddles.",
+      "backend_tags": ["catch", "pull", "early_vertical_forearm"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "toussaint_beek_front_crawl_biomechanics", "asca_technique_talks_library"]
+    },
+    {
+      "id": "kicks_have_different_jobs",
+      "concept": "Kick prescriptions must match stroke, event, and skill level.",
+      "details": "Freestyle and backstroke flutter kicks help balance, body line, and sprint speed; breaststroke kick is a major propulsive phase with knee/groin load; butterfly dolphin kick links body wave and arm timing. Beginner endurance users often need efficient small kicks before high-output kick sets.",
+      "backend_tags": ["kick", "event_specificity", "load_management"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_breaststroke_technique", "swim_england_butterfly_technique", "breaststroke_swimmers_knee"]
+    },
+    {
+      "id": "stroke_rate_distance_per_stroke_tradeoff",
+      "concept": "Distance per stroke and stroke rate should be developed together.",
+      "details": "Long gliding is not automatically efficient if speed stalls, and high turnover is not useful if the swimmer slips water or loses line. Intermediate and advanced swimmers need count-plus-time tasks to find sustainable combinations.",
+      "backend_tags": ["stroke_count", "stroke_rate", "efficiency"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "id": "simultaneous_vs_alternating_strokes",
+      "concept": "Alternating strokes and simultaneous strokes require different coordination models.",
+      "details": "Freestyle and backstroke are alternating, rotation-driven strokes; breaststroke and butterfly are simultaneous strokes with strict timing and legal symmetry requirements. The backend should not reuse freestyle cues for all strokes.",
+      "backend_tags": ["stroke_family", "coordination", "rules"],
+      "source_ref_ids": ["world_aquatics_competition_regulations_2026", "swim_england_breaststroke_technique", "swim_england_butterfly_technique"]
+    },
+    {
+      "id": "legality_shapes_mechanics",
+      "concept": "Competitive stroke mechanics must stay inside legal boundaries.",
+      "details": "Breaststroke hand depth, hip-line limits after the start/turn pullout, foot turn-out, butterfly simultaneous recovery, backstroke orientation, and medley order affect what can be prescribed for race-focused swimmers.",
+      "backend_tags": ["rules", "competition", "stroke_legality"],
+      "source_ref_ids": ["world_aquatics_competition_regulations_2026", "usa_swimming_stroke_turn_situations_2025", "swimming_australia_swimming_rules"]
+    },
+    {
+      "id": "drills_need_transfer_task",
+      "concept": "A drill is only useful if it changes the next swim repeat.",
+      "details": "Each drill should have one technical target, an immediate transfer swim, and an observable success marker such as quieter head, fewer strokes at same pace, cleaner breath timing, or reduced kick splash.",
+      "backend_tags": ["drills", "skill_transfer", "coaching"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "asca_level_2_strokes_school"]
+    },
+    {
+      "id": "fatigue_exposes_technique",
+      "concept": "Fatigue changes stroke mechanics before the swimmer fully fails.",
+      "details": "Technique warning signs include shorter strokes, higher head lift, dropped elbows, wider breaststroke kick, late butterfly breathing, excessive lumbar extension, and shoulder discomfort. Sets should include form-stop or regression rules.",
+      "backend_tags": ["fatigue", "technique_collapse", "load_management"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "progress_skill_before_volume",
+      "concept": "Skill readiness should gate volume and intensity.",
+      "details": "Beginners need water comfort, breathing, floating, gliding, and short repeats. Intermediates can add aerobic sets with stroke quality. Advanced swimmers can train race-pace and high-power work only when mechanics remain stable under speed and fatigue.",
+      "backend_tags": ["progression", "beginner", "advanced"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_expected_standards"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "stroke_mechanics_assessment_model",
+      "model": "BLABT plus propulsion-drag assessment",
+      "summary": "Assess each stroke through body position, legs, arms/catch/pull, breathing, timing, and visible drag. Add metrics only after the swimmer can perform the movement safely.",
+      "phases": ["body_position", "leg_action", "arm_action", "breathing", "timing", "drill_transfer", "pace_or_count_check"],
+      "observable_markers": ["quiet_head", "stable_hips", "aligned_entry", "force_directed_backward", "consistent_exhalation", "stroke_count_repeatability", "no_pain_response"],
+      "source_ref_ids": ["swim_england_expected_standards", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "id": "freestyle_mechanics_model",
+      "model": "Freestyle front crawl mechanics",
+      "body_position": "Long horizontal line with eyes mostly down/forward-down, stable head, hips near surface, and rotation driven by shoulders/trunk/hips.",
+      "catch_pull": "Enter in front between head centerline and shoulder line, extend patiently, then set forearm/hand to hold water and press backward through the body line before clean exit.",
+      "kick": "Small continuous flutter kick from hips with relaxed ankles; use lower kick count for endurance economy and stronger kick support for sprint or race-pace work.",
+      "breathing": "Exhale in the water, turn with body rotation, keep one goggle or low head position when possible, inhale quickly, and return face before the pulling arm rushes.",
+      "common_errors": ["lifting_head_to_breathe", "crossing_midline", "dropped_elbow_catch", "pulling_immediately_after_entry", "overkicking_endurance_sets", "holding_breath"],
+      "coaching_cues": ["long_neck_quiet_head", "reach_then_catch", "rotate_to_air_not_up_to_air", "fingertips_forward_elbow_high", "kick_small_and_steady"],
+      "drills": ["side_kick_with_exhale", "one_eye_breathing", "six_count_switch", "single_arm_freestyle", "scull_to_catch", "catch_up_with_tempo_limit"],
+      "progressions_by_level": {
+        "beginner": "Bubble exhale, prone float, streamline glide, kick with board or side support, 6 to 12.5 m freestyle fragments with relaxed side breath.",
+        "intermediate": "25 to 100 m repeats with stroke count, bilateral or controlled single-side breathing, drill-swim transfers, and pace that preserves body line.",
+        "advanced": "Race-pace stroke-count targets, stroke-rate changes at same line quality, catch-pressure work without shoulder symptoms, and event-specific breath patterns."
+      },
+      "source_ref_ids": ["swim_england_front_crawl_technique", "usa_swimming_adm_competence_progressions", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "id": "backstroke_mechanics_model",
+      "model": "Backstroke mechanics",
+      "body_position": "Supine horizontal line with ears near the water, eyes up/back, hips close to surface, relaxed neck, and steady rotation around the long axis.",
+      "catch_pull": "Thumb-led recovery, little-finger entry near shoulder line, patient catch, bent-elbow pull with palm oriented to push water toward feet, and finish near thigh.",
+      "kick": "Flutter kick from hips with close legs and relaxed ankles; knee bend remains small and does not break the body line excessively.",
+      "breathing": "Use a consistent inhale/exhale rhythm tied to arm cycles, avoiding breath holding because the face is exposed.",
+      "common_errors": ["head_lift", "hips_sinking", "flat_no_rotation", "pulling_down_too_soon", "bicycle_kick", "poor_wall_awareness"],
+      "coaching_cues": ["ears_in_water", "ribs_down_hips_up", "reach_and_roll", "pinkie_enters_first", "kick_from_hips"],
+      "drills": ["six_kick_switch_backstroke", "single_arm_backstroke", "double_arm_backstroke_for_timing", "backstroke_kick_with_cup_or_marker_on_forehead", "lane_line_rotation_awareness"],
+      "progressions_by_level": {
+        "beginner": "Back float, back glide, supported back kick, 10 to 25 m head-still backstroke with wall awareness.",
+        "intermediate": "25 to 100 m repeats with rotation, steady breathing, stroke count, and clean lane positioning.",
+        "advanced": "Race-tempo backstroke with stable line, underwater breakout integration, turn approach counts, and speed changes without over-arching."
+      },
+      "source_ref_ids": ["swim_england_backstroke_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "breaststroke_mechanics_model",
+      "model": "Breaststroke mechanics",
+      "body_position": "Streamlined glide with shoulders, hips, and legs close to horizontal, head aligned during glide, and hips held up as the legs recover.",
+      "catch_pull": "Hands pitch out from the glide, elbows remain relatively high, hands sweep out then in toward the upper chest, and arms recover forward into a narrow streamline.",
+      "kick": "Heels recover toward the seat, knees stay controlled and not excessively wide, feet turn out for the propulsive phase, legs sweep back and together into a long line.",
+      "breathing": "Shoulders lift the face to air during the pull; avoid throwing the head up because it drops hips and increases low-back/neck load.",
+      "timing": "Pull, breathe, kick, glide. The glide should be long enough to regain line but not so long that speed stalls.",
+      "common_errors": ["knees_too_wide", "knees_drawn_to_chest", "head_lift_instead_of_shoulder_rise", "overwide_arm_pull", "no_glide", "scissor_or_asymmetric_kick"],
+      "coaching_cues": ["heels_to_seat", "narrow_knees", "turn_feet_out_then_snap_together", "breathe_with_shoulders", "shoot_hands_forward"],
+      "drills": ["breaststroke_kick_on_back", "breaststroke_kick_with_streamline", "two_kicks_one_pull", "pull_breathe_kick_glide_count", "silent_breaststroke", "separate_pull_then_kick_timing"],
+      "progressions_by_level": {
+        "beginner": "Teach kick shape on deck or wall, then on back or with support; add short glide-kick repeats before full stroke.",
+        "intermediate": "25 to 50 m repeats emphasizing narrow kick, legal timing, and glide control; monitor knee/groin response.",
+        "advanced": "Race-tempo timing, pullout integration if appropriate, count-plus-split work, and volume caps based on knee/back symptoms."
+      },
+      "source_ref_ids": ["swim_england_breaststroke_technique", "usa_swimming_adm_competence_progressions", "usa_swimming_stroke_turn_situations_2025", "breaststroke_swimmers_knee"]
+    },
+    {
+      "id": "butterfly_mechanics_model",
+      "model": "Butterfly mechanics",
+      "body_position": "Crown/head leads a low-surface body wave with shoulders and hips coordinated; avoid excessive vertical lift or lumbar arching.",
+      "catch_pull": "Hands enter near shoulder width, set into a Y-shaped catch, sweep inward with high elbows, then press back toward the hips before low relaxed recovery.",
+      "kick": "Two dolphin kicks per arm cycle for most teaching: one supports entry/catch timing and one helps recovery; movement begins from hips with legs close and ankles relaxed.",
+      "breathing": "Breath should ride the body wave; shoulders lead the head, inhale quickly, and return the head before or with arm entry. Side breathing may be used selectively if it preserves line.",
+      "common_errors": ["muscling_with_arms", "late_breath", "head_stays_up", "single_large_kick", "hips_drop_during_recovery", "low_back_whip"],
+      "coaching_cues": ["chest_press_then_hips", "two_kicks_one_pull", "breathe_low_and_quick", "soft_recovery_wide_enough", "enter_then_catch"],
+      "drills": ["body_dolphin", "vertical_dolphin_kick", "single_arm_butterfly", "three_left_three_right_three_full", "butterfly_kick_on_stomach", "dolphin_to_one_pull_breakout"],
+      "progressions_by_level": {
+        "beginner": "Use body dolphin and short kick skills only; avoid long full-stroke butterfly sets.",
+        "intermediate": "Single-arm and 3-3-3 drill progressions, 6 to 15 m full-stroke fragments, generous rest, and stop when rhythm fails.",
+        "advanced": "Race-quality 12.5 to 50 m repeats, breathing-pattern control, catch pressure, and underwater-to-breakout integration with back and shoulder monitoring."
+      },
+      "source_ref_ids": ["swim_england_butterfly_technique", "usa_swimming_adm_competence_progressions", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "breathing_technical_model",
+      "model": "Breathing mechanics across strokes",
+      "summary": "Breathing should preserve stroke rhythm and body line; the exhale happens before air is needed, the inhale is quick, and head movement follows the stroke rather than disrupting it.",
+      "stroke_specifics": {
+        "freestyle": "Turn with rotation, keep head low, and avoid lifting forward.",
+        "backstroke": "Use a consistent rhythm because the face is exposed; avoid breath holding.",
+        "breaststroke": "Let the shoulders raise the face during the pull and return to line into the glide.",
+        "butterfly": "Breathe low with the body wave and place the head back before recovery collapses."
+      },
+      "common_errors": ["breath_holding", "late_exhale", "head_lift", "over_rotating_to_breathe", "panic_in_short_repeats"],
+      "drills": ["bubble_rhythm", "sink_down_exhale", "side_kick_breath", "one_goggle_breath", "breath_every_three_or_controlled_pattern", "breaststroke_breathe_and_glide"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_breaststroke_technique", "swim_england_butterfly_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "catch_pull_technical_model",
+      "model": "Catch and pull mechanics",
+      "summary": "Effective pulling uses the hand and forearm to anchor against water while the body moves past that anchor. The objective is backward-directed force with minimal line disruption.",
+      "stroke_specifics": {
+        "freestyle": "Patient extension, early forearm engagement, press back near body line, finish without overreaching behind the hip.",
+        "backstroke": "Little-finger entry, outward/downward scull into bent elbow, then push toward feet.",
+        "breaststroke": "Shorter outsweep-insweep; hands should not become a huge backward pull every stroke.",
+        "butterfly": "Simultaneous Y catch, inward sweep, then backward press that sets recovery."
+      },
+      "common_errors": ["dropped_elbow", "pressing_down", "slipping_water", "overwide_pull", "rushed_entry_to_pull"],
+      "drills": ["front_scull", "mid_scull", "dog_paddle_scull", "single_arm_focus", "fist_swim", "paddle_free_catch_feel"],
+      "source_ref_ids": ["toussaint_beek_front_crawl_biomechanics", "usa_swimming_adm_competence_progressions", "asca_technique_talks_library"]
+    },
+    {
+      "id": "kick_technical_model",
+      "model": "Flutter, whip, and dolphin kick mechanics",
+      "summary": "Kick work should build body line, timing, and event-specific propulsion without creating unnecessary knee, hip flexor, ankle, or low-back stress.",
+      "stroke_specifics": {
+        "flutter": "Hip-driven, close legs, relaxed ankles, small amplitude for economy and bigger controlled amplitude for sprint support.",
+        "breaststroke": "Heels recover toward seat, feet turn out, knees controlled, snap to streamline; avoid scissor or very wide knees.",
+        "dolphin": "Wave through trunk/hips with legs close; avoid knee-only kicking or excessive lumbar whip."
+      },
+      "common_errors": ["bicycle_kick", "stiff_ankles", "kicking_from_knees", "wide_breaststroke_knees", "dolphin_kick_from_low_back_only"],
+      "drills": ["vertical_kick_short_sets", "side_flutter_kick", "back_flutter_kick", "breaststroke_kick_on_back", "dolphin_kick_with_arms_at_sides", "streamline_dolphin_kick"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_backstroke_technique", "swim_england_breaststroke_technique", "swim_england_butterfly_technique"]
+    },
+    {
+      "id": "level_progression_model",
+      "model": "Beginner to advanced stroke progression",
+      "summary": "Progress from safety and control, to repeatable stroke mechanics, to efficiency under distance, to speed/race quality under fatigue.",
+      "beginner": ["water_comfort", "face_immersion", "exhale_underwater", "float_recover_to_stand", "streamline_glide", "short_skill_repeats", "freestyle_or_backstroke_first"],
+      "intermediate": ["25_to_100_m_quality_repeats", "stroke_count", "drill_swim_transfer", "controlled_breathing_patterns", "basic_breaststroke_and_butterfly_fragments", "aerobic_base_with_form"],
+      "advanced": ["race_pace", "stroke_rate_distance_per_stroke_targets", "specialty_stroke_sets", "starts_turns_breakouts_if_safe", "fatigue_resistant_technique", "symptom_gated_load"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_expected_standards"]
+    },
+    {
+      "id": "drill_prescription_model",
+      "model": "Drill selection and transfer",
+      "summary": "Every drill should define the stroke, target fault, cue, distance, rest, transfer swim, and stop condition.",
+      "fields_to_store": ["stroke", "technical_target", "cue", "distance_or_time", "equipment", "transfer_repeat", "success_marker", "stop_or_regress_condition"],
+      "safe_defaults": ["short_repeats", "ample_rest", "one_focus_at_a_time", "no_max_effort_until_skill_stable", "avoid_paddles_for_pain_or_poor_catch"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "asca_level_2_strokes_school"]
+    },
+    {
+      "id": "stroke_specific_fatigue_model",
+      "model": "Stroke-specific form breakdown signals",
+      "summary": "Fatigue should be tracked by stroke-specific visible errors and symptom trends, not only by pace.",
+      "signals": {
+        "freestyle": ["shortened_front_end", "dropped_elbow", "head_lift", "crossing_midline", "shoulder_pinch"],
+        "backstroke": ["hips_sink", "head_lifts", "excessive_arch", "wide_entry", "lane_drift"],
+        "breaststroke": ["wide_knees", "asymmetric_kick", "rushed_glide", "low_back_extension", "knee_or_groin_symptoms"],
+        "butterfly": ["late_breath", "hips_drop", "arm_recovery_heavy", "single_kick_rhythm", "low_back_or_shoulder_symptoms"]
+      },
+      "source_ref_ids": ["wanivenhaus_competitive_swimming_injuries", "tovin_swimmers_shoulder", "breaststroke_swimmers_knee"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "rule_beginner_skill_before_yardage",
+      "rule": "Do not prescribe long continuous swims until the swimmer can breathe rhythmically, float or recover safely, and complete short repeats without panic.",
+      "applies_to": ["beginner", "return_to_swim"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_expected_standards"]
+    },
+    {
+      "id": "rule_breathing_preserves_line",
+      "rule": "If a breath causes head lift, hip drop, or stroke pause, regress to side-kick, bubble rhythm, or shorter repeats before adding volume.",
+      "applies_to": ["freestyle", "butterfly", "breaststroke"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_butterfly_technique"]
+    },
+    {
+      "id": "rule_catch_before_paddles",
+      "rule": "Do not add paddles or hard pull sets for a swimmer with dropped-elbow catch, shoulder pain, or poor body line.",
+      "applies_to": ["freestyle", "butterfly", "return_to_swim"],
+      "source_ref_ids": ["tovin_swimmers_shoulder", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "id": "rule_breaststroke_symptom_gate",
+      "rule": "Reduce or remove breaststroke kick volume when medial knee, groin, or hip symptoms appear; use kick-shape drills and non-breaststroke aerobic work instead.",
+      "applies_to": ["breaststroke", "masters", "youth"],
+      "source_ref_ids": ["breaststroke_swimmers_knee", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "rule_butterfly_low_volume_gate",
+      "rule": "Butterfly should be short, high-quality, and rest-rich unless the swimmer already shows stable rhythm, shoulder tolerance, and low-back control.",
+      "applies_to": ["butterfly", "beginner", "intermediate"],
+      "source_ref_ids": ["swim_england_butterfly_technique", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "rule_count_plus_time",
+      "rule": "Use stroke count together with time or effort; fewer strokes are useful only when pace, rhythm, and line do not collapse.",
+      "applies_to": ["intermediate", "advanced", "fitness"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "id": "rule_drill_then_swim",
+      "rule": "Pair each technical drill with a short whole-stroke swim that asks the swimmer to preserve one cue from the drill.",
+      "applies_to": ["all_strokes", "coaching"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "asca_level_2_strokes_school"]
+    },
+    {
+      "id": "rule_legal_stroke_for_competition",
+      "rule": "For race-focused swimmers, technical prescriptions must preserve legal stroke timing, kick type, surface requirements, turns, and finishes.",
+      "applies_to": ["competition", "breaststroke", "butterfly", "backstroke", "IM"],
+      "source_ref_ids": ["world_aquatics_competition_regulations_2026", "usa_swimming_stroke_turn_situations_2025"]
+    },
+    {
+      "id": "rule_fatigue_stop_condition",
+      "rule": "Stop, rest, or regress a set when the target stroke fault appears repeatedly across two consecutive repeats.",
+      "applies_to": ["all_levels", "injury_prevention"],
+      "source_ref_ids": ["wanivenhaus_competitive_swimming_injuries", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "rule_event_breathing_not_generic_breathing",
+      "rule": "Breathing patterns should match the event and swimmer: teach control and symmetry, but avoid forcing bilateral breathing or restricted breathing when it worsens form or safety.",
+      "applies_to": ["freestyle", "open_water", "fitness", "triathlon"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "rule_backstroke_wall_awareness",
+      "rule": "Backstroke sessions for unsupervised fitness swimmers should include wall-awareness and lane-safety reminders before speed or longer repeats.",
+      "applies_to": ["backstroke", "beginner", "crowded_pool"],
+      "source_ref_ids": ["swim_england_backstroke_technique"]
+    },
+    {
+      "id": "rule_undulation_not_low_back_whip",
+      "rule": "Butterfly and dolphin kick should be taught as coordinated body wave from trunk and hips, not repeated lumbar hyperextension.",
+      "applies_to": ["butterfly", "underwater_dolphin", "low_back_risk"],
+      "source_ref_ids": ["swim_england_butterfly_technique", "wanivenhaus_competitive_swimming_injuries"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "shoulder_scapular_endurance",
+      "quality": "Shoulder and scapular endurance",
+      "details": "All four strokes repeatedly load overhead or near-overhead shoulder positions; freestyle and butterfly volume especially require rotator cuff capacity and scapular control.",
+      "source_ref_ids": ["tovin_swimmers_shoulder", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "trunk_rotation_control",
+      "quality": "Trunk rotation and anti-extension control",
+      "details": "Freestyle and backstroke need controlled long-axis rotation; butterfly, breaststroke, and dolphin kicking need trunk control that avoids excessive lumbar extension.",
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_backstroke_technique", "swim_england_butterfly_technique"]
+    },
+    {
+      "id": "thoracic_mobility",
+      "quality": "Thoracic mobility",
+      "details": "Adequate thoracic motion supports streamlined positions, rotation, breathing, overhead recovery, and reduces compensatory neck or low-back motion.",
+      "source_ref_ids": ["tovin_swimmers_shoulder"]
+    },
+    {
+      "id": "ankle_plantar_flexion_capacity",
+      "quality": "Ankle mobility and plantar-flexion tolerance",
+      "details": "Flutter and dolphin kicks require relaxed pointed feet; stiff ankles increase drag and may encourage knee-dominant kicking.",
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_butterfly_technique"]
+    },
+    {
+      "id": "hip_adductor_and_rotator_control",
+      "quality": "Hip adductor, external rotator, and groin tolerance",
+      "details": "Breaststroke kick requires coordinated hip and knee motion; poor control or abrupt volume can irritate medial knee or groin tissues.",
+      "source_ref_ids": ["swim_england_breaststroke_technique", "breaststroke_swimmers_knee"]
+    },
+    {
+      "id": "aerobic_base_for_form",
+      "quality": "Aerobic capacity that preserves technique",
+      "details": "Aerobic development is useful only when the swimmer can maintain breathing, line, catch, and timing across repeats.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "anaerobic_power_and_lactate_tolerance",
+      "quality": "Race-pace speed, anaerobic power, and lactate tolerance",
+      "details": "Advanced swimmers need short maximum-velocity work and race-pace tolerance, but these must be matched with enough recovery to avoid engraining collapsed mechanics.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "water_feel_and_proprioception",
+      "quality": "Water feel and proprioception",
+      "details": "Sculling, catch drills, kick balance, and stroke-count tasks develop the ability to sense pressure against water and keep force directed productively.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "id": "neck_control_and_relaxation",
+      "quality": "Neck control and relaxation",
+      "details": "Freestyle sightline, backstroke head stillness, and low breaststroke/butterfly breathing all require neck control under breathing stress.",
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_backstroke_technique", "swim_england_breaststroke_technique"]
+    },
+    {
+      "id": "dryland_posture_and_force_transfer",
+      "quality": "Dryland posture and force transfer",
+      "details": "Dryland should support aquatic posture, shoulder health, trunk control, landing/jumping for race skills, and balanced strength without creating fatigue that ruins water technique.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "swimmers_shoulder_overuse",
+      "risk": "Swimmer's shoulder and rotator cuff irritation",
+      "mechanism": "High repetitive overhead volume, poor catch mechanics, crossing midline, insufficient rotation, scapular fatigue, or rapid load spikes.",
+      "backend_flags": ["shoulder_pain", "paddles", "high_pull_volume", "freestyle_volume", "butterfly_volume"],
+      "source_ref_ids": ["tovin_swimmers_shoulder", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "dropped_elbow_shoulder_load",
+      "risk": "Dropped-elbow pulling can increase inefficient shoulder loading.",
+      "mechanism": "Pressing down or pulling with a collapsed elbow shifts force away from backward propulsion and may create extra shoulder stress.",
+      "backend_flags": ["catch_fault", "shoulder_symptoms", "avoid_paddles"],
+      "source_ref_ids": ["toussaint_beek_front_crawl_biomechanics", "tovin_swimmers_shoulder"]
+    },
+    {
+      "id": "breaststroke_knee_groin",
+      "risk": "Breaststroke knee and groin irritation",
+      "mechanism": "High breaststroke kick volume, wide or asymmetric kick, excessive valgus/rotation demand, and abrupt specialty-stroke increases.",
+      "backend_flags": ["knee_pain", "groin_pain", "breaststroke_volume", "kick_sets"],
+      "source_ref_ids": ["breaststroke_swimmers_knee", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "low_back_extension_butterfly_breaststroke",
+      "risk": "Low-back irritation in butterfly, breaststroke, and dolphin kicking",
+      "mechanism": "Late breathing, hips dropping, excessive lumbar arching, and fatigue-driven body-wave collapse.",
+      "backend_flags": ["low_back_pain", "butterfly_volume", "dolphin_kick", "breaststroke_timing"],
+      "source_ref_ids": ["swim_england_butterfly_technique", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "neck_irritation_breathing",
+      "risk": "Neck irritation from poor breathing mechanics",
+      "mechanism": "Lifting or twisting the head outside the stroke rhythm in freestyle, breaststroke, or butterfly; holding the head high in backstroke.",
+      "backend_flags": ["neck_pain", "breathing_fault", "head_lift"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "swim_england_backstroke_technique", "swim_england_breaststroke_technique"]
+    },
+    {
+      "id": "rapid_yardage_increase",
+      "risk": "Overuse from rapid swim-volume progression",
+      "mechanism": "Swimming has low impact but can accumulate shoulder, spine, and knee stress quickly because of high repetition.",
+      "backend_flags": ["weekly_volume_spike", "new_swimmer", "return_after_break"],
+      "source_ref_ids": ["wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "equipment_load_paddles_fins_buoy",
+      "risk": "Training equipment can amplify load or hide faults.",
+      "mechanism": "Paddles increase shoulder/catch load, fins increase ankle/hip/low-back and speed demands, and pull buoys can mask poor body position or overwork the shoulders.",
+      "backend_flags": ["paddles", "fins", "pull_buoy", "equipment_progression"],
+      "source_ref_ids": ["tovin_swimmers_shoulder", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "breath_control_hypoxic_risk",
+      "risk": "Unsafe breath-control or hypoxic prescriptions",
+      "mechanism": "Restricted breathing can become unsafe if treated as toughness work, especially for beginners or unsupervised swimmers.",
+      "backend_flags": ["hypoxic_set", "beginner", "unsupervised", "anxiety"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "fatigue_technique_collapse",
+      "risk": "Technique collapse under fatigue",
+      "mechanism": "As fatigue rises, swimmers shorten strokes, lift the head, lose catch, widen kicks, or arch the back; continuing high volume engrains poor mechanics.",
+      "backend_flags": ["form_breakdown", "race_pace", "high_intensity_repeats"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "crowded_lane_collision_backstroke",
+      "risk": "Collision risk during backstroke",
+      "mechanism": "Backstroke limits forward vision; beginners and crowded lanes need wall awareness, lane discipline, and conservative speed.",
+      "backend_flags": ["backstroke", "crowded_pool", "beginner", "wall_awareness"],
+      "source_ref_ids": ["swim_england_backstroke_technique"]
+    },
+    {
+      "id": "advanced_race_skill_before_readiness",
+      "risk": "Advanced race skills before technical readiness",
+      "mechanism": "Race-pace butterfly, high underwater kick counts, hard pull sets, or sprint breaststroke before mechanics are stable can overload shoulders, back, knees, or breathing control.",
+      "backend_flags": ["advanced_drills", "race_pace", "underwaters", "skill_gate_required"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "wanivenhaus_competitive_swimming_injuries"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "store_stroke_specific_technical_records",
+      "summary": "Create separate technical records for freestyle, backstroke, breaststroke, and butterfly rather than one generic swim-technique record.",
+      "source_ref_ids": ["swim_england_expected_standards", "asca_level_2_strokes_school"]
+    },
+    {
+      "id": "retrieve_by_water_confidence_first",
+      "summary": "For beginners, retrieval should prioritize water confidence, exhalation, floating, and short repeat skill records before fitness or interval records.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "include_blabt_fields",
+      "summary": "Technique records should expose body position, legs, arms/catch/pull, breathing, and timing fields so plans can target the actual limiter.",
+      "source_ref_ids": ["swim_england_expected_standards"]
+    },
+    {
+      "id": "include_common_error_to_cue_mapping",
+      "summary": "Backend records should map visible errors to coaching cues and drill regressions, such as head lift to side-kick breathing or dropped elbow to sculling.",
+      "source_ref_ids": ["swim_england_front_crawl_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "gate_butterfly_and_breaststroke_volume",
+      "summary": "Butterfly and breaststroke volume should require readiness checks and symptom monitoring because their timing and load profiles differ from freestyle/backstroke.",
+      "source_ref_ids": ["wanivenhaus_competitive_swimming_injuries", "breaststroke_swimmers_knee"]
+    },
+    {
+      "id": "track_stroke_specific_volume",
+      "summary": "Log weekly volume by stroke, not only total distance, so breaststroke knee, butterfly back, and freestyle shoulder load can be managed.",
+      "source_ref_ids": ["wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "track_equipment_exposure",
+      "summary": "Store paddles, fins, pull buoy, snorkel, and kickboard exposure because equipment changes shoulder, ankle, back, breathing, and body-line demands.",
+      "source_ref_ids": ["tovin_swimmers_shoulder", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "use_count_and_time_for_efficiency",
+      "summary": "Intermediate and advanced workouts should combine stroke count, split time, and effort rating to avoid rewarding over-gliding or sloppy turnover.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "id": "build_drill_swim_transfer_templates",
+      "summary": "Each drill prescription should include a transfer swim and success marker so technique work affects whole-stroke swimming.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "asca_level_2_strokes_school"]
+    },
+    {
+      "id": "stop_sets_on_repeated_faults",
+      "summary": "Technique-focused sets should include automatic stop, rest, or regression triggers when the same fault appears on consecutive repeats.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "separate_breathing_skill_from_hypoxic_training",
+      "summary": "Breathing skill records should emphasize exhalation, rhythm, and low-disruption inhalation; avoid unsafe restricted-breathing language.",
+      "source_ref_ids": ["swim_england_front_crawl_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "race_records_need_legality_context",
+      "summary": "Competitive swimmer records should include legal stroke constraints for breaststroke, butterfly, backstroke turns, medley transitions, and finishes.",
+      "source_ref_ids": ["world_aquatics_competition_regulations_2026", "usa_swimming_stroke_turn_situations_2025"]
+    },
+    {
+      "id": "return_to_swim_uses_symptom_gates",
+      "summary": "Return-to-swim plans should reduce volume, intensity, paddles, butterfly, and breaststroke kick until shoulder/back/knee symptoms remain stable.",
+      "source_ref_ids": ["tovin_swimmers_shoulder", "breaststroke_swimmers_knee", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "id": "event_goal_changes_mechanics_emphasis",
+      "summary": "Sprint swimmers can use higher kick and stroke rates; fitness, distance, triathlon, and open-water swimmers need economy, calm breathing, and sustainable rhythm.",
+      "source_ref_ids": ["swim_england_front_crawl_technique", "front_crawl_velocity_hydrodynamics_review"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_freestyle_body_position",
+      "record_type": "technical_model",
+      "title": "Freestyle Body Position",
+      "level": "beginner_to_advanced",
+      "summary": "Long horizontal line, head quiet, eyes down/forward-down, hips near surface, and rotation from trunk/hips.",
+      "coaching_cues": ["quiet_head", "long_neck", "hips_high", "rotate_dont_wiggle"],
+      "common_errors": ["head_lift", "hips_sink", "flat_body", "over_rotation"],
+      "drills": ["prone_streamline_glide", "side_kick", "six_count_switch"],
+      "source_ref_ids": ["swim_england_front_crawl_technique"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_freestyle_breathing_low_turn",
+      "record_type": "technical_model",
+      "title": "Freestyle Low-Disruption Breathing",
+      "level": "beginner_to_intermediate",
+      "summary": "Exhale in the water, turn with rotation, keep head low, inhale quickly, and return face without pausing the stroke.",
+      "coaching_cues": ["bubbles_before_air", "one_goggle_in", "rotate_to_air", "no_forward_lift"],
+      "common_errors": ["holding_breath", "lifting_head", "late_inhale", "scissor_kick_on_breath"],
+      "drills": ["bubble_rhythm", "side_kick_breath", "one_eye_breathing"],
+      "source_ref_ids": ["swim_england_front_crawl_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_freestyle_catch_evf",
+      "record_type": "technical_model",
+      "title": "Freestyle Catch and Early Forearm",
+      "level": "intermediate_to_advanced",
+      "summary": "After patient extension, set the hand and forearm to hold water and press backward without dropping the elbow or pressing down.",
+      "coaching_cues": ["reach_then_catch", "fingertips_down_forearm_on", "press_water_back", "elbow_above_hand"],
+      "common_errors": ["dropped_elbow", "straight_arm_press_down", "rushed_pull", "slipping_water"],
+      "drills": ["front_scull", "fist_swim", "single_arm_freestyle", "dog_paddle_scull"],
+      "source_ref_ids": ["toussaint_beek_front_crawl_biomechanics", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_freestyle_pull_finish",
+      "record_type": "technical_model",
+      "title": "Freestyle Pull and Finish",
+      "level": "intermediate",
+      "summary": "Maintain backward pressure through the pull, finish near the thigh, and recover without crossing or shrugging.",
+      "coaching_cues": ["hold_water_past_ribs", "finish_by_thigh", "relaxed_recovery", "enter_in_front_of_shoulder"],
+      "common_errors": ["short_pull", "wide_sweep", "crossing_midline", "shoulder_hike"],
+      "drills": ["zipper_recovery_light", "single_arm_focus", "catch_up_with_alignment"],
+      "source_ref_ids": ["swim_england_front_crawl_technique"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_freestyle_flutter_kick",
+      "record_type": "technical_model",
+      "title": "Freestyle Flutter Kick",
+      "level": "beginner_to_advanced",
+      "summary": "Hip-driven compact flutter kick with close legs, relaxed ankles, and amplitude matched to event demand.",
+      "coaching_cues": ["small_steady_kick", "kick_from_hips", "relax_ankles", "feet_under_surface"],
+      "common_errors": ["bicycle_kick", "stiff_ankles", "huge_splash", "overkicking_distance_work"],
+      "drills": ["side_kick", "streamline_kick", "kick_without_board_short_repeats"],
+      "source_ref_ids": ["swim_england_front_crawl_technique"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_freestyle_beginner_progression",
+      "record_type": "level_progression",
+      "title": "Beginner Freestyle Progression",
+      "level": "beginner",
+      "summary": "Progress bubble exhale, float, glide, kick, side breathing fragments, and short whole-stroke repeats before continuous swimming.",
+      "readiness_criteria": ["comfortable_face_immersion", "exhale_underwater", "prone_float", "short_streamline_glide"],
+      "avoid": ["long_continuous_sets", "restricted_breathing", "paddles"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_freestyle_intermediate_progression",
+      "record_type": "level_progression",
+      "title": "Intermediate Freestyle Progression",
+      "level": "intermediate",
+      "summary": "Use 25 to 100 m quality repeats, drill-swim transfers, controlled breathing patterns, stroke count, and aerobic work that preserves line.",
+      "success_markers": ["repeatable_stroke_count", "calm_exhale", "no_head_lift", "stable_pace"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_front_crawl_technique"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_freestyle_advanced_progression",
+      "record_type": "level_progression",
+      "title": "Advanced Freestyle Progression",
+      "level": "advanced",
+      "summary": "Use race-pace repeats, stroke-rate and distance-per-stroke targets, event-specific breathing, and catch pressure with shoulder monitoring.",
+      "success_markers": ["target_pace_with_line", "planned_breathing", "stroke_count_control", "no_shoulder_symptom_increase"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_backstroke_body_position",
+      "record_type": "technical_model",
+      "title": "Backstroke Body Position",
+      "level": "beginner_to_advanced",
+      "summary": "Supine line with ears in water, eyes up/back, relaxed neck, hips high, and ribs controlled.",
+      "coaching_cues": ["ears_in_water", "belly_button_up", "hips_high", "eyes_still"],
+      "common_errors": ["head_lift", "hips_sink", "arching_low_back", "looking_at_feet"],
+      "drills": ["back_float", "streamline_back_glide", "back_kick_head_still"],
+      "source_ref_ids": ["swim_england_backstroke_technique"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_backstroke_rotation",
+      "record_type": "technical_model",
+      "title": "Backstroke Shoulder and Hip Roll",
+      "level": "beginner_to_intermediate",
+      "summary": "Rotate the body around the long axis so the recovering arm and pulling arm work together without throwing the head.",
+      "coaching_cues": ["reach_and_roll", "shoulder_lifts_arm", "head_stays_still", "rotate_ribs_and_hips"],
+      "common_errors": ["flat_body", "arm_lifts_body", "head_rolls_with_shoulders", "over_rotation"],
+      "drills": ["six_kick_switch_backstroke", "single_arm_backstroke", "half_recovery_backstroke"],
+      "source_ref_ids": ["swim_england_backstroke_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_backstroke_arm_entry_catch",
+      "record_type": "technical_model",
+      "title": "Backstroke Entry and Catch",
+      "level": "intermediate",
+      "summary": "Recover with thumb-led arm, enter little finger first near shoulder line, then set a bent-elbow catch and push water toward the feet.",
+      "coaching_cues": ["thumb_out_pinkie_in", "enter_by_ear", "wait_then_catch", "push_to_feet"],
+      "common_errors": ["slapping_entry", "wide_entry", "pulling_immediately", "straight_arm_push_down"],
+      "drills": ["single_arm_backstroke", "pause_entry_catch", "backstroke_scull"],
+      "source_ref_ids": ["swim_england_backstroke_technique"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_backstroke_flutter_kick",
+      "record_type": "technical_model",
+      "title": "Backstroke Flutter Kick",
+      "level": "beginner_to_advanced",
+      "summary": "Kick from the hips with close legs, relaxed ankles, and small knee bend while keeping the body near the surface.",
+      "coaching_cues": ["kick_from_hips", "boil_not_splash", "toes_long", "knees_under_surface"],
+      "common_errors": ["bicycle_kick", "knees_above_water", "stiff_ankles", "hips_sinking"],
+      "drills": ["back_kick", "streamline_back_kick", "six_kick_switch"],
+      "source_ref_ids": ["swim_england_backstroke_technique"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_backstroke_breathing_rhythm",
+      "record_type": "technical_model",
+      "title": "Backstroke Breathing Rhythm",
+      "level": "beginner_to_intermediate",
+      "summary": "Use a predictable inhale/exhale rhythm tied to arm cycles to avoid breath holding and rhythm disruption.",
+      "coaching_cues": ["breathe_with_arms", "smooth_in_smooth_out", "keep_face_relaxed"],
+      "common_errors": ["breath_holding", "rushed_kick", "neck_tension"],
+      "drills": ["arm_cycle_breath_count", "single_arm_with_breath_pattern"],
+      "source_ref_ids": ["swim_england_backstroke_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_backstroke_beginner_progression",
+      "record_type": "level_progression",
+      "title": "Beginner Backstroke Progression",
+      "level": "beginner",
+      "summary": "Progress back float, back glide, back kick, single-arm timing, then short whole-stroke repeats with wall awareness.",
+      "readiness_criteria": ["comfortable_back_float", "can_recover_to_stand", "knows_wall_or_lane_awareness"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_backstroke_technique"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_backstroke_intermediate_progression",
+      "record_type": "level_progression",
+      "title": "Intermediate Backstroke Progression",
+      "level": "intermediate",
+      "summary": "Build 25 to 100 m backstroke repeats with rotation, consistent kick, breathing rhythm, and stroke count.",
+      "success_markers": ["straight_lane_line", "stable_head", "hips_high", "repeatable_count"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_backstroke_advanced_progression",
+      "record_type": "level_progression",
+      "title": "Advanced Backstroke Progression",
+      "level": "advanced",
+      "summary": "Add race-tempo repeats, underwater breakout integration, approach counts, and speed changes without low-back arching or shoulder irritation.",
+      "success_markers": ["pace_with_head_still", "clean_breakout", "consistent_turn_count", "no_back_or_shoulder_symptom_increase"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_breaststroke_timing",
+      "record_type": "technical_model",
+      "title": "Breaststroke Pull-Breathe-Kick-Glide Timing",
+      "level": "beginner_to_advanced",
+      "summary": "Coordinate pull, breath, kick, and glide so propulsion alternates without pausing in a high-drag shape.",
+      "coaching_cues": ["pull_breathe_kick_glide", "shoot_to_streamline", "finish_the_kick", "glide_long_not_dead"],
+      "common_errors": ["pull_and_kick_together_too_early", "no_glide", "overglide_stall", "head_stays_up"],
+      "drills": ["two_kicks_one_pull", "pull_breathe_kick_glide_count", "silent_breaststroke"],
+      "source_ref_ids": ["swim_england_breaststroke_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_breaststroke_body_line",
+      "record_type": "technical_model",
+      "title": "Breaststroke Body Line and Glide",
+      "level": "beginner_to_intermediate",
+      "summary": "Return to a narrow horizontal streamline after each cycle with head aligned, hips up, and legs behind the body.",
+      "coaching_cues": ["look_down_in_glide", "hips_follow_hands", "legs_behind_not_below", "long_line_after_kick"],
+      "common_errors": ["hips_drop", "knees_to_chest", "chin_lift", "wide_recovery"],
+      "drills": ["streamline_glide", "breaststroke_kick_with_streamline", "breaststroke_kick_on_back"],
+      "source_ref_ids": ["swim_england_breaststroke_technique"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_breaststroke_kick",
+      "record_type": "technical_model",
+      "title": "Breaststroke Kick Mechanics",
+      "level": "beginner_to_advanced",
+      "summary": "Recover heels toward the seat, keep knees controlled, turn feet out, sweep back, and snap legs together into streamline.",
+      "coaching_cues": ["heels_to_seat", "knees_narrow", "turn_feet_out", "snap_together"],
+      "common_errors": ["wide_knees", "scissor_kick", "pointed_feet_on_power_phase", "knees_forward"],
+      "drills": ["wall_kick_shape", "kick_on_back", "kick_with_board_short", "two_kicks_one_pull"],
+      "source_ref_ids": ["swim_england_breaststroke_technique", "breaststroke_swimmers_knee"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_breaststroke_pull",
+      "record_type": "technical_model",
+      "title": "Breaststroke Arm Pull",
+      "level": "intermediate",
+      "summary": "Pitch hands out from the glide, keep elbows high, sweep hands toward upper chest, and recover forward compactly.",
+      "coaching_cues": ["small_outsweep", "elbows_stay_near_surface", "hands_to_chest", "shoot_forward"],
+      "common_errors": ["arms_too_wide", "hands_pull_to_hips_each_cycle", "dropped_elbows", "slow_recovery"],
+      "drills": ["breaststroke_pull_with_buoy_light", "front_scull_to_breast_pull", "pull_only_short_repeats"],
+      "source_ref_ids": ["swim_england_breaststroke_technique", "usa_swimming_stroke_turn_situations_2025"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_breaststroke_breathing",
+      "record_type": "technical_model",
+      "title": "Breaststroke Breathing",
+      "level": "beginner_to_intermediate",
+      "summary": "Let the shoulders bring the face to air during the pull, inhale quickly, and return the head into line for the glide.",
+      "coaching_cues": ["shoulders_lift_head_follows", "chin_low", "breathe_then_shoot", "exhale_in_glide"],
+      "common_errors": ["neck_crane", "head_lift", "hips_drop", "late_breath"],
+      "drills": ["breaststroke_pull_breath_only", "breath_and_glide", "silent_breaststroke"],
+      "source_ref_ids": ["swim_england_breaststroke_technique"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_breaststroke_beginner_progression",
+      "record_type": "level_progression",
+      "title": "Beginner Breaststroke Progression",
+      "level": "beginner",
+      "summary": "Teach kick shape and glide separately before full stroke; keep volume low and emphasize symmetry and comfort.",
+      "readiness_criteria": ["can_float_and_glide", "can_practice_kick_without_knee_pain", "understands_exhale"],
+      "avoid": ["hard_kick_sets", "long_breaststroke_swims", "rushed_timing"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "breaststroke_swimmers_knee"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_breaststroke_intermediate_progression",
+      "record_type": "level_progression",
+      "title": "Intermediate Breaststroke Progression",
+      "level": "intermediate",
+      "summary": "Use 25 to 50 m repeats with pull-breathe-kick-glide timing, narrow kick, stroke count, and knee/groin monitoring.",
+      "success_markers": ["symmetrical_kick", "legal_timing", "hips_recover_to_surface", "no_knee_symptom_increase"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_breaststroke_technique"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_breaststroke_advanced_progression",
+      "record_type": "level_progression",
+      "title": "Advanced Breaststroke Progression",
+      "level": "advanced",
+      "summary": "Add race-tempo cycle timing, legal pullout integration, split-plus-count work, and controlled specialty volume.",
+      "success_markers": ["race_timing_without_rush", "legal_pullout", "stable_knee_response", "consistent_split_count"],
+      "source_ref_ids": ["world_aquatics_competition_regulations_2026", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_butterfly_body_wave",
+      "record_type": "technical_model",
+      "title": "Butterfly Body Wave",
+      "level": "beginner_to_advanced",
+      "summary": "Coordinate chest, hips, and legs in a low-surface wave without excessive vertical lift or lumbar whipping.",
+      "coaching_cues": ["chest_press", "hips_follow", "stay_low", "wave_not_arch"],
+      "common_errors": ["low_back_whip", "head_leads_up", "hips_drop", "over_vertical_undulation"],
+      "drills": ["body_dolphin", "dolphin_kick_arms_at_sides", "streamline_dolphin"],
+      "source_ref_ids": ["swim_england_butterfly_technique", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_butterfly_two_kick_timing",
+      "record_type": "technical_model",
+      "title": "Butterfly Two-Kick Timing",
+      "level": "intermediate_to_advanced",
+      "summary": "Use two dolphin kicks per arm cycle for most teaching: one around entry/catch and one to support recovery.",
+      "coaching_cues": ["kick_in_kick_out", "two_kicks_one_pull", "second_kick_lifts_recovery", "legs_together"],
+      "common_errors": ["one_big_kick", "late_second_kick", "knees_apart", "kick_from_knees"],
+      "drills": ["single_arm_butterfly", "three_three_three_butterfly", "vertical_dolphin_short"],
+      "source_ref_ids": ["swim_england_butterfly_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_butterfly_catch_pull",
+      "record_type": "technical_model",
+      "title": "Butterfly Catch and Pull",
+      "level": "intermediate",
+      "summary": "Enter near shoulder width, set a Y-shaped catch, sweep inward with high elbows, then press back toward hips.",
+      "coaching_cues": ["enter_wide_enough", "make_the_y", "elbows_high", "press_back_then_recover"],
+      "common_errors": ["hands_too_narrow", "straight_arm_press", "dropped_elbows", "pull_too_short"],
+      "drills": ["butterfly_front_scull", "single_arm_butterfly", "butterfly_catch_drill"],
+      "source_ref_ids": ["swim_england_butterfly_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_butterfly_breathing",
+      "record_type": "technical_model",
+      "title": "Butterfly Breathing",
+      "level": "intermediate_to_advanced",
+      "summary": "Ride the body wave to air, inhale quickly with low head position, and return the head before recovery forces the hips down.",
+      "coaching_cues": ["breathe_low", "chin_forward_not_up", "head_back_before_hands", "exhale_before_breath"],
+      "common_errors": ["late_breath", "head_stays_up", "hips_sink_after_breath", "neck_crank"],
+      "drills": ["single_arm_breath_timing", "two_down_one_breathe", "butterfly_kick_breath_rhythm"],
+      "source_ref_ids": ["swim_england_butterfly_technique"]
+    },
+    {
+      "collection": "sport_skill_models",
+      "id": "swim_butterfly_recovery",
+      "record_type": "technical_model",
+      "title": "Butterfly Arm Recovery",
+      "level": "intermediate",
+      "summary": "Recover both arms over the water low and relaxed enough to re-enter near shoulder width without lifting the whole body vertically.",
+      "coaching_cues": ["soft_arms_wide", "thumbs_low", "recover_forward", "hips_stay_near_surface"],
+      "common_errors": ["forced_high_recovery", "bent_tense_recovery", "hands_crash_centerline", "hips_drop"],
+      "drills": ["single_arm_butterfly", "3_left_3_right_3_full", "short_full_stroke_fragments"],
+      "source_ref_ids": ["swim_england_butterfly_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_butterfly_beginner_progression",
+      "record_type": "level_progression",
+      "title": "Beginner Butterfly Progression",
+      "level": "beginner",
+      "summary": "Teach body dolphin, dolphin kick, and rhythm fragments; avoid long full-stroke butterfly for beginners.",
+      "readiness_criteria": ["comfortable_face_immersion", "basic_streamline", "no_low_back_pain_with_dolphin", "can_exhale_underwater"],
+      "avoid": ["long_fly_sets", "max_effort_fly", "forced_breath_holding"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_butterfly_technique"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_butterfly_intermediate_progression",
+      "record_type": "level_progression",
+      "title": "Intermediate Butterfly Progression",
+      "level": "intermediate",
+      "summary": "Use single-arm, 3-3-3, and 6 to 15 m full-stroke fragments with ample rest and form-stop rules.",
+      "success_markers": ["two_kick_rhythm", "low_breath", "hips_do_not_drop", "no_shoulder_or_back_symptom_increase"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_progressions",
+      "id": "swim_butterfly_advanced_progression",
+      "record_type": "level_progression",
+      "title": "Advanced Butterfly Progression",
+      "level": "advanced",
+      "summary": "Add race-quality 12.5 to 50 m repeats, breathing-pattern control, underwater-to-breakout integration, and strict recovery between efforts.",
+      "success_markers": ["race_rhythm_maintained", "low_breath_under_fatigue", "stable_split_count", "no_back_or_shoulder_symptom_increase"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "collection": "sport_drills",
+      "id": "swim_drill_bubble_rhythm",
+      "record_type": "drill",
+      "title": "Bubble Rhythm Drill",
+      "level": "beginner",
+      "summary": "Practice calm exhalation under water before attempting longer stroke repeats.",
+      "prescription": "Short supervised repetitions with full rest; progress to floating, gliding, then stroke fragments.",
+      "success_marker": "Swimmer exhales without panic and does not hold breath before submerging.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_drills",
+      "id": "swim_drill_six_count_switch",
+      "record_type": "drill",
+      "title": "Six-Count Switch",
+      "level": "beginner_to_intermediate",
+      "summary": "Freestyle balance and rotation drill using side-kick positions before switching arms.",
+      "prescription": "6 kicks on side, switch with one stroke, breathe calmly, then repeat; keep distances short until line is stable.",
+      "success_marker": "Head stays quiet, hips remain near surface, and breath does not force a lift.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_drills",
+      "id": "swim_drill_front_scull",
+      "record_type": "drill",
+      "title": "Front Scull",
+      "level": "intermediate",
+      "summary": "Develop hand and forearm feel for the catch without rushing into a full pull.",
+      "prescription": "Short sculling repeats followed by 12.5 to 25 m swim holding the same catch feel.",
+      "success_marker": "Swimmer feels pressure on hand/forearm without pressing down or dropping elbow.",
+      "source_ref_ids": ["toussaint_beek_front_crawl_biomechanics", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_drills",
+      "id": "swim_drill_single_arm_freestyle",
+      "record_type": "drill",
+      "title": "Single-Arm Freestyle",
+      "level": "beginner_to_intermediate",
+      "summary": "Isolate timing, breath, catch, and rotation on one side while preserving body line.",
+      "prescription": "Use short repeats with non-working arm forward or at side depending on skill; transfer immediately to whole-stroke freestyle.",
+      "success_marker": "Breath turns with rotation and the pulling arm does not cross midline.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_drills",
+      "id": "swim_drill_backstroke_six_kick_switch",
+      "record_type": "drill",
+      "title": "Backstroke Six-Kick Switch",
+      "level": "beginner_to_intermediate",
+      "summary": "Build backstroke body roll, head stability, and kick line.",
+      "prescription": "Hold side-back position for six kicks, switch arms with rotation, and keep eyes still.",
+      "success_marker": "Head remains still and hips stay high through the switch.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_backstroke_technique"]
+    },
+    {
+      "collection": "sport_drills",
+      "id": "swim_drill_breaststroke_kick_on_back",
+      "record_type": "drill",
+      "title": "Breaststroke Kick on Back",
+      "level": "beginner_to_intermediate",
+      "summary": "Teach breaststroke kick shape while reducing the chance of drawing knees excessively forward.",
+      "prescription": "Short repeats on back with hands by side or streamline; monitor knee comfort.",
+      "success_marker": "Heels recover toward seat, knees stay controlled, feet turn out, and legs snap together.",
+      "source_ref_ids": ["swim_england_breaststroke_technique"]
+    },
+    {
+      "collection": "sport_drills",
+      "id": "swim_drill_breaststroke_two_kicks_one_pull",
+      "record_type": "drill",
+      "title": "Two Kicks One Pull Breaststroke",
+      "level": "intermediate",
+      "summary": "Improve kick completion, streamline, and timing before returning to normal stroke.",
+      "prescription": "Two controlled kicks in streamline, one pull with breath, repeat for short distances.",
+      "success_marker": "Swimmer finishes each kick in a long line and does not rush the pull.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_breaststroke_technique"]
+    },
+    {
+      "collection": "sport_drills",
+      "id": "swim_drill_body_dolphin",
+      "record_type": "drill",
+      "title": "Body Dolphin",
+      "level": "beginner_to_intermediate",
+      "summary": "Teach butterfly and dolphin kick rhythm as a whole-body wave instead of a low-back snap.",
+      "prescription": "Short body-wave repetitions with arms at sides or streamline; stop if low-back discomfort appears.",
+      "success_marker": "Wave passes through chest, hips, and legs with low head and no painful arch.",
+      "source_ref_ids": ["swim_england_butterfly_technique"]
+    },
+    {
+      "collection": "sport_drills",
+      "id": "swim_drill_three_three_three_butterfly",
+      "record_type": "drill",
+      "title": "3-3-3 Butterfly",
+      "level": "intermediate",
+      "summary": "Alternate three left-arm strokes, three right-arm strokes, and three full butterfly strokes to bridge drill and whole stroke.",
+      "prescription": "Use short distances and generous rest; require low breath and two-kick rhythm before adding repeats.",
+      "success_marker": "Full-stroke portion keeps timing from the single-arm portions.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_no_hypoxic_beginner_sets",
+      "record_type": "safety_rule",
+      "title": "No Hypoxic Beginner Sets",
+      "level": "beginner",
+      "summary": "Never use restricted-breath or breath-holding sets for beginners; teach calm exhalation and regular breathing instead.",
+      "trigger_conditions": ["beginner", "water_anxiety", "unsupervised_swim", "poor_exhalation"],
+      "action": "Replace with bubble rhythm, side breathing, or rest-rich short repeats.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_paddles_require_catch_readiness",
+      "record_type": "load_rule",
+      "title": "Paddles Require Catch and Shoulder Readiness",
+      "level": "intermediate_to_advanced",
+      "summary": "Allow paddles only when catch mechanics are stable and shoulder symptoms are absent.",
+      "trigger_conditions": ["shoulder_pain", "dropped_elbow", "return_to_swim", "new_swimmer"],
+      "action": "Use sculling, short technique pull without paddles, or whole-stroke drill transfer.",
+      "source_ref_ids": ["tovin_swimmers_shoulder", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_butterfly_form_stop",
+      "record_type": "load_rule",
+      "title": "Butterfly Form Stop Rule",
+      "level": "all_levels",
+      "summary": "Stop or regress butterfly when breath is late, hips drop, recovery becomes heavy, or shoulder/back symptoms appear.",
+      "trigger_conditions": ["late_breath", "hips_drop", "low_back_pain", "shoulder_pain"],
+      "action": "Switch to body dolphin, single-arm fly, or non-fly aerobic swimming.",
+      "source_ref_ids": ["swim_england_butterfly_technique", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_breaststroke_knee_monitor",
+      "record_type": "load_rule",
+      "title": "Breaststroke Knee Monitor",
+      "level": "all_levels",
+      "summary": "Monitor knee and groin response to breaststroke kick and reduce specialty volume if symptoms trend upward.",
+      "trigger_conditions": ["medial_knee_pain", "groin_pain", "wide_kick", "breaststroke_volume_spike"],
+      "action": "Reduce breaststroke kick volume, use technique correction, and substitute free/back aerobic work.",
+      "source_ref_ids": ["breaststroke_swimmers_knee", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_count_time_pairing",
+      "record_type": "efficiency_rule",
+      "title": "Pair Stroke Count with Time",
+      "level": "intermediate_to_advanced",
+      "summary": "Use count and time together so the swimmer does not over-glide or spin without propulsion.",
+      "trigger_conditions": ["technique_set", "efficiency_goal", "race_pace_goal"],
+      "action": "Prescribe target count range plus split or effort cap.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_drill_transfer",
+      "record_type": "coaching_rule",
+      "title": "Every Drill Needs a Transfer Swim",
+      "level": "all_levels",
+      "summary": "Follow drills with short whole-stroke swims using the same cue and a visible success marker.",
+      "trigger_conditions": ["drill_set", "technique_focus"],
+      "action": "Add 12.5 to 50 m transfer repeat depending on level and skill quality.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "asca_level_2_strokes_school"]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "swim_assess_breathing_readiness",
+      "record_type": "assessment",
+      "title": "Breathing Readiness Assessment",
+      "level": "beginner",
+      "summary": "Check whether swimmer can exhale under water, inhale calmly, and resume movement without panic or body-line collapse.",
+      "pass_criteria": ["exhale_underwater", "no_panic_response", "short_repeat_completed_with_regular_air"],
+      "fail_action": "Use water confidence and breathing drills before aerobic swim sets.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "swim_assess_freestyle_line_breath_catch",
+      "record_type": "assessment",
+      "title": "Freestyle Line, Breath, and Catch Assessment",
+      "level": "beginner_to_intermediate",
+      "summary": "Assess whether the swimmer can maintain body line, low breath, and non-dropped catch over short repeats.",
+      "pass_criteria": ["head_low_on_breath", "hips_near_surface", "entry_not_crossing", "catch_not_pressing_down"],
+      "fail_action": "Assign side-kick breathing, six-count switch, and sculling before adding yardage.",
+      "source_ref_ids": ["swim_england_front_crawl_technique", "toussaint_beek_front_crawl_biomechanics"]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "swim_assess_backstroke_safety_line",
+      "record_type": "assessment",
+      "title": "Backstroke Safety and Line Assessment",
+      "level": "beginner_to_intermediate",
+      "summary": "Assess back float comfort, wall awareness, head stillness, hip height, and lane control before longer or faster backstroke.",
+      "pass_criteria": ["stable_back_float", "head_still", "hips_high", "knows_wall_count_or_flags", "stays_in_lane"],
+      "fail_action": "Use back-kick, wall-awareness, and short single-arm drills.",
+      "source_ref_ids": ["swim_england_backstroke_technique"]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "swim_assess_breaststroke_kick_symmetry",
+      "record_type": "assessment",
+      "title": "Breaststroke Kick Symmetry and Comfort Assessment",
+      "level": "beginner_to_intermediate",
+      "summary": "Check kick shape, foot turn-out, knee width, streamline finish, and knee/groin comfort before volume.",
+      "pass_criteria": ["feet_turn_out", "knees_controlled", "legs_finish_together", "no_knee_or_groin_pain"],
+      "fail_action": "Use wall kick shape, kick on back, or reduce breaststroke volume.",
+      "source_ref_ids": ["swim_england_breaststroke_technique", "breaststroke_swimmers_knee"]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "swim_assess_butterfly_readiness",
+      "record_type": "assessment",
+      "title": "Butterfly Readiness Assessment",
+      "level": "intermediate",
+      "summary": "Check body dolphin, two-kick timing, low breath, and symptom response before full-stroke butterfly sets.",
+      "pass_criteria": ["body_wave_without_back_pain", "two_kick_rhythm", "low_quick_breath", "short_full_stroke_without_collapse"],
+      "fail_action": "Use body dolphin, single-arm fly, or 3-3-3 drill with rest.",
+      "source_ref_ids": ["swim_england_butterfly_technique", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_session_templates",
+      "id": "swim_template_beginner_stroke_skill",
+      "record_type": "session_template",
+      "title": "Beginner Stroke Skill Session",
+      "level": "beginner",
+      "summary": "Rest-rich session emphasizing water confidence, exhalation, floats, glides, short freestyle/backstroke fragments, and simple cues.",
+      "components": ["breathing_drill", "float_recovery", "streamline_glide", "kick_balance", "short_stroke_fragment", "easy_cooldown"],
+      "avoid": ["long_continuous_swim", "butterfly_volume", "hypoxic_work"],
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions", "swim_england_expected_standards"]
+    },
+    {
+      "collection": "sport_session_templates",
+      "id": "swim_template_intermediate_technique_base",
+      "record_type": "session_template",
+      "title": "Intermediate Technique and Base Session",
+      "level": "intermediate",
+      "summary": "Blend drill-swim transfers, 25 to 100 m aerobic repeats, stroke count, and one technical focus.",
+      "components": ["warmup_easy", "technical_drill", "transfer_swim", "aerobic_quality_repeats", "stroke_count_task", "cooldown"],
+      "stop_condition": "Regress if target fault repeats on two consecutive repeats.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_session_templates",
+      "id": "swim_template_advanced_race_quality",
+      "record_type": "session_template",
+      "title": "Advanced Race-Quality Stroke Session",
+      "level": "advanced",
+      "summary": "Use short high-quality repeats, planned rest, stroke-rate or count targets, and strict technique standards.",
+      "components": ["skill_warmup", "build_repeats", "race_pace_repeats", "count_time_check", "stroke_specific_cooldown"],
+      "stop_condition": "Stop race-pace work when splits or mechanics fall outside target or pain appears.",
+      "source_ref_ids": ["usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_load_tracking",
+      "id": "swim_track_stroke_specific_volume",
+      "record_type": "load_metric",
+      "title": "Track Stroke-Specific Volume",
+      "level": "all_levels",
+      "summary": "Record total distance by stroke each week to manage shoulder, back, knee, and technical loads.",
+      "fields": ["freestyle_distance", "backstroke_distance", "breaststroke_distance", "butterfly_distance", "kick_distance", "pull_distance"],
+      "source_ref_ids": ["wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "collection": "sport_load_tracking",
+      "id": "swim_track_symptom_trends",
+      "record_type": "load_metric",
+      "title": "Track Shoulder, Back, Knee, and Neck Symptoms",
+      "level": "all_levels",
+      "summary": "Track symptom trends alongside stroke volume, intensity, and equipment exposure.",
+      "fields": ["shoulder_symptom", "low_back_symptom", "knee_groin_symptom", "neck_symptom", "session_rpe", "equipment_used"],
+      "source_ref_ids": ["tovin_swimmers_shoulder", "breaststroke_swimmers_knee", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "collection": "sport_load_tracking",
+      "id": "swim_track_equipment_exposure",
+      "record_type": "load_metric",
+      "title": "Track Equipment Exposure",
+      "level": "intermediate_to_advanced",
+      "summary": "Record paddles, fins, pull buoy, snorkel, and board use because each changes technical and tissue load.",
+      "fields": ["paddles_distance", "fins_distance", "pull_buoy_distance", "snorkel_distance", "kickboard_distance"],
+      "source_ref_ids": ["tovin_swimmers_shoulder", "usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_return_to_swim_mechanics_first",
+      "record_type": "return_to_sport_rule",
+      "title": "Return to Swim Mechanics First",
+      "level": "return_to_swim",
+      "summary": "After shoulder, back, knee, or long-break history, restart with low-volume technique and symptom-gated progression before intensity or equipment.",
+      "trigger_conditions": ["return_after_break", "shoulder_history", "back_history", "knee_history"],
+      "action": "Use easy short repeats, no paddles early, low breaststroke/fly exposure, and symptom trend checks.",
+      "source_ref_ids": ["tovin_swimmers_shoulder", "wanivenhaus_competitive_swimming_injuries"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_legal_breaststroke",
+      "record_type": "competition_rule",
+      "title": "Legal Breaststroke Constraint",
+      "level": "competition",
+      "summary": "Race-focused breaststroke prescriptions must preserve legal kick, timing, hand path, head-surface, pullout, turn, and finish requirements.",
+      "trigger_conditions": ["competition_goal", "breaststroke", "IM"],
+      "action": "Use official-rule-aware coaching and avoid illegal extra dolphin kicks, scissor kick, or repeated hands-to-hips pulls.",
+      "source_ref_ids": ["world_aquatics_competition_regulations_2026", "usa_swimming_stroke_turn_situations_2025"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_legal_butterfly",
+      "record_type": "competition_rule",
+      "title": "Legal Butterfly Constraint",
+      "level": "competition",
+      "summary": "Race-focused butterfly prescriptions must preserve simultaneous arm recovery, stroke rhythm, legal kick patterns, and two-hand touch requirements.",
+      "trigger_conditions": ["competition_goal", "butterfly", "IM"],
+      "action": "Use full-stroke and turn tasks that maintain legal simultaneous timing under fatigue.",
+      "source_ref_ids": ["world_aquatics_competition_regulations_2026", "usa_swimming_stroke_turn_situations_2025"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_backstroke_lane_awareness",
+      "record_type": "safety_rule",
+      "title": "Backstroke Lane and Wall Awareness",
+      "level": "all_levels",
+      "summary": "Backstroke prescriptions should account for wall approach, flags or stroke count, and collision risk in crowded lanes.",
+      "trigger_conditions": ["backstroke", "crowded_pool", "beginner"],
+      "action": "Use short repeats, wall count, and lane discipline before fast backstroke.",
+      "source_ref_ids": ["swim_england_backstroke_technique"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_bodyline_before_intensity",
+      "record_type": "progression_rule",
+      "title": "Body Line Before Intensity",
+      "level": "beginner_to_intermediate",
+      "summary": "Do not add speed before the swimmer can maintain head, hip, and kick alignment at easy speed.",
+      "trigger_conditions": ["hips_sink", "head_lift", "wide_kick", "poor_balance"],
+      "action": "Use glide, side-kick, back-kick, and short drill-transfer repeats.",
+      "source_ref_ids": ["swim_england_expected_standards", "swim_england_front_crawl_technique"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "swim_rule_one_focus_per_drill_set",
+      "record_type": "coaching_rule",
+      "title": "One Technical Focus Per Drill Set",
+      "level": "all_levels",
+      "summary": "Technique sets should emphasize one primary cue so the swimmer can change behavior and the coach/app can evaluate transfer.",
+      "trigger_conditions": ["technique_session", "multiple_faults"],
+      "action": "Select the upstream limiter first: breathing, body line, catch, kick, or timing.",
+      "source_ref_ids": ["swim_england_expected_standards", "asca_level_2_strokes_school"]
+    }
+  ]
+}

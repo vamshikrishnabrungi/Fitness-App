@@ -1,0 +1,2178 @@
+{
+  "metadata": {
+    "sport": "swimming",
+    "domain": "injury_snc_load_return_to_swim",
+    "version": "0.1.0",
+    "research_goal": "Synthesize swimming-specific strength and conditioning, injury risk, load monitoring, dryland support, mobility, equipment exposure, and return-to-swim rules into backend-ready planning records.",
+    "created_by_agent": "injury_snc_load_agent",
+    "created_at": "2026-06-23",
+    "scope": [
+      "swimmer shoulder and scapular control",
+      "elbow and wrist overuse",
+      "neck symptoms from breathing and head position",
+      "low-back load in butterfly, breaststroke, streamlines, and underwaters",
+      "breaststroke knee and groin load",
+      "yardage and intensity spikes",
+      "paddles, fins, pull buoy, kickboard, and snorkel modifiers",
+      "dryland placement around pool sessions",
+      "strength, mobility, trunk, hip, and ankle support",
+      "return-to-swim gates after shoulder, back, knee, groin, or long-break flags"
+    ],
+    "excluded_scope": [
+      "full stroke-teaching progressions except where mechanics change load",
+      "event programming except where load or return-to-swim gates depend on event",
+      "nutrition",
+      "medical diagnosis or treatment plans"
+    ],
+    "source_selection_note": "Sources emphasize federation or official safety material, sports medicine reviews, peer-reviewed swimming injury/load studies, and reputable clinician-coaching education. The records synthesize and do not reproduce copyrighted programs."
+  },
+  "source_refs": [
+    {
+      "id": "src_world_aquatics_rules",
+      "title": "World Aquatics Swimming Rules and Competition Regulations",
+      "url": "https://www.worldaquatics.com/swimming/rules",
+      "source_type": "official_rules",
+      "organization_or_author": "World Aquatics",
+      "notes": "Used for racing context, starts, turns, stroke legality, and the 15 m underwater constraint that should shape safe skill gates."
+    },
+    {
+      "id": "src_usa_swimming_adm",
+      "title": "USA Swimming American Development Model",
+      "url": "https://www.usaswimming.org/coaches-leaders/coaches/american-development-model",
+      "source_type": "official_athlete_development_guidance",
+      "organization_or_author": "USA Swimming",
+      "notes": "Used for age-appropriate coaching, technique quality, and injury prevention framing."
+    },
+    {
+      "id": "src_redcross_usa_swimming_hypoxic",
+      "title": "Hypoxic Blackout Joint Statement",
+      "url": "https://www.redcross.org/content/dam/redcross/training-services/scientific-advisory-council/2022%20Hypoxic%20Blackout%20-%20Joint%20Statement%20-%20Red%20Cross%20Y%20USA%20Swimming%2010-31-2022.pdf",
+      "source_type": "official_safety_statement",
+      "organization_or_author": "American Red Cross, YMCA of the USA, and USA Swimming",
+      "notes": "Used for safety gates around underwater work, breath holding, hyperventilation, and supervision."
+    },
+    {
+      "id": "src_ais_breath_hold_training",
+      "title": "Breath Hold Training Position Statement",
+      "url": "https://www.ausport.gov.au/ais/position_statements/breath-hold-training",
+      "source_type": "official_sport_science_position_statement",
+      "organization_or_author": "Australian Institute of Sport / Australian Sports Commission",
+      "notes": "Used for balancing modest breath-hold benefits against safety risks in swimming and water-based activities."
+    },
+    {
+      "id": "src_aquatics_gb_snc",
+      "title": "Strength and Conditioning | Para-Swimming",
+      "url": "https://www.britishswimming.org/performance/para-swimming/training-and-sports-science/strength-and-conditioning/",
+      "source_type": "federation_snc_guidance",
+      "organization_or_author": "Aquatics GB / British Swimming",
+      "notes": "Used for the principle that S&C must be integrated with the swim program, athlete needs, communication, and training load."
+    },
+    {
+      "id": "src_wanivenhaus_injury_epidemiology",
+      "title": "Epidemiology of Injuries and Prevention Strategies in Competitive Swimmers",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23016094/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Wanivenhaus, Fox, Chaudhury, and Rodeo",
+      "notes": "Used for common swimming injury regions: upper limb, knee, and spine, plus prevention and rehabilitation planning context."
+    },
+    {
+      "id": "src_tovin_swimmer_shoulder",
+      "title": "Prevention and Treatment of Swimmer's Shoulder",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21522219/",
+      "source_type": "peer_reviewed_clinical_review",
+      "organization_or_author": "Tovin",
+      "notes": "Used for swimmer shoulder impairments, prevention, early management, and training-error framing."
+    },
+    {
+      "id": "src_bak_painful_shoulder",
+      "title": "The Practical Management of Swimmer's Painful Shoulder: Etiology, Diagnosis, and Treatment",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20818199/",
+      "source_type": "peer_reviewed_clinical_review",
+      "organization_or_author": "Bak",
+      "notes": "Used for balanced rotator cuff strength, scapular dysfunction, core stability, and the importance of technique and training errors."
+    },
+    {
+      "id": "src_usms_swimmer_shoulder",
+      "title": "What to Know About Swimmer's Shoulder",
+      "url": "https://www.usms.org/fitness-and-training/articles-and-videos/articles/what-to-know-about-swimmers-shoulder",
+      "source_type": "reputable_coaching_clinician_guidance",
+      "organization_or_author": "U.S. Masters Swimming",
+      "notes": "Used for practical coaching flags: midline crossing, lack of roll, unbalanced dryland, overtraining, hand paddle overuse, neck tightness, serratus weakness, and shoulder internal rotation deficits."
+    },
+    {
+      "id": "src_usms_paddles",
+      "title": "What Swimmers Need to Know About Paddles",
+      "url": "https://www.usms.org/fitness-and-training/articles-and-videos/articles/how-to-buy-and-use-paddles",
+      "source_type": "reputable_coaching_guidance",
+      "organization_or_author": "U.S. Masters Swimming",
+      "notes": "Used for safe paddle use, technique feedback, resistance progression, and avoiding equipment as a default."
+    },
+    {
+      "id": "src_usms_swimmer_elbow",
+      "title": "What to Know About Swimmer's Elbow",
+      "url": "https://www.usms.org/fitness-and-training/articles-and-videos/articles/what-to-know-about-swimmers-elbow",
+      "source_type": "reputable_coaching_clinician_guidance",
+      "organization_or_author": "U.S. Masters Swimming",
+      "notes": "Used for elbow overuse logic, medial epicondyle symptoms, tendon irritation, and technique-overuse interaction."
+    },
+    {
+      "id": "src_hss_overuse_injuries",
+      "title": "Swimming Overuse Injuries and How to Prevent Them",
+      "url": "https://www.hss.edu/health-library/move-better/swimming-injuries-prevention",
+      "source_type": "sports_medicine_education_resource",
+      "organization_or_author": "Hospital for Special Surgery",
+      "notes": "Used for practical technique risk controls: hand entry, midline crossing, body line, head-trunk alignment, and bilateral breathing distribution."
+    },
+    {
+      "id": "src_return_to_swimming_protocol",
+      "title": "Return to Swimming Protocol for Competitive Swimmers",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25328833/",
+      "source_type": "peer_reviewed_clinical_commentary",
+      "organization_or_author": "Spigelman, Sciascia, Uhl, and colleagues",
+      "notes": "Used for yardage-based return-to-swim progressions, technique-first early phases, and symptom-gated increases after shoulder injury."
+    },
+    {
+      "id": "src_pediatric_return_to_swim",
+      "title": "Considerations and Return to Swim Protocol for the Pediatric Swimmer After Non-Operative Injury",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24944859/",
+      "source_type": "peer_reviewed_clinical_commentary",
+      "organization_or_author": "Pediatric return-to-swim protocol authors",
+      "notes": "Used for youth return-to-swim caution, staged loading, and the need to respect growth and training history."
+    },
+    {
+      "id": "src_volume_shoulder_pain_review",
+      "title": "Swim-Training Volume and Shoulder Pain Across the Life Span of the Competitive Swimmer: A Systematic Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31935141/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Swim-training volume and shoulder pain review authors",
+      "notes": "Used for the association between training volume and shoulder pain, especially in adolescent competitive swimmers."
+    },
+    {
+      "id": "src_collegiate_workload_injury",
+      "title": "Workload and Noncontact Musculoskeletal Injury in Collegiate Swimmers",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9205558/",
+      "source_type": "peer_reviewed_cohort_study",
+      "organization_or_author": "Collegiate swimmer workload study authors",
+      "notes": "Used for swimming workload thresholds, noncontact injury risk, supraspinatus tendinopathy, and acute-to-chronic load logic."
+    },
+    {
+      "id": "src_nonshoulder_injury_review",
+      "title": "Non-shoulder Injuries in Swimming: A Systematic Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33852442/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Non-shoulder swimming injury review authors",
+      "notes": "Used for neck, back, pelvis, hip, and knee risk-factor categories, and for recognizing limited certainty outside shoulder research."
+    },
+    {
+      "id": "src_spondylolysis_swimmers",
+      "title": "Spondylolysis as a Cause of Low Back Pain in Swimmers",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10950449/",
+      "source_type": "peer_reviewed_case_series",
+      "organization_or_author": "Nyska, Constantini, Cale-Benzoor, Back, Kahn, and Mann",
+      "notes": "Used for repeated lumbar hyperextension concern in breaststroke and butterfly swimmers and for red flags requiring clinical evaluation."
+    },
+    {
+      "id": "src_swimming_low_back_review",
+      "title": "Swimming Anatomy and Lower Back Injuries in Competitive Swimmers",
+      "url": "https://journals.sagepub.com/doi/10.1177/19417381231225213",
+      "source_type": "peer_reviewed_narrative_review",
+      "organization_or_author": "Sports Health review authors",
+      "notes": "Used for lumbar strain, spondylolysis, facet irritation, disc concerns, technique, high volume, and trunk fatigue mechanisms."
+    },
+    {
+      "id": "src_breaststroke_knee",
+      "title": "Knee Pain in Competitive Swimming",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10230572/",
+      "source_type": "peer_reviewed_clinical_review",
+      "organization_or_author": "Rodeo",
+      "notes": "Used for medial knee pain, breaststroke predominance, and stroke-specific knee management."
+    },
+    {
+      "id": "src_elbow_pain_elite_swimmers",
+      "title": "Distribution and Prevalence of Elbow Pain in Elite Swimmers",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10572555/",
+      "source_type": "peer_reviewed_cross_sectional_study",
+      "organization_or_author": "Elite swimmer elbow pain study authors",
+      "notes": "Used for elbow pain surveillance and the need not to ignore distal upper-limb symptoms in swimmers."
+    },
+    {
+      "id": "src_strength_training_swimming_review",
+      "title": "Effect of Different Types of Strength Training on Swimming Performance in Competitive Swimmers: A Systematic Review",
+      "url": "https://link.springer.com/article/10.1186/s40798-022-00410-5",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Strength training in swimming review authors",
+      "notes": "Used for transfer limits, dryland and swim-specific resistance, strength as an adjunct rather than replacement for water skill, and event-specific power support."
+    },
+    {
+      "id": "src_ioc_load_consensus",
+      "title": "How Much Is Too Much? International Olympic Committee Consensus Statement on Load in Sport and Risk of Injury",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27535989/",
+      "source_type": "consensus_statement",
+      "organization_or_author": "International Olympic Committee expert group",
+      "notes": "Used for external/internal load monitoring, rapid load changes, competition and psychological load, and individualized risk management."
+    },
+    {
+      "id": "src_return_to_sport_consensus",
+      "title": "2016 Consensus Statement on Return to Sport from the First World Congress in Sports Physical Therapy",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27226389/",
+      "source_type": "consensus_statement",
+      "organization_or_author": "Ardern, Glasgow, Schneiders, Witvrouw, Clarsen, Cools, and colleagues",
+      "notes": "Used for return-to-participation, return-to-sport, and return-to-performance continuum logic."
+    },
+    {
+      "id": "src_lauersen_injury_prevention",
+      "title": "The Effectiveness of Exercise Interventions to Prevent Sports Injuries",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24100287/",
+      "source_type": "peer_reviewed_systematic_review_meta_analysis",
+      "organization_or_author": "Lauersen, Bertelsen, and Andersen",
+      "notes": "Used for general support that strength training has a stronger injury-prevention signal than stretching alone."
+    },
+    {
+      "id": "src_rypt_swim_load_monitoring",
+      "title": "The Importance of Training Load Monitoring in Swimming",
+      "url": "https://blog.rypt.app/sandc/the-importance-of-training-load-monitoring-in-swimming/",
+      "source_type": "sports_science_practitioner_guidance",
+      "organization_or_author": "Lorna Barry / RYPT",
+      "notes": "Used for practical swimming load monitoring: RPE x duration, pool volume, dryland, competition, and interpreting trends rather than claiming prediction."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "concept_swimming_is_low_impact_high_repetition",
+      "name": "Swimming removes ground impact but concentrates repetitive joint load",
+      "summary": "Swimming is low impact for the lower limbs, but each practice can contain thousands of shoulder cycles plus repeated neck rotation, trunk extension, kicking, walls, and equipment-assisted repetitions.",
+      "backend_use": "Do not reduce swim injury risk just because impact load is low; track repetition, stroke, equipment, and symptoms.",
+      "source_refs": [
+        "src_wanivenhaus_injury_epidemiology",
+        "src_volume_shoulder_pain_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "concept_load_channels_by_stroke",
+      "name": "Load must be separated by stroke and anatomical channel",
+      "summary": "Freestyle/backstroke emphasize shoulder, scapular, elbow, wrist, and neck exposure; butterfly and underwaters add trunk extension and high shoulder load; breaststroke adds medial knee, groin, and hip external-rotation load.",
+      "backend_use": "Store stroke_volume fields rather than one generic yardage field.",
+      "source_refs": [
+        "src_wanivenhaus_injury_epidemiology",
+        "src_nonshoulder_injury_review",
+        "src_breaststroke_knee"
+      ]
+    },
+    {
+      "id": "concept_external_internal_load_pairing",
+      "name": "Yardage is incomplete without internal response",
+      "summary": "Distance, intensity, stroke mix, equipment, and dryland volume must be paired with RPE, pain location, next-day soreness, sleep, fatigue, and readiness because swimmers tolerate similar meters differently.",
+      "backend_use": "Pair every swim_session_summary with external_load and internal_response fields.",
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_rypt_swim_load_monitoring",
+        "src_collegiate_workload_injury"
+      ]
+    },
+    {
+      "id": "concept_pain_changes_role_of_equipment",
+      "name": "Equipment is a load modifier, not a neutral accessory",
+      "summary": "Paddles can increase shoulder and elbow stress, fins can change speed and kick demand, kickboards can alter shoulder and neck posture, and pull buoys shift work toward the upper body.",
+      "backend_use": "Treat paddles, fins, kickboard, pull buoy, snorkel, cords, and tether work as exposure modifiers with contraindication rules.",
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_usms_paddles",
+        "src_usms_swimmer_elbow"
+      ]
+    },
+    {
+      "id": "concept_dryland_supports_pool_quality",
+      "name": "Dryland should support water quality rather than drain it",
+      "summary": "S&C is useful when it improves shoulder capacity, trunk control, hip function, starts, turns, and posture, but poorly placed upper-body fatigue can worsen technique and overload symptoms in the pool.",
+      "backend_use": "Schedule dryland relative to key swims and automatically reduce upper-body dryland near high-intensity or high-paddle swim days.",
+      "source_refs": [
+        "src_aquatics_gb_snc",
+        "src_strength_training_swimming_review",
+        "src_bak_painful_shoulder"
+      ]
+    },
+    {
+      "id": "concept_technique_is_load_management",
+      "name": "Technique errors act like load multipliers",
+      "summary": "Midline crossing, dropped elbow recovery/catch, poor body roll, thumb-down entry, excessive head lift, poor streamline, late butterfly timing, and knee-driven breaststroke kick can raise tissue stress without changing yardage.",
+      "backend_use": "Use technique_flag fields to downgrade load readiness and prioritize drills before adding volume.",
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries",
+        "src_breaststroke_knee"
+      ]
+    },
+    {
+      "id": "concept_return_to_swim_is_not_return_to_performance",
+      "name": "Return-to-swim has stages",
+      "summary": "A swimmer can return to easy technical water exposure before returning to normal training and much later before returning to race-pace, paddles, butterfly, starts, or peak yardage.",
+      "backend_use": "Represent return as staged gates: participation, training, sport, and performance rather than a single cleared boolean.",
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_return_to_sport_consensus",
+        "src_pediatric_return_to_swim"
+      ]
+    },
+    {
+      "id": "concept_breath_control_is_safety_gated",
+      "name": "Breath control must never become unsafe breath holding",
+      "summary": "Underwater skill and relaxed exhalation are relevant, but hyperventilation, extended breath holding, breath-hold games, and unsupervised underwater lap work create safety risk.",
+      "backend_use": "Gate underwater and breath-control prescriptions by supervision, experience, pool context, and explicit no-hyperventilation rules.",
+      "source_refs": [
+        "src_redcross_usa_swimming_hypoxic",
+        "src_ais_breath_hold_training",
+        "src_world_aquatics_rules"
+      ]
+    },
+    {
+      "id": "concept_shoulder_capacity_is_kinetic_chain",
+      "name": "Swimmer shoulder is not only rotator cuff strength",
+      "summary": "Shoulder durability depends on rotator cuff capacity, serratus and scapular control, thoracic mobility, trunk control, breathing mechanics, stroke timing, and appropriate exposure.",
+      "backend_use": "Bundle shoulder support records across cuff, scapula, thoracic, trunk, and technique rather than a single prehab drill.",
+      "source_refs": [
+        "src_tovin_swimmer_shoulder",
+        "src_bak_painful_shoulder",
+        "src_usms_swimmer_shoulder"
+      ]
+    },
+    {
+      "id": "concept_youth_and_masters_need_extra_context",
+      "name": "Youth and masters swimmers need different risk gates",
+      "summary": "Youth swimmers need age-appropriate development, growth-aware load progression, and supervision; masters swimmers may need more conservative return progression, mobility support, and recovery spacing.",
+      "backend_use": "Use age_group and training_age fields when applying volume, dryland, equipment, and return-to-swim rules.",
+      "source_refs": [
+        "src_usa_swimming_adm",
+        "src_pediatric_return_to_swim",
+        "src_return_to_sport_consensus"
+      ]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "model_swim_load_stack",
+      "name": "Swimming load stack",
+      "model": "total_load = pool_distance + session_intensity + stroke_specific_volume + equipment_modifier + dryland_load + competition_load + internal_response",
+      "use_case": "Estimate recovery and injury-risk context without pretending yardage alone explains symptoms.",
+      "fields_to_track": [
+        "total_distance_m",
+        "high_intensity_distance_m",
+        "freestyle_m",
+        "backstroke_m",
+        "breaststroke_m",
+        "butterfly_m",
+        "underwater_reps",
+        "starts_turns_reps",
+        "paddle_distance_m",
+        "fin_distance_m",
+        "kickboard_distance_m",
+        "pull_buoy_distance_m",
+        "session_rpe",
+        "duration_min",
+        "dryland_upper_load",
+        "dryland_lower_load",
+        "dryland_core_load",
+        "pain_by_region",
+        "next_day_response"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_rypt_swim_load_monitoring",
+        "src_collegiate_workload_injury"
+      ]
+    },
+    {
+      "id": "model_shoulder_traffic_light",
+      "name": "Shoulder traffic light",
+      "model": "green = 0-2/10 pain that does not alter stroke and resolves by next day; yellow = 3-4/10, altered stroke, loss of range, or next-day soreness; red = sharp pain, night pain, weakness, neurological symptoms, or worsening trend.",
+      "use_case": "Control practice modification and referral prompts for swimmer shoulder.",
+      "fields_to_track": [
+        "pain_score_during",
+        "pain_score_after",
+        "next_day_pain",
+        "stroke_altered",
+        "sleep_pain",
+        "strength_loss",
+        "neck_or_arm_symptoms"
+      ],
+      "source_refs": [
+        "src_tovin_swimmer_shoulder",
+        "src_bak_painful_shoulder",
+        "src_return_to_swimming_protocol"
+      ]
+    },
+    {
+      "id": "model_knee_groin_breaststroke_gate",
+      "name": "Breaststroke knee and groin gate",
+      "model": "breaststroke kick exposure progresses only if medial knee and adductor symptoms remain low, kick width is controlled, hip rotation supplies turnout, and next-day response is stable.",
+      "use_case": "Protect swimmers from adding breaststroke volume when knee or groin tissue is already reactive.",
+      "fields_to_track": [
+        "breaststroke_m",
+        "breaststroke_kick_reps",
+        "medial_knee_pain",
+        "groin_pain",
+        "hip_rotation_limit",
+        "kick_width_flag",
+        "next_day_knee_response"
+      ],
+      "source_refs": [
+        "src_breaststroke_knee",
+        "src_nonshoulder_injury_review",
+        "src_wanivenhaus_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "model_low_back_extension_gate",
+      "name": "Low-back extension load gate",
+      "model": "butterfly, dolphin kick, breaststroke pullout, aggressive streamline, and high-volume kick sets are limited when lumbar extension pain, repeated arching, or trunk fatigue is present.",
+      "use_case": "Modify stroke selection and dryland when low-back symptoms appear.",
+      "fields_to_track": [
+        "butterfly_m",
+        "dolphin_kick_reps",
+        "underwater_distance_m",
+        "breaststroke_pullouts",
+        "lumbar_pain",
+        "extension_sensitive",
+        "trunk_fatigue",
+        "red_flag_back_symptoms"
+      ],
+      "source_refs": [
+        "src_spondylolysis_swimmers",
+        "src_swimming_low_back_review",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "model_equipment_modifier",
+      "name": "Equipment exposure modifier",
+      "model": "equipment exposure changes tissue stress: paddles raise upper-limb resistance, pull buoy can concentrate shoulder work, fins increase speed and ankle/hip demand, kickboards can challenge shoulder/neck posture, and snorkels can reduce head-turning while requiring comfort.",
+      "use_case": "Generate safer substitutions when symptoms are present.",
+      "fields_to_track": [
+        "equipment_used",
+        "equipment_distance_m",
+        "equipment_intensity",
+        "symptom_region",
+        "technique_quality"
+      ],
+      "source_refs": [
+        "src_usms_paddles",
+        "src_usms_swimmer_shoulder",
+        "src_usms_swimmer_elbow"
+      ]
+    },
+    {
+      "id": "model_dryland_placement",
+      "name": "Dryland placement model",
+      "model": "place high-load upper-body strength away from key swim quality, use low-fatigue activation before swim, reserve heavier strength for lower-priority swim days or after key water work, and avoid stacking paddles with heavy pulling.",
+      "use_case": "Coordinate dryland and pool training in generated weekly plans.",
+      "fields_to_track": [
+        "key_swim_day",
+        "dryland_day_type",
+        "upper_pull_volume",
+        "overhead_volume",
+        "push_volume",
+        "pool_intensity",
+        "paddle_distance_m",
+        "readiness_score"
+      ],
+      "source_refs": [
+        "src_aquatics_gb_snc",
+        "src_strength_training_swimming_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "model_return_to_swim_stages",
+      "name": "Return-to-swim stages",
+      "model": "stage_0 = medical/rehab clearance and daily function; stage_1 = easy technique-only water; stage_2 = short aerobic intervals; stage_3 = normal stroke mix without equipment spikes; stage_4 = race pace, paddles, butterfly, starts, and competition exposure.",
+      "use_case": "Map injury history to safe session recommendations.",
+      "fields_to_track": [
+        "injury_region",
+        "clearance_status",
+        "stage",
+        "max_session_distance_m",
+        "allowed_strokes",
+        "allowed_equipment",
+        "pain_gate",
+        "next_stage_criteria"
+      ],
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_pediatric_return_to_swim",
+        "src_return_to_sport_consensus"
+      ]
+    },
+    {
+      "id": "model_acwr_swimming_guardrail",
+      "name": "Acute-to-chronic swimming guardrail",
+      "model": "compare the current week with recent chronic exposure for distance, session RPE load, high-intensity distance, and stroke-specific volume; flag sharp increases rather than using one universal safe threshold.",
+      "use_case": "Identify yardage spikes, sudden equipment changes, or stroke-specialization spikes before symptoms escalate.",
+      "fields_to_track": [
+        "current_week_distance_m",
+        "four_week_avg_distance_m",
+        "current_week_session_load",
+        "four_week_avg_session_load",
+        "stroke_specific_acwr",
+        "equipment_acwr",
+        "symptom_trend"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_collegiate_workload_injury",
+        "src_volume_shoulder_pain_review"
+      ]
+    },
+    {
+      "id": "model_breath_underwater_safety_gate",
+      "name": "Underwater and breath-control safety gate",
+      "model": "underwater work requires demonstrated water competence, supervision, no hyperventilation, no extended breath holding, no breath-hold contests, conservative distances, and clear stop rules.",
+      "use_case": "Prevent unsafe hypoxic prescriptions in workouts.",
+      "fields_to_track": [
+        "water_confidence_level",
+        "supervision",
+        "underwater_reps",
+        "underwater_distance_m",
+        "breath_hold_instruction_present",
+        "hyperventilation_warning",
+        "fatigue_state"
+      ],
+      "source_refs": [
+        "src_redcross_usa_swimming_hypoxic",
+        "src_ais_breath_hold_training",
+        "src_world_aquatics_rules"
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "rule_no_high_volume_butterfly_for_beginner_or_back_pain",
+      "rule": "Do not prescribe high-volume butterfly to beginners, swimmers with poor timing, or swimmers reporting extension-sensitive low-back symptoms.",
+      "rationale": "Butterfly adds shoulder load, repeated lumbar extension, and technique collapse risk when fatigue rises.",
+      "source_refs": [
+        "src_swimming_low_back_review",
+        "src_spondylolysis_swimmers",
+        "src_wanivenhaus_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "rule_reduce_paddles_for_shoulder_elbow_or_wrist_pain",
+      "rule": "If shoulder, elbow, or wrist pain is present, remove paddles first and replace with short technical swimming, fins-assisted easy swimming, or non-aggravating kick work.",
+      "rationale": "Paddles amplify pulling resistance and can worsen symptoms when technique or tissue capacity is limited.",
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_usms_paddles",
+        "src_usms_swimmer_elbow"
+      ]
+    },
+    {
+      "id": "rule_do_not_stack_heavy_pull_dryland_and_paddles",
+      "rule": "Avoid heavy upper-body pulling dryland on the same day or preceding day as high-paddle, high-pull, or race-pace upper-body swim sets.",
+      "rationale": "The combined fatigue can reduce catch quality and overload rotator cuff, scapular stabilizers, elbow, and wrist.",
+      "source_refs": [
+        "src_aquatics_gb_snc",
+        "src_ioc_load_consensus",
+        "src_bak_painful_shoulder"
+      ]
+    },
+    {
+      "id": "rule_breaststroke_symptoms_limit_kick_first",
+      "rule": "For medial knee or groin symptoms, first reduce breaststroke kick volume, kick intensity, and wide kick emphasis before reducing all swimming.",
+      "rationale": "Breaststroke-specific lower-limb mechanics can drive symptoms even when freestyle or backstroke remain tolerated.",
+      "source_refs": [
+        "src_breaststroke_knee",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "rule_shoulder_pain_prioritize_technique_before_volume",
+      "rule": "When shoulder symptoms rise, prioritize hand-entry alignment, no midline crossing, body roll, relaxed recovery, and catch control before adding volume.",
+      "rationale": "Technique faults can multiply shoulder load independent of distance.",
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries",
+        "src_tovin_swimmer_shoulder"
+      ]
+    },
+    {
+      "id": "rule_neck_pain_modify_breathing_and_kickboard",
+      "rule": "For neck irritation, reduce repeated one-sided breathing, head-lift breathing, and prolonged kickboard postures; use body roll, bilateral or controlled breathing, snorkel where appropriate, and arms-at-side kicking.",
+      "rationale": "Neck rotation/lift repeated hundreds of times can affect shoulder mechanics and cervical symptoms.",
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries"
+      ]
+    },
+    {
+      "id": "rule_load_spike_requires_distance_and_intensity_check",
+      "rule": "Flag any large increase in weekly distance, high-intensity distance, session count, or stroke-specific volume, especially if sleep, soreness, or pain trend worsens.",
+      "rationale": "Rapid load changes are more actionable than absolute yardage alone.",
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_collegiate_workload_injury",
+        "src_rypt_swim_load_monitoring"
+      ]
+    },
+    {
+      "id": "rule_return_session_ends_on_stroke_change",
+      "rule": "In return-to-swim sessions, stop or downshift when pain changes stroke mechanics, causes guarding, or worsens during the set.",
+      "rationale": "Altered mechanics can transfer load to other tissues and reinforce poor patterns.",
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_return_to_sport_consensus",
+        "src_tovin_swimmer_shoulder"
+      ]
+    },
+    {
+      "id": "rule_no_unsupervised_breath_hold_sets",
+      "rule": "Do not prescribe unsupervised hypoxic sets, extended breath holds, hyperventilation, or breath-hold contests.",
+      "rationale": "Hypoxic blackout risk is a safety issue, not a normal conditioning challenge.",
+      "source_refs": [
+        "src_redcross_usa_swimming_hypoxic",
+        "src_ais_breath_hold_training"
+      ]
+    },
+    {
+      "id": "rule_fins_are_not_free_load",
+      "rule": "Use fins to support body position or technique only when ankle, calf, hip, knee, and low-back response is acceptable; do not use long fin sets as default recovery.",
+      "rationale": "Fins can reduce shoulder strain in some contexts but increase speed, kick force, ankle demand, and lumbar extension exposure.",
+      "source_refs": [
+        "src_usms_paddles",
+        "src_swimming_low_back_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "rule_youth_return_needs_more_conservative_progression",
+      "rule": "For youth swimmers returning from injury, progress volume, intensity, equipment, starts, and competition more conservatively and coordinate with coach/clinician/guardian context.",
+      "rationale": "Growth, training age, school load, and technique maturity influence risk.",
+      "source_refs": [
+        "src_pediatric_return_to_swim",
+        "src_usa_swimming_adm",
+        "src_return_to_sport_consensus"
+      ]
+    },
+    {
+      "id": "rule_referral_for_red_flags",
+      "rule": "Refer out or advise medical review for sharp pain, neurological symptoms, night pain, progressive weakness, persistent low-back pain in adolescent butterfly/breaststroke swimmers, or knee/groin pain that worsens despite load reduction.",
+      "rationale": "Some symptoms require diagnosis rather than app-level programming changes.",
+      "source_refs": [
+        "src_spondylolysis_swimmers",
+        "src_bak_painful_shoulder",
+        "src_return_to_sport_consensus"
+      ]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "demand_shoulder_rotator_capacity",
+      "name": "Shoulder rotator capacity",
+      "description": "Repeated internal rotation, external rotation control, and overhead recovery require rotator cuff strength, endurance, and fatigue resistance.",
+      "train_with": [
+        "external rotation variations",
+        "controlled internal rotation capacity",
+        "low-fatigue activation before swim",
+        "progressive pulling strength away from key swim quality"
+      ],
+      "source_refs": [
+        "src_tovin_swimmer_shoulder",
+        "src_bak_painful_shoulder"
+      ]
+    },
+    {
+      "id": "demand_scapular_control",
+      "name": "Scapular upward rotation and protraction control",
+      "description": "Serratus anterior, lower trapezius, and scapular control provide a stable base for repeated arm cycles.",
+      "train_with": [
+        "wall slide variations",
+        "serratus punch",
+        "bear plank reach",
+        "prone Y/T variations",
+        "row variations with scapular control"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_bak_painful_shoulder"
+      ]
+    },
+    {
+      "id": "demand_thoracic_mobility",
+      "name": "Thoracic extension and rotation mobility",
+      "description": "Thoracic mobility supports streamline, overhead reach, body roll, and shoulder mechanics without forcing excess lumbar extension.",
+      "train_with": [
+        "open books",
+        "quadruped rotations",
+        "bench thoracic extension",
+        "streamline mobility without lumbar flare"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_swimming_low_back_review"
+      ]
+    },
+    {
+      "id": "demand_trunk_anti_extension",
+      "name": "Trunk anti-extension and body-line control",
+      "description": "Streamline, kicking, butterfly, starts, and turns require the trunk to transmit force while limiting uncontrolled lumbar arching.",
+      "train_with": [
+        "dead bug",
+        "hollow hold regressions",
+        "front plank variations",
+        "body saw",
+        "landmine or cable anti-extension patterns"
+      ],
+      "source_refs": [
+        "src_swimming_low_back_review",
+        "src_spondylolysis_swimmers",
+        "src_strength_training_swimming_review"
+      ]
+    },
+    {
+      "id": "demand_hip_rotation_adductor_capacity",
+      "name": "Hip rotation and adductor capacity",
+      "description": "Breaststroke kick and turns require hip mobility, adductor capacity, and control so the knee does not absorb all turnout demand.",
+      "train_with": [
+        "adductor isometrics",
+        "Copenhagen plank regressions",
+        "hip internal and external rotation mobility",
+        "controlled breaststroke kick drills"
+      ],
+      "source_refs": [
+        "src_breaststroke_knee",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "demand_knee_medial_load_tolerance",
+      "name": "Medial knee load tolerance",
+      "description": "Breaststroke swimmers need tolerance to repetitive valgus/rotational knee stress, especially when kick width or volume increases.",
+      "train_with": [
+        "controlled squat and hinge strength",
+        "hip abductors and external rotators",
+        "adductor strength",
+        "symptom-gated breaststroke kick volume"
+      ],
+      "source_refs": [
+        "src_breaststroke_knee",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "demand_ankle_plantar_flexion",
+      "name": "Ankle plantar-flexion and kick comfort",
+      "description": "Efficient flutter and dolphin kick need ankle mobility and plantar-flexion capacity; fins can increase demand if progressed too fast.",
+      "train_with": [
+        "ankle mobility",
+        "calf and foot intrinsic strength",
+        "short fin exposures",
+        "kick sets progressed by response"
+      ],
+      "source_refs": [
+        "src_strength_training_swimming_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "demand_start_turn_power",
+      "name": "Start and turn power",
+      "description": "Racing swimmers need lower-body power, trunk stiffness, landing and wall-skill coordination, and shoulder-safe streamline positions.",
+      "train_with": [
+        "jump progressions",
+        "medicine ball throws",
+        "hinge and squat strength",
+        "streamline holds",
+        "turn-specific pool skill"
+      ],
+      "source_refs": [
+        "src_world_aquatics_rules",
+        "src_strength_training_swimming_review",
+        "src_aquatics_gb_snc"
+      ]
+    },
+    {
+      "id": "demand_aerobic_and_recovery_capacity",
+      "name": "Aerobic base and recovery capacity",
+      "description": "Even sprint swimmers need repeated high-quality practices; aerobic and recovery capacity help maintain stroke mechanics under training load.",
+      "train_with": [
+        "progressive aerobic swim volume",
+        "easy technical swimming",
+        "recovery spacing",
+        "RPE monitoring"
+      ],
+      "source_refs": [
+        "src_rypt_swim_load_monitoring",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "demand_neck_control_and_breathing",
+      "name": "Neck control and breathing mechanics",
+      "description": "Freestyle and butterfly breathing can repeat cervical rotation or extension many times; head position should integrate with trunk roll and shoulder mechanics.",
+      "train_with": [
+        "chin tuck variations",
+        "controlled breathing drills",
+        "bilateral breathing exposure when appropriate",
+        "snorkel-assisted technique where safe and comfortable"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries"
+      ]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "risk_swimmer_shoulder",
+      "name": "Swimmer shoulder",
+      "risk_summary": "Shoulder pain may reflect multiple pathologies and often emerges from a combination of high repetition, fatigue, technique errors, mobility restrictions, scapular dysfunction, and load spikes.",
+      "warning_signs": [
+        "pain during catch or recovery",
+        "dropping elbow because of pain",
+        "cross-body entry or pull under fatigue",
+        "night pain",
+        "loss of strength or range",
+        "next-day worsening"
+      ],
+      "load_modifiers": [
+        "high freestyle/backstroke distance",
+        "butterfly volume",
+        "paddles",
+        "pull buoy",
+        "heavy upper-body dryland",
+        "poor sleep"
+      ],
+      "source_refs": [
+        "src_tovin_swimmer_shoulder",
+        "src_bak_painful_shoulder",
+        "src_usms_swimmer_shoulder"
+      ]
+    },
+    {
+      "id": "risk_supraspinatus_tendinopathy_high_volume",
+      "name": "Supraspinatus tendon load from high swim volume",
+      "risk_summary": "High weekly swimming workload has been linked with shoulder tendon risk in competitive swimmers, especially when volume and intensity outpace tissue capacity.",
+      "warning_signs": [
+        "painful arc or overhead reach",
+        "catch pain",
+        "persistent soreness",
+        "shoulder weakness",
+        "load-response pattern after high-volume weeks"
+      ],
+      "load_modifiers": [
+        "weekly distance spike",
+        "high-intensity low-volume power work",
+        "paddle distance",
+        "insufficient recovery"
+      ],
+      "source_refs": [
+        "src_collegiate_workload_injury",
+        "src_volume_shoulder_pain_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "risk_scapular_fatigue",
+      "name": "Scapular fatigue and dyskinesis",
+      "risk_summary": "Fatigue or weakness in serratus anterior, lower trapezius, and other scapular stabilizers can degrade shoulder mechanics across a long set.",
+      "warning_signs": [
+        "winging or shrugging",
+        "reduced distance per stroke",
+        "shoulder pinch late in practice",
+        "loss of streamline comfort"
+      ],
+      "load_modifiers": [
+        "long pull sets",
+        "late-session paddles",
+        "upper-body dryland fatigue",
+        "poor trunk control"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_bak_painful_shoulder",
+        "src_tovin_swimmer_shoulder"
+      ]
+    },
+    {
+      "id": "risk_elbow_overuse",
+      "name": "Swimmer elbow",
+      "risk_summary": "Elbow tendon irritation can occur from repetitive pulling, backstroke/freestyle load, altered catch mechanics, and paddle-assisted stress.",
+      "warning_signs": [
+        "inside elbow pain",
+        "grip weakness",
+        "pain with pull-through",
+        "symptoms after paddle sets",
+        "forearm tightness"
+      ],
+      "load_modifiers": [
+        "paddles",
+        "high pull volume",
+        "poor catch angle",
+        "excessive wrist/forearm tension",
+        "heavy gripping dryland"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_elbow",
+        "src_elbow_pain_elite_swimmers",
+        "src_usms_paddles"
+      ]
+    },
+    {
+      "id": "risk_wrist_irritation",
+      "name": "Wrist irritation from entry, catch, or equipment",
+      "risk_summary": "Wrist pain is less emphasized than shoulder pain but can arise when hand entry, catch, paddle use, or wall contact overloads the wrist and forearm.",
+      "warning_signs": [
+        "pain at entry",
+        "pain gripping paddles",
+        "forearm tightness",
+        "wrist extension pain after starts or walls",
+        "altered hand angle"
+      ],
+      "load_modifiers": [
+        "paddles",
+        "high-speed sprinting",
+        "stiff hand entry",
+        "dryland pressing or gripping",
+        "wall-contact trauma"
+      ],
+      "source_refs": [
+        "src_usms_paddles",
+        "src_elbow_pain_elite_swimmers",
+        "src_wanivenhaus_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "risk_neck_irritation",
+      "name": "Neck irritation from breathing and head position",
+      "risk_summary": "Repeated one-sided head turn, head lift, poor body roll, and prolonged kickboard posture can irritate the neck and secondarily affect shoulder mechanics.",
+      "warning_signs": [
+        "neck tightness after practice",
+        "pain on breathing side",
+        "head-lift breathing",
+        "shoulder symptoms paired with neck stiffness"
+      ],
+      "load_modifiers": [
+        "one-sided breathing",
+        "butterfly breath timing",
+        "kickboard volume",
+        "poor thoracic mobility",
+        "high fatigue"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "risk_low_back_extension",
+      "name": "Low-back extension overload",
+      "risk_summary": "Butterfly, dolphin kick, breaststroke, pullouts, and aggressive streamline positions can repeatedly load lumbar extension, especially with weak trunk control or poor timing.",
+      "warning_signs": [
+        "pain with butterfly",
+        "pain with dolphin kick",
+        "pain with breaststroke pullout",
+        "extension-sensitive back pain",
+        "symptoms that persist after practice"
+      ],
+      "load_modifiers": [
+        "butterfly_m",
+        "underwater_reps",
+        "breaststroke_m",
+        "fins",
+        "trunk fatigue",
+        "poor hip mobility"
+      ],
+      "source_refs": [
+        "src_swimming_low_back_review",
+        "src_spondylolysis_swimmers",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "risk_adolescent_spondylolysis_flag",
+      "name": "Adolescent low-back red flag",
+      "risk_summary": "Persistent or worsening low-back pain in adolescent butterfly or breaststroke swimmers should prompt clinical review because repeated hyperextension can be associated with spondylolysis.",
+      "warning_signs": [
+        "focal low-back pain",
+        "pain with extension",
+        "pain that lingers outside practice",
+        "declining tolerance to butterfly or breaststroke",
+        "pain persisting despite deload"
+      ],
+      "load_modifiers": [
+        "growth stage",
+        "butterfly volume",
+        "breaststroke volume",
+        "underwater dolphin kick",
+        "training spike"
+      ],
+      "source_refs": [
+        "src_spondylolysis_swimmers",
+        "src_swimming_low_back_review",
+        "src_pediatric_return_to_swim"
+      ]
+    },
+    {
+      "id": "risk_breaststroke_knee",
+      "name": "Breaststroke knee",
+      "risk_summary": "Medial knee pain is strongly associated with breaststroke kick exposure and can be aggravated by wide, forceful, or knee-driven kick mechanics.",
+      "warning_signs": [
+        "medial knee pain",
+        "pain during kick out-sweep",
+        "pain after breaststroke sets",
+        "swelling or catching",
+        "next-day stiffness"
+      ],
+      "load_modifiers": [
+        "breaststroke_m",
+        "breaststroke_kick_reps",
+        "kick width",
+        "turnout from knee rather than hip",
+        "rapid stroke-specialization increase"
+      ],
+      "source_refs": [
+        "src_breaststroke_knee",
+        "src_nonshoulder_injury_review",
+        "src_wanivenhaus_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "risk_breaststroke_groin",
+      "name": "Breaststroke groin and adductor load",
+      "risk_summary": "Breaststroke kick, turns, and wide or forceful hip positions can provoke adductor/groin symptoms when volume or intensity exceeds capacity.",
+      "warning_signs": [
+        "adductor soreness",
+        "pain squeezing legs together",
+        "pain during kick recovery or snap",
+        "groin pain after turns",
+        "reduced kick power"
+      ],
+      "load_modifiers": [
+        "breaststroke kick volume",
+        "wide kick",
+        "turn push-offs",
+        "adductor strength deficit",
+        "hip mobility limitation"
+      ],
+      "source_refs": [
+        "src_nonshoulder_injury_review",
+        "src_breaststroke_knee",
+        "src_wanivenhaus_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "risk_yardage_spike",
+      "name": "Yardage spike",
+      "risk_summary": "A sudden increase in total distance, session frequency, or weekly duration can exceed tissue adaptation even when intensity seems moderate.",
+      "warning_signs": [
+        "new soreness in multiple regions",
+        "fatigue persisting across days",
+        "stroke count rising",
+        "pace falling at same effort",
+        "sleep or mood changes"
+      ],
+      "load_modifiers": [
+        "current_week_distance_m",
+        "four_week_average",
+        "sessions_per_week",
+        "double practices",
+        "return from break"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_rypt_swim_load_monitoring",
+        "src_collegiate_workload_injury"
+      ]
+    },
+    {
+      "id": "risk_intensity_spike",
+      "name": "Intensity spike",
+      "risk_summary": "Race-pace, sprint, lactate, power, starts, and resisted work can create high tendon and neuromuscular load even if total meters are low.",
+      "warning_signs": [
+        "sharp symptoms during hard repeats",
+        "loss of mechanics at speed",
+        "unexpected next-day soreness",
+        "high RPE for short session"
+      ],
+      "load_modifiers": [
+        "high_intensity_distance_m",
+        "starts_reps",
+        "turns_reps",
+        "resisted_swim_reps",
+        "paddle_sprints",
+        "dryland_power"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_collegiate_workload_injury",
+        "src_strength_training_swimming_review"
+      ]
+    },
+    {
+      "id": "risk_paddle_overuse",
+      "name": "Paddle overuse",
+      "risk_summary": "Paddles can provide useful feedback and overload, but excessive or poorly timed paddle work can increase shoulder, elbow, and wrist stress.",
+      "warning_signs": [
+        "shoulder soreness after paddles",
+        "elbow or forearm pain",
+        "wrist discomfort",
+        "catch mechanics worsening",
+        "sprinting with oversized paddles"
+      ],
+      "load_modifiers": [
+        "paddle_size",
+        "paddle_distance_m",
+        "paddle_intensity",
+        "technique_quality",
+        "current_shoulder_status"
+      ],
+      "source_refs": [
+        "src_usms_paddles",
+        "src_usms_swimmer_shoulder",
+        "src_usms_swimmer_elbow"
+      ]
+    },
+    {
+      "id": "risk_fin_overuse",
+      "name": "Fin overuse",
+      "risk_summary": "Fins can help position and reduce some shoulder demand, but they can increase ankle, calf, hip, knee, and back loading through faster and stronger kicking.",
+      "warning_signs": [
+        "ankle soreness",
+        "calf cramping",
+        "hip flexor tightness",
+        "low-back symptoms with dolphin kick",
+        "knee irritation"
+      ],
+      "load_modifiers": [
+        "fin_distance_m",
+        "fin_type",
+        "dolphin_kick_reps",
+        "kick_intensity",
+        "low_back_status"
+      ],
+      "source_refs": [
+        "src_usms_paddles",
+        "src_swimming_low_back_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "risk_kickboard_posture",
+      "name": "Kickboard shoulder and neck posture",
+      "risk_summary": "Long kickboard sets can place the shoulders in sustained elevation or the neck in extension, which may not suit swimmers with shoulder or neck symptoms.",
+      "warning_signs": [
+        "neck tightness during kick",
+        "front shoulder ache",
+        "numbness or tingling",
+        "difficulty relaxing head and shoulders"
+      ],
+      "load_modifiers": [
+        "kickboard_distance_m",
+        "head_position",
+        "shoulder_status",
+        "neck_status"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries"
+      ]
+    },
+    {
+      "id": "risk_hypoxic_blackout",
+      "name": "Hypoxic blackout risk",
+      "risk_summary": "Extended breath holding, hyperventilation, underwater lap work, and breath-hold challenges can lead to loss of consciousness in water.",
+      "warning_signs": [
+        "breath-hold contest language",
+        "hyperventilation instruction",
+        "underwater distance goals under fatigue",
+        "unsupervised underwater work"
+      ],
+      "load_modifiers": [
+        "underwater_reps",
+        "fatigue_state",
+        "supervision",
+        "swimmer_experience",
+        "rest_between_reps"
+      ],
+      "source_refs": [
+        "src_redcross_usa_swimming_hypoxic",
+        "src_ais_breath_hold_training"
+      ]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "implication_track_swim_and_dryland_together",
+      "summary": "A swim plan should calculate total weekly stress from pool sessions, dryland strength, mobility, rehab/prehab, competitions, and cross-training rather than treating pool and gym as separate worlds.",
+      "backend_action": "Create a combined weekly load summary with pool and dryland subtotals.",
+      "source_refs": [
+        "src_aquatics_gb_snc",
+        "src_rypt_swim_load_monitoring",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "implication_add_stroke_specific_counters",
+      "summary": "Total distance should be broken down by freestyle, backstroke, breaststroke, butterfly, kick, pull, underwater, start, and turn exposure.",
+      "backend_action": "Add stroke_volume and skill_exposure fields to swim sessions.",
+      "source_refs": [
+        "src_wanivenhaus_injury_epidemiology",
+        "src_nonshoulder_injury_review",
+        "src_breaststroke_knee"
+      ]
+    },
+    {
+      "id": "implication_beginner_plans_need_safety_before_load",
+      "summary": "Beginners with poor water confidence should receive breathing, floating, easy drills, and safe supervision rules before conditioning volume or underwater work.",
+      "backend_action": "Gate volume workouts behind water_confidence and safety assessment fields.",
+      "source_refs": [
+        "src_usa_swimming_adm",
+        "src_redcross_usa_swimming_hypoxic",
+        "src_world_aquatics_rules"
+      ]
+    },
+    {
+      "id": "implication_return_after_break_like_minor_return_to_swim",
+      "summary": "A long break should be handled like a load-readiness issue even without injury: short sessions, easy technique, no early paddles, and gradual frequency.",
+      "backend_action": "Trigger return_from_break progression when recent chronic swim load is low or absent.",
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_return_to_swimming_protocol",
+        "src_rypt_swim_load_monitoring"
+      ]
+    },
+    {
+      "id": "implication_shoulder_symptoms_change_workout_type",
+      "summary": "Shoulder symptoms should shift the session toward technique, short rest-rich repeats, reduced pulling equipment, and lower total upper-limb stress.",
+      "backend_action": "Implement shoulder_pain modifications for workout generator.",
+      "source_refs": [
+        "src_tovin_swimmer_shoulder",
+        "src_usms_swimmer_shoulder",
+        "src_return_to_swimming_protocol"
+      ]
+    },
+    {
+      "id": "implication_breaststroke_knee_changes_stroke_mix",
+      "summary": "Medial knee or groin symptoms should reduce breaststroke kick first while preserving tolerated freestyle/backstroke aerobic work if safe.",
+      "backend_action": "Add breaststroke_knee substitutions: pull-free easy freestyle, backstroke, vertical kick alternatives, or arms-only technique only if shoulder status permits.",
+      "source_refs": [
+        "src_breaststroke_knee",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "implication_low_back_flags_change_butterfly_underwater_load",
+      "summary": "Low-back symptoms should reduce butterfly, underwater dolphin kick, aggressive streamline volume, and high-volume breaststroke until trunk control and symptoms improve.",
+      "backend_action": "Add low_back_sensitive workout filters.",
+      "source_refs": [
+        "src_swimming_low_back_review",
+        "src_spondylolysis_swimmers"
+      ]
+    },
+    {
+      "id": "implication_equipment_needs_progression",
+      "summary": "Equipment should have progression rules by size, distance, intensity, and symptom status; it should not appear automatically in every session.",
+      "backend_action": "Create equipment exposure budget and contraindication logic.",
+      "source_refs": [
+        "src_usms_paddles",
+        "src_usms_swimmer_shoulder",
+        "src_usms_swimmer_elbow"
+      ]
+    },
+    {
+      "id": "implication_strength_over_stretching_only",
+      "summary": "Mobility matters, but durable injury-risk support should include progressive strength and neuromuscular control rather than stretching-only prescriptions.",
+      "backend_action": "Create strength plus mobility templates for shoulder, trunk, hip, and ankle rather than standalone stretch routines.",
+      "source_refs": [
+        "src_lauersen_injury_prevention",
+        "src_bak_painful_shoulder",
+        "src_strength_training_swimming_review"
+      ]
+    },
+    {
+      "id": "implication_dryland_before_swim_is_activation_not_exhaustion",
+      "summary": "Pre-swim dryland should be low-fatigue activation and mobility; strength or power that creates soreness belongs after key water work or on a planned dryland day.",
+      "backend_action": "Separate warmup_activation from strength_session records.",
+      "source_refs": [
+        "src_aquatics_gb_snc",
+        "src_strength_training_swimming_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "implication_readiness_should_use_next_day_response",
+      "summary": "A set can feel acceptable in the water but fail the next-day test; next-day shoulder, knee, groin, back, and fatigue response should control progression.",
+      "backend_action": "Collect next_day_response before progressing return-to-swim or equipment exposure.",
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_ioc_load_consensus",
+        "src_rypt_swim_load_monitoring"
+      ]
+    },
+    {
+      "id": "implication_return_to_performance_reintroduces_last",
+      "summary": "Race pace, starts, turns, paddles, butterfly, high breaststroke kick volume, and competition should be reintroduced after easy and normal training are tolerated.",
+      "backend_action": "Set high_load_features_allowed false until return_stage >= 4.",
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_return_to_sport_consensus",
+        "src_world_aquatics_rules"
+      ]
+    },
+    {
+      "id": "implication_no_hypoxic_for_general_fitness",
+      "summary": "Most fitness swimmers and beginners do not need hypoxic sets; relaxed exhalation and normal breathing rhythm are safer and more relevant.",
+      "backend_action": "Suppress hypoxic workouts unless advanced swimmer, supervised context, and safe constraints are explicitly satisfied.",
+      "source_refs": [
+        "src_redcross_usa_swimming_hypoxic",
+        "src_ais_breath_hold_training"
+      ]
+    },
+    {
+      "id": "implication_competition_rules_are_not_training_safety_maximums",
+      "summary": "The legal underwater distance in racing should not be treated as a default training target, especially for fatigue, youth, beginners, or unsupervised swimmers.",
+      "backend_action": "Separate rule_legal_limit from training_prescription_limit.",
+      "source_refs": [
+        "src_world_aquatics_rules",
+        "src_redcross_usa_swimming_hypoxic",
+        "src_ais_breath_hold_training"
+      ]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "id": "record_swim_session_load_schema",
+      "record_type": "data_schema",
+      "title": "Swim Session Load Schema",
+      "summary": "Record pool distance, duration, RPE, stroke mix, equipment exposure, starts/turns, underwater work, dryland adjacency, and symptoms for every swim session.",
+      "priority": "high",
+      "fields": [
+        "total_distance_m",
+        "duration_min",
+        "session_rpe",
+        "stroke_mix_m",
+        "equipment_distance_m",
+        "underwater_reps",
+        "starts_reps",
+        "turns_reps",
+        "pain_by_region",
+        "next_day_response"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_rypt_swim_load_monitoring"
+      ]
+    },
+    {
+      "id": "record_stroke_specific_load_counters",
+      "record_type": "load_counter",
+      "title": "Stroke-Specific Load Counters",
+      "summary": "Separate freestyle, backstroke, breaststroke, butterfly, kick, pull, IM, open-water, and underwater exposure so load logic can match tissue risk.",
+      "priority": "high",
+      "fields": [
+        "freestyle_m",
+        "backstroke_m",
+        "breaststroke_m",
+        "butterfly_m",
+        "kick_m",
+        "pull_m",
+        "im_m",
+        "underwater_m"
+      ],
+      "source_refs": [
+        "src_wanivenhaus_injury_epidemiology",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "record_shoulder_symptom_gate",
+      "record_type": "readiness_rule",
+      "title": "Shoulder Symptom Gate",
+      "summary": "Use pain score, altered mechanics, night pain, strength loss, and next-day response to choose normal, modified, deload, or referral output.",
+      "priority": "high",
+      "fields": [
+        "shoulder_pain_score",
+        "stroke_altered",
+        "night_pain",
+        "strength_loss",
+        "range_loss",
+        "next_day_worse"
+      ],
+      "source_refs": [
+        "src_tovin_swimmer_shoulder",
+        "src_bak_painful_shoulder",
+        "src_return_to_swimming_protocol"
+      ]
+    },
+    {
+      "id": "record_elbow_wrist_symptom_gate",
+      "record_type": "readiness_rule",
+      "title": "Elbow and Wrist Symptom Gate",
+      "summary": "Track elbow, forearm, grip, and wrist symptoms and downshift paddle, sprint, and heavy grip dryland exposure when symptoms appear.",
+      "priority": "medium",
+      "fields": [
+        "elbow_pain_score",
+        "wrist_pain_score",
+        "forearm_tightness",
+        "grip_pain",
+        "paddle_related",
+        "catch_related"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_elbow",
+        "src_elbow_pain_elite_swimmers",
+        "src_usms_paddles"
+      ]
+    },
+    {
+      "id": "record_neck_breathing_modifier",
+      "record_type": "workout_modifier",
+      "title": "Neck and Breathing Load Modifier",
+      "summary": "For neck symptoms, reduce one-sided breathing, head-lift breathing, and long kickboard sets while emphasizing body roll and relaxed exhalation.",
+      "priority": "medium",
+      "fields": [
+        "neck_pain_score",
+        "breathing_side",
+        "head_lift_flag",
+        "kickboard_m",
+        "snorkel_allowed",
+        "bilateral_breathing_tolerated"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries"
+      ]
+    },
+    {
+      "id": "record_low_back_extension_gate",
+      "record_type": "readiness_rule",
+      "title": "Low-Back Extension Gate",
+      "summary": "Limit butterfly, dolphin kick, breaststroke pullouts, and aggressive streamline exposure when extension-sensitive low-back symptoms are present.",
+      "priority": "high",
+      "fields": [
+        "low_back_pain_score",
+        "extension_sensitive",
+        "butterfly_m",
+        "dolphin_kick_reps",
+        "breaststroke_pullouts",
+        "underwater_m"
+      ],
+      "source_refs": [
+        "src_swimming_low_back_review",
+        "src_spondylolysis_swimmers"
+      ]
+    },
+    {
+      "id": "record_adolescent_back_referral_prompt",
+      "record_type": "safety_prompt",
+      "title": "Adolescent Low-Back Referral Prompt",
+      "summary": "Prompt clinical review when adolescent swimmers report persistent or worsening low-back pain with butterfly, breaststroke, or extension.",
+      "priority": "high",
+      "fields": [
+        "age_group",
+        "low_back_duration_days",
+        "extension_pain",
+        "butterfly_specialist",
+        "breaststroke_specialist",
+        "failed_deload"
+      ],
+      "source_refs": [
+        "src_spondylolysis_swimmers",
+        "src_pediatric_return_to_swim"
+      ]
+    },
+    {
+      "id": "record_breaststroke_knee_gate",
+      "record_type": "readiness_rule",
+      "title": "Breaststroke Knee Gate",
+      "summary": "Reduce breaststroke kick volume, intensity, and width when medial knee pain or next-day knee symptoms are present.",
+      "priority": "high",
+      "fields": [
+        "medial_knee_pain",
+        "breaststroke_m",
+        "breaststroke_kick_reps",
+        "kick_width_flag",
+        "next_day_knee_response"
+      ],
+      "source_refs": [
+        "src_breaststroke_knee",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "record_breaststroke_groin_gate",
+      "record_type": "readiness_rule",
+      "title": "Breaststroke Groin Gate",
+      "summary": "Monitor adductor and groin response to breaststroke kick and turns; progress adductor strength and reduce wide-forceful kick when symptoms occur.",
+      "priority": "medium",
+      "fields": [
+        "groin_pain",
+        "adductor_soreness",
+        "breaststroke_kick_reps",
+        "turn_push_off_reps",
+        "copenhagen_regression_level",
+        "next_day_groin_response"
+      ],
+      "source_refs": [
+        "src_nonshoulder_injury_review",
+        "src_breaststroke_knee"
+      ]
+    },
+    {
+      "id": "record_yardage_spike_flag",
+      "record_type": "load_alert",
+      "title": "Yardage Spike Flag",
+      "summary": "Flag sudden increases in weekly swim distance or frequency, especially after low chronic load, travel, illness, or a training break.",
+      "priority": "high",
+      "fields": [
+        "current_week_distance_m",
+        "four_week_average_distance_m",
+        "sessions_per_week",
+        "days_since_last_swim",
+        "acute_chronic_ratio",
+        "symptom_trend"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_collegiate_workload_injury",
+        "src_volume_shoulder_pain_review"
+      ]
+    },
+    {
+      "id": "record_intensity_spike_flag",
+      "record_type": "load_alert",
+      "title": "High-Intensity Swim Spike Flag",
+      "summary": "Flag sudden increases in sprint, race-pace, lactate, resisted, start, turn, or high-RPE work even when total distance is stable.",
+      "priority": "high",
+      "fields": [
+        "high_intensity_m",
+        "race_pace_reps",
+        "start_reps",
+        "turn_reps",
+        "resisted_reps",
+        "session_rpe"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_collegiate_workload_injury",
+        "src_strength_training_swimming_review"
+      ]
+    },
+    {
+      "id": "record_paddle_exposure_budget",
+      "record_type": "equipment_rule",
+      "title": "Paddle Exposure Budget",
+      "summary": "Limit paddle distance by swimmer level, shoulder/elbow/wrist status, technique quality, paddle size, and recent paddle history.",
+      "priority": "high",
+      "fields": [
+        "paddle_size",
+        "paddle_distance_m",
+        "paddle_intensity",
+        "technique_quality",
+        "shoulder_status",
+        "elbow_status",
+        "wrist_status"
+      ],
+      "source_refs": [
+        "src_usms_paddles",
+        "src_usms_swimmer_shoulder",
+        "src_usms_swimmer_elbow"
+      ]
+    },
+    {
+      "id": "record_fin_exposure_budget",
+      "record_type": "equipment_rule",
+      "title": "Fin Exposure Budget",
+      "summary": "Progress fin use by distance and intensity while monitoring ankle, calf, hip, knee, and low-back response.",
+      "priority": "medium",
+      "fields": [
+        "fin_type",
+        "fin_distance_m",
+        "kick_type",
+        "ankle_status",
+        "calf_status",
+        "low_back_status",
+        "knee_status"
+      ],
+      "source_refs": [
+        "src_usms_paddles",
+        "src_swimming_low_back_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "record_kickboard_substitution_rule",
+      "record_type": "equipment_rule",
+      "title": "Kickboard Substitution Rule",
+      "summary": "Substitute arms-at-side kicking, snorkel-assisted kicking, or back kick when kickboard posture aggravates neck or shoulder symptoms.",
+      "priority": "medium",
+      "fields": [
+        "kickboard_m",
+        "neck_status",
+        "shoulder_status",
+        "snorkel_allowed",
+        "arms_at_side_kick_allowed",
+        "back_kick_allowed"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries"
+      ]
+    },
+    {
+      "id": "record_pull_buoy_upper_body_flag",
+      "record_type": "equipment_rule",
+      "title": "Pull Buoy Upper-Body Flag",
+      "summary": "Treat pull buoy distance as upper-body load and avoid using it as default recovery for shoulder, elbow, or wrist symptoms.",
+      "priority": "medium",
+      "fields": [
+        "pull_buoy_m",
+        "shoulder_status",
+        "elbow_status",
+        "wrist_status",
+        "paddle_combined",
+        "session_goal"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_usms_swimmer_elbow",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "record_dryland_before_swim_activation",
+      "record_type": "dryland_template",
+      "title": "Low-Fatigue Pre-Swim Activation",
+      "summary": "Use short activation and mobility before swim: scapular control, cuff activation, thoracic mobility, trunk bracing, hips, and ankles without fatigue.",
+      "priority": "high",
+      "fields": [
+        "duration_min",
+        "rpe_cap",
+        "shoulder_activation",
+        "thoracic_mobility",
+        "trunk_activation",
+        "hip_ankle_prep"
+      ],
+      "source_refs": [
+        "src_aquatics_gb_snc",
+        "src_bak_painful_shoulder",
+        "src_strength_training_swimming_review"
+      ]
+    },
+    {
+      "id": "record_dryland_strength_placement",
+      "record_type": "scheduling_rule",
+      "title": "Dryland Strength Placement",
+      "summary": "Place heavier upper-body strength after key water work or away from quality swim sessions; avoid pre-fatiguing shoulders before important stroke work.",
+      "priority": "high",
+      "fields": [
+        "key_swim_day",
+        "dryland_type",
+        "upper_body_volume",
+        "pool_intensity",
+        "paddle_distance_m",
+        "recovery_hours"
+      ],
+      "source_refs": [
+        "src_aquatics_gb_snc",
+        "src_ioc_load_consensus",
+        "src_strength_training_swimming_review"
+      ]
+    },
+    {
+      "id": "record_swimmer_shoulder_strength_template",
+      "record_type": "dryland_template",
+      "title": "Swimmer Shoulder Strength Template",
+      "summary": "Progress rotator cuff, serratus anterior, lower trapezius, rows, pressing tolerance, and trunk control while monitoring shoulder response.",
+      "priority": "high",
+      "fields": [
+        "external_rotation_level",
+        "serratus_level",
+        "lower_trap_level",
+        "row_level",
+        "pressing_level",
+        "pain_response"
+      ],
+      "source_refs": [
+        "src_tovin_swimmer_shoulder",
+        "src_bak_painful_shoulder",
+        "src_lauersen_injury_prevention"
+      ]
+    },
+    {
+      "id": "record_thoracic_streamline_mobility_template",
+      "record_type": "mobility_template",
+      "title": "Thoracic and Streamline Mobility Template",
+      "summary": "Improve overhead streamline and body roll through thoracic extension/rotation and shoulder mobility while avoiding lumbar compensation.",
+      "priority": "medium",
+      "fields": [
+        "thoracic_extension",
+        "thoracic_rotation",
+        "overhead_flexion",
+        "lumbar_rib_flare_flag",
+        "streamline_comfort"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_swimming_low_back_review"
+      ]
+    },
+    {
+      "id": "record_trunk_control_template",
+      "record_type": "dryland_template",
+      "title": "Trunk Anti-Extension and Rotation Control Template",
+      "summary": "Build trunk stiffness and control for streamlines, turns, starts, butterfly, and body-line maintenance.",
+      "priority": "high",
+      "fields": [
+        "anti_extension_level",
+        "anti_rotation_level",
+        "hollow_position_level",
+        "plank_level",
+        "low_back_response"
+      ],
+      "source_refs": [
+        "src_swimming_low_back_review",
+        "src_spondylolysis_swimmers",
+        "src_strength_training_swimming_review"
+      ]
+    },
+    {
+      "id": "record_breaststroke_hip_adductor_template",
+      "record_type": "dryland_template",
+      "title": "Breaststroke Hip and Adductor Support Template",
+      "summary": "Develop hip rotation control, adductor capacity, and knee-friendly lower-body strength for breaststroke swimmers.",
+      "priority": "medium",
+      "fields": [
+        "hip_rotation_mobility",
+        "adductor_isometric_level",
+        "copenhagen_level",
+        "squat_hinge_level",
+        "knee_response",
+        "groin_response"
+      ],
+      "source_refs": [
+        "src_breaststroke_knee",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "record_ankle_kick_mobility_template",
+      "record_type": "mobility_template",
+      "title": "Ankle and Kick Mobility Template",
+      "summary": "Progress ankle plantar-flexion mobility, calf-foot capacity, and fin tolerance to support efficient flutter and dolphin kick.",
+      "priority": "medium",
+      "fields": [
+        "ankle_plantar_flexion",
+        "calf_capacity",
+        "foot_intrinsic_level",
+        "fin_tolerance",
+        "kick_symptom_response"
+      ],
+      "source_refs": [
+        "src_strength_training_swimming_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "record_return_to_swim_stage_0_clearance",
+      "record_type": "return_to_swim_gate",
+      "title": "Return Stage 0: Clearance and Baseline Function",
+      "summary": "Before water return, confirm medical/rehab clearance where relevant, daily function tolerance, no red flags, basic range, and acceptable pain response.",
+      "priority": "high",
+      "fields": [
+        "clearance_status",
+        "daily_function_ok",
+        "range_ok",
+        "strength_ok",
+        "red_flags_absent",
+        "baseline_pain"
+      ],
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_return_to_sport_consensus"
+      ]
+    },
+    {
+      "id": "record_return_to_swim_stage_1_technique",
+      "record_type": "return_to_swim_gate",
+      "title": "Return Stage 1: Technique-Only Water",
+      "summary": "Begin with low-volume, rest-rich, pain-gated drills and easy swimming, excluding paddles, sprinting, butterfly, high breaststroke kick, and hard underwaters.",
+      "priority": "high",
+      "fields": [
+        "max_distance_m",
+        "allowed_drills",
+        "rest_interval",
+        "excluded_equipment",
+        "pain_gate",
+        "next_day_gate"
+      ],
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_pediatric_return_to_swim"
+      ]
+    },
+    {
+      "id": "record_return_to_swim_stage_2_aerobic_intervals",
+      "record_type": "return_to_swim_gate",
+      "title": "Return Stage 2: Short Aerobic Intervals",
+      "summary": "Progress to short easy intervals with controlled technique and modest volume increases only when current and next-day symptoms remain stable.",
+      "priority": "high",
+      "fields": [
+        "interval_distance_m",
+        "session_distance_m",
+        "rpe_cap",
+        "stroke_allowed",
+        "pain_gate",
+        "next_day_gate"
+      ],
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "record_return_to_swim_stage_3_normal_training",
+      "record_type": "return_to_swim_gate",
+      "title": "Return Stage 3: Normal Training Rebuild",
+      "summary": "Rebuild normal training structure before race pace, large paddle sets, high butterfly, or high breaststroke kick; continue stroke-specific symptom checks.",
+      "priority": "high",
+      "fields": [
+        "weekly_distance_cap",
+        "sessions_per_week",
+        "stroke_mix_allowed",
+        "equipment_limited",
+        "intensity_limited",
+        "symptom_trend"
+      ],
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_return_to_sport_consensus"
+      ]
+    },
+    {
+      "id": "record_return_to_swim_stage_4_performance",
+      "record_type": "return_to_swim_gate",
+      "title": "Return Stage 4: Performance Reintroduction",
+      "summary": "Reintroduce race pace, starts, turns, underwaters, paddles, butterfly, high breaststroke kick, and competition in small doses after normal training is tolerated.",
+      "priority": "high",
+      "fields": [
+        "race_pace_allowed",
+        "starts_allowed",
+        "turns_allowed",
+        "paddles_allowed",
+        "butterfly_allowed",
+        "competition_allowed",
+        "post_session_response"
+      ],
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_return_to_sport_consensus",
+        "src_world_aquatics_rules"
+      ]
+    },
+    {
+      "id": "record_return_from_long_break",
+      "record_type": "return_to_swim_gate",
+      "title": "Return From Long Break Progression",
+      "summary": "When chronic swim exposure is low, restart with easy technique volume, conservative frequency, no early paddles, and next-day symptom gates even without a diagnosed injury.",
+      "priority": "high",
+      "fields": [
+        "weeks_since_regular_swim",
+        "previous_training_level",
+        "current_session_cap_m",
+        "frequency_cap",
+        "equipment_excluded",
+        "progression_rate"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_return_to_swimming_protocol",
+        "src_rypt_swim_load_monitoring"
+      ]
+    },
+    {
+      "id": "record_underwater_safety_gate",
+      "record_type": "safety_rule",
+      "title": "Underwater Safety Gate",
+      "summary": "Block extended breath holding, hyperventilation, breath-hold games, and unsupervised underwater lap work; allow only conservative supervised skill work for competent swimmers.",
+      "priority": "critical",
+      "fields": [
+        "water_confidence",
+        "supervision_present",
+        "breath_hold_instruction",
+        "hyperventilation_warning",
+        "underwater_distance_cap",
+        "fatigue_state"
+      ],
+      "source_refs": [
+        "src_redcross_usa_swimming_hypoxic",
+        "src_ais_breath_hold_training",
+        "src_world_aquatics_rules"
+      ]
+    },
+    {
+      "id": "record_beginner_swim_safety_gate",
+      "record_type": "safety_rule",
+      "title": "Beginner Swim Safety Gate",
+      "summary": "Require comfort, face immersion, exhalation, floating/recovery, and safe pool context before assigning fitness volume or challenging intervals.",
+      "priority": "critical",
+      "fields": [
+        "water_comfort",
+        "face_immersion",
+        "exhalation_control",
+        "float_recover_to_stand",
+        "supervision_context",
+        "continuous_swim_distance"
+      ],
+      "source_refs": [
+        "src_usa_swimming_adm",
+        "src_redcross_usa_swimming_hypoxic"
+      ]
+    },
+    {
+      "id": "record_technique_load_flags",
+      "record_type": "assessment",
+      "title": "Technique Load Flags",
+      "summary": "Flag midline crossing, thumb-down entry, dropped elbow, poor body roll, head lift, excessive lumbar arch, wide breaststroke kick, and fatigue technique collapse.",
+      "priority": "high",
+      "fields": [
+        "midline_crossing",
+        "thumb_down_entry",
+        "dropped_elbow",
+        "poor_body_roll",
+        "head_lift",
+        "lumbar_arch",
+        "wide_breaststroke_kick",
+        "fatigue_collapse"
+      ],
+      "source_refs": [
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries",
+        "src_breaststroke_knee"
+      ]
+    },
+    {
+      "id": "record_shoulder_technique_substitution",
+      "record_type": "workout_modifier",
+      "title": "Shoulder-Friendly Technique Substitution",
+      "summary": "Replace painful pull volume with short drill repeats, easy kicking that does not aggravate neck/shoulder, relaxed freestyle/backstroke technique, or non-water recovery depending on symptoms.",
+      "priority": "high",
+      "fields": [
+        "painful_stroke",
+        "paddle_removed",
+        "pull_volume_reduced",
+        "drill_replacement",
+        "kick_replacement",
+        "stop_rule"
+      ],
+      "source_refs": [
+        "src_return_to_swimming_protocol",
+        "src_usms_swimmer_shoulder",
+        "src_hss_overuse_injuries"
+      ]
+    },
+    {
+      "id": "record_breaststroke_substitution",
+      "record_type": "workout_modifier",
+      "title": "Breaststroke Knee/Groin Substitution",
+      "summary": "Replace aggravating breaststroke kick with tolerated freestyle/backstroke aerobic work, gentle technique, or isolated hip/adductor rehab support.",
+      "priority": "high",
+      "fields": [
+        "breaststroke_removed",
+        "kick_reduced",
+        "freestyle_substitution",
+        "backstroke_substitution",
+        "adductor_support",
+        "next_day_gate"
+      ],
+      "source_refs": [
+        "src_breaststroke_knee",
+        "src_nonshoulder_injury_review"
+      ]
+    },
+    {
+      "id": "record_low_back_substitution",
+      "record_type": "workout_modifier",
+      "title": "Low-Back Sensitive Swim Substitution",
+      "summary": "Replace butterfly, hard dolphin kick, and extension-heavy breaststroke with tolerated freestyle/backstroke technique and trunk-control dryland.",
+      "priority": "high",
+      "fields": [
+        "butterfly_removed",
+        "dolphin_kick_removed",
+        "breaststroke_limited",
+        "streamline_modified",
+        "trunk_control_assigned",
+        "referral_prompt"
+      ],
+      "source_refs": [
+        "src_swimming_low_back_review",
+        "src_spondylolysis_swimmers"
+      ]
+    },
+    {
+      "id": "record_masters_recovery_modifier",
+      "record_type": "population_modifier",
+      "title": "Masters Recovery Modifier",
+      "summary": "For masters swimmers, apply conservative progression after breaks, monitor shoulder history, and separate hard pool and heavy dryland stress unless recovery is proven.",
+      "priority": "medium",
+      "fields": [
+        "age_group",
+        "training_history",
+        "shoulder_history",
+        "weekly_recovery_days",
+        "dryland_spacing",
+        "symptom_trend"
+      ],
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_ioc_load_consensus",
+        "src_usms_swimmer_shoulder"
+      ]
+    },
+    {
+      "id": "record_youth_growth_modifier",
+      "record_type": "population_modifier",
+      "title": "Youth Growth and Training-Age Modifier",
+      "summary": "For youth swimmers, adjust volume, dryland intensity, breaststroke kick, and return progression by growth, training age, skill quality, and coach supervision.",
+      "priority": "high",
+      "fields": [
+        "age_group",
+        "maturation_flag",
+        "training_age",
+        "coach_supervision",
+        "dryland_experience",
+        "return_stage"
+      ],
+      "source_refs": [
+        "src_usa_swimming_adm",
+        "src_pediatric_return_to_swim",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "record_next_day_response_checkin",
+      "record_type": "monitoring_prompt",
+      "title": "Next-Day Response Check-In",
+      "summary": "Ask for next-day shoulder, elbow, wrist, neck, back, knee, groin, sleep, soreness, and fatigue after hard, new, equipment-heavy, or return-to-swim sessions.",
+      "priority": "high",
+      "fields": [
+        "shoulder_next_day",
+        "elbow_wrist_next_day",
+        "neck_next_day",
+        "back_next_day",
+        "knee_groin_next_day",
+        "sleep_quality",
+        "fatigue"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_return_to_swimming_protocol",
+        "src_rypt_swim_load_monitoring"
+      ]
+    },
+    {
+      "id": "record_red_flag_medical_review",
+      "record_type": "safety_prompt",
+      "title": "Swimming Medical Review Red Flags",
+      "summary": "Prompt medical review for neurological symptoms, sharp acute pain, night pain, progressive weakness, persistent adolescent back pain, swelling/catching knee symptoms, or worsening symptoms despite deload.",
+      "priority": "critical",
+      "fields": [
+        "neurological_symptoms",
+        "sharp_acute_pain",
+        "night_pain",
+        "progressive_weakness",
+        "persistent_back_pain",
+        "knee_swelling_catching",
+        "failed_deload"
+      ],
+      "source_refs": [
+        "src_spondylolysis_swimmers",
+        "src_bak_painful_shoulder",
+        "src_return_to_sport_consensus"
+      ]
+    },
+    {
+      "id": "record_open_water_load_context",
+      "record_type": "context_modifier",
+      "title": "Open-Water and Triathlon Load Context",
+      "summary": "Track sighting, wetsuit context, continuous duration, anxiety, bilateral breathing comfort, and neck/shoulder response for open-water or triathlon swimmers.",
+      "priority": "medium",
+      "fields": [
+        "open_water_session",
+        "sighting_reps",
+        "wetsuit_used",
+        "continuous_duration_min",
+        "neck_response",
+        "shoulder_response",
+        "safety_context"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_redcross_usa_swimming_hypoxic",
+        "src_hss_overuse_injuries"
+      ]
+    },
+    {
+      "id": "record_start_turn_power_integration",
+      "record_type": "dryland_template",
+      "title": "Start and Turn Power Integration",
+      "summary": "For racing swimmers, progress lower-body power, trunk stiffness, and streamline positions while coordinating with start/turn pool exposure and shoulder/back readiness.",
+      "priority": "medium",
+      "fields": [
+        "jump_level",
+        "medicine_ball_level",
+        "streamline_hold",
+        "start_reps",
+        "turn_reps",
+        "shoulder_status",
+        "back_status"
+      ],
+      "source_refs": [
+        "src_world_aquatics_rules",
+        "src_strength_training_swimming_review",
+        "src_aquatics_gb_snc"
+      ]
+    },
+    {
+      "id": "record_load_monitoring_dashboard",
+      "record_type": "dashboard_spec",
+      "title": "Swimming Load Monitoring Dashboard",
+      "summary": "Show weekly distance, session load, high-intensity distance, stroke mix, equipment exposure, dryland load, symptoms, and next-day response trends.",
+      "priority": "high",
+      "fields": [
+        "weekly_distance_chart",
+        "weekly_session_load_chart",
+        "high_intensity_chart",
+        "stroke_mix_chart",
+        "equipment_chart",
+        "dryland_chart",
+        "symptom_trend_chart",
+        "readiness_flag"
+      ],
+      "source_refs": [
+        "src_rypt_swim_load_monitoring",
+        "src_ioc_load_consensus",
+        "src_collegiate_workload_injury"
+      ]
+    },
+    {
+      "id": "record_no_copy_program_warning",
+      "record_type": "content_policy_rule",
+      "title": "No Blind Copy of Elite Yardage",
+      "summary": "Avoid copying elite or team yardage templates into user plans without swimmer level, chronic load, technique quality, pool access, recovery, and symptom context.",
+      "priority": "high",
+      "fields": [
+        "swimmer_level",
+        "chronic_load",
+        "technique_quality",
+        "pool_access",
+        "recovery_status",
+        "symptom_history"
+      ],
+      "source_refs": [
+        "src_ioc_load_consensus",
+        "src_usa_swimming_adm",
+        "src_rypt_swim_load_monitoring"
+      ]
+    }
+  ]
+}

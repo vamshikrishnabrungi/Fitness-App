@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "domain": "level_teaching",
+    "sport": "boxing",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready beginner, intermediate, and advanced boxing teaching progressions, assessments, promotion gates, and safe-contact rules.",
+    "researched_on": "2026-06-21"
+  },
+  "source_refs": [
+    {
+      "title": "Boxing",
+      "url": "https://olympics.com/en/sports/boxing/",
+      "source_type": "official_sport_education",
+      "organization_or_author": "Olympics",
+      "notes": "Used for boxing definition, ring, rounds, knockdowns, scoring, and Olympic/pro format."
+    },
+    {
+      "title": "England Boxing Coaching Resources",
+      "url": "https://www.englandboxing.org/coaches/coaching-resources/",
+      "source_type": "coaching_education",
+      "organization_or_author": "England Boxing",
+      "notes": "Used as a coaching-source category for level-based teaching and safety framing."
+    },
+    {
+      "title": "Amateur boxing: physical and physiological attributes",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25358529/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Davis et al.",
+      "notes": "Used for physical attributes that influence progression."
+    },
+    {
+      "title": "A Systematic Review and Meta-Analysis Investigating Head Trauma in Boxing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10597432/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Review authors",
+      "notes": "Used for contact progression caution."
+    },
+    {
+      "title": "Effects of Strength Training on Physical Fitness of Olympic Combat Sports Athletes",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9961120/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Review authors",
+      "notes": "Used for general combat-sport S&C progression context."
+    }
+  ],
+  "key_concepts": [
+    {"id": "beginner_safe_base", "summary": "Beginners need stance, guard, movement, basic punches, simple defense, and low-threat partner awareness."},
+    {"id": "intermediate_variable_skill", "summary": "Intermediate boxers need variable combinations, defense-to-counter, range control, and constrained sparring."},
+    {"id": "advanced_opponent_specificity", "summary": "Advanced boxers need style-specific tactics, fight-camp planning, sparring periodization, and tactical adjustment."},
+    {"id": "contact_is_earned", "summary": "Contact progression requires defensive competency, coach control, readiness, and symptom monitoring."},
+    {"id": "skill_before_fitness_fatigue", "summary": "Conditioning should not obscure whether a boxer actually understands the skill."},
+    {"id": "assessment_must_include_safety", "summary": "Promotion gates should include technical quality, decision-making, conditioning, and injury/readiness signals."}
+  ],
+  "technical_models": [
+    {"id": "boxing_beginner_curriculum", "skills": ["stance", "guard", "step_slide", "jab", "cross", "basic_block", "basic_parry", "safe_bag_round"]},
+    {"id": "boxing_intermediate_curriculum", "skills": ["hooks", "uppercuts", "body_shots", "slip_roll", "counter", "angle_exit", "combination_variability", "controlled_sparring"]},
+    {"id": "boxing_advanced_curriculum", "skills": ["style_matchups", "feint_sequences", "ring_traps", "opponent_analysis", "fight_camp_taper", "sparring_periodization"]},
+    {"id": "boxing_contact_progression", "stages": ["no_contact", "partner_touch", "technical_drill", "body_sparring", "controlled_sparring", "open_sparring"]},
+    {"id": "boxing_skill_assessment_model", "domains": ["stance_guard", "footwork", "punch_quality", "defense", "range", "conditioning", "contact_readiness"]}
+  ],
+  "tactical_rules": [
+    {"id": "rule_beginner_no_open_sparring_default", "rule": "Beginner programs should not default to open sparring."},
+    {"id": "rule_promote_after_stability", "rule": "Progress punch variety only when stance and guard recovery remain stable."},
+    {"id": "rule_defense_before_contact", "rule": "Controlled sparring requires demonstrated block/parry/slip/exit basics."},
+    {"id": "rule_intermediate_constraint_rounds", "rule": "Intermediate tactical learning should use constrained sparring with defined tasks."},
+    {"id": "rule_advanced_specificity", "rule": "Advanced work should connect tactics to opponent style, round score, and fight-camp phase."},
+    {"id": "rule_hold_with_symptoms", "rule": "Headache, dizziness, worsening hand pain, or poor recovery should hold or regress contact."}
+  ],
+  "physical_demands": [
+    {"id": "beginner_general_base", "quality": "basic strength, aerobic base, shoulder and trunk control"},
+    {"id": "intermediate_repeat_power", "quality": "repeat punching bursts and footwork under controlled fatigue"},
+    {"id": "advanced_specific_power_endurance", "quality": "style-specific power, pace control, and late-round quality"},
+    {"id": "contact_tolerance_context", "quality": "neck/trunk/shoulder preparation paired with defensive skill, not blind toughness"},
+    {"id": "weight_class_management", "quality": "body composition and fueling managed slowly and safely"}
+  ],
+  "injury_or_load_risks": [
+    {"id": "beginner_contact_risk", "risk": "Beginners may lack defense and awareness, increasing avoidable contact risk."},
+    {"id": "intermediate_overconfidence_risk", "risk": "Intermediate athletes may escalate sparring before tactical control is ready."},
+    {"id": "advanced_camp_accumulation", "risk": "Advanced camp can accumulate contact, weight, sleep, and stress load."},
+    {"id": "hand_wrist_skill_gate", "risk": "Painful hand/wrist impact should regress bag/pad volume and check wrapping/technique."},
+    {"id": "head_symptom_gate", "risk": "Any head symptom should block contact progression and trigger medical review."}
+  ],
+  "training_implications": [
+    {"id": "beginner_train_2_to_4_days", "summary": "Beginners can train boxing 2-4 days/week with low contact and simple conditioning."},
+    {"id": "intermediate_train_skill_plus_snc", "summary": "Intermediate plans should split technical boxing, conditioning, and S&C while managing sparring."},
+    {"id": "advanced_camp_blocks", "summary": "Advanced fight-camp blocks should sequence base, specific sparring, peak, taper, and recovery."},
+    {"id": "level_review_not_calendar_only", "summary": "Level changes require evidence, not just time elapsed."},
+    {"id": "store_contact_history", "summary": "Athlete state should store sparring rounds, contact intensity, symptoms, hand pain, and readiness."}
+  ],
+  "backend_records_to_create": [
+    {"collection": "sport_teaching_progressions", "id": "boxing_teach_fundamentals_beginner"},
+    {"collection": "sport_teaching_progressions", "id": "boxing_teach_tactical_iq_intermediate"},
+    {"collection": "sport_teaching_progressions", "id": "boxing_teach_fight_camp_advanced"},
+    {"collection": "sport_skill_assessments", "id": "boxing_assess_contact_readiness"},
+    {"collection": "sport_level_transition_rules", "id": "boxing_beginner_to_intermediate"},
+    {"collection": "sport_level_transition_rules", "id": "boxing_intermediate_to_advanced"},
+    {"collection": "sport_level_transition_rules", "id": "boxing_contact_hold_or_regress"}
+  ]
+}
+

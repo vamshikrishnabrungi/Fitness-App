@@ -1,0 +1,1256 @@
+{
+  "metadata": {
+    "domain": "starts_turns_streamlines_underwater_breakouts",
+    "sport": "swimming",
+    "version": "draft_v1",
+    "researched_on": "2026-06-23",
+    "agent_scope": "dive starts, push starts, backstroke starts, racing-start safety, streamlines, underwater dolphin kick, breaststroke pullouts, freestyle and backstroke flip turns, open turns, medley transitions, wall approach, breakout timing, level progressions, physical demands, load risks, and backend record candidates",
+    "research_goal": "Create backend-ready swimming knowledge for starts, turns, streamlines, underwater phases, breakouts, and safety gates without creating production records.",
+    "notes": "Original synthesis from current governing-body rules, national federation safety and athlete-development resources, and swimming biomechanics and coaching literature. Legal rules must be refreshed before competition-specific prescription."
+  },
+  "source_refs": [
+    {
+      "id": "src_world_aquatics_competition_regulations_2026",
+      "title": "World Aquatics Competition Regulations, current regulations page and February 2026 regulations",
+      "url": "https://www.worldaquatics.com/rules/competition-regulations",
+      "source_type": "international_governing_body_rules",
+      "organization_or_author": "World Aquatics",
+      "notes": "Used for international rule framing around legal starts, stroke-specific turns, medley order and transitions, underwater limits, and competition compliance."
+    },
+    {
+      "id": "src_usa_swimming_rules_policies_2026",
+      "title": "USA Swimming Rules and Policies: 2026 Rulebook updates",
+      "url": "https://www.usaswimming.org/about-usas/governance/rules-policies",
+      "source_type": "national_governing_body_rules",
+      "organization_or_author": "USA Swimming",
+      "notes": "Used for current U.S. rule language on starts, backstroke 15 m limit, IM order and turn constraints, final 5 m submersion updates, and equipment restrictions."
+    },
+    {
+      "id": "src_world_aquatics_facilities_rules",
+      "title": "World Aquatics / FINA Facilities Rules 2021-2025",
+      "url": "https://resources.fina.org/fina/document/2022/02/08/77c3058d-b549-4543-8524-ad51a857864e/210805-Facilities-Rules_clean.pdf",
+      "source_type": "international_facility_safety_rules_pdf",
+      "organization_or_author": "World Aquatics / FINA",
+      "notes": "Used for minimum depth framing for pools with starting blocks and facility-dependent dive-start gating."
+    },
+    {
+      "id": "src_usa_swimming_teaching_racing_starts",
+      "title": "Teaching Racing Starts: Safety Protocols",
+      "url": "https://www.usaswimming.org/docs/default-source/coaching-resourcesdocuments/teaching-racing-starts.pdf",
+      "source_type": "national_federation_coaching_safety_pdf",
+      "organization_or_author": "USA Swimming",
+      "notes": "Used for racing-start progression gates, shallow-angle entry, permission/supervision rules, clear entry area, arms-overhead entry, and backstroke-start ledge cautions."
+    },
+    {
+      "id": "src_usa_swimming_adm_competence_progressions",
+      "title": "USA Swimming American Development Model: Competence Progressions",
+      "url": "https://www.usaswimming.org/docs/default-source/coaching-resourcesdocuments/adm-competence-progressions.pdf",
+      "source_type": "national_federation_athlete_development_pdf",
+      "organization_or_author": "USA Swimming",
+      "notes": "Used for level progression from push streamline and breakout through legal flip turns, open turns, block starts, stroke turns, underwater skills, and advanced 15 m capacity."
+    },
+    {
+      "id": "src_swim_england_minimum_entry_depth",
+      "title": "Swim England: Updated Guidance on Minimum Pool Depths for Racing Entries",
+      "url": "https://www.swimming.org/sport/minimum-entry-depth-guidance/",
+      "source_type": "national_federation_safety_guidance",
+      "organization_or_author": "Swim England",
+      "notes": "Used for practical dive-entry depth gates and the principle that health and safety override start prescription."
+    },
+    {
+      "id": "src_red_cross_usa_swimming_y_hypoxic_blackout",
+      "title": "Joint Statement from the American Red Cross, USA Swimming, and YMCA of the USA on Hypoxic Blackout",
+      "url": "https://www.redcross.org/content/dam/redcross/training-services/scientific-advisory-council/2022%20Hypoxic%20Blackout%20-%20Joint%20Statement%20-%20Red%20Cross%20Y%20USA%20Swimming%2010-31-2022.pdf",
+      "source_type": "aquatic_safety_joint_statement_pdf",
+      "organization_or_author": "American Red Cross, USA Swimming, YMCA of the USA",
+      "notes": "Used for prohibiting hyperventilation, avoiding extended breath-holding activities, limiting breath-hold tasks, and supervising any submersion activity."
+    },
+    {
+      "id": "src_swimming_canada_shallow_water_blackout",
+      "title": "Swimming Canada: Shallow Water Blackout",
+      "url": "https://www.swimming.ca/shallow-water-blackout/",
+      "source_type": "national_federation_safety_guidance",
+      "organization_or_author": "Swimming Canada",
+      "notes": "Used for risk framing around underwater hypoxic drills, surface-only restricted breathing recommendations, recovery between efforts, lifeguard/coach supervision, and elimination of repeated underwater breath-hold sets except in tightly regulated environments."
+    },
+    {
+      "id": "src_vantorre_swim_start_review",
+      "title": "Biomechanical Analysis of the Swim-Start: A Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24790473/",
+      "source_type": "peer_reviewed_biomechanics_review",
+      "organization_or_author": "Vantorre, Seifert, Fernandes, Boas, and Chollet",
+      "notes": "Used for swim-start phases, block/flight/entry/underwater interactions, skill differences, and start-performance determinants."
+    },
+    {
+      "id": "src_weimar_flip_turn_push_off",
+      "title": "Kinetic Analysis of Swimming Flip-Turn Push-Off Techniques",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30696072/",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Weimar, Sumner, Romer, Fox, Rehm, Decoux, and Patel",
+      "notes": "Used for wall push-off force, impulse, countermovement versus no-countermovement turn mechanics, and velocity after the wall."
+    },
+    {
+      "id": "src_trinidad_transition_underwater_surface",
+      "title": "The Transition from Underwater to Surface Swimming During the Push-off Start in Competitive Swimmers",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32269648/",
+      "source_type": "peer_reviewed_kinematic_study",
+      "organization_or_author": "Trinidad, Veiga, Navarro, and Lorenzo",
+      "notes": "Used for transition-to-surface phase modeling, stroke-specific push-start breakouts, and the idea that breakout is a measurable transition rather than an afterthought."
+    },
+    {
+      "id": "src_veiga_underwater_surface_elite_100_free",
+      "title": "Underwater and Surface Swimming Parameters Reflect Performance Level in Elite Swimmers",
+      "url": "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2021.712652/full",
+      "source_type": "peer_reviewed_performance_analysis",
+      "organization_or_author": "Veiga and colleagues",
+      "notes": "Used for elite short-course 100 freestyle evidence that underwater distance, underwater speed, and non-swimming phase percentage distinguish performance level."
+    },
+    {
+      "id": "src_betke_underwater_dolphin_kick_review",
+      "title": "The Characteristics of Underwater Dolphin Kicking in Swimming: A Systematic Review",
+      "url": "https://fis.dshs-koeln.de/en/publications/the-characteristics-of-underwater-dolphin-kicking-in-swimming-a-s/",
+      "source_type": "peer_reviewed_systematic_review_abstract",
+      "organization_or_author": "Betke, Staub, and Vogt",
+      "notes": "Used for underwater dolphin-kick variables: rhythm, coupling, flow, constancy, range of motion, speed, body position, frequency, amplitude, and joint angles."
+    },
+    {
+      "id": "src_thompson_underwater_fly_kick_coaching",
+      "title": "Coaching Practices to Develop Underwater Fly Kick Performance in Swimming Training",
+      "url": "https://journals.sagepub.com/doi/10.1177/17479541221101598",
+      "source_type": "peer_reviewed_coaching_practice_study",
+      "organization_or_author": "Thompson, Warner, Hudson, Banks, and Logan",
+      "notes": "Used for coaching priorities around underwater fly kick: frequency, symmetry, coordination, individualization, representative practice, feedback, and resource gaps."
+    },
+    {
+      "id": "src_polach_1500_turn_performance",
+      "title": "Swimming Turn Performance: The Distinguishing Factor in 1500 m World Championship Freestyle Races?",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34193247/",
+      "source_type": "peer_reviewed_race_analysis",
+      "organization_or_author": "Polach, Thiel, Krenik, and Born",
+      "notes": "Used for evidence that turn performance can affect final ranking in distance races and is especially important in short-course racing."
+    },
+    {
+      "id": "src_usms_flip_turns_guide",
+      "title": "U.S. Masters Swimming: Flip Turns, The Complete Guide",
+      "url": "https://www.usms.org/fitness-and-training/guides/turns/flip-turns",
+      "source_type": "reputable_coaching_education_resource",
+      "organization_or_author": "U.S. Masters Swimming",
+      "notes": "Used for adult and masters-friendly coaching language around freestyle and backstroke flip turns, line control, streamline, rotation, and practical turn teaching."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "non_swimming_phases_are_performance_phases",
+      "concept": "Starts, turns, and underwater phases are race-speed phases, not pauses between swimming.",
+      "details": "The swimmer leaves the block or wall at a speed that often exceeds surface swimming speed. The backend should model these phases as high-value skill and power segments, especially in sprint and short-course events.",
+      "source_ids": ["src_vantorre_swim_start_review", "src_veiga_underwater_surface_elite_100_free", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "safety_gate_precedes_start_prescription",
+      "concept": "A dive-start instruction is invalid unless pool depth, facility rules, supervision, lane clearance, and athlete competency are known.",
+      "details": "Headfirst entries should be gated more tightly than push starts or in-water turns. The app should default to feet-first or push-start alternatives when depth, supervision, or athlete skill is unknown.",
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_swim_england_minimum_entry_depth", "src_world_aquatics_facilities_rules"]
+    },
+    {
+      "id": "legal_underwater_limit_is_not_a_training_target",
+      "concept": "The 15 m underwater allowance is a legal ceiling, not an automatic goal for every swimmer.",
+      "details": "Advanced racers may use longer underwater segments if speed and safety justify it. Beginners, fatigued swimmers, and fitness users should use short comfortable underwater exits and breathe as needed.",
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "streamline_is_the_drag_gate",
+      "concept": "The streamline is the main drag gate after every start and turn.",
+      "details": "A poor streamline wastes the fastest speed of the length. Backend cues should emphasize long body line, ears between upper arms, stacked hands, stable trunk, pointed toes, and no head lift during the glide.",
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_vantorre_swim_start_review", "src_trinidad_transition_underwater_surface"]
+    },
+    {
+      "id": "breakout_is_a_speed_match",
+      "concept": "A good breakout starts surface swimming before underwater speed decays below stroke speed.",
+      "details": "Breakout timing should be individualized by event, stroke, underwater speed, oxygen comfort, and legal constraints. More kicks are useful only while they preserve speed, line, and safety.",
+      "source_ids": ["src_trinidad_transition_underwater_surface", "src_veiga_underwater_surface_elite_100_free", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "underwater_dolphin_kick_is_coordination_not_just_power",
+      "concept": "Underwater dolphin kick performance depends on rhythm, symmetry, body-wave coupling, amplitude, and frequency, not only leg strength.",
+      "details": "Kick frequency can help speed but becomes counterproductive if coordination, line, or range of motion collapses. The backend should separate kick skill from generic conditioning.",
+      "source_ids": ["src_betke_underwater_dolphin_kick_review", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "wall_approach_sets_the_turn",
+      "concept": "The final strokes into the wall determine turn speed before the body touches the wall.",
+      "details": "The approach must preserve velocity, spacing, body line, and decision timing. Gliding into the wall, lifting the head, or chopping strokes usually degrades rotation and push-off quality.",
+      "source_ids": ["src_usms_flip_turns_guide", "src_weimar_flip_turn_push_off", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "turn_skill_is_a_chain",
+      "concept": "A turn is approach, rotation or touch, foot plant, push-off, streamline, underwater work, and breakout.",
+      "details": "Training only the somersault or only the push-off misses the linked nature of the skill. Backend models should store phase-specific cues and errors.",
+      "source_ids": ["src_usms_flip_turns_guide", "src_weimar_flip_turn_push_off", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "open_turns_are_legal_conversion_skills",
+      "concept": "Open turns convert a legal touch into a fast push-off without losing alignment.",
+      "details": "Breaststroke and butterfly require simultaneous two-hand touches; open turns are also useful for beginners and medley transitions because they preserve legality and reduce spatial complexity.",
+      "source_ids": ["src_usa_swimming_rules_policies_2026", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "flip_turns_preserve_momentum_when_ready",
+      "concept": "Freestyle and backstroke flip turns can preserve speed, but only when the swimmer can somersault, plant the feet, push in line, and surface safely.",
+      "details": "Fitness beginners may be better served by open turns until breath control, rotation comfort, and lane awareness are stable.",
+      "source_ids": ["src_usms_flip_turns_guide", "src_usa_swimming_adm_competence_progressions", "src_weimar_flip_turn_push_off"]
+    },
+    {
+      "id": "medley_transitions_are_rule_constrained",
+      "concept": "Medley transitions are governed by the stroke being completed and the stroke being started.",
+      "details": "The backend should not treat all turns as interchangeable. Fly-to-back, back-to-breast, and breast-to-free each have different body-position, touch, and push-off constraints.",
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "breaststroke_pullout_is_a_unique_underwater_pattern",
+      "concept": "Breaststroke uses a legal pullout pattern rather than repeated underwater dolphin kick.",
+      "details": "Under current rules, breaststroke underwater work allows one arm pull, one breaststroke kick sequence, and a single butterfly kick before the first breaststroke kick. This must be stored separately from free/back/fly underwater dolphin-kick logic.",
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "beginner_underwater_training_is_about_comfort_not_apnea",
+      "concept": "Beginner underwater work should teach calm exhalation, short glide, safe resurfacing, and wall orientation, not breath-hold tolerance.",
+      "details": "The first goal is reliable recovery to surface and safe lane behavior. The app should avoid hypoxic wording and long underwater prescriptions for novice swimmers.",
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "progression_moves_from_push_to_race_context",
+      "concept": "Starts and turns progress from controlled push-offs to legal, race-speed execution.",
+      "details": "A conservative progression starts with push streamline and short breakout, then adds turn mechanics, wall approach, block or backstroke-start skill only after safety clearance, and finally race-specific pressure.",
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_usa_swimming_teaching_racing_starts"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "dive_start_phase_model",
+      "model": "Ready position -> set/reaction -> block force and projection -> flight -> hands-first entry -> underwater glide -> kick or pullout -> breakout.",
+      "quality_markers": ["stable_start_position", "fast_but_controlled_reaction", "horizontal_projection_without_excessive_height", "hands_enter_before_head", "shallow_safe_entry_angle", "tight_streamline_on_entry", "breakout_before_speed_loss"],
+      "common_errors": ["rocking_or_false_movement", "jumping_too_high", "arms_separating_on_entry", "head_lifting_into_entry", "too_deep_entry", "loose_streamline", "late_breakout"],
+      "safety_gates": ["known_pool_depth", "coach_or_lifeguard_supervision", "clear_entry_area", "athlete_has_racing_start_progression", "no_headfirst_entry_if_rules_unknown"],
+      "source_ids": ["src_vantorre_swim_start_review", "src_usa_swimming_teaching_racing_starts", "src_world_aquatics_facilities_rules"]
+    },
+    {
+      "id": "racing_start_safety_progression_model",
+      "model": "Feet-first entries and pool orientation -> streamlined push-offs -> sitting or kneeling entry where locally allowed -> shallow poolside racing entry -> block start only after depth, supervision, and competency gates.",
+      "quality_markers": ["arms_locked_overhead_on_entry", "entry_area_empty", "permission_received", "athlete_understands_depth_and_slope", "entry_angle_shallow", "surfaces_calmly"],
+      "stop_conditions": ["cloudy_water", "unknown_depth", "crowded_entry_area", "dizziness_or_panic", "athlete_cannot_hold_streamline", "coach_or_lifeguard_not_present"],
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_swim_england_minimum_entry_depth", "src_red_cross_usa_swimming_y_hypoxic_blackout"]
+    },
+    {
+      "id": "backstroke_start_model",
+      "model": "Feet set on wall or wedge -> hands on grips -> hips loaded -> head and chest drive back -> arms recover to streamline -> shallow back-entry arc -> underwater dolphin kick on back -> breakout into legal backstroke.",
+      "quality_markers": ["secure_hand_and_foot_contact", "hips_loaded_without_slipping", "arms_complete_overhead_before_entry", "entry_is_shallow_and_streamlined", "push_off_remains_on_back", "head_breaks_surface_before_15m"],
+      "common_errors": ["feet_slip", "throwing_head_without_hips", "overarching_low_back", "entering_with_arms_wide", "diving_too_deep", "rolling_to_front_too_early"],
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "push_start_model",
+      "model": "Feet on wall with one or both hands set -> inhale normally -> push in streamline -> glide at controlled depth -> initiate kick or pullout -> breakout into stroke.",
+      "quality_markers": ["feet_placed_solidly", "body_long_before_push", "head_neutral", "push_direction_slightly_down_then_forward_if_needed", "no_bubble_blast_or_panic", "breakout_is_smooth"],
+      "best_uses": ["beginner_underwater_progression", "fitness_swim_sets", "technique_testing", "race_turn_rehearsal_without_diving", "pool_context_where_blocks_are_unavailable"],
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_trinidad_transition_underwater_surface"]
+    },
+    {
+      "id": "streamline_position_model",
+      "model": "One hand stacked over the other, arms extended, ears between upper arms, ribs controlled, hips high, legs long, toes pointed, eyes neutral.",
+      "quality_markers": ["hands_stacked", "elbows_locked_or_nearly_locked", "biceps_cover_ears", "head_neutral", "rib_flare_controlled", "legs_together", "toes_pointed", "body_line_does_not_wobble"],
+      "common_errors": ["looking_forward", "arms_wide", "hands_unstacked", "arching_back", "bent_knees", "kicking_before_line_is_set", "surfacing_by_lifting_head"],
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_vantorre_swim_start_review"]
+    },
+    {
+      "id": "underwater_dolphin_kick_model",
+      "model": "Tight streamline with body-wave propulsion from trunk and hips through legs, using athlete-specific amplitude and frequency while preserving line and speed.",
+      "quality_markers": ["kick_starts_after_stable_streamline", "undulation_is_continuous", "hips_and_trunk_drive_the_wave", "knees_do_not_bicycle", "feet_finish_the_whip", "amplitude_matches_body_size_and_speed", "frequency_does_not_destroy_line"],
+      "common_errors": ["kicking_from_knees_only", "too_large_amplitude", "asymmetric_kick", "rushed_low_power_frequency", "loose_head", "holding_underwater_after_speed_drops"],
+      "source_ids": ["src_betke_underwater_dolphin_kick_review", "src_thompson_underwater_fly_kick_coaching", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "freestyle_flip_turn_model",
+      "model": "Accelerating approach -> final stroke without glide -> compact somersault -> feet plant about shoulder width -> push-off on back or side -> rotate to prone in streamline -> underwater kick -> breakout to freestyle.",
+      "quality_markers": ["approach_speed_maintained", "chin_tucks_after_last_stroke", "knees_compact_without_stalling", "feet_land_square_enough_to_push", "push_is_directly_off_wall", "rotation_occurs_during_streamline", "first_stroke_catches_as_head_surfaces"],
+      "common_errors": ["gliding_into_wall", "lifting_head_to_spot_wall", "using_hands_to_spin", "feet_too_high_or_low", "pushing_upward", "separating_arms", "breathing_immediately_on_breakout_when_racing"],
+      "source_ids": ["src_usms_flip_turns_guide", "src_weimar_flip_turn_push_off", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "backstroke_flip_turn_model",
+      "model": "Use wall flags and stroke count -> rotate legally toward breast during the turn action -> single-arm pull into somersault -> feet plant -> push off on back in streamline -> underwater dolphin kick -> backstroke breakout.",
+      "quality_markers": ["consistent_flag_count", "rotation_timed_to_wall", "turn_continuous_after_roll", "feet_plant_without_searching", "push_off_remains_on_back", "head_breaks_surface_before_15m"],
+      "common_errors": ["miscounting_flags", "rolling_too_early_and_gliding", "missing_wall", "pushing_off_sideways", "surfacing_by_throwing_head", "overstaying_underwater"],
+      "source_ids": ["src_usa_swimming_rules_policies_2026", "src_usms_flip_turns_guide", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "breaststroke_butterfly_open_turn_model",
+      "model": "Legal simultaneous two-hand touch -> tuck knees under body -> one arm recovers underwater while one arm spears forward or both hands reconnect -> feet plant -> push into streamline -> stroke-specific underwater phase -> breakout.",
+      "quality_markers": ["touch_is_simultaneous", "hands_separated_at_touch", "knees_drive_under_not_around", "eyes_do_not_linger_on_wall", "feet_plant_quickly", "push_off_depth_is_controlled", "stroke_rules_followed_after_push"],
+      "common_errors": ["one_hand_touch", "pulling_body_up_on_wall", "slow_breath_at_wall", "wide_turn_radius", "crooked_push_off", "starting_illegal_kicks"],
+      "source_ids": ["src_usa_swimming_rules_policies_2026", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "breaststroke_pullout_model",
+      "model": "Streamline glide -> optional single dolphin kick before first breaststroke kick -> one arm pull that brings the swimmer toward the surface -> arm recovery -> breaststroke kick -> head breaks surface before the hands turn inward at the widest part of the second stroke.",
+      "quality_markers": ["glide_keeps_line", "single_dolphin_kick_only", "pull_is_long_and_symmetric", "body_stays_on_breast", "kick_times_with_recovery", "surface_timing_is_legal"],
+      "common_errors": ["multiple_dolphin_kicks", "pulling_too_early_before_speed_settles", "wide_head_lift", "late_surface", "asymmetric_pull", "long_breath_hold_after_speed_loss"],
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "medley_transition_model",
+      "model": "Fly-to-back: legal fly finish then leave on back. Back-to-breast: legal back finish then leave on breaststroke path. Breast-to-free: legal breast finish then leave in freestyle with the IM free leg not repeating butterfly, backstroke, or breaststroke.",
+      "quality_markers": ["finishing_stroke_touch_rules_met", "body_position_after_wall_matches_next_leg", "no_illegal_kick_or_stroke_before_required_orientation", "turn_speed_does_not_compromise_legality"],
+      "common_errors": ["treating_im_turns_like_freestyle_turns", "leaving_wall_in_wrong_orientation", "using_illegal_dolphin_sequence", "rushing_touch_and_losing_simultaneity"],
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "wall_approach_spacing_model",
+      "model": "Calibrate last 5 m by stroke count, visual markers, speed, and preferred final stroke so the swimmer reaches the wall at speed without a glide or jammed contact.",
+      "quality_markers": ["consistent_last_stroke_count", "no_head_lift_to_search", "no_dead_glide", "no_extra_chop_strokes", "contact_distance_allows_compact_turn", "breath_plan_does_not_disrupt_line"],
+      "common_errors": ["looking_up_for_wall", "decelerating_before_wall", "crowding_wall", "being_too_far_and_reaching", "breathing_into_wall_under_fatigue"],
+      "source_ids": ["src_usms_flip_turns_guide", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "breakout_timing_model",
+      "model": "Carry start or wall speed in streamline, add stroke-legal underwater work, begin the first stroke while rising so the head breaks the surface smoothly and surface stroke rhythm begins without a stall.",
+      "quality_markers": ["first_pull_connects_to_surface", "head_surfaces_without_bobbing", "kick_continues_through_transition", "first_two_strokes_have_race_rhythm", "breath_timing_does_not_stop_momentum", "underwater_distance_stays_legal"],
+      "common_errors": ["popping_up_vertically", "overkicking_underwater", "taking_first_stroke_too_deep", "breathing_before_speed_is_stable", "missing_15m_limit"],
+      "source_ids": ["src_trinidad_transition_underwater_surface", "src_veiga_underwater_surface_elite_100_free", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "start_turn_measurement_model",
+      "model": "Track start time to 5 m/10 m/15 m, turn-in and turn-out splits, wall contact time, breakout distance, breakout velocity impression, and stroke count after breakout.",
+      "quality_markers": ["same_start_markers_each_test", "video_angle_captures_wall_and_surface", "splits_do_not_reward_illegal_underwater", "measurements_compare_to_surface_speed", "athlete_reports_breath_comfort"],
+      "source_ids": ["src_vantorre_swim_start_review", "src_weimar_flip_turn_push_off", "src_veiga_underwater_surface_elite_100_free", "src_polach_1500_turn_performance"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "underwater_distance_rule",
+      "rule": "Use underwater distance only while it is faster, legal, technically stable, and safe.",
+      "application": "For advanced racers, test individualized breakout distances by event and stroke. For beginners, use short comfortable underwater exits and avoid distance targets.",
+      "source_ids": ["src_veiga_underwater_surface_elite_100_free", "src_swimming_canada_shallow_water_blackout", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "dive_start_context_rule",
+      "rule": "Do not prescribe dive starts unless the system knows the pool allows them and the swimmer has supervised start competency.",
+      "application": "If context is missing, substitute push starts, streamlined wall push-offs, or feet-first entry practice.",
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_swim_england_minimum_entry_depth", "src_world_aquatics_facilities_rules"]
+    },
+    {
+      "id": "hypoxic_language_rule",
+      "rule": "Avoid programming that asks users to test maximum breath-hold distance, repeat underwater lengths, hyperventilate, or ignore the urge to breathe.",
+      "application": "Use terms such as controlled exhalation, calm short underwater exit, and breathe as needed. Restricted breathing belongs only to experienced, supervised surface swimming if used at all.",
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "short_course_priority_rule",
+      "rule": "Short-course swimmers need more turn and underwater priority than long-course swimmers because turns occur more often.",
+      "application": "Increase technical turn frequency, wall-out speed metrics, and underwater consistency work in short-course blocks, while avoiding unsafe breath-hold volume.",
+      "source_ids": ["src_polach_1500_turn_performance", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "sprint_start_quality_rule",
+      "rule": "Sprint events should prioritize start quality, first breakout, and early speed preservation.",
+      "application": "Use low-repetition, full-recovery start work and measure 5 m/10 m performance. Stop once reaction, entry, or breakout quality drops.",
+      "source_ids": ["src_vantorre_swim_start_review", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "distance_turn_economy_rule",
+      "rule": "Distance swimmers should train repeatable, low-cost turns rather than maximal underwater effort every wall.",
+      "application": "Use consistent approach spacing, quick foot plants, economical streamlines, and breakout timing that preserves rhythm over many turns.",
+      "source_ids": ["src_polach_1500_turn_performance", "src_weimar_flip_turn_push_off"]
+    },
+    {
+      "id": "im_legality_rule",
+      "rule": "Individual medley turns must be selected by the stroke being completed and the next stroke, not by generic fastest-turn preference.",
+      "application": "Store fly-to-back, back-to-breast, and breast-to-free transition records separately from within-stroke turns.",
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "breaststroke_underwater_rule",
+      "rule": "Breaststroke underwater work uses the legal pullout pattern and must not be treated like free/back/fly underwater dolphin kicking.",
+      "application": "Limit to one butterfly kick before the first breaststroke kick and one arm pull, then surface according to current rules.",
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "breakout_no_stall_rule",
+      "rule": "The breakout should connect underwater speed to stroke rhythm without a vertical pop-up or glide stall.",
+      "application": "Coach first pull timing, kick continuity, and first two surface strokes. A shorter, faster breakout is better than a longer underwater segment that stalls.",
+      "source_ids": ["src_trinidad_transition_underwater_surface", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "wall_approach_no_glide_rule",
+      "rule": "Approach the wall at speed with planned spacing; do not coast into the turn.",
+      "application": "Use last-5 m stroke-count checks, wall-spacing drills, and turn-in timing rather than only practicing the push-off.",
+      "source_ids": ["src_usms_flip_turns_guide", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "beginner_turn_rule",
+      "rule": "Beginners should master safe open turns, push-off depth, and surfacing before flip turns or racing starts.",
+      "application": "Gate flip turns by comfort with submersion, somersault orientation, wall awareness, and safe lane spacing.",
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_red_cross_usa_swimming_y_hypoxic_blackout"]
+    },
+    {
+      "id": "fatigue_quality_rule",
+      "rule": "Start, turn, and underwater work should stop or regress when fatigue causes loose streamlines, late breakouts, panic, dizziness, or rule errors.",
+      "application": "Use small doses inside workouts and reserve maximal race-skill reps for rested sets.",
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_swimming_canada_shallow_water_blackout", "src_thompson_underwater_fly_kick_coaching"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "lower_body_power_for_block_and_wall",
+      "demand": "Starts and turns require rapid hip, knee, and ankle extension against the block or wall.",
+      "backend_use": "Add lower-body power and force-transfer tags for sprint, start, and turn specialization blocks.",
+      "source_ids": ["src_vantorre_swim_start_review", "src_weimar_flip_turn_push_off"]
+    },
+    {
+      "id": "trunk_stiffness_for_streamline",
+      "demand": "A tight streamline requires trunk stiffness and rib-pelvis control under high-speed drag forces.",
+      "backend_use": "Pair streamline skill with anti-extension trunk control and body-line awareness in dryland support.",
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_vantorre_swim_start_review"]
+    },
+    {
+      "id": "shoulder_flexion_for_overhead_line",
+      "demand": "Efficient streamline needs comfortable overhead shoulder flexion without compensatory lumbar arching.",
+      "backend_use": "Screen shoulder discomfort and overhead mobility before high-volume streamline, starts, and underwater sets.",
+      "source_ids": ["src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "ankle_plantar_flexion_for_kick_and_line",
+      "demand": "Pointed toes and flexible ankles reduce drag and support dolphin kick and flutter kick propulsion.",
+      "backend_use": "Add ankle mobility and calf-foot load tags for swimmers increasing underwater or kick volume.",
+      "source_ids": ["src_betke_underwater_dolphin_kick_review", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "hip_trunk_undulation_for_dolphin_kick",
+      "demand": "Underwater dolphin kick requires coordinated trunk, hip, knee, and ankle sequencing.",
+      "backend_use": "Treat underwater fly kick as a coordination skill with mobility and rhythm constraints, not just a conditioning drill.",
+      "source_ids": ["src_betke_underwater_dolphin_kick_review", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "orientation_and_spatial_awareness",
+      "demand": "Flip turns and backstroke turns require comfort rotating, locating the wall, and pushing off without visual confirmation.",
+      "backend_use": "Gate flip-turn progression by somersault comfort, wall flags or marker use, and ability to surface calmly.",
+      "source_ids": ["src_usms_flip_turns_guide", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "breath_control_without_breath_hold_maxing",
+      "demand": "Racing starts and turns require calm breath management, but training should not chase maximal apnea.",
+      "backend_use": "Use safety-first breath tags: normal inhale, controlled exhale, breathe as needed, no hyperventilation.",
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "repeat_acceleration_capacity",
+      "demand": "Turn-heavy races require repeated short accelerations from walls with limited recovery.",
+      "backend_use": "Distinguish high-quality turn-power microdoses from fatigue-heavy underwater volume.",
+      "source_ids": ["src_polach_1500_turn_performance", "src_weimar_flip_turn_push_off"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "head_neck_dive_entry_risk",
+      "risk": "Headfirst entry into shallow, unknown, crowded, or cloudy water can create catastrophic head and neck risk.",
+      "mitigation": "Require known facility depth, clear water, clear entry area, permission, supervision, shallow entry angle, and arms extended overhead.",
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_swim_england_minimum_entry_depth", "src_world_aquatics_facilities_rules"]
+    },
+    {
+      "id": "backstroke_ledge_depth_risk",
+      "risk": "Backstroke-start ledges can increase depth and distance of entry, particularly for larger or stronger swimmers.",
+      "mitigation": "Teach backstroke-start progression before ledge use; permit ledge work only under qualified supervision and local facility rules.",
+      "source_ids": ["src_usa_swimming_teaching_racing_starts"]
+    },
+    {
+      "id": "hypoxic_blackout_risk",
+      "risk": "Hyperventilation, repeated underwater swims, underwater kicking for distance, or breath-hold contests can lead to hypoxic blackout and drowning.",
+      "mitigation": "Do not prescribe max breath-hold or repeated underwater distance sets. Require lifeguard/coach supervision and let swimmers breathe as needed.",
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "shoulder_overhead_streamline_irritation",
+      "risk": "High-volume streamline or starts can irritate shoulders when the swimmer lacks overhead mobility or scapular control.",
+      "mitigation": "Screen pain, reduce overhead start/underwater volume, use mobility and trunk-control work, and prioritize pain-free body line.",
+      "source_ids": ["src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "lumbar_extension_dolphin_kick_risk",
+      "risk": "Dolphin kick and backstroke starts can overload the low back when swimmers overarch instead of controlling trunk and hips.",
+      "mitigation": "Cue ribs down, smaller kick amplitude, trunk-led wave, and stop if back symptoms increase.",
+      "source_ids": ["src_betke_underwater_dolphin_kick_review", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "knee_ankle_wall_push_risk",
+      "risk": "Aggressive wall push-offs and poor foot plant angles can stress knees, ankles, calves, and Achilles tissues.",
+      "mitigation": "Progress wall-power volume gradually, vary intensity, coach knee-foot alignment, and avoid maximal push-offs under heavy fatigue.",
+      "source_ids": ["src_weimar_flip_turn_push_off"]
+    },
+    {
+      "id": "vestibular_flip_turn_discomfort",
+      "risk": "Somersault turns can provoke dizziness, disorientation, water inhalation, or panic in new swimmers.",
+      "mitigation": "Progress from bubbles and somersault comfort away from the wall to slow wall turns; keep lane space clear and stop if dizziness persists.",
+      "source_ids": ["src_usms_flip_turns_guide", "src_red_cross_usa_swimming_y_hypoxic_blackout"]
+    },
+    {
+      "id": "breaststroke_knee_groin_transition_load",
+      "risk": "Breaststroke pullouts and turns can compound knee and groin load when high breaststroke volume is added quickly.",
+      "mitigation": "Track breaststroke volume, knee/groin symptoms, pullout reps, and turn intensity; reduce kick volume when symptoms appear.",
+      "source_ids": ["src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "fatigue_based_rule_errors",
+      "risk": "Fatigue can cause missed touches, delayed surfaces, illegal underwater kicks, crossed streamlines, and unsafe entries.",
+      "mitigation": "Keep race-skill work short and high quality; regress to push-offs or drill speed when form or orientation declines.",
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "lane_collision_entry_risk",
+      "risk": "Starts, backstroke starts, and turns create collision risk if another swimmer is in the entry or wall zone.",
+      "mitigation": "Use coach-controlled send-offs, one-way start lanes, clear verbal permission, and no entry until the prior swimmer surfaces and exits the zone.",
+      "source_ids": ["src_usa_swimming_teaching_racing_starts"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "use_push_off_as_default_teaching_entry",
+      "implication": "For most users, teach streamline, depth control, and breakout from push-offs before any dive-start prescription.",
+      "backend_application": "Default to push-start and wall-skill records when pool context or start competency is unknown.",
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_usa_swimming_teaching_racing_starts"]
+    },
+    {
+      "id": "microdose_starts_turns_frequently",
+      "implication": "Starts and turns improve through frequent high-quality reps, not occasional exhausted repetitions.",
+      "backend_application": "Insert 4-10 focused wall or start reps in warm-ups or pre-main sets for intermediate and advanced swimmers.",
+      "source_ids": ["src_thompson_underwater_fly_kick_coaching", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "separate_power_reps_from_conditioning",
+      "implication": "Maximal starts and wall push-offs need full recovery so speed and mechanics remain measurable.",
+      "backend_application": "Do not bury maximal start/turn power inside high-lactate sets unless the explicit goal is race-fatigue execution for advanced swimmers.",
+      "source_ids": ["src_vantorre_swim_start_review", "src_weimar_flip_turn_push_off"]
+    },
+    {
+      "id": "breakout_distance_is_individualized",
+      "implication": "Optimal breakout distance depends on stroke, event, speed decay, oxygen comfort, and skill level.",
+      "backend_application": "Store per-swimmer breakout preferences rather than forcing universal kick counts.",
+      "source_ids": ["src_trinidad_transition_underwater_surface", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "train_underwater_quality_without_hypoxic_sets",
+      "implication": "Underwater skill can be trained with short safe reps, full recovery, and technique goals rather than breath-hold challenges.",
+      "backend_application": "Use short wall-to-breakout reps, video feedback, and stop points such as 5-8 m for most non-elite users.",
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "progress_turns_by_complexity",
+      "implication": "Open turns are lower complexity than flip turns; medley transitions are higher complexity because legality and orientation interact.",
+      "backend_application": "Use level gates: open turn first, freestyle flip turn after somersault comfort, backstroke flip and medley transitions after wall-awareness competency.",
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_usms_flip_turns_guide"]
+    },
+    {
+      "id": "include_rule_checks_in_skill_records",
+      "implication": "Technical records should include legal constraints, not only performance cues.",
+      "backend_application": "Attach rule tags to breaststroke pullout, butterfly/breast open turn, backstroke turn, IM transition, and 15 m limit records.",
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "measure_turns_with_simple_splits",
+      "implication": "Turn performance should be visible with simple markers such as 5 m in, 5 m out, breakout distance, and stroke count.",
+      "backend_application": "Add assessment records for turn-in time, wall-out time, breakout distance, and first-cycle quality.",
+      "source_ids": ["src_weimar_flip_turn_push_off", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "dryland_support_for_wall_power",
+      "implication": "Dryland can support starts and turns through lower-body power, trunk stiffness, mobility, and landing mechanics.",
+      "backend_application": "Pair advanced start/turn blocks with jumps, medicine-ball throws, squats/hinges, trunk anti-extension, shoulder mobility, and careful fatigue management.",
+      "source_ids": ["src_vantorre_swim_start_review", "src_weimar_flip_turn_push_off", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "masters_and_fitness_swimmers_need_contextual_options",
+      "implication": "Adult fitness and masters swimmers may benefit from safer alternatives such as open turns, push starts, and shorter underwaters when racing starts are not appropriate.",
+      "backend_application": "Store options by goal: fitness efficiency, triathlon/open-water relevance, masters racing, sprint pool racing, or beginner comfort.",
+      "source_ids": ["src_usms_flip_turns_guide", "src_usa_swimming_teaching_racing_starts"]
+    },
+    {
+      "id": "fatigue_turns_are_advanced_only",
+      "implication": "Practicing race-quality turns under fatigue is useful only after the swimmer has stable technique at rest.",
+      "backend_application": "Gate fatigue-turn sets behind an advanced level and no current dizziness, panic, shoulder, back, knee, or breath-control risk flags.",
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "refresh_rules_before_competition_plan",
+      "implication": "Competition rules change and local meet rules may differ by federation, pool, and sanction.",
+      "backend_application": "Mark rule-sensitive records as requiring current federation verification before competition-specific advice.",
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "id": "swim_safety_gate_dive_start_context",
+      "record_type": "safety_gate",
+      "title": "Dive Start Context Gate",
+      "payload": {
+        "applies_to": ["dive_start", "racing_start", "block_start"],
+        "required_context": ["pool_allows_headfirst_starts", "known_water_depth", "clear_entry_area", "coach_or_lifeguard_present", "athlete_has_start_progression"],
+        "fallback_if_missing": "Use push starts, streamline push-offs, or feet-first entries."
+      },
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_swim_england_minimum_entry_depth", "src_world_aquatics_facilities_rules"]
+    },
+    {
+      "id": "swim_safety_gate_no_hypoxic_underwater_sets",
+      "record_type": "safety_gate",
+      "title": "No Max Breath-Hold or Repeated Underwater Distance Sets",
+      "payload": {
+        "blocked_prescriptions": ["max_underwater_distance", "breath_hold_contest", "repeated_underwater_lengths", "hyperventilation_before_underwater", "ignore_urge_to_breathe"],
+        "safe_language": ["normal_inhale", "controlled_exhale", "short_underwater_exit", "breathe_as_needed", "full_recovery"]
+      },
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "swim_skill_model_push_start_streamline_breakout",
+      "record_type": "skill_model",
+      "title": "Push Start to Streamline Breakout",
+      "payload": {
+        "level": "beginner_to_intermediate",
+        "steps": ["feet_set_on_wall", "body_long_before_push", "push_in_streamline", "hold_line_briefly", "kick_or_pull_to_surface", "first_stroke_when_head_surfaces"],
+        "success_markers": ["calm_submersion", "straight_line", "no_head_lift", "smooth_first_stroke"]
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_trinidad_transition_underwater_surface"]
+    },
+    {
+      "id": "swim_skill_model_dive_start_phase_chain",
+      "record_type": "skill_model",
+      "title": "Dive Start Phase Chain",
+      "payload": {
+        "level": "advanced_when_safety_cleared",
+        "phases": ["set", "reaction", "block_push", "flight", "entry", "underwater", "breakout"],
+        "coaching_focus": ["horizontal_projection", "hands_first_entry", "tight_streamline", "breakout_before_speed_decay"]
+      },
+      "source_ids": ["src_vantorre_swim_start_review", "src_usa_swimming_teaching_racing_starts"]
+    },
+    {
+      "id": "swim_skill_model_backstroke_start",
+      "record_type": "skill_model",
+      "title": "Backstroke Start",
+      "payload": {
+        "level": "intermediate_to_advanced",
+        "steps": ["secure_grip_and_foot_set", "load_hips", "drive_back_and_up_shallowly", "arms_recover_to_streamline", "enter_on_back", "underwater_kick", "breakout_before_15m"],
+        "risk_flags": ["slipping_feet", "deep_entry", "low_back_arch", "unknown_ledge_rules"]
+      },
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "swim_skill_model_streamline",
+      "record_type": "skill_model",
+      "title": "Tight Streamline Position",
+      "payload": {
+        "applies_after": ["push_start", "dive_start", "flip_turn", "open_turn", "medley_transition"],
+        "cues": ["stack_hands", "ears_between_arms", "ribs_down", "long_legs", "point_toes", "eyes_neutral"],
+        "common_errors": ["head_up", "arms_wide", "arched_back", "bent_knees", "early_kick"]
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_vantorre_swim_start_review"]
+    },
+    {
+      "id": "swim_skill_model_underwater_dolphin_kick",
+      "record_type": "skill_model",
+      "title": "Underwater Dolphin Kick",
+      "payload": {
+        "level": "intermediate_to_advanced",
+        "variables": ["rhythm", "frequency", "amplitude", "symmetry", "trunk_hip_coupling", "body_line"],
+        "success_rule": "Kick only while line and speed are preserved."
+      },
+      "source_ids": ["src_betke_underwater_dolphin_kick_review", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "swim_skill_model_freestyle_flip_turn",
+      "record_type": "skill_model",
+      "title": "Freestyle Flip Turn",
+      "payload": {
+        "level": "intermediate",
+        "phases": ["approach", "somersault", "foot_plant", "push_off", "rotate_to_prone", "underwater", "breakout"],
+        "gate": "Requires somersault comfort, wall awareness, and safe lane spacing."
+      },
+      "source_ids": ["src_usms_flip_turns_guide", "src_weimar_flip_turn_push_off", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "swim_skill_model_backstroke_flip_turn",
+      "record_type": "skill_model",
+      "title": "Backstroke Flip Turn",
+      "payload": {
+        "level": "intermediate_to_advanced",
+        "phases": ["flag_count", "legal_roll", "single_pull_or_continuous_turn", "somersault", "foot_plant", "push_off_on_back", "underwater", "breakout"],
+        "rule_attention": ["do_not_glide_on_breast", "push_off_on_back", "surface_before_15m"]
+      },
+      "source_ids": ["src_usa_swimming_rules_policies_2026", "src_usms_flip_turns_guide"]
+    },
+    {
+      "id": "swim_skill_model_breast_fly_open_turn",
+      "record_type": "skill_model",
+      "title": "Breaststroke and Butterfly Open Turn",
+      "payload": {
+        "level": "beginner_to_advanced",
+        "phases": ["two_hand_touch", "compact_tuck", "breathe_without_linger", "feet_to_wall", "streamline_push", "stroke_specific_underwater"],
+        "rule_attention": ["simultaneous_touch", "hands_separated_at_touch", "legal_underwater_after_push"]
+      },
+      "source_ids": ["src_usa_swimming_rules_policies_2026", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "swim_skill_model_breaststroke_pullout",
+      "record_type": "skill_model",
+      "title": "Breaststroke Pullout",
+      "payload": {
+        "level": "intermediate_to_advanced",
+        "sequence": ["streamline_glide", "single_optional_dolphin_kick_before_first_breast_kick", "one_arm_pull", "arm_recovery", "breaststroke_kick", "surface_timing"],
+        "blocked_errors": ["multiple_dolphin_kicks", "late_surface", "asymmetric_pull"]
+      },
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "swim_skill_model_breakout_timing",
+      "record_type": "skill_model",
+      "title": "Breakout Timing",
+      "payload": {
+        "goal": "Connect underwater speed to first surface strokes without popping up or stalling.",
+        "markers": ["rise_angle", "first_pull_timing", "head_surface_timing", "first_two_strokes_rhythm", "legal_distance"],
+        "individualize_by": ["stroke", "event", "underwater_speed", "oxygen_comfort", "skill_level"]
+      },
+      "source_ids": ["src_trinidad_transition_underwater_surface", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "swim_skill_model_wall_approach",
+      "record_type": "skill_model",
+      "title": "Wall Approach and Spacing",
+      "payload": {
+        "goal": "Arrive at the wall at speed with correct spacing for the chosen turn.",
+        "cues": ["know_last_5m_count", "keep_head_line", "avoid_dead_glide", "avoid_chop_steps", "prepare_breath_plan"],
+        "assessment": ["turn_in_time", "distance_from_wall_at_last_stroke", "contact_quality"]
+      },
+      "source_ids": ["src_usms_flip_turns_guide", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "swim_rule_record_15m_underwater_limit",
+      "record_type": "competition_rule",
+      "title": "15 m Underwater Limit",
+      "payload": {
+        "applies_to": ["freestyle", "backstroke", "butterfly", "starts", "turns"],
+        "backend_rule": "Head must break the surface by the legal underwater limit; treat this as a ceiling, not a universal training target.",
+        "refresh_before_competition": true
+      },
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "swim_rule_record_im_order_transitions",
+      "record_type": "competition_rule",
+      "title": "Individual Medley Order and Transition Constraint",
+      "payload": {
+        "order": ["butterfly", "backstroke", "breaststroke", "freestyle"],
+        "backend_rule": "Each intermediate turn must obey the stroke being completed and the next leg's legal push-off/orientation constraints.",
+        "separate_records_needed": ["fly_to_back", "back_to_breast", "breast_to_free"]
+      },
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "swim_rule_record_backstroke_surface_limit",
+      "record_type": "competition_rule",
+      "title": "Backstroke Underwater and Finish Surface Rule",
+      "payload": {
+        "backend_rule": "Backstroke requires the swimmer to remain on the back except during legal turn action; after start and turns, the head must surface by the legal underwater limit.",
+        "planning_note": "Backstroke start and turn records must include orientation checks."
+      },
+      "source_ids": ["src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "swim_progression_beginner_wall_skills",
+      "record_type": "teaching_progression",
+      "title": "Beginner Wall-Skill Progression",
+      "payload": {
+        "sequence": ["safe_entry_exit", "face_immersion_and_exhale", "wall_push_to_stand", "short_streamline_push", "open_turn_touch_and_push", "short_breakout"],
+        "avoid": ["dive_starts", "max_underwaters", "fatigue_turns", "unsupervised_flip_turns"]
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_red_cross_usa_swimming_y_hypoxic_blackout"]
+    },
+    {
+      "id": "swim_progression_intermediate_turns",
+      "record_type": "teaching_progression",
+      "title": "Intermediate Turn Progression",
+      "payload": {
+        "sequence": ["repeatable_open_turn", "freestyle_somersault_away_from_wall", "freestyle_flip_turn_slow", "approach_plus_flip_turn", "push_off_streamline_plus_breakout", "backstroke_flag_count"],
+        "gates": ["comfortable_submersion", "no_dizziness", "safe_lane_space", "legal_stroke_basics"]
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_usms_flip_turns_guide"]
+    },
+    {
+      "id": "swim_progression_advanced_race_underwater",
+      "record_type": "teaching_progression",
+      "title": "Advanced Race Underwater Progression",
+      "payload": {
+        "sequence": ["test_streamline_distance", "test_5m_breakout_quality", "add_2_to_6_dolphin_kicks", "compare_breakout_distances", "race_pace_start_or_turn_reps", "fatigue_limited_race_rehearsal"],
+        "safety_constraints": ["no_hyperventilation", "full_recovery", "stop_if_speed_or_line_drops", "surface_before_legal_limit"]
+      },
+      "source_ids": ["src_veiga_underwater_surface_elite_100_free", "src_thompson_underwater_fly_kick_coaching", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "swim_assessment_streamline_hold",
+      "record_type": "assessment",
+      "title": "Streamline Push-Off Assessment",
+      "payload": {
+        "setup": "Push from wall in prone streamline at easy effort.",
+        "observe": ["body_line", "head_position", "arm_lock", "depth_control", "distance_before_first_kick", "calm_resurface"],
+        "pass_gate": "Can hold line for a short controlled distance without panic, head lift, or shoulder pain."
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "swim_assessment_breakout_distance",
+      "record_type": "assessment",
+      "title": "Individual Breakout Distance Test",
+      "payload": {
+        "setup": "Compare short, medium, and longer legal breakout options from push-off or turn with full recovery.",
+        "metrics": ["time_to_5m_or_10m", "breakout_distance", "first_two_strokes_quality", "breath_comfort", "rule_compliance"],
+        "decision": "Choose the shortest distance that preserves or improves speed without oxygen distress."
+      },
+      "source_ids": ["src_trinidad_transition_underwater_surface", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "swim_assessment_turn_in_out_split",
+      "record_type": "assessment",
+      "title": "Turn-In and Turn-Out Split",
+      "payload": {
+        "setup": "Time last 5 m into wall and first 5 m out from wall, using same marker each trial.",
+        "metrics": ["turn_in_time", "wall_contact_quality", "turn_out_time", "breakout_distance", "stroke_count_to_marker"],
+        "use": "Identify whether approach, rotation, push-off, or breakout is limiting."
+      },
+      "source_ids": ["src_weimar_flip_turn_push_off", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "swim_assessment_backstroke_flags",
+      "record_type": "assessment",
+      "title": "Backstroke Flag Count Assessment",
+      "payload": {
+        "setup": "Swim backstroke into wall from flags at controlled speed.",
+        "observe": ["consistent_stroke_count", "no_panic_near_wall", "legal_turn_timing", "safe_push_on_back"],
+        "pass_gate": "Consistent count and safe wall contact before adding race-speed backstroke turns."
+      },
+      "source_ids": ["src_usa_swimming_rules_policies_2026", "src_usms_flip_turns_guide"]
+    },
+    {
+      "id": "swim_programming_rule_start_reps_full_recovery",
+      "record_type": "programming_rule",
+      "title": "Start Reps Need Full Recovery",
+      "payload": {
+        "rule": "Program starts as quality speed-power reps with full recovery unless advanced race-fatigue execution is the goal.",
+        "example": "4-8 starts to 10-15 m with generous rest and technical feedback.",
+        "stop_when": ["entry_angle_degrades", "streamline_opens", "breakout_stalls", "dizziness_or_panic"]
+      },
+      "source_ids": ["src_vantorre_swim_start_review", "src_usa_swimming_teaching_racing_starts"]
+    },
+    {
+      "id": "swim_programming_rule_turn_microdose",
+      "record_type": "programming_rule",
+      "title": "Turn Skill Microdose",
+      "payload": {
+        "rule": "Add small focused turn doses frequently rather than saving all turn work for race week.",
+        "example": "During warm-up, 6 x wall approach plus turn plus breakout with easy swim back.",
+        "level_gate": "intermediate_and_advanced"
+      },
+      "source_ids": ["src_thompson_underwater_fly_kick_coaching", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "swim_programming_rule_no_underwater_when_fatigued_beginner",
+      "record_type": "programming_rule",
+      "title": "No Fatigued Underwater Sets for Beginners",
+      "payload": {
+        "rule": "Beginners should not receive underwater kick or breath-control tasks late in fatigue-heavy workouts.",
+        "replacement": "Use easy push-off to surface, side breathing, floating recovery, or open-turn practice.",
+        "risk_flags": ["panic", "dizziness", "poor_exhalation", "cannot_float", "cannot_recover_to_stand"]
+      },
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "swim_programming_rule_short_course_turn_emphasis",
+      "record_type": "programming_rule",
+      "title": "Short-Course Turn Emphasis",
+      "payload": {
+        "rule": "Short-course blocks should allocate more time to turn consistency, wall-out speed, and repeatable breakout distance.",
+        "avoid": "Do not convert this emphasis into unsafe underwater breath-hold volume.",
+        "target_users": ["short_course_racer", "sprint_freestyle", "im_swimmer", "masters_competitor"]
+      },
+      "source_ids": ["src_polach_1500_turn_performance", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "swim_programming_rule_distance_turn_economy",
+      "record_type": "programming_rule",
+      "title": "Distance Turn Economy",
+      "payload": {
+        "rule": "Distance swimmers need repeatable turns that preserve pace and rhythm over many walls.",
+        "focus": ["approach_consistency", "quick_foot_plant", "economical_streamline", "short_reliable_breakout", "no_overkicking"],
+        "target_users": ["400_free", "800_free", "1500_free", "fitness_endurance"]
+      },
+      "source_ids": ["src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "swim_programming_rule_rule_refresh",
+      "record_type": "programming_rule",
+      "title": "Refresh Rule-Sensitive Records Before Meet Plans",
+      "payload": {
+        "rule": "Competition-specific starts, turns, underwaters, IM transitions, and finish rules require current federation verification.",
+        "backend_flag": "requires_current_rules_check",
+        "scope": ["world_aquatics", "usa_swimming", "local_meet_rules"]
+      },
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "swim_cue_streamline_before_kick",
+      "record_type": "coaching_cue",
+      "title": "Set Streamline Before Kicking",
+      "payload": {
+        "cue": "Make the body long first, then kick.",
+        "use_for": ["push_off", "dive_entry", "flip_turn", "open_turn"],
+        "fixes": ["early_kicking", "wiggly_body_line", "head_lift"]
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_vantorre_swim_start_review"]
+    },
+    {
+      "id": "swim_cue_breakout_no_pop_up",
+      "record_type": "coaching_cue",
+      "title": "Break Out Forward, Not Up",
+      "payload": {
+        "cue": "Rise into the first stroke; do not pop vertically.",
+        "use_for": ["freestyle_breakout", "backstroke_breakout", "butterfly_breakout"],
+        "fixes": ["vertical_surfacing", "lost_speed", "late_first_pull"]
+      },
+      "source_ids": ["src_trinidad_transition_underwater_surface", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "swim_cue_wall_is_launch_not_rest",
+      "record_type": "coaching_cue",
+      "title": "The Wall Is a Launch Point",
+      "payload": {
+        "cue": "Carry speed into the wall, plant, and leave in a line.",
+        "use_for": ["freestyle_flip_turn", "backstroke_turn", "open_turn"],
+        "fixes": ["gliding_in", "slow_touch", "loose_push_off"]
+      },
+      "source_ids": ["src_usms_flip_turns_guide", "src_weimar_flip_turn_push_off"]
+    },
+    {
+      "id": "swim_cue_breathe_as_needed",
+      "record_type": "coaching_cue",
+      "title": "Breathe as Needed for Safety",
+      "payload": {
+        "cue": "Never ignore the urge to breathe to complete an underwater target.",
+        "use_for": ["beginner_sessions", "fitness_swimmers", "underwater_drills", "fatigue_sets"],
+        "blocked_language": ["lung_buster", "no_breath_challenge", "max_underwater"]
+      },
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "swim_cue_backstroke_count_flags",
+      "record_type": "coaching_cue",
+      "title": "Count From the Flags",
+      "payload": {
+        "cue": "Use a consistent stroke count from the flags to the wall.",
+        "use_for": ["backstroke_turn", "backstroke_finish", "wall_awareness"],
+        "fixes": ["looking_for_wall", "missed_turn", "panic_near_wall"]
+      },
+      "source_ids": ["src_usms_flip_turns_guide", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "swim_cue_open_turn_elbow_back",
+      "record_type": "coaching_cue",
+      "title": "Touch, Tuck, and Spear",
+      "payload": {
+        "cue": "Touch legally, tuck compactly, then spear into streamline.",
+        "use_for": ["breaststroke_open_turn", "butterfly_open_turn", "beginner_open_turn"],
+        "fixes": ["hanging_on_wall", "wide_turn", "slow_push_off"]
+      },
+      "source_ids": ["src_usa_swimming_rules_policies_2026", "src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "swim_workout_type_start_turn_quality_set",
+      "record_type": "workout_type",
+      "title": "Start and Turn Quality Set",
+      "payload": {
+        "target_level": "advanced",
+        "structure": "Short repeats from start or turn to 10-15 m with full recovery and feedback.",
+        "do_not_pair_with": ["max_breath_hold", "unknown_pool_depth", "crowded_lanes", "heavy_fatigue"]
+      },
+      "source_ids": ["src_vantorre_swim_start_review", "src_usa_swimming_teaching_racing_starts"]
+    },
+    {
+      "id": "swim_workout_type_wall_skill_warmup",
+      "record_type": "workout_type",
+      "title": "Wall-Skill Warm-Up",
+      "payload": {
+        "target_level": "beginner_to_advanced",
+        "structure": "Easy swimming with one focused wall cue per length: streamline, depth, turn spacing, or breakout.",
+        "intent": "Build repeatable wall habits without fatigue or unsafe underwater distance."
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "swim_workout_type_turn_under_fatigue_advanced",
+      "record_type": "workout_type",
+      "title": "Advanced Turns Under Fatigue",
+      "payload": {
+        "target_level": "advanced",
+        "structure": "Race-pace repeats where the turn and breakout are scored, not just the interval time.",
+        "gates": ["stable_technique_at_rest", "no_safety_flags", "coach_supervision", "legal_underwater_distance"]
+      },
+      "source_ids": ["src_polach_1500_turn_performance", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "swim_workout_type_underwater_skill_short_reps",
+      "record_type": "workout_type",
+      "title": "Short Underwater Skill Reps",
+      "payload": {
+        "target_level": "intermediate_to_advanced",
+        "structure": "Push-off to short controlled breakout with full recovery, focusing on line and kick rhythm.",
+        "safety_limits": ["no_hyperventilation", "no_max_distance", "breathe_as_needed", "stop_if_dizzy"]
+      },
+      "source_ids": ["src_betke_underwater_dolphin_kick_review", "src_red_cross_usa_swimming_y_hypoxic_blackout"]
+    },
+    {
+      "id": "swim_dryland_record_wall_power",
+      "record_type": "dryland_support",
+      "title": "Wall and Start Power Support",
+      "payload": {
+        "qualities": ["lower_body_power", "hip_knee_ankle_extension", "landing_control", "trunk_stiffness"],
+        "examples": ["jumps", "medicine_ball_throws", "squats", "hinges", "anti_extension_core"],
+        "caution": "Avoid heavy lower-body fatigue immediately before key start or turn speed work."
+      },
+      "source_ids": ["src_vantorre_swim_start_review", "src_weimar_flip_turn_push_off"]
+    },
+    {
+      "id": "swim_dryland_record_streamline_mobility",
+      "record_type": "dryland_support",
+      "title": "Streamline Mobility Support",
+      "payload": {
+        "qualities": ["shoulder_flexion", "thoracic_extension_control", "rib_pelvis_stack", "ankle_plantar_flexion"],
+        "screen_flags": ["shoulder_pain", "low_back_arching", "cannot_get_arms_overhead", "cramping_feet"],
+        "goal": "Create a tight line without pain or lumbar compensation."
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_betke_underwater_dolphin_kick_review"]
+    },
+    {
+      "id": "swim_load_monitor_underwater_volume",
+      "record_type": "load_monitor",
+      "title": "Underwater Volume Monitor",
+      "payload": {
+        "track": ["number_of_underwater_reps", "approx_underwater_distance", "stroke_focus", "fatigue_level", "breath_discomfort", "back_symptoms"],
+        "red_flags": ["dizziness", "panic", "headache", "blackout_history", "technique_collapse"],
+        "action": "Reduce or stop underwater work and return to surface swimming when red flags appear."
+      },
+      "source_ids": ["src_swimming_canada_shallow_water_blackout", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "swim_load_monitor_start_turn_power",
+      "record_type": "load_monitor",
+      "title": "Start and Turn Power Volume Monitor",
+      "payload": {
+        "track": ["max_start_reps", "max_wall_push_reps", "plyometric_dryland_near_swim", "knee_ankle_calf_symptoms", "shoulder_back_symptoms"],
+        "adjust_when": ["push_off_speed_drops", "foot_plant_pain", "streamline_pain", "fatigue_rule_errors"]
+      },
+      "source_ids": ["src_weimar_flip_turn_push_off", "src_vantorre_swim_start_review"]
+    },
+    {
+      "id": "swim_risk_record_dive_depth_unknown",
+      "record_type": "risk_rule",
+      "title": "Unknown Depth Means No Headfirst Entry",
+      "payload": {
+        "if": "water_depth_or_pool_slope_unknown",
+        "then": "Use feet-first entry or in-water push start.",
+        "severity": "high"
+      },
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_swim_england_minimum_entry_depth"]
+    },
+    {
+      "id": "swim_risk_record_dizziness_stop",
+      "record_type": "risk_rule",
+      "title": "Dizziness or Panic Stops Underwater Work",
+      "payload": {
+        "if": "swimmer_reports_dizziness_panic_water_inhalation_or_disorientation",
+        "then": "Stop underwater or flip-turn work, recover at wall, and regress to surface breathing and easy swimming.",
+        "severity": "high"
+      },
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "swim_risk_record_streamline_shoulder_pain",
+      "record_type": "risk_rule",
+      "title": "Shoulder Pain Regresses Streamline Volume",
+      "payload": {
+        "if": "streamline_or_start_work_increases_shoulder_pain",
+        "then": "Reduce overhead volume, shorten underwater reps, use mobility and pain-free body-line drills, and avoid block-start volume until symptoms settle.",
+        "severity": "moderate"
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "swim_risk_record_low_back_dolphin_kick",
+      "record_type": "risk_rule",
+      "title": "Low-Back Symptoms Limit Dolphin Kick",
+      "payload": {
+        "if": "dolphin_kick_or_backstroke_start_increases_low_back_symptoms",
+        "then": "Reduce amplitude and volume, emphasize trunk control, and substitute shorter breakouts or surface swimming.",
+        "severity": "moderate"
+      },
+      "source_ids": ["src_betke_underwater_dolphin_kick_review", "src_thompson_underwater_fly_kick_coaching"]
+    },
+    {
+      "id": "swim_event_record_50_free_start_turn",
+      "record_type": "event_emphasis",
+      "title": "50 Freestyle Start, Turn, and Breakout Emphasis",
+      "payload": {
+        "priority": ["dive_start_speed", "entry_line", "first_breakout", "turn_speed_if_pool_length_requires", "no_speed_loss_first_strokes"],
+        "training_bias": "Low-volume high-speed work with full recovery and precise measurement."
+      },
+      "source_ids": ["src_vantorre_swim_start_review", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "swim_event_record_100_short_course_underwater",
+      "record_type": "event_emphasis",
+      "title": "100 Short-Course Underwater Emphasis",
+      "payload": {
+        "priority": ["underwater_speed", "legal_breakout_distance", "turn_out_consistency", "first_strokes_after_breakout"],
+        "caution": "Do not chase 15 m if speed, oxygen comfort, or legality fails."
+      },
+      "source_ids": ["src_veiga_underwater_surface_elite_100_free", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "swim_event_record_1500_turn_economy",
+      "record_type": "event_emphasis",
+      "title": "1500 Freestyle Turn Economy",
+      "payload": {
+        "priority": ["consistent_approach", "quick_economical_turn", "repeatable_push_off", "short_efficient_breakout", "pace_rhythm"],
+        "training_bias": "Many technically clean submaximal turns rather than maximal underwater work every wall."
+      },
+      "source_ids": ["src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "swim_event_record_im_transitions",
+      "record_type": "event_emphasis",
+      "title": "Individual Medley Transition Emphasis",
+      "payload": {
+        "priority": ["fly_to_back_legality", "back_to_breast_orientation", "breast_to_free_exit", "stroke_specific_pullout_or_breakout"],
+        "training_bias": "Separate transition skills before combining into full IM repeats."
+      },
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "swim_user_record_fitness_swimmer_wall_options",
+      "record_type": "user_adaptation",
+      "title": "Fitness Swimmer Wall Options",
+      "payload": {
+        "default": ["open_turns", "push_starts", "short_streamlines", "comfortable_breakouts"],
+        "upgrade_when": ["comfortable_submersion", "consistent_breathing", "wants_pool_racing", "safe_pool_context"],
+        "avoid": ["unsupervised_dives", "max_underwater_challenges"]
+      },
+      "source_ids": ["src_usms_flip_turns_guide", "src_red_cross_usa_swimming_y_hypoxic_blackout"]
+    },
+    {
+      "id": "swim_user_record_beginner_no_racing_start",
+      "record_type": "user_adaptation",
+      "title": "Beginner No Racing Start Default",
+      "payload": {
+        "if_user_level": "beginner_or_low_water_confidence",
+        "then": "Use water confidence, safe entry, floating, exhalation, push-off, and open-turn records only.",
+        "promote_when": ["can_float_and_recover", "can_exhale_underwater", "can_swim_lengths_calmly", "supervised_pool_context"]
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_usa_swimming_teaching_racing_starts"]
+    },
+    {
+      "id": "swim_user_record_masters_conservative_starts",
+      "record_type": "user_adaptation",
+      "title": "Masters Conservative Start Progression",
+      "payload": {
+        "focus": ["safe_entry", "push_start_efficiency", "turn_quality", "shoulder_back_symptom_monitoring"],
+        "dive_start_gate": "Only when pool, rules, supervision, and athlete competency are confirmed.",
+        "note": "Fitness benefit does not require block-start exposure."
+      },
+      "source_ids": ["src_usms_flip_turns_guide", "src_usa_swimming_teaching_racing_starts"]
+    },
+    {
+      "id": "swim_error_record_late_breakout",
+      "record_type": "error_correction",
+      "title": "Late Breakout",
+      "payload": {
+        "symptoms": ["speed_dies_underwater", "vertical_pop_up", "first_stroke_feels_heavy", "breath_distress"],
+        "fixes": ["shorten_underwater", "start_first_pull_while_rising", "use_fewer_higher_quality_kicks", "compare_5m_or_10m_times"]
+      },
+      "source_ids": ["src_trinidad_transition_underwater_surface", "src_veiga_underwater_surface_elite_100_free"]
+    },
+    {
+      "id": "swim_error_record_deep_dive_entry",
+      "record_type": "error_correction",
+      "title": "Dive Entry Too Deep",
+      "payload": {
+        "symptoms": ["long_time_to_surface", "panic_or_air_hunger", "lost_forward_speed", "safety_concern"],
+        "fixes": ["regress_to_supervised_entry_drills", "shallow_angle", "arms_fully_extended", "use_push_starts_until_cleared"]
+      },
+      "source_ids": ["src_usa_swimming_teaching_racing_starts", "src_swim_england_minimum_entry_depth"]
+    },
+    {
+      "id": "swim_error_record_gliding_into_wall",
+      "record_type": "error_correction",
+      "title": "Gliding Into the Wall",
+      "payload": {
+        "symptoms": ["speed_loss_before_turn", "long_reach_to_wall", "slow_foot_plant", "weak_push_off"],
+        "fixes": ["recalibrate_last_stroke_count", "keep_swimming_to_wall", "practice_last_5m_approach", "turn_at_controlled_speed_then_progress"]
+      },
+      "source_ids": ["src_usms_flip_turns_guide", "src_polach_1500_turn_performance"]
+    },
+    {
+      "id": "swim_error_record_loose_underwater_line",
+      "record_type": "error_correction",
+      "title": "Loose Underwater Line",
+      "payload": {
+        "symptoms": ["arms_separate", "head_wobbles", "knees_bend_excessively", "body_snakes_side_to_side"],
+        "fixes": ["shorten_reps", "streamline_before_kick", "reduce_kick_amplitude", "video_from_side_or_front"]
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions", "src_betke_underwater_dolphin_kick_review"]
+    },
+    {
+      "id": "swim_error_record_illegal_breast_pullout",
+      "record_type": "error_correction",
+      "title": "Illegal Breaststroke Pullout Pattern",
+      "payload": {
+        "symptoms": ["multiple_dolphin_kicks", "late_head_surface", "non_symmetric_pull", "extra_underwater_arm_action"],
+        "fixes": ["teach_sequence_slowly", "count_single_dolphin_kick", "surface_earlier", "verify_current_rules_before_meet"]
+      },
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    },
+    {
+      "id": "swim_retrieval_tag_start_turn_underwater",
+      "record_type": "retrieval_tag",
+      "title": "Starts Turns Underwater Retrieval Tags",
+      "payload": {
+        "tags": ["swimming", "starts", "turns", "streamline", "underwater", "breakout", "safety_gate", "race_skill"],
+        "retrieve_when": ["user_has_race_goal", "pool_swimmer", "asks_about_flip_turns", "asks_about_underwaters", "short_course_goal", "im_goal"],
+        "exclude_when": ["non_swimmer", "unsafe_pool_context", "open_water_only_without_pool"]
+      },
+      "source_ids": ["src_usa_swimming_adm_competence_progressions"]
+    },
+    {
+      "id": "swim_retrieval_tag_hypoxic_safety",
+      "record_type": "retrieval_tag",
+      "title": "Hypoxic Safety Retrieval Tag",
+      "payload": {
+        "tags": ["swimming", "safety", "hypoxic_blackout", "breath_control", "underwater"],
+        "retrieve_when": ["user_mentions_breath_hold", "underwater_distance", "no_breath_sets", "dizziness", "panic", "beginner_underwater"],
+        "response_bias": "Safety-first, no max breath-hold prescriptions."
+      },
+      "source_ids": ["src_red_cross_usa_swimming_y_hypoxic_blackout", "src_swimming_canada_shallow_water_blackout"]
+    },
+    {
+      "id": "swim_retrieval_tag_medley_turns",
+      "record_type": "retrieval_tag",
+      "title": "Medley Turn Retrieval Tag",
+      "payload": {
+        "tags": ["swimming", "individual_medley", "turns", "stroke_rules", "transitions"],
+        "retrieve_when": ["im_goal", "fly_to_back", "back_to_breast", "breast_to_free", "stroke_turn_legality"],
+        "response_bias": "Explain legality before speed cues."
+      },
+      "source_ids": ["src_world_aquatics_competition_regulations_2026", "src_usa_swimming_rules_policies_2026"]
+    }
+  ]
+}

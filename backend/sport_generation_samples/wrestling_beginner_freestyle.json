@@ -1,0 +1,301 @@
+{
+  "profile_name": "wrestling_beginner_freestyle",
+  "generated_at": "2026-06-27T10:13:54.625452+00:00",
+  "model": "claude-haiku-4-5-20251001",
+  "source": "anthropic",
+  "sports": [
+    "wrestling"
+  ],
+  "input_profile": {
+    "user_id": "sample_wrestling_beginner_freestyle",
+    "sports": [
+      "Wrestling"
+    ],
+    "sport_details": [
+      {
+        "sport": "Wrestling",
+        "role": "Beginner Wrestler",
+        "style": "Freestyle"
+      }
+    ],
+    "experience": "beginner",
+    "selected_goals": [
+      "Sport Performance",
+      "Strength"
+    ],
+    "primary_goal": "Sport Performance",
+    "training_location": "gym",
+    "equipment": [
+      "dumbbells",
+      "barbell",
+      "mat"
+    ],
+    "training_days_per_week": 1,
+    "session_duration_min": 60,
+    "pain_areas": [
+      "knee"
+    ],
+    "current_injuries": [
+      {
+        "area": "knee",
+        "severity": "mild",
+        "note": "occasional discomfort on shots"
+      }
+    ],
+    "preferred_training_days": [
+      "Monday"
+    ],
+    "sleep_avg_hours": 7,
+    "stress_level": "moderate"
+  },
+  "knowledge_context_summary": {
+    "programming_rule_ids": [
+      "wrestling_rule_snc_supports_wrestling_actions",
+      "wrestling_rule_bottom_escape_base_hand_control",
+      "wrestling_rule_top_control_before_turns",
+      "wrestling_plan_live_load_pain_gate"
+    ],
+    "teaching_progression_ids": [
+      "wrestling_teach_top_control_beginner",
+      "wrestling_teach_snc_beginner",
+      "wrestling_teach_global_beginner",
+      "wrestling_teach_bottom_escape_beginner"
+    ],
+    "assessment_ids": [
+      "wrestling_assess_top_bottom_control",
+      "wrestling_assess_snc_load_readiness"
+    ]
+  },
+  "program": {
+    "title": "Wrestling Beginner Foundation Week 1",
+    "goal": "Sport Performance",
+    "sports": [
+      "Wrestling"
+    ],
+    "duration_weeks": 1,
+    "athlete_analysis": {
+      "profile_summary": "Beginner wrestler, 1 session/week, 60min gym session on Monday. Mild occasional knee discomfort on shots. 7h sleep, moderate stress. Needs safe hip/leg strength and trunk control to support wrestling mechanics without aggravating knee.",
+      "primary_constraints": [
+        "Mild knee pain on shots—avoid high-impact plyometrics and landing volume",
+        "1 session/week limits volume—prioritize quality movement patterns over fatigue",
+        "Beginner wrestling skill—S&C must reinforce stance, hinge, and hip control"
+      ],
+      "sport_demands": [
+        "Hip extension and adductor strength for shots, sprawls, and escapes",
+        "Trunk stiffness and anti-rotation for top control and mat pressure",
+        "Relative strength for hand fighting and base stability"
+      ],
+      "block_priority": "Build safe strength foundation across hinge, squat, and anti-rotation patterns. Protect knee by avoiding heavy impact and high-volume shots. Establish hip and adductor capacity to support wrestling-specific actions."
+    },
+    "blocks": [
+      {
+        "name": "Foundation Block 1",
+        "start_week": 1,
+        "end_week": 1,
+        "emphasis": [
+          "Hip extension strength",
+          "Trunk stability",
+          "Squat mechanics",
+          "Adductor tissue capacity"
+        ]
+      }
+    ],
+    "weeks": [
+      {
+        "week_number": 1,
+        "theme": "Wrestling S&C Foundation: Hinge, Squat, Hip Control",
+        "workouts": [
+          {
+            "day": "Monday",
+            "title": "Beginner Wrestling Strength: Hinge, Squat, Hip Control",
+            "category": "Strength",
+            "duration_min": 60,
+            "intensity": "moderate",
+            "adaptation_targets": [
+              "Hip extension strength",
+              "Trunk anti-rotation stability",
+              "Squat depth control",
+              "Adductor tissue capacity"
+            ],
+            "sport_transfer": [
+              "Hip extension and hinge power for shots and sprawls",
+              "Trunk stiffness for top control pressure",
+              "Hip adductor and groin capacity for leg-driven wrestling actions"
+            ],
+            "why_this_session": "Build safe strength base for wrestling stance, shots, and escapes. Protect knees by avoiding impact while establishing posterior chain and hip control needed for beginner wrestler demands.",
+            "warmup": [
+              {
+                "name": "Bird Dog",
+                "exercise_id": "mob_drill_bird_dog",
+                "purpose": "Activate anti-rotation trunk stability and prepare for wrestling top pressure mechanics.",
+                "category": null,
+                "sets": 2,
+                "reps": "8 each side",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": "RPE 4-5",
+                "rest": "60 sec",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Dead Bug",
+                "exercise_id": "mob_drill_dead_bug",
+                "purpose": "Build supine core control and anti-extension stability without spinal load.",
+                "category": null,
+                "sets": 2,
+                "reps": "10 each side",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": "RPE 4-5",
+                "rest": "60 sec",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Lateral Band Walk",
+                "exercise_id": "mob_drill_lateral_band_walk",
+                "purpose": "Activate hip abductors and lateral stability for shot mechanics and knee control.",
+                "category": null,
+                "sets": 2,
+                "reps": "10 each direction",
+                "duration": null,
+                "load_guidance": "Light resistance band",
+                "rpe": null,
+                "rest": "60 sec",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "main_work": [
+              {
+                "name": "Kettlebell Deadlift",
+                "exercise_id": "ex_kettlebell_deadlift",
+                "purpose": "Teach hip hinge pattern and build posterior chain strength for shots and sprawls.",
+                "category": null,
+                "sets": 3,
+                "reps": "6",
+                "duration": null,
+                "load_guidance": "Moderate weight; focus on neutral spine and hip drive, not max load",
+                "rpe": "RPE 6-7",
+                "rest": "90 sec",
+                "tempo": "2 sec down, pause 1 sec, 1 sec up",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Goblet Squat",
+                "exercise_id": "ex_goblet_squat",
+                "purpose": "Build squat depth and knee control with front-load stability; prep for wrestling stance.",
+                "category": null,
+                "sets": 3,
+                "reps": "8",
+                "duration": null,
+                "load_guidance": "Dumbbell held at chest; moderate weight prioritizing depth and pain-free range",
+                "rpe": "RPE 6-7",
+                "rest": "90 sec",
+                "tempo": "2 sec down, 1 sec pause, 1 sec up",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Machine Hip Adduction",
+                "exercise_id": "ex_machine_hip_adduction",
+                "purpose": "Build groin and adductor strength to support wrestling actions and injury resilience.",
+                "category": null,
+                "sets": 3,
+                "reps": "10",
+                "duration": null,
+                "load_guidance": "Moderate weight; set machine range conservatively to avoid end-range groin stretch",
+                "rpe": "RPE 6-7",
+                "rest": "75 sec",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Dumbbell Hip Thrust",
+                "exercise_id": "ex_dumbbell_hip_thrust",
+                "purpose": "Build glute and hip extension strength for wrestling power and mat control.",
+                "category": null,
+                "sets": 3,
+                "reps": "8",
+                "duration": null,
+                "load_guidance": "Dumbbell across hips; moderate load held securely",
+                "rpe": "RPE 6-7",
+                "rest": "90 sec",
+                "tempo": "1 sec down, pause 1 sec at top, 1 sec up",
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "cooldown": [
+              {
+                "name": "Deep Squat Pry",
+                "exercise_id": "mob_drill_deep_squat_pry",
+                "purpose": "Restore squat-range mobility and ankle/hip opening after loaded work.",
+                "category": null,
+                "sets": null,
+                "reps": null,
+                "duration": "90 sec",
+                "load_guidance": null,
+                "rpe": null,
+                "rest": null,
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Lateral Band Walk (Light)",
+                "exercise_id": "mob_drill_lateral_band_walk",
+                "purpose": "Deload hip abductors and build patterning stability for next session.",
+                "category": null,
+                "sets": 1,
+                "reps": "10 each direction",
+                "duration": null,
+                "load_guidance": "Very light band resistance",
+                "rpe": null,
+                "rest": null,
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "injury_modifications": [
+              "Knee pain on shots: avoid all jumping, loaded lunges, and high-impact plyometrics; goblet squat to pain-free depth only",
+              "If knee discomfort appears, reduce goblet squat reps to 5 and increase rest to 2 min between sets",
+              "Machine adduction range set conservatively; stop 1–2 inches before full end-range to avoid groin stretch"
+            ]
+          }
+        ],
+        "progression_rule": "Load hinge and squat patterns at RPE 6-7 (moderate effort). Use machine adduction to build groin capacity without complexity. Bird Dog and Dead Bug prepare trunk for wrestling top control. Pain-free range only on all movements.",
+        "deload_note": null
+      }
+    ],
+    "nutrition_focus": "Support strength adaptation and recovery between sessions: adequate protein intake (1.6–2.2 g/kg), carbohydrate around training, and consistent meal timing. Maintain hydration throughout day.",
+    "recovery_focus": [
+      "Prioritize 7+ hours consistent sleep to support adaptation and wrestling learning",
+      "Use 2–3 short mobility breaks on non-training days (hip, ankle, thoracic spine)",
+      "Monitor knee response in 24–48 h post-session; reduce volume or intensity if pain increases"
+    ],
+    "safety_notes": [
+      "All exercises pain-free range only; stop immediately if knee discomfort exceeds mild occasional sensation",
+      "Do not perform true 1RM tests or max-effort shots in first week; establish baseline with RPE-based loading",
+      "Neutral spine required on hinge patterns; do not sacrifice form for load",
+      "Machine adduction end-range stretch should be conservative to avoid groin irritation"
+    ],
+    "assumptions": [
+      "Beginner wrestler has completed basic wrestling literacy (stance, motion, level change, hand fighting) or will do so in parallel wrestling practice",
+      "Knee mild discomfort is activity-related (shots, takedowns) and not acute injury; athlete has clearance to train with modifications",
+      "Gym has dumbbells, barbell, bench, machine hip adduction, and space for bodyweight drills",
+      "Sleep (7h) and moderate stress are baseline; no acute illness, concussion, or neurological symptoms",
+      "One session per week is due to schedule constraint; subsequent weeks should expand to 2–3 sessions to support wrestling progression"
+    ]
+  },
+  "workout_titles": [
+    "Beginner Wrestling Strength: Hinge, Squat, Hip Control"
+  ]
+}

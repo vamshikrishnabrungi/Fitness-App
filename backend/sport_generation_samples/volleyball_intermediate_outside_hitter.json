@@ -1,0 +1,298 @@
+{
+  "profile_name": "volleyball_intermediate_outside_hitter",
+  "generated_at": "2026-06-27T10:11:28.033865+00:00",
+  "model": "claude-haiku-4-5-20251001",
+  "source": "anthropic",
+  "sports": [
+    "volleyball"
+  ],
+  "input_profile": {
+    "user_id": "sample_volleyball_intermediate_outside_hitter",
+    "sports": [
+      "Volleyball"
+    ],
+    "sport_details": [
+      {
+        "sport": "Volleyball",
+        "role": "Outside Hitter"
+      }
+    ],
+    "experience": "intermediate",
+    "selected_goals": [
+      "Sport Performance",
+      "Jump Higher"
+    ],
+    "primary_goal": "Sport Performance",
+    "training_location": "gym",
+    "equipment": [
+      "dumbbells",
+      "barbell",
+      "bands"
+    ],
+    "training_days_per_week": 1,
+    "session_duration_min": 60,
+    "pain_areas": [
+      "knee"
+    ],
+    "current_injuries": [
+      {
+        "area": "knee",
+        "severity": "mild",
+        "note": "occasional landing discomfort"
+      }
+    ],
+    "preferred_training_days": [
+      "Monday"
+    ],
+    "sleep_avg_hours": 7,
+    "stress_level": "moderate"
+  },
+  "knowledge_context_summary": {
+    "programming_rule_ids": [
+      "plyo_template_volleyball_jump_landing",
+      "mob_rule_activation_before_power",
+      "volleyball_training_rule_volleyball_serving_progression_serve_progression_jump_topspin",
+      "volleyball_training_rule_volleyball_blocking_model_blocking_ready_position"
+    ],
+    "teaching_progression_ids": [
+      "volleyball_teach_transition_intermediate",
+      "volleyball_teach_serving_intermediate",
+      "volleyball_teach_passing_serve_receive_intermediate",
+      "volleyball_teach_defense_digging_intermediate"
+    ],
+    "assessment_ids": [
+      "volleyball_assess_serving",
+      "volleyball_assess_defense_digging"
+    ]
+  },
+  "program": {
+    "title": "Volleyball Outside Hitter: Jump & Landing Power Week 1",
+    "goal": "Sport Performance",
+    "sports": [
+      "Volleyball"
+    ],
+    "duration_weeks": 1,
+    "athlete_analysis": {
+      "profile_summary": "Intermediate volleyball outside hitter (left side) with mild occasional landing discomfort in knee. Single gym session per week (60 min), moderate stress, good sleep. Primary goal: sport performance and jump height.",
+      "primary_constraints": [
+        "Mild knee landing discomfort—prioritize low-impact loading, hip/trunk control, landing mechanics only if pain-free",
+        "1 session/week requires high density and sport specificity to drive volleyball performance",
+        "60-minute session limits main work to 4 exercises max"
+      ],
+      "sport_demands": [
+        "Outside hitter needs explosive vertical jump, deceleration control, and repeated jumping capacity",
+        "Transition attacks require hip extension power, trunk rotation, and landing stability",
+        "Passing and serve-receive require hip mobility, low posture endurance, and lateral movement"
+      ],
+      "block_priority": "Build foundational jump-power strength and landing safety through posterior-chain loading (squat pattern, hinge pattern, calf capacity) combined with core anti-rotation control. Avoid high-impact plyometrics until landing mechanics prove stable and pain-free."
+    },
+    "blocks": [
+      {
+        "name": "Jump Foundation & Knee-Friendly Power (Weeks 1–4)",
+        "start_week": 1,
+        "end_week": 1,
+        "emphasis": [
+          "Bilateral squat and hinge strength",
+          "Calf/soleus and adductor capacity",
+          "Core bracing and anti-rotation",
+          "Pain-free landing prep"
+        ]
+      }
+    ],
+    "weeks": [
+      {
+        "week_number": 1,
+        "theme": "Squat pattern strength + hinge + core stiffness for jump foundation",
+        "workouts": [
+          {
+            "day": "Monday",
+            "title": "Jump Power Foundation: Squat + Hinge + Core",
+            "category": "Strength",
+            "duration_min": 60,
+            "intensity": "moderate-hard",
+            "adaptation_targets": [
+              "Posterior chain strength (glutes, hamstrings, calves)",
+              "Core stiffness and anti-rotation control",
+              "Knee-friendly lower-body mechanics",
+              "Hip extension power for vertical jump"
+            ],
+            "sport_transfer": [
+              "Squat strength drives approach and jump power in attacks and blocks",
+              "Hip extension and calf strength support vertical jump height and landing control",
+              "Core bracing stabilizes trunk rotation during serving and hitting transitions"
+            ],
+            "why_this_session": "Build bilateral squat and posterior-chain strength while protecting the knee through controlled loading, low-impact movement, and adductor/calf capacity work.",
+            "warmup": [
+              {
+                "name": "Bird Dog",
+                "exercise_id": "mob_drill_bird_dog",
+                "purpose": "Activate core stability and spinal control before loading.",
+                "category": null,
+                "sets": 2,
+                "reps": "8 per side",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": null,
+                "rest": "45 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Lateral Band Walk",
+                "exercise_id": "mob_drill_lateral_band_walk",
+                "purpose": "Activate hip abductors and prepare knees for squat control.",
+                "category": null,
+                "sets": 2,
+                "reps": "10 per direction",
+                "duration": null,
+                "load_guidance": "Light band, controlled tempo",
+                "rpe": null,
+                "rest": "45 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Deep Squat Pry",
+                "exercise_id": "mob_drill_deep_squat_pry",
+                "purpose": "Open hips and ankles; establish squat depth cues.",
+                "category": null,
+                "sets": 2,
+                "reps": "6–8 reps",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": null,
+                "rest": "30 sec between sets",
+                "tempo": "Slow, 2 sec hold at bottom",
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "main_work": [
+              {
+                "name": "Box Squat",
+                "exercise_id": "ex_box_squat",
+                "purpose": "Controlled bilateral squat with standardized depth; knee-friendly mechanics for jump power.",
+                "category": null,
+                "sets": 4,
+                "reps": "5–6",
+                "duration": null,
+                "load_guidance": "RPE 6–7 (medium-heavy); prioritize controlled descent and pause. Avoid pain.",
+                "rpe": "6–7",
+                "rest": "2.5 min between sets",
+                "tempo": "3 sec descent, 1 sec pause, 1 sec ascent",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Trap Bar Deadlift",
+                "exercise_id": "ex_trap_bar_deadlift",
+                "purpose": "Centered-load hinge to build posterior-chain power while reducing knee stress.",
+                "category": null,
+                "sets": 4,
+                "reps": "5–6",
+                "duration": null,
+                "load_guidance": "RPE 6–7; maintain balanced foot pressure and neutral spine throughout.",
+                "rpe": "6–7",
+                "rest": "2.5 min between sets",
+                "tempo": "2 sec descent, instant drive",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Single-Leg Calf Raise",
+                "exercise_id": "ex_single_leg_calf_raise",
+                "purpose": "Unilateral calf and ankle capacity for landing stability and jump power.",
+                "category": null,
+                "sets": 3,
+                "reps": "8–10 per leg",
+                "duration": null,
+                "load_guidance": "Hold dumbbell in one hand if balance allows; light load OK.",
+                "rpe": "6–7",
+                "rest": "90 sec between sets",
+                "tempo": "2 sec rise, 1 sec hold, 2 sec lower",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "RKC Plank",
+                "exercise_id": "ex_rkc_plank",
+                "purpose": "Maximal-tension core bracing for trunk stiffness and anti-extension control.",
+                "category": null,
+                "sets": 3,
+                "reps": null,
+                "duration": "30–40 sec",
+                "load_guidance": "Full-body tension; pull elbows toward toes without arm movement.",
+                "rpe": "8–9",
+                "rest": "90 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "cooldown": [
+              {
+                "name": "Dead Bug",
+                "exercise_id": "mob_drill_dead_bug",
+                "purpose": "Supine core control and low-back recovery.",
+                "category": null,
+                "sets": 2,
+                "reps": "6–8 per side",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": null,
+                "rest": "45 sec between sets",
+                "tempo": "Controlled, 2 sec per rep",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Cable Hip Adduction",
+                "exercise_id": "ex_cable_hip_adduction",
+                "purpose": "Adductor tissue capacity for landing stability and injury prevention.",
+                "category": null,
+                "sets": 2,
+                "reps": "10–12 per leg",
+                "duration": null,
+                "load_guidance": "Light load; focus on control and inner-thigh activation.",
+                "rpe": "4–5",
+                "rest": "60 sec between sets",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "injury_modifications": [
+              "If knee pain during box squat: reduce depth by 2–3 cm or sit on higher box; monitor hip and ankle mobility",
+              "If calf raise pain: reduce range of motion or use support; prioritize single-leg control over height",
+              "If plank causes discomfort: reduce duration to 20–25 sec or elevate hands on bench to lower spine load"
+            ]
+          }
+        ],
+        "progression_rule": "Establish baseline loads (moderate weight, RPE 6–7) for 5–6 reps per set. Monitor knee comfort during landing prep drills. Progress next week if no pain escalation.",
+        "deload_note": null
+      }
+    ],
+    "nutrition_focus": "Post-session protein intake (20–30 g) and carbohydrates (30–40 g) within 1–2 hours to support muscle recovery and jump adaptation. Maintain consistent hydration during week.",
+    "recovery_focus": [
+      "Sleep target: maintain 7+ hours nightly to support strength and power adaptation",
+      "Stress management: use low-intensity movement (walking, easy mobility) on non-training days to reduce moderate stress level",
+      "Avoid high-intensity conditioning outside session; focus recovery on sleep and nutrition this week"
+    ],
+    "safety_notes": [
+      "Do not perform depth jumps, box jumps, or plyometrics until landing mechanics are pain-free and have been cleared in follow-up sessions",
+      "Knee pain during any exercise signals immediate exercise modification or cessation; report changes to coach or healthcare provider",
+      "Do not max-load or test 1RM with existing knee discomfort"
+    ],
+    "assumptions": [
+      "Athlete has access to trap bar or can substitute with safety bar squat if trap bar unavailable",
+      "Athlete can perform all exercises without acute pain; soreness is normal",
+      "One session per week is the total dedicated strength block; sport-specific drills and match play are separate",
+      "Athlete has moderate recovery capacity and will focus on sleep and stress management outside this session"
+    ]
+  },
+  "workout_titles": [
+    "Jump Power Foundation: Squat + Hinge + Core"
+  ]
+}

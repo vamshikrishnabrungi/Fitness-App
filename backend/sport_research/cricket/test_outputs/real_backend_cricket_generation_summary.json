@@ -1,0 +1,106 @@
+{
+  "ok": true,
+  "user_id": "backend_real_test_cricket_user",
+  "program_id": "bf30c2e6-3d05-4d00-a7dd-f9f8a34c306f",
+  "program_title": "Cricket Re-Entry: Movement Quality & Knee-Safe Base",
+  "program_source": "ai_workout_generator_v1:anthropic",
+  "model": "claude-opus-4-8",
+  "duration_weeks": 1,
+  "macro_plan_id": "8ba02823-a622-4d96-8655-a34014feb205",
+  "macro_template": "template_return_to_training_8w",
+  "athlete_state_level": "beginner",
+  "workout_count": 5,
+  "workout_titles": [
+    "2026-06-22 | Lower-Body Foundation & Knee Control",
+    "2026-06-23 | Upper-Body Push & Scapular Health",
+    "2026-06-24 | Pull Strength & Trunk Rotation Base",
+    "2026-06-26 | Full-Body Strength & Adductor Capacity",
+    "2026-06-20 | Match-Prep Mobility & Trunk Primer"
+  ],
+  "total_session_exercises": 43,
+  "exercises_with_knowledge_ref": 33,
+  "exercises_with_library_enrichment": 33,
+  "first_workout_session_plan_keys": [
+    "day",
+    "title",
+    "category",
+    "duration_min",
+    "intensity",
+    "adaptation_targets",
+    "sport_transfer",
+    "why_this_session",
+    "warmup",
+    "main_work",
+    "cooldown",
+    "injury_modifications"
+  ],
+  "first_enriched_exercise": {
+    "name": "Bird Dog",
+    "exercise_id": "mob_drill_bird_dog",
+    "purpose": "Activate trunk anti-rotation control before loaded squatting",
+    "category": null,
+    "sets": 2,
+    "reps": "6/side",
+    "duration": null,
+    "load_guidance": null,
+    "rpe": null,
+    "rest": "30s",
+    "tempo": "slow",
+    "coaching_notes": [],
+    "substitutions": [],
+    "knowledge_ref": {
+      "exercise_id": "mob_drill_bird_dog",
+      "exercise_name": "Bird Dog",
+      "source_refs": [
+        {
+          "source_book_id": "mobility_flexibility_web_research_v1",
+          "section_id": "mob_src_aaos_spine",
+          "section_title": "AAOS OrthoInfo - Spine Conditioning Program",
+          "heading": "Bird Dog"
+        },
+        {
+          "source_book_id": "mobility_flexibility_web_research_v1",
+          "section_id": "mob_src_mayo_back",
+          "section_title": "Mayo Clinic - Back Exercises in 15 Minutes a Day",
+          "heading": "Bird Dog"
+        }
+      ]
+    },
+    "library_enrichment": {
+      "summary": "Quadruped core stability drill that resists rotation and extension while the opposite arm and leg move.",
+      "coaching_cues": [
+        "Reach long, not high.",
+        "Keep hips square.",
+        "Hands under shoulders and knees under hips"
+      ],
+      "common_errors": [
+        "Rotating pelvis.",
+        "Overarching low back.",
+        "Opening the hip"
+      ],
+      "substitutions": [],
+      "regressions": [
+        "Dead Bug",
+        "Quadruped leg reach",
+        "Bear Plank Hold"
+      ],
+      "progressions": [
+        "Bear Crawl",
+        "Renegade Row",
+        "Plank Shoulder Tap"
+      ],
+      "use_when": [
+        "spine warm-up",
+        "back pain modification",
+        "athletic trunk prep"
+      ],
+      "avoid_when": [
+        "wrist pain or shoulder loading intolerance",
+        "Wrist or knee support is painful",
+        "Athlete cannot avoid lumbar extension"
+      ]
+    }
+  },
+  "api_return_program_id": "bf30c2e6-3d05-4d00-a7dd-f9f8a34c306f",
+  "api_return_weekly_plan_count": 5
+}

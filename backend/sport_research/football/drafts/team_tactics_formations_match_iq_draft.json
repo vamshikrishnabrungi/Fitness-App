@@ -1,0 +1,1352 @@
+{
+  "metadata": {
+    "domain": "team_tactics_formations_match_iq",
+    "sport": "soccer",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready soccer coaching knowledge for team tactics, formations, phases of play, build-up, possession, counterattack, pressing, blocks, rest defense, counterpressing, overloads, set pieces, game-state decisions, opponent scouting, match IQ progression, and performance indicators."
+  },
+  "source_refs": [
+    {
+      "id": "fifa_fwc2022_technical_tactical_overview",
+      "title": "FIFA World Cup Qatar 2022: Technical and tactical overview",
+      "url": "https://www.fifatrainingcentre.com/en/fwc2022/technical-and-tactical-analysis/technical-tactical-overview.php",
+      "source_type": "official_tournament_technical_analysis",
+      "organization_or_author": "FIFA Training Centre / FIFA Technical Study Group",
+      "notes": "Used for tournament-level evidence on mid-blocks, wide areas, counterattack quality, ball progressions, defensive unit line breaks, number 9 trends, goalkeeper line height, and winning-team indicators."
+    },
+    {
+      "id": "fifa_fwc2022_mid_block_compactness",
+      "title": "Controlling the game without the ball: The mid-block and compactness",
+      "url": "https://www.fifatrainingcentre.com/en/fwc2022/technical-and-tactical-analysis/controlling-the-game-without-the-ball--the-mid-block-and-compactness.php",
+      "source_type": "official_tournament_technical_analysis",
+      "organization_or_author": "FIFA Training Centre / FIFA Technical Study Group",
+      "notes": "Used for mid-block and low-block definitions, compactness, central denial, forcing play wide, and interpreting possession within game-state context."
+    },
+    {
+      "id": "fifa_moft_build_up_variations",
+      "title": "Variations and flexibility in build-up play",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/olympic-football-tournament/moft/variations-and-flexibility-in-build-up-play.php",
+      "source_type": "official_tournament_tactical_analysis",
+      "organization_or_author": "FIFA Training Centre / FIFA Technical Experts",
+      "notes": "Used for build-up structures that adapt to the opponent's press, including back-three build-up versus two-player pressure, goalkeeper-center-back-pivot diamonds, midfield boxes, high fullbacks, and fullbacks dropping to create a 4v3."
+    },
+    {
+      "id": "fifa_counterpress_session",
+      "title": "Preparing and executing counter-pressing",
+      "url": "https://www.fifatrainingcentre.com/en/practice/elite-sessions/transition-to-defending/preparing-and-executing-counter-pressing.php",
+      "source_type": "official_coach_education_session",
+      "organization_or_author": "FIFA Training Centre / Anne Pochert",
+      "notes": "Used for counterpressing principles: immediate ball pressure, closing passing lanes, squeezing space behind the press, and reacting quickly to turnovers."
+    },
+    {
+      "id": "fifa_rest_defense_offensive_balance",
+      "title": "TSG roundtable: Offensive balance and changing the point of attack",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fcwc/2025/team-analyses/tsg-roundtable-offensive-balance-and-changing-the-point-of-attack.php",
+      "source_type": "official_technical_study_group_roundtable",
+      "organization_or_author": "FIFA Training Centre / FIFA Football Performance Insights Team",
+      "notes": "Used for rest defense/offensive balance: organizing behind the ball while attacking so creative players can take risks and the team can survive turnovers."
+    },
+    {
+      "id": "fifa_fcwc2025_high_press",
+      "title": "Pressing strategies: Investigating the increased use of the high press",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fcwc/2025/team-analyses/increased-use-of-high-press-and-pressing-strategies.php",
+      "source_type": "official_tournament_performance_insight",
+      "organization_or_author": "FIFA Training Centre / FIFA Football Performance Insights Team",
+      "notes": "Used for high-press measurement, pressing intensity, tactical trend comparison, and the need to define pressing with location, speed, distance to ball, and team context."
+    },
+    {
+      "id": "fifa_morocco_low_mid_block_transition",
+      "title": "Morocco: Effective transitioning from low and mid-blocks under direct pressure",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/olympic-football-tournament/2024/men/effective-transitioning-from-low-and-mid-blocks-under-direct-pressure.php",
+      "source_type": "official_tactical_case_analysis",
+      "organization_or_author": "FIFA Training Centre / Sue Ronan",
+      "notes": "Used for low/mid-block transition principles: compact defending, one- and two-touch escape passes under counterpressure, weak-side outlets, and explosive forward support runs after regain."
+    },
+    {
+      "id": "fifa_fcwc2025_set_play_opportunities",
+      "title": "Set plays: More goalscoring opportunities generated from corners and free kicks at FIFA Club World Cup",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fcwc/2025/team-analyses/more-goalscoring-opportunities-generated-from-set-plays.php",
+      "source_type": "official_tournament_performance_insight",
+      "organization_or_author": "FIFA Training Centre / FIFA Football Performance Insights Team",
+      "notes": "Used for set-piece attack: first-phase, second-phase and sustained-phase set plays; corner attempt generation; first contact; inswinger/outswinger tendencies; and free-kick chance creation."
+    },
+    {
+      "id": "fifa_fcwc2025_corner_defending",
+      "title": "Set plays: Defending corner strategies",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fcwc/2025/team-analyses/set-plays-defending-corner-strategies.php",
+      "source_type": "official_tournament_performance_insight",
+      "organization_or_author": "FIFA Training Centre / FIFA Football Performance Insights Team",
+      "notes": "Used for defensive corner systems: player marking, zonal marking, hybrid marking, consistency of strategy, and the growing use of zonal components."
+    },
+    {
+      "id": "fifa_fcwc2025_inverted_full_back",
+      "title": "Innovation: The emerging positioning of the inverted full-back",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fcwc/2025/team-analyses/emerging-positioning-of-the-inverted-full-back.php",
+      "source_type": "official_tactical_trend_analysis",
+      "organization_or_author": "FIFA Training Centre / FIFA Football Performance Insights Team",
+      "notes": "Used for modern fullback/wingback roles, central build-up support, midfield overloads, shorter passing connections, compact rest defense, and formation morphing."
+    },
+    {
+      "id": "fifa_fwc2022_physical_context",
+      "title": "How did team physical demands change in relation to various contexts?",
+      "url": "https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/how-do-team-demands-change-in-relation-to-various-contexts.php",
+      "source_type": "official_scientific_tournament_physical_analysis",
+      "organization_or_author": "FIFA Training Centre / Dr Paul Bradley",
+      "notes": "Used for interpreting physical demands through possession status, opposition standard, competition stage, scoreline, fatigue, formation and style of play rather than raw totals alone."
+    },
+    {
+      "id": "uefa_ucl_2021_22_five_at_back",
+      "title": "UEFA Champions League Technical Report: Five at the back ... and the front too",
+      "url": "https://www.uefa.com/uefachampionsleague/news/0278-15f13230f46c-f5746795e8f3-1000--uefa-champions-league-technical-report-five-at-the-back-an/",
+      "source_type": "official_technical_observer_article",
+      "organization_or_author": "UEFA Technical Observers",
+      "notes": "Used for formation flexibility: common 4-3-3, 4-2-3-1 and 4-4-2 use; back-three/back-five variation; systems changing between defending and attacking; and 4-3-3 morphing into 2-3-5 in possession."
+    },
+    {
+      "id": "uefa_euro2024_technical_report_part_one",
+      "title": "UEFA EURO 2024 Technical Report, Part One",
+      "url": "https://editorial.uefa.com/resources/028f-1b6f7f14a391-e1beafb781cc-1000/euro2024_mini-tech-report_v7.pdf",
+      "source_type": "official_tournament_technical_report_pdf",
+      "organization_or_author": "UEFA Technical Observer Panel",
+      "notes": "Used for tournament-wide tactical observations, practical coaching insights, formations, tactical flexibility, pressing, fullback/winger combinations, and transition trends at international level."
+    },
+    {
+      "id": "england_principles_of_football",
+      "title": "What are the principles of football?",
+      "url": "https://learn.englandfootball.com/articles-and-resources/coaching/resources/2022/What-are-the-principles-of-football",
+      "source_type": "national_federation_coach_education",
+      "organization_or_author": "England Football Learning / The FA",
+      "notes": "Used for teachable principles including compactness, cover and balance, pressing, delaying, control and restraint, and relationship between principles and training/matchday observation."
+    },
+    {
+      "id": "england_what_is_pressing",
+      "title": "What is pressing in football?",
+      "url": "https://learn.englandfootball.com/articles-and-resources/coaching/resources/2022/what-is-pressing-in-football",
+      "source_type": "national_federation_coach_education",
+      "organization_or_author": "England Football Learning / The FA",
+      "notes": "Used for age-appropriate pressing concepts: pressure on the ball, triggers, counterpressing after loss, coordinated pressure, cover, balance, scanning, and communication."
+    },
+    {
+      "id": "england_press_for_success",
+      "title": "Pressing session: Press for success",
+      "url": "https://learn.englandfootball.com/sessions/resources/2022/pressing-session-press-for-success",
+      "source_type": "national_federation_session_plan",
+      "organization_or_author": "England Football Learning / The FA",
+      "notes": "Used for practice constraints that distinguish high press, mid-block and low-block training, including reward systems for regains in the attacking third."
+    },
+    {
+      "id": "england_develop_styles_of_play",
+      "title": "How to develop styles of play",
+      "url": "https://learn.englandfootball.com/articles-and-resources/coaching/resources/2024/How-to-develop-styles-of-play",
+      "source_type": "national_federation_coach_education",
+      "organization_or_author": "England Football Learning / The FA",
+      "notes": "Used for style-of-play development, realistic practice design, match scenarios, consistent matchday messaging, and observing tactical problems around and away from the ball."
+    },
+    {
+      "id": "us_soccer_grassroots_11v11_framework",
+      "title": "U.S. Soccer Grassroots Player Development Framework",
+      "url": "https://static.ussdcc.com/users/227808/458431/us-soccer-grassroots-11v11-player-development-framework.pdf",
+      "source_type": "national_federation_player_development_framework",
+      "organization_or_author": "U.S. Soccer Federation",
+      "notes": "Used for 11v11 progression: reading the game, role alignment, pass or dribble forward, creating 2v1/1v1, changing the point of attack, compactness, pressure-cover-balance, marking space/player, and guided problem solving."
+    },
+    {
+      "id": "peer_ball_possession_indicators",
+      "title": "A systematic review about the performance indicators related to ball possession",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8929629/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Open-access sport performance analysis researchers",
+      "notes": "Used for possession-related performance indicators and the caution that possession metrics need context instead of being treated as automatic success measures."
+    },
+    {
+      "id": "peer_attacking_kpis_soccer",
+      "title": "Attacking Key Performance Indicators in Soccer: Current Practice and Perceptions from the Elite to Youth Academy Level",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7919358/",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Open-access soccer performance analysis researchers",
+      "notes": "Used for attacking KPI candidates such as shots, shots on goal, penalty-area shots, crosses, shooting efficiency, and adapting indicators to level and coaching environment."
+    },
+    {
+      "id": "peer_playing_formation_demands",
+      "title": "The Influence of Playing Formation on Physical Demands and Technical-Tactical Actions according to Playing Positions in an Elite Soccer Team",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8070941/",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Open-access soccer match analysis researchers",
+      "notes": "Used for linking formations and player roles to physical demands and technical-tactical actions, especially position-specific workload when systems change."
+    },
+    {
+      "id": "peer_collective_tactical_behaviours",
+      "title": "Reference values for collective tactical behaviours based on positional data in professional football matches: A systematic review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8805357/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Rico-Gonzalez, Pino-Ortega, Castellano, Oliva-Lozano, and Los Arcos",
+      "notes": "Used for collective tactical variables such as team length, team width, team area, centroid/geometrical centre, distances between players, and positional-data measures of compactness and spacing."
+    },
+    {
+      "id": "peer_xg_model",
+      "title": "A Goal Scoring Probability Model for Shots Based on Synchronized Positional and Event Data in Football (Soccer)",
+      "url": "https://www.frontiersin.org/journals/sports-and-active-living/articles/10.3389/fspor.2021.624475/full",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Gabriel Anzer and Pascal Bauer",
+      "notes": "Used for expected goals as a process-based chance-quality metric that is more informative than raw goals or shots alone."
+    },
+    {
+      "id": "peer_tactical_context_la_liga",
+      "title": "Effect of Match Location, Team Ranking, Match Status and Tactical Dimensions on the Offensive Performance in Spanish La Liga Soccer Matches",
+      "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2019.02089/full",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Gonzalez-Rodenas, Aranda-Malaves, Tudela-Desantes, Calabuig Moreno, Casal, and Aranda",
+      "notes": "Used for game-state and contextual effects, showing that penetration after regain, fast attacks, counterattacks, possession length, match location, team ranking, and match status influence offensive performance."
+    },
+    {
+      "id": "peer_video_analysis_objectivity",
+      "title": "Objectivity of match analysis in football: Testing the level of agreement between coaches' interpretations of video data",
+      "url": "https://journals.sagepub.com/doi/10.1177/17479541241278603",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Furley, Mehta, Raabe, and Memmert",
+      "notes": "Used for opponent scouting safeguards: coaches may interpret the same footage differently, so analysis needs shared definitions, clear coding windows, multiple clips, and explicit confidence levels."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "formation_is_reference_not_tactic",
+      "concept": "A formation is a starting reference, not the whole tactic.",
+      "details": "4-3-3, 4-2-3-1, 4-4-2, 3-5-2 and 3-4-3 describe nominal player distribution, but modern teams often defend in one shape and attack in another. The backend should store formation profiles as phase-dependent structures, not fixed diagrams.",
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "uefa_euro2024_technical_report_part_one", "fifa_fcwc2025_inverted_full_back"],
+      "backend_tags": ["formations", "phase_dependent_structure", "match_iq"]
+    },
+    {
+      "id": "four_phase_lens",
+      "concept": "Team tactics should be organized by phases of play.",
+      "details": "The core teaching lens is in possession, out of possession, transition to attack, transition to defense, plus set pieces/restarts as planned sub-phases. Players need to know the team's priority and their role when the phase changes.",
+      "source_ids": ["england_principles_of_football", "us_soccer_grassroots_11v11_framework"],
+      "backend_tags": ["phases", "game_model", "role_clarity"]
+    },
+    {
+      "id": "build_up_solves_press",
+      "concept": "Build-up play is a problem-solving phase against the opponent's first pressure.",
+      "details": "The build-up shape should create a free player, attract pressure, and give the ball carrier forward or diagonal options. Teams may use two center backs, a back three, goalkeeper involvement, a pivot drop, fullbacks deep, or inverted fullbacks depending on the opponent's press.",
+      "source_ids": ["fifa_moft_build_up_variations", "fifa_fcwc2025_inverted_full_back"],
+      "backend_tags": ["build_up", "press_resistance", "free_player"]
+    },
+    {
+      "id": "plus_one_first_line",
+      "concept": "A common build-up principle is to create plus-one superiority in the first line.",
+      "details": "Against one striker, two center backs and/or a goalkeeper can often create the spare player. Against two forwards, a third player may join the first line. Against three aggressive pressers, deeper fullbacks or goalkeeper support can create a 4v3.",
+      "source_ids": ["fifa_moft_build_up_variations"],
+      "backend_tags": ["build_up", "numerical_superiority", "first_line"]
+    },
+    {
+      "id": "possession_requires_purpose",
+      "concept": "Possession is valuable when it creates territory, control, or chance quality.",
+      "details": "Possession percentage alone is not a reliable success target. Possession should be judged by whether it disorganizes the opponent, breaks lines, accesses advanced zones, creates high-value chances, or protects a game state.",
+      "source_ids": ["fifa_fwc2022_mid_block_compactness", "peer_ball_possession_indicators", "peer_xg_model"],
+      "backend_tags": ["possession", "performance_indicators", "chance_quality"]
+    },
+    {
+      "id": "verticality_after_regain",
+      "concept": "The first seconds after regain are a high-value attacking window.",
+      "details": "If the opponent is open, the first look should be forward or across to the free outlet. If pressure is immediate, the team may need a short escape pass before releasing runners into space.",
+      "source_ids": ["fifa_fwc2022_technical_tactical_overview", "fifa_morocco_low_mid_block_transition", "peer_tactical_context_la_liga"],
+      "backend_tags": ["counterattack", "transition_to_attack", "regain"]
+    },
+    {
+      "id": "pressing_controls_decisions",
+      "concept": "Pressing is about controlling opponent decisions, not simply running at the ball.",
+      "details": "Effective pressing needs timing, body shape, teammates closing options, and communication. The first presser should make play predictable while cover and balance protect the spaces that are opened.",
+      "source_ids": ["england_what_is_pressing", "england_principles_of_football", "fifa_fcwc2025_high_press"],
+      "backend_tags": ["pressing", "defending", "team_coordination"]
+    },
+    {
+      "id": "pressing_trigger",
+      "concept": "Presses should start from triggers that increase the chance of regaining or forcing a poor action.",
+      "details": "Common triggers include a bad touch, pass into a receiver facing their own goal, back pass, slow square pass, pass to the goalkeeper, aerial/lofted ball, or opponent body shape that limits forward options.",
+      "source_ids": ["england_what_is_pressing", "england_press_for_success"],
+      "backend_tags": ["pressing_triggers", "match_iq"]
+    },
+    {
+      "id": "blocks_are_active_defending",
+      "concept": "A mid-block or low-block is not passive defending.",
+      "details": "A block should remain compact, protect central spaces, communicate shifts, and spring to press when the opponent tries to break lines or enters a trap zone. The objective may be to force wide play, delay, regain, or prepare the counterattack.",
+      "source_ids": ["fifa_fwc2022_mid_block_compactness", "fifa_morocco_low_mid_block_transition"],
+      "backend_tags": ["mid_block", "low_block", "compactness"]
+    },
+    {
+      "id": "rest_defense_is_attacking_insurance",
+      "concept": "Rest defense is the team's anti-counterattack structure while attacking.",
+      "details": "When players advance to create overloads, enough players must remain connected behind and around the ball to protect central counter lanes, defend clearances, and allow counterpressing or recovery.",
+      "source_ids": ["fifa_rest_defense_offensive_balance", "fifa_fcwc2025_inverted_full_back"],
+      "backend_tags": ["rest_defense", "offensive_balance", "transition_to_defense"]
+    },
+    {
+      "id": "counterpress_or_recover",
+      "concept": "After losing the ball, the team must choose between counterpressing and recovering shape.",
+      "details": "Counterpress when the ball is close, teammates are connected, the opponent faces pressure, and rest defense is in place. Recover when the ball is out, the first pass has escaped, distances are too large, or the back line is exposed.",
+      "source_ids": ["fifa_counterpress_session", "england_what_is_pressing"],
+      "backend_tags": ["counterpressing", "recovery", "transition_to_defense"]
+    },
+    {
+      "id": "overloads_and_underloads",
+      "concept": "Overloads and underloads are complementary.",
+      "details": "An overload creates local superiority near the ball, often to progress or pin defenders. An underloaded weak side can be the eventual target if the opponent overcommits, especially after a switch of play.",
+      "source_ids": ["fifa_rest_defense_offensive_balance", "us_soccer_grassroots_11v11_framework"],
+      "backend_tags": ["overloads", "underloads", "switch_play"]
+    },
+    {
+      "id": "width_and_depth_stretch_blocks",
+      "concept": "Width and depth create spaces that compact blocks try to deny.",
+      "details": "Wide players can stretch the block horizontally, while runs in behind stretch it vertically. If central progression is denied, wide access, switch play, cutbacks and crosses become more important.",
+      "source_ids": ["fifa_fwc2022_technical_tactical_overview", "england_principles_of_football"],
+      "backend_tags": ["width", "depth", "attacking_structure"]
+    },
+    {
+      "id": "set_pieces_are_sub_phases",
+      "concept": "Set pieces should be modelled as tactical sub-phases with first, second, and transition moments.",
+      "details": "Attacking set pieces need delivery, blocking/screening, target zones, rebound behavior, and rest defense. Defensive set pieces need a marking system, first-contact responsibilities, second-ball reactions, and counterattack outlets.",
+      "source_ids": ["fifa_fcwc2025_set_play_opportunities", "fifa_fcwc2025_corner_defending"],
+      "backend_tags": ["set_pieces", "corners", "free_kicks"]
+    },
+    {
+      "id": "game_state_changes_risk",
+      "concept": "Scoreline, time remaining, opponent quality and venue change tactical risk tolerance.",
+      "details": "A team protecting a lead may slow tempo, reduce central losses, prioritize compactness, and accept lower-risk attacks. A team chasing a game may press higher, add runners, increase crossing or direct play, and must protect against transition risk.",
+      "source_ids": ["peer_tactical_context_la_liga", "fifa_fwc2022_mid_block_compactness"],
+      "backend_tags": ["game_state", "risk_management", "match_iq"]
+    },
+    {
+      "id": "scouting_needs_shared_definitions",
+      "concept": "Opponent scouting must define exactly what is being observed.",
+      "details": "Coaches can interpret the same video differently, including basic formation and space occupation. Scouting records should include clip context, phase, time window, confidence level, and whether the observation is repeated or isolated.",
+      "source_ids": ["peer_video_analysis_objectivity", "england_develop_styles_of_play"],
+      "backend_tags": ["scouting", "video_analysis", "analysis_reliability"]
+    },
+    {
+      "id": "performance_indicators_need_context",
+      "concept": "Performance indicators are only useful when tied to style, phase, role and game state.",
+      "details": "Raw possession, shots, sprint distance or pass count can mislead. More useful indicators compare the team's intended style against outputs such as line breaks, final-third entries, xG, regains, rest-defense outcomes and set-piece first contacts.",
+      "source_ids": ["peer_ball_possession_indicators", "peer_attacking_kpis_soccer", "peer_tactical_context_la_liga", "peer_xg_model"],
+      "backend_tags": ["analytics", "performance_indicators", "context"]
+    },
+    {
+      "id": "formation_changes_physical_demands",
+      "concept": "Formation changes redistribute physical load by role.",
+      "details": "Back-three systems often place heavy two-way demands on wingbacks. High-press systems increase accelerations and decelerations. Low blocks may reduce high pressing but increase emergency recoveries, clearances, contacts and transition sprints.",
+      "source_ids": ["peer_playing_formation_demands", "fifa_fwc2022_physical_context"],
+      "backend_tags": ["physical_demands", "formations", "role_demands"]
+    },
+    {
+      "id": "young_players_learn_principles_before_scripts",
+      "concept": "Beginners should learn principles and cues before complex fixed patterns.",
+      "details": "Younger and novice players need simple cues such as spread out, support, protect the goal, stay compact, pressure-cover-balance and change the point of attack. Advanced players can handle phase-specific rotations and opponent-specific plans.",
+      "source_ids": ["us_soccer_grassroots_11v11_framework", "england_develop_styles_of_play"],
+      "backend_tags": ["progression", "youth", "match_iq"]
+    },
+    {
+      "id": "collective_spacing_measurable",
+      "concept": "Team shape can be tracked with collective spacing variables.",
+      "details": "Team width, length, area, centroid movement and player-player distances can help describe compactness, expansion, pressing height and rest-defense spacing when positional data is available.",
+      "source_ids": ["peer_collective_tactical_behaviours", "fifa_fwc2022_mid_block_compactness"],
+      "backend_tags": ["positional_data", "compactness", "team_shape"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "formation_433_model",
+      "model": "4-3-3 formation profile",
+      "structure": "Back four, single pivot or holding midfielder, two advanced or mixed-role central midfielders, two wide forwards/wingers and one center forward.",
+      "in_possession": "Can build as 2-3-5, 3-2-5 or 2-4-4 depending on fullback and pivot behavior. Natural width can come from wingers, with fullbacks overlapping, underlapping or inverting.",
+      "out_of_possession": "Front three can press the back line; midfield three protect central lanes. Common defensive shapes include 4-1-4-1, 4-5-1 or a narrow 4-3-3 press.",
+      "strengths": ["clear width", "front-three pressing", "central triangle options", "easy creation of five-lane attacking occupation"],
+      "vulnerabilities": ["single pivot can be isolated", "fullback spaces exposed if both advance", "midfield can be outnumbered by box midfields"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "id": "formation_4231_model",
+      "model": "4-2-3-1 formation profile",
+      "structure": "Back four, double pivot, attacking midfield line of three and one striker.",
+      "in_possession": "Double pivot supports build-up security and can stagger to create a 3+1 or 2+2 base. The number 10 connects between lines while wide players can isolate fullbacks.",
+      "out_of_possession": "Can defend as 4-4-1-1 or 4-2-3-1. The number 10 may screen the opposing pivot or jump to press, while the double pivot protects central spaces.",
+      "strengths": ["central stability", "clear number 10 role", "double-pivot rest defense", "flexible shift to 4-4-2 press"],
+      "vulnerabilities": ["striker can become isolated", "wide players must recover deep", "number 10 space can be denied by a holding midfielder"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "england_develop_styles_of_play"]
+    },
+    {
+      "id": "formation_442_model",
+      "model": "4-4-2 formation profile",
+      "structure": "Back four, two central midfielders, two wide midfielders and two forwards.",
+      "in_possession": "Can create direct two-forward access, wide combinations and second-ball presence. One forward may drop to create a 4-4-1-1 or link midfield.",
+      "out_of_possession": "Often forms two compact banks of four with a pair of forwards screening center backs and pivots. Useful for mid-block pressing and clear horizontal shifting.",
+      "strengths": ["simple role clarity", "two-striker threat", "compact banks", "good wide coverage"],
+      "vulnerabilities": ["central midfield can be outnumbered by a midfield three", "building short can lack a free central player", "wide midfielders carry heavy two-way loads"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "england_principles_of_football"]
+    },
+    {
+      "id": "formation_352_model",
+      "model": "3-5-2 formation profile",
+      "structure": "Three center backs, two wingbacks, three central midfielders and two forwards.",
+      "in_possession": "The back three can provide first-line superiority, wingbacks provide width, and two forwards can pin or split center backs. Midfield three can create central overloads.",
+      "out_of_possession": "Often defends as 5-3-2, protecting the box and central channels while inviting wide play. Pressing can use two forwards against two center backs or screen pivots.",
+      "strengths": ["central numbers", "two-forward transitions", "back-three security", "natural wingback width"],
+      "vulnerabilities": ["wingback fatigue", "space behind wingbacks", "wide overloads against a winger-fullback pair", "limited natural wide forward threat"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "peer_playing_formation_demands"]
+    },
+    {
+      "id": "formation_343_model",
+      "model": "3-4-3 formation profile",
+      "structure": "Three center backs, two wingbacks, double pivot and front three.",
+      "in_possession": "Offers a stable three-player base, wingback width and a front three that can pin the opponent's back line. Outside center backs may step in to create overloads.",
+      "out_of_possession": "Can defend as 5-4-1, 5-2-3 or 3-4-3 high press. The front three can press a back four while wingbacks decide when to jump or hold the line.",
+      "strengths": ["front-three threat", "back-three rest defense", "wingback width", "outside center-back progression"],
+      "vulnerabilities": ["double pivot can be outnumbered", "wingback decision burden", "large spaces if front three press without midfield connection"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "id": "build_up_two_plus_one",
+      "model": "2+1 build-up base",
+      "structure": "Two center backs with a goalkeeper or pivot as the plus-one support player.",
+      "use_case": "Useful against one forward or a passive first line when the team wants to attract pressure and find the pivot, fullback or number 8.",
+      "coaching_cues": ["center backs split to open lane", "pivot checks shoulder before receiving", "goalkeeper offers central bounce option", "next line creates angles, not flat distances"],
+      "source_ids": ["fifa_moft_build_up_variations"]
+    },
+    {
+      "id": "build_up_three_plus_one",
+      "model": "3+1 build-up base",
+      "structure": "Three first-line players behind or alongside one pivot, created by a center back spread, pivot drop, fullback drop or goalkeeper participation.",
+      "use_case": "Useful against two forwards or aggressive two-player first pressure to keep one free player and protect central counter lanes.",
+      "coaching_cues": ["spare player carries or passes forward", "do not build with a flat line of three if no passing lane appears", "far-side center back prepares switch", "pivot positions to receive behind first pressure"],
+      "source_ids": ["fifa_moft_build_up_variations", "fifa_rest_defense_offensive_balance"]
+    },
+    {
+      "id": "goalkeeper_center_back_pivot_diamond",
+      "model": "Goalkeeper-center-back-pivot diamond",
+      "structure": "Goalkeeper, two center backs and a defensive midfielder form a diamond to progress from deep areas.",
+      "use_case": "Useful for short build-up when the goalkeeper is comfortable as an extra player and the pivot can receive or bounce under pressure.",
+      "coaching_cues": ["goalkeeper sets angle before pass", "center backs receive open to pitch", "pivot scans before dropping", "number 8s support beyond the first line"],
+      "source_ids": ["fifa_moft_build_up_variations"]
+    },
+    {
+      "id": "box_build_up_rotation",
+      "model": "Box build-up and midfield rotation",
+      "structure": "Two center backs and two central midfielders form a box, or midfielders rotate wide/deep to create a free player.",
+      "use_case": "Useful when the opponent presses man-to-man or blocks central lanes; rotations should create separation without losing rest defense.",
+      "coaching_cues": ["rotation must move an opponent or open a lane", "third player fills vacated space", "receiver faces forward when possible", "nearest players prepare counterpress if rotation fails"],
+      "source_ids": ["fifa_moft_build_up_variations", "fifa_counterpress_session"]
+    },
+    {
+      "id": "possession_progression_model",
+      "model": "Purposeful possession progression model",
+      "structure": "Secure possession, attract or shift the opponent, find a free player, break a line, arrive in the final third, create a high-value chance or reset with rest defense intact.",
+      "use_case": "Useful for teams learning to distinguish circulation from effective progression.",
+      "coaching_cues": ["scan before receiving", "change tempo after the opponent shifts", "switch when ball-side is crowded", "protect central loss zones", "judge possession by entries and chance quality"],
+      "source_ids": ["peer_ball_possession_indicators", "peer_xg_model", "england_develop_styles_of_play"]
+    },
+    {
+      "id": "counterattack_model",
+      "model": "Counterattack decision model",
+      "structure": "Regain, secure first action, identify imbalance, play forward or escape pressure, support with runners, finish quickly or settle into possession if the counter is closed.",
+      "use_case": "Useful after high regains, mid-block regains and low-block regains, with different first-pass options by zone.",
+      "coaching_cues": ["first look forward", "if pressed, play one-touch escape", "opposite winger holds width as outlet", "nearest runner stretches the back line", "trailing runner supports cutback or rebound"],
+      "source_ids": ["fifa_fwc2022_technical_tactical_overview", "fifa_morocco_low_mid_block_transition", "peer_tactical_context_la_liga"]
+    },
+    {
+      "id": "press_cover_balance_model",
+      "model": "Press-cover-balance defensive model",
+      "structure": "First defender applies pressure, closest support covers the next pass or dribble lane, and remaining players balance the team shape around the ball, goal and opponents.",
+      "use_case": "Useful for individual, unit and team pressing progressions from youth to advanced levels.",
+      "coaching_cues": ["first presser curves run to show direction", "second defender closes the obvious outlet", "far-side players narrow and scan", "back line squeezes only when pressure is secure"],
+      "source_ids": ["england_principles_of_football", "england_what_is_pressing", "fifa_counterpress_session"]
+    },
+    {
+      "id": "block_defending_model",
+      "model": "Mid-block and low-block defending model",
+      "structure": "Connected team shape that protects central areas, controls distances between lines, forces predictable wide or backward passes, and presses on selected triggers.",
+      "use_case": "Useful for defending against stronger possession teams, protecting a lead, or creating counterattacking conditions.",
+      "coaching_cues": ["line distances stay connected", "do not jump alone", "show wide when central lanes are protected", "press when opponent tries to break lines", "prepare outlet before regain"],
+      "source_ids": ["fifa_fwc2022_mid_block_compactness", "fifa_morocco_low_mid_block_transition"]
+    },
+    {
+      "id": "set_piece_phase_model",
+      "model": "Set-piece phase model",
+      "structure": "Set pieces include preparation, delivery, first contact, second ball, sustained attack/clearance, and transition against or from the set piece.",
+      "use_case": "Useful for planning attacking corners/free kicks, defensive corner systems, and rest defense at dead-ball situations.",
+      "coaching_cues": ["define first-contact target", "assign second-ball hunters", "protect counter lanes", "vary routines without overloading players", "review first contact and chance quality"],
+      "source_ids": ["fifa_fcwc2025_set_play_opportunities", "fifa_fcwc2025_corner_defending"]
+    },
+    {
+      "id": "opponent_scouting_model",
+      "model": "Opponent phase audit model",
+      "structure": "Scout opponent in possession, out of possession, transition to attack, transition to defense, set pieces, game-state behavior and key personnel.",
+      "use_case": "Useful for turning video and data into a short game plan with clear player tasks.",
+      "coaching_cues": ["code repeated patterns, not one-off clips", "separate nominal formation from phase shape", "write how to exploit and how to protect", "state confidence level", "show only the highest-value clips to players"],
+      "source_ids": ["peer_video_analysis_objectivity", "england_develop_styles_of_play", "england_principles_of_football"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "build_plus_one_against_press",
+      "phase": "in_possession_build_up",
+      "rule": "Create a plus-one in the first build-up line before asking players to play short under pressure.",
+      "application": "Use 2v1, 3v2 or 4v3 structures depending on the opponent's first line. The spare player should be able to carry or pass forward, not just recycle sideways.",
+      "avoid_if": "The spare player is technically weak under pressure, the pitch is poor, or the opponent's trap is designed to invite that pass.",
+      "source_ids": ["fifa_moft_build_up_variations"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "adapt_build_to_opponent_front",
+      "phase": "in_possession_build_up",
+      "rule": "Change the build-up base when the opponent changes their pressing front.",
+      "application": "Against one striker, build with two center backs plus goalkeeper/pivot. Against two strikers, add a third first-line player. Against three high pressers, use goalkeeper and deeper fullbacks or quicker direct access behind.",
+      "avoid_if": "Players do not understand the trigger for changing shape; then keep one simple default and train it deeply.",
+      "source_ids": ["fifa_moft_build_up_variations", "uefa_ucl_2021_22_five_at_back"],
+      "level": "advanced"
+    },
+    {
+      "id": "goalkeeper_as_outfield_support",
+      "phase": "in_possession_build_up",
+      "rule": "Use the goalkeeper as a build-up player only when the next pass options are pre-connected.",
+      "application": "The goalkeeper can create numerical superiority, but center backs, pivot and fullbacks must offer clear angles and know the escape route if pressed.",
+      "avoid_if": "The goalkeeper cannot play reliably under pressure or the team lacks rest-defense coverage for a central turnover.",
+      "source_ids": ["fifa_moft_build_up_variations", "fifa_fwc2022_technical_tactical_overview"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "inverted_fullback_requires_balance",
+      "phase": "in_possession_progression",
+      "rule": "Invert a fullback to create central overloads only if width and rest defense are still covered.",
+      "application": "The winger or opposite fullback must maintain width, and the back line/pivot must remain connected enough to stop counterattacks.",
+      "avoid_if": "Both fullbacks invert or advance without a clear counterpress/rest-defense structure.",
+      "source_ids": ["fifa_fcwc2025_inverted_full_back", "fifa_rest_defense_offensive_balance"],
+      "level": "advanced"
+    },
+    {
+      "id": "possession_must_move_block",
+      "phase": "in_possession_possession",
+      "rule": "Circulate the ball to move the opponent, not simply to increase pass count.",
+      "application": "Switch, bounce, third-player pass or carry after the opponent shifts enough to open a lane or isolate a defender.",
+      "avoid_if": "Circulation is slow, predictable, or produces central turnovers with poor rest defense.",
+      "source_ids": ["peer_ball_possession_indicators", "fifa_fwc2022_mid_block_compactness"],
+      "level": "all_levels"
+    },
+    {
+      "id": "line_break_before_final_third",
+      "phase": "in_possession_progression",
+      "rule": "Track whether possession breaks defensive units before final-third entries.",
+      "application": "Useful possession often includes a pass, carry, rotation or run that breaks a defensive line and creates an advantage for the next action.",
+      "avoid_if": "Players force risky vertical passes when the opponent is compact and rest defense is weak.",
+      "source_ids": ["fifa_fwc2022_technical_tactical_overview", "peer_tactical_context_la_liga"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "4_3_3_single_pivot_protection",
+      "phase": "formation_rule",
+      "rule": "In a 4-3-3, protect the single pivot with staggered number 8s and disciplined fullback timing.",
+      "application": "If both fullbacks advance and both 8s are ahead of the ball, the pivot may be exposed in transition. One 8, fullback or center back should secure the counter lane.",
+      "avoid_if": "The opponent has strong central counterattackers or two strikers waiting to split the center backs.",
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "fifa_rest_defense_offensive_balance"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "4_2_3_1_double_pivot_stagger",
+      "phase": "formation_rule",
+      "rule": "In a 4-2-3-1, stagger the double pivot so one player can support build-up and the other can secure transition.",
+      "application": "A flat double pivot can be easy to mark; staggering creates a passing lane, a bounce option and better rest-defense spacing.",
+      "avoid_if": "Both pivots drop on the same line and disconnect the number 10 and striker.",
+      "source_ids": ["england_develop_styles_of_play", "peer_playing_formation_demands"],
+      "level": "intermediate"
+    },
+    {
+      "id": "4_4_2_compact_banks",
+      "phase": "formation_rule",
+      "rule": "In a 4-4-2 block, keep the midfield and defensive lines connected before jumping to press.",
+      "application": "The two forwards can screen central passes while the ball-side wide midfielder presses wide triggers. The far-side wide midfielder narrows to protect midfield.",
+      "avoid_if": "One forward jumps while midfield stays deep, creating a pass into the opponent's pivot or number 10.",
+      "source_ids": ["england_principles_of_football", "fifa_fwc2022_mid_block_compactness"],
+      "level": "beginner_to_intermediate"
+    },
+    {
+      "id": "3_5_2_wingback_load_rule",
+      "phase": "formation_rule",
+      "rule": "In a 3-5-2, manage wingback timing because the same player often supplies width and recovers to a back five.",
+      "application": "Use the outside center back, near number 8 or striker to cover the wingback's advance depending on ball location and game state.",
+      "avoid_if": "Both wingbacks are asked to press high and attack deep without training recovery and support rules.",
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "peer_playing_formation_demands"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "3_4_3_double_pivot_screen",
+      "phase": "formation_rule",
+      "rule": "In a 3-4-3, the double pivot must screen central counters when wingbacks and front three are high.",
+      "application": "At least one pivot should remain connected to the back three. Outside center backs can step in only when the opposite side and central lane are covered.",
+      "avoid_if": "The front three press but the pivots are too deep or too wide to stop central progression.",
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "fifa_fcwc2025_inverted_full_back"],
+      "level": "advanced"
+    },
+    {
+      "id": "counterattack_first_look_forward",
+      "phase": "transition_to_attack",
+      "rule": "After a regain, the first scan should look for forward or weak-side advantage.",
+      "application": "If a runner, forward, or opposite winger has space, play early. If the first forward pass is blocked, use one short escape pass to beat counterpressure.",
+      "avoid_if": "The ball winner is facing their own goal with pressure and no support; then protect the ball and escape first.",
+      "source_ids": ["fifa_morocco_low_mid_block_transition", "peer_tactical_context_la_liga"],
+      "level": "all_levels"
+    },
+    {
+      "id": "low_block_outlet_before_regain",
+      "phase": "out_of_possession_low_block",
+      "rule": "A low block needs an outlet plan before the regain happens.",
+      "application": "One forward or wide player should be ready to receive into space, while nearby players are close enough for the first escape pass.",
+      "avoid_if": "All players collapse too deep and the first clearance immediately returns to the opponent.",
+      "source_ids": ["fifa_morocco_low_mid_block_transition", "fifa_fwc2022_mid_block_compactness"],
+      "level": "intermediate"
+    },
+    {
+      "id": "high_press_trigger_selection",
+      "phase": "out_of_possession_high_press",
+      "rule": "Use clear high-press triggers rather than pressing every pass.",
+      "application": "Press on bad touches, back passes, slow square passes, passes to the goalkeeper, receiver facing own goal, or predictable wide passes. The first presser makes play predictable; teammates lock short options.",
+      "avoid_if": "The team is stretched, the back line cannot squeeze, or the opponent has a clear free player behind the press.",
+      "source_ids": ["fifa_fcwc2025_high_press", "england_what_is_pressing"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "mid_block_press_on_line_break_attempt",
+      "phase": "out_of_possession_mid_block",
+      "rule": "In a mid-block, press when the opponent tries to play through or into the block.",
+      "application": "Protect central lanes, invite slower wide circulation, and jump aggressively when the ball travels into a marked midfielder, poor body shape, or a pass that can be trapped.",
+      "avoid_if": "Players chase backward or sideways passes without team support, opening central gaps.",
+      "source_ids": ["fifa_fwc2022_mid_block_compactness", "england_principles_of_football"],
+      "level": "intermediate"
+    },
+    {
+      "id": "low_block_cutback_rule",
+      "phase": "out_of_possession_low_block",
+      "rule": "Low-block defending must protect cutbacks as much as crosses.",
+      "application": "Center backs protect first-contact zones, midfielders track the penalty spot and edge, and fullbacks prevent clean byline cutbacks.",
+      "avoid_if": "All defenders drop to the goal line and leave the penalty spot or edge unmarked.",
+      "source_ids": ["fifa_fwc2022_technical_tactical_overview", "fifa_fcwc2025_corner_defending"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "counterpress_closest_player",
+      "phase": "transition_to_defense",
+      "rule": "The closest player presses immediately after loss while nearby players close exits.",
+      "application": "The player who lost the ball or nearest teammate applies pressure before the opponent scans. Second and third players block forward lanes, the back line squeezes only if pressure is secure.",
+      "avoid_if": "The ball is already played beyond the first pressure or teammates are too far to close exits.",
+      "source_ids": ["fifa_counterpress_session", "england_what_is_pressing"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "recover_when_counterpress_broken",
+      "phase": "transition_to_defense",
+      "rule": "Recover shape when the counterpress is broken.",
+      "application": "The nearest player delays; center backs protect depth; midfielders sprint to central cover; far-side players recover inside before wide.",
+      "avoid_if": "Players keep chasing the ball individually after the opponent has clean forward access.",
+      "source_ids": ["fifa_counterpress_session", "england_principles_of_football"],
+      "level": "all_levels"
+    },
+    {
+      "id": "rest_defense_minimum_structure",
+      "phase": "in_possession_rest_defense",
+      "rule": "Do not commit attacking numbers without a minimum rest-defense structure.",
+      "application": "A common minimum is two or three players behind the ball plus one central screener, adjusted to opponent forward numbers and counterattack threat.",
+      "avoid_if": "The opponent has no counter threat and the game state requires maximum attacking risk; even then, define who defends clearances.",
+      "source_ids": ["fifa_rest_defense_offensive_balance", "fifa_fcwc2025_inverted_full_back"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "overload_with_exit",
+      "phase": "in_possession_final_third",
+      "rule": "Create ball-side overloads only when there is an exit if the overload is locked.",
+      "application": "A 3v2 wide overload should include a backward bounce, inside runner or weak-side switch. Without an exit, the overload can become a trap.",
+      "avoid_if": "Players crowd the ball on one side and leave no switch or rest-defense balance.",
+      "source_ids": ["us_soccer_grassroots_11v11_framework", "fifa_rest_defense_offensive_balance"],
+      "level": "intermediate"
+    },
+    {
+      "id": "underload_to_switch",
+      "phase": "in_possession_possession",
+      "rule": "Use the underloaded side as a target, not an afterthought.",
+      "application": "Draw defenders to one side, then switch quickly to an isolated winger, fullback or wingback before the opponent can shift.",
+      "avoid_if": "The switch travels slowly or the far-side receiver has no support for the second action.",
+      "source_ids": ["fifa_rest_defense_offensive_balance", "us_soccer_grassroots_11v11_framework"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "set_piece_attack_phases",
+      "phase": "set_piece_attack",
+      "rule": "Plan corners and free kicks for first contact, second ball and sustained attack.",
+      "application": "Define delivery zones, target runners, blockers, rebounds, edge support and rest defense. Review whether the routine creates attempts and not just contacts.",
+      "avoid_if": "The team only rehearses the delivery and ignores clearance, counterattack and second-phase behavior.",
+      "source_ids": ["fifa_fcwc2025_set_play_opportunities"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "defensive_corner_system_consistency",
+      "phase": "set_piece_defense",
+      "rule": "Choose a defensive corner system that matches personnel and rehearse it consistently.",
+      "application": "Zonal, player-marking and hybrid systems can all work, but players must know who attacks zones, who tracks runners, who protects the goalkeeper, who clears the edge and who becomes the outlet.",
+      "avoid_if": "Switching systems week to week without enough rehearsal creates assignment confusion.",
+      "source_ids": ["fifa_fcwc2025_corner_defending"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "leading_game_state",
+      "phase": "game_state_management",
+      "rule": "When leading late, reduce central turnover risk and control the opponent's highest-value threats.",
+      "application": "Use safer circulation, corner management, compact spacing after loss and substitutions that protect tired pressing or wide-defending roles.",
+      "avoid_if": "The team becomes so passive that it invites repeated box entries and loses all outlet threat.",
+      "source_ids": ["peer_tactical_context_la_liga", "fifa_fwc2022_mid_block_compactness"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "trailing_game_state",
+      "phase": "game_state_management",
+      "rule": "When trailing, add penetration without abandoning rest defense.",
+      "application": "Increase forward runs, press higher on triggers, commit an extra player between lines or into the box, and target set pieces, but assign cover against the opponent's outlet.",
+      "avoid_if": "Every player attacks the same line and one clearance creates a clean counterattack.",
+      "source_ids": ["peer_tactical_context_la_liga", "fifa_rest_defense_offensive_balance"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "substitution_tactical_problem",
+      "phase": "game_state_management",
+      "rule": "Substitutions should solve a tactical or load problem, not only replace tired players.",
+      "application": "Identify whether the issue is pressing intensity, build-up access, wide defending, box presence, transition speed, set-piece matchup or emotional control.",
+      "avoid_if": "The change adds a better individual but breaks the team's phase responsibilities.",
+      "source_ids": ["england_develop_styles_of_play", "peer_playing_formation_demands"],
+      "level": "advanced"
+    },
+    {
+      "id": "scout_phase_not_just_formation",
+      "phase": "opponent_scouting",
+      "rule": "Scout the opponent by phase, not just by formation.",
+      "application": "Record their build-up shape, pressing height, block behavior, transition habits, set-piece systems, weak-side behavior, key outlets and changes when winning or losing.",
+      "avoid_if": "The scouting report lists a formation without explaining how it changes in possession and out of possession.",
+      "source_ids": ["peer_video_analysis_objectivity", "england_develop_styles_of_play"],
+      "level": "all_levels"
+    },
+    {
+      "id": "scouting_confidence_level",
+      "phase": "opponent_scouting",
+      "rule": "Attach confidence levels to opponent observations.",
+      "application": "High confidence requires repeated examples across matches or clear pattern under the same context. Low confidence observations should be presented as possibilities, not facts.",
+      "avoid_if": "A single clip is treated as a stable opponent weakness.",
+      "source_ids": ["peer_video_analysis_objectivity"],
+      "level": "advanced"
+    },
+    {
+      "id": "kpis_match_team_intent",
+      "phase": "performance_analysis",
+      "rule": "Choose KPIs that match the game model and match plan.",
+      "application": "A high-press team should track high regains and chances after regains. A possession team should track line breaks, final-third entries and xG. A set-piece focused team should track first contacts and set-piece xG.",
+      "avoid_if": "The same dashboard is used for every style and opponent.",
+      "source_ids": ["peer_attacking_kpis_soccer", "peer_xg_model", "peer_ball_possession_indicators"],
+      "level": "intermediate_to_advanced"
+    },
+    {
+      "id": "kpis_adjust_for_context",
+      "phase": "performance_analysis",
+      "rule": "Interpret KPIs through match status, opponent quality, venue and phase.",
+      "application": "A team may have lower possession because it is leading and protecting space, or higher possession because the opponent permits low-value circulation. Pair metrics with video and phase labels.",
+      "avoid_if": "Possession, pass count or distance covered is judged as good or bad without tactical context.",
+      "source_ids": ["peer_tactical_context_la_liga", "fifa_fwc2022_mid_block_compactness"],
+      "level": "all_levels"
+    },
+    {
+      "id": "beginner_principles_before_patterns",
+      "phase": "match_iq_development",
+      "rule": "Teach beginners principles before formation scripts.",
+      "application": "Use simple player actions: spread out, support the attack, pass or dribble forward, change point of attack, protect goal, make it compact, pressure-cover-balance and stay involved.",
+      "avoid_if": "Young players are asked to memorize rotations they cannot perceive or execute.",
+      "source_ids": ["us_soccer_grassroots_11v11_framework", "england_develop_styles_of_play"],
+      "level": "beginner"
+    },
+    {
+      "id": "advanced_patterns_need_player_autonomy",
+      "phase": "match_iq_development",
+      "rule": "Advanced patterns should include player-led decisions, not only rehearsed routes.",
+      "application": "Train rotations with constraints and live opposition so players learn when to use, cancel or reverse the pattern.",
+      "avoid_if": "The pattern works unopposed but fails when the opponent changes the press.",
+      "source_ids": ["england_develop_styles_of_play", "peer_video_analysis_objectivity"],
+      "level": "advanced"
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "wingback_two_way_load",
+      "demand": "Wingbacks in 3-5-2 and 3-4-3 often carry high repeated sprint, high-speed running and recovery-running demands.",
+      "tactical_context": "They may be the attacking width, pressing jumper and back-five defender in the same possession cycle.",
+      "planning_note": "Monitor wide-player high-speed exposure and avoid adding excessive extra conditioning after wingback-heavy matches.",
+      "source_ids": ["peer_playing_formation_demands", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "id": "high_press_accel_decel",
+      "demand": "High pressing increases repeated accelerations, decelerations, curved runs and short reactive efforts.",
+      "tactical_context": "The load is highest when the team presses without compact support and has to re-accelerate after each pass.",
+      "planning_note": "Train high pressing with work-rest periods that preserve decision quality and track deceleration exposure.",
+      "source_ids": ["fifa_fcwc2025_high_press", "england_press_for_success"]
+    },
+    {
+      "id": "counterpress_short_burst_load",
+      "demand": "Counterpressing creates intense short movements immediately after losing possession.",
+      "tactical_context": "Players close the ball, block lanes and squeeze space before the opponent can scan.",
+      "planning_note": "Use small-area transition games to train reaction speed but manage density for groin, calf and knee load.",
+      "source_ids": ["fifa_counterpress_session"]
+    },
+    {
+      "id": "counterattack_sprint_load",
+      "demand": "Counterattacking asks forwards, wingers and support runners for explosive accelerations and high-speed runs into space.",
+      "tactical_context": "The highest value runs often occur immediately after regains when the opponent's rest defense is disorganized.",
+      "planning_note": "Expose players to max velocity and repeated sprint work progressively, especially if changing to a more direct transition style.",
+      "source_ids": ["fifa_fwc2022_technical_tactical_overview", "peer_tactical_context_la_liga"]
+    },
+    {
+      "id": "low_block_recovery_contact_load",
+      "demand": "Low-block defending can reduce high-press volume but increase box defending, contacts, clearances, short recovery steps and emergency blocks.",
+      "tactical_context": "Players defend crosses, cutbacks, second balls and repeated attacks while maintaining concentration.",
+      "planning_note": "Pair low-block work with mobility, landing, heading/contact management and outlet-counter practice.",
+      "source_ids": ["fifa_fwc2022_mid_block_compactness", "fifa_morocco_low_mid_block_transition"]
+    },
+    {
+      "id": "possession_support_movement_load",
+      "demand": "Possession styles create repeated support movements, scanning actions, angle changes and tempo bursts rather than only long sprints.",
+      "tactical_context": "Players must constantly adjust body shape and position to offer passing lanes and prevent counterattack vulnerability.",
+      "planning_note": "Use representative possession games that include transition and rest-defense responsibilities, not only keep-ball volume.",
+      "source_ids": ["england_develop_styles_of_play", "peer_ball_possession_indicators"]
+    },
+    {
+      "id": "set_piece_duel_load",
+      "demand": "Set pieces add jumping, landing, grappling, blocking, screening and contact demands.",
+      "tactical_context": "Corner and free-kick routines include first contact, second balls and transition defense after clearances.",
+      "planning_note": "Dose high-volume aerial duel practice, especially near match day or for players with head, neck, groin, knee or ankle issues.",
+      "source_ids": ["fifa_fcwc2025_set_play_opportunities", "fifa_fcwc2025_corner_defending"]
+    },
+    {
+      "id": "game_state_load_shift",
+      "demand": "Game state can shift physical output independent of planned formation.",
+      "tactical_context": "Chasing a goal may increase pressing and forward runs; protecting a lead may increase defensive shifting and box defending.",
+      "planning_note": "Review load by phase and scoreline before judging a player's running profile.",
+      "source_ids": ["peer_tactical_context_la_liga", "fifa_fwc2022_physical_context"]
+    },
+    {
+      "id": "opponent_style_load_reaction",
+      "demand": "Opponent style can force a team to upregulate or downregulate total and high-intensity running.",
+      "tactical_context": "Facing a high-possession or high-physicality opponent changes defensive running and recovery actions.",
+      "planning_note": "Pre-match plans should anticipate opponent-driven load, especially in congested weeks.",
+      "source_ids": ["fifa_fwc2022_physical_context", "peer_playing_formation_demands"]
+    },
+    {
+      "id": "formation_morphing_cognitive_physical_load",
+      "demand": "Systems that morph between phases add cognitive load and position-specific movement demands.",
+      "tactical_context": "A fullback may invert in possession, recover wide out of possession and jump into a press on triggers.",
+      "planning_note": "Introduce morphing roles progressively and verify that players can execute them under fatigue.",
+      "source_ids": ["fifa_fcwc2025_inverted_full_back", "uefa_ucl_2021_22_five_at_back"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "sudden_high_press_change_risk",
+      "risk": "A sudden shift to high pressing can spike acceleration, deceleration, calf, hamstring and adductor load.",
+      "mitigation": "Progress pressing volume, monitor high-speed and deceleration exposure, and use shorter blocks before full-match pressing demands.",
+      "source_ids": ["fifa_fcwc2025_high_press", "peer_playing_formation_demands"]
+    },
+    {
+      "id": "wingback_overuse_risk",
+      "risk": "Wingbacks in back-three systems may accumulate excessive two-way running, crossing, tackling and recovery load.",
+      "mitigation": "Rotate wingbacks, manage extra running in training, and provide outside center-back or midfielder cover rules to reduce repeated emergency sprints.",
+      "source_ids": ["peer_playing_formation_demands", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "id": "counterpress_density_risk",
+      "risk": "Dense counterpressing games can overload groin, knee, calf and ankle tissues through repeated short cuts and contacts.",
+      "mitigation": "Limit work intervals, vary pitch size, include technical escape constraints and stop if pressing quality collapses.",
+      "source_ids": ["fifa_counterpress_session"]
+    },
+    {
+      "id": "low_block_clearance_contact_risk",
+      "risk": "Low-block and set-piece defending can increase aerial contact, landing, blocking and collision exposure.",
+      "mitigation": "Rehearse assignments clearly, dose aerial volume, monitor heading/contact load and keep outlet options to reduce repeated pressure.",
+      "source_ids": ["fifa_fcwc2025_corner_defending", "fifa_fwc2022_mid_block_compactness"]
+    },
+    {
+      "id": "game_state_chase_risk",
+      "risk": "Chasing a match can lead to uncontrolled pressing and repeated max-effort recovery runs.",
+      "mitigation": "Use scenario training so players know when to press, when to force wide, and who protects rest defense while chasing.",
+      "source_ids": ["peer_tactical_context_la_liga", "fifa_rest_defense_offensive_balance"]
+    },
+    {
+      "id": "poor_rest_defense_emergency_runs",
+      "risk": "Poor rest defense creates emergency sprinting, last-ditch tackles and avoidable transition duels.",
+      "mitigation": "Coach attacking structure with mandatory cover and counterpress roles before adding extra final-third numbers.",
+      "source_ids": ["fifa_rest_defense_offensive_balance", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "id": "formation_switch_cognitive_error_risk",
+      "risk": "Changing formation without clear phase responsibilities can produce hesitation, late recovery and dangerous contacts.",
+      "mitigation": "Introduce one phase change at a time, use walkthroughs plus live scenarios, and check player understanding with guided questions.",
+      "source_ids": ["us_soccer_grassroots_11v11_framework", "england_develop_styles_of_play"]
+    },
+    {
+      "id": "set_piece_repetition_near_match",
+      "risk": "Excessive set-piece rehearsal near match day can add unnecessary jumping, heading, striking and contact volume.",
+      "mitigation": "Use lower-contact walkthroughs, video and reduced-volume rehearsals close to match day; keep high-contact rehearsals earlier in the week.",
+      "source_ids": ["fifa_fcwc2025_set_play_opportunities", "fifa_fcwc2025_corner_defending"]
+    },
+    {
+      "id": "physical_metrics_without_context",
+      "risk": "Treating high distance or high sprint output as automatically good can encourage inappropriate conditioning or tactical choices.",
+      "mitigation": "Interpret physical metrics by role, phase, opponent, scoreline and tactical intention before changing training load.",
+      "source_ids": ["fifa_fwc2022_physical_context", "peer_playing_formation_demands"]
+    },
+    {
+      "id": "youth_over_tactical_complexity",
+      "risk": "Overloading youth players with complex formations can reduce scanning, confidence and individual problem solving.",
+      "mitigation": "Use simple principles, small-sided games and guided questions before assigning advanced rotations or opponent-specific tactical scripts.",
+      "source_ids": ["us_soccer_grassroots_11v11_framework", "england_develop_styles_of_play"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "representative_phase_training",
+      "implication": "Train tactics in representative game situations rather than isolated chalkboard patterns.",
+      "practice_design": "Use realistic pitch zones, direction, goals, transition moments and role numbers so the perception-action demands match the game.",
+      "source_ids": ["england_develop_styles_of_play", "us_soccer_grassroots_11v11_framework"]
+    },
+    {
+      "id": "build_up_vs_different_presses",
+      "implication": "Build-up training should include different opponent pressing fronts.",
+      "practice_design": "Run the same build-up objective against one striker, two strikers and a front three so players learn when to use 2+1, 3+1, goalkeeper diamond or deeper fullbacks.",
+      "source_ids": ["fifa_moft_build_up_variations"]
+    },
+    {
+      "id": "counterpress_to_recover_progression",
+      "implication": "Transition-to-defense sessions should teach both counterpress and recovery decisions.",
+      "practice_design": "Start with small rondo or possession games for immediate pressure and lane closure, then expand to full transition games where players must decide whether to squeeze or recover.",
+      "source_ids": ["fifa_counterpress_session", "england_what_is_pressing"]
+    },
+    {
+      "id": "pressing_trigger_games",
+      "implication": "Pressing should be taught through trigger-recognition games.",
+      "practice_design": "Reward goals after regains in the attacking third for high press, then constrain the defending team to engage only from the middle or final third to teach mid-block and low-block differences.",
+      "source_ids": ["england_press_for_success"]
+    },
+    {
+      "id": "block_to_counter_training",
+      "implication": "Mid-block and low-block work should include the attacking action after regain.",
+      "practice_design": "Train compact defending, first escape pass, weak-side outlet and forward runner timing in the same activity.",
+      "source_ids": ["fifa_morocco_low_mid_block_transition", "fifa_fwc2022_mid_block_compactness"]
+    },
+    {
+      "id": "rest_defense_embedded_in_attack",
+      "implication": "Rest defense should be coached inside attacking practices.",
+      "practice_design": "During overload or final-third games, award the defending team bonus points for counterattacking through unprotected central lanes. This forces attacking players to balance risk and cover.",
+      "source_ids": ["fifa_rest_defense_offensive_balance", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "id": "overload_underload_switch_games",
+      "implication": "Overload and underload concepts are best trained with switch-play constraints.",
+      "practice_design": "Create ball-side overloads while requiring a weak-side player to hold width; reward scoring after switching from the overloaded side.",
+      "source_ids": ["us_soccer_grassroots_11v11_framework", "fifa_rest_defense_offensive_balance"]
+    },
+    {
+      "id": "set_piece_complete_phase_rehearsal",
+      "implication": "Set-piece practice should include first contact, second ball and transition defense.",
+      "practice_design": "Rehearse delivery and runs, then continue live for eight to ten seconds after first contact so second balls and counterattack protection become habits.",
+      "source_ids": ["fifa_fcwc2025_set_play_opportunities", "fifa_fcwc2025_corner_defending"]
+    },
+    {
+      "id": "scenario_training_game_state",
+      "implication": "Game-state decisions need explicit scenario training.",
+      "practice_design": "Use score/time constraints such as leading by one with ten minutes left, chasing with fifteen minutes left, playing with ten players, or protecting a set-piece threat.",
+      "source_ids": ["peer_tactical_context_la_liga", "england_develop_styles_of_play"]
+    },
+    {
+      "id": "formation_comparison_sessions",
+      "implication": "Players learn formations better by comparing phase responsibilities.",
+      "practice_design": "Run short games where the same team attacks in 4-3-3, 4-2-3-1 and 3-4-3 structures, then ask players what changed in width, central cover, pressing and transition defense.",
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "us_soccer_grassroots_11v11_framework"]
+    },
+    {
+      "id": "scouting_player_task",
+      "implication": "Scouting can be used as a player-development tool, not only staff analysis.",
+      "practice_design": "Ask players to identify opponent formation, what they do with and without the ball, and whether they change approach in different areas, then present one actionable finding.",
+      "source_ids": ["england_develop_styles_of_play", "us_soccer_grassroots_11v11_framework"]
+    },
+    {
+      "id": "analysis_definitions_before_clips",
+      "implication": "Video analysis should start with shared definitions.",
+      "practice_design": "Before showing clips, define formation, build-up shape, press, block, regain, line break and chance quality so coaches and players interpret the same event consistently.",
+      "source_ids": ["peer_video_analysis_objectivity"]
+    },
+    {
+      "id": "kpi_review_with_video",
+      "implication": "KPI reviews should pair data with selected clips.",
+      "practice_design": "Review high regains, final-third entries, xG, set-piece first contacts and transition concessions with representative clips rather than numbers alone.",
+      "source_ids": ["peer_attacking_kpis_soccer", "peer_xg_model", "peer_ball_possession_indicators"]
+    },
+    {
+      "id": "physical_load_by_phase",
+      "implication": "Conditioning should reflect tactical phase demands.",
+      "practice_design": "High-press teams need repeated acceleration/deceleration capacity; counterattacking teams need sprint exposure; wingback systems need repeated high-speed recovery; low-block teams need box-defending resilience.",
+      "source_ids": ["fifa_fwc2022_physical_context", "peer_playing_formation_demands"]
+    },
+    {
+      "id": "progression_by_tactical_complexity",
+      "implication": "Match IQ should progress from principles to unit tactics to opponent-specific adaptation.",
+      "practice_design": "Beginners learn spread out, compactness, support and pressure-cover-balance. Intermediate players learn unit pressing, build-up shapes and game-state choices. Advanced players adapt formations and pressing plans to opponents.",
+      "source_ids": ["us_soccer_grassroots_11v11_framework", "england_develop_styles_of_play"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "football_formation_profile",
+      "id": "football_formation_profile_433",
+      "name": "4-3-3",
+      "summary": "Back four, midfield three and front three with strong width, central triangles and front-three pressing potential.",
+      "phase_shapes": {
+        "in_possession": ["2-3-5", "3-2-5", "2-4-4"],
+        "out_of_possession": ["4-1-4-1", "4-5-1", "4-3-3 high press"]
+      },
+      "role_demands": ["single pivot scanning and cover", "winger width or inside runs", "fullback timing", "number 8 support and counterpress"],
+      "best_for": ["wide threat", "possession progression", "front-three press"],
+      "watch_outs": ["single pivot isolation", "space behind fullbacks", "transition exposure"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "record_type": "football_formation_profile",
+      "id": "football_formation_profile_4231",
+      "name": "4-2-3-1",
+      "summary": "Back four, double pivot, line of three attacking midfielders and lone striker; strong central security and number 10 connection.",
+      "phase_shapes": {
+        "in_possession": ["2-2-3-3", "3-1-5-1", "2-3-4-1"],
+        "out_of_possession": ["4-4-1-1", "4-2-3-1", "4-4-2 press"]
+      },
+      "role_demands": ["double pivot staggering", "number 10 between-line receiving", "wide-player recovery", "lone striker hold-up and pressing"],
+      "best_for": ["central stability", "transition protection", "flexible pressing"],
+      "watch_outs": ["isolated striker", "flat double pivot", "wide recovery fatigue"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "england_develop_styles_of_play"]
+    },
+    {
+      "record_type": "football_formation_profile",
+      "id": "football_formation_profile_442",
+      "name": "4-4-2",
+      "summary": "Classic two-bank structure with two forwards, simple role clarity, strong wide coverage and direct two-striker threat.",
+      "phase_shapes": {
+        "in_possession": ["4-2-4", "4-4-1-1", "2-4-4"],
+        "out_of_possession": ["4-4-2 mid-block", "4-4-1-1", "4-2-2-2 press"]
+      },
+      "role_demands": ["central midfield coverage", "wide midfielder two-way load", "forward pair pressing screens", "fullback-wide midfielder partnership"],
+      "best_for": ["compact defending", "direct counterattack", "clear youth teaching"],
+      "watch_outs": ["midfield underload", "limited central build-up support", "gaps if forward press disconnects"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "england_principles_of_football"]
+    },
+    {
+      "record_type": "football_formation_profile",
+      "id": "football_formation_profile_352",
+      "name": "3-5-2",
+      "summary": "Back three, wingbacks, midfield three and two forwards; strong central numbers and transition threat through a front pair.",
+      "phase_shapes": {
+        "in_possession": ["3-1-4-2", "3-2-3-2", "3-5-2"],
+        "out_of_possession": ["5-3-2", "5-2-1-2", "3-5-2 high press"]
+      },
+      "role_demands": ["wingback repeated running", "outside center-back cover", "midfield three compactness", "two-striker pressing and depth"],
+      "best_for": ["central overloads", "two-forward counterattack", "box protection"],
+      "watch_outs": ["wingback overload", "space outside back three", "wide 2v1s against"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "peer_playing_formation_demands"]
+    },
+    {
+      "record_type": "football_formation_profile",
+      "id": "football_formation_profile_343",
+      "name": "3-4-3",
+      "summary": "Back three, wingbacks, double pivot and front three; combines back-three security with front-three attacking and pressing threat.",
+      "phase_shapes": {
+        "in_possession": ["3-2-5", "3-4-3", "2-3-5 with outside center-back step"],
+        "out_of_possession": ["5-4-1", "5-2-3", "3-4-3 high press"]
+      },
+      "role_demands": ["wingback width and recovery", "double-pivot screening", "outside center-back progression", "front-three pressing coordination"],
+      "best_for": ["front line pinning", "outside center-back progression", "wingback width"],
+      "watch_outs": ["central midfield underload", "wingback decision load", "pressing disconnection"],
+      "source_ids": ["uefa_ucl_2021_22_five_at_back", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "record_type": "football_build_up_model",
+      "id": "football_build_up_model_2_plus_1",
+      "name": "2+1 first-line build-up",
+      "trigger_context": "Opponent presses with one forward or allows goalkeeper/pivot support.",
+      "coaching_points": ["split center backs", "create a clear pivot or goalkeeper bounce option", "do not pass into a marked pivot without third-player support", "prepare rest defense behind the ball"],
+      "progression_level": "beginner_to_intermediate",
+      "source_ids": ["fifa_moft_build_up_variations"]
+    },
+    {
+      "record_type": "football_build_up_model",
+      "id": "football_build_up_model_3_plus_1",
+      "name": "3+1 first-line build-up",
+      "trigger_context": "Opponent presses with two forwards or blocks the pivot lane.",
+      "coaching_points": ["add a center back, dropping midfielder or fullback to create spare player", "spare player carries if unpressed", "pivot stays connected behind first pressure", "wide players stretch next line"],
+      "progression_level": "intermediate",
+      "source_ids": ["fifa_moft_build_up_variations", "fifa_rest_defense_offensive_balance"]
+    },
+    {
+      "record_type": "football_build_up_model",
+      "id": "football_build_up_model_4v3_deep_fullbacks",
+      "name": "4v3 deep fullback solution",
+      "trigger_context": "Opponent presses aggressively with three offensive players.",
+      "coaching_points": ["fullbacks drop to create a back four", "goalkeeper remains available", "find the free outside player or pivot", "advance only after pressure is bypassed"],
+      "progression_level": "advanced",
+      "source_ids": ["fifa_moft_build_up_variations"]
+    },
+    {
+      "record_type": "football_build_up_model",
+      "id": "football_build_up_model_inverted_fullback",
+      "name": "Inverted fullback central build-up support",
+      "trigger_context": "Team wants central overloads, shorter pivot connections and compact rest defense.",
+      "coaching_points": ["fullback receives inside the opponent shape", "winger maintains width", "pivot and fullback stagger", "back line balances counterattack threat"],
+      "progression_level": "advanced",
+      "source_ids": ["fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "record_type": "football_phase_tactical_rule",
+      "id": "football_phase_rule_purposeful_possession",
+      "name": "Purposeful possession",
+      "phase": "in_possession",
+      "rule_summary": "Possession should create line breaks, territory, chance quality, rest-defense control or game-state control.",
+      "beginner_cue": "Keep it only if forward is not on.",
+      "advanced_cue": "Circulate to move the block, then break a line or switch before the opponent resets.",
+      "source_ids": ["peer_ball_possession_indicators", "fifa_fwc2022_mid_block_compactness"]
+    },
+    {
+      "record_type": "football_phase_tactical_rule",
+      "id": "football_phase_rule_transition_first_look",
+      "name": "First look after regain",
+      "phase": "transition_to_attack",
+      "rule_summary": "After winning the ball, scan forward and weak side before recycling.",
+      "beginner_cue": "Can we attack now?",
+      "advanced_cue": "If pressure is immediate, escape with one or two touches then release the free runner.",
+      "source_ids": ["fifa_morocco_low_mid_block_transition", "peer_tactical_context_la_liga"]
+    },
+    {
+      "record_type": "football_phase_tactical_rule",
+      "id": "football_phase_rule_counterpress_or_recover",
+      "name": "Counterpress or recover decision",
+      "phase": "transition_to_defense",
+      "rule_summary": "Press immediately after loss only if connected; otherwise delay and recover to shape.",
+      "beginner_cue": "Nearest player pressure, others cover.",
+      "advanced_cue": "Counterpress when rest defense is set and exits can be closed; recover when the first pass escapes.",
+      "source_ids": ["fifa_counterpress_session", "england_what_is_pressing"]
+    },
+    {
+      "record_type": "football_phase_tactical_rule",
+      "id": "football_phase_rule_mid_block_compactness",
+      "name": "Mid-block compactness",
+      "phase": "out_of_possession",
+      "rule_summary": "Keep lines connected, deny central play and press when the opponent tries to enter the block.",
+      "beginner_cue": "Stay close together and protect the middle.",
+      "advanced_cue": "Force wide, then jump on poor body shape or line-breaking passes.",
+      "source_ids": ["fifa_fwc2022_mid_block_compactness", "england_principles_of_football"]
+    },
+    {
+      "record_type": "football_phase_tactical_rule",
+      "id": "football_phase_rule_rest_defense",
+      "name": "Rest defense before final-third risk",
+      "phase": "in_possession_rest_defense",
+      "rule_summary": "Before adding attacking runners, confirm who protects central counter lanes and who counterpresses first.",
+      "beginner_cue": "Someone must stay ready behind the attack.",
+      "advanced_cue": "Match rest-defense numbers and positioning to the opponent's outlet threat.",
+      "source_ids": ["fifa_rest_defense_offensive_balance", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "record_type": "football_phase_tactical_rule",
+      "id": "football_phase_rule_set_piece_second_phase",
+      "name": "Set-piece second-phase reaction",
+      "phase": "set_piece",
+      "rule_summary": "Treat corners and free kicks as live until the second ball and counterattack are controlled.",
+      "beginner_cue": "Do not stop after the first header.",
+      "advanced_cue": "Assign edge, rebound, counterpress and rest-defense players before the delivery.",
+      "source_ids": ["fifa_fcwc2025_set_play_opportunities", "fifa_fcwc2025_corner_defending"]
+    },
+    {
+      "record_type": "football_pressing_system",
+      "id": "football_pressing_system_high_press",
+      "name": "High press",
+      "phase": "out_of_possession_high_press",
+      "objective": "Regain near goal, force rushed long play, or prevent controlled build-up.",
+      "triggers": ["bad touch", "back pass", "pass to goalkeeper", "receiver facing own goal", "slow square pass", "isolated fullback"],
+      "shape_examples": ["4-3-3 front-three press", "4-2-3-1 to 4-4-2 press", "3-4-3 front-three press"],
+      "required_conditions": ["back line can squeeze", "midfield connected", "clear pressing direction", "rest defense controls long outlet"],
+      "source_ids": ["fifa_fcwc2025_high_press", "england_what_is_pressing"]
+    },
+    {
+      "record_type": "football_pressing_system",
+      "id": "football_pressing_system_mid_block_press",
+      "name": "Mid-block press",
+      "phase": "out_of_possession_mid_block",
+      "objective": "Control central space, force predictable wide/backward play, and press line-breaking attempts.",
+      "triggers": ["pass into central midfielder with back to goal", "poor touch in middle third", "opponent fullback receives facing touchline", "slow switch"],
+      "shape_examples": ["4-4-2 compact banks", "4-1-4-1", "5-3-2"],
+      "required_conditions": ["connected line distances", "communication", "forward outlet after regain", "patience not passive retreat"],
+      "source_ids": ["fifa_fwc2022_mid_block_compactness", "england_press_for_success"]
+    },
+    {
+      "record_type": "football_pressing_system",
+      "id": "football_pressing_system_low_block",
+      "name": "Low-block defending",
+      "phase": "out_of_possession_low_block",
+      "objective": "Protect goal zone, deny central penetration, defend crosses/cutbacks and counter from compact positions.",
+      "triggers": ["bad touch near box", "backward pass after wide entry", "loose cross-field pass", "clearance opportunity"],
+      "shape_examples": ["4-4-1-1 low block", "5-3-2", "5-4-1"],
+      "required_conditions": ["box assignments", "cutback protection", "outlet plan", "second-ball readiness"],
+      "source_ids": ["fifa_morocco_low_mid_block_transition", "fifa_fwc2022_mid_block_compactness"]
+    },
+    {
+      "record_type": "football_pressing_system",
+      "id": "football_pressing_system_counterpress",
+      "name": "Counterpress",
+      "phase": "transition_to_defense",
+      "objective": "Regain immediately, stop counterattack, or force the opponent backward before they can scan.",
+      "triggers": ["loss near multiple teammates", "opponent receiver has closed body shape", "poor first touch after regain", "rest defense connected"],
+      "shape_examples": ["nearest-player pressure with two lane blockers", "front-three collapse around central loss", "midfield box counterpress"],
+      "required_conditions": ["short distances", "aggressive first pressure", "lane closure", "back line squeeze only when secure"],
+      "source_ids": ["fifa_counterpress_session", "england_what_is_pressing"]
+    },
+    {
+      "record_type": "football_match_iq_progression",
+      "id": "football_match_iq_progression_beginner",
+      "name": "Beginner team tactics progression",
+      "level": "beginner",
+      "learning_targets": ["spread out in possession", "support the player on the ball", "pass or dribble forward when possible", "protect the goal", "make it compact", "understand pressure-cover-balance"],
+      "assessment_signals": ["recognizes team direction", "stays involved after passing", "recovers goal-side after loss", "can name basic formation and role"],
+      "avoid_until_ready": ["complex rotations", "opponent-specific pressing scripts", "high-risk short build-up under heavy pressure"],
+      "source_ids": ["us_soccer_grassroots_11v11_framework", "england_principles_of_football"]
+    },
+    {
+      "record_type": "football_match_iq_progression",
+      "id": "football_match_iq_progression_intermediate",
+      "name": "Intermediate team tactics progression",
+      "level": "intermediate",
+      "learning_targets": ["recognize pressing triggers", "differentiate high press, mid-block and low-block", "use overloads and switches", "understand rest defense", "adjust risk by scoreline"],
+      "assessment_signals": ["presses with teammates not alone", "chooses when to counterattack or keep possession", "identifies opponent phase shapes", "communicates cover and balance"],
+      "avoid_until_ready": ["frequent formation switches", "man-for-man high press without cover", "large tactical dashboards"],
+      "source_ids": ["england_what_is_pressing", "england_develop_styles_of_play", "fifa_rest_defense_offensive_balance"]
+    },
+    {
+      "record_type": "football_match_iq_progression",
+      "id": "football_match_iq_progression_advanced",
+      "name": "Advanced team tactics progression",
+      "level": "advanced",
+      "learning_targets": ["adapt build-up to pressing front", "morph formation by phase", "execute counterpress or recovery decisions", "use scouting to exploit opponent weaknesses", "link KPIs to tactical intentions"],
+      "assessment_signals": ["changes position based on phase trigger", "solves press without coach instruction", "maintains rest defense while attacking", "can explain opponent's most dangerous transition and set-piece pattern"],
+      "avoid_until_ready": ["overly complex game plans with unclear player tasks", "high-risk tactical changes without rehearsal"],
+      "source_ids": ["fifa_moft_build_up_variations", "uefa_ucl_2021_22_five_at_back", "peer_video_analysis_objectivity"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_expected_goals",
+      "name": "Expected goals and shot quality",
+      "category": "attacking_quality",
+      "definition": "Estimated probability that a shot becomes a goal based on shot context; use team xG and xG per shot to evaluate chance quality.",
+      "use_with": ["shots", "shots on target", "big chances", "shot location", "game state"],
+      "caution": "Do not judge finishing or chance creation from one match sample only.",
+      "source_ids": ["peer_xg_model", "peer_attacking_kpis_soccer"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_line_breaks",
+      "name": "Defensive unit line breaks",
+      "category": "progression",
+      "definition": "Number and quality of passes, carries or receptions that break an opponent defensive unit.",
+      "use_with": ["final-third entries", "receptions between lines", "receptions in behind", "xG after line break"],
+      "caution": "A line break without support may become a turnover; pair with next-action quality.",
+      "source_ids": ["fifa_fwc2022_technical_tactical_overview"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_final_third_entries",
+      "name": "Final-third and box entries",
+      "category": "territory_and_penetration",
+      "definition": "How often and how cleanly the team enters the final third or penalty area by pass, carry, cross or set piece.",
+      "use_with": ["entry method", "entry zone", "cutbacks", "cross attempts", "xG created"],
+      "caution": "Entries from low-value wide areas need chance-quality context.",
+      "source_ids": ["peer_attacking_kpis_soccer", "fifa_fwc2022_technical_tactical_overview"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_high_regains",
+      "name": "High regains and chances after regain",
+      "category": "pressing",
+      "definition": "Regains in the attacking third or high pressing zone, especially those leading to a shot, box entry or sustained attack.",
+      "use_with": ["pressing triggers", "time to shot", "opponent build-up errors", "counterpress regains"],
+      "caution": "High regain volume can hide poor rest defense if the opponent creates big counters.",
+      "source_ids": ["fifa_fcwc2025_high_press", "england_press_for_success"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_counterattack_quality",
+      "name": "Counterattack quality",
+      "category": "transition_to_attack",
+      "definition": "Count counterattacks by regain zone, forward first action, reception in behind, line break, shot, xG and goal.",
+      "use_with": ["regain location", "first-pass direction", "support runners", "opponent rest-defense numbers"],
+      "caution": "Speed alone is not enough; quality of decision and final chance matter.",
+      "source_ids": ["fifa_fwc2022_technical_tactical_overview", "peer_tactical_context_la_liga"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_rest_defense_outcomes",
+      "name": "Rest-defense outcomes",
+      "category": "transition_to_defense",
+      "definition": "Opponent counterattacks conceded, central counter lanes allowed, recovery tackles, tactical fouls, and shots conceded within seconds of losing the ball.",
+      "use_with": ["players behind ball", "counterpress success", "turnover zone", "formation phase shape"],
+      "caution": "A team with high attacking numbers must be judged by transition concessions, not only chances created.",
+      "source_ids": ["fifa_rest_defense_offensive_balance", "fifa_fcwc2025_inverted_full_back"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_compactness",
+      "name": "Compactness and team shape",
+      "category": "out_of_possession",
+      "definition": "Team length, team width, team area and line distances while defending in high, mid or low blocks.",
+      "use_with": ["passes allowed through block", "forced wide passes", "block height", "regains from traps"],
+      "caution": "More compact is not always better; compactness concedes space elsewhere.",
+      "source_ids": ["fifa_fwc2022_mid_block_compactness", "peer_collective_tactical_behaviours"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_set_piece_first_contact",
+      "name": "Set-piece first contact and second phase",
+      "category": "set_pieces",
+      "definition": "First contact won, first contact zone, attempts from first phase, attempts from second/subsequent phase, set-piece xG and counterattacks conceded.",
+      "use_with": ["delivery type", "target zone", "marking system", "edge-box control"],
+      "caution": "Winning first contact is useful only if it produces attempts or sustained pressure without transition exposure.",
+      "source_ids": ["fifa_fcwc2025_set_play_opportunities", "fifa_fcwc2025_corner_defending"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_possession_context",
+      "name": "Possession by zone and game state",
+      "category": "possession",
+      "definition": "Possession share, possession duration and possession zone interpreted by scoreline, opponent quality, venue and tactical plan.",
+      "use_with": ["line breaks", "field tilt", "final-third entries", "xG", "counterpress readiness"],
+      "caution": "High possession against a settled block may be lower value than fewer but more dangerous attacks.",
+      "source_ids": ["peer_ball_possession_indicators", "peer_tactical_context_la_liga", "fifa_fwc2022_mid_block_compactness"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_physical_by_phase",
+      "name": "Physical output by phase",
+      "category": "physical_tactical_context",
+      "definition": "Distance, high-speed running, sprinting, accelerations and decelerations split by in possession, out of possession, transition and set pieces.",
+      "use_with": ["formation", "role", "opponent style", "scoreline", "fixture congestion"],
+      "caution": "Physical load should not be interpreted without tactical context and role responsibility.",
+      "source_ids": ["fifa_fwc2022_physical_context", "peer_playing_formation_demands"]
+    },
+    {
+      "record_type": "football_performance_indicator",
+      "id": "football_pi_scouting_reliability",
+      "name": "Scouting reliability marker",
+      "category": "opponent_analysis",
+      "definition": "Confidence score for opponent observations based on repeated clips, same-phase examples, analyst agreement and clarity of definitions.",
+      "use_with": ["clip count", "match count", "phase label", "game-state context", "coach confidence"],
+      "caution": "Avoid treating subjective one-clip interpretations as stable opponent truths.",
+      "source_ids": ["peer_video_analysis_objectivity"]
+    }
+  ]
+}

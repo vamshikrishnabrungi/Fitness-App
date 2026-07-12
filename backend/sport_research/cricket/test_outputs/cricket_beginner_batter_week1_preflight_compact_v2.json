@@ -1,0 +1,18 @@
+{
+  "input_path": "backend/sport_research/cricket/test_outputs/cricket_beginner_batter_week1_input_compact_v2.json",
+  "input_bytes": 51668,
+  "teaching_progression_ids": [
+    "cricket_teach_match_iq_beginner",
+    "cricket_teach_cricket_snc_beginner",
+    "cricket_teach_fielding_beginner",
+    "cricket_teach_batting_beginner"
+  ],
+  "compact_context_counts": {
+    "primary": 12,
+    "variations": 0,
+    "progression_paths": 5,
+    "programming_rules": 4,
+    "mobility": 3,
+    "teaching": 4
+  }
+}

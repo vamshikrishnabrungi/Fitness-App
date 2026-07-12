@@ -9,6 +9,7 @@ import {
   Alert,
   ActivityIndicator,
   Modal,
+  Pressable,
   TouchableWithoutFeedback,
   TextInput,
   KeyboardAvoidingView,
@@ -19,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system/legacy';
 import { GlassCard } from '../../src/components/GlassCard';
 import { Badge } from '../../src/components/Badge';
 import { ProgressBar } from '../../src/components/ProgressBar';
@@ -77,6 +79,7 @@ export default function NutritionScreen() {
   // Modal State
   const [modalVisible, setModalVisible] = useState(false);
   const [activeMealType, setActiveMealType] = useState<string>('');
+  const [pendingPickerAction, setPendingPickerAction] = useState<'camera' | 'gallery' | null>(null);
 
   // Review Modal State
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
@@ -209,54 +212,126 @@ export default function NutritionScreen() {
   const isToday = selectedDate.toDateString() === new Date().toDateString();
 
   const handleScanMeal = async () => {
+    console.log('[nutrition-image] take-photo pressed');
+    setPendingPickerAction('camera');
     setModalVisible(false);
+  };
+
+  const handlePickImage = async () => {
+    console.log('[nutrition-image] gallery pressed');
+    setPendingPickerAction('gallery');
+    setModalVisible(false);
+  };
+
+  const handleActionSheetDismiss = () => {
+    if (!pendingPickerAction) return;
+
+    const nextAction = pendingPickerAction;
+    setPendingPickerAction(null);
+
+    requestAnimationFrame(() => {
+      if (nextAction === 'camera') {
+        launchCameraPicker();
+      } else {
+        launchGalleryPicker();
+      }
+    });
+  };
+
+  const launchCameraPicker = async () => {
     try {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      console.log('[nutrition-image] camera permission', status);
       if (status !== 'granted') {
         Alert.alert('Permission needed', 'Camera permission is required to scan meals');
         return;
       }
 
       const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ['images'],
         quality: 0.5, // Lower quality for faster upload
         base64: true,
         allowsEditing: true,
       });
+      console.log('[nutrition-image] camera result', {
+        canceled: result.canceled,
+        assets: result.canceled ? 0 : result.assets?.length || 0,
+        hasBase64: !result.canceled && Boolean(result.assets?.[0]?.base64),
+      });
 
-      if (!result.canceled && result.assets[0].base64) {
-        processImage(result.assets[0].base64);
+      if (!result.canceled) {
+        const base64 = await getPickedImageBase64(result.assets?.[0]);
+        if (base64) {
+          processImage(base64);
+        }
       }
     } catch (error) {
       console.error('Error scanning meal:', error);
+      Alert.alert('Error', 'Could not open the camera. Please try again.');
     }
   };
 
-  const handlePickImage = async () => {
-    setModalVisible(false);
+  const launchGalleryPicker = async () => {
     try {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      console.log('[nutrition-image] gallery permission', status);
       if (status !== 'granted') {
         Alert.alert('Permission needed', 'Photo library permission is required');
         return;
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ['images'],
         quality: 0.5,
         base64: true,
         allowsEditing: true,
       });
+      console.log('[nutrition-image] gallery result', {
+        canceled: result.canceled,
+        assets: result.canceled ? 0 : result.assets?.length || 0,
+        hasBase64: !result.canceled && Boolean(result.assets?.[0]?.base64),
+      });
 
-      if (!result.canceled && result.assets[0].base64) {
-        processImage(result.assets[0].base64);
+      if (!result.canceled) {
+        const base64 = await getPickedImageBase64(result.assets?.[0]);
+        if (base64) {
+          processImage(base64);
+        }
       }
     } catch (error) {
       console.error('Error picking image:', error);
+      Alert.alert('Error', 'Could not open the photo library. Please try again.');
+    }
+  };
+
+  const getPickedImageBase64 = async (asset?: ImagePicker.ImagePickerAsset | null) => {
+    if (!asset) {
+      Alert.alert('Error', 'No image was selected.');
+      return null;
+    }
+
+    if (asset.base64) {
+      return asset.base64;
+    }
+
+    if (!asset.uri) {
+      Alert.alert('Error', 'Selected image is missing file data.');
+      return null;
+    }
+
+    try {
+      return await FileSystem.readAsStringAsync(asset.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+    } catch (error) {
+      console.error('Error reading selected image:', error);
+      Alert.alert('Error', 'Could not read the selected image.');
+      return null;
     }
   };
 
   const processImage = async (base64: string) => {
+    console.log('[nutrition-image] analyze request', { base64Length: base64.length });
     setAnalyzing(true);
     try {
       // Call with save=false to review first
@@ -277,15 +352,22 @@ export default function NutritionScreen() {
   const handleConfirmLog = async () => {
     try {
       setLoading(true);
+      const numericValue = (value: unknown) => {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : 0;
+      };
       // Save the confirmed data
       const mealResult = await api.post<{ id?: string }>('/meals/analyze', {
         meal_type: activeMealType,
         name: analyzedData.name,
-        calories: parseInt(analyzedData.calories),
-        protein: parseFloat(analyzedData.protein),
-        carbs: parseFloat(analyzedData.carbs),
-        fat: parseFloat(analyzedData.fat),
-        image_base64: analyzedData.image_base64,
+        calories: Math.round(numericValue(analyzedData.calories)),
+        protein: numericValue(analyzedData.protein),
+        carbs: numericValue(analyzedData.carbs),
+        fat: numericValue(analyzedData.fat),
+        fiber: numericValue(analyzedData.fiber),
+        foods_identified: analyzedData.foods_identified || [],
+        status: analyzedData.status,
+        ai_analyzed: Boolean(analyzedData.ai_analyzed),
       });
 
       setReviewModalVisible(false);
@@ -295,8 +377,8 @@ export default function NutritionScreen() {
       // Show mood popup after meal logging
       setLoggedMealId(mealResult?.id);
       setMoodPopupVisible(true);
-    } catch (err) {
-      Alert.alert('Error', 'Failed to save meal');
+    } catch (err: any) {
+      Alert.alert('Error', err?.message || 'Failed to save meal');
     } finally {
       setLoading(false);
     }
@@ -625,17 +707,17 @@ export default function NutritionScreen() {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
+        onDismiss={handleActionSheetDismiss}
       >
-        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-          <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback>
-              <View style={[styles.modalContent, { paddingBottom: insets.bottom + 20 }]}>
+        <View style={styles.modalOverlay}>
+          <Pressable style={styles.modalBackdrop} onPress={() => setModalVisible(false)} />
+          <View style={[styles.modalContent, { paddingBottom: insets.bottom + 20 }]}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>Log {activeMealType}</Text>
                   <Text style={styles.modalSubtitle}>Choose an option to track your calories</Text>
                 </View>
 
-                <TouchableOpacity style={styles.actionButton} onPress={handleScanMeal}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleScanMeal} activeOpacity={0.75}>
                   <View style={[styles.iconContainer, { backgroundColor: '#E8F5E9' }]}>
                     <Ionicons name="camera" size={24} color="#2E7D32" />
                   </View>
@@ -646,7 +728,7 @@ export default function NutritionScreen() {
                   <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.actionButton} onPress={handlePickImage}>
+                <TouchableOpacity style={styles.actionButton} onPress={handlePickImage} activeOpacity={0.75}>
                   <View style={[styles.iconContainer, { backgroundColor: '#E3F2FD' }]}>
                     <Ionicons name="images" size={24} color="#1565C0" />
                   </View>
@@ -657,7 +739,7 @@ export default function NutritionScreen() {
                   <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.actionButton} onPress={handleManualEntry}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleManualEntry} activeOpacity={0.75}>
                   <View style={[styles.iconContainer, { backgroundColor: '#FFF3E0' }]}>
                     <Ionicons name="create" size={24} color="#EF6C00" />
                   </View>
@@ -674,10 +756,8 @@ export default function NutritionScreen() {
                 >
                   <Text style={styles.cancelText}>Cancel</Text>
                 </TouchableOpacity>
-              </View>
-            </TouchableWithoutFeedback>
           </View>
-        </TouchableWithoutFeedback>
+        </View>
       </Modal>
 
       {/* Review Modal */}
@@ -1187,6 +1267,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-end',
   },
+  modalBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
+  },
   modalContent: {
     backgroundColor: colors.background,
     borderTopLeftRadius: borderRadius.xl,
@@ -1199,6 +1283,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    zIndex: 2,
     elevation: 5,
   },
   modalHeader: {

@@ -1,0 +1,82 @@
+{
+  "metadata": {
+    "domain": "defense_countering_wave2",
+    "sport": "boxing",
+    "version": "draft_v2",
+    "research_goal": "Deepen boxing defensive actions and defense-to-counter mapping for app-facing teaching, retrieval, assessment, and safety records.",
+    "researched_on": "2026-06-21",
+    "agent_scope": "defense and countering"
+  },
+  "source_refs": [
+    {"title": "USA Boxing Grassroots Task Force Training Manual v.01", "url": "https://d36m266ykvepgv.cloudfront.net/uploads/media/lYivrDbNV6/o/usab-gtf-trainingmanual-v-01-1.pdf", "source_type": "coach_manual_pdf", "organization_or_author": "USA Boxing", "notes": "Used for defense drills and punch-defense progressions."},
+    {"title": "IBA Coach Regulations Manual", "url": "https://www.iba.sport/wp-content/uploads/2019/01/AIBA-Coach-Regulations-Manual_WEB_2019_01-1.pdf", "source_type": "coach_manual_pdf", "organization_or_author": "International Boxing Association", "notes": "Used for coaching and defense progression framing."},
+    {"title": "IBA Technical and Competition Rules", "url": "https://www.iba.sport/wp-content/uploads/2023/04/20240303-IBA-Technical-Competition-Rules-v7-clean.pdf", "source_type": "official_rules_pdf", "organization_or_author": "International Boxing Association", "notes": "Used for clinch/reset and legal boxing context."},
+    {"title": "Counter Punching", "url": "https://www.myboxingcoach.com/counter-punching/", "source_type": "boxing_coaching_article", "organization_or_author": "MyBoxingCoach", "notes": "Used for counterpunching trigger concepts."},
+    {"title": "Boxing - Styles",
+      "url": "https://www.britannica.com/sports/boxing/Styles",
+      "source_type": "sport_reference",
+      "organization_or_author": "Britannica",
+      "notes": "Used for defensive styles and counterpunching context."
+    },
+    {"title": "Epidemiology of injuries in amateur boxing: a systematic review and meta-analysis", "url": "https://researchers.mq.edu.au/en/publications/epidemiology-of-injuries-in-amateur-boxing-a-systematic-review-an/", "source_type": "peer_reviewed_review", "organization_or_author": "Macquarie University research repository", "notes": "Used for injury risk context."}
+  ],
+  "key_concepts": [
+    {"id": "defense_is_active", "summary": "Defense should create a counter, angle, clinch, or reset, not just absorb punches."},
+    {"id": "defense_needs_stance", "summary": "Blocks, slips, rolls, pulls, and parries fail if stance and balance are lost."},
+    {"id": "counter_has_trigger", "summary": "A counter should be linked to a defined incoming punch, timing window, or opponent error."},
+    {"id": "defense_progresses_by_threat", "summary": "Defense should progress from named feeds to random feeds to constrained sparring."},
+    {"id": "clinch_reset_is_safety_tool", "summary": "Clinch/reset can stop offense and manage danger but must respect rules."},
+    {"id": "head_symptoms_stop_contact", "summary": "Any head symptom should stop contact and trigger appropriate medical review."}
+  ],
+  "technical_models": [
+    {"id": "boxing_defense_block", "mechanics": "Hand, forearm, elbow, or shoulder cover while chin stays down and stance remains stable.", "counter_links": ["block_hook_to_hook_cross", "elbow_block_body_to_cross_hook"], "errors": ["blind_covering", "passive_shelling", "glove_pushed_into_face"]},
+    {"id": "boxing_defense_parry", "mechanics": "Small hand redirection, usually against straight punches.", "counter_links": ["parry_jab_to_cross", "parry_cross_to_jab_hook"], "errors": ["swatting", "reaching", "opening_centerline"]},
+    {"id": "boxing_defense_slip", "mechanics": "Small lateral head/shoulder move with knee bend and eyes on opponent.", "counter_links": ["slip_outside_jab_to_cross", "slip_cross_to_lead_hook"], "errors": ["waist_bend", "hands_down", "head_below_safe_line"]},
+    {"id": "boxing_defense_roll", "mechanics": "Bend knees, move under hook path, rise in stance loaded to counter.", "counter_links": ["roll_lead_hook_to_rear_hand", "roll_rear_hook_to_lead_hook"], "errors": ["duck_blind", "square_stance", "over_roll"]},
+    {"id": "boxing_defense_pull", "mechanics": "Sway back just outside range with hands up, weight to rear leg, then return.", "counter_links": ["pull_jab_to_jab_cross", "pull_cross_to_cross_hook"], "errors": ["chin_high", "feet_stuck", "leaning_too_far"]},
+    {"id": "boxing_defense_catch", "mechanics": "Glove catches straight shot near chin without collapsing into face.", "counter_links": ["catch_jab_to_jab_cross", "catch_uppercut_to_hook_cross"], "errors": ["soft_glove", "closed_eyes", "no_counter"]},
+    {"id": "boxing_clinch_reset_model", "mechanics": "Briefly smother to stop offense, protect head/arms, then reset on referee break or clean step-out.", "counter_links": ["reset_to_jab_exit", "step_out_to_cross_hook"], "errors": ["holding_and_hitting", "wrestling", "punching_on_break"]},
+    {"id": "boxing_defense_counter_map", "mechanics": "Defend, stay balanced, answer immediately or angle out.", "progression": "named response -> random single feed -> two-punch feed -> light spar constraints"}
+  ],
+  "tactical_rules": [
+    {"id": "defense_rule_response_after_defense", "rule": "Every defense drill should end with counter, exit, clinch/reset, or tactical pause."},
+    {"id": "defense_rule_parry_small", "rule": "Parries should be small; big swats open the centerline."},
+    {"id": "defense_rule_slip_by_inches", "rule": "Slips should make punches miss by inches, not create huge posture changes."},
+    {"id": "defense_rule_roll_with_eyes", "rule": "Rolling should keep eyes and guard available; blind ducking is not acceptable."},
+    {"id": "defense_rule_pull_needs_range_margin", "rule": "Pull counters require accurate range; avoid teaching as a default beginner defense."},
+    {"id": "defense_rule_clinch_obey_break", "rule": "Clinch/reset work must include legal break behavior."},
+    {"id": "defense_rule_contact_progression", "rule": "Defense-to-counter should progress through controlled feeds before open sparring."}
+  ],
+  "physical_demands": [
+    {"id": "defense_reaction_speed", "quality": "Visual reaction and decision speed."},
+    {"id": "defense_trunk_neck_control", "quality": "Neck and trunk control during head movement and contact risk."},
+    {"id": "defense_leg_endurance", "quality": "Knee/hip endurance for slips, rolls, and stance recovery."},
+    {"id": "defense_shoulder_guard_endurance", "quality": "Shoulder/scapular endurance for guard and blocks."},
+    {"id": "counter_explosive_response", "quality": "Short explosive counter after defensive load."},
+    {"id": "clinch_isometric_control", "quality": "Upper-body isometric control and breath control in resets."}
+  ],
+  "injury_or_load_risks": [
+    {"id": "defense_risk_late_reaction_contact", "risk": "Late defense increases clean head contact risk."},
+    {"id": "defense_risk_neck_back", "risk": "Excessive slipping/rolling volume can irritate neck or low back if mechanics are poor."},
+    {"id": "defense_risk_shoulder_shell", "risk": "High block/shell volume can fatigue shoulders and guard."},
+    {"id": "defense_risk_clinch_rule", "risk": "Clinch work can become unsafe or illegal without rules and coach control."},
+    {"id": "defense_risk_counter_overcommit", "risk": "Countering off balance can expose the boxer to return fire."}
+  ],
+  "training_implications": [
+    {"id": "defense_implication_store_maps", "summary": "Create defense-counter maps linking incoming punch, defense, counter, and exit."},
+    {"id": "defense_implication_reaction_assessment", "summary": "Assess timing, balance, and counter accuracy, not only whether the punch was avoided."},
+    {"id": "defense_implication_contact_gate", "summary": "Contact progression should require demonstrated defense quality."},
+    {"id": "defense_implication_symptom_gate", "summary": "Head symptoms, dizziness, or visual issues block contact work."},
+    {"id": "defense_implication_fatigue_modify", "summary": "Fatigue should simplify defense tasks and reduce contact intensity."}
+  ],
+  "backend_records_to_create": [
+    {"collection": "sport_training_rules", "id": "boxing_defense_block"},
+    {"collection": "sport_training_rules", "id": "boxing_defense_parry"},
+    {"collection": "sport_training_rules", "id": "boxing_defense_slip"},
+    {"collection": "sport_training_rules", "id": "boxing_defense_roll"},
+    {"collection": "sport_training_rules", "id": "boxing_defense_counter_map"},
+    {"collection": "sport_skill_assessments", "id": "boxing_assess_defense_to_counter"},
+    {"collection": "sport_level_transition_rules", "id": "boxing_defense_contact_gate"}
+  ]
+}
+

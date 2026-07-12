@@ -81,7 +81,7 @@ export function OptionRow({
     >
       {icon ? (
         <View style={[styles.optionIcon, selected && styles.optionIconSelected]}>
-          <Ionicons name={icon} size={22} color={selected ? colors.background : colors.textPrimary} />
+          <Ionicons name={icon} size={19} color={selected ? colors.background : colors.textPrimary} />
         </View>
       ) : null}
       <View style={styles.optionCopy}>
@@ -89,7 +89,7 @@ export function OptionRow({
         {description ? <Text style={[styles.optionDescription, selected && styles.optionDescriptionSelected]}>{description}</Text> : null}
       </View>
       <View style={[styles.checkCircle, selected && styles.checkCircleSelected]}>
-        {selected ? <Ionicons name="checkmark" size={15} color={colors.background} /> : null}
+        {selected ? <View style={styles.checkDot} /> : null}
       </View>
     </TouchableOpacity>
   );
@@ -117,7 +117,7 @@ export function SelectChip({
       onPress={onPress}
     >
       {icon ? (
-        <Ionicons name={icon} size={16} color={selected ? colors.background : colors.textPrimary} />
+        <Ionicons name={icon} size={15} color={colors.textPrimary} />
       ) : null}
       <Text style={[styles.chipText, selected && styles.chipTextSelected, textStyle]} numberOfLines={1}>
         {label}
@@ -198,11 +198,11 @@ export const onboardingStyles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingHorizontal: 26,
+    paddingHorizontal: 24,
     paddingBottom: 42,
   },
   optionStack: {
-    gap: 20,
+    gap: 12,
   },
   chipGrid: {
     flexDirection: 'row',
@@ -241,96 +241,99 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   progressText: {
-    fontSize: 19,
-    lineHeight: 24,
+    fontSize: 15,
+    lineHeight: 20,
     fontWeight: '600',
     color: '#9A9A9A',
   },
   header: {
     paddingTop: 8,
-    marginBottom: 40,
+    marginBottom: 30,
   },
   title: {
-    fontSize: 34,
-    lineHeight: 42,
-    fontWeight: '700',
+    fontSize: 28,
+    lineHeight: 35,
+    fontWeight: '600',
     letterSpacing: 0,
     color: colors.textPrimary,
     marginBottom: 14,
   },
   subtitle: {
-    fontSize: 21,
-    lineHeight: 29,
+    fontSize: 16,
+    lineHeight: 23,
     fontWeight: '400',
     letterSpacing: 0,
-    color: '#7F7F7F',
+    color: colors.textSecondary,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 30,
-    marginBottom: 14,
+    marginTop: 26,
+    marginBottom: 12,
   },
   sectionTitle: {
-    fontSize: 18,
-    lineHeight: 24,
-    fontWeight: '800',
+    fontSize: 14,
+    lineHeight: 19,
+    fontWeight: '600',
     letterSpacing: 0,
     textTransform: 'uppercase',
-    color: '#7E7E7E',
+    color: colors.textSecondary,
   },
   sectionMeta: {
-    fontSize: 17,
-    lineHeight: 22,
+    fontSize: 13,
+    lineHeight: 18,
     fontWeight: '600',
     color: colors.textTertiary,
   },
   optionRow: {
-    minHeight: 82,
-    borderRadius: 20,
-    backgroundColor: '#F1F1F1',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    minHeight: 76,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    backgroundColor: colors.surfaceSecondary,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
   },
   optionRowSelected: {
-    backgroundColor: colors.textPrimary,
+    backgroundColor: colors.background,
+    borderColor: colors.textPrimary,
   },
   optionIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
   optionIconSelected: {
-    backgroundColor: 'rgba(255,255,255,0.16)',
+    backgroundColor: colors.textPrimary,
   },
   optionCopy: {
     flex: 1,
   },
   optionTitle: {
-    fontSize: 19,
-    lineHeight: 25,
-    fontWeight: '700',
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: '600',
     color: colors.textPrimary,
   },
   optionTitleSelected: {
-    color: colors.background,
+    color: colors.textPrimary,
   },
   optionDescription: {
-    fontSize: 15,
-    lineHeight: 21,
+    fontSize: 12,
+    lineHeight: 17,
     fontWeight: '400',
-    color: '#7F7F7F',
+    color: colors.textSecondary,
     marginTop: 4,
   },
   optionDescriptionSelected: {
-    color: 'rgba(255,255,255,0.72)',
+    color: colors.textSecondary,
   },
   checkCircle: {
     width: 23,
@@ -342,67 +345,76 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkCircleSelected: {
-    borderColor: colors.background,
-    backgroundColor: 'rgba(255,255,255,0.16)',
+    borderColor: colors.textPrimary,
+    backgroundColor: colors.textPrimary,
+  },
+  checkDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: colors.background,
   },
   chip: {
-    minHeight: 54,
+    minHeight: 42,
     borderRadius: borderRadius.full,
-    backgroundColor: '#F1F1F1',
-    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    backgroundColor: colors.surfaceSecondary,
+    paddingHorizontal: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
   },
   chipSelected: {
-    backgroundColor: colors.textPrimary,
+    backgroundColor: colors.background,
+    borderColor: colors.textPrimary,
   },
   chipText: {
-    fontSize: 20,
-    lineHeight: 25,
-    fontWeight: '700',
+    fontSize: 14,
+    lineHeight: 19,
+    fontWeight: '600',
     color: colors.textPrimary,
     textTransform: 'capitalize',
   },
   chipTextSelected: {
-    color: colors.background,
+    color: colors.textPrimary,
   },
   field: {
-    marginBottom: 20,
+    marginBottom: 14,
   },
   fieldLabel: {
-    fontSize: 18,
-    lineHeight: 24,
-    fontWeight: '700',
-    color: '#7F7F7F',
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: '600',
+    color: colors.textSecondary,
     marginBottom: 10,
   },
   input: {
-    minHeight: 66,
+    minHeight: 54,
     borderRadius: 14,
-    backgroundColor: '#F1F1F1',
+    backgroundColor: colors.surfaceSecondary,
     paddingHorizontal: 18,
     paddingVertical: 14,
-    fontSize: 20,
-    lineHeight: 26,
+    fontSize: 15,
+    lineHeight: 21,
     fontWeight: '400',
     color: colors.textPrimary,
   },
   textArea: {
-    minHeight: 108,
+    minHeight: 96,
     textAlignVertical: 'top',
   },
   bottom: {
     paddingHorizontal: 26,
-    paddingTop: 22,
+    paddingTop: 18,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.separator,
     backgroundColor: colors.background,
   },
   primaryButton: {
-    height: 72,
-    borderRadius: 36,
+    height: 62,
+    borderRadius: 31,
     backgroundColor: colors.textPrimary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -411,8 +423,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#9A9A9A',
   },
   primaryButtonText: {
-    fontSize: 22,
-    lineHeight: 28,
+    fontSize: 17,
+    lineHeight: 23,
     fontWeight: '700',
     color: colors.background,
   },

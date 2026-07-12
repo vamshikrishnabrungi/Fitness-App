@@ -1,0 +1,99 @@
+{
+  "metadata": {
+    "domain": "rules_ring_scoring_competition",
+    "sport": "boxing",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready boxing knowledge covering rules, ring model, scoring, competition structure, weight classes, match phases, and fight-week implications.",
+    "researched_on": "2026-06-21"
+  },
+  "source_refs": [
+    {
+      "title": "Boxing",
+      "url": "https://olympics.com/en/sports/boxing/",
+      "source_type": "official_sport_education",
+      "organization_or_author": "Olympics",
+      "notes": "Used for Olympic boxing overview, ring, rounds, knockdown count, scoring, Olympic/professional differences, and Paris 2024 competition structure."
+    },
+    {
+      "title": "Home - World Boxing",
+      "url": "https://worldboxing.org/",
+      "source_type": "international_federation",
+      "organization_or_author": "World Boxing",
+      "notes": "Used for international boxing governance context and Olympic movement framing."
+    },
+    {
+      "title": "Amateur boxing: physical and physiological attributes",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25358529/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Davis et al.",
+      "notes": "Used for amateur boxing performance context and practical training implications."
+    },
+    {
+      "title": "Performance Aspects and Physiological Responses in Male Amateur Boxing Competitions",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28081033/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Slimani et al.",
+      "notes": "Used for time-motion, technical-tactical, and physiological response context."
+    },
+    {
+      "title": "Strength and conditioning for professional boxing: recommendations for physical preparation",
+      "url": "https://shura.shu.ac.uk/11499/3/Ruddock%20strength%20conditioning%20professional%20boxing.pdf",
+      "source_type": "sports_science_review_pdf",
+      "organization_or_author": "Ruddock et al.",
+      "notes": "Used for professional boxing bout structure, preparation demands, and S&C framing."
+    }
+  ],
+  "key_concepts": [
+    {"id": "boxing_is_scored_combat_sport", "summary": "Boxing rewards legal, effective punching and round control, not just activity volume."},
+    {"id": "ring_is_tactical_space", "summary": "Ring geography matters: center ring, ropes, corners, exits, pivots, pressure lanes, and escape routes should be modeled."},
+    {"id": "round_based_repeated_effort", "summary": "Boxing is structured as repeated rounds separated by short rest; training should respect round-rest rhythm."},
+    {"id": "olympic_and_pro_contexts_differ", "summary": "Olympic boxing and professional boxing differ in bout length, judging context, equipment, and competition demands."},
+    {"id": "weight_class_sport", "summary": "Boxing is weight-class based; training must not ignore body mass, nutrition, recovery, and weigh-in timing."},
+    {"id": "scoring_pressure_changes_tactics", "summary": "A boxer ahead on rounds, down on rounds, hurt, fatigued, or facing a southpaw requires different tactical decisions."}
+  ],
+  "technical_models": [
+    {"id": "boxing_ring_zone_model", "zones": ["center", "ropes", "corner", "long_range", "mid_range", "inside_range"], "backend_use": "Tag drills by ring zone and range."},
+    {"id": "boxing_round_model", "phases": ["opening_read", "mid_round_exchange", "late_round_urgency", "corner_rest"], "backend_use": "Create round-specific conditioning and tactics."},
+    {"id": "boxing_scoring_model", "criteria": ["clean_effective_punching", "ring_generalship", "defense", "effective_aggression"], "backend_use": "Teach users what wins rounds."},
+    {"id": "boxing_competition_phase_model", "phases": ["general_prep", "specific_camp", "sparring_peak", "taper", "weigh_in", "bout_day", "post_fight_recovery"], "backend_use": "Macro-plan generation."},
+    {"id": "boxing_weight_class_context_model", "elements": ["body_mass", "fueling", "hydration", "weigh_in_gap", "performance_tradeoff"], "backend_use": "Avoid unsafe weight-cut advice."}
+  ],
+  "tactical_rules": [
+    {"id": "rule_center_ring_advantage", "rule": "Use center-ring work to teach initiative, range control, and escape options before advanced pressure/corner tactics."},
+    {"id": "rule_ropes_are_context_not_failure", "rule": "Rope work can be defensive or tactical, but beginners should not be trapped there without exit skills."},
+    {"id": "rule_round_start_information", "rule": "Early round work should include reading stance, lead hand, distance, speed, and opponent rhythm."},
+    {"id": "rule_late_round_fatigue", "rule": "Late-round tactics should bias simple high-percentage actions when fatigue reduces fine motor control."},
+    {"id": "rule_weight_cut_safety", "rule": "Do not generate dehydration or rapid weight-loss prescriptions; refer severe weight-making issues to qualified professionals."}
+  ],
+  "physical_demands": [
+    {"id": "repeated_high_intensity_punching", "quality": "anaerobic power and repeatability"},
+    {"id": "aerobic_between_exchange_recovery", "quality": "aerobic recovery between bursts and rounds"},
+    {"id": "footwork_and_ring_movement", "quality": "calf, ankle, hip, and trunk endurance"},
+    {"id": "neck_and_trunk_stiffness", "quality": "head-position control and force transfer support"},
+    {"id": "upper_limb_speed_endurance", "quality": "shoulder/scapular/forearm capacity"},
+    {"id": "reaction_and_visual_processing", "quality": "decision speed under threat"}
+  ],
+  "injury_or_load_risks": [
+    {"id": "head_trauma_risk", "risk": "Contact exposure carries concussion and cumulative head-impact risk."},
+    {"id": "hand_wrist_risk", "risk": "Punching volume, poor wrapping, and impact quality can overload hand and wrist structures."},
+    {"id": "shoulder_overuse_risk", "risk": "High punching volume can overload shoulder and scapular control."},
+    {"id": "neck_fatigue_risk", "risk": "Fatigued neck and poor defensive posture can increase vulnerability."},
+    {"id": "weight_cut_risk", "risk": "Aggressive body-mass manipulation can harm performance and health."}
+  ],
+  "training_implications": [
+    {"id": "use_round_based_conditioning", "summary": "Conditioning should often use round lengths, rest intervals, and tactical tasks."},
+    {"id": "separate_skill_and_exhaustion", "summary": "New technical skills should be learned before fatigue-based conditioning."},
+    {"id": "model_competition_phase", "summary": "Fight-camp, taper, and post-fight weeks should be different from general training."},
+    {"id": "track_contact_load", "summary": "Sparring and contact volume must be tracked separately from gym workload."},
+    {"id": "protect_weight_cut_context", "summary": "Nutrition logic should support performance and safety, not extreme cutting."}
+  ],
+  "backend_records_to_create": [
+    {"collection": "sport_profiles", "id": "sport_profile_boxing"},
+    {"collection": "sport_training_rules", "id": "boxing_rule_ring_zone_model"},
+    {"collection": "sport_training_rules", "id": "boxing_rule_round_scoring_model"},
+    {"collection": "planning_rules", "id": "boxing_rule_fight_week_taper"},
+    {"collection": "planning_rules", "id": "boxing_rule_weight_class_safety"},
+    {"collection": "planning_rules", "id": "boxing_rule_contact_load_tracking"}
+  ]
+}
+

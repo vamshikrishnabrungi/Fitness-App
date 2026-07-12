@@ -1,0 +1,38 @@
+{
+  "raw_chars": 23563,
+  "raw_preview": "{\n  \"title\": \"Cricket Re-Entry Block - Week 1\",\n  \"goal\": \"Sport Performance\",\n  \"sports\": [\"Cricket\"],\n  \"duration_weeks\": 1,\n  \"athlete_analysis\": {\n    \"profile_summary\": \"21yo recreational top-order batsman, beginner lifter, lean-muscle focus. Returning via 8-week plan, currently re-entry phase. Mild right-knee discomfort after long running.\",\n    \"primary_constraints\": [\n      \"Mild right knee discomfort after long runs\",\n      \"Sleep 6.5h, moderate stress - cap intensity\",\n      \"Sunday ma",
+  "raw_tail": "s knee pain next day; regress load\",\n    \"Keep RPE <= 7 across the week given low sleep and layoff\"\n  ],\n  \"assumptions\": [\n    \"No competition calendar supplied; Saturday set as match-day-minus-1\",\n    \"Loads unknown for beginner, so RPE and tempo guide intensity\",\n    \"Cricket nets/turf access used only for light shadow batting\"\n  ],\n  \"notes\": [\n    \"5 workouts match training_days_per_week\",\n    \"Preferred days Mon/Tue/Wed/Fri/Sat used\",\n    \"Saturday kept light to protect Sunday match\"\n  ]\n}",
+  "json_valid": true,
+  "top_level_keys": [
+    "title",
+    "goal",
+    "sports",
+    "duration_weeks",
+    "athlete_analysis",
+    "blocks",
+    "weeks",
+    "nutrition_focus",
+    "recovery_focus",
+    "safety_notes",
+    "assumptions",
+    "notes"
+  ],
+  "weeks_count": 1,
+  "workout_counts": [
+    5
+  ],
+  "workout_titles": [
+    [
+      "Monday: Lower Base + Knee-Friendly Strength",
+      "Tuesday: Upper Push + Scapular Durability",
+      "Wednesday: Pull Strength + Rotation Control",
+      "Friday: Full-Body Strength + Hip Control",
+      "Saturday: Movement Quality + Light Sport Prep"
+    ]
+  ],
+  "parsed_path": "backend/sport_research/cricket/test_outputs/cricket_blueprint_contract_output_parsed.json",
+  "contains_coaching_notes": false,
+  "contains_substitutions": false,
+  "backend_validation": "failed",
+  "backend_validation_error": "Upper Push + Scapular Durability: main exercise 'Machine Chest Press' needs a specific purpose; Pull Strength + Rotation Control: main exercise 'Single-Arm Cable Pulldown' needs a specific purpose; Full-Body Strength + Hip Control: main exercise 'One-Arm Dumbbell Row' needs a specific purpose; Movement Quality + Light Sport Prep: exercise 'Bird Dog' is missing load guidance"
+}

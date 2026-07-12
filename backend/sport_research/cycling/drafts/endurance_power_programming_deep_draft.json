@@ -1,0 +1,876 @@
+{
+  "metadata": {
+    "sport": "cycling",
+    "domain": "endurance_power_programming",
+    "version": "2026-06-23",
+    "research_goal": "Synthesize credible-source guidance for cycling endurance and power programming into backend-ready records for zones, FTP/threshold, HR/RPE, cadence, block design, progression, tapering, indoor trainer use, recovery, intensity distribution, and fueling.",
+    "write_scope": "single draft file for endurance and power programming only",
+    "synthesis_note": "Records prioritize planning rules, progression gates, session-quality signals, and warning flags rather than broad cycling tips."
+  },
+  "source_refs": [
+    {
+      "id": "SRC_BC_HR_ZONES",
+      "title": "Understanding intensity 2: heart rate",
+      "url": "https://www.britishcycling.org.uk/knowledge/article/izn20140808-understanding-intensity-2--heart-rate-0",
+      "source_type": "official federation coaching guidance",
+      "evidence_use": "Heart-rate zone limitations, FTHR testing, recovery/endurance/tempo/threshold/VO2/anaerobic zone meanings, and time-constrained plan structure."
+    },
+    {
+      "id": "SRC_BC_RPE",
+      "title": "Rate of Perceived Exertion Scale - RPE",
+      "url": "https://www.britishcycling.org.uk/knowledge/article/izn20151119-Training-Plans-Supporting-Documents-Related-Rate-of-Perceived-Exertion-Scale---RPE-0",
+      "source_type": "official federation coaching guidance",
+      "evidence_use": "RPE fallback when FTP or HR zones are unavailable, and cadence-awareness basics."
+    },
+    {
+      "id": "SRC_BC_SIX_WEEK_PLAN",
+      "title": "Six-week training plan",
+      "url": "https://www.britishcycling.org.uk/knowledge/article/izn20200401-Covid-19--6-week-training-plan-0",
+      "source_type": "official federation training plan guidance",
+      "evidence_use": "Intermediate readiness, three-ride week pattern, build/recovery week sequencing, optional volume progression, and recovery as adaptation."
+    },
+    {
+      "id": "SRC_BC_TIME_EFFICIENT",
+      "title": "Time efficient cycling training",
+      "url": "https://www.britishcycling.org.uk/knowledge/training/understand-training/article/izn20140604-Training-Time-Efficient-Training-0",
+      "source_type": "official federation coaching guidance",
+      "evidence_use": "Purposeful ride structure, objective intensity monitoring, indoor trainer utility, recovery between sessions, and long-ride needs for endurance events."
+    },
+    {
+      "id": "SRC_BC_RECOVERY_BREAK",
+      "title": "Time to take a break?",
+      "url": "https://www.britishcycling.org.uk/knowledge/training/health-recovery/article/izn20201008-Understanding-training-Time-to-take-a-break--0",
+      "source_type": "official federation health and recovery guidance",
+      "evidence_use": "Recovery weeks, seasonal breaks, and signs of plateau, poor sleep, low motivation, non-recovery, and illness susceptibility."
+    },
+    {
+      "id": "SRC_BC_INDOOR_SESSIONS",
+      "title": "Indoor training sessions",
+      "url": "https://www.britishcycling.org.uk/knowledge/training-plans/supporting-documents/article/izn20140529-Indoor-Training-Sessions-0",
+      "source_type": "official federation training plan support",
+      "evidence_use": "Indoor trainer as a controlled platform for power/HR-zone workouts including VO2, tempo, threshold, sweet spot, sprint, leg speed, and warm-up sessions."
+    },
+    {
+      "id": "SRC_BC_TRAINER_CALIBRATION",
+      "title": "Zwift in-game trainer calibration",
+      "url": "https://www.britishcycling.org.uk/knowledge/article/izn20210128-Knowledge-Zwift-in-game-trainer-calibration-0",
+      "source_type": "official federation equipment guidance",
+      "evidence_use": "Smart-trainer calibration, warm-up before spin-down, temperature effects, wheel-on tire-pressure control, and data-quality rules."
+    },
+    {
+      "id": "SRC_BC_INDOOR_PLAN",
+      "title": "British Cycling 8-week Indoor Time Efficient Training Plan overview",
+      "url": "https://www.britishcycling.org.uk/knowledge/nutrition/article/izn20191023-Intermediate-What-is-the-British-Cycling-8-week-Indoor-Time-Efficient-Training-Plan--0",
+      "source_type": "official federation training plan guidance",
+      "evidence_use": "Indoor block readiness, quality-and-recovery emphasis, under-five-hour weekly model, longer interval plus sprint plus longer weekend pattern, and handling-skill caveat."
+    },
+    {
+      "id": "SRC_USAC_RACING_LOAD",
+      "title": "How Much Racing Is Too Much Racing?",
+      "url": "https://usacycling.org/article/how-much-racing-is-too-much-racing",
+      "source_type": "official federation coaching article",
+      "evidence_use": "Annual periodization, A/B/C event priorities, FTP-focused blocks, 2-3 interval workouts per week for a few weeks, over-racing risks, and base-fitness erosion."
+    },
+    {
+      "id": "SRC_USAC_COACH_ED",
+      "title": "USA Cycling Coach Education Courses",
+      "url": "https://usacycling.org/coaches-old/coaching-courses",
+      "source_type": "official federation coach education catalog",
+      "evidence_use": "Coach education themes for plan creation, adaptive process, recovery, high/low intensity complement, power metrics, athlete monitoring, nutrition, masters recovery, and overtraining."
+    },
+    {
+      "id": "SRC_TP_POWER_ZONES",
+      "title": "Cycling Power Zones Explained",
+      "url": "https://www.trainingpeaks.com/blog/power-training-levels/",
+      "source_type": "reputable coaching and power-meter methodology",
+      "evidence_use": "Coggan FTP-relative power zones, threshold as endurance-performance anchor, zone ranges, session use cases, and recovery implications."
+    },
+    {
+      "id": "SRC_TP_NP_IF_TSS",
+      "title": "Normalized Power, Intensity Factor and Training Stress Score",
+      "url": "https://www.trainingpeaks.com/learn/articles/normalized-power-intensity-factor-training-stress/",
+      "source_type": "reputable coaching and power-meter methodology",
+      "evidence_use": "Power variability outdoors, normalized power as physiological demand estimate, intensity factor ranges, and relative-intensity comparisons across riders."
+    },
+    {
+      "id": "SRC_TP_ZONE_CALC",
+      "title": "Zones Calculator Overview",
+      "url": "https://help.trainingpeaks.com/hc/en-us/articles/360017420092-Zones-Calculator-Overview",
+      "source_type": "reputable training-platform documentation",
+      "evidence_use": "Threshold-based HR/power zone calculator options, retired USAC zones note, and neuromuscular power not being percentage-of-FTP based."
+    },
+    {
+      "id": "SRC_UCI_POWER_PROFILE",
+      "title": "Track Sprinting: a question of watts?",
+      "url": "https://www.uci.org/article/track-sprinting-a-question-of-watts/6jKNDZjuB1oWJB57g8U0H8",
+      "source_type": "international federation performance article",
+      "evidence_use": "Power as force times velocity, UCI WCC power-profile testing using 6-second, 30-second, and 4-minute efforts, repeated testing, and watts not being the sole determinant of speed."
+    },
+    {
+      "id": "SRC_UCI_TRACK_TRAINING",
+      "title": "Training a track star",
+      "url": "https://www.uci.org/article/training-a-track-star/74xR0yggYFgntW1Mb5Slpn",
+      "source_type": "international federation performance article",
+      "evidence_use": "Track sprint/endurance energy-system differences, sprint strength and cadence work, high-cadence drills, force intervals, and discipline-specific power programming."
+    },
+    {
+      "id": "SRC_UCI_TRACK_FUEL",
+      "title": "Fuelling track success",
+      "url": "https://www.uci.org/article/fuelling-track-success/4qypP12JbpLLwrGR9U7MBp",
+      "source_type": "international federation nutrition article",
+      "evidence_use": "Nutrition periodization, matching intake to training load, sprint versus endurance protein/carbohydrate emphasis, and higher carbohydrate around key sessions and races."
+    },
+    {
+      "id": "SRC_GSSI_CARBOHYDRATE",
+      "title": "Dietary Carbohydrate and the Endurance Athlete: Contemporary Perspectives",
+      "url": "https://www.gssiweb.org/sports-science-exchange/article/dietary-carbohydrate-and-the-endurance-athlete-contemporary-perspectives",
+      "source_type": "sports-science review article",
+      "evidence_use": "Carbohydrate periodization, 1-4 g/kg pre-exercise, 30-90 g/h during exercise over 60 minutes, glucose-fructose for higher intakes, and post-exercise glycogen recovery."
+    },
+    {
+      "id": "SRC_UCI_NUTRITION_PROJECT",
+      "title": "UCI Sports Nutrition Project: The Role of Nutrition in the Prevention and Management of Illnesses and Injuries in Elite Cycling",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41265430/",
+      "source_type": "UCI-endorsed peer-reviewed review",
+      "evidence_use": "Nutrition links to training quality, illness/injury prevention, protein support, carbohydrate/protein matched to training load, gut training, and mixed-saccharide strategies."
+    },
+    {
+      "id": "SRC_FRONTIERS_CADENCE",
+      "title": "Understanding optimal cadence dynamics: a systematic analysis of the power-velocity relationship in track cyclists with increasing exercise intensity",
+      "url": "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2024.1343601/full",
+      "source_type": "peer-reviewed original research",
+      "evidence_use": "Cadence as intensity-dependent rather than fixed, optimal cadence rising with metabolic state, high-cadence cost at low intensity, and velocity as part of programming."
+    },
+    {
+      "id": "SRC_STOGGL_POLARIZED",
+      "title": "Polarized training has greater impact on key endurance variables than threshold, high intensity, or high volume training",
+      "url": "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2014.00033/full",
+      "source_type": "peer-reviewed endurance training study",
+      "evidence_use": "Comparison of polarized, threshold, high-intensity, and high-volume models in well-trained endurance athletes, with a 2-week build plus 1-week recovery structure."
+    },
+    {
+      "id": "SRC_SEILER_TID",
+      "title": "What is best practice for training intensity and duration distribution in endurance athletes?",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20861519/",
+      "source_type": "peer-reviewed endurance training review",
+      "evidence_use": "Intensity-duration-frequency distribution as central to maximizing performance while minimizing negative training outcomes and timing peaks."
+    },
+    {
+      "id": "SRC_MUJIKA_TAPER",
+      "title": "Scientific bases for precompetition tapering strategies",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12840640/",
+      "source_type": "peer-reviewed tapering review",
+      "evidence_use": "Taper aim of reducing fatigue while preserving adaptations, maintaining intensity, reducing volume, and individualizing taper duration."
+    },
+    {
+      "id": "SRC_LAURSEN_HIIT",
+      "title": "The scientific basis for high-intensity interval training",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11772161/",
+      "source_type": "peer-reviewed HIIT review",
+      "evidence_use": "High-intensity interval training as a performance stimulus for trained endurance athletes and need to optimize interval dose."
+    },
+    {
+      "id": "SRC_FRONTIERS_TID_2025",
+      "title": "Recent advances in training intensity distribution theory for cyclic endurance sports",
+      "url": "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2025.1657892/full",
+      "source_type": "peer-reviewed endurance training review",
+      "evidence_use": "Pyramidal, threshold, and polarized model comparison, phase-specific TID selection, and individual variability in cyclic endurance sports including road cycling."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "KC_INTENSITY_ANCHORS",
+      "concept": "Cycling intensity should be triangulated from power, HR, RPE, cadence, terrain, duration, and recovery response.",
+      "backend_use": "Do not require power data to create plans, but when power exists use it as the primary external-load target and cross-check against HR/RPE drift.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_RPE", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "id": "KC_FTP_THRESHOLD_ANCHOR",
+      "concept": "FTP or threshold power is a useful anchor for endurance cycling zones because it reflects sustainable aerobic power more directly than maximal power.",
+      "backend_use": "Power-zone plans should store zones relative to FTP/threshold and retest only when performance signals make current zones stale.",
+      "source_ids": ["SRC_TP_POWER_ZONES", "SRC_TP_ZONE_CALC", "SRC_USAC_RACING_LOAD"]
+    },
+    {
+      "id": "KC_HR_IS_INTERNAL_LOAD",
+      "concept": "Heart rate is valuable but delayed and sensitive to fatigue, heat, nerves, hydration, and cardiac drift.",
+      "backend_use": "For short intervals and stochastic rides, use HR mainly for post-session interpretation; for steady endurance and threshold work, pair HR with power or RPE.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_TP_NP_IF_TSS"]
+    },
+    {
+      "id": "KC_RPE_FALLBACK",
+      "concept": "RPE is essential when FTP or HR zones are missing and remains useful as a fatigue and execution-quality signal even with sensors.",
+      "backend_use": "Every workout target should have an RPE fallback so beginner and low-equipment cyclists can train safely.",
+      "source_ids": ["SRC_BC_RPE", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "id": "KC_CADENCE_IS_CONTEXTUAL",
+      "concept": "There is no universal cadence target; optimal cadence shifts with intensity, power demand, fatigue, terrain, gearing, and rider skill.",
+      "backend_use": "Program cadence ranges and drills as skill/neuromuscular tools, not as mandatory one-size-fits-all RPM rules.",
+      "source_ids": ["SRC_FRONTIERS_CADENCE", "SRC_BC_RPE", "SRC_UCI_TRACK_TRAINING"]
+    },
+    {
+      "id": "KC_ZONE_TWO_FOUNDATION",
+      "concept": "Endurance riding at conversational to purposeful low intensity builds the base that supports harder tempo, threshold, VO2, sprint, and race efforts.",
+      "backend_use": "Plans should protect enough low-intensity volume even when athletes request more intervals or races.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_USAC_RACING_LOAD", "SRC_SEILER_TID"]
+    },
+    {
+      "id": "KC_TIME_IN_ZONE",
+      "concept": "A ride average can hide poor execution; time in target zone and interval repeat quality matter more than average speed or average HR.",
+      "backend_use": "Session assessment should store target-compliance metrics such as time in zone, power fade, HR drift, and RPE mismatch.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_TP_NP_IF_TSS"]
+    },
+    {
+      "id": "KC_PROGRESSIVE_BLOCKS",
+      "concept": "Cycling plans commonly use several progressive build weeks followed by lower-load recovery to convert training stress into adaptation.",
+      "backend_use": "Block generator should default to 2-3 build weeks plus 1 recovery week, with level-specific adjustments.",
+      "source_ids": ["SRC_BC_SIX_WEEK_PLAN", "SRC_STOGGL_POLARIZED", "SRC_BC_RECOVERY_BREAK"]
+    },
+    {
+      "id": "KC_INDOOR_PRECISION",
+      "concept": "Indoor training is efficient because it removes traffic, route, weather, and coasting constraints and allows exact intensity-duration control.",
+      "backend_use": "Use indoor trainer options for short high-quality intervals, winter blocks, time-crunched users, and controlled assessments.",
+      "source_ids": ["SRC_BC_INDOOR_SESSIONS", "SRC_BC_TIME_EFFICIENT", "SRC_BC_INDOOR_PLAN"]
+    },
+    {
+      "id": "KC_FUELING_AS_SESSION_QUALITY",
+      "concept": "Fueling and hydration determine whether prescribed endurance and intensity work can be executed and recovered from.",
+      "backend_use": "Session prescriptions longer than 60 minutes or involving threshold/VO2/sprint density should include carbohydrate and hydration prompts.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE", "SRC_UCI_TRACK_FUEL", "SRC_UCI_NUTRITION_PROJECT"]
+    },
+    {
+      "id": "KC_POWER_PROFILE_NOT_SINGLE_METRIC",
+      "concept": "A cyclist's performance profile includes short sprint power, anaerobic capacity, 4-5 minute aerobic power, threshold power, durability, and skill/aerodynamics.",
+      "backend_use": "Assessment records should avoid classifying riders from FTP alone; include sprint, short aerobic, endurance durability, and discipline context.",
+      "source_ids": ["SRC_UCI_POWER_PROFILE", "SRC_TP_POWER_ZONES", "SRC_TP_NP_IF_TSS"]
+    },
+    {
+      "id": "KC_INTENSITY_DISTRIBUTION_IS_PHASED",
+      "concept": "Polarized, pyramidal, threshold, and high-volume models are tools; their usefulness depends on rider level, block phase, event, available time, and recovery capacity.",
+      "backend_use": "Plan templates should choose intensity distribution by phase and context instead of hard-coding a universal 80/20 rule.",
+      "source_ids": ["SRC_STOGGL_POLARIZED", "SRC_FRONTIERS_TID_2025", "SRC_SEILER_TID"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "TM_COGGAN_POWER_ZONES",
+      "model": "FTP-relative power-zone model",
+      "fields": {
+        "z1_active_recovery": "below 55% FTP; very easy spin",
+        "z2_endurance": "about 56-75% FTP; all-day endurance",
+        "z3_tempo": "about 76-90% FTP; muscular endurance and sustained pace",
+        "z4_threshold": "about 91-105% FTP; sustained hard work, often 10-30 minute repeats",
+        "z5_vo2max": "about 106-120% FTP; 3-8 minute aerobic-power intervals",
+        "z6_anaerobic": "above 120% FTP; 30 second to 3 minute efforts",
+        "z7_neuromuscular": "maximal sprint power; not percentage-FTP based"
+      },
+      "programming_use": "Primary power target model when FTP exists; add RPE and HR descriptions to each zone.",
+      "source_ids": ["SRC_TP_POWER_ZONES", "SRC_TP_ZONE_CALC"]
+    },
+    {
+      "id": "TM_BRITISH_CYCLING_HR_ZONE_MEANINGS",
+      "model": "HR/FTHR zone interpretation model",
+      "fields": {
+        "active_recovery": "very easy, no burning or fatigue",
+        "endurance": "steady all-day pace and long-ride base",
+        "tempo": "purposeful intensive endurance with short-sentence conversation",
+        "threshold": "near sustainable red-line; novices must build toward it",
+        "vo2max": "very hard 3-8 minute efforts with heavy breathing",
+        "anaerobic": "maximal sprint efforts where HR lags too much to prescribe"
+      },
+      "programming_use": "Use for HR-based plans and for explaining RPE/power targets in human terms.",
+      "source_ids": ["SRC_BC_HR_ZONES"]
+    },
+    {
+      "id": "TM_RPE_TO_SESSION_TARGETS",
+      "model": "1-10 cycling RPE fallback",
+      "fields": {
+        "rpe_3": "easy recreational spin",
+        "rpe_4": "all-day sustainable ride with full conversation",
+        "rpe_5": "brisk but still conversational",
+        "rpe_6": "short sentences only",
+        "rpe_7": "hard but controlled response-level effort",
+        "rpe_8": "few-minute hard effort with one-word communication",
+        "rpe_9": "near maximal",
+        "rpe_10": "maximal sprint"
+      },
+      "programming_use": "Attach to all no-sensor sessions and as a compliance check for power/HR sessions.",
+      "source_ids": ["SRC_BC_RPE"]
+    },
+    {
+      "id": "TM_POWER_STRESS_METRICS",
+      "model": "Power variability and relative-intensity model",
+      "fields": {
+        "normalized_power": "estimates physiological cost of variable cycling power",
+        "intensity_factor": "normalized power divided by FTP; compares relative session intensity",
+        "average_power_warning": "can understate stochastic race or criterium load",
+        "event_inference": "hard 1-hour race normalized power can help estimate threshold when formal testing is absent"
+      },
+      "programming_use": "Use NP/IF to classify outdoor stochastic rides, race simulations, and group rides that do not match steady-zone targets.",
+      "source_ids": ["SRC_TP_NP_IF_TSS"]
+    },
+    {
+      "id": "TM_BUILD_RECOVERY_MICROCYCLE",
+      "model": "Build and recovery sequencing",
+      "fields": {
+        "default_sequence": "2-3 progressive build weeks followed by one reduced-load week",
+        "intermediate_example": "three priority rides per week: two midweek structured rides plus one weekend ride",
+        "optional_volume_rule": "bonus sessions are added only when they do not reduce key-session quality",
+        "recovery_logic": "adaptation is realized through recovery, not continual weekly escalation"
+      },
+      "programming_use": "Macro-plan and 4-week block generator default for non-novice cyclists.",
+      "source_ids": ["SRC_BC_SIX_WEEK_PLAN", "SRC_STOGGL_POLARIZED"]
+    },
+    {
+      "id": "TM_INTENSITY_DISTRIBUTION_CHOOSER",
+      "model": "Phase-specific intensity distribution",
+      "fields": {
+        "base_phase": "mostly low intensity with long-ride durability and limited tempo",
+        "threshold_build": "controlled tempo/sweet-spot/threshold intervals with protected low-intensity rides",
+        "vo2_block": "small number of high-quality VO2 sessions plus low-intensity support",
+        "polarized_option": "large low-intensity share plus limited high-intensity work for well-trained riders",
+        "pyramidal_option": "low-intensity base, moderate tempo exposure, and smaller high-intensity dose for many real-world riders",
+        "avoidance": "do not let most rides drift into unplanned moderate fatigue"
+      },
+      "programming_use": "Select distribution based on level, event demands, available time, and recovery state.",
+      "source_ids": ["SRC_USAC_RACING_LOAD", "SRC_STOGGL_POLARIZED", "SRC_FRONTIERS_TID_2025", "SRC_SEILER_TID"]
+    },
+    {
+      "id": "TM_CADENCE_PROGRAMMING",
+      "model": "Cadence as force-velocity programming",
+      "fields": {
+        "endurance_default": "self-selected efficient cadence with comfort and no joint stress",
+        "low_cadence_force": "short controlled force work only for prepared riders and symptom-free knees",
+        "high_cadence_leg_speed": "low-load drills to improve coordination and cadence range",
+        "sprint_cadence": "maximal efforts depend on gear, force, and velocity; compare to prior similar efforts",
+        "assessment": "cadence target is acceptable when power, RPE, HR, and pain response stay within intent"
+      },
+      "programming_use": "Cadence drill planner and warning rules for big-gear grinding.",
+      "source_ids": ["SRC_FRONTIERS_CADENCE", "SRC_UCI_TRACK_TRAINING", "SRC_BC_RPE"]
+    },
+    {
+      "id": "TM_POWER_PROFILE_TESTS",
+      "model": "Multi-duration cycling power profile",
+      "fields": {
+        "sprint_peak": "6-second peak or best comparable sprint",
+        "anaerobic_capacity": "30-second effort",
+        "aerobic_power": "4-5 minute effort",
+        "threshold": "20-60 minute field estimate or modeled FTP",
+        "durability": "power or HR drift after long endurance load",
+        "repeatability": "ability to reproduce intervals or sprints late in a ride"
+      },
+      "programming_use": "Classify rider strengths, select sprint/VO2/threshold focus, and avoid overusing FTP as the only assessment.",
+      "source_ids": ["SRC_UCI_POWER_PROFILE", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "id": "TM_INDOOR_TRAINER_CONTROL",
+      "model": "Indoor trainer execution model",
+      "fields": {
+        "best_uses": "interval precision, short sessions, winter/time-crunched blocks, repeatable testing",
+        "data_quality": "warm up trainer and calibrate; maintain tire pressure for wheel-on trainers",
+        "erg_mode_use": "use ERG for precise dose, but also practice self-pacing near race season",
+        "limitations": "indoor riding does not train bike handling, group skills, descending, or outdoor pacing variability"
+      },
+      "programming_use": "Convert outdoor workouts to trainer-safe versions and flag handling-skill deficits before events.",
+      "source_ids": ["SRC_BC_INDOOR_SESSIONS", "SRC_BC_TRAINER_CALIBRATION", "SRC_BC_INDOOR_PLAN", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "id": "TM_TAPER",
+      "model": "Competition taper model",
+      "fields": {
+        "goal": "reduce accumulated fatigue while preserving fitness and neuromuscular sharpness",
+        "volume": "reduce total load more than intensity",
+        "intensity": "maintain short event-specific efforts if recovery permits",
+        "duration": "commonly 1-2 weeks for A events, individualized by fatigue depth, event duration, and rider level",
+        "novelty_rule": "avoid new fit, equipment, fueling, and interval formats near competition"
+      },
+      "programming_use": "A-event peak planning and final 7-14 day workout adjustment.",
+      "source_ids": ["SRC_MUJIKA_TAPER", "SRC_USAC_RACING_LOAD"]
+    },
+    {
+      "id": "TM_FUEL_FOR_WORK_REQUIRED",
+      "model": "Fueling matched to session demand",
+      "fields": {
+        "daily_carbohydrate": "scale to upcoming training load and intensity",
+        "pre_session": "for exercise over 60 minutes, plan carbohydrate 1-4 g/kg in the 1-4 hours before when appropriate",
+        "during_session": "30-90 g carbohydrate per hour for rides over 60 minutes, scaled by duration and intensity",
+        "high_intake": "use glucose-fructose or mixed saccharide approaches for higher hourly carbohydrate targets",
+        "post_session": "rapid carbohydrate recovery is most important after exhaustive work or when another key session follows soon"
+      },
+      "programming_use": "Attach fueling prompts and underfueling warnings to long rides, threshold blocks, VO2 blocks, and multi-session days.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE", "SRC_UCI_TRACK_FUEL", "SRC_UCI_NUTRITION_PROJECT"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "TR_EASY_RIDES_MUST_STAY_EASY",
+      "rule": "If the goal is recovery or low-intensity endurance, cap intensity with conversation-level RPE and avoid chasing speed, segments, or group surges.",
+      "backend_action": "Downgrade plan compliance when easy rides become tempo or threshold by HR/RPE/power.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_TIME_EFFICIENT", "SRC_USAC_RACING_LOAD"]
+    },
+    {
+      "id": "TR_KEY_SESSION_PRIORITY",
+      "rule": "Optional rides, bonus sessions, cross-training, and group rides are allowed only if they do not compromise the week's key sessions.",
+      "backend_action": "If key-session quality drops, remove optional volume before reducing the targeted workout.",
+      "source_ids": ["SRC_BC_SIX_WEEK_PLAN", "SRC_BC_TIME_EFFICIENT"]
+    },
+    {
+      "id": "TR_NO_THRESHOLD_STACKING",
+      "rule": "Avoid stacking threshold intervals, VO2 intervals, sprints, race-like group rides, long rides, and heavy lower-body strength in the same short window.",
+      "backend_action": "Flag excessive high-intensity density and insert recovery or low-intensity endurance.",
+      "source_ids": ["SRC_BC_RECOVERY_BREAK", "SRC_USAC_COACH_ED", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "id": "TR_POWER_TARGET_WITH_RPE_FAILSAFE",
+      "rule": "When power target and RPE sharply disagree, treat the session as a monitoring problem rather than blindly forcing watts.",
+      "backend_action": "Prompt checks for fatigue, heat, calibration, illness, fueling, and FTP staleness.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_RPE", "SRC_BC_TRAINER_CALIBRATION"]
+    },
+    {
+      "id": "TR_HR_NOT_FOR_SHORT_SPRINTS",
+      "rule": "Do not prescribe anaerobic or neuromuscular sprint targets by HR because HR response lags behind the effort.",
+      "backend_action": "Use power, cadence/gear, duration, maximal intent, full recovery, and prior comparable sprint values.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_TP_POWER_ZONES", "SRC_UCI_POWER_PROFILE"]
+    },
+    {
+      "id": "TR_SPRINTS_NEED_FRESHNESS",
+      "rule": "Sprint and neuromuscular sessions should prioritize maximal quality and long rests rather than fatigue accumulation.",
+      "backend_action": "Place sprint work early in the ride or after full recovery; stop if power, form, or coordination deteriorates.",
+      "source_ids": ["SRC_TP_POWER_ZONES", "SRC_UCI_TRACK_TRAINING"]
+    },
+    {
+      "id": "TR_PROGRESS_LONG_RIDE_BEFORE_INTENSITY_DENSITY",
+      "rule": "For riders with weak endurance base or saddle tolerance, progress long easy rides before adding multiple weekly hard sessions.",
+      "backend_action": "Gate threshold/VO2 blocks behind stable weekly riding, long-ride tolerance, and no pain spikes.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_SIX_WEEK_PLAN", "SRC_USAC_RACING_LOAD"]
+    },
+    {
+      "id": "TR_RACE_PRIORITY_CONTROLS_TAPER",
+      "rule": "A events receive event-specific preparation and taper; B events receive short freshness; C events are training opportunities.",
+      "backend_action": "Ask event priority before tapering or disrupting a productive block.",
+      "source_ids": ["SRC_USAC_RACING_LOAD", "SRC_MUJIKA_TAPER"]
+    },
+    {
+      "id": "TR_OVER_RACING_DETECTOR",
+      "rule": "Frequent racing can crowd out targeted training and low-intensity base, even when total ride hours appear high.",
+      "backend_action": "If schedule becomes race-recover-race, reduce event count or classify some events as C workouts.",
+      "source_ids": ["SRC_USAC_RACING_LOAD"]
+    },
+    {
+      "id": "TR_INDOOR_CALIBRATION_BEFORE_ASSESSMENT",
+      "rule": "Before FTP tests or precise indoor intervals, warm up and calibrate the trainer, and control wheel-on tire pressure.",
+      "backend_action": "Invalidate or annotate power-test results if calibration or setup is uncertain.",
+      "source_ids": ["SRC_BC_TRAINER_CALIBRATION"]
+    },
+    {
+      "id": "TR_ERG_TO_SELF_PACING_TRANSFER",
+      "rule": "ERG mode is useful for exact dose but riders also need self-paced execution for outdoor racing, climbing, time trials, and group variability.",
+      "backend_action": "Near events, convert some controlled intervals to self-paced power/RPE targets.",
+      "source_ids": ["SRC_BC_INDOOR_PLAN", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "id": "TR_FUEL_KEY_WORK",
+      "rule": "Do not judge a failed threshold, VO2, or long endurance session without checking carbohydrate and hydration execution.",
+      "backend_action": "When power fades early or RPE spikes, log fueling quality before increasing training load or lowering FTP.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE", "SRC_UCI_NUTRITION_PROJECT"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "PD_AEROBIC_BASE",
+      "demand": "High aerobic base and endurance durability for long rides, repeat training weeks, and support of all higher-intensity work.",
+      "programming_implication": "Protect weekly low-intensity ride time and long-ride progression.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_USAC_RACING_LOAD"]
+    },
+    {
+      "id": "PD_THRESHOLD_POWER",
+      "demand": "Sustainable threshold power for climbs, time trials, hard group rides, breakaways, and endurance event red-line control.",
+      "programming_implication": "Introduce tempo and threshold blocks only after basic endurance and recovery capacity are stable.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_USAC_RACING_LOAD", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "id": "PD_VO2MAX_POWER",
+      "demand": "VO2max and severe-domain power for 3-8 minute climbs, bridges, MTB surges, break initiation, and race selection moments.",
+      "programming_implication": "Use limited, high-quality VO2 work with recovery; do not stack with other hard days.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_TP_POWER_ZONES", "SRC_LAURSEN_HIIT"]
+    },
+    {
+      "id": "PD_ANAEROBIC_CAPACITY",
+      "demand": "Short hard repeatability for attacks, criterium exits, punchy climbs, track efforts, cyclocross accelerations, and MTB bursts.",
+      "programming_implication": "Program short intervals separately from pure sprints and threshold work.",
+      "source_ids": ["SRC_TP_POWER_ZONES", "SRC_UCI_TRACK_TRAINING"]
+    },
+    {
+      "id": "PD_NEUROMUSCULAR_SPRINT_POWER",
+      "demand": "Very short maximal power and rate of force development for sprint finishes, standing starts, BMX, and track sprint contexts.",
+      "programming_implication": "Use low-volume maximal efforts, long rests, and prior-best comparison instead of FTP percentages.",
+      "source_ids": ["SRC_UCI_POWER_PROFILE", "SRC_TP_ZONE_CALC", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "id": "PD_CADENCE_RANGE",
+      "demand": "Ability to produce power across cadence ranges as terrain, gears, fixed-gear constraints, fatigue, and event demands change.",
+      "programming_implication": "Include low-stress leg-speed drills and controlled force work when appropriate.",
+      "source_ids": ["SRC_FRONTIERS_CADENCE", "SRC_UCI_TRACK_TRAINING"]
+    },
+    {
+      "id": "PD_MUSCULAR_ENDURANCE",
+      "demand": "Muscular endurance for tempo, sweet spot, climbs, headwinds, and prolonged seated output.",
+      "programming_implication": "Develop with tempo and sub-threshold blocks after basic base; monitor knee/back response.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_INDOOR_SESSIONS", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "id": "PD_RECOVERY_CAPACITY",
+      "demand": "Ability to absorb hard sessions, long rides, and progressive blocks without accumulating non-functional fatigue.",
+      "programming_implication": "Use recovery weeks, rest days, and subjective readiness signals as plan inputs.",
+      "source_ids": ["SRC_BC_SIX_WEEK_PLAN", "SRC_BC_RECOVERY_BREAK", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "id": "PD_FUELING_TOLERANCE",
+      "demand": "Gut and behavior tolerance for carbohydrate and fluid intake during long and high-quality rides.",
+      "programming_implication": "Train fueling during long rides and race simulations before event day.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE", "SRC_UCI_NUTRITION_PROJECT", "SRC_UCI_TRACK_FUEL"]
+    },
+    {
+      "id": "PD_POSITION_AND_TRUNK_ENDURANCE",
+      "demand": "Postural tolerance for sustained power indoors/outdoors, aero positions, climbing, and long rides.",
+      "programming_implication": "Long-ride and trainer duration should progress with saddle, back, neck, and hand response.",
+      "source_ids": ["SRC_BC_INDOOR_PLAN", "SRC_USAC_COACH_ED"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "RL_UNDERFUELING",
+      "risk": "Underfueling can cause premature power fade, high RPE, poor recovery, illness susceptibility, and low energy availability risk.",
+      "planning_warning": "Check fueling before labeling a rider undertrained or increasing interval dose.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE", "SRC_UCI_NUTRITION_PROJECT", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "id": "RL_OVER_RACING",
+      "risk": "Too many races or race-like group rides can prevent targeted adaptation and erode aerobic base.",
+      "planning_warning": "Detect weeks dominated by racing and recovery with little structured endurance or targeted work.",
+      "source_ids": ["SRC_USAC_RACING_LOAD"]
+    },
+    {
+      "id": "RL_HIIT_DENSITY",
+      "risk": "Too much VO2, anaerobic, sprint, and threshold work can outpace recovery and reduce quality.",
+      "planning_warning": "Limit hard sessions per week based on level and recent fatigue; separate high-demand days.",
+      "source_ids": ["SRC_TP_POWER_ZONES", "SRC_LAURSEN_HIIT", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "id": "RL_RECOVERY_WEEK_SKIPPING",
+      "risk": "Continual weekly load increases can create plateaus, non-recovery, poor sleep, low motivation, and illness risk.",
+      "planning_warning": "If warning signs appear, insert reduced-load week or season break rather than escalating training.",
+      "source_ids": ["SRC_BC_RECOVERY_BREAK", "SRC_BC_SIX_WEEK_PLAN"]
+    },
+    {
+      "id": "RL_BIG_GEAR_GRINDING",
+      "risk": "Excessive low-cadence high-torque riding can overload knees, calves, Achilles, and low back, especially in beginners or fit issues.",
+      "planning_warning": "Regress big-gear work when knee or tendon symptoms occur and review cadence, gearing, saddle, and cleats.",
+      "source_ids": ["SRC_FRONTIERS_CADENCE", "SRC_BC_RPE"]
+    },
+    {
+      "id": "RL_HR_MISINTERPRETATION",
+      "risk": "HR drift, lag, heat, fatigue, and nerves can mislead pacing and post-session judgment.",
+      "planning_warning": "Use HR with RPE, power, environment, and hydration context instead of single-metric decisions.",
+      "source_ids": ["SRC_BC_HR_ZONES"]
+    },
+    {
+      "id": "RL_POWER_DATA_ERROR",
+      "risk": "Uncalibrated trainers, temperature shifts, and wheel-on tire-pressure changes can corrupt power targets and tests.",
+      "planning_warning": "Flag suspicious power changes when setup or calibration changed.",
+      "source_ids": ["SRC_BC_TRAINER_CALIBRATION"]
+    },
+    {
+      "id": "RL_INDOOR_HANDLING_GAP",
+      "risk": "Indoor-only blocks can preserve fitness but fail to maintain outdoor handling, group riding, and real-world pacing skills.",
+      "planning_warning": "Before outdoor events, add outdoor rides and skill exposure instead of only trainer workouts.",
+      "source_ids": ["SRC_BC_INDOOR_PLAN", "SRC_BC_INDOOR_SESSIONS"]
+    },
+    {
+      "id": "RL_TAPER_NOVELTY",
+      "risk": "New equipment, bike fit, fueling, or unfamiliar interval formats near competition can undermine performance.",
+      "planning_warning": "Freeze novelty during taper except for urgent safety fixes.",
+      "source_ids": ["SRC_MUJIKA_TAPER", "SRC_USAC_RACING_LOAD"]
+    },
+    {
+      "id": "RL_GI_DISTRESS",
+      "risk": "Aggressive carbohydrate intake without gut training or mixed-saccharide tolerance can cause GI symptoms and session failure.",
+      "planning_warning": "Build fueling practice progressively and individualize high-carbohydrate targets.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE", "SRC_UCI_NUTRITION_PROJECT"]
+    },
+    {
+      "id": "RL_MASTERS_RECOVERY",
+      "risk": "Masters riders may need more recovery timing and careful strength/intensity integration because recovery needs can change with age.",
+      "planning_warning": "Use readiness and quality markers to decide whether to repeat, hold, or progress hard sessions.",
+      "source_ids": ["SRC_USAC_COACH_ED", "SRC_BC_RECOVERY_BREAK"]
+    },
+    {
+      "id": "RL_THRESHOLD_TOO_EARLY",
+      "risk": "Beginners without base, saddle tolerance, handling confidence, or recovery habits can be overloaded by threshold or VO2 blocks.",
+      "planning_warning": "Gate high-intensity blocks behind ride frequency, endurance tolerance, and symptom-free easy riding.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_SIX_WEEK_PLAN"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "TI_BEGINNER_BASE_GATE",
+      "implication": "Beginner cycling plans should start with easy ride habit, cadence awareness, comfort, fueling basics, and no pain spikes before structured FTP or VO2 work.",
+      "backend_rule": "Hold beginners in foundation/base blocks until they complete consistent easy rides and one longer ride without symptom flare.",
+      "source_ids": ["SRC_BC_RPE", "SRC_BC_HR_ZONES"]
+    },
+    {
+      "id": "TI_INTERMEDIATE_ENTRY",
+      "implication": "Intermediate structured plans assume regular riding, usually three or more rides per week or readiness for interval-style workouts.",
+      "backend_rule": "If the rider cannot ride 2 hours or lacks recent ride frequency, select base or foundation instead of indoor intensity plan.",
+      "source_ids": ["SRC_BC_SIX_WEEK_PLAN", "SRC_BC_INDOOR_PLAN"]
+    },
+    {
+      "id": "TI_LONG_RIDE_PROGRESSION",
+      "implication": "Long rides should be mostly endurance intensity early in plans and progress by duration only when fueling, comfort, and next-day response are acceptable.",
+      "backend_rule": "Increase long-ride duration conservatively and deload when saddle, knee, back, neck, hand, sleep, or fatigue signals worsen.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_SIX_WEEK_PLAN", "SRC_GSSI_CARBOHYDRATE"]
+    },
+    {
+      "id": "TI_THRESHOLD_BLOCK",
+      "implication": "Threshold/FTP build blocks should concentrate time near threshold for a few weeks, usually with limited weekly interval sessions and low-intensity support.",
+      "backend_rule": "Use 2-3 threshold or related interval sessions per week only for prepared riders, and reduce if quality drops.",
+      "source_ids": ["SRC_USAC_RACING_LOAD", "SRC_TP_POWER_ZONES", "SRC_BC_HR_ZONES"]
+    },
+    {
+      "id": "TI_VO2_BLOCK",
+      "implication": "VO2 blocks should use short hard intervals with enough recovery and should not be added merely because the rider wants hard workouts.",
+      "backend_rule": "Require base, recent threshold tolerance, and stable recovery before VO2 progression.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_TP_POWER_ZONES", "SRC_LAURSEN_HIIT"]
+    },
+    {
+      "id": "TI_SPRINT_BLOCK",
+      "implication": "Sprint blocks need fresh neuromuscular work, long rests, and comparison to prior similar efforts rather than percentage-FTP prescriptions.",
+      "backend_rule": "Stop sprint work when peak power falls materially, form degrades, or pain appears.",
+      "source_ids": ["SRC_UCI_POWER_PROFILE", "SRC_UCI_TRACK_TRAINING", "SRC_TP_ZONE_CALC"]
+    },
+    {
+      "id": "TI_CADENCE_DRILLS",
+      "implication": "Cadence drills can be placed in easy or moderate rides to widen usable cadence range without compromising power targets.",
+      "backend_rule": "Do not place cadence drills inside key threshold/VO2 sets unless cadence is the main session objective.",
+      "source_ids": ["SRC_FRONTIERS_CADENCE", "SRC_BC_RPE"]
+    },
+    {
+      "id": "TI_RECOVERY_RIDES",
+      "implication": "Recovery rides should be very easy, short enough to improve circulation and loosen legs, and not used to add hidden training stress.",
+      "backend_rule": "If RPE or HR is elevated at recovery power, convert to rest or shorter spin.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_RECOVERY_BREAK"]
+    },
+    {
+      "id": "TI_INDOOR_WORKOUT_SELECTION",
+      "implication": "Indoor sessions are ideal for precise intervals, but indoor-only programming needs outdoor handling and real-world pacing before events.",
+      "backend_rule": "Pair indoor intensity blocks with outdoor skill/route exposure when an outdoor event is on the calendar.",
+      "source_ids": ["SRC_BC_INDOOR_SESSIONS", "SRC_BC_INDOOR_PLAN"]
+    },
+    {
+      "id": "TI_FTP_TESTING",
+      "implication": "FTP testing should be done when rested, fueled, and with reliable power setup; recent race NP or modeled data can help estimate threshold but must be contextualized.",
+      "backend_rule": "Schedule tests after easier days and require calibration notes for trainer-based tests.",
+      "source_ids": ["SRC_BC_TRAINER_CALIBRATION", "SRC_TP_NP_IF_TSS", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "id": "TI_TAPER_A_EVENT",
+      "implication": "A-event taper should reduce volume while retaining enough intensity to preserve feel and fitness; B events need less taper and C events may be trained through.",
+      "backend_rule": "Ask event priority and fatigue status before assigning taper length.",
+      "source_ids": ["SRC_USAC_RACING_LOAD", "SRC_MUJIKA_TAPER"]
+    },
+    {
+      "id": "TI_INTENSITY_DISTRIBUTION_PERSONALIZATION",
+      "implication": "A rider's intensity distribution should change across base, build, specificity, taper, and competition phases.",
+      "backend_rule": "Use polarized, pyramidal, threshold, or mixed distributions as phase tools, not identity labels.",
+      "source_ids": ["SRC_FRONTIERS_TID_2025", "SRC_STOGGL_POLARIZED", "SRC_SEILER_TID"]
+    },
+    {
+      "id": "TI_FUELING_PROMPTS",
+      "implication": "Rides over 60 minutes and key hard sessions need explicit carbohydrate and fluid planning because poor fueling can mimic poor fitness.",
+      "backend_rule": "Add fueling tasks to workout records and collect post-session fueling compliance.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE", "SRC_UCI_TRACK_FUEL"]
+    },
+    {
+      "id": "TI_RETEST_GATES",
+      "implication": "Training zones should be updated when repeated sessions are too easy/hard, HR/RPE no longer matches power, or recent testing/racing shows durable change.",
+      "backend_rule": "Trigger zone review after repeated interval overperformance, repeated underperformance, or a new validated power profile.",
+      "source_ids": ["SRC_TP_POWER_ZONES", "SRC_TP_NP_IF_TSS", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "id": "TI_ADAPTIVE_DELOAD",
+      "implication": "Plateau, poor sleep, low motivation, illness susceptibility, and non-recovery are reasons to reduce load before performance falls further.",
+      "backend_rule": "If two or more fatigue flags persist, replace hard sessions with rest/recovery and review fueling/sleep/load.",
+      "source_ids": ["SRC_BC_RECOVERY_BREAK", "SRC_USAC_COACH_ED"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "sport_training_rule",
+      "name": "Cycling intensity anchor hierarchy",
+      "payload_seed": "Use power when available, HR for internal load, RPE for all riders, cadence for movement quality, and recovery response for progression decisions.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_RPE", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "FTP-relative power zone table",
+      "payload_seed": "Create zone records for recovery, endurance, tempo, threshold, VO2max, anaerobic, and neuromuscular power with percent FTP, RPE, HR caveats, and typical sessions.",
+      "source_ids": ["SRC_TP_POWER_ZONES", "SRC_TP_ZONE_CALC"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "HR zone caveats and drift handling",
+      "payload_seed": "Store HR lag/drift/heat/fatigue caveats and rules for interpreting HR mismatches after workouts.",
+      "source_ids": ["SRC_BC_HR_ZONES"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "RPE fallback for no-sensor rides",
+      "payload_seed": "Map cycling RPE 3-10 to endurance, tempo, threshold, VO2, near-max, and sprint session targets.",
+      "source_ids": ["SRC_BC_RPE"]
+    },
+    {
+      "record_type": "macro_plan_template",
+      "name": "Cycling aerobic base block",
+      "payload_seed": "Mostly easy endurance, long-ride progression, cadence comfort, fueling practice, and low-intensity consistency before intensity density.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_BC_SIX_WEEK_PLAN"]
+    },
+    {
+      "record_type": "macro_plan_template",
+      "name": "Cycling threshold or FTP build block",
+      "payload_seed": "Tempo/sub-threshold/threshold intervals, 2-3 interval sessions only for prepared riders, low-intensity support, and recovery week.",
+      "source_ids": ["SRC_USAC_RACING_LOAD", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "record_type": "macro_plan_template",
+      "name": "Cycling VO2 and climbing development block",
+      "payload_seed": "3-8 minute VO2 intervals, climbing repeats, careful recovery, fueling checks, and no hard-day stacking.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_LAURSEN_HIIT"]
+    },
+    {
+      "record_type": "macro_plan_template",
+      "name": "Cycling sprint and neuromuscular block",
+      "payload_seed": "Low-volume maximal sprints, full recovery, cadence/gear control, prior-best comparisons, and stop rules for power drop or form loss.",
+      "source_ids": ["SRC_UCI_POWER_PROFILE", "SRC_UCI_TRACK_TRAINING"]
+    },
+    {
+      "record_type": "macro_plan_template",
+      "name": "Cycling indoor time-efficient block",
+      "payload_seed": "Three ride weekly pattern with precise indoor intervals, quality-and-recovery emphasis, calibration reminders, and outdoor handling add-ons near events.",
+      "source_ids": ["SRC_BC_INDOOR_PLAN", "SRC_BC_INDOOR_SESSIONS", "SRC_BC_TRAINER_CALIBRATION"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Build-recovery week sequencer",
+      "payload_seed": "Default 2-3 build weeks then one recovery week; hold or deload early if fatigue flags persist.",
+      "source_ids": ["SRC_BC_SIX_WEEK_PLAN", "SRC_STOGGL_POLARIZED", "SRC_BC_RECOVERY_BREAK"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Optional volume quality gate",
+      "payload_seed": "Bonus rides are allowed only when key workout quality and recovery remain intact.",
+      "source_ids": ["SRC_BC_SIX_WEEK_PLAN"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "A/B/C event priority and taper logic",
+      "payload_seed": "A events get event-specific prep and taper, B events get short freshness, C events are trained through and used for learning.",
+      "source_ids": ["SRC_USAC_RACING_LOAD", "SRC_MUJIKA_TAPER"]
+    },
+    {
+      "record_type": "sport_injury_load_rule",
+      "name": "Cycling excessive intensity density flag",
+      "payload_seed": "Flag weeks combining multiple threshold/VO2/sprint/race/long-ride/heavy-gym stressors without recovery.",
+      "source_ids": ["SRC_TP_POWER_ZONES", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "record_type": "sport_injury_load_rule",
+      "name": "Underfueling session-quality flag",
+      "payload_seed": "When power fades or RPE spikes, check carbohydrate, hydration, sleep, and heat before changing fitness assumptions.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE", "SRC_UCI_NUTRITION_PROJECT"]
+    },
+    {
+      "record_type": "sport_injury_load_rule",
+      "name": "Big-gear low-cadence pain regression",
+      "payload_seed": "If knee/calf/Achilles/back symptoms appear, remove high-torque cadence work and review gearing, cadence, fit, and recent load.",
+      "source_ids": ["SRC_FRONTIERS_CADENCE", "SRC_BC_RPE"]
+    },
+    {
+      "record_type": "sport_skill_assessment",
+      "name": "Cycling power profile assessment",
+      "payload_seed": "Assess 6-second sprint, 30-second anaerobic power, 4-5 minute aerobic power, FTP/threshold, and durability instead of FTP alone.",
+      "source_ids": ["SRC_UCI_POWER_PROFILE", "SRC_TP_POWER_ZONES"]
+    },
+    {
+      "record_type": "sport_skill_assessment",
+      "name": "Endurance durability assessment",
+      "payload_seed": "Track HR drift, power fade, RPE rise, fueling compliance, and symptom response during long endurance rides.",
+      "source_ids": ["SRC_BC_HR_ZONES", "SRC_TP_NP_IF_TSS", "SRC_GSSI_CARBOHYDRATE"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "Indoor trainer calibration rule",
+      "payload_seed": "Warm up trainer, calibrate before tests/key workouts, and control tire pressure for wheel-on trainers.",
+      "source_ids": ["SRC_BC_TRAINER_CALIBRATION"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "ERG mode transfer rule",
+      "payload_seed": "Use ERG for exact dose early or indoors, then add self-paced intervals near event specificity.",
+      "source_ids": ["SRC_BC_INDOOR_PLAN", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Fuel for the work required",
+      "payload_seed": "Scale carbohydrate and hydration guidance by session duration, intensity, upcoming sessions, and gut tolerance.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE", "SRC_UCI_TRACK_FUEL", "SRC_UCI_NUTRITION_PROJECT"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Long ride fueling prompt",
+      "payload_seed": "For rides over 60 minutes, prompt pre-ride carbohydrate and during-ride 30-90 g/h depending on duration and intensity.",
+      "source_ids": ["SRC_GSSI_CARBOHYDRATE"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "Cadence drill placement",
+      "payload_seed": "Place cadence drills in easy/moderate rides; keep them low stakes and stop when form or target compliance degrades.",
+      "source_ids": ["SRC_FRONTIERS_CADENCE", "SRC_BC_RPE"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "Sprint session stop rule",
+      "payload_seed": "End sprint work when power drops, cadence control worsens, coordination declines, or pain appears.",
+      "source_ids": ["SRC_TP_POWER_ZONES", "SRC_UCI_TRACK_TRAINING"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Training intensity distribution chooser",
+      "payload_seed": "Choose polarized, pyramidal, threshold, or mixed distribution by rider level, phase, event demands, available time, and recovery signals.",
+      "source_ids": ["SRC_STOGGL_POLARIZED", "SRC_FRONTIERS_TID_2025", "SRC_SEILER_TID"]
+    },
+    {
+      "record_type": "sport_level_transition_rule",
+      "name": "Beginner to structured cycling readiness",
+      "payload_seed": "Progress when rider completes consistent easy rides, handles a longer endurance ride, understands RPE/cadence, fuels basic rides, and reports no pain spikes.",
+      "source_ids": ["SRC_BC_RPE", "SRC_BC_HR_ZONES", "SRC_BC_SIX_WEEK_PLAN"]
+    },
+    {
+      "record_type": "sport_level_transition_rule",
+      "name": "Structured intensity hold rule",
+      "payload_seed": "Hold or regress when intervals repeatedly fail, HR/RPE is abnormal, sleep/motivation declines, illness appears, or fueling is inadequate.",
+      "source_ids": ["SRC_BC_RECOVERY_BREAK", "SRC_UCI_NUTRITION_PROJECT", "SRC_USAC_COACH_ED"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Over-racing guardrail",
+      "payload_seed": "Limit events that disrupt targeted blocks; classify races as A/B/C and preserve base training.",
+      "source_ids": ["SRC_USAC_RACING_LOAD"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "Taper novelty freeze",
+      "payload_seed": "During final A-event taper, avoid new equipment, fit, fueling, and unfamiliar workouts except urgent safety changes.",
+      "source_ids": ["SRC_MUJIKA_TAPER", "SRC_USAC_RACING_LOAD"]
+    }
+  ]
+}

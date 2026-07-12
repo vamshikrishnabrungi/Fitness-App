@@ -1,0 +1,7 @@
+{
+  "raw_chars": 28089,
+  "raw_preview": "{\n  \"title\": \"Cricket Return-to-Training Block 1: Re-Entry Week 1\",\n  \"goal\": \"Sport Performance (lean muscle gain support) for a recreational top-order cricket batsman, rebuilding movement quality and low-impact capacity while protecting a mild right knee.\",\n  \"sports\": [\"Cricket\"],\n  \"duration_weeks\": 1,\n  \"athlete_analysis\": \"22-year-old male beginner, top-order batsman, training 5 gym days/week with cricket practice plus a Sunday match. Macro plan is in Block 1 (re_entry, weeks 1-2) with goa",
+  "raw_tail": "scomfort that eases over weeks), monitor 24-hour knee response after each lower-body day, and keep moderate stress in check with consistent wind-down. On low-sleep days, cut volume 20-40% and keep technical work submaximal.\",\n  \"safety_notes\": [\"Right knee is mild and only flares after long running or deep fatigue jumps; this week uses no running impact, no jumping, and pain-free squat depth.\", \"Stop any set if knee discomfort appears and reduce range before load. Hold or regress if 24-hour pain",
+  "json_valid": false,
+  "json_error": "Unterminated string starting at: line 520 column 173 (char 27987)"
+}

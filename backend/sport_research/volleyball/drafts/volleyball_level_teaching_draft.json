@@ -1,0 +1,1275 @@
+{
+  "metadata": {
+    "domain": "volleyball_level_teaching",
+    "sport": "volleyball",
+    "version": "draft_v1",
+    "research_goal": "Create a backend-ready level-based teaching draft for indoor six-player volleyball that integrates Wave 1 technical, tactical, role, rules, and match-IQ drafts with official coaching resources and peer-reviewed performance and injury evidence. The draft defines beginner, intermediate, and advanced expectations, prerequisites, drills, avoid-until-ready gates, assessment signals, role-specific progressions, and transition rules for serving, passing/serve receive, setting, attacking, blocking, defense/digging, transition, match IQ, and volleyball strength and conditioning."
+  },
+  "source_refs": [
+    {
+      "title": "Official Volleyball Rules 2025-2028",
+      "url": "https://www.fivb.com/wp-content/uploads/2025/01/FIVB-Volleyball_Rules2025_2028-EN-v05.pdf",
+      "source_type": "official_rulebook",
+      "organization_or_author": "FIVB",
+      "notes": "Used for rotation, service, front-row/back-row attack, blocking, libero, substitution, and legal action gates."
+    },
+    {
+      "title": "FIVB Official Volleyball Rules Portal",
+      "url": "https://www.fivb.com/volleyball/the-game/official-volleyball-rules/",
+      "source_type": "official_rules_portal",
+      "organization_or_author": "FIVB",
+      "notes": "Official rules landing page for rulebook verification."
+    },
+    {
+      "title": "FIVB Coaches Manual Level II",
+      "url": "https://www.fivb.com/wp-content/uploads/2024/03/Coaches_Manual_Level_II_EN.pdf",
+      "source_type": "official_coach_education_manual",
+      "organization_or_author": "FIVB",
+      "notes": "Used for skill models, systems, technical progressions, tactical phase language, and role responsibilities."
+    },
+    {
+      "title": "FIVB Top Volley Manual",
+      "url": "https://www.fivb.com/wp-content/uploads/2024/03/FIVB_DEV_Top_Volley_Manual_eng.pdf",
+      "source_type": "official_development_manual",
+      "organization_or_author": "FIVB Sports Development Department",
+      "notes": "Used for developmental skill sequencing and whole-game teaching emphasis."
+    },
+    {
+      "title": "FIVB Technical and Data Report VNL 2024",
+      "url": "https://www.fivb.com/wp-content/uploads/2025/04/FIVB-Technical-and-Data-Report-07.05.2025.pdf",
+      "source_type": "official_performance_report",
+      "organization_or_author": "FIVB",
+      "notes": "Used for advanced KPI framing around serve pressure, side-out, transition, and performance tagging."
+    },
+    {
+      "title": "USA Volleyball Lesson Plans for Teachers and Coaches",
+      "url": "https://usavolleyball.org/resources-for-coaches/lesson-plans/",
+      "source_type": "national_federation_lesson_plans",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for beginner teaching design, small-sided games, and practice progression."
+    },
+    {
+      "title": "USA Volleyball Junior High Lesson Plans",
+      "url": "https://usavolleyball.org/wp-content/uploads/2020/12/Junior-High-Lesson-Plans.pdf",
+      "source_type": "national_federation_lesson_plan_pdf",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for modified-court, participation, and beginner progression concepts."
+    },
+    {
+      "title": "USA Volleyball: You Win with Serve Reception, not Passing",
+      "url": "https://usavolleyball.org/resource/you-win-with-serve-reception-not-passing/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for serve-receive emphasis and pass-to-offense framing."
+    },
+    {
+      "title": "USA Volleyball: Five Keys to Better Passing",
+      "url": "https://usavolleyball.org/resource/five-keys-to-better-passing/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for platform, movement, and passer-control cues."
+    },
+    {
+      "title": "USA Volleyball: Five Keys to a Wicked Jump Float Serve",
+      "url": "https://usavolleyball.org/resource/five-keys-to-a-wicked-jump-float-serve/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for jump-float prerequisites, toss/contact control, and serve-pressure progressions."
+    },
+    {
+      "title": "USA Volleyball: Recipe for a Setter",
+      "url": "https://usavolleyball.org/resource/recipe-for-a-setter/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for setter decision making, communication, and second-contact leadership."
+    },
+    {
+      "title": "USA Volleyball: The 7 Speeds of Volleyball",
+      "url": "https://usavolleyball.org/resource/the-7-speeds-of-volleyball/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for tempo progression and set-speed readiness gates."
+    },
+    {
+      "title": "USA Volleyball: Defense is More Than Just Another Team System",
+      "url": "https://usavolleyball.org/resource/defense-is-more-than-just-another-team-system/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for read defense, block-defense linkage, and defensive system teaching."
+    },
+    {
+      "title": "USA Volleyball: So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+      "url": "https://usavolleyball.org/resource/so-you-want-to-be-a-great-defender-learn-to-read-the-hitter/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for defender cue progression and hitter-read assessments."
+    },
+    {
+      "title": "USA Volleyball: 10 Keys to Middle Blocking",
+      "url": "https://usavolleyball.org/resource/10-keys-to-middle-blocking/",
+      "source_type": "national_federation_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for middle blocker read, close, hand press, and transition responsibilities."
+    },
+    {
+      "title": "USA Volleyball: How You Can Make a Huge Impact as a Libero",
+      "url": "https://usavolleyball.org/resource/how-you-can-make-a-huge-impact-as-a-libero/",
+      "source_type": "national_federation_role_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for libero serve-receive, defense, communication, and second-contact role progressions."
+    },
+    {
+      "title": "USA Volleyball: Opponent Analysis and Scouting Reports",
+      "url": "https://usavolleyball.org/resource/opponent-analysis-and-scouting-reports/",
+      "source_type": "national_federation_scouting_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for advanced match-IQ and scouting progression."
+    },
+    {
+      "title": "Predicting Volleyball Serve-Reception",
+      "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.01694/full",
+      "source_type": "peer_reviewed_perception_action_study",
+      "organization_or_author": "Paulo, Zaal, Fonseca, and Araujo",
+      "notes": "Used for serve-receive reading, receiver movement, and live serve assessment emphasis."
+    },
+    {
+      "title": "Characteristics of Serve, Reception and Set That Determine the Setting Efficacy in Men's Volleyball",
+      "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2020.00222/full",
+      "source_type": "peer_reviewed_match_analysis",
+      "organization_or_author": "Jara Gonzalez-Silva, Fernandez-Echeverria, Conejero, Moreno, and collaborators",
+      "notes": "Used for pass-quality and serve-reception effects on setting efficacy."
+    },
+    {
+      "title": "Tactical Determinants of Setting Zone in Elite Men's Volleyball",
+      "url": "https://www.jssm.org/jssm-11-64.xml-Fulltext",
+      "source_type": "peer_reviewed_match_analysis",
+      "organization_or_author": "Afonso, Esteves, Araujo, Thomas, and Mesquita",
+      "notes": "Used for setter-zone and pass-quality decision gates."
+    },
+    {
+      "title": "Match Analysis in Volleyball: A Systematic Review",
+      "url": "https://mjssm.me/clanci/MJSSM_March_2016_Silva.pdf",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Silva, Marcelino, Lacerda, and Joao",
+      "notes": "Used for skill-performance indicators and phase-based assessment."
+    },
+    {
+      "title": "Upper Limb Biomechanics During the Volleyball Serve and Spike",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23015961/",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Reeser, Fleisig, Bolt, and Ruan",
+      "notes": "Used for overhead serve/spike load and shoulder readiness implications."
+    },
+    {
+      "title": "Strategies for the Prevention of Volleyball Related Injuries",
+      "url": "https://bjsm.bmj.com/content/40/7/594.abstract",
+      "source_type": "peer_reviewed_injury_review",
+      "organization_or_author": "Reeser, Verhagen, Briner, Askeland, and Bahr",
+      "notes": "Used for ankle, knee, shoulder, back, hand/finger, and overuse risk framing."
+    },
+    {
+      "title": "Lower Extremity Mechanics During Landing After a Volleyball Block as a Risk Factor for ACL Injury",
+      "url": "https://starfos.tacr.cz/vysledky-vyzkumu/RIV%2F61988987%3A17450%2F15%3AA1601DBE",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Zahradnik, Jandacka, Uchytil, Farana, and Hamill",
+      "notes": "Used for blocking landing-control gates and lower-limb risk indicators."
+    },
+    {
+      "title": "Biomechanic Differences Between Anticipated and Unanticipated Volleyball Block Jump",
+      "url": "https://www.mdpi.com/2075-1729/14/11/1357",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Zhao, Liu, Dan, Xu, and Li",
+      "notes": "Used for planned-before-unplanned block movement progression and landing-risk controls."
+    },
+    {
+      "title": "The Sequencing of Game Complexes in Women's Volleyball",
+      "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2020.00739/full",
+      "source_type": "peer_reviewed_match_analysis",
+      "organization_or_author": "Hileno, Arasanz, Garcia-de-Alcaraz, and colleagues",
+      "notes": "Used for transition and extended-rally phase sequencing."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "level_is_multidimensional",
+      "concept": "Volleyball level is not defined by one flashy skill.",
+      "details": "A player should move from beginner to intermediate or intermediate to advanced only when technical execution, tactical decision making, legal awareness, physical readiness, and match-transfer signals are all present for the target domain."
+    },
+    {
+      "id": "beginner_literacy_before_specialization",
+      "concept": "Beginner volleyball should build broad game literacy before narrow role specialization.",
+      "details": "New players need serve, pass, set, controlled attack, safe net play, rotation, communication, base defense, and three-contact intent before complex systems or role-only training."
+    },
+    {
+      "id": "intermediate_specialization_with_shared_ball_control",
+      "concept": "Intermediate players can specialize while retaining enough all-around skill to solve broken plays.",
+      "details": "Role priority increases at this level, but every player still needs emergency second contact, controlled free ball, coverage, defensive communication, and basic serve-receive or transition responsibilities."
+    },
+    {
+      "id": "advanced_perception_pressure_and_scouting",
+      "concept": "Advanced development is driven by speed, deception, scouting, and pressure execution.",
+      "details": "Advanced athletes must execute under live serve and attack speed, vary choices by opponent tendency, track phase-specific metrics, and manage load while preserving technical quality."
+    },
+    {
+      "id": "pass_quality_controls_offensive_complexity",
+      "concept": "Serve-receive and dig quality determine how much offense can be used.",
+      "details": "Quicks, slides, pipe, setter attack, and combination plays belong behind positive pass or high-quality transition gates. Poor first contacts should trigger high, hittable, low-error options."
+    },
+    {
+      "id": "gamelike_transfer_over_isolated_form",
+      "concept": "Isolated drills are only a bridge to perception-action practice.",
+      "details": "Wall passing, self-setting, and approach footwork can establish shapes, but assessments should use live or representative cues: server, setter release, block, hitter approach, score state, and rally consequence."
+    },
+    {
+      "id": "avoid_until_ready_is_positive_coaching",
+      "concept": "Avoid-until-ready gates protect learning quality and athlete health.",
+      "details": "Jump topspin serves, two-person receive, first-tempo combinations, swing blocking, commit blocking, back-row attacks, and emergency dive volume should be held until prerequisites are visible."
+    },
+    {
+      "id": "role_specific_but_rule_aware",
+      "concept": "Role progressions must respect legal row status and rule-set variants.",
+      "details": "A setter, outside, opposite, middle, libero, DS, or serving specialist may have different tasks by rotation. Back-row attack-line rules, libero restrictions, and substitution rules must be stored with drills and tactical prompts."
+    },
+    {
+      "id": "block_defense_transition_are_one_chain",
+      "concept": "Blocking, floor defense, and transition attack should be taught as one chain.",
+      "details": "The block shapes the dig, the dig shapes the set, the set shapes the attack, and coverage protects the next contact. Training that stops after a block jump or dig misses the rally value of the skill."
+    },
+    {
+      "id": "volleyball_snc_supports_court_quality",
+      "concept": "Volleyball strength and conditioning should support skill repeatability rather than steal court quality.",
+      "details": "Gym work should build jump, landing, shoulder, trunk, hip, ankle, and low-stance capacity while respecting court jump count, swing volume, serve volume, tournament density, and pain response."
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "serve_level_model",
+      "domain": "serving",
+      "model": "Serve progression moves from underhand or adapted-distance over-net success to standing float pressure, then jump float or jump topspin only when contact, target accuracy, shoulder tolerance, and landing control are stable.",
+      "level_summary": {
+        "beginner": "Serve over and in from legal or adapted distance; learn routine, contact point, large targets, and recovery into defense.",
+        "intermediate": "Use standing float as default pressure serve; serve zones 1, 5, 6, seams, short/deep targets, and score pressure sets.",
+        "advanced": "Select jump float, jump topspin, or tactical float by rotation, passer, score, and error threshold."
+      }
+    },
+    {
+      "id": "serve_receive_platform_model",
+      "domain": "passing_serve_receive",
+      "model": "Passing is an angle-control and reading skill. The passer reads server cues and ball flight, moves into a stable base, creates platform angle to target, and transitions to the next responsibility.",
+      "level_summary": {
+        "beginner": "Forearm pass to large target with early call and simple seam rule.",
+        "intermediate": "Receive float, topspin, short, and seam serves with midline and outside-body platforms in three- or four-person systems.",
+        "advanced": "Adjust starting depth and lane by server, use libero-priority seams, and connect pass grade to side-out plans."
+      }
+    },
+    {
+      "id": "setting_location_decision_model",
+      "domain": "setting",
+      "model": "Setting combines early release, balanced arrival, legal contact, safe set location, and decision making based on pass quality, attacker availability, blocker position, and score context.",
+      "level_summary": {
+        "beginner": "High hittable front sets and emergency forearm sets.",
+        "intermediate": "Front/back options, basic tempo, out-of-system protocols, and second-setter calls.",
+        "advanced": "Jump setting, neutral release, setter attack, rotation distribution, and late blocker reads."
+      }
+    },
+    {
+      "id": "attacking_approach_choice_model",
+      "domain": "attacking",
+      "model": "Attacking is approach timing, takeoff mechanics, high contact, landing control, and shot selection against set quality, block shape, and defensive space.",
+      "level_summary": {
+        "beginner": "Approach rhythm, controlled swing or roll, line/cross broad zones, and safe landing.",
+        "intermediate": "High hands, tool, roll, tip, recycle, quick/slide/pipe introductions where legal and safe.",
+        "advanced": "Role-specific attack menus, combination timing, back-row attack, scouting, and pressure kill/error management."
+      }
+    },
+    {
+      "id": "blocking_read_footwork_press_model",
+      "domain": "blocking",
+      "model": "Blocking begins with pass-setter-hitter reading, then footwork matched to distance and tempo, balanced takeoff, hand penetration, legal net discipline, and safe landing into transition.",
+      "level_summary": {
+        "beginner": "Ready position, static press, one-step or shuffle block, and controlled landings.",
+        "intermediate": "Read block, crossover, double-block seam closure, and block-defense lane calls.",
+        "advanced": "Swing block, commit/read choices, scout-based hand plans, and role-specific jump-load monitoring."
+      }
+    },
+    {
+      "id": "defense_digging_read_model",
+      "domain": "defense_digging",
+      "model": "Defenders start from a system base, read pass, setter, set, block, hitter, and ball, then dig to a target that creates a realistic second contact and attack.",
+      "level_summary": {
+        "beginner": "Base position, low balanced posture, high-center dig, and simple tip responsibility.",
+        "intermediate": "Hard-driven, roll, tip, line, and cross reads with perimeter or rotational rules.",
+        "advanced": "Hybrid defense, hitter tendency reads, libero/DS leadership, and dig-to-attack efficiency."
+      }
+    },
+    {
+      "id": "transition_phase_model",
+      "domain": "transition",
+      "model": "Transition connects block or dig to setter access, attacker release, set choice, attack selection, coverage, and reset. It should be trained as a sequence rather than a single skill.",
+      "level_summary": {
+        "beginner": "Dig or free ball to high target, call second ball, send controlled third contact, and cover.",
+        "intermediate": "Second-setter plan, dig-set-attack scoring, attacker release routes, and coverage layers.",
+        "advanced": "Fast transition from perfect digs, out-of-system counterattack choices, free-ball conversion, and phase-specific KPIs."
+      }
+    },
+    {
+      "id": "match_iq_phase_model",
+      "domain": "match_iq",
+      "model": "Match IQ should tag rallies by serve pressure, side-out, transition, and extended rally so coaching actions match the actual problem.",
+      "level_summary": {
+        "beginner": "Know zones, rotation, front/back row, three contacts, call responsibility, and base positions.",
+        "intermediate": "Use side-out, breakpoint, pass grade, serve target, seam rule, and block-defense calls.",
+        "advanced": "Use rotation reports, conditional setter/hitter scouting, serve target expected value, and live adjustment loops."
+      }
+    },
+    {
+      "id": "volleyball_snc_readiness_model",
+      "domain": "volleyball_strength_conditioning",
+      "model": "S&C readiness supports skill progressions through lower-body strength, landing mechanics, repeated jump ability, shoulder/scapular capacity, trunk control, hip/ankle mobility, low-stance tolerance, and recovery habits.",
+      "level_summary": {
+        "beginner": "Movement literacy, landing mechanics, basic strength, mobility, and pain-free participation.",
+        "intermediate": "Progressive strength, plyometrics, deceleration, shoulder care, and role-aware load tracking.",
+        "advanced": "Periodized power, repeated jump and overhead capacity, tournament recovery, and individualized load adjustments."
+      }
+    },
+    {
+      "id": "role_specific_progression_model",
+      "domain": "all",
+      "model": "Role specialization should increase by level while preserving all-around problem solving.",
+      "level_summary": {
+        "beginner": "All roles learn serve, pass, set, attack approach, defend, rotate, and communicate.",
+        "intermediate": "Setters, outsides, opposites, middles, liberos, DS, and serving specialists add role priorities and legal constraints.",
+        "advanced": "Roles train by rotation, matchup, opponent tendency, pressure routine, and load profile."
+      }
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "serve_risk_band_rule",
+      "rule": "Choose serve risk by score, server skill, target value, and error history.",
+      "beginner_application": "Large target and high in-bounds rate come before ace seeking.",
+      "intermediate_application": "Standing float to weak passer, seam, short/deep zone, or overloaded attacker with tracked miss type.",
+      "advanced_application": "Rotation-specific target and serve type chosen by expected disruption minus error cost."
+    },
+    {
+      "id": "pass_quality_controls_tempo_rule",
+      "rule": "Pass or dig quality determines tempo and option count.",
+      "beginner_application": "Use high hittable sets and controlled third contact from most first contacts.",
+      "intermediate_application": "Run middle, right-side, or faster pin only from positive passes and stable setter arrival.",
+      "advanced_application": "Use pass-grade distribution to plan quick, slide, pipe, setter attack, and fallback high-ball choices."
+    },
+    {
+      "id": "seam_ownership_rule",
+      "rule": "Every serve-receive and defensive seam needs an owner before the ball is served or attacked.",
+      "beginner_application": "Use a fixed left-owns or right-owns rule and require a call.",
+      "intermediate_application": "Use libero-priority, short/deep split, or movement-based seam rules.",
+      "advanced_application": "Adjust seam ownership by server type, passer strength, rotation, and outside-hitter attack value."
+    },
+    {
+      "id": "safe_set_miss_rule",
+      "rule": "When set quality is uncertain, miss high, inside, and off the net rather than low, tight, outside the antenna, or over the net.",
+      "beginner_application": "High to large pin target.",
+      "intermediate_application": "Hittable out-of-system outlet to trained attacker.",
+      "advanced_application": "Target range varies by hitter approach lane, block matchup, and transition coverage."
+    },
+    {
+      "id": "attack_choice_by_set_and_block_rule",
+      "rule": "Attack selection must fit set quality, contact point, block shape, and match risk.",
+      "beginner_application": "Controlled deep ball, broad line/cross, and roll shot before max power.",
+      "intermediate_application": "Add tool, high hands, tip, roll, recycle, and seam shots against live blockers.",
+      "advanced_application": "Use scout-based shot charts and pressure-specific kill/error targets."
+    },
+    {
+      "id": "block_defense_contract_rule",
+      "rule": "A block call must map to floor defenders, tip/roll ownership, and transition setter responsibility.",
+      "beginner_application": "Simple block/no-block lane plus high-center dig target.",
+      "intermediate_application": "Line or angle call with defender lanes and tip player.",
+      "advanced_application": "Scout-based line/angle/seam hand plan with hybrid defense and transition route."
+    },
+    {
+      "id": "second_setter_rule",
+      "rule": "If the setter makes first contact or cannot take second contact cleanly, a preassigned second setter owns the ball loudly and early.",
+      "beginner_application": "Nearest player calls help and sends high ball.",
+      "intermediate_application": "Libero, right-back, or DS has trained second-contact target.",
+      "advanced_application": "Second-setter plan varies by dig zone, role, libero legality, and attacker availability."
+    },
+    {
+      "id": "legal_row_status_rule",
+      "rule": "Named role never overrides current front-row/back-row status or libero rules.",
+      "beginner_application": "Players identify if they are front row or back row each rotation.",
+      "intermediate_application": "Back-row attack and libero setting constraints are attached to drills.",
+      "advanced_application": "Rotation cards include legal attack, block, substitution, and libero choices."
+    },
+    {
+      "id": "scouting_action_limit_rule",
+      "rule": "A scout plan must translate into a small number of on-court actions.",
+      "beginner_application": "No opponent-specific scouting beyond obvious open space and weak contact.",
+      "intermediate_application": "One scout cue per drill or match segment.",
+      "advanced_application": "Serve target, block call, defensive lane, setter tendency, and fallback are rehearsed before competition."
+    },
+    {
+      "id": "load_quality_stop_rule",
+      "rule": "Skill volume stops or regresses when movement quality, pain response, or decision accuracy degrades.",
+      "beginner_application": "Stop high-repetition overhead and jump drills when contact or landing falls apart.",
+      "intermediate_application": "Track jump serves, block jumps, swings, and hard-dig exposure.",
+      "advanced_application": "Adjust by role, tournament schedule, tendon response, shoulder symptoms, and match density."
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "jump_landing_repeatability",
+      "demand": "Volleyball requires repeated jumps for serving, attacking, blocking, jump setting, and transition.",
+      "level_progression": {
+        "beginner": "Learn two-foot landing, knee tracking, quiet trunk, and spacing before high volume.",
+        "intermediate": "Add approach jumps, block jumps, low-volume plyometrics, and landing under moderate randomness.",
+        "advanced": "Develop repeated jump ability, role-specific jump count tolerance, and power maintenance across match/tournament density."
+      },
+      "role_emphasis": ["outside_hitter", "opposite", "middle_blocker", "front_row_setter"]
+    },
+    {
+      "id": "overhead_contact_capacity",
+      "demand": "Serving, spiking, setting, and overhead defensive contacts load the shoulder, trunk, elbow, wrist, and fingers.",
+      "level_progression": {
+        "beginner": "Use controlled volume, clean mechanics, and broad targets.",
+        "intermediate": "Build shoulder/scapular endurance and track serve/swing/set counts.",
+        "advanced": "Separate high-speed swing volume, jump-serve load, setter hand volume, and shoulder symptom response."
+      },
+      "role_emphasis": ["setter", "outside_hitter", "opposite", "serving_specialist"]
+    },
+    {
+      "id": "low_stance_reactivity",
+      "demand": "Serve receive, defense, and digging require low posture, lateral movement, hip mobility, reaction speed, and repeated short accelerations.",
+      "level_progression": {
+        "beginner": "Teach balanced ready posture without collapsing trunk or knees.",
+        "intermediate": "Add shuffle, drop-step, crossover, forward short-ball movement, and low-stance endurance.",
+        "advanced": "React to serve/hitter cues under fatigue while preserving pass and dig quality."
+      },
+      "role_emphasis": ["libero", "defensive_specialist", "outside_hitter", "setter"]
+    },
+    {
+      "id": "lateral_deceleration_and_net_movement",
+      "demand": "Blocking and defensive release patterns require lateral acceleration, deceleration, spatial awareness, and safe landings near teammates and the center line.",
+      "level_progression": {
+        "beginner": "One-step and shuffle patterns with known targets.",
+        "intermediate": "Crossover and controlled swing-block movement with live setter reads.",
+        "advanced": "Unanticipated block movement, swing blocking, and release switches under scout constraints."
+      },
+      "role_emphasis": ["middle_blocker", "opposite", "outside_hitter", "front_row_setter"]
+    },
+    {
+      "id": "repeat_rally_and_tournament_capacity",
+      "demand": "Volleyball has intermittent high-intensity rallies with repeated technical efforts across practices, matches, and tournament days.",
+      "level_progression": {
+        "beginner": "Build general fitness and recovery habits while preserving skill quality.",
+        "intermediate": "Use conditioning through gamelike rallies and monitor high-intensity volume.",
+        "advanced": "Plan microcycles around match density, travel, jump load, and role-specific recovery."
+      },
+      "role_emphasis": ["all_roles"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "ankle_sprain_and_crowded_landing",
+      "risk": "Ankle sprains and contact landings are common around the net and during block/attack landings.",
+      "gates": ["landing_control_before_block_volume", "spatial_awareness_before_live_net_crowding", "reduce_when_landing_quality_drops"],
+      "high_risk_roles": ["middle_blocker", "outside_hitter", "opposite", "front_row_setter"]
+    },
+    {
+      "id": "patellar_tendon_and_knee_overload",
+      "risk": "Repeated jumps, fast approaches, hard landings, and high block volume can overload the knee and patellar tendon.",
+      "gates": ["track_jump_count", "avoid_rapid_jump_volume_spikes", "regress_plyometrics_if_tendon_response_worsens"],
+      "high_risk_roles": ["middle_blocker", "outside_hitter", "opposite"]
+    },
+    {
+      "id": "acl_and_unanticipated_landing_risk",
+      "risk": "Unanticipated block movement and poor landing mechanics can increase knee valgus, trunk control, and lower-limb risk.",
+      "gates": ["planned_block_before_random_block", "bilateral_landing_before_swing_block_volume", "fatigue_stop_for_poor_alignment"],
+      "high_risk_roles": ["middle_blocker", "opposite", "outside_hitter"]
+    },
+    {
+      "id": "shoulder_overuse_from_serve_and_attack",
+      "risk": "Serving, jump serving, attacking, and high-volume overhead reps can overload the shoulder, especially when fatigue changes mechanics.",
+      "gates": ["standing_contact_before_jump_serve", "count_swings_and_serves", "reduce_max_speed_when_pain_or_mechanics_degrade"],
+      "high_risk_roles": ["outside_hitter", "opposite", "serving_specialist", "setter"]
+    },
+    {
+      "id": "low_back_extension_rotation_load",
+      "risk": "Repeated hitting, serving, emergency setting, and defensive extension can stress the low back.",
+      "gates": ["trunk_control_before_high_volume_hitting", "hip_thoracic_mobility_before_max_swing_volume", "avoid_max_serving_when_back_pain_present"],
+      "high_risk_roles": ["outside_hitter", "opposite", "setter", "serving_specialist"]
+    },
+    {
+      "id": "finger_wrist_hand_trauma",
+      "risk": "Blocking, setting, and hard-driven digs expose fingers, thumbs, wrists, and hands to high-speed ball contact.",
+      "gates": ["hand_shape_before_live_hard_blocking", "progress_set_volume_gradually", "use_protective_taping_or_medical_guidance_when_needed"],
+      "high_risk_roles": ["setter", "middle_blocker", "libero", "defensive_specialist"]
+    },
+    {
+      "id": "floor_skill_and_dive_load",
+      "risk": "Digging, pursuit, and emergency floor skills can create shoulder, wrist, hip, and low-back load if taught as fatigue punishment.",
+      "gates": ["safe_floor_progression_before_full_speed_dives", "avoid_punishment_dive_volume", "track_floor_contacts"],
+      "high_risk_roles": ["libero", "defensive_specialist", "outside_hitter"]
+    },
+    {
+      "id": "early_specialization_and_system_complexity",
+      "risk": "Early role-only training and complex switching can reduce all-around problem solving and increase collision or confusion risk.",
+      "gates": ["rotation_literacy_before_complex_switches", "all_around_skills_before_role_narrowing", "clear_release_routes_before_live_pressure"],
+      "high_risk_roles": ["beginner_teams", "youth_teams"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "design_progressions_as_gates",
+      "implication": "Every level should have entry criteria, teaching tasks, avoid-until-ready gates, and exit signals.",
+      "application": "The backend should not recommend advanced skills based only on age or roster role. It should check technical, tactical, physical, and match-transfer readiness."
+    },
+    {
+      "id": "use_modified_constraints_for_beginners",
+      "implication": "Beginner training should adjust court size, net height, ball type, serve distance, and game numbers when needed to preserve rallies.",
+      "application": "The goal is more real contacts and decisions, not adult full-court failure repeated at low quality."
+    },
+    {
+      "id": "connect_drills_to_phase_metrics",
+      "implication": "Drills should map to serve pressure, side-out, transition, or extended-rally outcomes.",
+      "application": "Serving practice tracks in-rate and opponent pass quality; receive practice tracks side-out; defense practice tracks dig-to-attack; transition practice tracks counterattack quality."
+    },
+    {
+      "id": "role_progression_requires_shared_emergency_skills",
+      "implication": "Role-specific plans should still include emergency second contact, controlled free ball, coverage, and communication.",
+      "application": "Specialization should not leave middles, pins, or defensive players unable to handle broken-play responsibilities."
+    },
+    {
+      "id": "teach_legal_constraints_inside_drills",
+      "implication": "Rules should be embedded in skill tasks, not taught only as trivia.",
+      "application": "Back-row attack drills include attack-line takeoff, libero second-ball drills include front-zone overhand-set restrictions, and blocking drills tag front-row eligibility."
+    },
+    {
+      "id": "load_and_skill_quality_are_assessment_fields",
+      "implication": "The backend should store volume and quality together.",
+      "application": "Jump count without landing quality, serve count without shoulder quality, or dig count without playable target rate gives an incomplete recommendation."
+    },
+    {
+      "id": "progress_snc_from_capacity_to_transfer",
+      "implication": "S&C should start with movement capacity, progress to volleyball-specific power and deceleration, then integrate with court load.",
+      "application": "Avoid max plyometrics, fatigue conditioning, or heavy gym sessions immediately before high-speed timing practices."
+    },
+    {
+      "id": "teach_players_to_explain_decisions",
+      "implication": "Assessment should include brief decision explanations.",
+      "application": "Players should be able to state why they served a zone, passed a seam, set a high ball, chose a roll shot, or defended a lane."
+    },
+    {
+      "id": "advanced_training_should_rehearse_adjustment",
+      "implication": "Advanced teams need practice changing a plan after the opponent adapts.",
+      "application": "Use scout-team constraints and rotation-specific games where players must observe, compare, decide, communicate, test, and retain or revert."
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "collection": "sport_teaching_progressions",
+      "records": [
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "volleyball_teaching_serving",
+          "sport": "volleyball",
+          "domain": "serving",
+          "source_ref_titles": ["Official Volleyball Rules 2025-2028", "FIVB Coaches Manual Level II", "USA Volleyball: Five Keys to a Wicked Jump Float Serve", "USA Volleyball: Five Keys to Better Passing", "Upper Limb Biomechanics During the Volleyball Serve and Spike"],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": ["can hold ready stance and step toward target", "understands service order and service zone", "pain-free basic overhead or underhand motion"],
+              "expectations": ["serve over the net and in from adapted or legal distance", "use a repeatable simple routine", "aim at large half-court targets", "recover into defensive base after serve"],
+              "typical_drills": ["underhand over-net challenge from progressive distance", "standing contact to wall or partner target", "serve to front half and back half", "serve plus recover to right-back base", "small-sided games where serve starts every rally"],
+              "avoid_until_ready_gates": ["do not chase ace speed before in-bounds consistency", "do not require full-distance overhand serving if strength or coordination forces unsafe mechanics", "do not add jump serve before stable toss, contact, and landing"],
+              "assessment_signals": ["7 of 10 legal or adapted serves in bounds", "repeatable contact point on most attempts", "can name target half or zone before serving", "low net-error trend across practice set"],
+              "role_specific_progression": {
+                "all_roles": ["everyone learns a reliable serve and post-serve defensive base"],
+                "serving_specialist": ["not assigned as a specialist yet; identify athletes with calm routine and target control"]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": ["basic overhand serve in bounds", "understands zone numbers", "shoulder tolerates normal practice volume", "can track miss type"],
+              "expectations": ["use standing float as default pressure serve", "serve zones 1, 5, 6 plus short/deep targets", "target weak passer, seam, or overloaded attacker", "serve under score pressure without losing routine"],
+              "typical_drills": ["standing float no-spin contact ladder", "serve to called zones with miss-type logging", "serve-receive pressure games", "green/yellow/red risk-band games", "serve plus defend first opponent attack"],
+              "avoid_until_ready_gates": ["do not add jump float until standing float is hard, flat, and targetable", "do not shrink targets if in-bounds rate collapses", "do not punish all errors equally when the tactical target was appropriate"],
+              "assessment_signals": ["80 percent in bounds in pressure practice sets", "50 percent or better broad-zone target hit rate", "net errors below team threshold", "opponent pass quality worsens against planned targets"],
+              "role_specific_progression": {
+                "outside_hitter": ["serve pressure without reducing receive and attack training quality"],
+                "opposite": ["develop right-back serve-to-defense base"],
+                "setter": ["serve target plan supports next defensive responsibility"],
+                "serving_specialist": ["enter from bench, complete routine, hit called broad target, and defend immediately"]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": ["standing float and/or jump float pressure is stable", "landing mechanics and overhead load tolerance are monitored", "can select target by rotation and score", "coach tracks serve value, error, and load"],
+              "expectations": ["choose jump float, jump topspin, hybrid, or tactical float by expected value", "change speed, depth, and target without obvious cues", "attack rotation-specific weaknesses", "manage late-set risk and server-run logic"],
+              "typical_drills": ["rotation-specific serve target plans", "jump-float depth deception", "jump-topspin speed plus target tracking", "server-run wash games", "scout-based serve then block-defense sequence"],
+              "avoid_until_ready_gates": ["do not use jump topspin if error cost exceeds pressure value", "do not stack high-volume jump serves after heavy swing sessions when shoulder or landing quality drops", "do not serve elite libero by habit unless plan intentionally manipulates receive"],
+              "assessment_signals": ["serve plus-minus positive in target contexts", "opponent negative-pass or out-of-system rate improves against planned serve", "error rate remains inside agreed risk band", "landing and shoulder quality remain stable under fatigue"],
+              "role_specific_progression": {
+                "serving_specialist": ["late-set cold-entry routine, target plan, and immediate defensive readiness"],
+                "libero_or_ds": ["tactical serve if rule set and role permit; primary load still ball-control readiness"],
+                "pin_attackers": ["balance jump-serve value against swing and block load"]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "volleyball_teaching_passing_serve_receive",
+          "sport": "volleyball",
+          "domain": "passing_serve_receive",
+          "source_ref_titles": ["USA Volleyball: You Win with Serve Reception, not Passing", "USA Volleyball: Five Keys to Better Passing", "Predicting Volleyball Serve-Reception", "Characteristics of Serve, Reception and Set That Determine the Setting Efficacy in Men's Volleyball"],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": ["can hold balanced ready posture", "knows call words", "understands target area", "can create a forearm platform"],
+              "expectations": ["call the ball early", "forearm pass to a large setter target", "use a simple seam rule", "keep ball playable rather than perfect", "transition after first contact"],
+              "typical_drills": ["partner over-net serve-pass to large target", "coach-toss move-and-pass with call", "five- or four-person receive with fixed lanes", "short-court serve-receive to three contacts", "seam ownership game"],
+              "avoid_until_ready_gates": ["do not judge mastery from stationary partner passing alone", "do not use narrow three-person lanes before players communicate and move", "do not teach outside-body passing as wrong when the ball path demands an angle"],
+              "assessment_signals": ["playable pass rate improving", "ball is called before contact", "player knows seam owner", "platform angle sends ball toward target zone", "three-contact attempts increase in small-sided play"],
+              "role_specific_progression": {
+                "all_roles": ["learn simple receive and free-ball passing"],
+                "setter": ["learn release path but pass if ball is clearly theirs in beginner systems"],
+                "middle_blocker": ["learn basic receive first, then gradually reduce receive role as team specializes"]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": ["basic platform control", "serve type recognition begins", "can move forward, lateral, and backward safely", "understands zone and seam language"],
+              "expectations": ["receive float, topspin, short, and seam serves", "use three- or four-person receive by personnel", "score pass quality", "protect setter path and attacker transition"],
+              "typical_drills": ["live over-net float vs topspin receive", "three-person lane serve receive", "short/deep seam split reps", "pass-set-hit side-out scoring", "serve target response games"],
+              "avoid_until_ready_gates": ["do not move to two-person receive without data showing side-out improvement", "do not let libero steal seams without clear rule", "do not hide weak passers so completely that emergency ball control disappears"],
+              "assessment_signals": ["positive pass percentage by serve type", "seam conflict rate decreasing", "side-out rate improves after positive pass", "outside hitter can pass and still approach", "setter path is not blocked by receive movement"],
+              "role_specific_progression": {
+                "libero": ["lead seam calls and take larger but defined receive area"],
+                "outside_hitter": ["pass-to-hit footwork and approach recovery"],
+                "defensive_specialist": ["cold-entry receive and serve-receive stabilization"],
+                "opposite": ["receive or non-receive variant based on team system"]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": ["stable pass rating against multiple serve types", "clear receive systems by rotation", "libero and outside responsibilities are data-informed", "players can adjust starting depth by server"],
+              "expectations": ["customize lanes by server, rotation, and serve type", "use two- or three-person receive strategically", "manipulate or protect attackers through geometry", "link pass grade to first-ball attack plan"],
+              "typical_drills": ["scout-team serving by target and type", "rotation-specific receive patterns", "libero green-light seam scenarios", "pressure side-out games", "video-tagged pass quality by serve type"],
+              "avoid_until_ready_gates": ["do not overload libero receive area without monitoring quality and fatigue", "do not free a high-value attacker if team pass rating and side-out drop", "do not change receive formation after one-rally noise"],
+              "assessment_signals": ["pass rating by server type and rotation", "first-ball kill rate after positive pass", "two-person receive outperforms three-person in selected rotations", "late backward movement errors are reduced", "side-out plan is known before serve"],
+              "role_specific_progression": {
+                "libero": ["organize receive geometry, bait or avoid server targets, stabilize late pressure"],
+                "outside_hitter": ["high-quality pass-to-attack under targeting pressure"],
+                "defensive_specialist": ["change receive geometry through substitution role"],
+                "setter": ["use pass-quality information to prepare tempo choices early"]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "volleyball_teaching_setting",
+          "sport": "volleyball",
+          "domain": "setting",
+          "source_ref_titles": ["FIVB Coaches Manual Level II", "USA Volleyball: Recipe for a Setter", "USA Volleyball: The 7 Speeds of Volleyball", "Tactical Determinants of Setting Zone in Elite Men's Volleyball"],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": ["can move feet to ball", "can create hand shape without pain", "understands second-contact target", "can send a high ball to a large zone"],
+              "expectations": ["beat easy balls to target", "set high and hittable to front attackers", "use forearm set when hands are not realistic", "communicate mine/help early"],
+              "typical_drills": ["self-toss set to wall or target", "partner setting with footwork", "pass-set-catch or pass-set-hit to large target", "help-call second-contact games", "high outside target setting"],
+              "avoid_until_ready_gates": ["do not force hand setting on low or fast balls", "do not teach deception before location accuracy", "do not require fast tempo or jump sets before balanced arrival"],
+              "assessment_signals": ["hittable high-set percentage", "contact above forehead on controlled balls", "early call on second contact", "safe miss high/off net rather than tight/low", "recovery into cover after set"],
+              "role_specific_progression": {
+                "setter": ["basic release, high pin setting, and communication"],
+                "non_setters": ["emergency high-ball second contact"],
+                "libero": ["learn legal back-row setting and forearm set options"]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": ["high-ball accuracy to pins", "can classify pass quality", "can move with shuffle, crossover, and drop step", "understands attacker availability"],
+              "expectations": ["front/back set options", "basic middle or faster pin tempo from good pass", "out-of-system high outlet", "second-setter plan when setter defends", "safe set miss under pressure"],
+              "typical_drills": ["random pass-location setting", "pass-grade decision tree", "front/back neutral-window reps", "setter-first-contact transition games", "out-of-system high-ball target games"],
+              "avoid_until_ready_gates": ["do not force quick after poor pass", "do not add jump set if setter drifts or location collapses", "do not let non-setters set tight from chaos"],
+              "assessment_signals": ["hittable-set percentage by pass grade", "set location error map", "correct high-ball fallback decisions", "front/back choice quality", "second-setter success when setter digs"],
+              "role_specific_progression": {
+                "setter": ["lead tempo choices and emergency calls"],
+                "libero": ["second-contact help while respecting libero restrictions"],
+                "opposite_or_right_back": ["trained help setter in transition"],
+                "outside_hitter": ["out-of-system emergency high ball when setter unavailable"]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": ["location and tempo are stable under live pass variation", "can read blockers and hitter readiness", "knows legal front/back row status", "team has role-specific attacker routes"],
+              "expectations": ["jump set and neutral release without losing location", "late blocker read", "setter attack when legal and tactically useful", "distribution by rotation and score", "deception tied to real attacker availability"],
+              "typical_drills": ["live blocker distribution games", "rotation-specific side-out setting", "transition setting after random digs", "setter dump decision games", "video review of decision rationale"],
+              "avoid_until_ready_gates": ["do not deceive if location, legality, or hitter timing suffers", "do not overuse setter attack if blockers are not actually held", "do not expand tempo menu without enough hitter-setter repetitions"],
+              "assessment_signals": ["attack efficiency by set choice", "middle and back-row options used from correct pass grades", "blockers delayed or moved without increased setting errors", "setter explains pass-quality and blocker cue", "distribution fits scouting and hot/cold hitter state"],
+              "role_specific_progression": {
+                "setter": ["tempo offense, scout distribution, pressure leadership"],
+                "libero": ["advanced legal second ball, no illegal front-zone overhand-set attack sequence"],
+                "opposite_or_outside": ["emergency setting to maintain real attack, not free-ball panic"]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "volleyball_teaching_attacking",
+          "sport": "volleyball",
+          "domain": "attacking",
+          "source_ref_titles": ["FIVB Coaches Manual Level II", "USA Volleyball: The 7 Speeds of Volleyball", "Upper Limb Biomechanics During the Volleyball Serve and Spike", "Ball-To-Hand Contact Forces Increase Modeled Shoulder Torques during a Volleyball Spike"],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": ["can approach without crossing under net", "can jump and land in control", "can contact ball high or send controlled third contact", "understands net safety"],
+              "expectations": ["learn approach rhythm and last two steps", "contact high and in front when swinging", "use controlled deep ball, roll, or broad line/cross target", "land balanced and avoid net faults"],
+              "typical_drills": ["approach footwork without ball", "toss-hit to deep zones", "catch-and-throw timing games before full spike", "controlled third-contact games", "landing stick after approach"],
+              "avoid_until_ready_gates": ["do not chase max-power swings before contact and landing are safe", "do not add quick tempo or back-row attack yet", "do not swing from tight or unsafe sets"],
+              "assessment_signals": ["approach rhythm repeatable", "takeoff and landing stay out of net and teammate space", "controlled attack lands in court", "attacker calls for set and covers after swing", "errors decrease from easy sets"],
+              "role_specific_progression": {
+                "all_roles": ["learn approach, high contact, controlled third ball, and coverage"],
+                "outside_hitter": ["high left-side outlet basics"],
+                "middle_blocker": ["basic quick approach rhythm without live speed"],
+                "opposite": ["right-side approach orientation"]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": ["safe approach and landing", "can adjust timing to high sets", "can see broad block/defense cues", "shoulder tolerates moderate swing volume"],
+              "expectations": ["attack line, cross, deep, roll, tip, high hands, tool, and recycle", "adjust to high ball, faster pin, quick, slide, or pipe where trained", "choose lower-risk attack from poor set", "begin legal back-row attack awareness"],
+              "typical_drills": ["live or simulated block shot-selection games", "high-ball out-of-system scoring", "quick/slide timing with pass-quality gate", "tool and recycle games", "back-row attack takeoff-line walk-through"],
+              "avoid_until_ready_gates": ["do not add first-tempo attack unless pass and hitter timing support it", "do not add pipe or D-ball if attack-line legality and landing are unreliable", "do not repeat max swings after shoulder or back mechanics degrade"],
+              "assessment_signals": ["kill/error/continuation by set quality", "shot variety under live block", "correct low-error choice from poor set", "legal back-row takeoff when trained", "landing control after varied tempos"],
+              "role_specific_progression": {
+                "outside_hitter": ["pass-to-hit and out-of-system scoring"],
+                "opposite": ["right-side attack, D-ball intro, and outside-hitter block matchup"],
+                "middle_blocker": ["quick, 31, or slide timing by pass quality"],
+                "setter": ["setter attack only when legal and blockers are committed"]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": ["role-specific attack mechanics stable under speed", "can read block and defense", "team can deliver tempo reliably", "swing and jump load monitored"],
+              "expectations": ["execute role-specific attack menu by rotation", "combine tempo, route, and shot to manipulate blockers", "score from imperfect sets without high error", "use scouting and match state to choose attacks", "integrate back-row attacks legally"],
+              "typical_drills": ["scout-based block shot chart games", "combination offense against live blockers", "transition attack after random digs", "high-ball pressure kill/error games", "video-tagged attack decision review"],
+              "avoid_until_ready_gates": ["do not overload primary attackers with untracked swing and jump volume", "do not run combinations that crowd approach lanes or obscure legal takeoff", "do not value kill count without error and continuation context"],
+              "assessment_signals": ["attack efficiency by phase and set quality", "tool/recycle success under double block", "first-tempo and back-row attacks used from correct pass grades", "scouted shot choice visible", "shoulder/back/knee quality stable across workload"],
+              "role_specific_progression": {
+                "outside_hitter": ["out-of-system scoring, pipe, heavy receive-attack load management"],
+                "opposite": ["right-side scoring, D-ball, and opponent outside block matchup"],
+                "middle_blocker": ["quick/31/slide variation and block-to-attack transition"],
+                "setter": ["setter attack and dump as low-volume deception tool"]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "volleyball_teaching_blocking",
+          "sport": "volleyball",
+          "domain": "blocking",
+          "source_ref_titles": ["FIVB Coaches Manual Level II", "USA Volleyball: 10 Keys to Middle Blocking", "Biomechanic Differences Between Anticipated and Unanticipated Volleyball Block Jump", "Lower Extremity Mechanics During Landing After a Volleyball Block as a Risk Factor for ACL Injury"],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": ["knows front-row/back-row block eligibility", "can jump and land in control", "can keep hands out of net", "can identify opponent setter and hitter broadly"],
+              "expectations": ["ready position near net", "static press and one-step or shuffle block", "hands over and into court legally", "land on balance and reset", "understand block as defensive channel"],
+              "typical_drills": ["net-safe hand press drill", "one-step block to known target", "shuffle-block footwork with landing stick", "block shadow then cover", "front-row eligibility walk-through"],
+              "avoid_until_ready_gates": ["do not use high-volume live blocking before landing control", "do not add swing block or commit block yet", "do not reward net faults or sideways drift just because the ball is touched"],
+              "assessment_signals": ["loaded stance before set", "jump from balance", "hands penetrate without net fault", "two-foot or controlled landing", "ready to play next ball"],
+              "role_specific_progression": {
+                "all_front_row_players": ["safe ready, press, land, reset"],
+                "middle_blocker": ["basic lateral step and overpass awareness"],
+                "pin_blockers": ["outside hand turns into court and sets edge"]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": ["safe one-step and shuffle block", "can read pass quality and setter release", "can communicate line/angle or simple block call", "can land after moderate lateral movement"],
+              "expectations": ["read block from pass-setter-hitter sequence", "use shuffle or crossover by distance", "close double-block seam", "pair block call with floor defense", "transition after landing"],
+              "typical_drills": ["live setter read block", "middle close to pin with seam scoring", "line/angle block-defense drill", "block touch to transition attack", "controlled swing-block intro if landing gate passes"],
+              "avoid_until_ready_gates": ["do not overuse swing block when shorter footwork fits", "do not commit block without scouting and floor-defense adjustment", "do not increase jump volume when landings drift or pain appears"],
+              "assessment_signals": ["correct first move after setter release", "double block closes without shoulder gap", "block touches slow attacks into playable digs", "floor defenders know lane behind block", "blocker transitions after landing"],
+              "role_specific_progression": {
+                "middle_blocker": ["read pass quality, honor quick, close to pins"],
+                "opposite": ["block opponent outside with line/cross plan"],
+                "outside_hitter": ["set pin edge against right-side attack"],
+                "setter_front_row": ["right-front block responsibility and dump awareness"]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": ["read block stable at match speed", "landing quality survives lateral and unanticipated movement", "team has block-defense calls", "scouting data is actionable"],
+              "expectations": ["choose read or commit block by pass quality and tendency", "use swing-block and advanced footwork only when appropriate", "shape hands for line, cross, seam, or tool prevention", "execute rotation-specific block plans", "manage role jump load"],
+              "typical_drills": ["scout-based read/commit games", "swing-block under varied tempo", "block-defense contract scrimmages", "commit quick then recover scenarios", "jump-load tracked block-to-transition sequences"],
+              "avoid_until_ready_gates": ["do not commit by habit on poor opponent passes", "do not ignore back-row and libero block restrictions", "do not mix maximal block volume with heavy transition attack without recovery"],
+              "assessment_signals": ["block call reduces opponent expected shot value", "touch-to-dig and touch-to-point rates improve", "commit calls are correct by pass quality", "defenders can predict block shape", "jump-load and pain response stay acceptable"],
+              "role_specific_progression": {
+                "middle_blocker": ["read/commit decisions, setter tendency, first-tempo control"],
+                "pin_blockers": ["tool prevention, hand angle, and matchup plan"],
+                "opposite": ["primary outside-hitter matchup block"],
+                "setter_front_row": ["survive matchup and manipulate opponent setter/hitter reads"]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "volleyball_teaching_defense_digging",
+          "sport": "volleyball",
+          "domain": "defense_digging",
+          "source_ref_titles": ["USA Volleyball: Defense is More Than Just Another Team System", "USA Volleyball: So You Want to be a Great Defender?! Learn to Read the Hitter!!", "USA Volleyball: How You Can Make a Huge Impact as a Libero", "The Sequencing of Game Complexes in Women's Volleyball"],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": ["can hold low balanced posture", "knows base defensive area", "can create platform", "can call ball"],
+              "expectations": ["move to base after serve or attack", "dig high and playable to center target", "cover tips with simple assignment", "avoid watching after contact", "send controlled free ball when no attack is available"],
+              "typical_drills": ["base-to-defense movement", "coach attack to high-center dig", "tip or roll recognition with call", "dig-set-free-ball small games", "coverage after teammate attack"],
+              "avoid_until_ready_gates": ["do not use full-speed emergency dives as conditioning", "do not place defenders in complex rotations before base and call are understood", "do not assess defense by spectacular saves only"],
+              "assessment_signals": ["player reaches base before attack", "playable dig rate increases", "tip owner moves early", "ball is called", "player recovers after dig"],
+              "role_specific_progression": {
+                "all_roles": ["base defense, call, playable dig, cover"],
+                "libero_or_ds": ["larger focus on low posture, free-ball control, and communication"],
+                "pin_players": ["defend line/cross lanes linked to block"]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": ["stable defensive base", "can read hitter approach and set location", "understands block call", "can move safely to hard and soft attacks"],
+              "expectations": ["dig hard-driven balls to setter-accessible target", "read tips and roll shots from hitter cues", "defend behind line/angle block", "use perimeter or rotational responsibilities", "convert digs into attack chances"],
+              "typical_drills": ["hard-driven vs roll randomization", "block-defense lane drill", "dig-set-attack wash games", "tip/roll plus transition scoring", "libero/DS communication lead games"],
+              "avoid_until_ready_gates": ["do not rotate defenders without explaining open lanes", "do not train hard-driven digs without block context", "do not chase every tip if system assigns another defender"],
+              "assessment_signals": ["playable dig percentage by attack type", "defender position matches block call", "tip/roll save percentage", "dig-to-attack rate", "communication reduces duplicate or dropped balls"],
+              "role_specific_progression": {
+                "libero": ["read hitter, lead back-row defense, control free balls"],
+                "defensive_specialist": ["cold-entry defense and serve-receive stabilization"],
+                "outside_hitter": ["left-back or perimeter defense plus transition attack"],
+                "setter": ["defend assigned zone then transition or call help"]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": ["defense reads are stable under live tempo", "team block-defense contract exists", "libero/DS can organize adjustments", "dig quality is tagged to transition"],
+              "expectations": ["use hybrid defense by hitter, set, and block", "read shoulder, hand, approach, and tendency", "dig to tempo-enabling or second-setter target", "adjust to scout and in-match evidence", "protect floor-skill load"],
+              "typical_drills": ["scout-based hitter tendency defense", "hybrid block-defense scrimmage", "dig target by transition option", "late adjustment games after opponent changes shot", "video-tagged defense by phase"],
+              "avoid_until_ready_gates": ["do not memorize system spots without reading block and hitter", "do not overuse floor contacts when wrists, shoulders, hips, or back are irritated", "do not judge libero only by digs without receive and transition value"],
+              "assessment_signals": ["dig-to-attack and counterattack efficiency", "defender adjustment after scout cue", "reduced open-court soft-shot points", "libero communication changes team geometry effectively", "floor-contact load remains tolerable"],
+              "role_specific_progression": {
+                "libero": ["organize defense, scout hitter tendencies, and stabilize pressure"],
+                "defensive_specialist": ["targeted rotation stabilization and serve-plus-defense"],
+                "pin_defenders": ["read around own block and transition into attack"],
+                "middle_blocker": ["front-row net defense, overpass, and block-deflection pursuit"]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "volleyball_teaching_transition",
+          "sport": "volleyball",
+          "domain": "transition",
+          "source_ref_titles": ["FIVB Coaches Manual Level II", "The Sequencing of Game Complexes in Women's Volleyball", "USA Volleyball: How You Can Make a Huge Impact as a Libero", "USA Volleyball: Recipe for a Setter"],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": ["can call ball", "can send high second or third contact", "knows cover position", "can reset after defensive contact"],
+              "expectations": ["after dig or free ball, organize second contact", "send high playable third contact", "cover the attacker", "reset defensive base if rally continues"],
+              "typical_drills": ["dig-set-free-ball games", "free-ball receive to three contacts", "setter help-call games", "attack coverage walk-through", "small-sided wash games"],
+              "avoid_until_ready_gates": ["do not demand fast counterattack from poor digs", "do not omit coverage after controlled attacks", "do not let players stop after first good contact"],
+              "assessment_signals": ["three-contact continuation rate", "second contact is called", "third ball is controlled over net", "non-attackers cover before contact", "team resets after attack"],
+              "role_specific_progression": {
+                "all_roles": ["dig, call help, cover, reset"],
+                "setter": ["move to second ball if available"],
+                "libero_or_ds": ["controlled free-ball and emergency second-contact help"]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": ["dig target improves", "second-setter plan known", "hitters can transition from block/defense to approach", "coverage layers understood"],
+              "expectations": ["turn dig into hittable attack", "use second setter when setter defends", "match set tempo to dig quality", "transition attackers separate from net or defensive base", "cover blocked counterattack"],
+              "typical_drills": ["dig-set-attack scoring", "setter-dig second-setter drills", "block-touch to transition", "free-ball conversion games", "coverage-to-reattack wash games"],
+              "avoid_until_ready_gates": ["do not run full-speed transition attacks when approach mechanics collapse", "do not leave second contact undefined", "do not set tight from poor dig quality"],
+              "assessment_signals": ["dig-to-second-contact rate", "dig-to-attack rate", "counterattack error rate", "second-setter hittable-ball percentage", "coverage recovery after block"],
+              "role_specific_progression": {
+                "setter": ["transition from defense or call help early"],
+                "libero": ["second setter when setter digs; coverage leader"],
+                "outside_hitter": ["high-ball outlet after dig or block coverage"],
+                "middle_blocker": ["block-land-release for quick or cover role"],
+                "opposite": ["right-side or D-ball transition when legal and available"]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": ["transition roles are rotation-specific", "dig quality is graded", "attackers can run fast or controlled options by context", "coverage and reset are automatic"],
+              "expectations": ["convert high-quality digs and free balls into high-value attacks", "use fast transition when pass/dig allows", "use low-error high-ball or recycle when out of system", "tag transition separately from side-out", "adjust by opponent coverage and block"],
+              "typical_drills": ["K2/K3 phase scrimmage", "free-ball expected-kill games", "scout-based counterattack against planned block", "transition after setter-first-contact chaos", "video-coded counterattack decision review"],
+              "avoid_until_ready_gates": ["do not let fast transition reduce coverage discipline", "do not ignore setter-availability legality", "do not overload middles with block-to-quick reps without jump-load tracking"],
+              "assessment_signals": ["counterattack efficiency by dig grade", "free-ball conversion rate", "transition kill/error/continuation by hitter", "coverage save to re-attack rate", "phase-specific decision explanations are accurate"],
+              "role_specific_progression": {
+                "setter": ["choose tempo from transition state and blocker cues"],
+                "libero_or_ds": ["organize second ball and coverage under pressure"],
+                "middle_blocker": ["fast block-to-attack when landing and spacing allow"],
+                "pins": ["score from high-ball and transition tempo without high error"],
+                "opposite": ["D-ball or right-side outlet in front-row setter rotations"]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "volleyball_teaching_match_iq",
+          "sport": "volleyball",
+          "domain": "match_iq",
+          "source_ref_titles": ["FIVB Coaches Manual Level II", "FIVB Technical and Data Report VNL 2024", "USA Volleyball: Opponent Analysis and Scouting Reports", "Match Analysis in Volleyball: A Systematic Review", "Official Volleyball Rules 2025-2028"],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": ["knows ball can be contacted three times", "understands rotation direction", "knows front/back row concept", "can use simple call words"],
+              "expectations": ["identify court zones", "rotate correctly after side-out", "serve to a large target", "call ball and seam", "use three-contact intent", "know safe net and back-row basics"],
+              "typical_drills": ["zone naming games", "rotation walk-through", "serve-to-zone scoring", "three-contact small-sided games", "base defense freeze checks"],
+              "avoid_until_ready_gates": ["do not introduce complex scouting before players know basic phases", "do not install 5-1 or 6-2 switching before rotation literacy", "do not overload rule details before action relevance"],
+              "assessment_signals": ["player rotates correctly", "can identify front or back row", "can name target zone", "calls seam or ball", "team attempts three contacts"],
+              "role_specific_progression": {
+                "all_roles": ["learn all phases and court geography"],
+                "setter": ["basic second-contact ownership"],
+                "libero": ["basic restrictions only after back-row status is understood"]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": ["basic rotation and zone knowledge", "pass grade and side-out terms introduced", "players know role responsibilities", "team can run simple serve/receive and defense systems"],
+              "expectations": ["understand side-out and breakpoint", "choose serve target for a reason", "read front-row/back-row setter status", "connect block call to defense", "use timeout or reset scripts", "track simple KPIs"],
+              "typical_drills": ["one-scout-cue games", "rotation strength/weakness walk-through", "side-out scoring by pass grade", "serve target plus block-defense games", "timeout script rehearsal"],
+              "avoid_until_ready_gates": ["do not use statistics as punishment labels", "do not change tactical plan from single-rally noise", "do not use substitution plans without rule-set awareness"],
+              "assessment_signals": ["can explain serve target", "can identify side-out failure point", "can defend behind a block call", "can name front-row attackers in rotation", "uses pass rating or serve pressure metrics"],
+              "role_specific_progression": {
+                "setter": ["simple distribution choices by pass grade"],
+                "libero": ["receive and defense communication lead"],
+                "middle_blocker": ["pass-quality block read"],
+                "serving_specialist": ["target reason and abort condition"]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": ["phase metrics are collected", "rotation reports exist", "players can process small scout plans", "team can adjust systems legally"],
+              "expectations": ["use rotation-by-rotation side-out and transition plans", "profile setter and hitter tendencies conditionally", "serve by expected value", "call block-defense contract", "adjust live through observe-compare-decide-communicate-test loop", "manage substitution and timeout resources"],
+              "typical_drills": ["rotation-card scrimmage", "setter tendency scout-team games", "hitter shot-chart defense", "serve target expected-value games", "live adjustment scrimmage after opponent changes pattern"],
+              "avoid_until_ready_gates": ["do not give players more scout detail than they can act on", "do not overfit tiny samples", "do not ignore legal or substitution constraints in tactical plans"],
+              "assessment_signals": ["player can update serve/block plan after opponent adjustment", "team separates side-out from transition problems", "rotation plus-minus informs practice focus", "scout cue changes on-court behavior", "timeout/substitution rationale is rule-aware"],
+              "role_specific_progression": {
+                "setter": ["conditional distribution by pass, rotation, blocker, and score"],
+                "libero": ["opponent server/hitter tendency recognition and receive geometry"],
+                "middles_and_pins": ["block and attack plans by matchup"],
+                "serving_specialist": ["score-state, target, and substitution-resource awareness"]
+              }
+            }
+          }
+        },
+        {
+          "record_type": "sport_teaching_progression",
+          "record_id": "volleyball_teaching_strength_conditioning",
+          "sport": "volleyball",
+          "domain": "volleyball_strength_conditioning",
+          "source_ref_titles": ["Strategies for the Prevention of Volleyball Related Injuries", "Upper Limb Biomechanics During the Volleyball Serve and Spike", "Biomechanic Differences Between Anticipated and Unanticipated Volleyball Block Jump", "Lower Extremity Mechanics During Landing After a Volleyball Block as a Risk Factor for ACL Injury"],
+          "levels": {
+            "beginner": {
+              "skill_prerequisites": ["can squat, hinge, lunge, brace, land, and move laterally with basic control", "no unmanaged pain", "understands warm-up and recovery basics"],
+              "expectations": ["build general strength and movement literacy", "learn landing and deceleration mechanics", "develop shoulder and trunk control", "use mobility for low stance and overhead positions", "recover enough to practice skills well"],
+              "typical_drills": ["bodyweight squat and hinge", "landing snap-down and stick", "low-level pogo or line hops if appropriate", "band external rotation and scapular control", "hip and ankle mobility", "short acceleration/deceleration games"],
+              "avoid_until_ready_gates": ["do not use high-volume plyometrics without landing quality", "do not condition through fatigue that destroys skill mechanics", "do not ignore pain reports in knees, ankles, shoulders, back, or fingers"],
+              "assessment_signals": ["quiet balanced landing", "knees track over toes", "pain-free overhead movement", "can hold low stance briefly without collapse", "recovers for next practice"],
+              "role_specific_progression": {
+                "all_roles": ["movement literacy and landing base"],
+                "future_liberos_ds": ["low-stance mobility and trunk control"],
+                "future_pins_middles": ["landing and basic jump mechanics"],
+                "future_setters": ["hand, shoulder, trunk, and footwork durability"]
+              }
+            },
+            "intermediate": {
+              "skill_prerequisites": ["basic strength and landing control", "role and practice load are known", "pain response can be monitored", "athlete can separate gym fatigue from court quality"],
+              "expectations": ["develop progressive lower-body strength and power", "train controlled plyometrics", "build shoulder/scapular and trunk capacity", "add lateral deceleration and repeated effort", "track jump, swing, serve, dig, and floor-contact volumes by role"],
+              "typical_drills": ["loaded squat or split squat progression", "hip hinge and posterior-chain strength", "approach jump landing progressions", "lateral bound and stick", "rotator cuff/scapular endurance", "medicine-ball rotational power", "tempo conditioning through volleyball rallies"],
+              "avoid_until_ready_gates": ["do not progress plyometric intensity after tendon soreness spikes", "do not place heavy leg fatigue before high-speed jump timing sessions", "do not add jump-serve or block volume without counting it"],
+              "assessment_signals": ["landing quality remains stable across moderate fatigue", "jump and serve volumes are recorded", "shoulder strength/endurance supports practice", "lateral deceleration is controlled", "athlete reports normal recovery within planned window"],
+              "role_specific_progression": {
+                "setter": ["quickness, trunk, finger/shoulder endurance, front-row block readiness"],
+                "outside_hitter": ["repeat jump, approach power, shoulder durability, receive posture"],
+                "opposite": ["right-side jump power and pin-block deceleration"],
+                "middle_blocker": ["lateral net movement and high-density landing tolerance"],
+                "libero_ds": ["low-stance endurance, reaction, hip mobility, floor-skill durability"],
+                "serving_specialist": ["serve mechanics repeatability and cold-entry readiness"]
+              }
+            },
+            "advanced": {
+              "skill_prerequisites": ["role-specific load history exists", "athlete tolerates advanced court volume", "strength and power are maintained in season", "medical referral path exists for pain or injury concerns"],
+              "expectations": ["periodize power, repeated jump ability, overhead capacity, and recovery by season phase", "adjust loads around match and tournament density", "individualize role workload", "use readiness and symptom response to modify court and gym volume", "support return-to-jump and return-to-serve/hit progressions"],
+              "typical_drills": ["contrast strength-power sessions when schedule allows", "high-quality low-volume plyometrics", "repeated jump ability blocks with landing score", "shoulder velocity and endurance maintenance", "role-specific conditioning circuits", "tournament recovery and mobility sessions"],
+              "avoid_until_ready_gates": ["do not chase peak power during congested competition weeks", "do not combine maximal jump blocking, heavy attacking, and fatigue conditioning without recovery", "do not return to full jump-serve or spike volume after symptoms without staged exposure"],
+              "assessment_signals": ["jump height or power maintained without landing deterioration", "swing and serve speed do not come with pain or mechanics loss", "tendon and shoulder response acceptable 24 to 48 hours after load", "role-specific workload matches plan", "performance metrics improve or hold under fatigue"],
+              "role_specific_progression": {
+                "pin_attackers": ["manage combined receive, swing, block, and serve load"],
+                "middle_blocker": ["highest block-jump density and tendon monitoring"],
+                "setter": ["movement-to-ball, jump set, finger, shoulder, and block-load balance"],
+                "libero_ds": ["floor-contact and low-posture volume management"],
+                "serving_specialist": ["cold warm-up, high-leverage serve load, shoulder/back readiness"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "records": [
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "volleyball_assessment_serving",
+          "sport": "volleyball",
+          "domain": "serving",
+          "metrics": ["serve_in_rate", "miss_type", "target_zone_accuracy", "ace_rate", "opponent_pass_grade_allowed", "serve_plus_minus", "serve_speed_optional", "jump_serve_volume", "shoulder_landing_quality"],
+          "level_signals": {
+            "beginner": ["7 of 10 serves in from adapted or legal distance", "repeatable contact point", "serve to large target", "recover after serve"],
+            "intermediate": ["standing float targetable to broad zones", "80 percent pressure in-rate", "net errors below threshold", "opponent pass quality reduced by planned target"],
+            "advanced": ["serve expected value positive by target", "risk band respected by score", "jump serve load tolerated", "serve target plan changes opponent offense"]
+          },
+          "red_flags": ["painful overhead motion", "rising error rate with no tactical value", "landing drift on jump serve", "routine changes under pressure"]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "volleyball_assessment_passing_serve_receive",
+          "sport": "volleyball",
+          "domain": "passing_serve_receive",
+          "metrics": ["pass_grade_0_3_or_0_4", "positive_pass_rate", "perfect_pass_rate", "error_rate", "overpass_rate", "seam_conflict_rate", "sideout_after_pass_grade", "pass_quality_by_serve_type", "outside_pass_to_attack_readiness"],
+          "level_signals": {
+            "beginner": ["playable pass to large target", "call before contact", "simple seam owner understood", "three-contact attempts increase"],
+            "intermediate": ["pass grade stable by serve type", "three-person receive workable", "side-out improves after positive pass", "outside can pass and approach"],
+            "advanced": ["rotation-specific receive plan improves side-out", "two-person receive only used where metrics justify it", "libero seam leadership lowers conflict", "pass data informs first-ball attack"]
+          },
+          "red_flags": ["stationary passing looks good but live serve fails", "late backward movement recurring", "overpasses against pace", "receive shape changes without outcome tracking"]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "volleyball_assessment_setting",
+          "sport": "volleyball",
+          "domain": "setting",
+          "metrics": ["hittable_set_percentage", "location_error_map", "tempo_accuracy", "decision_quality_by_pass_grade", "out_of_system_save_quality", "second_setter_success", "illegal_contact_or_constraint_faults", "attack_efficiency_after_set"],
+          "level_signals": {
+            "beginner": ["high hittable ball to large target", "feet move before hands", "calls second contact", "safe miss high/off net"],
+            "intermediate": ["front/back choice is appropriate", "quick or faster tempo only from good pass", "out-of-system high outlet reliable", "second-setter plan works"],
+            "advanced": ["distribution creates matchup value", "jump set/deception does not reduce location", "setter attack used legally and sparingly", "decision explanation matches cues"]
+          },
+          "red_flags": ["forces quick from poor pass", "sets tight from chaos", "drifts while jump setting", "libero front-zone overhand set creates illegal above-net attack"]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "volleyball_assessment_attacking",
+          "sport": "volleyball",
+          "domain": "attacking",
+          "metrics": ["attack_efficiency", "kill_error_continuation_by_set_quality", "shot_variety", "tool_or_recycle_success", "approach_timing_score", "contact_point_quality", "landing_quality", "legal_back_row_takeoff", "swing_volume"],
+          "level_signals": {
+            "beginner": ["approach rhythm and safe landing", "controlled attack in court", "high contact from easy set", "coverage after attack"],
+            "intermediate": ["shot menu includes line/cross/roll/tip/tool", "adapts to set quality", "back-row attack legal when used", "landing stable at varied tempos"],
+            "advanced": ["role attack menu by rotation", "scouted shot choice changes outcome", "high-ball errors controlled", "combination and back-row attacks used from correct contexts"]
+          },
+          "red_flags": ["max swings from unsafe/tight sets", "contact consistently behind head", "net drift or center-line risk", "shoulder/back pain with high volume"]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "volleyball_assessment_blocking",
+          "sport": "volleyball",
+          "domain": "blocking",
+          "metrics": ["correct_read_percentage", "block_touch_rate", "block_point_rate", "controlled_touch_rate", "double_block_seam_errors", "net_fault_rate", "landing_quality_score", "jump_count_by_role", "touch_to_dig_or_point_rate"],
+          "level_signals": {
+            "beginner": ["legal front-row block awareness", "ready stance", "balanced jump and landing", "hands press without net fault"],
+            "intermediate": ["footwork matches set distance", "read block from setter release", "double-block seam closes", "floor defense knows block call"],
+            "advanced": ["read/commit decision fits pass and scout", "hand plan channels hitter", "block-defense metrics improve", "jump load tolerated"]
+          },
+          "red_flags": ["sideways drift landings", "commit blocking without communication", "swing block used for every set", "poor landing quality under fatigue"]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "volleyball_assessment_defense_digging",
+          "sport": "volleyball",
+          "domain": "defense_digging",
+          "metrics": ["playable_dig_rate", "dig_quality_by_attack_type", "tip_roll_save_rate", "hard_driven_dig_quality", "defense_position_matches_block_call", "dig_to_attack_rate", "free_ball_control", "floor_contact_load"],
+          "level_signals": {
+            "beginner": ["base position reached", "high playable dig to center", "ball is called", "tip owner understands task"],
+            "intermediate": ["reads hard/roll/tip cues", "defends behind line or angle block", "dig creates second contact", "libero/DS communication stabilizes shape"],
+            "advanced": ["hybrid defense adjusts by scout", "dig target enables transition choice", "counterattack efficiency improves", "floor-contact load stays tolerable"]
+          },
+          "red_flags": ["defender stands in block shadow unintentionally", "dives used as punishment", "system spots memorized without reading", "wrist/shoulder/hip/back symptoms ignored"]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "volleyball_assessment_transition",
+          "sport": "volleyball",
+          "domain": "transition",
+          "metrics": ["dig_to_second_contact_rate", "dig_to_attack_rate", "counterattack_efficiency", "free_ball_conversion_rate", "second_setter_hittable_percentage", "coverage_save_rate", "transition_error_rate", "phase_tag"],
+          "level_signals": {
+            "beginner": ["team continues after dig or free ball", "second contact is called", "third contact is controlled", "coverage is attempted"],
+            "intermediate": ["setter-dig help plan works", "dig-set-attack sequences score", "coverage creates re-attack", "tempo matches dig quality"],
+            "advanced": ["K2/K3 efficiency tracked separately", "fast transition used from high-quality digs", "out-of-system choices reduce errors", "free-ball conversion is a strength"]
+          },
+          "red_flags": ["setter unavailable and no one calls help", "transition attack too fast for dig quality", "coverage omitted", "middles overloaded with block-to-quick reps"]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "volleyball_assessment_match_iq",
+          "sport": "volleyball",
+          "domain": "match_iq",
+          "metrics": ["rotation_identification", "front_back_status_accuracy", "serve_target_rationale", "sideout_percentage", "breakpoint_percentage", "rotation_plus_minus", "block_defense_call_execution", "scout_plan_execution", "adjustment_quality"],
+          "level_signals": {
+            "beginner": ["rotates correctly", "knows zones and front/back row", "calls ball", "understands three-contact intent"],
+            "intermediate": ["can explain serve target and side-out problem", "identifies setter front/back row", "executes block-defense call", "uses simple KPIs"],
+            "advanced": ["updates plan after opponent adjustment", "separates side-out from transition issue", "uses rotation and scout data", "timeout/substitution rationale is rule-aware"]
+          },
+          "red_flags": ["stats used without action", "tactical change after one-rally noise", "complex scout exceeds player action capacity", "rule-set mismatch for libero or substitution decisions"]
+        },
+        {
+          "record_type": "sport_skill_assessment",
+          "record_id": "volleyball_assessment_strength_conditioning",
+          "sport": "volleyball",
+          "domain": "volleyball_strength_conditioning",
+          "metrics": ["landing_quality", "jump_count", "swing_count", "serve_count", "block_jump_count", "low_stance_tolerance", "shoulder_symptom_response", "knee_tendon_response", "ankle_control", "recovery_status"],
+          "level_signals": {
+            "beginner": ["pain-free basic movement", "controlled landing", "basic low stance", "overhead range and control adequate"],
+            "intermediate": ["progressive strength and plyometric tolerance", "loads recorded by role", "shoulder and trunk capacity supports practice", "quality maintained under moderate fatigue"],
+            "advanced": ["role-specific load plan", "power maintained in season", "symptom response guides volume", "return-to-jump and return-to-serve/hit staged after symptoms"]
+          },
+          "red_flags": ["pain ignored", "rapid jump or swing volume spike", "heavy fatigue before technical timing practice", "landing valgus or drift worsens with fatigue"]
+        }
+      ]
+    },
+    {
+      "collection": "sport_level_transition_rules",
+      "records": [
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "volleyball_global_beginner_to_intermediate",
+          "sport": "volleyball",
+          "from_level": "beginner",
+          "to_level": "intermediate",
+          "required_evidence": [
+            "serves are legal or adapted-distance stable and increasingly full-distance",
+            "first contact is playable often enough to create three-contact rallies",
+            "player understands zones, rotation direction, and front/back row status",
+            "basic set, attack, defend, cover, and communicate behaviors are visible in small-sided or 6v6 play",
+            "landing and overhead mechanics tolerate normal beginner practice volume"
+          ],
+          "do_not_progress_if": [
+            "player cannot safely land or control net spacing",
+            "live-serve first contact collapses despite stationary passing success",
+            "player does not know rotation or row status",
+            "pain is present and unmanaged"
+          ],
+          "backend_action": "unlock intermediate role priorities, standing float pressure, pass grading, three- or four-person receive, read defense, simple systems, and tracked S&C load."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "volleyball_global_intermediate_to_advanced",
+          "sport": "volleyball",
+          "from_level": "intermediate",
+          "to_level": "advanced",
+          "required_evidence": [
+            "skill holds under live speed, score pressure, and role-specific fatigue",
+            "athlete can explain decisions using pass quality, block/defense cues, rotation, and score context",
+            "team or athlete has phase metrics for serve pressure, side-out, transition, and error cost",
+            "role-specific load is tracked and does not degrade movement quality",
+            "legal constraints for back-row attacks, libero actions, and substitutions are understood in drills"
+          ],
+          "do_not_progress_if": [
+            "advanced skill increases error or injury risk without tactical return",
+            "player relies on isolated drill success but fails in rally context",
+            "scouting plan is too complex for on-court execution",
+            "jump, swing, serve, or floor-contact volume produces poor 24 to 48 hour response"
+          ],
+          "backend_action": "unlock advanced scout-based progressions, jump serve options, fast tempo and combinations, read/commit block, hybrid defense, transition KPIs, and individualized S&C planning."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "volleyball_domain_readiness_gate_matrix",
+          "sport": "volleyball",
+          "from_level": "beginner",
+          "to_level": "advanced",
+          "domain_gates": {
+            "serving": {
+              "beginner_to_intermediate": ["legal/adapted serve in rate stable", "repeatable contact", "can aim large target"],
+              "intermediate_to_advanced": ["serve pressure improves opponent pass quality", "target/error/risk tracked", "jump-serve load tolerated if used"]
+            },
+            "passing_serve_receive": {
+              "beginner_to_intermediate": ["live serve playable pass rate improving", "simple seam rule works", "player transitions after pass"],
+              "intermediate_to_advanced": ["pass grade stable by serve type", "receive system chosen by data", "side-out plan linked to pass quality"]
+            },
+            "setting": {
+              "beginner_to_intermediate": ["high set to target is hittable", "setter moves feet and calls early", "safe miss habits present"],
+              "intermediate_to_advanced": ["tempo and distribution are accurate under live pass grades", "blocker reads inform choices", "legal second-contact constraints understood"]
+            },
+            "attacking": {
+              "beginner_to_intermediate": ["approach, contact, and landing safe", "controlled attack can score or continue rally"],
+              "intermediate_to_advanced": ["shot menu works against live block", "role-specific routes legal and timed", "kill/error profile justifies complexity"]
+            },
+            "blocking": {
+              "beginner_to_intermediate": ["front-row eligibility understood", "one-step/shuffle block lands safely", "hands press without net fault"],
+              "intermediate_to_advanced": ["read block and double-block seam reliable", "read/commit plan tied to scout", "jump load and landing quality monitored"]
+            },
+            "defense_digging": {
+              "beginner_to_intermediate": ["base and call are reliable", "dig is playable to center target", "tip owner moves"],
+              "intermediate_to_advanced": ["block-defense contract is executed", "dig target creates attack", "hybrid or scout adjustments improve outcomes"]
+            },
+            "transition": {
+              "beginner_to_intermediate": ["team continues after dig/free ball", "second contact owner is called", "coverage is attempted"],
+              "intermediate_to_advanced": ["second-setter plan works", "dig-to-attack rate tracked", "counterattack choices fit dig quality"]
+            },
+            "match_iq": {
+              "beginner_to_intermediate": ["zones, rotation, row status, and three-contact intent understood"],
+              "intermediate_to_advanced": ["phase metrics, rotation plans, scout cues, and live adjustment rules are usable"]
+            },
+            "volleyball_strength_conditioning": {
+              "beginner_to_intermediate": ["basic strength, mobility, landing, and overhead control are safe"],
+              "intermediate_to_advanced": ["role load is tracked", "athlete tolerates power and repeated effort", "symptom response guides planning"]
+            }
+          },
+          "backend_action": "use the domain gate that matches the requested workout or skill plan; do not unlock all advanced content because one domain is advanced."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "volleyball_avoid_until_ready_rule",
+          "sport": "volleyball",
+          "rule": "Hold or regress advanced volleyball tasks when prerequisites are missing, even if the athlete's team role normally performs that task.",
+          "task_gates": [
+            {
+              "task": "jump_topspin_serve",
+              "minimum_gate": "standing or jump float contact stable, shoulder load tolerated, landing controlled, and error value acceptable"
+            },
+            {
+              "task": "two_person_receive",
+              "minimum_gate": "selected passers maintain side-out and pass grade above three-person option across serve types"
+            },
+            {
+              "task": "first_tempo_quick_or_slide",
+              "minimum_gate": "pass quality, setter location, hitter timing, and landing safety are stable"
+            },
+            {
+              "task": "pipe_or_d_ball",
+              "minimum_gate": "legal attack-line takeoff, spacing, set timing, and landing control are reliable"
+            },
+            {
+              "task": "swing_block_or_commit_block",
+              "minimum_gate": "lateral landing control, block-defense communication, and scout/pass-quality rationale are present"
+            },
+            {
+              "task": "emergency_dive_volume",
+              "minimum_gate": "safe floor technique, surface readiness, and load monitoring are present"
+            },
+            {
+              "task": "advanced_scouting_plan",
+              "minimum_gate": "player can execute the simpler version of the plan during live rallies"
+            }
+          ],
+          "backend_action": "if gate fails, recommend the nearest lower-level drill variant and reassess with the relevant skill assessment record."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "volleyball_role_specialization_timing",
+          "sport": "volleyball",
+          "rule": "Increase role specificity only after broad volleyball literacy is present.",
+          "level_guidance": {
+            "beginner": ["all players train serve, pass, set, attack, defend, cover, and rotate", "roles are teaching labels only"],
+            "intermediate": ["primary role priorities are added while emergency all-around skills are maintained", "legal row and libero constraints are attached to role drills"],
+            "advanced": ["role training is rotation-, matchup-, scout-, and load-specific", "workload is individualized by setter, outside, opposite, middle, libero, DS, and serving specialist demands"]
+          },
+          "backend_action": "avoid early over-specialization in beginner workout generation; use role filters increasingly from intermediate onward."
+        },
+        {
+          "record_type": "sport_level_transition_rule",
+          "record_id": "volleyball_regression_and_return_rule",
+          "sport": "volleyball",
+          "rule": "Regression is required when quality, pain response, or tactical transfer falls below the level standard.",
+          "regress_triggers": ["pain during or after session", "landing or overhead mechanics degrade", "advanced skill lowers phase outcome", "decision accuracy fails under live cues", "error rate exceeds planned risk band"],
+          "regression_actions": ["reduce volume", "increase target size", "return to standing or lower-speed variant", "remove jump or live-block constraint", "restore simpler receive or defense geometry", "use medical referral when pain persists or worsens"],
+          "return_to_progression_signals": ["pain-free staged exposure", "quality returns under representative cues", "metrics reach previous level gate", "athlete can explain decision and safety constraints"],
+          "backend_action": "create adaptive workouts that step down task complexity without dropping all volleyball specificity."
+        }
+      ]
+    }
+  ]
+}

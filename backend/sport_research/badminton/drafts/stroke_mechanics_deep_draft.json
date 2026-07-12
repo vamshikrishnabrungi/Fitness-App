@@ -1,0 +1,827 @@
+{
+  "metadata": {
+    "domain": "stroke_mechanics_deep",
+    "sport": "badminton",
+    "version": "draft_v1",
+    "researched_on": "2026-06-21",
+    "agent_scope": "stroke mechanics and racket skills only",
+    "research_goal": "Create backend-ready badminton coaching knowledge focused only on grip changes, racket preparation, serve, return, clear, drop, smash, drive, lift, block, net shot, deception, common errors, level-specific teaching, stroke-specific physical demands, injury/load risks, training implications, and records to create.",
+    "non_goals": [
+      "full rules and scoring research except service legality constraints",
+      "full footwork system research except contact support and load implications",
+      "general tactics, formations, tournament planning, or doubles rotation beyond stroke-selection implications"
+    ]
+  },
+  "source_refs": [
+    {
+      "id": "bwf_shuttle_time_teacher_manual",
+      "title": "BWF Shuttle Time Teachers' Manual",
+      "url": "https://www.badminton.org.au/wp-content/uploads/2022/11/1.-BWF-ST-Teachers-Manual_Inclusivity_ENGLISH.pdf",
+      "source_type": "official_coach_education_pdf",
+      "organization_or_author": "Badminton World Federation",
+      "notes": "Used for beginner-to-school coaching language, grip changes, forecourt/midcourt/rearcourt progressions, net shots, lifts, blocks, drives, clears, drops, smashes, and stroke-cycle teaching."
+    },
+    {
+      "id": "bwf_coach_level_1",
+      "title": "BWF Coach Education Level 1",
+      "url": "https://development.bwfbadminton.com/coaches/level-1",
+      "source_type": "official_coach_education_program",
+      "organization_or_author": "Badminton World Federation",
+      "notes": "Used for coaching framework, technical and tactical fundamentals, movement-stroke integration, and progressive learning principles."
+    },
+    {
+      "id": "bwf_laws_badminton",
+      "title": "BWF Corporate Statutes: Chapter 4 Rules of the Game",
+      "url": "https://corporate.bwfbadminton.com/statutes/",
+      "source_type": "official_rules_portal",
+      "organization_or_author": "Badminton World Federation",
+      "notes": "Used only for service legality constraints in Section 4.1 that affect serve mechanics: diagonal service, continuous forward racket movement, no foot faults, shuttle contact below the fixed service height, and cork/base first contact."
+    },
+    {
+      "id": "bwf_change_grip_activity",
+      "title": "BWF Shuttle Time Activity of the Month: Hitting With Change of Grip",
+      "url": "https://shuttletime.bwfbadminton.com/2016/02/12/activity-of-the-month-february-hitting-with-change-of-grip/",
+      "source_type": "official_coach_activity",
+      "organization_or_author": "Badminton World Federation",
+      "notes": "Used for grip-change teaching: alternating thumb and V grips, racket in front, short compact strokes, and over-net practice."
+    },
+    {
+      "id": "bwf_net_shot_activity",
+      "title": "BWF Shuttle Time Activity of the Month: Introduction Net Shots Backhand and Forehand",
+      "url": "https://shuttletime.bwfbadminton.com/2017/10/16/activity-of-the-month-october-introduction-net-shots-backhand-and-forehand/",
+      "source_type": "official_coach_activity",
+      "organization_or_author": "Badminton World Federation",
+      "notes": "Used for net-shot teaching cues: touch action, early racket presentation, relaxed grip, and quality over power."
+    },
+    {
+      "id": "waddell_gowitzke_biomechanics",
+      "title": "Biomechanical Principles Applied to Badminton Power Strokes",
+      "url": "https://ojs.ub.uni-konstanz.de/cpa/article/view/2233",
+      "source_type": "biomechanics_paper",
+      "organization_or_author": "D. B. Waddell and B. A. Gowitzke",
+      "notes": "Used for synthesis of overhead power strokes as coordinated shoulder, arm, forearm, wrist, and racket actions rather than an isolated wrist flick."
+    },
+    {
+      "id": "tsai_overhead_biomechanics",
+      "title": "Biomechanical Analysis of Different Badminton Forehand Overhead Strokes",
+      "url": "https://ojs.ub.uni-konstanz.de/cpa/article/view/2521/2368",
+      "source_type": "peer_reviewed_biomechanics_pdf",
+      "organization_or_author": "C. L. Tsai and collaborators",
+      "notes": "Used for overhead clear, drop, and smash distinctions, including shared preparation and different contact, racket-speed, and follow-through demands."
+    },
+    {
+      "id": "science_of_badminton",
+      "title": "The Science of Badminton: Game Characteristics, Anthropometry, Physiology, Visual Fitness and Biomechanics",
+      "url": "https://www.worldbadminton.com/shuttlenws/20150316a.pdf",
+      "source_type": "peer_reviewed_review_pdf",
+      "organization_or_author": "M. Phomsoupha and G. Laffaye",
+      "notes": "Used for badminton as a fast intermittent racket sport, visual-perceptual demands, repeat high-intensity actions, and biomechanical support for overhead and explosive stroke production."
+    },
+    {
+      "id": "frontiers_workload_energy",
+      "title": "Comparison of Energy Contributions and Workloads in Male and Female Badminton Players During Games Versus Repetitive Practices",
+      "url": "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2021.640199/full",
+      "source_type": "peer_reviewed_physiology_study",
+      "organization_or_author": "Frontiers in Physiology authors",
+      "notes": "Used for training-load implications: repetitive practice can differ substantially from game demands and should be prescribed with stroke volume, intensity, and recovery in mind."
+    },
+    {
+      "id": "elite_badminton_injury_review",
+      "title": "Badminton Injuries in Elite Athletes: A Review of Epidemiology and Biomechanics",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32399141/",
+      "source_type": "peer_reviewed_injury_review",
+      "organization_or_author": "Pardiwala, Subbiah, Rao, and Modi",
+      "notes": "Used for injury-risk framing around shoulder, back, knee, ankle, and lower-limb demands in elite badminton."
+    },
+    {
+      "id": "systematic_badminton_injury_review",
+      "title": "Characteristics and Incidence of Injuries in Badminton: A Systematic Review",
+      "url": "https://bmjopensem.bmj.com/content/11/1/e002127",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "BMJ Open Sport and Exercise Medicine authors",
+      "notes": "Used for broad injury pattern synthesis, including frequent lower-body injury locations, overuse versus acute mechanisms, and implications for progressive load management."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "stroke_cycle_diagnosis",
+      "concept": "Badminton stroke quality should be diagnosed by phase, not only by shot outcome.",
+      "details": "Separate the problem into ready position, grip, racket preparation, backswing or hold, forward swing, contact, follow-through, and recovery. A shuttle landing short, high, or out may originate from the wrong grip, late preparation, contact too close to the body, excessive swing, poor finger timing, or fatigue.",
+      "backend_tags": ["stroke_cycle", "diagnosis", "racket_skills"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_coach_level_1"]
+    },
+    {
+      "id": "grip_as_face_control",
+      "concept": "Grip is the control interface for racket-face angle, power transfer, and deception.",
+      "details": "The V grip supports many forehand overhead and underarm actions; the thumb grip supports many backhand pushes, lifts, blocks, and drives. Players must change grip early enough to present the racket face, but stay relaxed enough to adjust at the last moment.",
+      "backend_tags": ["grip", "racket_face", "forehand_backhand"],
+      "source_ref_ids": ["bwf_change_grip_activity", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "finger_power_not_tension",
+      "concept": "Good racket skills use relaxed fingers with a timed squeeze, not constant hand tension.",
+      "details": "A relaxed grip helps fast grip changes, touch, and late face changes. The squeeze or finger acceleration should occur close to impact; gripping hard throughout slows preparation and reduces feel.",
+      "backend_tags": ["finger_power", "touch", "relaxation"],
+      "source_ref_ids": ["bwf_change_grip_activity", "bwf_net_shot_activity"]
+    },
+    {
+      "id": "racket_preparation_creates_time",
+      "concept": "Early racket preparation is a time-management skill.",
+      "details": "The racket should normally be visible and ready in front of the body between shots, then set early toward the expected contact zone. Late preparation forces rushed swings, poor contact height, and obvious shot selection.",
+      "backend_tags": ["racket_preparation", "timing", "ready_position"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "science_of_badminton"]
+    },
+    {
+      "id": "same_preparation_different_shots",
+      "concept": "Clear, drop, and smash become tactically stronger when their preparation looks similar.",
+      "details": "The rear-court player should show comparable shoulder turn, racket preparation, and approach to contact, then vary impact height, racket speed, face angle, slice, and follow-through to produce depth, touch, or power.",
+      "backend_tags": ["overhead", "disguise", "shot_variation"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "tsai_overhead_biomechanics"]
+    },
+    {
+      "id": "overhead_power_sequence",
+      "concept": "Overhead power is a whole-chain sequence, not a wrist-only action.",
+      "details": "Useful power comes from timed trunk rotation, shoulder action, elbow extension, forearm rotation, wrist and finger acceleration, and a clean contact point. Isolating power to the wrist commonly causes weak, late, or painful strokes.",
+      "backend_tags": ["overhead_power", "kinetic_chain", "smash_clear"],
+      "source_ref_ids": ["waddell_gowitzke_biomechanics", "science_of_badminton"]
+    },
+    {
+      "id": "contact_point_is_shot_identity",
+      "concept": "Contact height, distance from body, and racket-face angle largely define the shot.",
+      "details": "A high contact in front enables attacking clears, steep drops, and smashes. A low forecourt contact often requires lift or block. A flat midcourt contact supports drives. A shuttle taken too close to the body reduces options and makes deception harder.",
+      "backend_tags": ["contact_point", "shot_selection", "racket_face"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "tsai_overhead_biomechanics"]
+    },
+    {
+      "id": "serve_is_closed_but_constrained",
+      "concept": "The serve is a closed skill, but legal constraints strongly shape mechanics.",
+      "details": "Serve practice should train repeatable setup, legal shuttle contact, continuous forward racket movement, and target control. Low, flick, and high serves differ in trajectory and intent, but all must stay legal before they are judged tactically useful.",
+      "backend_tags": ["serve", "legality", "closed_skill"],
+      "source_ref_ids": ["bwf_laws_badminton", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "return_as_first_racket_attack",
+      "concept": "The return of serve is the first chance to take time away with the racket.",
+      "details": "The receiver should prepare the racket early, take short serves high and in front when possible, and choose net, push, drive, lift, or kill based on shuttle height and server recovery. A late or low contact turns an attacking return into a defensive lift.",
+      "backend_tags": ["return", "serve_receive", "first_three_shots"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_coach_level_1"]
+    },
+    {
+      "id": "flat_vs_touched_stroke_continuum",
+      "concept": "Badminton racket skills sit on a continuum from touch to flat speed to full power.",
+      "details": "Net shots, blocks, and soft returns require touch and face control. Drives require compact fast racket work. Clears and smashes require larger acceleration and body contribution. Programming should not treat all racket contacts as the same load.",
+      "backend_tags": ["touch", "drive", "power", "load_specificity"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "frontiers_workload_energy"]
+    },
+    {
+      "id": "below_tape_decision",
+      "concept": "When the shuttle is below tape height, lift and block become safer than forcing a kill.",
+      "details": "Players need a simple net-height rule: attack only when the shuttle can be taken above or around tape height with control; otherwise use a tight net, soft block, or quality lift depending on pressure and court position.",
+      "backend_tags": ["net_height", "lift", "block", "decision_rule"],
+      "source_ref_ids": ["bwf_net_shot_activity", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "deception_requires_base_skill",
+      "concept": "Deception should be layered onto a reliable base stroke.",
+      "details": "Hold, slice, reverse slice, double-motion, and last-moment face changes work only if the player can first produce the simple clear, drop, net, push, lift, or drive from the same preparation without losing balance or legality.",
+      "backend_tags": ["deception", "progression", "shot_disguise"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "tsai_overhead_biomechanics"]
+    },
+    {
+      "id": "common_errors_are_predictable",
+      "concept": "Most stroke errors cluster around predictable causes.",
+      "details": "Common causes are tight grip, no grip change, racket prepared behind the body, contact too low, contact too close, backswing too large for time available, face opening or closing unintentionally, overuse of wrist, and follow-through that prevents recovery.",
+      "backend_tags": ["common_errors", "coaching_feedback", "error_correction"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_change_grip_activity"]
+    },
+    {
+      "id": "level_specific_stroke_learning",
+      "concept": "Beginner, intermediate, and advanced stroke teaching should solve different problems.",
+      "details": "Beginners need grip, contact, and simple targets. Intermediates need earlier preparation, depth-height-speed control, and basic disguise. Advanced players need same-preparation variation, tactical serve/return quality, deception under pressure, and load-tolerant power.",
+      "backend_tags": ["beginner", "intermediate", "advanced", "teaching_progression"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_coach_level_1"]
+    },
+    {
+      "id": "stroke_load_is_not_just_conditioning",
+      "concept": "Stroke repetition carries specific tissue load.",
+      "details": "High-volume smashes, clears, drives, net lunges, and repetitive multi-shuttle blocks load different tissues and can distort technique when fatigue changes grip, contact height, or trunk control.",
+      "backend_tags": ["load_management", "injury_risk", "multi_shuttle"],
+      "source_ref_ids": ["frontiers_workload_energy", "elite_badminton_injury_review", "systematic_badminton_injury_review"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "badminton_model_grip_change_deep",
+      "skill_family": "grip_changes",
+      "mechanics": "Move between relaxed neutral/V, thumb, panhandle-like emergency, and bevel variations according to contact side, shuttle height, and intended face angle. The grip change should occur before the swing whenever there is time, then finish with a brief finger squeeze at contact.",
+      "racket_preparation": "Racket head in front between contacts, handle loose enough for the fingers to rotate the racket without regripping with the whole arm.",
+      "coaching_cues": ["racket_in_front", "loose_fingers", "show_the_strings", "thumb_for_backhand_push", "squeeze_at_contact"],
+      "common_errors": ["one_grip_for_every_shot", "death_grip", "late_whole_hand_regrip", "panhandle_for_all_overheads", "thumb_flat_too_early_on_forehands"],
+      "teaching_progression": {
+        "beginner": ["forehand_to_backhand_tap_exchange", "thumb_grip_pushes_over_net", "V_grip_forehand_taps"],
+        "intermediate": ["random_forehand_backhand_drives", "net_lift_choice_with_grip_change", "serve_return_grip_ready"],
+        "advanced": ["late_face_change_from_same_prep", "drive_block_counter_patterns", "deception_under_receiver_pressure"]
+      },
+      "assessment_signals": ["changes_grip_without_looking", "racket_face_matches_target", "contact_stays_clean_when_feed_is_random"],
+      "source_ref_ids": ["bwf_change_grip_activity", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "badminton_model_racket_preparation",
+      "skill_family": "racket_preparation",
+      "mechanics": "Use a ready racket that can move to forecourt, midcourt, or rear-court contact quickly. Preparation changes by stroke: compact and in front for drives and blocks, early shoulder turn and racket set for overheads, soft high racket presentation for net, and stable setup for serve.",
+      "racket_preparation": "Default ready position keeps the racket in front of the trunk with the head above hand height where practical; avoid resting the racket low after each shot.",
+      "coaching_cues": ["recover_racket_first", "prepare_before_feed_bounces_in_your_head", "short_swing_when_time_is_short", "turn_then_hit_overhead"],
+      "common_errors": ["racket_drops_after_contact", "backswing_too_large_in_drive_exchange", "overhead_preparation_after_shuttle_arrives", "forecourt_racket_hidden_below_tape"],
+      "teaching_progression": {
+        "beginner": ["ready_position_freeze_after_each_hit", "coach_calls_forehand_or_backhand", "frontcourt_racket_up_games"],
+        "intermediate": ["random_feed_prep_checks", "same_prep_clear_drop", "drive_block_ready_sequences"],
+        "advanced": ["delayed_feed_reaction", "serve_return_first_three_shots", "disguised_overhead_and_net_recovery"]
+      },
+      "assessment_signals": ["racket_ready_before_shuttle_crosses_net", "compact_swing_under_speed", "preparation_does_not_reveal_every_shot"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "science_of_badminton"]
+    },
+    {
+      "id": "badminton_model_low_backhand_serve",
+      "skill_family": "serve",
+      "shot": "low backhand serve",
+      "mechanics": "Set a stable legal stance, hold shuttle consistently in front, use a short controlled backswing, move the racket continuously forward, contact the shuttle cleanly below the legal height, and send a flat-low trajectory that falls near the receiver's service line.",
+      "racket_preparation": "Thumb or bevel-based backhand grip, racket face slightly open enough to clear the tape without popping the shuttle high.",
+      "coaching_cues": ["small_action", "brush_clean_not_flicky", "same_start_each_time", "aim_tape_then_drop", "legal_before_clever"],
+      "common_errors": ["serve_too_high", "racket_stops_before_contact", "inconsistent_shuttle_hold", "stepping_or_dragging_foot", "slicing_sideways_without_control"],
+      "teaching_progression": {
+        "beginner": ["legal_contact_and_service_box", "target_mat_near_short_service_line"],
+        "intermediate": ["low_serve_to_multiple_targets", "same_setup_low_or_flick"],
+        "advanced": ["pressure_serve_with_receiver_threat", "low_serve_plus_third_shot_pattern"]
+      },
+      "assessment_signals": ["legal_repeatable_contact", "low_net_clearance_without_faulting", "receiver_cannot_attack_most_serves"],
+      "source_ref_ids": ["bwf_laws_badminton", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "badminton_model_flick_and_high_serve",
+      "skill_family": "serve",
+      "shot": "flick serve and high forehand serve",
+      "mechanics": "The flick serve starts like the low serve and adds late acceleration to send the shuttle over the receiver. The high forehand serve uses a larger underarm action and higher trajectory to push the receiver deep, mainly in singles and early learning contexts.",
+      "racket_preparation": "Flick serve must hide intent through similar setup to the low serve. High serve uses relaxed underarm rhythm, stable base, and upward racket path.",
+      "coaching_cues": ["same_picture_then_late_speed", "clear_the_receiver_not_the_ceiling", "serve_deep_with_control", "recover_racket_after_serve"],
+      "common_errors": ["flick_telegraphed_by_big_backswing", "high_serve_short", "illegal_pause_or_lift", "overhitting_long", "not_ready_after_serving"],
+      "teaching_progression": {
+        "beginner": ["high_serve_depth_targets", "legal_underarm_rhythm"],
+        "intermediate": ["low_flick_pairing", "serve_depth_zone_variation"],
+        "advanced": ["flick_as_receiver_punishment", "serve_mix_under_score_pressure"]
+      },
+      "assessment_signals": ["flick_and_low_serve_share_setup", "high_serve_reaches_deep_target_area", "server_recovers_for_next_racket_action"],
+      "source_ref_ids": ["bwf_laws_badminton", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "badminton_model_return_of_serve",
+      "skill_family": "return",
+      "mechanics": "Prepare with racket forward, grip adaptable, and body balanced. Take short serves early and high when possible; choose net, push, drive, lift, or kill based on height, speed, server position, and partner context.",
+      "racket_preparation": "Racket head up before the server contacts the shuttle; minimal backswing; grip ready to change between forehand and backhand returns.",
+      "coaching_cues": ["racket_first_step_second", "take_it_early", "short_action", "hit_down_only_if_above_tape", "recover_for_third_shot"],
+      "common_errors": ["standing_too_tall_with_low_racket", "swinging_big_at_short_serve", "killing_below_tape", "lifting_every_return", "grip_locked_to_one_side"],
+      "teaching_progression": {
+        "beginner": ["return_short_serve_to_net_or_lift", "recognize_short_vs_deep"],
+        "intermediate": ["push_drive_lift_choice", "receiver_targets_server_or_space"],
+        "advanced": ["threaten_kill_then_hold", "return_patterns_against_low_flick_variation"]
+      },
+      "assessment_signals": ["takes_short_serves_in_front", "chooses_safe_lift_when_late", "can pressure without over-swinging"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_coach_level_1"]
+    },
+    {
+      "id": "badminton_model_overhead_clear",
+      "skill_family": "clear",
+      "mechanics": "Use early shoulder turn, high contact in front or slightly above the hitting shoulder, whole-chain acceleration, and a full enough follow-through to send the shuttle high and deep. Defensive clears buy time; attacking or punch clears travel flatter and faster when contact quality allows.",
+      "racket_preparation": "Racket set behind and above the shoulder with non-racket arm helping alignment; grip relaxed until acceleration.",
+      "coaching_cues": ["turn_early", "hit_high", "reach_to_the_back_line", "finish_balanced", "same_prep_as_drop_smash"],
+      "common_errors": ["contact_behind_head", "panhandle_push", "short_clear_from_arm_only", "falling_back", "follow_through_across_too_early"],
+      "teaching_progression": {
+        "beginner": ["shadow_throwing_shape", "feed_clear_to_depth", "target_back_third"],
+        "intermediate": ["attacking_vs_defensive_clear", "clear_drop_same_prep", "under_pressure_recovery_clear"],
+        "advanced": ["punch_clear_disguise", "clear_to_wrong_foot", "clear_after_hold_or_slice_threat"]
+      },
+      "assessment_signals": ["deep_length_without_pain", "contact_high_and_in_front", "clear_depth_maintained_under_random_feed"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "tsai_overhead_biomechanics", "waddell_gowitzke_biomechanics"]
+    },
+    {
+      "id": "badminton_model_overhead_drop",
+      "skill_family": "drop",
+      "mechanics": "Begin like an overhead clear or smash, then reduce racket speed, change face angle, or add slice to send the shuttle downward into the forecourt. Quality depends on early preparation, high contact, touch, and recovery rather than deceleration that telegraphs the shot too soon.",
+      "racket_preparation": "Show similar rear-court preparation to clear and smash; keep the option to hit straight, cross, fast, slow, sliced, or reverse-sliced drops.",
+      "coaching_cues": ["same_start_soft_finish", "cut_the_feathers_only_if_controlled", "hit_down_not_float", "recover_after_touch"],
+      "common_errors": ["slowing_too_early", "drop_too_high", "contact_low", "slice_without_face_control", "watching_the_shot_instead_of_recovering"],
+      "teaching_progression": {
+        "beginner": ["simple_straight_drop_from_feed", "clear_drop_contrast"],
+        "intermediate": ["fast_vs_slow_drop", "straight_cross_drop_targets", "slice_introduction"],
+        "advanced": ["reverse_slice", "hold_drop_from_clear_smash_prep", "drop_followed_by_net_kill_or_recovery"]
+      },
+      "assessment_signals": ["drop_descends_below_tape_soon_after_net", "preparation_does_not_obviously_change", "player_recovers_before_opponent_contact"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "tsai_overhead_biomechanics"]
+    },
+    {
+      "id": "badminton_model_smash",
+      "skill_family": "smash",
+      "mechanics": "Create a steep powerful downward stroke from high contact in front, using coordinated trunk, shoulder, elbow, forearm, wrist, and finger acceleration. The aim is not only speed; placement, angle, recovery, and ability to follow the smash matter.",
+      "racket_preparation": "Rear-court preparation should initially resemble clear and drop. Contact should be far enough in front to hit down without excessive lumbar extension.",
+      "coaching_cues": ["hit_high_and_in_front", "throw_then_whip", "angle_before_max_power", "land_or_recover_ready", "do_not_force_when_late"],
+      "common_errors": ["smashing_from_behind_body", "all_wrist_power", "jumping_without_control", "shoulder_pain_ignored", "flat_smash_when_contact_is_low"],
+      "teaching_progression": {
+        "beginner": ["half_speed_steep_contact", "smash_to_large_target", "recover_after_smash"],
+        "intermediate": ["placement_before_power", "body_smash_vs_side_line", "smash_drop_clear_variation"],
+        "advanced": ["jump_smash_load_managed", "stick_smash", "smash_block_follow_up", "deceptive_angle_change"]
+      },
+      "assessment_signals": ["steep_angle_from_high_contact", "power_does_not_break_shoulder_or_back_shape", "can repeat_with_accuracy_under_fatigue_limits"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "waddell_gowitzke_biomechanics", "elite_badminton_injury_review"]
+    },
+    {
+      "id": "badminton_model_drive",
+      "skill_family": "drive",
+      "mechanics": "Hit a flat fast shuttle through the midcourt with compact preparation, racket head in front, short backswing, quick grip change, and sharp finger or forearm acceleration. Drives should stay flat or slightly downward when contact allows.",
+      "racket_preparation": "Racket up and in front; elbows relaxed; grip can shift rapidly between forehand, thumb, and bevel contacts.",
+      "coaching_cues": ["short_punch", "racket_up", "no_big_swing", "aim_body_or_space", "ready_for_next_drive"],
+      "common_errors": ["backswing_behind_body", "lifting_drive_upward", "locked_grip", "late_contact_beside_hip", "admiring_winner_in_drive_exchange"],
+      "teaching_progression": {
+        "beginner": ["forehand_backhand_wall_or_partner_drives", "racket_up_exchange"],
+        "intermediate": ["random_drive_channels", "drive_block_counter", "body_vs_space_targets"],
+        "advanced": ["doubles_drive_battle", "intercept_drive", "deceptive_drive_hold_or_check"]
+      },
+      "assessment_signals": ["maintains_flat_trajectory", "recovers_racket_between_hits", "survives_random_forehand_backhand_speed"],
+      "source_ref_ids": ["bwf_change_grip_activity", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "badminton_model_lift",
+      "skill_family": "lift",
+      "mechanics": "From forecourt or defensive positions, open the racket face and accelerate upward enough to send the shuttle high and deep. A lift can be defensive and high or attacking and flatter when the player takes the shuttle early.",
+      "racket_preparation": "Racket presented before the shuttle drops too low; grip selected for forehand or thumb backhand; contact in front with stable face.",
+      "coaching_cues": ["under_then_up", "show_face_to_target", "deep_or_do_not_lift", "make_lift_and_net_look_similar"],
+      "common_errors": ["short_lift_to_midcourt", "scooping_with_big_arm", "contact_below_knee", "face_too_open_long", "no_recovery_after_lift"],
+      "teaching_progression": {
+        "beginner": ["net_area_lift_to_backcourt_target", "forehand_and_backhand_lifts"],
+        "intermediate": ["net_or_lift_choice", "defensive_vs_attacking_lift", "cross_lift_control"],
+        "advanced": ["disguised_lift_from_net_hold", "pressure_lift_after_smash_block", "lift_depth_under_fatigue_monitoring"]
+      },
+      "assessment_signals": ["lift_reaches_deep_backcourt", "racket_face_stable", "choice_is_appropriate_when_below_tape"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_net_shot_activity"]
+    },
+    {
+      "id": "badminton_model_block",
+      "skill_family": "block",
+      "mechanics": "Use a compact soft racket action to absorb or redirect a fast smash, drive, or push. The block relies on racket-face angle, grip relaxation, and contact in front, not a large swing.",
+      "racket_preparation": "Racket in front with enough space from body to adjust face; grip loose enough to cushion, firm enough to control direction.",
+      "coaching_cues": ["catch_with_strings", "soft_hands", "angle_to_net_or_space", "do_not_swing_at_smash", "recover_after_block"],
+      "common_errors": ["hard_grip_rebound_high", "racket_too_close_to_body", "blocking_without_target", "big_chop_motion", "standing_up_after_defense"],
+      "teaching_progression": {
+        "beginner": ["coach_toss_soft_block", "block_to_safe_area"],
+        "intermediate": ["smash_block_to_net_or_midcourt", "straight_cross_block_targets"],
+        "advanced": ["hold_block", "block_drive_counter", "deceptive_soft_block_under_attack"]
+      },
+      "assessment_signals": ["keeps_attacking_shot_low", "racket_face_controls_direction", "body_and_racket_ready_for_next_attack"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "frontiers_workload_energy"]
+    },
+    {
+      "id": "badminton_model_net_shot",
+      "skill_family": "net_shot",
+      "mechanics": "Present the racket early near tape height, use a relaxed grip, contact the shuttle in front, and guide it tightly over the net with minimal swing. Spin or tumbling net shots require fine face control and should not sacrifice consistency.",
+      "racket_preparation": "Racket head up before the final step; face slightly open or adjusted to produce straight, cross, spin, or hold net shots.",
+      "coaching_cues": ["racket_waits_for_shuttle", "soft_touch", "brush_or_push_small", "tight_but_safe", "recover_racket_after_contact"],
+      "common_errors": ["late_racket_below_tape", "stabbing_at_shuttle", "too_much_wrist", "net_shot_sits_high", "trying_spin_before_basic_touch"],
+      "teaching_progression": {
+        "beginner": ["simple_straight_net_touch", "forehand_backhand_net_contact"],
+        "intermediate": ["net_lift_choice", "cross_net_intro", "net_shot_after_drop"],
+        "advanced": ["spinning_net", "hold_then_push_or_lift", "net_kill_threat_without_faulting"]
+      },
+      "assessment_signals": ["shuttle_tumbles_or_drops_tight_without_large_swing", "can_repeat_under_movement", "keeps_racket_above_tape_when_possible"],
+      "source_ref_ids": ["bwf_net_shot_activity", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "badminton_model_deception",
+      "skill_family": "deception",
+      "mechanics": "Create late uncertainty by showing one preparation, then changing timing, racket-face angle, slice, direction, speed, or contact moment. Deception should preserve balance, legality, and recovery.",
+      "racket_preparation": "Use the same visible preparation as the base shot: clear/drop/smash in rear court, net/lift/push in forecourt, drive/block in midcourt.",
+      "coaching_cues": ["earn_the_simple_shot_first", "same_prep_late_change", "hold_without_freezing", "change_face_not_whole_body", "recover_after_deceiving"],
+      "common_errors": ["fake_before_having_quality_base_shot", "overholding_until_contact_too_low", "double_motion_that_becomes_illegal_on_serve", "losing_balance", "deception_with_no_target_logic"],
+      "teaching_progression": {
+        "beginner": ["no_deception_until_contact_targets_are_reliable"],
+        "intermediate": ["hold_net_then_lift_or_push", "clear_drop_same_prep", "simple_slice_drop"],
+        "advanced": ["reverse_slice", "delayed_drive_or_block", "serve_return_hold_under_pressure"]
+      },
+      "assessment_signals": ["opponent_reads_late_without_player_losing_control", "base_shot_quality_remains_high", "deception_still_has_recovery"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "tsai_overhead_biomechanics"]
+    },
+    {
+      "id": "badminton_model_common_error_phase_matrix",
+      "skill_family": "common_errors",
+      "mechanics": "Use a phase-based matrix so feedback targets the cause rather than the symptom.",
+      "matrix": [
+        {"phase": "grip", "error": "one_grip_for_all_shots", "visible_result": "weak_backhand_or_closed_forehand_face", "correction": "alternate_thumb_and_V_grip_before_contact"},
+        {"phase": "preparation", "error": "racket_late_or_low", "visible_result": "rushed_contact_and_lifted_returns", "correction": "racket_up_freeze_or_feed_call_drills"},
+        {"phase": "backswing", "error": "swing_too_big_for_available_time", "visible_result": "missed_drives_blocks_and_returns", "correction": "compact_punch_or_block_constraints"},
+        {"phase": "contact", "error": "contact_too_close_or_low", "visible_result": "short_clear_high_net_or_flat_smash", "correction": "earlier_intercept_and_targeted_feed_height"},
+        {"phase": "face_control", "error": "face_opens_or_closes_unintentionally", "visible_result": "out_wide_long_or_into_net", "correction": "slow_face_angle_targets_before_speed"},
+        {"phase": "follow_through", "error": "finish_prevents_next_ready_position", "visible_result": "late_to_next_shot", "correction": "hit_recover_racket_cue_and_two_shot_drills"},
+        {"phase": "fatigue", "error": "form_breaks_after_volume", "visible_result": "late_contact_pain_or_random_errors", "correction": "reduce_reps_or_intensity_and_track_load"}
+      ],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "frontiers_workload_energy"]
+    },
+    {
+      "id": "badminton_model_beginner_teaching",
+      "skill_family": "beginner_teaching",
+      "mechanics": "Beginner stroke sessions should prioritize racket confidence, grip changes, legal serving, clean contact, simple trajectories, and large target success before speed or deception.",
+      "teaching_priorities": ["racket_and_shuttle_familiarity", "V_and_thumb_grip", "underarm_serve_and_lift", "basic_net_touch", "simple_clear_shape", "short_drive_exchange"],
+      "avoid": ["jump_smash_volume", "complex_slice", "narrow_target_pressure_too_early", "fatigue_drills_that_destroy_contact"],
+      "assessment_signals": ["can_serve_legally", "can_change_forehand_backhand_grip", "can_send_shuttle_to_large_target"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_change_grip_activity"]
+    },
+    {
+      "id": "badminton_model_intermediate_teaching",
+      "skill_family": "intermediate_teaching",
+      "mechanics": "Intermediate sessions should connect stroke mechanics to time pressure: earlier racket preparation, depth control, low serve quality, return choices, overhead variation, and net/lift decisions under semi-random feeds.",
+      "teaching_priorities": ["same_prep_clear_drop_smash", "serve_return_first_three_shots", "drive_block_lift_choice", "straight_cross_targets", "basic_deception_after_base_quality"],
+      "avoid": ["only_blocked_feeds", "power_before_depth_accuracy", "teaching_trick_shots_without_recovery"],
+      "assessment_signals": ["target_quality_survives_random_feed", "serve_and_return_have_intent", "player_can_explain_lift_block_net_choice"],
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_coach_level_1"]
+    },
+    {
+      "id": "badminton_model_advanced_teaching",
+      "skill_family": "advanced_teaching",
+      "mechanics": "Advanced sessions should train shot disguise, high-speed racket exchanges, serve/return pressure, precise placement, overhead power with load control, and decision quality under matchlike information.",
+      "teaching_priorities": ["same_preparation_variation", "late_hold_and_slice", "serve_return_under_receiver_server_pressure", "smash_block_follow_up", "multi_shuttle_with_technique_stop_rules"],
+      "avoid": ["untracked_smash_spikes", "deception_that_breaks_base_shape", "max_speed_drive_volume_without_recovery"],
+      "assessment_signals": ["deception_preserves_accuracy", "power_repeats_without_pain", "stroke_choice_matches_shuttle_height_and_time"],
+      "source_ref_ids": ["science_of_badminton", "frontiers_workload_energy", "elite_badminton_injury_review"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "stroke_rule_serve_legality_first",
+      "rule": "Do not progress serve deception, speed, or target pressure until the player can repeat a legal serve action.",
+      "details": "A serve that faults, pauses illegally, or pops up is not backend-ready as a pressure skill.",
+      "source_ref_ids": ["bwf_laws_badminton"]
+    },
+    {
+      "id": "stroke_rule_low_serve_sets_receiver_height",
+      "rule": "A low serve should force the receiver to contact near tape height rather than invite a downward hit.",
+      "details": "The target is not merely in; it should be low, short enough, and recoverable for the server's next racket action.",
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "stroke_rule_return_above_tape_attack",
+      "rule": "On return, attack only when the shuttle can be taken high enough to control a downward or flat path.",
+      "details": "If the receiver is late or below tape height, a tight net, push, or quality lift is safer than forcing a kill.",
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_net_shot_activity"]
+    },
+    {
+      "id": "stroke_rule_clear_when_late",
+      "rule": "When rear-court contact is late or under pressure, prioritize a deep defensive clear over a low-quality smash or drop.",
+      "details": "The clear buys time only if it reaches depth; a short clear should be treated as a mechanics or strength issue.",
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "stroke_rule_same_prep_overhead",
+      "rule": "Teach clear, drop, and smash from similar early preparation before adding advanced deception.",
+      "details": "If the preparation reveals the shot, opponents can move early even when contact quality is high.",
+      "source_ref_ids": ["tsai_overhead_biomechanics", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "stroke_rule_smash_requires_high_contact",
+      "rule": "Do not cue maximum smash power from a low, late, or behind-body contact.",
+      "details": "Use a clear, drop, block, or reset option when the contact point cannot support a steep and recoverable smash.",
+      "source_ref_ids": ["waddell_gowitzke_biomechanics", "elite_badminton_injury_review"]
+    },
+    {
+      "id": "stroke_rule_drive_is_compact",
+      "rule": "Drive exchanges should use compact racket actions and immediate racket recovery.",
+      "details": "A big backswing may win one slow feed but loses time in a real flat exchange.",
+      "source_ref_ids": ["bwf_change_grip_activity", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "stroke_rule_lift_depth_matters",
+      "rule": "A lift that lands short in midcourt is usually worse than a simple tight net or block.",
+      "details": "Coaches should track lift depth and height, not only whether the shuttle crosses the net.",
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "stroke_rule_block_absorbs",
+      "rule": "Blocks should absorb and redirect speed rather than add a large swing against a fast shuttle.",
+      "details": "Soft hands and face angle matter more than force when defending smashes and hard drives.",
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "stroke_rule_net_quality_before_spin",
+      "rule": "Teach reliable tight net contact before spinning, tumbling, or cross-net variations.",
+      "details": "Spin without basic touch often becomes a high net sitter or repeated net error.",
+      "source_ref_ids": ["bwf_net_shot_activity"]
+    },
+    {
+      "id": "stroke_rule_deception_late_and_small",
+      "rule": "Deception should be late, small, and linked to a real alternative shot.",
+      "details": "Large fake motions waste time; useful deception changes the opponent's read without destroying the player's contact point.",
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "stroke_rule_beginner_targets_large",
+      "rule": "Beginner stroke tasks should use large targets and success thresholds before speed, small targets, or live pressure.",
+      "details": "The backend should not prescribe advanced slice, jump smash, or tight spinning net work to players who cannot serve, grip-change, and hit large targets consistently.",
+      "source_ref_ids": ["bwf_shuttle_time_teacher_manual", "bwf_coach_level_1"]
+    },
+    {
+      "id": "stroke_rule_randomize_after_shape",
+      "rule": "Move from blocked feeds to variable feeds only after the player can reproduce the basic shape.",
+      "details": "Random practice is essential for transfer, but too much randomness before the grip and contact model exist creates noise rather than learning.",
+      "source_ref_ids": ["bwf_coach_level_1", "bwf_shuttle_time_teacher_manual"]
+    },
+    {
+      "id": "stroke_rule_stop_power_when_pain_or_shape_fails",
+      "rule": "Stop or regress power strokes when pain, late contact, or major form breakdown appears.",
+      "details": "Continuing high-volume clears or smashes through poor contact can increase shoulder, back, elbow, wrist, and lower-limb load.",
+      "source_ref_ids": ["frontiers_workload_energy", "elite_badminton_injury_review", "systematic_badminton_injury_review"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "stroke_demand_finger_grip_speed",
+      "quality": "Fast grip change and finger squeeze timing",
+      "why_it_matters": "Serve returns, drives, blocks, lifts, and net shots often happen with little time; grip speed preserves face control without a large swing.",
+      "training_notes": "Use forehand-backhand tap exchanges, random drive feeds, and low-load racket control before heavy speed volume.",
+      "source_ref_ids": ["bwf_change_grip_activity"]
+    },
+    {
+      "id": "stroke_demand_forearm_rotation",
+      "quality": "Forearm pronation, supination, and racket-face control",
+      "why_it_matters": "Overheads, drives, backhand pushes, and blocks rely on controlled forearm rotation and face orientation.",
+      "training_notes": "Progress from slow face-angle targets to speed; monitor elbow and wrist discomfort.",
+      "source_ref_ids": ["waddell_gowitzke_biomechanics"]
+    },
+    {
+      "id": "stroke_demand_shoulder_scapular_capacity",
+      "quality": "Shoulder mobility, rotator cuff tolerance, and scapular control",
+      "why_it_matters": "Clears, drops, and smashes require repeated overhead acceleration and deceleration.",
+      "training_notes": "Pair overhead volume with cuff, scapular, thoracic, and recovery work; avoid sudden smash-volume spikes.",
+      "source_ref_ids": ["elite_badminton_injury_review", "systematic_badminton_injury_review"]
+    },
+    {
+      "id": "stroke_demand_trunk_rotation_control",
+      "quality": "Trunk rotation, anti-extension, and balanced follow-through",
+      "why_it_matters": "Power overheads need trunk contribution, while late smashes or poor follow-through can overload the low back.",
+      "training_notes": "Teach high front contact and controlled landing before maximal jump smash volume.",
+      "source_ref_ids": ["waddell_gowitzke_biomechanics", "elite_badminton_injury_review"]
+    },
+    {
+      "id": "stroke_demand_lower_limb_contact_support",
+      "quality": "Lunge, braking, and jump-landing support for racket contact",
+      "why_it_matters": "Net shots, lifts, blocks, and jump smashes are racket skills supported by lower-limb braking and balance at contact.",
+      "training_notes": "Track lunge and jump-smash exposure even in stroke sessions; poor lower-limb control changes contact height and injury risk.",
+      "source_ref_ids": ["systematic_badminton_injury_review", "science_of_badminton"]
+    },
+    {
+      "id": "stroke_demand_visual_reaction",
+      "quality": "Visual tracking, anticipation, and fast perception-action coupling",
+      "why_it_matters": "The shuttle decelerates rapidly and exchanges are fast; late reads create late racket preparation and low contacts.",
+      "training_notes": "Use live and semi-random feeds after the basic stroke model exists; include server and hitter cues.",
+      "source_ref_ids": ["science_of_badminton"]
+    },
+    {
+      "id": "stroke_demand_repeat_high_intensity",
+      "quality": "Repeat high-intensity racket actions with recovery",
+      "why_it_matters": "Match play alternates short explosive actions with incomplete recovery; repetitive practice may overrepresent certain strokes.",
+      "training_notes": "Separate technical quality sets from conditioning sets; do not let fatigue rewrite grip and contact mechanics.",
+      "source_ref_ids": ["frontiers_workload_energy", "science_of_badminton"]
+    },
+    {
+      "id": "stroke_demand_touch_precision",
+      "quality": "Fine touch and low-force control",
+      "why_it_matters": "Net shots, short serves, blocks, and soft returns require small force adjustments, relaxed grip, and stable racket-face angle.",
+      "training_notes": "Use low-speed repetition, target constraints, and pressure only after consistent contact quality.",
+      "source_ref_ids": ["bwf_net_shot_activity", "bwf_shuttle_time_teacher_manual"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "stroke_risk_shoulder_overhead_volume",
+      "risk": "Shoulder overload from repeated clears, smashes, and high-volume overhead feeds",
+      "mechanism": "Repeated acceleration and deceleration, late contact, poor scapular control, or sudden increases in smash volume.",
+      "warning_signs": ["shoulder_pain_during_overhead", "loss_of_contact_height", "arm_only_power", "night_or_next_day_soreness"],
+      "load_controls": ["cap_smash_reps", "alternate_power_and_touch_days", "regress_to_half_speed", "add_cuff_scapular_work"],
+      "source_ref_ids": ["elite_badminton_injury_review", "systematic_badminton_injury_review"]
+    },
+    {
+      "id": "stroke_risk_low_back_overhead_extension",
+      "risk": "Low-back irritation from repeated late overheads or forced jump smashes",
+      "mechanism": "Contact behind the body can drive excessive lumbar extension and rotation, especially under fatigue.",
+      "warning_signs": ["back_tightness_after_smash_sets", "arching_to_find_contact", "reduced_trunk_rotation", "pain_with_follow_through"],
+      "load_controls": ["prioritize_contact_in_front", "reduce_jump_smash_volume", "use_clear_or_drop_when_late", "strengthen_trunk_control"],
+      "source_ref_ids": ["elite_badminton_injury_review", "waddell_gowitzke_biomechanics"]
+    },
+    {
+      "id": "stroke_risk_elbow_wrist_tight_grip",
+      "risk": "Wrist, elbow, or forearm irritation from tight grip, mishits, and excessive wrist-only power",
+      "mechanism": "Constant gripping tension and poor face control increase local load during drives, backhand lifts, blocks, and smashes.",
+      "warning_signs": ["forearm_tightness", "wrist_pain_on_mishits", "elbow_pain_after_drive_sets", "loss_of_touch"],
+      "load_controls": ["teach_relaxed_grip", "reduce_speed_before_face_control", "use_lighter_technical_reps", "monitor_racket_string_and_handle_fit"],
+      "source_ref_ids": ["bwf_change_grip_activity", "elite_badminton_injury_review"]
+    },
+    {
+      "id": "stroke_risk_knee_ankle_lunge_net",
+      "risk": "Knee and ankle stress during net shots, lifts, and blocks taken from long lunges",
+      "mechanism": "Late racket preparation can force extreme reach, unstable braking, and repeated deep lunges.",
+      "warning_signs": ["knee_pain_on_frontcourt_reps", "ankle_rolls_or_instability", "contact_drops_below_tape_late", "slow_recovery_from_lunge"],
+      "load_controls": ["reduce_frontcourt_volume", "train_lunge_braking", "raise_feed_quality_before_speed", "alternate_sides_and_recovery"],
+      "source_ref_ids": ["systematic_badminton_injury_review", "science_of_badminton"]
+    },
+    {
+      "id": "stroke_risk_achilles_calf_jump_smash",
+      "risk": "Calf and Achilles overload from repeated jump smashes and rear-court recovery contacts",
+      "mechanism": "High-intensity jumping, landing, and push-off volume can spike in smash-focused sessions.",
+      "warning_signs": ["morning_achilles_stiffness", "calf_tightness", "reduced_jump_height", "avoiding_push_off"],
+      "load_controls": ["track_jump_smash_count", "progress_plyometric_and_smash_load", "separate_max_power_days", "monitor_next_day_response"],
+      "source_ref_ids": ["systematic_badminton_injury_review", "frontiers_workload_energy"]
+    },
+    {
+      "id": "stroke_risk_multi_shuttle_distortion",
+      "risk": "Technique breakdown and non-matchlike load from repetitive multi-shuttle feeding",
+      "mechanism": "Repetitive practice can overload one pattern and remove game cues, causing fatigue-based mechanics not seen in early reps.",
+      "warning_signs": ["late_grip_changes_after_rep_count", "clear_depth_drops", "serve_or_net_touch_gets_hard", "pain_or_random_mishits"],
+      "load_controls": ["define_rep_stop_rules", "mix_technical_and_live_feeds", "track_stroke_family_volume", "end_set_when_quality_falls"],
+      "source_ref_ids": ["frontiers_workload_energy"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "stroke_implication_store_phase_tags",
+      "summary": "Backend drill records should tag the stroke phase being trained.",
+      "implementation_notes": "Use phase tags such as grip, preparation, contact, face_control, follow_through, recovery, and deception so feedback is not limited to outcome."
+    },
+    {
+      "id": "stroke_implication_create_shot_family_ids",
+      "summary": "Create separate shot-family records for serve, return, clear, drop, smash, drive, lift, block, net shot, and deception.",
+      "implementation_notes": "Each family needs mechanics, cues, common errors, target metrics, level gates, and load flags."
+    },
+    {
+      "id": "stroke_implication_progress_from_contact_to_pressure",
+      "summary": "Progress stroke learning from clean contact to target control, then speed, disguise, and live pressure.",
+      "implementation_notes": "Avoid prescribing advanced deception or power before the player has repeatable grip and contact quality."
+    },
+    {
+      "id": "stroke_implication_track_stroke_volume",
+      "summary": "Track volume by stroke family rather than total shuttle count only.",
+      "implementation_notes": "A session with 80 smashes, 80 net lunges, or 80 backhand lifts has different tissue load than 240 mixed low-speed touches."
+    },
+    {
+      "id": "stroke_implication_add_quality_stop_rules",
+      "summary": "Power and repetition drills need quality stop rules.",
+      "implementation_notes": "Stop, regress, or rest when contact height drops, grip locks, target quality falls, or pain appears."
+    },
+    {
+      "id": "stroke_implication_measure_targets",
+      "summary": "Assess racket skills with target outcomes that match the shot.",
+      "implementation_notes": "Use serve height/depth, clear depth, drop steepness, smash angle and placement, drive flatness, lift depth, block height, and net tightness."
+    },
+    {
+      "id": "stroke_implication_randomize_after_reliable_shape",
+      "summary": "Use blocked feeds to establish mechanics, then semi-random and live feeds for transfer.",
+      "implementation_notes": "Randomize grip side, shuttle height, and stroke choice only after basic face and contact control are stable."
+    },
+    {
+      "id": "stroke_implication_deception_is_a_level_gate",
+      "summary": "Deception should be gated by base-shot reliability.",
+      "implementation_notes": "Require simple shot success before adding hold, slice, reverse slice, double-action, or same-preparation variations."
+    },
+    {
+      "id": "stroke_implication_include_prehab_support",
+      "summary": "Racket-skill blocks should connect to shoulder, forearm, trunk, calf, and lunge capacity work.",
+      "implementation_notes": "Pair high overhead days with shoulder/scapular maintenance and pair frontcourt/net volume with lunge braking and calf-Achilles management."
+    },
+    {
+      "id": "stroke_implication_keep_scope_clean",
+      "summary": "This draft should enrich stroke mechanics without replacing separate footwork, tactics, or match-planning records.",
+      "implementation_notes": "Only include movement or tactical notes when they directly change racket contact, shot choice, or stroke load."
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_stroke_grip_change_deep",
+      "record_purpose": "Teach grip changes as the foundation for racket-face control, touch, drives, returns, lifts, blocks, and deception.",
+      "source_model_id": "badminton_model_grip_change_deep",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_stroke_racket_preparation_deep",
+      "record_purpose": "Teach racket-ready behavior and preparation differences across forecourt, midcourt, and rear-court skills.",
+      "source_model_id": "badminton_model_racket_preparation",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_serve_low_backhand_deep",
+      "record_purpose": "Store low backhand serve mechanics, legal constraints, cues, errors, and target metrics.",
+      "source_model_id": "badminton_model_low_backhand_serve",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_serve_flick_high_deep",
+      "record_purpose": "Store flick and high serve mechanics, use cases, common errors, and level progression.",
+      "source_model_id": "badminton_model_flick_and_high_serve",
+      "priority": "medium"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_return_of_serve_deep",
+      "record_purpose": "Teach return-of-serve racket preparation, short-serve interception, push/drive/lift/net options, and errors.",
+      "source_model_id": "badminton_model_return_of_serve",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_overhead_clear_deep",
+      "record_purpose": "Store deep clear mechanics, attacking versus defensive clear distinction, errors, and depth assessment.",
+      "source_model_id": "badminton_model_overhead_clear",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_overhead_drop_deep",
+      "record_purpose": "Store overhead drop mechanics, fast/slow/sliced variants, common errors, and same-preparation links.",
+      "source_model_id": "badminton_model_overhead_drop",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_smash_deep",
+      "record_purpose": "Store smash mechanics, power sequence, placement-before-power rule, load risk, and progression gates.",
+      "source_model_id": "badminton_model_smash",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_drive_deep",
+      "record_purpose": "Teach compact flat drive mechanics, grip changes, fast exchanges, and common midcourt errors.",
+      "source_model_id": "badminton_model_drive",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_lift_deep",
+      "record_purpose": "Teach forecourt and defensive lift mechanics, lift depth, attacking versus defensive lifts, and net/lift disguise.",
+      "source_model_id": "badminton_model_lift",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_block_deep",
+      "record_purpose": "Teach soft defensive blocks against smashes and drives, face-angle control, and recovery.",
+      "source_model_id": "badminton_model_block",
+      "priority": "medium"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_net_shot_deep",
+      "record_purpose": "Teach tight net-shot mechanics, relaxed grip, early racket presentation, and spin progression.",
+      "source_model_id": "badminton_model_net_shot",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_deception_deep",
+      "record_purpose": "Teach deception as a same-preparation, late-change skill with base-shot prerequisites.",
+      "source_model_id": "badminton_model_deception",
+      "priority": "medium"
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "badminton_assess_stroke_mechanics_phase_matrix",
+      "record_purpose": "Assess grip, racket preparation, backswing size, contact point, face control, follow-through, fatigue response, and pain flags.",
+      "source_model_id": "badminton_model_common_error_phase_matrix",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_teaching_progressions",
+      "id": "badminton_teach_stroke_mechanics_beginner_deep",
+      "record_purpose": "Beginner progression for grip changes, legal serve, simple net, lift, clear, and drive skills.",
+      "source_model_id": "badminton_model_beginner_teaching",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_teaching_progressions",
+      "id": "badminton_teach_stroke_mechanics_intermediate_deep",
+      "record_purpose": "Intermediate progression for serve/return choice, clear/drop/smash variation, drive/block/lift decisions, and basic disguise.",
+      "source_model_id": "badminton_model_intermediate_teaching",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_teaching_progressions",
+      "id": "badminton_teach_stroke_mechanics_advanced_deep",
+      "record_purpose": "Advanced progression for same-preparation deception, high-speed racket exchanges, serve/return pressure, and load-controlled power.",
+      "source_model_id": "badminton_model_advanced_teaching",
+      "priority": "high"
+    },
+    {
+      "collection": "planning_rules",
+      "id": "badminton_stroke_load_management_rule",
+      "record_purpose": "Track stroke-family volume and stop/regress high-load drills when pain or technique breakdown appears.",
+      "source_training_implication_id": "stroke_implication_track_stroke_volume",
+      "priority": "high"
+    }
+  ]
+}

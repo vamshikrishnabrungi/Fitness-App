@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { api } from '../../src/utils/api';
 import { colors, spacing } from '../../src/utils/theme';
 
@@ -33,6 +34,7 @@ const LESSON_CATEGORY_CONFIG: Record<string, { color: string; icon: string }> = 
 
 export default function SportScreen() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [query, setQuery] = useState('');
@@ -163,7 +165,22 @@ export default function SportScreen() {
               <Text style={styles.sectionTitle}>{sport}</Text>
               <Text style={styles.sectionDescription}>Recommended lessons and drills for you.</Text>
               {sportLessons.map((lesson) => (
-                <LessonRow key={lesson.id} lesson={lesson} />
+                <LessonRow
+                  key={lesson.id}
+                  lesson={lesson}
+                  onPress={() => router.push({
+                    pathname: '/sport/lesson' as any,
+                    params: {
+                      id: lesson.id,
+                      title: lesson.title,
+                      category: lesson.category,
+                      sport: lesson.sport,
+                      duration: String(lesson.duration || 0),
+                      difficulty: lesson.difficulty,
+                      description: lesson.description || '',
+                    },
+                  })}
+                />
               ))}
             </View>
           ))
@@ -175,11 +192,11 @@ export default function SportScreen() {
   );
 }
 
-function LessonRow({ lesson }: { lesson: Lesson }) {
+function LessonRow({ lesson, onPress }: { lesson: Lesson; onPress: () => void }) {
   const category = LESSON_CATEGORY_CONFIG[lesson.category] || LESSON_CATEGORY_CONFIG.Fundamentals;
 
   return (
-    <TouchableOpacity style={styles.lessonRow} activeOpacity={0.7}>
+    <TouchableOpacity style={styles.lessonRow} activeOpacity={0.7} onPress={onPress}>
       <View style={[styles.thumb, { backgroundColor: category.color + '22' }]}>
         <Ionicons name={category.icon as any} size={22} color={category.color} />
         <View style={[styles.categoryPill, { backgroundColor: category.color + '16' }]}>
@@ -193,9 +210,9 @@ function LessonRow({ lesson }: { lesson: Lesson }) {
         </Text>
         <Text style={styles.rowDuration}>{lesson.duration} min</Text>
       </View>
-      <TouchableOpacity style={styles.bookmarkButton}>
+      <View style={styles.bookmarkButton}>
         <Ionicons name="bookmark-outline" size={18} color="#9CA3AF" />
-      </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   );
 }

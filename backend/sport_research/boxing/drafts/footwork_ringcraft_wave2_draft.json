@@ -1,0 +1,121 @@
+{
+  "metadata": {
+    "domain": "footwork_ringcraft_wave2",
+    "sport": "boxing",
+    "version": "draft_v2",
+    "research_goal": "Deepen boxing footwork, ringcraft, range control, ring-zone, exit, and open-stance foot-position knowledge for app-facing teaching and retrieval.",
+    "researched_on": "2026-06-21",
+    "agent_scope": "footwork and ringcraft"
+  },
+  "source_refs": [
+    {
+      "title": "USA Boxing Grassroots Task Force Training Manual v.01",
+      "url": "https://d36m266ykvepgv.cloudfront.net/uploads/media/lYivrDbNV6/o/usab-gtf-trainingmanual-v-01-1.pdf",
+      "source_type": "coach_manual_pdf",
+      "organization_or_author": "USA Boxing",
+      "notes": "Used for stance, step-slide, pivots, and cut-off-ring tactics."
+    },
+    {
+      "title": "IBA Coach Regulations Manual",
+      "url": "https://www.iba.sport/wp-content/uploads/2019/01/AIBA-Coach-Regulations-Manual_WEB_2019_01-1.pdf",
+      "source_type": "coach_manual_pdf",
+      "organization_or_author": "International Boxing Association",
+      "notes": "Used for stance, sliding, strike-gliding, spring-gliding, and pivots."
+    },
+    {
+      "title": "Boxing Canada Instruction Beginners Reference Manual",
+      "url": "https://boxingcanada.org/wp-content/uploads/2025/01/Instruction-Beginners-Reference-Manual-EN.pdf",
+      "source_type": "coach_manual_pdf",
+      "organization_or_author": "Boxing Canada",
+      "notes": "Used for beginner stance, elementary footwork, southpaw basics, and teaching corrections."
+    },
+    {
+      "title": "England Boxing Coaching Handbook Part 1",
+      "url": "https://www.englandboxing.org/wp-content/uploads/2022/03/EB_Boxing-Coaching-Handbook-Part-1_v8-002.pdf",
+      "source_type": "coach_manual_pdf",
+      "organization_or_author": "England Boxing",
+      "notes": "Used for beginner games, agility, balance, and safety framing."
+    },
+    {
+      "title": "World Boxing Competition Rules",
+      "url": "https://worldboxing.org/wp-content/uploads/2024/09/World-Boxing-Competition-Rules-Feb-2024-v3.99-ClEAN.pdf",
+      "source_type": "official_rules_pdf",
+      "organization_or_author": "World Boxing",
+      "notes": "Used for ring dimensions and contest environment context."
+    },
+    {
+      "title": "Strength and Conditioning for Professional Boxing",
+      "url": "https://shura.shu.ac.uk/11499/3/Ruddock%20strength%20conditioning%20professional%20boxing.pdf",
+      "source_type": "sports_science_review_pdf",
+      "organization_or_author": "Ruddock et al.",
+      "notes": "Used for physiological demands and fatigue effects on technical precision."
+    },
+    {
+      "title": "High-Intensity Conditioning for Combat Athletes",
+      "url": "https://www.mdpi.com/2076-3417/11/22/10658",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Applied Sciences",
+      "notes": "Used for intermittent combat-sport high-intensity demands."
+    }
+  ],
+  "key_concepts": [
+    {"id": "footwork_preserves_fighting_shape", "summary": "Footwork is only good if stance, guard, balance, punch readiness, and defense readiness survive movement."},
+    {"id": "short_steps_create_control", "summary": "Ringcraft depends on repeated small adjustments, not large jumps."},
+    {"id": "ring_zones_change_risk", "summary": "Center, ropes, and corners change available exits, contact risk, and tactical priorities."},
+    {"id": "cutting_ring_is_denying_exits", "summary": "Pressure fighters should cut lanes, not chase the opponent's body."},
+    {"id": "range_changes_punch_choice", "summary": "Jab range, mid range, inside range, and clinch/reset range require different punch and defense choices."},
+    {"id": "open_stance_footwork_needs_gate", "summary": "Orthodox/southpaw foot battles should be introduced after basic stance and step-slide control."}
+  ],
+  "technical_models": [
+    {"id": "boxing_stance_movement_model", "model": "Balanced 45-degree stance, shoulder-width base, soft knees, light rear heel, chin protected, hands available.", "common_errors": ["too_wide", "too_narrow", "flat_footed", "crossed_feet", "hopping", "chin_high"]},
+    {"id": "boxing_step_slide_model", "model": "Foot nearest the direction moves first; second foot slides back to stance.", "directions": ["advance", "retreat", "left", "right", "circle"], "constraints": ["short_steps", "do_not_square", "do_not_cross_feet"]},
+    {"id": "boxing_pivot_angle_model", "model": "Plant lead or rear foot, rotate body, move free foot to create a new 30-90 degree angle.", "uses": ["exit_after_punch", "turn_opponent", "counter_from_new_line", "avoid_ropes_corner"]},
+    {"id": "boxing_ring_zone_model", "zones": ["center", "open_lane", "near_ropes", "on_ropes", "near_corner", "in_corner"], "tactical_value": ["center_has_exits", "ropes_reduce_backward_exit", "corner_is_highest_trap_risk"]},
+    {"id": "boxing_range_model", "ranges": ["out_of_range", "jab_range", "mid_range", "inside_range", "clinch_reset"], "control_tools": ["lead_foot", "jab", "small_step", "feint", "pivot", "step_back"]},
+    {"id": "boxing_cut_ring_model", "model": "Hold center, match circle, take exit side, force backward, trap ropes/corner, attack without smothering."},
+    {"id": "boxing_exit_model", "exits": ["step_back", "lateral_slide", "pivot_out", "roll_under_and_step", "jab_exit", "clinch_reset"]},
+    {"id": "boxing_orthodox_southpaw_foot_model", "basics": ["open_stance_lead_feet_are_close", "outside_lead_foot_can_open_rear_hand_line", "avoid_foot_clashes"]}
+  ],
+  "tactical_rules": [
+    {"id": "footwork_rule_base_before_speed", "rule": "Increase speed only while stance width, guard, and balance stay stable."},
+    {"id": "footwork_rule_short_steps", "rule": "Use short steps for control before adding bounce, rhythm changes, or angles."},
+    {"id": "footwork_rule_cut_do_not_chase", "rule": "Pressure should take away exits; following lets the opponent keep circling."},
+    {"id": "footwork_rule_center_before_ropes", "rule": "Beginners should learn center-ring movement before rope or corner tactics."},
+    {"id": "footwork_rule_ropes_need_exit_skill", "rule": "Rope work needs defined exit skill and contact constraints."},
+    {"id": "footwork_rule_range_sets_punches", "rule": "Jab range favors straight punches and exits; inside range requires tighter punches and faster resets."},
+    {"id": "footwork_rule_open_stance_simple_first", "rule": "Teach lead-foot awareness and rear-hand lane before advanced southpaw traps."},
+    {"id": "footwork_rule_fatigue_simplifies", "rule": "Late-round footwork should bias step-slide, jab, pivot, and clinch/reset over complex angle chains."}
+  ],
+  "physical_demands": [
+    {"id": "footwork_calf_ankle_stiffness", "quality": "Calf, Achilles, foot intrinsic, and ankle stiffness for repeated direction changes."},
+    {"id": "footwork_hip_control", "quality": "Hip abductor/adductor and glute control for lateral movement and pivots."},
+    {"id": "footwork_trunk_hip_rotation", "quality": "Trunk stiffness plus hip rotation for angle changes without losing punch mechanics."},
+    {"id": "footwork_accel_decel", "quality": "Short acceleration/deceleration ability over 1-3 steps."},
+    {"id": "footwork_aerobic_recovery", "quality": "Aerobic recovery to preserve ring control across rounds."},
+    {"id": "footwork_spatial_awareness", "quality": "Visual tracking and ring awareness for ropes, corners, stance, and scoring."}
+  ],
+  "injury_or_load_risks": [
+    {"id": "footwork_risk_ankle_calf_achilles", "risk": "Jump-rope spikes, bouncing, hard floors, or large footwork volume jumps can irritate ankle/calf/Achilles."},
+    {"id": "footwork_risk_knee_pivot", "risk": "Planted foot without hip turn can increase knee torque during pivots."},
+    {"id": "footwork_risk_open_stance_foot_clash", "risk": "Orthodox/southpaw lead-foot battles can create foot clashes and balance disruptions."},
+    {"id": "footwork_risk_rope_corner_contact", "risk": "Poor exits and corner trap sparring can raise contact risk."},
+    {"id": "footwork_risk_low_back_hip_rotation", "risk": "Repeated pivots with stuck feet can increase low-back or hip irritation."}
+  ],
+  "training_implications": [
+    {"id": "footwork_teach_beginner_center", "summary": "Beginner assessment: move 60-90 seconds without crossing feet, hopping, squaring up, or losing guard."},
+    {"id": "footwork_teach_intermediate_angles", "summary": "Intermediate work should add pivot exits, angles after jab/cross, lane cutting, and basic open-stance awareness."},
+    {"id": "footwork_teach_advanced_ringcraft", "summary": "Advanced work should include opponent-specific ringcraft, pressure vs mover, feint steering, rope tactics, and score-state control."},
+    {"id": "footwork_load_track_surface_minutes", "summary": "Track footwork minutes, jump-rope minutes, pivot reps, surface, and ankle/knee pain flags."},
+    {"id": "footwork_retrieval_use_ring_zone", "summary": "Use ring zone and range tags in retrieval for technical/tactical workout generation."}
+  ],
+  "backend_records_to_create": [
+    {"collection": "sport_training_rules", "id": "boxing_footwork_ringcraft_model"},
+    {"collection": "sport_training_rules", "id": "boxing_ring_zone_model"},
+    {"collection": "sport_training_rules", "id": "boxing_orthodox_southpaw_foot_position_rule"},
+    {"collection": "sport_skill_assessments", "id": "boxing_assess_footwork_balance"},
+    {"collection": "sport_teaching_progressions", "id": "boxing_teach_step_slide_to_pivot_to_ringcraft"},
+    {"collection": "planning_rules", "id": "boxing_footwork_load_rule"},
+    {"collection": "planning_rules", "id": "boxing_rope_corner_contact_rule"}
+  ]
+}
+

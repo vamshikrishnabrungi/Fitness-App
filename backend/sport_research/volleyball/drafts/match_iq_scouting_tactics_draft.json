@@ -1,0 +1,1917 @@
+{
+  "metadata": {
+    "domain": "match_iq_scouting_tactics",
+    "sport": "volleyball",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready volleyball knowledge for match IQ, scouting, team tactics, phase analysis, rotation-specific decision rules, performance indicators, and tactical learning progressions from beginner to advanced levels."
+  },
+  "source_refs": [
+    {
+      "title": "Official Volleyball Rules 2025-2028",
+      "url": "https://www.fivb.com/wp-content/uploads/2025/01/FIVB-Volleyball_Rules2025_2028-EN-v05.pdf",
+      "source_type": "official_rules",
+      "organization_or_author": "FIVB",
+      "notes": "Defines legal match structure, rotations, team hits, substitutions, time-outs, libero constraints, interruptions, and delay rules. Used for tactical decision boundaries, not for technique claims."
+    },
+    {
+      "title": "Coaches Manual Level II",
+      "url": "https://www.fivb.com/wp-content/uploads/2024/03/Coaches_Manual_Level_II_EN.pdf",
+      "source_type": "official_coaching_manual",
+      "organization_or_author": "FIVB",
+      "notes": "Covers serve receive formations, switching, attack balance, block-defense, scouting reports, match preparation, game plans, and rotation-based offensive combinations."
+    },
+    {
+      "title": "Technical and Data Report VNL 2024",
+      "url": "https://www.fivb.com/wp-content/uploads/2025/04/FIVB-Technical-and-Data-Report-07.05.2025.pdf",
+      "source_type": "official_technical_data_report",
+      "organization_or_author": "FIVB",
+      "notes": "Modern elite benchmark source for attack efficiency, in-system and out-of-system efficiency, positive reception, serve aces and errors, blocks, team errors, crunch-time performance, and medal-profile KPIs."
+    },
+    {
+      "title": "Opponent Analysis and Scouting Reports",
+      "url": "https://usavolleyball.org/resource/opponent-analysis-and-scouting-reports/",
+      "source_type": "official_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Practical scouting checklist for offensive tendencies by rotation, serve receive formations, hitter shot charts, blocking schemes, defensive formations, and use of alternate receive patterns."
+    },
+    {
+      "title": "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+      "url": "https://usavolleyball.org/resource/so-you-want-to-be-a-great-defender-learn-to-read-the-hitter/",
+      "source_type": "official_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for block-defense reading rules: block as first line of defense, pass-set-hitter visual sequence, hitter shoulder and approach cues, line/angle calls, and tip coverage."
+    },
+    {
+      "title": "Recipe for a Setter",
+      "url": "https://usavolleyball.org/resource/recipe-for-a-setter/",
+      "source_type": "official_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for setter match IQ: directing receive changes, using hot hitters, exploiting blocker mismatches, changing offensive tempo, and knowing options in every rotation."
+    },
+    {
+      "title": "How You Can Make a Huge Impact as a Libero",
+      "url": "https://usavolleyball.org/resource/how-you-can-make-a-huge-impact-as-a-libero/",
+      "source_type": "official_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for libero tactical rules: absorbing large passing zones, baiting serving teams, free-ball priority, hitter coverage, and second-setter responsibilities in transition."
+    },
+    {
+      "title": "Lesson Plans",
+      "url": "https://usavolleyball.org/resources-for-coaches/lesson-plans/",
+      "source_type": "official_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for beginner and intermediate learning design: gamelike drills, random practice, whole skill practice, and scoring constraints rather than isolated blocked repetitions."
+    },
+    {
+      "title": "Simplified Youth Rules",
+      "url": "https://usavolleyball.org/resource/simplified-youth-rules/",
+      "source_type": "official_youth_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for beginner tactical progressions, youth service-run limits, positive versus negative errors, three-contact learning, simple rotation awareness, and safety around net play."
+    },
+    {
+      "title": "Match Analysis in Volleyball: A Systematic Review",
+      "url": "https://mjssm.me/clanci/MJSSM_March_2016_Silva.pdf",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Silva, Sattler, Lacerda, and Joao",
+      "notes": "Reviews adult male volleyball match-analysis literature and supports using game actions, phase context, technical-tactical indicators, and outcome-linked skills rather than raw box score totals alone."
+    },
+    {
+      "title": "Effect of Team Level on Skill Performance in Volleyball",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/24748668.2004.11868304",
+      "source_type": "peer_reviewed_article",
+      "organization_or_author": "Palao, Santos, and Urena",
+      "notes": "Classic Olympic match-analysis study linking team level with skill performance in serve, reception, spike, block, and dig. Used for level-sensitive KPI weighting."
+    },
+    {
+      "title": "Game-Related Volleyball Skills that Influence Victory",
+      "url": "https://johk.pl/?p=2941",
+      "source_type": "peer_reviewed_article",
+      "organization_or_author": "Silva, Lacerda, and Joao",
+      "notes": "Analyzed 2010 senior men's World Championship matches and reported serve points, reception errors, and blocking-related variables as important discriminators of match outcome."
+    },
+    {
+      "title": "Game-Related Performance Factors in Four European Men's Professional Volleyball Championships",
+      "url": "https://johk.pl/?p=3998",
+      "source_type": "peer_reviewed_article",
+      "organization_or_author": "Pena and Casals",
+      "notes": "Uses professional league match data to evaluate outcome predictors and supports tracking service errors, service points, reception errors, blocked balls, attack points, number of scorers, and team level."
+    },
+    {
+      "title": "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness",
+      "url": "https://revista-apunts.com/en/reception-attack-transition-in-volleyball-analysis-of-spike-effectiveness/",
+      "source_type": "peer_reviewed_article",
+      "organization_or_author": "Apunts Sports Journal authors",
+      "notes": "Top-level men's match sample linking front receiver attack effectiveness with reception-attack transition, setter position, and team rotation. Used for serving-target and rotation-pressure rules."
+    },
+    {
+      "title": "A Comparative Analysis of Volleyball Skills in Balanced Sets for Men and Women in Asian Competitions",
+      "url": "https://www.jhse.es/index.php/jhse/article/view/comparative-analysis-volleyball-skills-balanced-sets",
+      "source_type": "peer_reviewed_article",
+      "organization_or_author": "Drikos, Fatahi, Ahmed, Molavian, Giatsis, and Shakeri",
+      "notes": "Balanced-set analysis from 2023 AVC Challenge Cup; supports attack win percentage, serve win percentage, and attack-after-reception as important set outcome indicators while noting gender and context differences."
+    },
+    {
+      "title": "Timeouts and Psychological Momentum in Volleyball",
+      "url": "https://www.jhse.es/index.php/jhse/article/view/timeouts-psychological-momentum-volleyball",
+      "source_type": "peer_reviewed_article",
+      "organization_or_author": "Huynh, Goh, Condon, and Layous",
+      "notes": "Journal of Human Sport and Exercise article on timeout use and psychological momentum in women's Division I volleyball. Used cautiously for timeout timing and reset logic."
+    },
+    {
+      "title": "The Timeout in Sports: A Study of Its Effect on Volleyball",
+      "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2019.02437/full",
+      "source_type": "peer_reviewed_article",
+      "organization_or_author": "Fernandez-Echeverria, Gonzalez-Silva, Castro, and Moreno",
+      "notes": "Frontiers in Psychology study on timeout effects in youth volleyball, using lost-rally and score-difference variables. Used as supporting evidence for context-dependent timeout logic."
+    },
+    {
+      "title": "Training Without a Net or Friends",
+      "url": "https://usavolleyball.org/resource/training-without-a-net-or-friends/",
+      "source_type": "official_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Applied player-development resource used for post-serve recovery and gamelike solo or small-group training concepts."
+    },
+    {
+      "title": "Why Should I Run a 6-3 or 6-6?",
+      "url": "https://usavolleyball.org/resource/why-/",
+      "source_type": "official_coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Development-oriented resource on broad participation, smaller-sided learning, and delaying narrow specialization. Used for beginner match-IQ progression and system-learning context."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "phase_based_match_iq",
+      "concept": "Volleyball match IQ starts by separating the rally into phases instead of treating every contact as an isolated skill.",
+      "details": "Useful phase labels are serve pressure, side-out after serve receive, transition or breakpoint after defending, and extended-rally counterattack. The same attack outcome means different things when it follows a perfect pass, a dig under stress, or a free ball.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Technical and Data Report VNL 2024",
+        "Match Analysis in Volleyball: A Systematic Review"
+      ]
+    },
+    {
+      "id": "side_out_as_priority_phase",
+      "concept": "Side-out is the receiving team's first-order stabilizer because it stops the opponent's serving run and restores service.",
+      "details": "The side-out chain is reception quality, setter availability, attacker readiness, set tempo, attack choice, and coverage. Higher levels should track side-out by rotation and pass quality; beginner teams should first track whether they can receive, set a hittable ball, and send a controlled attack over the net.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness",
+        "A Comparative Analysis of Volleyball Skills in Balanced Sets for Men and Women in Asian Competitions"
+      ]
+    },
+    {
+      "id": "transition_or_breakpoint_phase",
+      "concept": "Transition is the serving team's chance to convert serve pressure and defensive control into a point.",
+      "details": "The transition sequence begins with block-defense organization, then dig quality, second-setter availability, counterattack tempo, attack choice, and hitter coverage. Transition effectiveness is a major separator at stronger levels because teams must score after defending good attacks, not only after receiving easy balls.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Game-Related Performance Factors in Four European Men's Professional Volleyball Championships",
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!"
+      ]
+    },
+    {
+      "id": "serving_runs_as_pressure_events",
+      "concept": "Serving runs are created by repeatable pressure, not only aces.",
+      "details": "A run can come from aces, predictable out-of-system balls, attacking receivers who cannot transition, setters forced off the net, or emotional pressure after repeated poor first contacts. The backend should store serving-run triggers, risk level, and stop rules separately from raw ace count.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Game-Related Volleyball Skills that Influence Victory",
+        "Simplified Youth Rules"
+      ]
+    },
+    {
+      "id": "rotation_as_context",
+      "concept": "Every rotation is a different tactical context because setter location, hitter count, receiver responsibilities, approach lanes, and block matchups change.",
+      "details": "Rotation analysis should not only list who is on court. It should identify setter path, front-row attacker count, which hitter has receive-to-attack load, likely first tempo availability, opponent block matchups, serve target choices, and the planned fallback if pass quality drops.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness"
+      ]
+    },
+    {
+      "id": "setter_tendencies_are_conditional",
+      "concept": "Setter tendencies should be modeled conditionally, not as simple favorite-hitter labels.",
+      "details": "A meaningful setter profile separates choices by pass quality, rotation, setter front-row or back-row status, score pressure, hitter availability, opponent blocker, and previous rally outcome. The goal is a probabilistic scout that predicts likely options while leaving room for deception.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Recipe for a Setter",
+        "Opponent Analysis and Scouting Reports",
+        "Match Analysis in Volleyball: A Systematic Review"
+      ]
+    },
+    {
+      "id": "hitter_tendencies_as_shot_map",
+      "concept": "Hitter scouting links set location and body cues to shot distribution.",
+      "details": "Shot charts should split in-system and out-of-system attempts, line versus cross, sharp angle versus deep corner, tool attempts, tips, roll shots, error zones, and performance against different block looks. A hitter's tendency on a perfect set may be irrelevant when the set is tight, inside, or off the net.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "serving_target_plan",
+      "concept": "A serving target plan is a tactical hypothesis that should connect a target to an expected constraint on the opponent's offense.",
+      "details": "Valid reasons to target a zone include weak receiver, receiver-to-attacker transition cost, setter movement interference, seam confusion, short-ball vulnerability, forcing a non-preferred attacker, or reducing middle availability. If the target does not change the opponent's offense or produce errors, it should be revised.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness",
+        "How You Can Make a Huge Impact as a Libero"
+      ]
+    },
+    {
+      "id": "block_defense_contract",
+      "concept": "Block and floor defense work as one contract: the block takes away a declared lane and defense loads the expected remaining spaces.",
+      "details": "Block calls should be translated into backcourt starting positions and responsibilities for hard-driven ball, tip, roll, and tool coverage. When blockers change line/angle responsibility without communicating, defenders lose the read structure behind them.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "timeouts_are_reset_tools",
+      "concept": "Timeouts are best treated as reset and adjustment tools, not guaranteed momentum stoppers.",
+      "details": "Research on volleyball timeouts is mixed, but useful patterns support calling timeouts earlier in opponent scoring runs and while the set is still close. A timeout script should contain one emotional reset cue, one tactical instruction, and one next-rally plan.",
+      "evidence_level": "moderate",
+      "source_refs": [
+        "Official Volleyball Rules 2025-2028",
+        "Timeouts and Psychological Momentum in Volleyball",
+        "The Timeout in Sports: A Study of Its Effect on Volleyball"
+      ],
+      "source_note": "The timeout studies were used as supporting evidence from search results and abstracts; they should be rechecked before production ingestion if exact thresholds are encoded as hard rules."
+    },
+    {
+      "id": "substitution_as_resource_management",
+      "concept": "Substitution decisions are tactical resource choices constrained by rule set, rotation order, player readiness, and remaining substitutions.",
+      "details": "Under FIVB rules, teams have limited substitutions per set. A substitution should have a clear tactical reason: improve a serve, pass a rotation, block a matchup, protect an injured or overloaded player, add a double substitution pattern, or change emotional rhythm. The cost is loss of flexibility later in the set.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Official Volleyball Rules 2025-2028",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "stats_ladder_by_level",
+      "concept": "The most useful stats depend on competitive level and data quality.",
+      "details": "Beginner teams benefit from serve-in rate, first-contact playable rate, three-contact attempts, and unforced errors. Intermediate teams can add pass rating, side-out percentage, breakpoint percentage, attack efficiency, and rotation scoring. Advanced teams should split all core stats by phase, rotation, pass quality, matchup, setter position, score state, and pressure moment.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Lesson Plans",
+        "Effect of Team Level on Skill Performance in Volleyball",
+        "Game-Related Performance Factors in Four European Men's Professional Volleyball Championships"
+      ]
+    },
+    {
+      "id": "actionable_scout_limit",
+      "concept": "A scout is only useful if players can act on it during rallies.",
+      "details": "Advanced scouting reports can contain many variables, but the player-facing plan should be small: serve this zone for this reason, block this hitter this way, defend this lane, expect this set in this rotation, and use this fallback if the read is wrong.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "in_match_adjustment_loop",
+      "concept": "In-match adjustment should follow observe, compare, decide, communicate, test, and retain-or-revert.",
+      "details": "A change should be triggered by repeated evidence such as two or more side-out failures in the same rotation, a hitter beating the same block-defense plan, a server scoring through the same seam, or the opponent changing its lineup or receive pattern. One-rally noise should not override a sound plan.",
+      "evidence_level": "moderate",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports",
+        "Match Analysis in Volleyball: A Systematic Review"
+      ]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "volleyball_phase_model_k0_k1_k2_k3",
+      "model": "Rally phase model for tactical tagging",
+      "record_type": "volleyball_match_phase_model",
+      "phases": [
+        {
+          "phase_id": "k0_serve_pressure",
+          "common_name": "serve phase",
+          "starts_when": "Server initiates the rally.",
+          "ends_when": "The receiving team's first attack is completed or the serve ends the rally.",
+          "primary_goal": "Create an ace, error, predictable pass, or limited opponent attack while controlling service-error risk.",
+          "useful_stats": [
+            "serve_in_rate",
+            "ace_rate",
+            "serve_error_rate",
+            "opponent_pass_rating_allowed",
+            "opponent_side_out_after_target",
+            "run_points_by_server"
+          ]
+        },
+        {
+          "phase_id": "k1_side_out",
+          "common_name": "side-out phase",
+          "starts_when": "Team receives serve.",
+          "ends_when": "Receiving team wins the point, loses the point, or the rally enters post-attack continuation.",
+          "primary_goal": "Turn serve receive into a controlled first attack and end the opponent's serving run.",
+          "useful_stats": [
+            "side_out_percentage",
+            "pass_rating",
+            "perfect_or_positive_reception_rate",
+            "first_attack_kill_percentage",
+            "attack_efficiency_after_reception",
+            "side_out_by_rotation"
+          ]
+        },
+        {
+          "phase_id": "k2_transition",
+          "common_name": "breakpoint or transition phase",
+          "starts_when": "Serving team defends the opponent's attack or receives a free/down ball.",
+          "ends_when": "Serving team counterattacks or loses the continuation.",
+          "primary_goal": "Convert block-defense quality into a point while retaining enough organization to cover the counterattack.",
+          "useful_stats": [
+            "breakpoint_percentage",
+            "dig_to_attack_conversion_rate",
+            "counterattack_efficiency",
+            "block_touch_to_point_rate",
+            "free_ball_conversion_rate",
+            "transition_error_rate"
+          ]
+        },
+        {
+          "phase_id": "k3_extended_rally",
+          "common_name": "extended rally continuation",
+          "starts_when": "The rally continues beyond the first side-out and first transition attack.",
+          "ends_when": "The rally ends.",
+          "primary_goal": "Maintain organization under scramble conditions, identify the first high-quality swing, and avoid giving away the point.",
+          "useful_stats": [
+            "extended_rally_win_rate",
+            "scramble_set_quality",
+            "coverage_save_rate",
+            "second_counterattack_efficiency",
+            "unforced_error_rate_after_10_seconds"
+          ]
+        }
+      ],
+      "coaching_use": "Tag every rally by phase first, then by skill. This avoids confusing a transition setting problem with a generic attacking problem or a serving-target problem with a passing problem.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Technical and Data Report VNL 2024",
+        "Match Analysis in Volleyball: A Systematic Review"
+      ]
+    },
+    {
+      "id": "side_out_quality_chain_model",
+      "model": "Side-out quality chain",
+      "record_type": "volleyball_match_phase_model",
+      "inputs": [
+        "serve_type",
+        "serve_zone",
+        "receiver_identity",
+        "pass_quality",
+        "setter_court_zone",
+        "setter_front_or_back",
+        "available_attackers",
+        "middle_availability",
+        "front_receiver_transition_load",
+        "opponent_block_matchup"
+      ],
+      "outputs": [
+        "first_attack_option",
+        "tempo_available",
+        "hitter_advantage",
+        "side_out_probability",
+        "coverage_assignment",
+        "fallback_ball"
+      ],
+      "decision_steps": [
+        "Stabilize first contact to a setter-accessible target.",
+        "If pass is positive, keep middle and pipe threats live where level appropriate.",
+        "If pass is off the net, select high-percentage outlet with clear coverage.",
+        "If the receiver must also attack, evaluate whether the serve location delayed the approach.",
+        "After the rally, tag the failure point as pass, setter access, hitter readiness, shot choice, coverage, or opponent defense."
+      ],
+      "backend_fields": [
+        "rotation_id",
+        "pass_quality_scale",
+        "setter_status",
+        "front_receiver_transition",
+        "first_attack_zone",
+        "result"
+      ],
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness",
+        "Technical and Data Report VNL 2024"
+      ]
+    },
+    {
+      "id": "transition_conversion_model",
+      "model": "Block-defense to counterattack conversion",
+      "record_type": "volleyball_match_phase_model",
+      "inputs": [
+        "serve_target_effect",
+        "opponent_set_location",
+        "block_call",
+        "block_touch_or_no_touch",
+        "dig_quality",
+        "setter_defended_or_available",
+        "libero_second_setter_available",
+        "hitter_transition_depth",
+        "opponent_coverage_shape"
+      ],
+      "outputs": [
+        "counterattack_tempo",
+        "best_available_hitter",
+        "risk_level",
+        "expected_point_value",
+        "coverage_priority"
+      ],
+      "decision_steps": [
+        "Use the serve and block plan to make the dig more predictable.",
+        "If the setter digs first contact, route second contact to trained second setter.",
+        "On a perfect or free-ball transition, run the fastest safe option for the level.",
+        "On a poor dig, prioritize a high-ball swing or controlled attack that keeps coverage organized.",
+        "Score the transition phase separately from side-out so counterattack training needs are visible."
+      ],
+      "evidence_level": "strong",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+        "How You Can Make a Huge Impact as a Libero"
+      ]
+    },
+    {
+      "id": "rotation_report_model",
+      "model": "Rotation-by-rotation scouting report",
+      "record_type": "volleyball_rotation_tactical_rule",
+      "rotation_fields": [
+        "rotation_label",
+        "setter_start_zone",
+        "setter_front_or_back_row",
+        "front_row_hitter_count",
+        "primary_receive_pattern",
+        "secondary_receive_pattern",
+        "setter_path_risk",
+        "front_receiver_transition_load",
+        "middle_route_availability",
+        "opposite_or_right_side_availability",
+        "back_row_attack_availability",
+        "best_side_out_option",
+        "fallback_out_of_system_option",
+        "opponent_best_serve_target",
+        "our_best_serve_target_against_opponent",
+        "block_matchup_to_exploit",
+        "defensive_adjustment"
+      ],
+      "analysis_rules": [
+        "Map rotation labels to the team's own lineup convention before applying rules.",
+        "Separate back-row setter rotations from front-row setter rotations because attacker count and setter dump threat change.",
+        "Flag any rotation where a front-row receiver must pass and still hit a first-tempo or pin route.",
+        "Flag any rotation where the setter's path crosses a passing seam or is vulnerable to short serves.",
+        "Store actual side-out percentage and opponent breakpoint percentage for each rotation."
+      ],
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness"
+      ]
+    },
+    {
+      "id": "setter_tendency_model",
+      "model": "Conditional setter tendency matrix",
+      "record_type": "volleyball_scouting_rule",
+      "dimensions": [
+        "rotation",
+        "pass_quality",
+        "setter_front_or_back_row",
+        "setter_distance_from_target",
+        "score_state",
+        "previous_set_choice",
+        "hitter_hot_or_cold",
+        "opponent_blocker_matchup",
+        "middle_available",
+        "out_of_system_state"
+      ],
+      "tracked_outputs": [
+        "set_to_left_pin_percentage",
+        "set_to_middle_percentage",
+        "set_to_right_pin_percentage",
+        "pipe_or_back_row_percentage",
+        "setter_attack_or_dump_percentage",
+        "repeat_hitter_percentage",
+        "first_ball_after_timeout_choice",
+        "high_pressure_choice"
+      ],
+      "scouting_warning": "Do not overfit a setter profile from a small sample. Use tendency bands and update with live match evidence.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "Recipe for a Setter",
+        "Opponent Analysis and Scouting Reports",
+        "Match Analysis in Volleyball: A Systematic Review"
+      ]
+    },
+    {
+      "id": "hitter_tendency_model",
+      "model": "Hitter shot and efficiency profile",
+      "record_type": "volleyball_scouting_rule",
+      "dimensions": [
+        "hitter_role",
+        "attack_zone",
+        "set_tempo",
+        "set_quality",
+        "setter_location",
+        "block_type_faced",
+        "defensive_look",
+        "score_pressure",
+        "transition_or_side_out"
+      ],
+      "tracked_outputs": [
+        "line_rate",
+        "cross_rate",
+        "sharp_angle_rate",
+        "deep_corner_rate",
+        "tool_rate",
+        "tip_or_roll_rate",
+        "blocked_rate",
+        "error_rate",
+        "kill_rate",
+        "attack_efficiency"
+      ],
+      "coaching_use": "Translate the profile into a simple block-defense plan: take away the highest-value shot, bait the low-efficiency shot, and assign tip coverage.",
+      "evidence_level": "strong",
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+        "Opponent Analysis and Scouting Reports",
+        "Game-Related Volleyball Skills that Influence Victory"
+      ]
+    },
+    {
+      "id": "serve_target_selection_model",
+      "model": "Serving target decision matrix",
+      "record_type": "volleyball_scouting_rule",
+      "target_reasons": [
+        "weak_receiver",
+        "front_row_receiver_must_transition_to_attack",
+        "setter_path_interference",
+        "receiver_seam_confusion",
+        "short_ball_vulnerability",
+        "force_non_preferred_attacker",
+        "reduce_middle_tempo",
+        "challenge_passer_under_pressure",
+        "move_libero_out_of_second_setter_area"
+      ],
+      "risk_controls": [
+        "server_skill_level",
+        "score_state",
+        "previous_service_error",
+        "target_window_size",
+        "opponent_passer_adjustment",
+        "team_need_for_point_run",
+        "server_fatigue"
+      ],
+      "output_plan": [
+        "primary_zone",
+        "secondary_zone",
+        "serve_type",
+        "acceptable_error_type",
+        "abort_condition",
+        "expected_opponent_attack_limit"
+      ],
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports",
+        "How You Can Make a Huge Impact as a Libero",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness"
+      ]
+    },
+    {
+      "id": "block_matchup_model",
+      "model": "Block matchup and defense contract",
+      "record_type": "volleyball_scouting_rule",
+      "inputs": [
+        "opponent_hitter",
+        "opponent_setter",
+        "our_front_row_blockers",
+        "setter_front_row_status",
+        "hitter_hand",
+        "hitter_approach_angle",
+        "set_location",
+        "set_tempo",
+        "pass_quality",
+        "our_backcourt_defenders"
+      ],
+      "block_options": [
+        "commit_middle",
+        "read_middle",
+        "bunch_block",
+        "spread_block",
+        "line_block",
+        "angle_block",
+        "soft_block",
+        "triple_block_high_ball"
+      ],
+      "defensive_outputs": [
+        "line_defender_depth",
+        "cross_defender_depth",
+        "middle_back_responsibility",
+        "tip_coverage_player",
+        "roll_shot_zone",
+        "tool_coverage"
+      ],
+      "evidence_level": "strong",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!"
+      ]
+    },
+    {
+      "id": "timeout_substitution_logic_model",
+      "model": "Bench decision logic for timeouts and substitutions",
+      "record_type": "volleyball_scouting_rule",
+      "timeout_triggers": [
+        "opponent_scores_two_or_three_in_a_row_through_same_pattern",
+        "same_rotation_side_out_failure_repeats",
+        "passer_confidence_or_communication_breakdown",
+        "team_forgets_scouting_plan",
+        "late_set_score_with_high_leverage_next_rally",
+        "opponent_lineup_or_receive_pattern_changes"
+      ],
+      "timeout_script": [
+        "State one reset cue.",
+        "State one tactical correction.",
+        "Name the next serve receive or serve target.",
+        "Assign one player to confirm the on-court call.",
+        "Avoid overloading players with a full scouting report."
+      ],
+      "substitution_triggers": [
+        "serve_specialist_expected_to_create_pressure",
+        "passer_targeted_repeatedly_and_alternative_is_ready",
+        "blocker_matchup_costing_points",
+        "hitter_efficiency_drop_with_clear_bench_alternative",
+        "defensive_specialist_needed_in_specific_back_row_rotation",
+        "injury_or_load_risk_requires_removal",
+        "double_substitution_or_system_change_needed"
+      ],
+      "constraints": [
+        "remaining_substitutions",
+        "legal_reentry_or_rule_set",
+        "rotation_position",
+        "libero_replacement_rules",
+        "player_readiness",
+        "future_set_endgame_needs"
+      ],
+      "evidence_level": "moderate",
+      "source_refs": [
+        "Official Volleyball Rules 2025-2028",
+        "Coaches Manual Level II",
+        "Timeouts and Psychological Momentum in Volleyball",
+        "The Timeout in Sports: A Study of Its Effect on Volleyball"
+      ]
+    },
+    {
+      "id": "tactical_stats_by_level_model",
+      "model": "Performance indicator ladder by competitive level",
+      "record_type": "volleyball_performance_indicator",
+      "beginner_stats": [
+        {
+          "stat": "serve_in_rate",
+          "reason": "Rally scoring makes missed serves immediately costly, and beginners often lose points before tactical play starts."
+        },
+        {
+          "stat": "first_contact_playable_rate",
+          "reason": "Measures whether the team can keep the rally alive and create a second contact."
+        },
+        {
+          "stat": "three_contact_attempt_rate",
+          "reason": "Encourages serve receive, set, and attack structure instead of panic overpasses."
+        },
+        {
+          "stat": "unforced_error_count",
+          "reason": "At entry level, reducing free points usually beats complex scouting."
+        }
+      ],
+      "intermediate_stats": [
+        {
+          "stat": "side_out_percentage",
+          "reason": "Captures whether the team can stop serving runs and convert receive into points."
+        },
+        {
+          "stat": "breakpoint_percentage",
+          "reason": "Captures whether the serving team can score after serve pressure and defense."
+        },
+        {
+          "stat": "pass_rating",
+          "reason": "Links receive quality to setter options and first attack quality."
+        },
+        {
+          "stat": "attack_efficiency",
+          "formula": "(kills - errors - blocked_attacks) / attempts",
+          "reason": "More informative than kill count because it includes errors and blocks."
+        },
+        {
+          "stat": "rotation_plus_minus",
+          "reason": "Identifies rotations that produce or leak runs."
+        }
+      ],
+      "advanced_stats": [
+        {
+          "stat": "side_out_by_rotation_and_pass_quality",
+          "reason": "Shows whether a rotation fails because of serve receive, setter path, or attack matchup."
+        },
+        {
+          "stat": "in_system_attack_efficiency",
+          "reason": "Measures how well the team converts high-quality first contacts."
+        },
+        {
+          "stat": "out_of_system_attack_efficiency",
+          "reason": "Measures adaptability when pass or dig quality breaks the planned offense."
+        },
+        {
+          "stat": "serve_target_expected_value",
+          "reason": "Connects serving target to opponent reception, side-out, and error outcomes."
+        },
+        {
+          "stat": "counterattack_efficiency",
+          "reason": "Captures transition scoring after dig, block touch, free ball, or down ball."
+        },
+        {
+          "stat": "crunch_time_efficiency",
+          "reason": "Tracks whether choices remain effective in high-leverage score states."
+        }
+      ],
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Effect of Team Level on Skill Performance in Volleyball",
+        "Game-Related Volleyball Skills that Influence Victory",
+        "A Comparative Analysis of Volleyball Skills in Balanced Sets for Men and Women in Asian Competitions"
+      ]
+    },
+    {
+      "id": "match_iq_progression_model",
+      "model": "Beginner to advanced tactical learning progression",
+      "record_type": "volleyball_match_iq_progression",
+      "levels": [
+        {
+          "level": "beginner",
+          "focus": "Know court zones, rotation direction, three-contact structure, base positions, calling the ball, and serving in with purpose.",
+          "player_tasks": [
+            "Call mine or help before first contact.",
+            "Know where the setter target is.",
+            "Recover to a simple base after sending the ball over.",
+            "Serve to a large zone instead of only trying to clear the net.",
+            "Understand that a high playable ball is usually a good miss."
+          ],
+          "avoid": [
+            "Overloading players with full opponent scouting reports.",
+            "Running complex switches before players understand legal rotations.",
+            "Using double blocks when players cannot jump and land safely near the net."
+          ]
+        },
+        {
+          "level": "intermediate",
+          "focus": "Connect rotations, serve receive patterns, side-out, breakpoint, block-defense calls, and simple opponent tendencies.",
+          "player_tasks": [
+            "Know the team's strongest and weakest side-out rotations.",
+            "Serve a named zone for a named reason.",
+            "Make line or angle block calls and defend behind them.",
+            "Recognize when the setter is front row or back row.",
+            "Use a planned fallback ball when pass quality is poor."
+          ],
+          "avoid": [
+            "Changing tactics after one unlucky rally.",
+            "Tracking advanced stats without enough data quality.",
+            "Giving every player more than one or two scout cues at a time."
+          ]
+        },
+        {
+          "level": "advanced",
+          "focus": "Use phase, rotation, matchup, pass-quality, score-state, and tendency data to adapt during the match.",
+          "player_tasks": [
+            "Read setter choices by rotation and pass quality.",
+            "Adjust serve target when the opponent changes receive pattern.",
+            "Use block-defense contracts based on set location and hitter profile.",
+            "Separate side-out problems from transition problems in feedback.",
+            "Apply timeout and substitution decisions as resource-management choices."
+          ],
+          "avoid": [
+            "Treating historical tendencies as guarantees.",
+            "Prioritizing raw kills over efficiency and phase context.",
+            "Ignoring fatigue and injury risk when tactical plans overload one player."
+          ]
+        }
+      ],
+      "source_refs": [
+        "Lesson Plans",
+        "Simplified Youth Rules",
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "serve_receive_first_rule",
+      "category": "side_out_phase",
+      "rule": "Protect setter access before chasing perfect pass location.",
+      "rationale": "A slightly off-target but setter-accessible pass keeps the team in offense; a low, tight, or overpassed ball often hands the opponent a direct scoring chance.",
+      "level": "beginner_to_advanced",
+      "if_then": "If the serve creates conflict or late movement, prioritize a high playable ball to the setter zone or middle of court before attempting a perfect target.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Lesson Plans"
+      ]
+    },
+    {
+      "id": "side_out_failure_diagnosis",
+      "category": "side_out_phase",
+      "rule": "Diagnose side-out failure by chain link, not by final attacker.",
+      "rationale": "The hitter may receive blame for a low-efficiency swing that was actually caused by poor pass quality, setter path, delayed transition, or predictable out-of-system setting.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If side-out fails twice in one rotation, tag pass quality, setter location, hitter readiness, set choice, block matchup, and shot decision before changing personnel.",
+      "source_refs": [
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness",
+        "Technical and Data Report VNL 2024"
+      ]
+    },
+    {
+      "id": "front_receiver_transition_rule",
+      "category": "serving_target_plan",
+      "rule": "Serve a front-row receiver when the serve location can reduce that player's attack readiness.",
+      "rationale": "Top-level research indicates that the reception-to-attack transition can reduce front receiver spike effectiveness in some rotations and setter-position contexts.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If a front-row hitter must pass and then run a major first-ball route, serve a zone that adds movement away from the intended approach lane; abort if the libero or another passer absorbs the target cleanly.",
+      "source_refs": [
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "serve_weakness_with_purpose",
+      "category": "serving_target_plan",
+      "rule": "Do not serve the weakest passer automatically; serve the target that most limits the opponent's next attack.",
+      "rationale": "A weak passer matters most when the resulting pass removes middle tempo, forces a predictable pin, or creates an error. If a weak passer still produces high easy balls to the opponent's best attacker, another target may be better.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If the weak passer's average pass still allows the opponent's preferred offense, test a seam, short target, or transition-load target instead.",
+      "source_refs": [
+        "Opponent Analysis and Scouting Reports",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "serve_error_budget_rule",
+      "category": "serving_runs",
+      "rule": "Increase serve risk only when the expected pressure outweighs the immediate point cost.",
+      "rationale": "Elite data tracks aces and errors together because a high-ace plan can lose value if errors arrive in low-leverage or tactically unnecessary moments.",
+      "level": "all_levels",
+      "if_then": "If the team has just missed a serve, is leading late by one, or faces an opponent rotation already struggling to side out, choose a pressure-in serve before a maximum-risk serve.",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Game-Related Volleyball Skills that Influence Victory"
+      ]
+    },
+    {
+      "id": "serving_run_continue_rule",
+      "category": "serving_runs",
+      "rule": "Keep a successful serving plan until the opponent proves an adjustment.",
+      "rationale": "Serving runs often come from repeated seam conflict or transition overload. Changing targets too early can release pressure.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If the same target produces two poor passes, a direct error, or a predictable out-of-system ball, repeat the target or adjacent seam until the opponent changes shape or passer responsibility.",
+      "source_refs": [
+        "Opponent Analysis and Scouting Reports",
+        "Technical and Data Report VNL 2024"
+      ]
+    },
+    {
+      "id": "side_out_after_timeout_rule",
+      "category": "timeout_logic",
+      "rule": "After calling timeout to receive, name the next pass responsibility and first-ball option.",
+      "rationale": "A timeout works best as a focused reset. Players need a simple next-rally plan, not a long review of all match problems.",
+      "level": "all_levels",
+      "if_then": "If the timeout was called during an opponent serving run, identify the target passer or seam owner, the setter fallback, and the preferred high-percentage first swing.",
+      "source_refs": [
+        "Timeouts and Psychological Momentum in Volleyball",
+        "The Timeout in Sports: A Study of Its Effect on Volleyball",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "timeout_early_run_rule",
+      "category": "timeout_logic",
+      "rule": "Consider timeout early in a damaging run rather than after the set has separated.",
+      "rationale": "Timeout research suggests better usefulness when score margins are still small and before momentum has fully built. This should be a guide, not an automatic rule.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If the opponent scores two or three consecutive points through the same pattern and the set is still within roughly three points, consider timeout if no on-court adjustment is ready.",
+      "source_refs": [
+        "Timeouts and Psychological Momentum in Volleyball",
+        "The Timeout in Sports: A Study of Its Effect on Volleyball"
+      ]
+    },
+    {
+      "id": "substitution_expected_value_rule",
+      "category": "substitution_logic",
+      "rule": "Use a tactical substitution only when the expected gain in that rotation is worth the lost future flexibility.",
+      "rationale": "FIVB substitutions are limited, so a serving, passing, blocking, or attacking sub must be weighed against endgame needs and legal reentry constraints.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If a serving specialist is likely to create real pass pressure and the team has enough substitutions left for planned reentries, use the sub; if the server only adds marginal pressure, preserve the resource.",
+      "source_refs": [
+        "Official Volleyball Rules 2025-2028",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "rotation_dashboard_rule",
+      "category": "rotation_analysis",
+      "rule": "Track each rotation as a mini-game with its own side-out rate, point scoring rate, serve target, and first-ball plan.",
+      "rationale": "Team averages hide whether a team loses one rotation badly and survives the others. Rotation-level tracking makes adjustments precise.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If one rotation is minus three or worse across two cycles, adjust receive shape, first-ball route, serving target, or substitution plan before changing the entire system.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "back_row_setter_rotation_rule",
+      "category": "rotation_analysis",
+      "rule": "In back-row setter rotations, protect the setter path and preserve three front-row attack threats where the level supports it.",
+      "rationale": "Back-row setter rotations can offer three front-row attackers, but a difficult setter path or poor pass can remove tempo and make the offense predictable.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If the opponent serves the setter path or the receiver next to the setter, adjust passing lanes, release timing, or first-ball tempo before assuming the attackers are the problem.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Recipe for a Setter"
+      ]
+    },
+    {
+      "id": "front_row_setter_rotation_rule",
+      "category": "rotation_analysis",
+      "rule": "In front-row setter rotations, account for reduced front-row hitter count while using setter attack, tempo, and matchup deception.",
+      "rationale": "The front-row setter can attack or dump and can manipulate blockers, but the team often has fewer pure front-row attacking options.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If blockers ignore the setter, use second-contact threat or fast tempo; if blockers commit to the setter, release hitters into the space created.",
+      "source_refs": [
+        "Recipe for a Setter",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "rotation_receive_alternative_rule",
+      "category": "rotation_analysis",
+      "rule": "Prepare a secondary receive pattern for rotations that opponents will target.",
+      "rationale": "Scouting resources emphasize whether teams use alternate serve receive formations when in trouble. Without a practiced secondary pattern, in-match adjustments often create overlap or seam confusion.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If the opponent scores twice into the same receive seam, switch to the practiced alternate pattern and name the new seam owner before the next serve.",
+      "source_refs": [
+        "Opponent Analysis and Scouting Reports",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "setter_repeat_tendency_rule",
+      "category": "setter_tendencies",
+      "rule": "Scout repeat behavior after kills, errors, and timeouts separately.",
+      "rationale": "Some setters feed a hot hitter, some move away from an error, and some run scripted plays after stoppages. Aggregated set distribution can hide these patterns.",
+      "level": "advanced",
+      "if_then": "If the setter repeatedly returns to the same hitter after a kill in a specific rotation, shade the block-defense plan on that next comparable pass quality.",
+      "source_refs": [
+        "Recipe for a Setter",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "setter_poor_pass_rule",
+      "category": "setter_tendencies",
+      "rule": "Separate setter choices on perfect passes from choices on poor passes.",
+      "rationale": "An advanced offense may be balanced in system but predictable out of system. Blocking plans should key the real available options.",
+      "level": "advanced",
+      "if_then": "If pass quality pulls the setter beyond the attack line or sideline, release blockers and defenders toward the most likely high-ball outlet rather than honoring unavailable first-tempo options.",
+      "source_refs": [
+        "Opponent Analysis and Scouting Reports",
+        "Technical and Data Report VNL 2024"
+      ]
+    },
+    {
+      "id": "hitter_set_location_rule",
+      "category": "hitter_tendencies",
+      "rule": "Read hitter choices through set location before applying generic shot charts.",
+      "rationale": "A hitter's line, cross, tip, and tool choices change when the set is tight, inside, outside the antenna, or off the net.",
+      "level": "all_levels",
+      "if_then": "If the set is tight, expect faster downward or tool attempts; if the set is off the net, load deeper angle and roll-shot coverage; if the set is outside the antenna, protect sharp cross and emergency recycle.",
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!"
+      ]
+    },
+    {
+      "id": "left_handed_hitter_rule",
+      "category": "hitter_tendencies",
+      "rule": "Identify left-handed attackers during warm-up and adjust block hand and defensive expectations.",
+      "rationale": "Handedness changes natural contact angle, especially from right-side or out-of-system positions.",
+      "level": "all_levels",
+      "if_then": "If a hitter is left-handed, confirm blocking shoulder alignment and defender starting spots before that hitter's first front-row rotation.",
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!"
+      ]
+    },
+    {
+      "id": "block_line_angle_call_rule",
+      "category": "block_matchups",
+      "rule": "Every block plan needs a line or angle responsibility that backcourt defenders understand.",
+      "rationale": "A block that takes no declared space leaves defenders guessing and reduces dig quality.",
+      "level": "beginner_to_advanced",
+      "if_then": "If blockers call line, backcourt loads angle and tip seams; if blockers call angle, line defender protects line and deep corner.",
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "commit_block_threshold_rule",
+      "category": "block_matchups",
+      "rule": "Commit block only when the opponent's pass, setter tendency, and attacker threat justify leaving other options exposed.",
+      "rationale": "Commit blocking can stop elite middles or scripted plays, but it creates openings if used without enough information.",
+      "level": "advanced",
+      "if_then": "If the opponent's positive pass plus rotation tendency sends first tempo at high frequency, commit selectively; if pass quality drops, return to read or release blocking.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "free_ball_conversion_rule",
+      "category": "transition_phase",
+      "rule": "Treat free balls as planned scoring opportunities, not relief rallies.",
+      "rationale": "Free balls give the receiving team time to organize pass, setter, attack routes, and coverage. Poor free-ball conversion is a tactical failure.",
+      "level": "all_levels",
+      "if_then": "If the opponent sends a free ball, assign the best ball-control player to first contact, run the planned free-ball offense, and measure conversion rate after the set.",
+      "source_refs": [
+        "How You Can Make a Huge Impact as a Libero",
+        "Technical and Data Report VNL 2024"
+      ]
+    },
+    {
+      "id": "setter_dig_transition_rule",
+      "category": "transition_phase",
+      "rule": "Train a second-setter plan for every defensive rotation.",
+      "rationale": "When the setter digs the first ball, transition quality depends on whether another player can set a hittable ball with tempo and location.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If the setter takes first contact, the libero or assigned second setter should move immediately to the setting zone while hitters call available routes.",
+      "source_refs": [
+        "How You Can Make a Huge Impact as a Libero",
+        "Recipe for a Setter"
+      ]
+    },
+    {
+      "id": "coverage_confidence_rule",
+      "category": "transition_phase",
+      "rule": "Use hitter coverage to permit aggressive but intelligent attacks against strong blocks.",
+      "rationale": "A team that covers well can challenge the block without turning every blocked ball into an immediate point for the opponent.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If the opponent block is scoring through stuffs, improve coverage spacing and tool-recycle options before telling hitters only to avoid the block.",
+      "source_refs": [
+        "How You Can Make a Huge Impact as a Libero",
+        "Game-Related Volleyball Skills that Influence Victory"
+      ]
+    },
+    {
+      "id": "beginner_tactics_limit_rule",
+      "category": "learning_progression",
+      "rule": "Beginner tactical learning should be limited to court zones, communication, serve target, base, and three-contact intent.",
+      "rationale": "Beginners need repeatable perception-action habits before complex scouting or switching systems.",
+      "level": "beginner",
+      "if_then": "If players cannot consistently receive and send a playable second ball, delay rotation-specific opponent scouting and train gamelike first-contact decisions.",
+      "source_refs": [
+        "Lesson Plans",
+        "Simplified Youth Rules"
+      ]
+    },
+    {
+      "id": "intermediate_tactics_rule",
+      "category": "learning_progression",
+      "rule": "Intermediate teams should connect simple scouting to a small number of practiced choices.",
+      "rationale": "At this level, a useful game plan is usually one serve target, one block-defense call, one receive adjustment, and one transition fallback per major rotation problem.",
+      "level": "intermediate",
+      "if_then": "If a scouting point cannot be practiced before the match or explained in one sentence to the player responsible, do not make it a primary cue.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "advanced_tactics_rule",
+      "category": "learning_progression",
+      "rule": "Advanced teams should combine pre-match scouting with live evidence and phase-specific data.",
+      "rationale": "At high levels, opponents adjust. The original scout must be revised when the setter, receiver, or coach changes the pattern.",
+      "level": "advanced",
+      "if_then": "If live data contradicts the scout across a meaningful sample in the same rotation and pass-quality context, update the on-court call and record the reason.",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Match Analysis in Volleyball: A Systematic Review",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "crunch_time_simplicity_rule",
+      "category": "in_match_adjustment",
+      "rule": "In high-leverage points, simplify the plan to the team's best trained option unless the opponent has clearly taken it away.",
+      "rationale": "Pressure reduces tolerance for ambiguous cues. Elite data tracks crunch-time efficiency because execution under score stress matters.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If the score is late and close, choose the serve target, pass pattern, and first-ball route that players have executed most reliably in that match context.",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Recipe for a Setter"
+      ]
+    },
+    {
+      "id": "one_change_at_a_time_rule",
+      "category": "in_match_adjustment",
+      "rule": "Change one tactical variable at a time when possible.",
+      "rationale": "Multiple simultaneous changes make it difficult to know whether the adjustment worked and can create player confusion.",
+      "level": "all_levels",
+      "if_then": "If a rotation is failing, first adjust receive shape or first-ball choice; if that fails, then consider personnel or system changes.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Lesson Plans"
+      ]
+    },
+    {
+      "id": "libero_range_counter_rule",
+      "category": "serve_receive_adjustment",
+      "rule": "Use libero range to counter serving plans that overload outside hitters, but do not create hidden seams.",
+      "rationale": "A libero can pass a larger area and free attackers, but only if adjacent passers know the new seam responsibilities.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If the opponent repeatedly serves an outside hitter to reduce attack readiness, expand libero responsibility or move the hitter out of receive; announce the new seam owner.",
+      "source_refs": [
+        "How You Can Make a Huge Impact as a Libero",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness"
+      ]
+    },
+    {
+      "id": "opponent_receive_change_rule",
+      "category": "serving_target_plan",
+      "rule": "When the opponent changes receive pattern, re-scout before repeating the old target.",
+      "rationale": "A target that worked against a three-passer pattern may fail against a two-passer, four-passer, or libero-expanded pattern.",
+      "level": "advanced",
+      "if_then": "If the opponent changes passer count or moves the libero, identify the new seams, setter path, and receiver-to-attack load before the next serve plan is called.",
+      "source_refs": [
+        "Opponent Analysis and Scouting Reports",
+        "How You Can Make a Huge Impact as a Libero"
+      ]
+    },
+    {
+      "id": "raw_kill_count_warning_rule",
+      "category": "performance_indicators",
+      "rule": "Do not use raw kill count alone to evaluate attackers or tactics.",
+      "rationale": "Attack efficiency, error rate, block rate, phase, pass quality, and set context are needed to know whether an attack plan is actually working.",
+      "level": "intermediate_to_advanced",
+      "if_then": "If one hitter has many kills but low efficiency or high blocked rate, adjust shot selection, set location, or matchup rather than automatically increasing volume.",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "A Comparative Analysis of Volleyball Skills in Balanced Sets for Men and Women in Asian Competitions"
+      ]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "transition_repetition_demand",
+      "demand": "Repeated receive-to-attack and defend-to-attack transitions require acceleration, deceleration, approach re-timing, and jump readiness under short time constraints.",
+      "tactical_relevance": "Serving plans that target front-row receivers are partly physical: they make attackers move, stabilize a platform, then rapidly rebuild approach rhythm.",
+      "monitoring_fields": [
+        "front_receiver_targets_per_set",
+        "receive_to_attack_attempts",
+        "transition_attack_attempts",
+        "late_approach_errors"
+      ],
+      "source_refs": [
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness"
+      ]
+    },
+    {
+      "id": "setter_movement_demand",
+      "demand": "Setter match IQ depends on repeated fast movement to the setting zone, body control from imperfect passes, jump-setting or dumping threat, and decision-making while moving.",
+      "tactical_relevance": "Serving at setter path or forcing off-net passes raises both physical and cognitive load on the setter.",
+      "monitoring_fields": [
+        "off_net_sets",
+        "setter_sprint_recoveries",
+        "jump_sets",
+        "setter_first_contacts",
+        "setter_attack_attempts"
+      ],
+      "source_refs": [
+        "Recipe for a Setter",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "serving_run_demand",
+      "demand": "Serving runs require repeated high-concentration serving and immediate sprint to defensive base after each serve.",
+      "tactical_relevance": "A server who scores pressure but cannot recover to defensive position can leak transition points after the opponent handles the serve.",
+      "monitoring_fields": [
+        "serves_in_run",
+        "serve_velocity_or_type",
+        "post_serve_defensive_error",
+        "service_error_after_long_run"
+      ],
+      "source_refs": [
+        "Training Without a Net or Friends",
+        "Technical and Data Report VNL 2024"
+      ]
+    },
+    {
+      "id": "block_defense_reaction_demand",
+      "demand": "Block-defense tactics require repeated split-step readiness, lateral movement, jump timing, landing control, and fast floor defense reactions.",
+      "tactical_relevance": "Committing to a block or loading a defensive zone changes physical starting positions and movement distances for multiple players.",
+      "monitoring_fields": [
+        "block_jumps",
+        "block_lateral_moves",
+        "digs_from_loaded_zone",
+        "emergency_defensive_movements"
+      ],
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "cognitive_load_demand",
+      "demand": "Advanced scouting increases information load: players must perceive serve, pass, setter, hitter, block, score, and rotation cues under rally speed.",
+      "tactical_relevance": "Too many cues can reduce execution quality. Match plans should be filtered into role-specific actionable cues.",
+      "monitoring_fields": [
+        "player_cue_count",
+        "missed_assignment_errors",
+        "timeout_instruction_count",
+        "post_scout_execution_rate"
+      ],
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports",
+        "Lesson Plans"
+      ]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "front_receiver_overload",
+      "risk": "Repeatedly assigning a front-row hitter large serve receive responsibility can reduce approach readiness and increase acute fatigue across passing, acceleration, and jumping tasks.",
+      "tactical_trigger": "Opponent repeatedly serves the same attacking receiver or the team relies on that player for both primary passing and high attack volume.",
+      "mitigation": "Use libero range, shift seams, remove the hitter from receive in targeted rotations, or change first-ball route to reduce immediate transition cost.",
+      "source_refs": [
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness",
+        "How You Can Make a Huge Impact as a Libero"
+      ]
+    },
+    {
+      "id": "net_play_landing_risk",
+      "risk": "Aggressive blocking systems and crowded net play increase landing and net-contact risk, especially for youth or low-training-age athletes.",
+      "tactical_trigger": "Double blocks, late close blocks, or commit blocks are introduced before players can jump, land, and avoid the net safely.",
+      "mitigation": "At beginner levels, prioritize reading and floor defense until blockers can reach safely above the net and land under control; use one-player blocks when appropriate.",
+      "source_refs": [
+        "Simplified Youth Rules",
+        "Official Volleyball Rules 2025-2028"
+      ]
+    },
+    {
+      "id": "jump_serve_shoulder_and_fatigue_risk",
+      "risk": "High-risk jump serving can add shoulder, trunk, and landing load while increasing point-costly service errors under fatigue.",
+      "tactical_trigger": "A player uses maximum-risk serves across long runs or late-set pressure without enough accuracy or recovery.",
+      "mitigation": "Use a serve error budget, mix pressure-in targets, and monitor service errors after long runs or extended matches.",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Simplified Youth Rules"
+      ]
+    },
+    {
+      "id": "emergency_defense_risk",
+      "risk": "Defensive adjustments that invite tips, sharp angles, or deep pursuit can increase diving, rolling, lunging, and collision exposure.",
+      "tactical_trigger": "The block-defense plan leaves open spaces that require late emergency saves or multiple players pursue the same ball.",
+      "mitigation": "Clarify tip coverage, line/angle responsibilities, and communication calls; train emergency movements progressively rather than only in matches.",
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+        "Lesson Plans"
+      ]
+    },
+    {
+      "id": "substitution_delay_and_readiness_risk",
+      "risk": "Poorly prepared substitutions can create delay sanctions, cold-entry errors, or confusion about rotation responsibilities.",
+      "tactical_trigger": "A substitute enters without knowing serve target, defensive base, blocking assignment, or legal rotation position.",
+      "mitigation": "Prepare substitution cards or verbal scripts, confirm role assignment before the player enters, and keep substitutes warm and tactically engaged.",
+      "source_refs": [
+        "Official Volleyball Rules 2025-2028",
+        "Coaches Manual Level II"
+      ]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "train_phases_not_only_skills",
+      "implication": "Practice should include side-out, transition, free-ball, down-ball, and extended-rally scenarios rather than only isolated serve, pass, set, hit repetitions.",
+      "application": "Build drills that start with a serve or realistic first contact, then score the phase goal: side-out, breakpoint, counterattack, or free-ball conversion.",
+      "level": "all_levels",
+      "source_refs": [
+        "Lesson Plans",
+        "Match Analysis in Volleyball: A Systematic Review"
+      ]
+    },
+    {
+      "id": "use_rotation_games",
+      "implication": "Rotation-by-rotation learning should be practiced as small games with clear scoring constraints.",
+      "application": "Start each game in a specific rotation, give the opponent a planned serve target, and track whether the team executes its receive shape, first-ball option, fallback, and coverage.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "scout_to_practice_conversion",
+      "implication": "A scouting report should become practice constraints before it becomes a match plan.",
+      "application": "If the opponent's setter favors a right-side attacker on positive passes, practice the serve target that reduces that pass quality, the block call if the set still goes there, and the defensive responsibility behind it.",
+      "level": "advanced",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "id": "teach_stats_as_decision_tools",
+      "implication": "Stats should be taught as cues for decisions, not as punishment labels.",
+      "application": "Pair each tracked stat with an action: low side-out prompts receive or first-ball changes; high serve errors prompt risk adjustment; poor counterattack prompts second-setter and hitter transition work.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Effect of Team Level on Skill Performance in Volleyball"
+      ]
+    },
+    {
+      "id": "beginner_match_iq_curriculum",
+      "implication": "Beginner tactical curriculum should prioritize playability, spacing, and communication over opponent-specific scouting.",
+      "application": "Use small-sided or simplified games where players learn court zones, serve target, three contacts, setter target, base position, and safe net behavior.",
+      "level": "beginner",
+      "source_refs": [
+        "Simplified Youth Rules",
+        "Lesson Plans",
+        "Why Should I Run a 6-3 or 6-6?"
+      ]
+    },
+    {
+      "id": "intermediate_match_iq_curriculum",
+      "implication": "Intermediate players should learn how serve, receive, block, and defense connect tactically.",
+      "application": "Use one-scout-cue games: serve zone 5 to make the outside hit late, block angle and defend line, or move libero to absorb a seam. Debrief with side-out and breakpoint outcomes.",
+      "level": "intermediate",
+      "source_refs": [
+        "Opponent Analysis and Scouting Reports",
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!"
+      ]
+    },
+    {
+      "id": "advanced_match_iq_curriculum",
+      "implication": "Advanced training should integrate video, tagged data, and live adjustment rehearsal.",
+      "application": "Before competition, build rotation cards and setter/hitter tendency sheets. During practice, force the scout team to change receive patterns or set choices so players rehearse updating the plan.",
+      "level": "advanced",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Technical and Data Report VNL 2024",
+        "Match Analysis in Volleyball: A Systematic Review"
+      ]
+    },
+    {
+      "id": "timeout_rehearsal",
+      "implication": "Timeouts should be rehearsed as communication events.",
+      "application": "Practice thirty-second timeout scripts in scrimmages: one reset cue, one tactical correction, next rally responsibility, and confirmation from the on-court leader.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "Timeouts and Psychological Momentum in Volleyball",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "id": "train_second_setter_system",
+      "implication": "Every team needs a second-setter plan for transition when the setter defends first contact.",
+      "application": "Train libero and selected back-row players to set hittable balls from common dig zones, then require hitters to call available transition routes.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "How You Can Make a Huge Impact as a Libero",
+        "Recipe for a Setter"
+      ]
+    },
+    {
+      "id": "practice_in_match_adjustment_rules",
+      "implication": "Players should practice when to keep, modify, or abandon a tactical plan.",
+      "application": "Use scrimmage constraints where the same serve target works twice, then the opponent changes receive. Players must identify the new target or return to pressure-in serving.",
+      "level": "advanced",
+      "source_refs": [
+        "Opponent Analysis and Scouting Reports",
+        "Technical and Data Report VNL 2024"
+      ]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "volleyball_match_phase_model",
+      "id": "phase_k0_serve_pressure",
+      "name": "K0 serve pressure",
+      "phase": "serve",
+      "core_question": "Did the serve create advantage without unacceptable error risk?",
+      "metrics": [
+        "serve_in_rate",
+        "ace_rate",
+        "serve_error_rate",
+        "opponent_pass_rating_allowed",
+        "opponent_side_out_percentage_after_target",
+        "run_points_by_server"
+      ],
+      "coaching_actions": [
+        "select_target_zone",
+        "choose_serve_type",
+        "adjust_risk_by_score",
+        "repeat_successful_target_until_adjusted"
+      ],
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Game-Related Volleyball Skills that Influence Victory"
+      ]
+    },
+    {
+      "record_type": "volleyball_match_phase_model",
+      "id": "phase_k1_side_out",
+      "name": "K1 side-out",
+      "phase": "serve_receive",
+      "core_question": "Did receive, set, and first attack stop the opponent's serving phase?",
+      "metrics": [
+        "side_out_percentage",
+        "side_out_by_rotation",
+        "pass_rating",
+        "positive_reception_rate",
+        "first_attack_kill_percentage",
+        "attack_efficiency_after_reception"
+      ],
+      "coaching_actions": [
+        "change_receive_shape",
+        "protect_setter_path",
+        "free_attacking_receiver",
+        "change_first_ball_route",
+        "use_fallback_high_ball"
+      ],
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness"
+      ]
+    },
+    {
+      "record_type": "volleyball_match_phase_model",
+      "id": "phase_k2_transition_breakpoint",
+      "name": "K2 transition and breakpoint",
+      "phase": "defense_to_offense",
+      "core_question": "Did the serving team turn defense into a point?",
+      "metrics": [
+        "breakpoint_percentage",
+        "dig_quality",
+        "counterattack_efficiency",
+        "block_touch_to_point_rate",
+        "free_ball_conversion_rate",
+        "transition_error_rate"
+      ],
+      "coaching_actions": [
+        "clarify_block_defense_contract",
+        "assign_second_setter",
+        "run_free_ball_offense",
+        "improve_hitter_coverage",
+        "select_best_transition_hitter"
+      ],
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "How You Can Make a Huge Impact as a Libero"
+      ]
+    },
+    {
+      "record_type": "volleyball_rotation_tactical_rule",
+      "id": "rotation_report_template",
+      "name": "Rotation report template",
+      "fields_to_store": [
+        "rotation_label",
+        "setter_start_zone",
+        "setter_front_or_back_row",
+        "front_row_hitter_count",
+        "primary_receive_pattern",
+        "secondary_receive_pattern",
+        "side_out_percentage",
+        "breakpoint_percentage_allowed",
+        "setter_path_risk",
+        "front_receiver_transition_load",
+        "best_first_ball_option",
+        "fallback_option",
+        "opponent_target_plan",
+        "our_counter_target_plan",
+        "block_matchup"
+      ],
+      "creation_rule": "Create one record for each of the six rotations for a team profile, plus a generic template for teams without a known lineup.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "record_type": "volleyball_rotation_tactical_rule",
+      "id": "rotation_back_row_setter_priority",
+      "name": "Back-row setter rotation priority",
+      "condition": "Setter is in the back row and the system can use three front-row attackers.",
+      "rule": "Protect the setter path, preserve middle availability, and use three front-row options when pass quality allows.",
+      "adjustment_triggers": [
+        "setter_path_targeted",
+        "middle_unavailable_after_pass",
+        "front_receiver_late_to_attack",
+        "opponent_commit_block_success"
+      ],
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Recipe for a Setter"
+      ]
+    },
+    {
+      "record_type": "volleyball_rotation_tactical_rule",
+      "id": "rotation_front_row_setter_priority",
+      "name": "Front-row setter rotation priority",
+      "condition": "Setter is in the front row.",
+      "rule": "Account for fewer front-row hitters while using setter attack threat, tempo changes, and blocker manipulation.",
+      "adjustment_triggers": [
+        "opponent_ignores_setter_dump",
+        "pin_attack_double_blocked",
+        "middle_tempo_unavailable",
+        "setter_block_matchup_exploited"
+      ],
+      "source_refs": [
+        "Recipe for a Setter",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "record_type": "volleyball_scouting_rule",
+      "id": "scout_setter_conditional_distribution",
+      "name": "Setter conditional set distribution",
+      "scout_dimensions": [
+        "rotation",
+        "pass_quality",
+        "setter_front_or_back",
+        "score_state",
+        "middle_available",
+        "previous_rally_result",
+        "hitter_matchup"
+      ],
+      "outputs": [
+        "likely_first_option",
+        "likely_pressure_option",
+        "likely_poor_pass_outlet",
+        "setter_attack_threat",
+        "repeat_tendency"
+      ],
+      "player_facing_translation": "Expect this hitter in this rotation on this pass quality; block and defend this lane first.",
+      "source_refs": [
+        "Recipe for a Setter",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "record_type": "volleyball_scouting_rule",
+      "id": "scout_hitter_shot_chart",
+      "name": "Hitter shot chart by context",
+      "scout_dimensions": [
+        "hitter",
+        "attack_zone",
+        "set_location",
+        "set_tempo",
+        "side_out_or_transition",
+        "block_faced",
+        "score_state"
+      ],
+      "outputs": [
+        "line_rate",
+        "cross_rate",
+        "tool_rate",
+        "tip_roll_rate",
+        "error_rate",
+        "blocked_rate",
+        "attack_efficiency"
+      ],
+      "player_facing_translation": "Block the highest-value lane and place defenders where the remaining shots are most likely.",
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "record_type": "volleyball_scouting_rule",
+      "id": "scout_serve_target_matrix",
+      "name": "Serve target matrix",
+      "target_options": [
+        "weak_passer",
+        "front_row_receiver_transition",
+        "setter_path",
+        "short_zone",
+        "deep_zone",
+        "seam",
+        "libero_bait_counter",
+        "non_preferred_receiver"
+      ],
+      "required_fields": [
+        "target_zone",
+        "target_player",
+        "serve_type",
+        "intended_offensive_limit",
+        "risk_level",
+        "abort_condition",
+        "observed_result"
+      ],
+      "source_refs": [
+        "Coaches Manual Level II",
+        "How You Can Make a Huge Impact as a Libero",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness"
+      ]
+    },
+    {
+      "record_type": "volleyball_scouting_rule",
+      "id": "scout_block_defense_contract",
+      "name": "Block-defense contract",
+      "required_fields": [
+        "opponent_hitter",
+        "opponent_setter_context",
+        "block_call",
+        "line_defender",
+        "angle_defender",
+        "tip_coverage",
+        "roll_shot_zone",
+        "transition_setter_after_dig"
+      ],
+      "rule": "Every block call must map to backcourt responsibilities and a transition plan.",
+      "source_refs": [
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "record_type": "volleyball_scouting_rule",
+      "id": "bench_timeout_decision",
+      "name": "Timeout decision rule",
+      "trigger_conditions": [
+        "two_or_three_point_run_from_same_pattern",
+        "repeat_side_out_failure_in_same_rotation",
+        "late_close_set_with_high_leverage_next_rally",
+        "communication_breakdown",
+        "opponent_tactical_change_not_solved_on_court"
+      ],
+      "script_fields": [
+        "reset_cue",
+        "tactical_correction",
+        "next_rally_plan",
+        "on_court_leader_confirmation"
+      ],
+      "source_refs": [
+        "Official Volleyball Rules 2025-2028",
+        "Timeouts and Psychological Momentum in Volleyball",
+        "The Timeout in Sports: A Study of Its Effect on Volleyball"
+      ]
+    },
+    {
+      "record_type": "volleyball_scouting_rule",
+      "id": "bench_substitution_decision",
+      "name": "Substitution decision rule",
+      "trigger_conditions": [
+        "serve_specialist_needed",
+        "passer_targeted",
+        "block_matchup_loss",
+        "hitter_efficiency_drop",
+        "defensive_specialist_rotation",
+        "injury_or_load_risk",
+        "planned_double_substitution"
+      ],
+      "constraint_fields": [
+        "remaining_substitutions",
+        "legal_reentry_status",
+        "rotation_position",
+        "future_endgame_need",
+        "substitute_readiness"
+      ],
+      "source_refs": [
+        "Official Volleyball Rules 2025-2028",
+        "Coaches Manual Level II"
+      ]
+    },
+    {
+      "record_type": "volleyball_performance_indicator",
+      "id": "kpi_attack_efficiency",
+      "name": "Attack efficiency",
+      "formula": "(kills - attack_errors - blocked_attacks) / attack_attempts",
+      "phase_splits": [
+        "after_reception",
+        "after_dig",
+        "in_system",
+        "out_of_system",
+        "crunch_time",
+        "by_rotation"
+      ],
+      "level_use": "Intermediate teams can track total attack efficiency; advanced teams should split by phase and pass quality.",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "A Comparative Analysis of Volleyball Skills in Balanced Sets for Men and Women in Asian Competitions"
+      ]
+    },
+    {
+      "record_type": "volleyball_performance_indicator",
+      "id": "kpi_side_out_percentage",
+      "name": "Side-out percentage",
+      "formula": "points_won_by_receiving_team / serve_receive_rallies",
+      "phase_splits": [
+        "by_rotation",
+        "by_passer",
+        "by_serve_type",
+        "by_pass_quality",
+        "after_timeout",
+        "crunch_time"
+      ],
+      "level_use": "Core team stat from intermediate upward; simplified for beginners as receive-to-playable-attack rate.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Reception-Attack Transition in Volleyball: Analysis of Spike Effectiveness"
+      ]
+    },
+    {
+      "record_type": "volleyball_performance_indicator",
+      "id": "kpi_breakpoint_percentage",
+      "name": "Breakpoint percentage",
+      "formula": "points_won_by_serving_team / serves_attempted",
+      "phase_splits": [
+        "by_server",
+        "by_serve_target",
+        "by_opponent_rotation",
+        "by_block_defense_call",
+        "by_transition_quality"
+      ],
+      "level_use": "Intermediate and advanced stat for evaluating serving runs and transition scoring.",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Game-Related Performance Factors in Four European Men's Professional Volleyball Championships"
+      ]
+    },
+    {
+      "record_type": "volleyball_performance_indicator",
+      "id": "kpi_pass_rating",
+      "name": "Serve receive pass rating",
+      "formula": "average ordinal rating of serve reception quality using the team's chosen scale",
+      "recommended_scale": "0 to 3 or 0 to 4, with separate tags for ace/error, no attack, limited attack, and full offense",
+      "phase_splits": [
+        "by_receiver",
+        "by_zone",
+        "by_serve_type",
+        "by_rotation",
+        "by_score_state"
+      ],
+      "level_use": "Intermediate teams can rate pass quality; advanced teams should connect pass quality to side-out and first attack efficiency.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Technical and Data Report VNL 2024"
+      ]
+    },
+    {
+      "record_type": "volleyball_performance_indicator",
+      "id": "kpi_serve_pressure",
+      "name": "Serve pressure profile",
+      "formula": "composite of ace rate, opponent poor-pass rate, opponent side-out allowed, and serve error rate",
+      "phase_splits": [
+        "by_server",
+        "by_target_zone",
+        "by_target_player",
+        "by_score_state",
+        "by_serve_type"
+      ],
+      "level_use": "Beginner teams track serve in and target zone; advanced teams track target expected value.",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Game-Related Volleyball Skills that Influence Victory"
+      ]
+    },
+    {
+      "record_type": "volleyball_performance_indicator",
+      "id": "kpi_counterattack_efficiency",
+      "name": "Counterattack efficiency",
+      "formula": "(counterattack_kills - counterattack_errors - counterattack_blocked) / counterattack_attempts",
+      "phase_splits": [
+        "after_dig",
+        "after_block_touch",
+        "after_free_ball",
+        "setter_available",
+        "setter_defended",
+        "by_hitter",
+        "by_rotation"
+      ],
+      "level_use": "Advanced priority KPI; intermediate teams can begin with free-ball conversion and transition kill rate.",
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Game-Related Performance Factors in Four European Men's Professional Volleyball Championships"
+      ]
+    },
+    {
+      "record_type": "volleyball_performance_indicator",
+      "id": "kpi_rotation_plus_minus",
+      "name": "Rotation plus-minus",
+      "formula": "team_points_scored_minus_points_allowed_while_in_rotation",
+      "phase_splits": [
+        "side_out_component",
+        "serve_run_component",
+        "opponent_breakpoint_component",
+        "home_away_or_context_if_available"
+      ],
+      "level_use": "Useful from intermediate upward for identifying rotations that need receive, serve, block, or substitution changes.",
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    },
+    {
+      "record_type": "volleyball_match_iq_progression",
+      "id": "progression_beginner_match_iq",
+      "level": "beginner",
+      "learning_goals": [
+        "court_zones",
+        "rotation_direction",
+        "three_contact_intent",
+        "setter_target",
+        "serve_in_with_large_zone_target",
+        "base_defense_position",
+        "safe_net_play",
+        "call_the_ball"
+      ],
+      "assessment_examples": [
+        "Can name zone 1 through zone 6.",
+        "Can rotate correctly after winning serve.",
+        "Can call seam responsibility before serve.",
+        "Can serve into a named half or zone at safe speed."
+      ],
+      "source_refs": [
+        "Simplified Youth Rules",
+        "Lesson Plans"
+      ]
+    },
+    {
+      "record_type": "volleyball_match_iq_progression",
+      "id": "progression_intermediate_match_iq",
+      "level": "intermediate",
+      "learning_goals": [
+        "side_out_and_breakpoint_meaning",
+        "simple_rotation_strengths",
+        "serve_target_reasoning",
+        "passer_seam_rules",
+        "block_line_angle_calls",
+        "transition_second_setter_plan",
+        "basic_timeout_reset"
+      ],
+      "assessment_examples": [
+        "Can explain why a target zone was chosen.",
+        "Can identify front-row versus back-row setter.",
+        "Can execute a secondary receive pattern.",
+        "Can defend behind a line or angle block call."
+      ],
+      "source_refs": [
+        "Coaches Manual Level II",
+        "Opponent Analysis and Scouting Reports",
+        "So You Want to be a Great Defender?! Learn to Read the Hitter!!"
+      ]
+    },
+    {
+      "record_type": "volleyball_match_iq_progression",
+      "id": "progression_advanced_match_iq",
+      "level": "advanced",
+      "learning_goals": [
+        "conditional_setter_scouting",
+        "hitter_shot_chart_by_context",
+        "rotation_dashboard_use",
+        "serve_target_expected_value",
+        "block_defense_contracts",
+        "phase_specific_kpis",
+        "substitution_resource_logic",
+        "live_adjustment_loop"
+      ],
+      "assessment_examples": [
+        "Can update a serve plan after opponent receive adjustment.",
+        "Can distinguish a side-out problem from transition problem using tagged data.",
+        "Can call a block-defense plan based on pass quality and setter tendency.",
+        "Can recommend timeout or substitution with a rule-based rationale."
+      ],
+      "source_refs": [
+        "Technical and Data Report VNL 2024",
+        "Match Analysis in Volleyball: A Systematic Review",
+        "Opponent Analysis and Scouting Reports"
+      ]
+    }
+  ]
+}

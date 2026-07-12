@@ -1,0 +1,478 @@
+{
+  "metadata": {
+    "sport": "cycling",
+    "domain": "level_teaching_progression",
+    "version": "2026-06-24",
+    "research_goal": "Create backend-ready records for cycling beginner, intermediate, and advanced level assessment, progression gates, hold/regression rules, and auto-with-review recommendations.",
+    "write_scope": "single draft file for cycling level assessment and teaching progression only",
+    "synthesis_note": "Records combine handling readiness, endurance markers, power/HR/RPE availability, discipline context, pain response, and training consistency."
+  },
+  "source_refs": [
+    {
+      "id": "SRC_GOV_UK_NATIONAL_STANDARD",
+      "title": "National standard for cycle training",
+      "url": "https://www.gov.uk/government/publications/national-standard-for-cycle-training",
+      "source_type": "government cycle training standard",
+      "evidence_use": "Skill progression, road-readiness, responsibility, and training environment complexity."
+    },
+    {
+      "id": "SRC_BIKEABILITY_CYCLE_TRAINING",
+      "title": "Bikeability cycle training",
+      "url": "https://www.bikeability.org.uk/cycle-training/",
+      "source_type": "official cycle training provider",
+      "evidence_use": "Level-based cycling progression from traffic-free control to more complex roads."
+    },
+    {
+      "id": "SRC_BRITISH_CYCLING_HR_ZONES",
+      "title": "Understanding intensity 2: heart rate",
+      "url": "https://www.britishcycling.org.uk/knowledge/article/izn20140808-understanding-intensity-2--heart-rate-0",
+      "source_type": "official federation coaching guidance",
+      "evidence_use": "Training intensity anchors and zone-based progression."
+    },
+    {
+      "id": "SRC_BRITISH_CYCLING_RPE",
+      "title": "Rate of Perceived Exertion Scale - RPE",
+      "url": "https://www.britishcycling.org.uk/knowledge/article/izn20151119-Training-Plans-Supporting-Documents-Related-Rate-of-Perceived-Exertion-Scale---RPE-0",
+      "source_type": "official federation coaching guidance",
+      "evidence_use": "RPE-based progression when power or HR data are unavailable."
+    },
+    {
+      "id": "SRC_USA_CYCLING_RESOURCES",
+      "title": "USA Cycling resources",
+      "url": "https://usacycling.org/resources",
+      "source_type": "official federation resource hub",
+      "evidence_use": "Racing, rider development, rules, and coaching context."
+    },
+    {
+      "id": "SRC_UCI_REGULATIONS",
+      "title": "UCI regulations",
+      "url": "https://www.uci.org/regulations/3MyLDDrwJCJJ0BGGOFzOat",
+      "source_type": "international federation regulations",
+      "evidence_use": "Discipline structure, event categories, and competition context."
+    },
+    {
+      "id": "SRC_TRAININGPEAKS_POWER_ZONES",
+      "title": "Cycling training zones and power targets",
+      "url": "https://www.trainingpeaks.com/blog/power-training-levels/",
+      "source_type": "reputable endurance coaching platform",
+      "evidence_use": "Power-zone language, FTP-relative zones, and threshold-based training progression."
+    },
+    {
+      "id": "SRC_CDC_ADULT_ACTIVITY",
+      "title": "Adult physical activity guidelines",
+      "url": "https://www.cdc.gov/physical-activity-basics/guidelines/adults.html",
+      "source_type": "public health guideline",
+      "evidence_use": "General aerobic activity dose and strength-support framing."
+    },
+    {
+      "id": "SRC_WHO_PHYSICAL_ACTIVITY",
+      "title": "Physical activity fact sheet",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/physical-activity",
+      "source_type": "public health guideline",
+      "evidence_use": "Activity progression and public-health aerobic recommendations."
+    },
+    {
+      "id": "SRC_ACSM_ACTIVITY_GUIDELINES",
+      "title": "Physical activity guidelines resources",
+      "url": "https://www.acsm.org/education-resources/trending-topics-resources/physical-activity-guidelines",
+      "source_type": "sports medicine and exercise science organization",
+      "evidence_use": "Exercise progression, activity-dose, and strength support."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "KC_LEVEL_IS_RECOMMENDATION",
+      "concept": "Cycling level should be treated as a recommendation state, not a fixed identity.",
+      "backend_use": "Store evidence and review status when recommending beginner to intermediate or intermediate to advanced movement.",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "id": "KC_TWO_AXIS_LEVEL",
+      "concept": "Cycling level has two axes: physical training capacity and bike-handling/road-readiness.",
+      "backend_use": "A user may have strong aerobic fitness but still remain beginner for outdoor cycling skills.",
+      "source_ids": ["SRC_BIKEABILITY_CYCLE_TRAINING", "SRC_BRITISH_CYCLING_HR_ZONES"]
+    },
+    {
+      "id": "KC_DATA_AVAILABILITY_CHANGES_PRECISION",
+      "concept": "Power, HR, cadence, and route data improve precision, but RPE and completion history are enough for safe beginner plans.",
+      "backend_use": "Do not block planning when FTP or power meter data are absent.",
+      "source_ids": ["SRC_BRITISH_CYCLING_RPE", "SRC_TRAININGPEAKS_POWER_ZONES"]
+    },
+    {
+      "id": "KC_DISCIPLINE_LEVEL_DIFFERS",
+      "concept": "A rider can be intermediate on an indoor trainer and beginner in MTB, group riding, or criterium contexts.",
+      "backend_use": "Store level by discipline or context when possible.",
+      "source_ids": ["SRC_UCI_REGULATIONS", "SRC_USA_CYCLING_RESOURCES"]
+    },
+    {
+      "id": "KC_ADVANCEMENT_NEEDS_PAIN_STABILITY",
+      "concept": "Progression should require stable or improving pain and contact-point response, not only better fitness.",
+      "backend_use": "Hold level progression when knee, back, neck, hand, saddle, calf, or Achilles symptoms worsen.",
+      "source_ids": ["SRC_ACSM_ACTIVITY_GUIDELINES", "SRC_CDC_ADULT_ACTIVITY"]
+    },
+    {
+      "id": "KC_GROUP_RIDE_READINESS_IS_SKILL",
+      "concept": "Group riding readiness depends on line holding, braking, signaling, proximity comfort, and predictability.",
+      "backend_use": "Do not unlock fast group rides based only on FTP or endurance.",
+      "source_ids": ["SRC_USA_CYCLING_RESOURCES", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "id": "KC_ADVANCED_REQUIRES_SPECIFICITY",
+      "concept": "Advanced cycling should be discipline-specific: road racing, TT, MTB, BMX, track, gravel, and triathlon all need different progressions.",
+      "backend_use": "Advanced unlocks should require discipline context and not just high training volume.",
+      "source_ids": ["SRC_UCI_REGULATIONS", "SRC_USA_CYCLING_RESOURCES"]
+    },
+    {
+      "id": "KC_RECOVERY_LIMITS_LEVEL",
+      "concept": "If recovery, sleep, fueling, or completion are poor, the plan should hold or regress even when fitness markers improve.",
+      "backend_use": "Level recommendations should integrate completion, RPE drift, soreness, pain, and fatigue.",
+      "source_ids": ["SRC_BRITISH_CYCLING_HR_ZONES", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "TM_CYCLING_LEVEL_MATRIX",
+      "name": "Cycling level matrix",
+      "dimensions": ["handling safety", "aerobic capacity", "intensity tolerance", "route complexity", "discipline specificity", "pain stability", "data literacy"],
+      "backend_use": "Recommend level from multiple signals instead of one FTP or weekly volume number.",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_BRITISH_CYCLING_HR_ZONES"]
+    },
+    {
+      "id": "TM_BEGINNER_TO_INTERMEDIATE_GATE",
+      "name": "Beginner to intermediate gate",
+      "requirements": ["4+ consistent weeks or 8+ completed rides", "85% planned completion", "stable pain response", "can ride 45-75 min easy", "can brake/turn/shift/scan safely", "RPE mostly inside target"],
+      "backend_use": "Auto-with-review recommendation: ready for intermediate cycling foundation.",
+      "source_ids": ["SRC_BIKEABILITY_CYCLE_TRAINING", "SRC_CDC_ADULT_ACTIVITY"]
+    },
+    {
+      "id": "TM_INTERMEDIATE_TO_ADVANCED_GATE",
+      "name": "Intermediate to advanced gate",
+      "requirements": ["8+ additional consistent weeks", "stable long ride progression", "can complete threshold/tempo work without pain spikes", "discipline-specific skill readiness", "recovery supports harder blocks", "equipment supports target discipline"],
+      "backend_use": "Auto-with-review recommendation: ready for advanced discipline-specific block.",
+      "source_ids": ["SRC_TRAININGPEAKS_POWER_ZONES", "SRC_USA_CYCLING_RESOURCES"]
+    },
+    {
+      "id": "TM_HOLD_OR_REGRESS_GATE",
+      "name": "Hold or regress gate",
+      "conditions": ["completion below 65%", "pain worsening", "RPE repeatedly above target", "fatigue high", "missed rides after illness or crash", "contact-point symptoms increasing", "handling confidence low"],
+      "backend_use": "Keep current level or temporarily regress training complexity.",
+      "source_ids": ["SRC_ACSM_ACTIVITY_GUIDELINES", "SRC_BRITISH_CYCLING_RPE"]
+    },
+    {
+      "id": "TM_FTP_READINESS_MODEL",
+      "name": "FTP and power readiness model",
+      "requirements": ["power meter or trainer power", "consistent pacing", "safe testing context", "not beginner handling stage", "no acute illness/fatigue"],
+      "backend_use": "Use FTP testing only when useful and safe; otherwise estimate with RPE/HR/session history.",
+      "source_ids": ["SRC_TRAININGPEAKS_POWER_ZONES", "SRC_BRITISH_CYCLING_HR_ZONES"]
+    },
+    {
+      "id": "TM_CONTEXTUAL_ADVANCED_UNLOCK",
+      "name": "Contextual advanced unlock",
+      "examples": ["advanced indoor threshold work", "beginner road group riding", "intermediate MTB handling", "advanced time-trial pacing"],
+      "backend_use": "Store separate readiness flags per discipline/context.",
+      "source_ids": ["SRC_UCI_REGULATIONS", "SRC_USA_CYCLING_RESOURCES"]
+    },
+    {
+      "id": "TM_LEVEL_REVIEW_OBJECT",
+      "name": "Cycling level review object",
+      "fields": ["current_level", "recommended_level", "context", "evidence", "risks", "missing_evidence", "review_status", "next_review_date"],
+      "backend_use": "Persist level recommendations in `user_level_assessments`.",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "id": "TM_SKILL_BEFORE_GROUP_SPEED",
+      "name": "Group ride readiness model",
+      "requirements": ["holds line", "smooth braking", "predictable turns", "can signal", "can scan", "can ride near others", "understands basic etiquette"],
+      "backend_use": "Gate fast group rides, pacelines, and criterium tactics.",
+      "source_ids": ["SRC_BIKEABILITY_CYCLE_TRAINING", "SRC_USA_CYCLING_RESOURCES"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "TR_LEVEL_ADVANCES_BY_EVIDENCE",
+      "rule": "Advance cycling level only when completion, symptom response, handling readiness, and training tolerance support the change.",
+      "backend_trigger": "level_review_due = true",
+      "source_ids": ["SRC_ACSM_ACTIVITY_GUIDELINES", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "id": "TR_PHYSICAL_FITNESS_DOES_NOT_UNLOCK_ROAD_COMPLEXITY",
+      "rule": "Strong gym or running fitness does not automatically unlock advanced outdoor cycling environments.",
+      "backend_trigger": "new_to_cycling = true",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "id": "TR_POWER_TEST_AFTER_CONSISTENCY",
+      "rule": "FTP or hard power testing should wait until the rider has consistent cycling sessions and can pace safely.",
+      "backend_trigger": "cycling_history_weeks < 4 OR fatigue_high = true",
+      "source_ids": ["SRC_TRAININGPEAKS_POWER_ZONES", "SRC_BRITISH_CYCLING_HR_ZONES"]
+    },
+    {
+      "id": "TR_BEGINNER_NO_HIGH_INTENSITY_STACK",
+      "rule": "Beginner riders should not stack long rides, hills, hard intervals, and heavy lower-body gym work in the same microcycle.",
+      "backend_trigger": "current_level = beginner",
+      "source_ids": ["SRC_BRITISH_CYCLING_RPE", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "id": "TR_INTERMEDIATE_UNLOCK_TEMPO_THRESHOLD",
+      "rule": "Intermediate riders may receive tempo or threshold work when easy ride completion, pain response, and recovery are stable.",
+      "backend_trigger": "current_level = intermediate AND readiness = good",
+      "source_ids": ["SRC_BRITISH_CYCLING_HR_ZONES", "SRC_TRAININGPEAKS_POWER_ZONES"]
+    },
+    {
+      "id": "TR_ADVANCED_UNLOCK_DISCIPLINE_SPECIFICITY",
+      "rule": "Advanced riders should receive discipline-specific intensity and tactics rather than generic harder cycling.",
+      "backend_trigger": "recommended_level = advanced",
+      "source_ids": ["SRC_UCI_REGULATIONS", "SRC_USA_CYCLING_RESOURCES"]
+    },
+    {
+      "id": "TR_PAIN_TREND_OVERRIDES_LEVEL",
+      "rule": "Worsening pain, contact-point symptoms, crash history, or high fatigue overrides level progression.",
+      "backend_trigger": "pain_trend = worsening OR crash_recent = true OR fatigue_high = true",
+      "source_ids": ["SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "id": "TR_LEVEL_CONTEXT_SPLIT",
+      "rule": "Use separate readiness states for indoor cycling, outdoor road, group riding, MTB/off-road, racing, and triathlon cycling.",
+      "backend_trigger": "cycling_disciplines.length > 1 OR mixed_context = true",
+      "source_ids": ["SRC_UCI_REGULATIONS", "SRC_USA_CYCLING_RESOURCES"]
+    },
+    {
+      "id": "TR_RETURNS_AFTER_BREAK",
+      "rule": "After illness, crash, or a long break, reduce level complexity temporarily even if the user was previously advanced.",
+      "backend_trigger": "break_days >= 14 OR illness_recent = true OR crash_recent = true",
+      "source_ids": ["SRC_ACSM_ACTIVITY_GUIDELINES", "SRC_BRITISH_CYCLING_RPE"]
+    },
+    {
+      "id": "TR_DATA_CONFIDENCE",
+      "rule": "If power/HR data are noisy or missing, use RPE, completion, route context, and recovery response for progression decisions.",
+      "backend_trigger": "power_data_available = false OR hr_data_reliable = false",
+      "source_ids": ["SRC_BRITISH_CYCLING_RPE", "SRC_BRITISH_CYCLING_HR_ZONES"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "PD_LEVEL_AEROBIC_DURATION",
+      "quality": "aerobic duration tolerance",
+      "beginner_marker": "20-45 min easy rides",
+      "intermediate_marker": "60-120 min rides with controlled RPE",
+      "advanced_marker": "event-specific long rides or high-quality intervals with recovery"
+    },
+    {
+      "id": "PD_LEVEL_INTENSITY_TOLERANCE",
+      "quality": "intensity tolerance",
+      "beginner_marker": "short cadence changes only",
+      "intermediate_marker": "tempo/threshold intervals",
+      "advanced_marker": "VO2, anaerobic, sprint, race-specific intervals"
+    },
+    {
+      "id": "PD_LEVEL_HANDLING",
+      "quality": "handling skill",
+      "beginner_marker": "traffic-free control and quiet-road readiness",
+      "intermediate_marker": "group basics, hills, descending, predictable braking",
+      "advanced_marker": "discipline-specific cornering, descending, pack, off-road, or race tactics"
+    },
+    {
+      "id": "PD_LEVEL_CADENCE",
+      "quality": "cadence control",
+      "beginner_marker": "avoids heavy grinding",
+      "intermediate_marker": "can vary cadence intentionally",
+      "advanced_marker": "uses cadence strategically for terrain and event demands"
+    },
+    {
+      "id": "PD_LEVEL_RECOVERY",
+      "quality": "recovery capacity",
+      "beginner_marker": "no symptom spikes after easy rides",
+      "intermediate_marker": "recovers from moderate intervals and long rides",
+      "advanced_marker": "recovers from discipline-specific intensity blocks"
+    },
+    {
+      "id": "PD_LEVEL_POSTURE",
+      "quality": "postural endurance",
+      "beginner_marker": "comfortable on short rides",
+      "intermediate_marker": "stable through longer rides",
+      "advanced_marker": "tolerates aero, race, off-road, or high-speed positions"
+    },
+    {
+      "id": "PD_LEVEL_FUELING",
+      "quality": "fueling and hydration skill",
+      "beginner_marker": "hydrates and eats normally around short rides",
+      "intermediate_marker": "practices fueling on longer rides",
+      "advanced_marker": "matches fueling to race/event demands"
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "RISK_ADVANCING_WITH_PAIN",
+      "risk": "advancing despite worsening pain",
+      "backend_adjustment": "Hold or regress level recommendation until symptoms stabilize."
+    },
+    {
+      "id": "RISK_FTP_OBSESSION",
+      "risk": "using FTP as the only measure of cycling level",
+      "backend_adjustment": "Require handling, recovery, completion, and discipline context."
+    },
+    {
+      "id": "RISK_ADVANCED_INTENSITY_TOO_EARLY",
+      "risk": "VO2, anaerobic, or sprint work before base and safety",
+      "backend_adjustment": "Keep beginner plans mostly easy with short controlled skill exposures."
+    },
+    {
+      "id": "RISK_GROUP_RIDE_MISMATCH",
+      "risk": "joining fast group rides before handling readiness",
+      "backend_adjustment": "Require group ride skill assessment and start with slower/no-drop contexts."
+    },
+    {
+      "id": "RISK_CONTEXT_MISMATCH",
+      "risk": "using road cycling readiness to unlock MTB, BMX, track, or criterium demands",
+      "backend_adjustment": "Use discipline-specific readiness states."
+    },
+    {
+      "id": "RISK_HIDDEN_FATIGUE",
+      "risk": "commuting, work stress, and poor sleep masking overload",
+      "backend_adjustment": "Review athlete_state before progression."
+    },
+    {
+      "id": "RISK_AFTER_BREAK_OVERREACH",
+      "risk": "returning at previous level after a break",
+      "backend_adjustment": "Use return-to-ride block and lower complexity until tolerance returns."
+    },
+    {
+      "id": "RISK_NO_STRENGTH_SUPPORT",
+      "risk": "cycling-only progression without strength or mobility support",
+      "backend_adjustment": "Add trunk, hip, lower-limb, and posture support, especially for intermediate and advanced riders."
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "TI_BEGINNER_OUTPUT_SHOULD_TEACH",
+      "implication": "Beginner cycling sessions should include teaching intent, not just minutes on bike.",
+      "backend_use": "Generate skill-focused sessions like braking, shifting, quiet-route practice, and cadence comfort."
+    },
+    {
+      "id": "TI_INTERMEDIATE_OUTPUT_SHOULD_STRUCTURE",
+      "implication": "Intermediate cycling sessions should introduce structured endurance, tempo, and threshold while preserving recovery.",
+      "backend_use": "Use zones/RPE and progress one variable at a time."
+    },
+    {
+      "id": "TI_ADVANCED_OUTPUT_SHOULD_SPECIALIZE",
+      "implication": "Advanced cycling sessions should map to discipline and event demands.",
+      "backend_use": "Retrieve discipline-specific tactical and physical records before generation."
+    },
+    {
+      "id": "TI_LEVEL_REVIEW_PERIOD",
+      "implication": "Level review should occur after a meaningful training sample, not every session.",
+      "backend_use": "Review every 4 weeks or after 8-12 ride completions."
+    },
+    {
+      "id": "TI_HANDLING_PROGRESS_IS_NOT_LINEAR",
+      "implication": "Handling confidence can lag behind fitness and may need its own progressions.",
+      "backend_use": "Separate handling skill flags from endurance level."
+    },
+    {
+      "id": "TI_TRAINING_DATA_NOT_REQUIRED",
+      "implication": "A beginner without power, HR, or cadence sensors can still receive high-quality plans.",
+      "backend_use": "Use RPE, route, duration, completion, and symptoms."
+    },
+    {
+      "id": "TI_PROGRESSION_USES_RECENT_HISTORY",
+      "implication": "The next block should use recent completion, RPE, pain, and long-ride response.",
+      "backend_use": "Persist athlete_state and update after daily snapshots."
+    },
+    {
+      "id": "TI_COMBINE_WITH_MACRO_PLAN",
+      "implication": "Level progression should modify the macro plan rather than rewrite it randomly.",
+      "backend_use": "Use macro block theme plus athlete_state to choose progression or hold."
+    },
+    {
+      "id": "TI_BEGINNER_LEVEL_CAN_STAY_BY_CONTEXT",
+      "implication": "A rider can remain beginner for road/traffic while becoming intermediate for indoor fitness.",
+      "backend_use": "Store contextual level assessments."
+    },
+    {
+      "id": "TI_ADVANCED_REQUIRES_EQUIPMENT_CONTEXT",
+      "implication": "Advanced work may require power meter, safe route, trainer, bike type, or discipline-specific equipment.",
+      "backend_use": "Gate advanced sessions by equipment and environment."
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "sport_level_transition_rule",
+      "name": "Cycling beginner to intermediate",
+      "payload_seed": "Eligible after 4+ consistent weeks or 8+ completed rides, 85% completion, stable pain, easy ride duration tolerance, and basic handling readiness.",
+      "source_ids": ["SRC_BIKEABILITY_CYCLE_TRAINING", "SRC_CDC_ADULT_ACTIVITY"]
+    },
+    {
+      "record_type": "sport_level_transition_rule",
+      "name": "Cycling intermediate to advanced",
+      "payload_seed": "Eligible after 8+ additional consistent weeks, stable progression, controlled tempo/threshold tolerance, discipline-specific skill readiness, and recovery support.",
+      "source_ids": ["SRC_TRAININGPEAKS_POWER_ZONES", "SRC_USA_CYCLING_RESOURCES"]
+    },
+    {
+      "record_type": "sport_level_transition_rule",
+      "name": "Cycling hold or regress",
+      "payload_seed": "Hold or regress when completion is low, pain worsens, fatigue is high, RPE overshoots, crash/illness occurred, or handling confidence is low.",
+      "source_ids": ["SRC_ACSM_ACTIVITY_GUIDELINES", "SRC_BRITISH_CYCLING_RPE"]
+    },
+    {
+      "record_type": "sport_skill_assessment",
+      "name": "Cycling handling readiness",
+      "payload_seed": "Assess start/stop, braking, turning, scanning, signaling, shifting, line holding, and comfort near hazards.",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "record_type": "sport_skill_assessment",
+      "name": "Cycling group ride readiness",
+      "payload_seed": "Assess line holding, predictable braking, signaling, shoulder checking, proximity comfort, etiquette, and no-drop ride completion.",
+      "source_ids": ["SRC_USA_CYCLING_RESOURCES", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "record_type": "sport_skill_assessment",
+      "name": "Cycling intensity readiness",
+      "payload_seed": "Assess ride consistency, RPE control, HR/power availability, fatigue response, and ability to complete tempo work without symptom spikes.",
+      "source_ids": ["SRC_BRITISH_CYCLING_HR_ZONES", "SRC_BRITISH_CYCLING_RPE"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Contextual cycling level",
+      "payload_seed": "Store separate readiness for indoor, outdoor road, group riding, MTB/off-road, racing, and triathlon cycling.",
+      "source_ids": ["SRC_UCI_REGULATIONS", "SRC_USA_CYCLING_RESOURCES"]
+    },
+    {
+      "record_type": "user_level_assessment_template",
+      "name": "Cycling auto-with-review assessment",
+      "payload_seed": "current_level, recommended_level, context, evidence, risks, missing_evidence, review_status, next_review_date.",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Power data optional for beginner cycling",
+      "payload_seed": "Use RPE, route, duration, completion, and symptoms when power/HR data are absent or unreliable.",
+      "source_ids": ["SRC_BRITISH_CYCLING_RPE", "SRC_BRITISH_CYCLING_HR_ZONES"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "FTP testing readiness gate",
+      "payload_seed": "Only test FTP after consistent cycling history, safe test context, stable fatigue, and ability to pace hard efforts.",
+      "source_ids": ["SRC_TRAININGPEAKS_POWER_ZONES", "SRC_BRITISH_CYCLING_HR_ZONES"]
+    },
+    {
+      "record_type": "macro_plan_template",
+      "name": "Cycling beginner foundation block",
+      "payload_seed": "Control skills, short easy rides, flat/quiet route progression, contact-point monitoring, and strength support.",
+      "source_ids": ["SRC_BIKEABILITY_CYCLE_TRAINING", "SRC_CDC_ADULT_ACTIVITY"]
+    },
+    {
+      "record_type": "macro_plan_template",
+      "name": "Cycling intermediate build block",
+      "payload_seed": "Longer endurance ride, cadence drills, tempo/threshold exposure, route-specific skill, and recovery monitoring.",
+      "source_ids": ["SRC_BRITISH_CYCLING_HR_ZONES", "SRC_TRAININGPEAKS_POWER_ZONES"]
+    },
+    {
+      "record_type": "macro_plan_template",
+      "name": "Cycling advanced discipline block",
+      "payload_seed": "Discipline-specific intensity, terrain simulation, tactical practice, event fueling, and taper rules.",
+      "source_ids": ["SRC_UCI_REGULATIONS", "SRC_USA_CYCLING_RESOURCES"]
+    }
+  ]
+}
+

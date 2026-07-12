@@ -1,0 +1,108 @@
+{
+  "metadata": {
+    "domain": "boxing_snc_injury_macro_planning",
+    "sport": "boxing",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready boxing S&C, injury-risk, sparring-load, readiness, and macro-planning knowledge for safe performance-focused program generation.",
+    "researched_on": "2026-06-21"
+  },
+  "source_refs": [
+    {
+      "title": "Amateur boxing: physical and physiological attributes",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25358529/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Davis et al.",
+      "notes": "Used for amateur boxing physical and physiological characteristics."
+    },
+    {
+      "title": "Performance Aspects and Physiological Responses in Male Amateur Boxing Competitions",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28081033/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Slimani et al.",
+      "notes": "Used for time-motion, physiological response, and conditioning context."
+    },
+    {
+      "title": "Strength and conditioning for professional boxing: recommendations for physical preparation",
+      "url": "https://shura.shu.ac.uk/11499/3/Ruddock%20strength%20conditioning%20professional%20boxing.pdf",
+      "source_type": "sports_science_review_pdf",
+      "organization_or_author": "Ruddock et al.",
+      "notes": "Used for professional boxing physical preparation recommendations."
+    },
+    {
+      "title": "A Systematic Review and Meta-Analysis Investigating Head Trauma in Boxing",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10597432/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Review authors",
+      "notes": "Used for head trauma risk context."
+    },
+    {
+      "title": "Effects of Strength Training on Physical Fitness of Olympic Combat Sports Athletes",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9961120/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Review authors",
+      "notes": "Used for strength training effects in Olympic combat sports."
+    },
+    {
+      "title": "Effects of High-Intensity Interval Training in Combat Sports",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31904713/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Franchini et al.",
+      "notes": "Used for HIIT effects on combat sport fitness qualities."
+    }
+  ],
+  "key_concepts": [
+    {"id": "boxing_is_skill_plus_conditioning", "summary": "S&C supports boxing skill; it should not replace technical training."},
+    {"id": "sparring_is_highest_risk_load", "summary": "Sparring/contact exposure must be tracked separately from gym, bag, and conditioning load."},
+    {"id": "aerobic_base_supports_recovery", "summary": "Aerobic capacity supports between-burst and between-round recovery."},
+    {"id": "power_needs_low_fatigue_quality", "summary": "Punching power training should use quality reps, rest, and force-transfer logic, not fatigue circuits."},
+    {"id": "fight_camp_is_phase_specific", "summary": "General prep, specific camp, sparring peak, taper, fight week, and post-fight recovery require different prescriptions."},
+    {"id": "readiness_modifies_contact", "summary": "Headache, dizziness, poor sleep, high stress, or hand pain should reduce contact intensity before reducing only gym work."}
+  ],
+  "technical_models": [
+    {"id": "boxing_physical_quality_model", "qualities": ["aerobic_capacity", "anaerobic_power", "repeat_power", "rotational_power", "neck_trunk_control", "shoulder_capacity", "footwork_endurance"]},
+    {"id": "boxing_session_type_model", "types": ["technical_shadow", "bag_work", "pad_work", "partner_drill", "sparring", "roadwork", "strength_power", "recovery"]},
+    {"id": "boxing_sparring_load_model", "fields": ["rounds", "contact_intensity", "partner_level", "protective_equipment", "head_contact", "post_session_symptoms"]},
+    {"id": "boxing_macro_phase_model", "phases": ["general_prep", "specific_camp", "sparring_peak", "taper", "fight_week", "post_fight_recovery"]},
+    {"id": "boxing_readiness_model", "signals": ["sleep", "stress", "head_symptoms", "hand_pain", "shoulder_pain", "neck_pain", "weight_cut_stress"]}
+  ],
+  "tactical_rules": [
+    {"id": "rule_no_hard_sparring_default", "rule": "Do not prescribe hard sparring as a default workout; require coach context and readiness."},
+    {"id": "rule_contact_after_skill_base", "rule": "Progress contact only after stance, guard, defense, and controlled partner drills are stable."},
+    {"id": "rule_power_before_fatigue", "rule": "Place speed/power work before fatigue conditioning or on separate days."},
+    {"id": "rule_do_not_stack_contact_and_heavy_neck_fatigue", "rule": "Avoid heavy neck/shoulder fatigue immediately before high-contact sparring."},
+    {"id": "rule_post_sparring_recovery", "rule": "The day after high-contact or high-intensity sparring should bias recovery, low-contact skill, or low-fatigue aerobic work."},
+    {"id": "rule_weight_cut_safety", "rule": "Avoid dehydration protocols; use safe body-composition planning and professional referral for aggressive cuts."}
+  ],
+  "physical_demands": [
+    {"id": "aerobic_capacity", "quality": "supports repeated round recovery and training volume"},
+    {"id": "anaerobic_repeat_power", "quality": "supports explosive exchanges and late-round output"},
+    {"id": "rotational_power", "quality": "supports punches from hips/trunk into shoulders and hands"},
+    {"id": "neck_trunk_stiffness", "quality": "supports posture, impact tolerance context, and force transfer"},
+    {"id": "shoulder_scapular_endurance", "quality": "supports guard, punching volume, and defense"},
+    {"id": "calf_ankle_footwork_capacity", "quality": "supports movement, angles, and stance endurance"}
+  ],
+  "injury_or_load_risks": [
+    {"id": "head_trauma", "risk": "Sparring and competition include head-impact risk; symptoms should stop contact and trigger medical review."},
+    {"id": "hand_wrist_overload", "risk": "Punching impact can overload hand/wrist, especially with poor technique or wrapping."},
+    {"id": "shoulder_overuse", "risk": "Repeated punching and guard fatigue can overload shoulder/scapular structures."},
+    {"id": "neck_overload", "risk": "Neck fatigue or contact load can raise risk during sparring."},
+    {"id": "low_back_rotation", "risk": "High rotational volume with poor hip/trunk control can irritate the back."},
+    {"id": "weight_cut_fatigue", "risk": "Aggressive weight loss can impair recovery, cognition, and performance."}
+  ],
+  "training_implications": [
+    {"id": "separate_load_streams", "summary": "Track skill, contact, conditioning, and strength loads separately."},
+    {"id": "build_engine_without_brain_contact", "summary": "Use roadwork, intervals, bag circuits, and non-contact drills to condition without excess head contact."},
+    {"id": "include_neck_shoulder_trunk_capacity", "summary": "Add neck isometrics, scapular control, trunk anti-rotation, and shoulder capacity as appropriate."},
+    {"id": "periodize_sparring", "summary": "Sparring should build then taper; it should not rise endlessly into fight week."},
+    {"id": "use_post_fight_recovery", "summary": "After competition, prioritize medical clearance, symptoms, tissue recovery, and gradual re-entry."}
+  ],
+  "backend_records_to_create": [
+    {"collection": "planning_rules", "id": "boxing_rule_sparring_load_tracking"},
+    {"collection": "planning_rules", "id": "boxing_rule_fight_camp_phase_model"},
+    {"collection": "planning_rules", "id": "boxing_rule_contact_readiness"},
+    {"collection": "planning_rules", "id": "boxing_rule_post_fight_recovery"},
+    {"collection": "sport_training_rules", "id": "boxing_physical_quality_model"},
+    {"collection": "sport_level_transition_rules", "id": "boxing_contact_progression_gate"}
+  ]
+}
+

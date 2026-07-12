@@ -1,0 +1,996 @@
+{
+  "metadata": {
+    "domain": "movement_surface_demands",
+    "sport": "tennis",
+    "version": "draft_v1",
+    "researched_on": "2026-06-22",
+    "agent_scope": "split-step, first step, crossover, shuffle, adjustment steps, recovery, stance movement, wide-ball recovery, approach movement, net transition, serve recovery, singles versus doubles movement, clay/hard/grass movement and load differences, fatigue errors, level progressions, physical demands, injury/load risks, and backend record candidates",
+    "research_goal": "Create backend-ready tennis knowledge for movement and surface demands without creating production records.",
+    "notes": "Summaries are original synthesis from official tennis education, tennis-specific coaching/S&C sources, and peer-reviewed tennis movement, surface, match-demand, and injury literature."
+  },
+  "source_refs": [
+    {
+      "id": "src_itf_play_stay",
+      "title": "ITF Tennis Play and Stay",
+      "url": "https://www.itftennis.com/en/growing-the-game/itf-tennis-play-and-stay/",
+      "source_type": "official_development_resource",
+      "organization_or_author": "International Tennis Federation",
+      "notes": "Used for beginner progression principles: slower balls, smaller courts, rally success, and age/level-appropriate court movement before full-court speed work."
+    },
+    {
+      "id": "src_itf_tennis10s_manual",
+      "title": "ITF Tennis10s Manual",
+      "url": "https://www.itftennis.com/media/4042/tennis10s-manual-english.pdf",
+      "source_type": "official_coaching_manual_pdf",
+      "organization_or_author": "International Tennis Federation",
+      "notes": "Used for red/orange/green/yellow progression, court scaling, ball scaling, beginner movement safety, and child-friendly tactical/movement development."
+    },
+    {
+      "id": "src_usta_quickness_drills",
+      "title": "Quickness Drills for Tennis",
+      "url": "https://www.usta.com/en/home/improve/tennis-health---fitness/national/quickness-drills-for-tennis.html",
+      "source_type": "national_federation_training_resource",
+      "organization_or_author": "United States Tennis Association",
+      "notes": "Used for tennis-specific quickness, split-step readiness, lateral response, first-step timing, and short reaction movement drills."
+    },
+    {
+      "id": "src_usta_agility_movement",
+      "title": "Agility and Movement",
+      "url": "https://tennis.dk/media/1252/usta_agility-and-movement.pdf",
+      "source_type": "national_federation_coach_education_pdf",
+      "organization_or_author": "United States Tennis Association Player Development",
+      "notes": "Used for athletic movement qualities, multi-directional quickness, deceleration, balance, recovery, and tennis-specific agility progressions."
+    },
+    {
+      "id": "src_itpa_tennis_movements",
+      "title": "Movement and Footwork Language for Tennis",
+      "url": "https://www.itpamembers.org/wp-content/uploads/2018/12/Movement-Footwork-Language-iTPA-Final-Presentation-and-Booklet-Reduced.pdf",
+      "source_type": "reputable_tennis_s_and_c_resource",
+      "organization_or_author": "International Tennis Performance Association",
+      "notes": "Used for movement vocabulary: split-step, side step, crossover, jab step, shuffle, adjustment steps, recovery steps, and speed categories."
+    },
+    {
+      "id": "src_itf_cssr_footwork_snc",
+      "title": "Strength and Conditioning for Tennis Footwork",
+      "url": "https://itfcoachingreview.com/index.php/journal/article/view/647",
+      "source_type": "itf_coaching_and_sport_science_review",
+      "organization_or_author": "ITF Coaching and Sport Science Review",
+      "notes": "Used for tennis footwork as an integrated S&C topic: acceleration, deceleration, reaction, balance, lower-limb strength, and progression from technique to pressure."
+    },
+    {
+      "id": "src_filipcic_split_step_2017",
+      "title": "Analysis of Time and Game Characteristics in Top Profile Tennis with a New Tracking System",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29020353/",
+      "source_type": "peer_reviewed_split_step_and_tracking_study",
+      "organization_or_author": "Filipcic and colleagues",
+      "notes": "Used for split-step timing in elite tennis and for modeling movement as a tracked sequence around opponent contact, reaction, and first movement."
+    },
+    {
+      "id": "src_navia_return_split_step_2022",
+      "title": "Temporal and Kinematic Analysis of the Split-Step in the Tennis Return of Serve",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35406322/",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Navia and colleagues",
+      "notes": "Used for return-specific split-step timing, pre-landing information gathering, landing/push-off demands, and reaction constraints against fast serves."
+    },
+    {
+      "id": "src_reid_forehand_review_2013",
+      "title": "Mechanics and Learning Practices Associated with the Tennis Forehand: A Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24149799/",
+      "source_type": "peer_reviewed_technical_review",
+      "organization_or_author": "Reid, Elliott, and Crespo",
+      "notes": "Used for stance and movement relationships in the forehand, including open, semi-open, square/neutral, and closed stance implications."
+    },
+    {
+      "id": "src_martin_open_stance_hip_2020",
+      "title": "Can the Open Stance Forehand Increase the Risk of Hip Injuries in Tennis Players?",
+      "url": "https://journals.sagepub.com/doi/10.1177/2325967120966297",
+      "source_type": "peer_reviewed_biomechanics_and_injury_risk_study",
+      "organization_or_author": "Martin and colleagues",
+      "notes": "Used for open-stance loading concerns, hip rotation/torque context, and load-risk flags when open-stance forehands dominate volume."
+    },
+    {
+      "id": "src_pluim_surface_physical_demands_2023",
+      "title": "The Effect of Court Surface on Elite Tennis Strategy, Performance and Physical Demands: A Systematic Review and Meta-Analysis",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36752978/",
+      "source_type": "peer_reviewed_systematic_review_meta_analysis",
+      "organization_or_author": "Pluim, Jansen, Williamson, and colleagues",
+      "notes": "Used for surface-specific strategy, performance, and physical-demand differences across clay, hard, and grass."
+    },
+    {
+      "id": "src_starbuck_surface_biomech_2016",
+      "title": "Tennis-Specific Movement in Response to Different Court Surfaces: Implications for Injury and Performance",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26699792/",
+      "source_type": "peer_reviewed_surface_biomechanics_study",
+      "organization_or_author": "Starbuck, Damm, Clarke, Carré, Capel-Davies, Miller, Stiles, and Dixon",
+      "notes": "Used for shoe-surface interaction, player perception, surface-dependent friction, movement biomechanics, and injury/performance implications."
+    },
+    {
+      "id": "src_kilit_surface_senior_2024",
+      "title": "Court Surface Effect on Physiological Responses and Match Characteristics in Professional Senior Tennis Players",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11593140/",
+      "source_type": "peer_reviewed_match_demand_study",
+      "organization_or_author": "Kilit and colleagues",
+      "notes": "Used for surface-related physiological response and match-characteristic differences, especially clay versus hard court load interpretation."
+    },
+    {
+      "id": "src_prieto_womens_surface_2022",
+      "title": "Influence of Court Surface on Women's Singles Tennis Strategy and Performance",
+      "url": "https://www.mdpi.com/1660-4601/19/13/7955",
+      "source_type": "peer_reviewed_surface_match_analysis",
+      "organization_or_author": "Prieto-Bermejo and colleagues",
+      "notes": "Used for surface-dependent rally, serve/return, and point-construction tendencies in elite women's singles."
+    },
+    {
+      "id": "src_fernandez_intensity_2006",
+      "title": "Intensity of Tennis Match Play",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2653871/",
+      "source_type": "peer_reviewed_match_demand_review",
+      "organization_or_author": "Fernandez-Fernandez, Mendez-Villanueva, and Pluim",
+      "notes": "Used for intermittent match structure, rally/rest rhythm, aerobic and anaerobic contribution, heart-rate response, and conditioning specificity."
+    },
+    {
+      "id": "src_kovacs_physiology_2007",
+      "title": "Tennis Physiology: Training the Competitive Athlete",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17685689/",
+      "source_type": "peer_reviewed_physiology_review",
+      "organization_or_author": "Kovacs",
+      "notes": "Used for repeated short bursts, recovery between points, agility, acceleration/deceleration, and energy-system demands in tennis."
+    },
+    {
+      "id": "src_pluim_injury_epidemiology_2018",
+      "title": "Tennis Injuries: Occurrence, Aetiology, and Prevention",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5825333/",
+      "source_type": "peer_reviewed_injury_review",
+      "organization_or_author": "Pluim, Staal, and colleagues",
+      "notes": "Used for common tennis injury sites, acute versus overuse patterns, upper- and lower-limb risks, back concerns, prevention framing, and load monitoring."
+    },
+    {
+      "id": "src_itf_surface_injury_review_2022",
+      "title": "Tennis Court Surfaces and Injury Risk: What Do We Know?",
+      "url": "https://itfcoachingreview.com/index.php/journal/article/view/383",
+      "source_type": "itf_coaching_and_sport_science_review",
+      "organization_or_author": "ITF Coaching and Sport Science Review",
+      "notes": "Used for surface injury-risk framing, friction/sliding concerns, and the need to prepare players progressively for surface changes."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "movement_is_a_point_cycle",
+      "concept": "Tennis movement is a repeating point cycle, not isolated agility.",
+      "details": "Each ball requires ready posture, split-step timing, first-step direction, travel pattern, braking/setup, stroke stance, recovery path, and re-split before the opponent's next contact.",
+      "source_ids": ["src_usta_agility_movement", "src_itpa_tennis_movements", "src_filipcic_split_step_2017"]
+    },
+    {
+      "id": "split_step_is_timed_to_opponent_contact",
+      "concept": "The split-step is useful when it synchronizes with the opponent's hit and the player's read of the ball.",
+      "details": "Landing too early creates a dead pause; landing too late delays the first push. The key backend cue is readiness at information pickup, not jump height.",
+      "source_ids": ["src_filipcic_split_step_2017", "src_navia_return_split_step_2022", "src_usta_quickness_drills"]
+    },
+    {
+      "id": "return_split_step_is_more_constrained_than_rally_split_step",
+      "concept": "Return movement has less time and requires earlier preparation than baseline rally movement.",
+      "details": "Against serve, the split-step and first push are tied to server contact, serve speed, serve direction cues, and the receiver's pre-position; the receiver often lands while the serve direction is still being resolved.",
+      "source_ids": ["src_navia_return_split_step_2022", "src_fernandez_intensity_2006"]
+    },
+    {
+      "id": "first_step_is_the_speed_gate",
+      "concept": "Most recoverable balls are lost because of late or inefficient first movement, not because of poor top speed.",
+      "details": "Backend assessments should flag false steps, standing up before push-off, opening hips too late, and racket reach before foot drive.",
+      "source_ids": ["src_usta_quickness_drills", "src_usta_agility_movement", "src_itpa_tennis_movements"]
+    },
+    {
+      "id": "footwork_pattern_depends_on_distance_and_time",
+      "concept": "Crossover, shuffle, side-step, running step, jab step, and adjustment steps solve different movement problems.",
+      "details": "Small adjustments protect contact spacing; shuffles maintain orientation on short lateral moves; crossovers cover bigger distance and recovery; running steps chase deep or drop balls.",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "recovery_is_tactical_not_geometric_centering",
+      "concept": "Recovery is toward the next highest-probability court position, not automatically to the center mark.",
+      "details": "Recovery target changes with shot direction, shot quality, opponent position, surface, singles or doubles format, and whether the player is attacking or defending.",
+      "source_ids": ["src_usta_agility_movement", "src_itpa_tennis_movements", "src_prieto_womens_surface_2022"]
+    },
+    {
+      "id": "stance_choice_links_movement_to_contact",
+      "concept": "Open, semi-open, neutral, and closed stances are movement solutions tied to ball time, location, and recovery need.",
+      "details": "Open and semi-open stances help on wide or faster balls and support quicker recovery; neutral stances help step-in contact; closed stances are more constrained and commonly appear on certain backhand or stretched situations.",
+      "source_ids": ["src_reid_forehand_review_2013", "src_martin_open_stance_hip_2020"]
+    },
+    {
+      "id": "wide_ball_recovery_is_braking_plus_escape",
+      "concept": "A wide ball is not complete at contact; braking and escape steps determine whether the next ball is playable.",
+      "details": "The player must brake without collapsing, use a crossover or recovery step as the shot travels, and bias recovery based on whether the reply is defensive, neutral, or offensive.",
+      "source_ids": ["src_usta_agility_movement", "src_itpa_tennis_movements", "src_starbuck_surface_biomech_2016"]
+    },
+    {
+      "id": "approach_movement_prioritizes_forward_momentum_control",
+      "concept": "Approaching the net requires forward acceleration, controlled contact, and split-step timing before the opponent's pass.",
+      "details": "A good approach path lets the player hit while moving through the ball, recover diagonally toward the best volley position, and avoid running through the opponent's strike window.",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "net_transition_is_a_separate_movement_phase",
+      "concept": "Net transition is not just sprinting forward.",
+      "details": "It includes approach footwork, forward deceleration, split-step at the opponent's contact, first volley positioning, and lateral recovery for the next volley or overhead.",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "serve_recovery_depends_on_landing_and_plus_one_intent",
+      "concept": "Serve recovery begins as the server lands.",
+      "details": "The server must regain balance, organize the racket and feet, and recover to a location that protects likely returns while supporting the planned plus-one ball.",
+      "source_ids": ["src_usta_agility_movement", "src_fernandez_intensity_2006", "src_kovacs_physiology_2007"]
+    },
+    {
+      "id": "singles_and_doubles_have_different_movement_maps",
+      "concept": "Singles rewards repeated whole-court coverage; doubles rewards shared lanes, net interception, and smaller explosive movements.",
+      "details": "Singles players need wider baseline recovery and defensive running capacity. Doubles players need serve/return recovery, poach steps, lateral net movement, partner spacing, and communication-driven rotations.",
+      "source_ids": ["src_itpa_tennis_movements", "src_fernandez_intensity_2006", "src_usta_agility_movement"]
+    },
+    {
+      "id": "surface_changes_both_tactics_and_body_load",
+      "concept": "Clay, hard, and grass surfaces change ball behavior, movement strategy, and tissue load.",
+      "details": "The same drill is not the same load on each surface because bounce, friction, sliding, braking, rally length, impact, and reaction time change.",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "clay_demands_patience_sliding_and_repeat_recovery",
+      "concept": "Clay generally increases sliding exposure and often increases point-construction and repeated-recovery demands.",
+      "details": "Players need tolerance for longer rallies, controlled sliding/braking, high-bounce movement spacing, and recovery after heavy topspin exchanges.",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_kilit_surface_senior_2024", "src_prieto_womens_surface_2022"]
+    },
+    {
+      "id": "hard_court_demands_impact_and_deceleration_capacity",
+      "concept": "Hard court is a balanced tennis surface but places high value on braking, repeated impact tolerance, and rapid direction changes.",
+      "details": "Backend planning should treat hard-court volume as a lower-limb and trunk deceleration load even when rally length is moderate.",
+      "source_ids": ["src_starbuck_surface_biomech_2016", "src_pluim_surface_physical_demands_2023", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "grass_demands_reaction_low_bounce_and_stable_footing",
+      "concept": "Grass movement is shaped by lower or skidding bounces, shorter reaction windows, and footing confidence.",
+      "details": "Players need lower contact preparation, smaller adjustment steps, earlier split-step reads, and careful acceleration/deceleration on lower-friction or variable-footing areas.",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_prieto_womens_surface_2022", "src_starbuck_surface_biomech_2016"]
+    },
+    {
+      "id": "fatigue_changes_movement_quality_before_total_speed",
+      "concept": "Fatigue often appears first as timing, posture, spacing, and recovery errors.",
+      "details": "The player may split late, stand tall, overstride, miss adjustment steps, brake stiffly, choose the wrong stance, recover to the wrong place, or abandon split-step discipline.",
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007", "src_usta_agility_movement"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "tennis_movement_cycle_model",
+      "model": "Ready posture -> opponent cue read -> split-step landing -> first directional push -> travel pattern -> adjustment/brake -> stance and contact -> recovery step/path -> re-split.",
+      "quality_markers": ["split_step_on_opponent_contact", "first_push_without_pause", "travel_pattern_matches_distance", "contact_spacing_preserved", "recovery_starts_before_watch_mode", "next_split_is_available"],
+      "common_errors": ["waiting_flat_footed", "jumping_split_step_too_high", "false_step_away_from_ball", "running_past_contact", "admiring_shot_after_contact", "recovering_to_center_after_every_ball"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement", "src_filipcic_split_step_2017"]
+    },
+    {
+      "id": "split_step_model",
+      "movement": "A low, timed rebound from the ready position that lands as the opponent's shot information becomes actionable.",
+      "cues": ["feet_slightly_wider_than_hips", "hips_knees_ankles_flexed", "chest_slightly_forward", "racket_ready_in_front", "land_light_then_push", "head_stable"],
+      "coaching_checks": ["landing_time_matches_opponent_contact", "player_can_push_both_ways", "no_large_vertical_jump", "no_pause_after_landing"],
+      "common_errors": ["landing_after_ball_direction_is_obvious", "landing_too_early_and_sinking", "feet_too_narrow", "heels_heavy", "racket_drops_during_split"],
+      "source_ids": ["src_filipcic_split_step_2017", "src_navia_return_split_step_2022", "src_usta_quickness_drills"]
+    },
+    {
+      "id": "first_step_model",
+      "movement": "Immediate directional push from the split-step using the outside edge or directional support leg to project the hips toward the ball.",
+      "best_uses": ["wide_lateral_ball", "short_ball_attack", "return_of_serve", "serve_plus_one_recovery", "doubles_poach"],
+      "quality_markers": ["hips_move_before_racket_reach", "trunk_angle_supports_direction", "first_step_is_not_a_hesitation_step", "eyes_remain_on_ball_path"],
+      "common_errors": ["standing_up_before_moving", "step_under_body_without_projection", "opening_hips_late", "reaching_with_arm_before_feet_move"],
+      "source_ids": ["src_usta_quickness_drills", "src_usta_agility_movement", "src_itpa_tennis_movements"]
+    },
+    {
+      "id": "shuffle_and_side_step_model",
+      "movement": "Short lateral travel with feet not crossing, used to preserve body orientation and contact spacing.",
+      "best_uses": ["baseline_small_lateral_adjustment", "inside_out_forehand_setup", "doubles_net_lane_adjustment", "volley_positioning", "recovery_when_distance_is_short"],
+      "quality_markers": ["feet_do_not_click_together", "hips_stay_low", "shoulders_remain_organized", "last_step_allows_brake_or_hit"],
+      "common_errors": ["hopping_tall", "taking_too_many_tiny_steps", "feet_crossing_on_short_ball", "losing_ready_racket"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "crossover_model",
+      "movement": "Distance-covering step where one leg crosses over or behind to accelerate, chase a wide ball, or recover after being pulled off court.",
+      "best_uses": ["wide_baseline_recovery", "running_around_backhand", "covering_big_diagonal_distance", "recovering_from_open_stance_wide_forehand", "doubles_lob_retrieval"],
+      "quality_markers": ["cross_is_used_for_distance", "trunk_stays_controlled", "player_can_still_read_opponent", "next_step_can_brake_or_reaccelerate"],
+      "common_errors": ["crossing_on_small_spacing_steps", "turning_back_to_court", "tangling_feet_under_pressure", "overcrossing_and_missing_brake"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "adjustment_step_model",
+      "movement": "Small spacing steps immediately before contact that tune distance, height, and balance after the main travel pattern.",
+      "best_uses": ["different_bounce_heights", "wind_or_spin_adjustment", "approach_contact", "low_grass_bounce", "clay_high_bounce", "volley_spacing"],
+      "quality_markers": ["last_steps_are_quick_and_quiet", "contact_zone_not_cramped", "body_not_reaching_away_from_base", "stance_matches_ball"],
+      "common_errors": ["arriving_fast_then_freezing", "skipping_spacing_steps", "overrunning_short_ball", "hitting_with_locked_lower_body"],
+      "source_ids": ["src_itpa_tennis_movements", "src_reid_forehand_review_2013", "src_pluim_surface_physical_demands_2023"]
+    },
+    {
+      "id": "baseline_recovery_model",
+      "movement": "Post-contact escape and repositioning toward the likely next ball rather than a fixed court center.",
+      "recovery_inputs": ["own_shot_direction", "own_shot_depth", "own_shot_speed_spin_height", "opponent_position", "court_surface", "singles_or_doubles", "player_hand_and_backhand_side"],
+      "quality_markers": ["recovery_begins_as_ball_leaves_strings", "first_recovery_step_is_explosive_enough", "player_re-splits_before_opponent_contact", "base_bias_matches_reply_probability"],
+      "common_errors": ["watching_ball_after_contact", "recovering_too_far_and_opening_wrong_lane", "recovering_tall", "late_split_after_recovery"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement", "src_prieto_womens_surface_2022"]
+    },
+    {
+      "id": "open_stance_movement_model",
+      "movement": "Lateral or semi-lateral setup where the outside leg loads and rotates the body through contact, often used on wide or time-constrained balls.",
+      "best_uses": ["wide_forehand", "fast_baseline_exchange", "heavy_crosscourt_rally", "clay_high_bounce_defense", "quick_recovery_needed"],
+      "quality_markers": ["outside_leg_absorbs_and_pushes", "trunk_rotation_is_organized", "head_stays_stable_at_contact", "recovery_step_follows_rotation"],
+      "common_errors": ["opening_too_early", "collapsing_hip_or_knee", "arm_only_swing", "repeating_high_volume_without_hip_capacity"],
+      "source_ids": ["src_reid_forehand_review_2013", "src_martin_open_stance_hip_2020"]
+    },
+    {
+      "id": "semi_open_stance_movement_model",
+      "movement": "Hybrid setup between open and neutral that allows rotation, forward transfer, and recoverability.",
+      "best_uses": ["neutral_rally_ball", "forehand_from_moderate_width", "inside_out_forehand", "balanced_attack_after_lateral_move"],
+      "quality_markers": ["feet_allow_rotation_and_balance", "weight_can_transfer_without_overcommitting", "player_can_recover_either_direction", "contact_spacing_is_clear"],
+      "common_errors": ["too_closed_for_wide_ball", "too_open_for_step-in_attack", "feet_static_before_contact", "late_small_steps"],
+      "source_ids": ["src_reid_forehand_review_2013", "src_itpa_tennis_movements"]
+    },
+    {
+      "id": "neutral_stance_movement_model",
+      "movement": "Step-in setup with the body more square/side-on to the net line, often used when the player has time to move forward through contact.",
+      "best_uses": ["short_ball_attack", "approach_shot", "controlled_change_of_direction", "return_second_serve_step_in", "low_ball_with_forward_momentum"],
+      "quality_markers": ["front_foot_sets_contact_distance", "back_hip_can_drive_through", "body_does_not_overrun_the_ball", "recovery_continues_after_step_in"],
+      "common_errors": ["lunging_past_contact", "closing_too_much_on_wide_ball", "front_knee_locks", "no_recovery_after_attack"],
+      "source_ids": ["src_reid_forehand_review_2013", "src_usta_agility_movement"]
+    },
+    {
+      "id": "closed_stance_movement_model",
+      "movement": "More crossed or side-on setup that can appear on one-handed backhands, sliced balls, and stretched situations but can restrict recovery if overused.",
+      "best_uses": ["one_handed_backhand_drive", "slice_backhand_on_reach", "running_defensive_backhand", "controlled_low_ball"],
+      "quality_markers": ["front_foot_does_not_block_balance", "trunk_rotation_has_room", "head_stays_over_support", "recovery_step_uncrosses_quickly"],
+      "common_errors": ["overclosing_on_fast_wide_ball", "getting_stuck_after_contact", "hips_blocked", "late_crossover_recovery"],
+      "source_ids": ["src_reid_forehand_review_2013", "src_itpa_tennis_movements"]
+    },
+    {
+      "id": "wide_ball_recovery_model",
+      "movement": "Defend or counter from outside the singles sideline, then use braking and crossover recovery before the opponent's next strike.",
+      "sequence": ["split_and_push_wide", "travel_with_crossover_or_running_steps", "brake_or_slide_by_surface", "hit_with_open_or_stretched_stance", "recover_with_crossover_as_ball_travels", "re-split_before_opponent_contact"],
+      "quality_markers": ["brake_is_controlled", "shot_choice_buys_recovery_time_if_defensive", "outside_leg_or_slide_absorbs_load", "recovery_path_protects_open_court"],
+      "common_errors": ["trying_to_hit_winner_without_recovery_time", "overrunning_wide_ball", "braking_stiff_on_hard_court", "sliding_without_skill_on_clay"],
+      "source_ids": ["src_usta_agility_movement", "src_starbuck_surface_biomech_2016", "src_pluim_surface_physical_demands_2023"]
+    },
+    {
+      "id": "approach_movement_model",
+      "movement": "Move forward to a short ball with controlled acceleration, spacing steps, forward contact, and recovery toward a closing net position.",
+      "sequence": ["read_short_ball", "first_step_forward", "adjust_to_ball_height", "hit_approach_with_forward_balance", "continue_diagonal_recovery", "split_before_opponent_pass_or_lob"],
+      "quality_markers": ["contact_not_cramped", "head_stays_quiet_while_moving_forward", "approach_line_covers_likely_reply", "split_step_occurs_before_opponent_contact"],
+      "common_errors": ["sprinting_through_contact", "no_split_before_pass", "approaching_straight_to_center_after_crosscourt_ball", "poor_low_ball_spacing"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement", "src_pluim_surface_physical_demands_2023"]
+    },
+    {
+      "id": "net_transition_model",
+      "movement": "Transition from baseline or service line to a volley-ready position with forward deceleration and a split-step at the opponent's strike.",
+      "phases": ["approach_or_follow_serve", "close_distance", "decelerate_with_short_steps", "split_at_opponent_contact", "first_volley_step", "recover_laterally_or_forward"],
+      "quality_markers": ["not_still_sprinting_when_opponent_hits", "racket_head_ready", "base_is_between_likely_pass_and_lob", "lateral_first_step_is_available"],
+      "common_errors": ["running_into_split_late", "standing_tall_at_service_line", "overclosing_and_exposing_lob", "volleying_with_no_recovery"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "serve_recovery_model",
+      "movement": "Recover from serve landing into the planned plus-one coverage position or serve-and-volley transition.",
+      "variants": ["baseline_serve_plus_one_recovery", "wide_serve_recovery", "body_serve_recovery", "serve_and_volley_recovery", "doubles_serve_follow_and_partner_coverage"],
+      "quality_markers": ["landing_is_balanced", "racket_recovers_quickly", "first_step_after_landing_matches_serve_location", "server_splits_or_sets_before_return_contact_when_possible"],
+      "common_errors": ["falling_off_court_after_serve", "watching_serve_before_moving", "late_plus_one_read", "poor_balance_after_high_intent_serve"],
+      "source_ids": ["src_kovacs_physiology_2007", "src_fernandez_intensity_2006", "src_usta_agility_movement"]
+    },
+    {
+      "id": "singles_baseline_coverage_model",
+      "movement": "Whole-court lateral and diagonal coverage with base position biased by shot direction and opponent options.",
+      "coverage_priorities": ["crosscourt_exchange_recovery", "down_the_line_change_recovery", "short_ball_attack", "drop_shot_chase", "lob_or_overhead_recovery", "wide_defense"],
+      "quality_markers": ["base_bias_matches_crosscourt_geometry", "player_can_defend_both_wings", "recovery_does_not_overopen_down_the_line_lane", "split_step_repeats_under_rally_stress"],
+      "common_errors": ["recovering_to_same_spot_after_all_shots", "late_recovery_after_down_the_line", "no_forward_recovery_after_short_ball", "overcovering_favorite_side"],
+      "source_ids": ["src_prieto_womens_surface_2022", "src_fernandez_intensity_2006", "src_itpa_tennis_movements"]
+    },
+    {
+      "id": "doubles_net_movement_model",
+      "movement": "Short explosive lane coverage at or near the net, coordinated with partner position and ball direction.",
+      "coverage_priorities": ["poach_step", "fake_and_recover", "middle_ball_intercept", "lob_drop_recovery", "switch_after_lob", "volley_lateral_recovery"],
+      "quality_markers": ["split_at_opponent_contact", "partner_spacing_is_clear", "movement_does_not_open_same_lane_twice", "net_player_recovers_after_poach_attempt"],
+      "common_errors": ["standing_static_at_net", "poaching_without_partner_coverage", "crossing_too_early", "watching_partner_hit_without_repositioning"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "surface_braking_model",
+      "movement": "Surface-specific deceleration strategy for stopping, sliding, and reaccelerating.",
+      "surface_rules": ["clay_allows_trained_sliding_but_requires_control", "hard_requires_more_direct_braking_and_impact_tolerance", "grass_requires_smaller_steps_and_footing_awareness", "all_surfaces_require_progressive_exposure"],
+      "quality_markers": ["braking_step_matches_surface", "player_does_not_slide_untrained", "center_of_mass_remains_controlled", "reacceleration_follows_brake_without_pause"],
+      "common_errors": ["hard_court_stiff_stop", "clay_over_slide_past_contact", "grass_overstride", "changing_surface_without_drill_progression"],
+      "source_ids": ["src_starbuck_surface_biomech_2016", "src_pluim_surface_physical_demands_2023", "src_itf_surface_injury_review_2022"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "split_step_on_every_opponent_strike",
+      "rule": "A player should be moving into a split-step for every opponent strike, including serve return, rally balls, volleys, overhead defense, and approach-pass situations.",
+      "why_it_matters": "It preserves directional options and prevents late first-step reactions.",
+      "level": "all_levels",
+      "source_ids": ["src_filipcic_split_step_2017", "src_navia_return_split_step_2022", "src_usta_quickness_drills"]
+    },
+    {
+      "id": "use_shuffle_for_short_spacing_not_big_recovery",
+      "rule": "Use shuffles and side steps for small lateral positioning; use crossover or running steps when distance is large.",
+      "why_it_matters": "Pattern mismatch wastes time and either cramps contact or delays recovery.",
+      "level": "beginner_to_advanced",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "wide_defense_requires_time_buying_shot",
+      "rule": "When pulled very wide, choose a reply that creates enough time to recover unless the counterattack is high percentage.",
+      "why_it_matters": "A low-margin winner from poor balance often loses both the current ball and court position.",
+      "level": "intermediate_to_advanced",
+      "source_ids": ["src_prieto_womens_surface_2022", "src_pluim_surface_physical_demands_2023"]
+    },
+    {
+      "id": "recover_based_on_shot_direction",
+      "rule": "After a crosscourt ball, recover less aggressively across the court than after a down-the-line ball that exposes the crosscourt reply.",
+      "why_it_matters": "Court geometry and opponent angles change the highest-probability next threat.",
+      "level": "intermediate_to_advanced",
+      "source_ids": ["src_prieto_womens_surface_2022", "src_itpa_tennis_movements"]
+    },
+    {
+      "id": "attack_short_ball_with_forward_spacing_steps",
+      "rule": "On a short ball, first move forward decisively, then use smaller adjustment steps so contact is not rushed or cramped.",
+      "why_it_matters": "The tactical attack depends on arriving early enough to hit with balance and continue toward recovery or the net.",
+      "level": "beginner_to_advanced",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "approach_shot_requires_pre_pass_split",
+      "rule": "After an approach, split-step before the opponent strikes the passing shot or lob.",
+      "why_it_matters": "Continuing to run through the opponent's contact removes lateral and overhead response options.",
+      "level": "intermediate_to_advanced",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "serve_recovery_matches_serve_location",
+      "rule": "The server's recovery should anticipate the most likely return window created by serve placement.",
+      "why_it_matters": "Wide, body, and T serves change the server's plus-one coverage and recovery line.",
+      "level": "intermediate_to_advanced",
+      "source_ids": ["src_kovacs_physiology_2007", "src_fernandez_intensity_2006"]
+    },
+    {
+      "id": "return_position_changes_first_step",
+      "rule": "Deeper return position increases travel time after contact but can help manage serve speed; closer return position shortens reaction time but can support earlier attack.",
+      "why_it_matters": "Return movement is a timing tradeoff between reaction, contact intent, and recovery.",
+      "level": "intermediate_to_advanced",
+      "source_ids": ["src_navia_return_split_step_2022", "src_fernandez_intensity_2006"]
+    },
+    {
+      "id": "doubles_net_player_moves_on_cues_not_only_after_ball",
+      "rule": "The doubles net player should time poach, fake, or hold movements to server/returner cues and partner plan, not react only after the ball passes.",
+      "why_it_matters": "Doubles movement windows are smaller, and partner coverage determines whether an intercept is tactically sound.",
+      "level": "intermediate_to_advanced",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "doubles_recovery_preserves_team_lanes",
+      "rule": "After a volley, poach, lob retrieval, or switch, recover to a team shape that covers middle, line, lob, and crosscourt according to ball position.",
+      "why_it_matters": "Doubles movement failure is often two players covering the same lane while leaving another open.",
+      "level": "intermediate_to_advanced",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "clay_rewards_recovery_time_creation",
+      "rule": "On clay, use height, spin, depth, and controlled sliding recovery to extend or reset points when pulled wide.",
+      "why_it_matters": "Higher bounce and longer exchanges make point construction and repeated recovery more valuable.",
+      "level": "intermediate_to_advanced",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_kilit_surface_senior_2024", "src_prieto_womens_surface_2022"]
+    },
+    {
+      "id": "hard_court_requires_deceleration_budget",
+      "rule": "On hard court, limit sudden spikes in wide-ball, repeated sprint, and high-intent change-of-direction volume.",
+      "why_it_matters": "Hard-court braking and impact load accumulate even when skill work appears technically controlled.",
+      "level": "all_levels",
+      "source_ids": ["src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022", "src_pluim_injury_epidemiology_2018"]
+    },
+    {
+      "id": "grass_requires_earlier_lower_preparation",
+      "rule": "On grass, prepare lower, use shorter adjustment steps, and avoid late big braking steps.",
+      "why_it_matters": "Lower/skidding bounces and footing variability shrink the time and space for last-second correction.",
+      "level": "intermediate_to_advanced",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_prieto_womens_surface_2022", "src_starbuck_surface_biomech_2016"]
+    },
+    {
+      "id": "fatigue_rule_reduce_complexity_before_quality_breaks",
+      "rule": "When movement fatigue appears as late split-step, poor braking, or missed adjustment steps, reduce drill complexity or volume before speed fully drops.",
+      "why_it_matters": "Tired players can keep hitting balls while reinforcing poor spacing and higher-risk deceleration.",
+      "level": "all_levels",
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007", "src_usta_agility_movement"]
+    },
+    {
+      "id": "beginners_need_rally_movement_before_surface_specialization",
+      "rule": "Beginners should first learn ready position, split-step rhythm, safe first steps, and contact spacing on scaled courts before advanced sliding or full-court recovery work.",
+      "why_it_matters": "Scaling ball speed and court size improves learning quality and reduces unnecessary movement load.",
+      "level": "beginner",
+      "source_ids": ["src_itf_play_stay", "src_itf_tennis10s_manual"]
+    },
+    {
+      "id": "advanced_players_need_surface_transition_blocks",
+      "rule": "Advanced players should receive planned surface transition sessions before competition blocks that change from hard to clay, clay to grass, or grass to hard.",
+      "why_it_matters": "Surface-specific ball response, braking, sliding, and tactical timing require adaptation before high-volume match play.",
+      "level": "advanced",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "repeated_short_acceleration",
+      "demand": "Repeated 1-5 step accelerations from a split-step or recovery position.",
+      "backend_load_channels": ["first_step_count", "short_sprint_count", "reactive_start_density"],
+      "programming_note": "Train with full-quality starts, visual or ball cues, and sport-specific rest rather than generic straight-line sprint volume.",
+      "source_ids": ["src_kovacs_physiology_2007", "src_fernandez_intensity_2006", "src_usta_quickness_drills"]
+    },
+    {
+      "id": "braking_and_reacceleration",
+      "demand": "High-frequency deceleration followed by reacceleration, especially after wide balls and direction changes.",
+      "backend_load_channels": ["deceleration_count", "wide_ball_brake_count", "change_of_direction_density"],
+      "programming_note": "Progress from planned stops to reactive stops and surface-specific braking.",
+      "source_ids": ["src_usta_agility_movement", "src_starbuck_surface_biomech_2016", "src_itf_cssr_footwork_snc"]
+    },
+    {
+      "id": "lateral_and_diagonal_coverage",
+      "demand": "Repeated lateral, diagonal, forward, and backward movement rather than one-direction running.",
+      "backend_load_channels": ["lateral_move_count", "diagonal_recovery_count", "forward_transition_count"],
+      "programming_note": "Conditioning should combine baseline, short-ball, recovery, and net-transition patterns.",
+      "source_ids": ["src_itpa_tennis_movements", "src_fernandez_intensity_2006", "src_kovacs_physiology_2007"]
+    },
+    {
+      "id": "low_posture_and_trunk_control",
+      "demand": "Repeated low ready posture, trunk stiffness, and rotation control while changing direction and preparing strokes.",
+      "backend_load_channels": ["low_posture_duration", "reactive_rotation_count", "stance_load_count"],
+      "programming_note": "Pair trunk control with actual movement and stroke contexts, not only static core drills.",
+      "source_ids": ["src_itf_cssr_footwork_snc", "src_reid_forehand_review_2013", "src_kovacs_physiology_2007"]
+    },
+    {
+      "id": "surface_specific_footing_capacity",
+      "demand": "Ability to brake, slide, grip, and reaccelerate according to clay, hard, or grass conditions.",
+      "backend_load_channels": ["surface_transition_exposure", "sliding_exposure", "hard_court_impact_exposure", "grass_low_bounce_exposure"],
+      "programming_note": "Surface change should be treated as a load and skill change, not merely a venue change.",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "aerobic_between_point_recovery",
+      "demand": "Aerobic capacity supports recovery between points, games, sets, and repeated matches.",
+      "backend_load_channels": ["match_duration", "between_point_recovery_quality", "tournament_density"],
+      "programming_note": "Aerobic work should support tennis recovery without replacing movement-specific repeated efforts.",
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007"]
+    },
+    {
+      "id": "anaerobic_repeat_effort",
+      "demand": "High-intensity bursts recur across rallies and must be repeated without major movement-quality loss.",
+      "backend_load_channels": ["high_intensity_rally_count", "repeat_effort_cluster", "rally_length_distribution"],
+      "programming_note": "Use rally/rest formats and movement patterns that resemble match demands.",
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007"]
+    },
+    {
+      "id": "single_leg_braking_and_stance_load",
+      "demand": "Tennis frequently loads one leg heavily during open-stance strokes, lunging reaches, braking, and recovery push-offs.",
+      "backend_load_channels": ["open_stance_volume", "wide_open_stance_count", "single_leg_brake_count"],
+      "programming_note": "Monitor asymmetry and build hip, knee, ankle, and trunk control under rotational load.",
+      "source_ids": ["src_reid_forehand_review_2013", "src_martin_open_stance_hip_2020", "src_pluim_injury_epidemiology_2018"]
+    },
+    {
+      "id": "serve_recovery_and_plus_one_demand",
+      "demand": "Serve action is followed immediately by landing, balance recovery, and preparation for the next ball.",
+      "backend_load_channels": ["serve_count", "high_intent_serve_count", "serve_plus_one_recovery_count"],
+      "programming_note": "Do not separate serve volume from first-ball movement quality in advanced sessions.",
+      "source_ids": ["src_kovacs_physiology_2007", "src_fernandez_intensity_2006", "src_pluim_injury_epidemiology_2018"]
+    },
+    {
+      "id": "net_transition_and_lateral_volley_demand",
+      "demand": "Approach and doubles play require forward acceleration, controlled deceleration, split-step, and short lateral volley movements.",
+      "backend_load_channels": ["approach_count", "net_split_count", "volley_lateral_move_count", "poach_step_count"],
+      "programming_note": "Train net work as movement-plus-skill instead of static volley repetition.",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "surface_rally_length_demand",
+      "demand": "Rally length and point construction can shift with surface, changing repeated movement and recovery requirements.",
+      "backend_load_channels": ["rally_length_by_surface", "point_duration_by_surface", "defensive_recovery_count_by_surface"],
+      "programming_note": "Clay blocks need more repeat-recovery tolerance; grass blocks need more reaction and low-bounce spacing; hard blocks need balanced first-strike and braking capacity.",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_kilit_surface_senior_2024", "src_prieto_womens_surface_2022"]
+    },
+    {
+      "id": "fatigue_resistant_movement_timing",
+      "demand": "Players must preserve split-step timing, first-step quality, and adjustment steps late in long rallies and matches.",
+      "backend_load_channels": ["late_session_movement_error_rate", "fatigue_split_late_count", "late_rally_spacing_error"],
+      "programming_note": "Assess movement quality under fatigue, not only time-to-complete in fresh drills.",
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007", "src_usta_agility_movement"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "hard_court_deceleration_spike",
+      "risk": "Rapid increase in hard-court change-of-direction and braking volume can overload lower limb and trunk tissues.",
+      "risk_signals": ["next_day_knee_pain", "achilles_stiffness", "ankle_soreness", "low_back_tightness", "braking_quality_drop"],
+      "mitigation": "Progress wide-ball and repeated braking volume, monitor next-day response, and avoid combining large hard-court movement spikes with heavy lower-body gym work.",
+      "source_ids": ["src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022", "src_pluim_injury_epidemiology_2018"]
+    },
+    {
+      "id": "unprepared_clay_sliding",
+      "risk": "Untrained sliding on clay can create uncontrolled hip, groin, knee, ankle, and trunk load.",
+      "risk_signals": ["late_slide_start", "sliding_past_contact", "groin_tightness", "inside_knee_collapse", "poor_reacceleration_after_slide"],
+      "mitigation": "Teach low-speed slide mechanics and braking positions before high-speed reactive sliding or match-like wide-ball drills.",
+      "source_ids": ["src_starbuck_surface_biomech_2016", "src_pluim_surface_physical_demands_2023", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "grass_footing_and_low_bounce_risk",
+      "risk": "Grass can create slips, rushed low contacts, and late braking when players use hard-court step lengths.",
+      "risk_signals": ["overstride_on_low_ball", "slipping_on_first_push", "late_contact_below_knee", "ankle_or_groin_soreness"],
+      "mitigation": "Use shorter steps, lower ready posture, progressive exposure, and reaction drills before maximal movement or competition volume.",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "open_stance_hip_rotation_load",
+      "risk": "High open-stance forehand volume can increase hip rotation and loading demands, especially on the outside leg.",
+      "risk_signals": ["hip_pinching", "groin_tightness", "loss_of_rotation", "outside_leg_collapse", "forehand_power_drop"],
+      "mitigation": "Cap repeated wide open-stance volume, build hip/trunk capacity, vary stance demands, and watch next-day hip/groin response.",
+      "source_ids": ["src_reid_forehand_review_2013", "src_martin_open_stance_hip_2020"]
+    },
+    {
+      "id": "wide_ball_braking_overload",
+      "risk": "Repeated wide-ball defense can overload ankle, knee, hip, groin, and lumbar tissues through high braking and reacceleration demands.",
+      "risk_signals": ["brake_step_noise", "knee_valgus", "stiff_landings", "late_recovery", "change_of_direction_speed_drop"],
+      "mitigation": "Track wide-ball count separately from rally count and progress reactive width only after planned braking quality is stable.",
+      "source_ids": ["src_usta_agility_movement", "src_pluim_injury_epidemiology_2018", "src_itf_cssr_footwork_snc"]
+    },
+    {
+      "id": "serve_landing_plus_recovery_load",
+      "risk": "Serve volume adds landing, trunk rotation, shoulder, and immediate recovery demands that can accumulate with movement drills.",
+      "risk_signals": ["shoulder_soreness", "low_back_tightness", "landing_balance_loss", "late_plus_one_feet", "serve_speed_drop"],
+      "mitigation": "Track high-intent serve count with serve-recovery movement quality and avoid pairing high serve volume with maximal change-of-direction work when fatigue is high.",
+      "source_ids": ["src_kovacs_physiology_2007", "src_pluim_injury_epidemiology_2018", "src_fernandez_intensity_2006"]
+    },
+    {
+      "id": "fatigue_spacing_error_risk",
+      "risk": "Fatigue can create cramped contact and rushed compensations that increase stroke and movement stress.",
+      "risk_signals": ["missed_adjustment_steps", "late_split_step", "arm_only_contact", "falling_after_shot", "recovery_pause"],
+      "mitigation": "Use movement-quality stop rules in conditioning drills instead of only time or heart-rate targets.",
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007", "src_usta_agility_movement"]
+    },
+    {
+      "id": "beginner_full_court_overload",
+      "risk": "Beginners asked to cover full-size courts with fast balls may develop unsafe reaching, late braking, and poor contact habits.",
+      "risk_signals": ["constant_late_contact", "falling_after_shots", "no_split_step", "rally_failure_from_movement_not_stroke", "pain_after_sessions"],
+      "mitigation": "Use scaled courts and slower balls, then expand court size only after ready position, first step, and spacing steps are reliable.",
+      "source_ids": ["src_itf_play_stay", "src_itf_tennis10s_manual"]
+    },
+    {
+      "id": "surface_transition_spike",
+      "risk": "Changing surface without preparation can change friction, bounce, rally rhythm, and tissue load abruptly.",
+      "risk_signals": ["slipping_or_sticking", "unexpected_soreness", "late_contact_due_to_bounce", "braking_confidence_drop", "increased_unforced_errors"],
+      "mitigation": "Add transition sessions with reduced volume, movement drills, and tactical adaptation before full competition or high-volume practice.",
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "doubles_net_collision_and_ankle_risk",
+      "risk": "Doubles net movement can create sudden lateral starts, partner proximity, poach deceleration, and awkward overhead/lob recovery.",
+      "risk_signals": ["late_partner_call", "overlapping_lanes", "ankle_roll_on_poach", "collision_near_middle", "poor_lob_switch"],
+      "mitigation": "Train communication, lane responsibility, split-step timing, and switch patterns at submaximal speed before live poaching.",
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement", "src_pluim_injury_epidemiology_2018"]
+    },
+    {
+      "id": "adolescent_growth_and_movement_load",
+      "risk": "Junior players during growth can be sensitive to sudden increases in court coverage, serve landing, and high-intent movement volume.",
+      "risk_signals": ["heel_pain", "knee_pain", "coordination_drop", "stiff_braking", "fatigue_earlier_than_usual"],
+      "mitigation": "Use development-stage progressions, scaled courts when appropriate, and gradual increases in high-speed movement and serve recovery load.",
+      "source_ids": ["src_itf_tennis10s_manual", "src_itf_play_stay", "src_pluim_injury_epidemiology_2018"]
+    },
+    {
+      "id": "poor_footwear_surface_match",
+      "risk": "Shoes that do not match surface friction needs can increase slipping, sticking, sliding errors, and braking stress.",
+      "risk_signals": ["foot_slips_on_push", "foot_sticks_during_turn", "unplanned_slide", "blisters_or_foot_pain", "movement_confidence_loss"],
+      "mitigation": "Match shoe outsole and movement drills to surface and avoid maximal direction-change work in inappropriate footwear.",
+      "source_ids": ["src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "low_back_rotation_plus_recovery_load",
+      "risk": "Heavy rotational stroke volume combined with repeated braking and recovery can aggravate lumbar load.",
+      "risk_signals": ["low_back_tightness_after_open_stance_blocks", "serve_landing_discomfort", "loss_of_trunk_control", "late_recovery_posture"],
+      "mitigation": "Manage serve, open-stance forehand, and wide-ball recovery volume together; include trunk/hip control and recovery-day checks.",
+      "source_ids": ["src_pluim_injury_epidemiology_2018", "src_kovacs_physiology_2007", "src_martin_open_stance_hip_2020"]
+    },
+    {
+      "id": "knee_ankle_load_from_late_adjustment",
+      "risk": "Late adjustment steps force abrupt braking and awkward low-contact reaches.",
+      "risk_signals": ["last_second_lunge", "locked_knee_contact", "ankle_roll_near_contact", "contact_behind_body", "late_error_cluster"],
+      "mitigation": "Build perception, early read, first step, and spacing-step habits before adding high-speed feeds or fatigue constraints.",
+      "source_ids": ["src_usta_quickness_drills", "src_usta_agility_movement", "src_itf_cssr_footwork_snc"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "beginner_progression_scaled_court_first",
+      "level": "beginner",
+      "implication": "Teach ready position, split-step rhythm, first step, and contact spacing on scaled courts with slower balls before full-court chase drills.",
+      "example_drills": ["red_or_orange_court_rally_recover", "coach_call_split_and_catch", "two_step_spacing_to_forehand", "short_court_crosscourt_recovery"],
+      "source_ids": ["src_itf_play_stay", "src_itf_tennis10s_manual"]
+    },
+    {
+      "id": "beginner_no_advanced_sliding",
+      "level": "beginner",
+      "implication": "Avoid advanced clay sliding or maximal wide-ball recovery until the player can brake safely and recover with balance.",
+      "example_drills": ["planned_stop_and_hold", "slow_wide_feed_brake", "balance_after_contact", "walk_through_recovery_path"],
+      "source_ids": ["src_itf_tennis10s_manual", "src_starbuck_surface_biomech_2016"]
+    },
+    {
+      "id": "beginner_stance_teaching_simple_choices",
+      "level": "beginner",
+      "implication": "Frame stance as a simple movement outcome: step in when time and short ball allow, load outside leg when wide or rushed.",
+      "example_drills": ["short_ball_step_in", "wide_ball_outside_leg_load", "coach_feed_stance_choice", "freeze_at_contact_balance_check"],
+      "source_ids": ["src_reid_forehand_review_2013", "src_itf_play_stay"]
+    },
+    {
+      "id": "intermediate_recovery_decision_training",
+      "level": "intermediate",
+      "implication": "Add shot-direction recovery rules so players do not recover to a fixed center after every ball.",
+      "example_drills": ["crosscourt_recover_bias", "down_the_line_recover_penalty", "wide_defense_height_reset", "short_ball_attack_then_split"],
+      "source_ids": ["src_itpa_tennis_movements", "src_prieto_womens_surface_2022"]
+    },
+    {
+      "id": "intermediate_first_step_reactivity",
+      "level": "intermediate",
+      "implication": "Progress from rehearsed starts to visual cue, opponent cue, and live-ball first-step decisions.",
+      "example_drills": ["colored_cone_first_step", "coach_racket_cue_split", "live_feed_random_wide_short", "return_split_step_read"],
+      "source_ids": ["src_usta_quickness_drills", "src_filipcic_split_step_2017", "src_navia_return_split_step_2022"]
+    },
+    {
+      "id": "intermediate_approach_net_transition",
+      "level": "intermediate",
+      "implication": "Train approach movement as read, move, adjust, hit, close, split, and volley rather than only approach-shot stroke mechanics.",
+      "example_drills": ["short_ball_approach_split_volley", "approach_line_by_direction", "approach_pass_reaction", "approach_lob_recovery"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "intermediate_surface_intro",
+      "level": "intermediate",
+      "implication": "Introduce surface constraints explicitly: clay recovery height and sliding basics, hard-court braking quality, grass-style low-bounce spacing even if trained off grass.",
+      "example_drills": ["clay_controlled_slide_shadow", "hard_court_brake_reaccelerate", "low_bounce_adjustment_steps", "surface_rule_rally_games"],
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "advanced_surface_transition_microcycle",
+      "level": "advanced",
+      "implication": "Before a surface change, schedule reduced-volume adaptation sessions for bounce, braking, sliding/footing, serve-return timing, and point construction.",
+      "example_drills": ["surface_specific_return_split", "clay_wide_slide_recover", "grass_low_contact_first_step", "hard_brake_plus_one"],
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_starbuck_surface_biomech_2016", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "advanced_open_stance_load_monitor",
+      "level": "advanced",
+      "implication": "Track high-volume open-stance and wide forehand blocks as hip/trunk/lower-limb load, not just stroke repetitions.",
+      "example_drills": ["wide_forehand_counted_block", "outside_leg_load_quality", "wide_forehand_recover_under_time", "hip_response_next_day_check"],
+      "source_ids": ["src_reid_forehand_review_2013", "src_martin_open_stance_hip_2020"]
+    },
+    {
+      "id": "advanced_serve_plus_one_movement",
+      "level": "advanced",
+      "implication": "Pair serve practice with recovery and plus-one movement patterns, especially after high-intent serves.",
+      "example_drills": ["wide_serve_plus_one_recover", "body_serve_first_step", "serve_land_split_return_feed", "serve_and_volley_timing"],
+      "source_ids": ["src_kovacs_physiology_2007", "src_fernandez_intensity_2006"]
+    },
+    {
+      "id": "advanced_doubles_movement_patterns",
+      "level": "advanced",
+      "implication": "Train doubles movement through planned team cues: poach, fake, hold, switch, lob recovery, and middle-ball responsibility.",
+      "example_drills": ["serve_poach_recover", "return_cross_middle_call", "fake_hold_split", "lob_switch_recover"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "fatigue_quality_stop_rule",
+      "level": "all_levels",
+      "implication": "End or regress a movement drill when split-step timing, braking quality, or contact spacing collapses, even if the athlete can keep running.",
+      "example_drills": ["rally_to_quality_threshold", "movement_error_count_stop", "late_split_penalty_game", "fatigue_recovery_assessment"],
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007", "src_usta_agility_movement"]
+    },
+    {
+      "id": "condition_with_tennis_rhythm",
+      "level": "intermediate_to_advanced",
+      "implication": "Condition using tennis rally/rest rhythms and movement directions instead of generic long intervals unrelated to court patterns.",
+      "example_drills": ["15_second_reactive_rally_25_second_rest", "wide_recover_plus_short_ball_cluster", "serve_return_plus_one_repeats", "multi_ball_surface_specific_cluster"],
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007"]
+    },
+    {
+      "id": "separate_planned_and_reactive_movement",
+      "level": "all_levels",
+      "implication": "Use planned shadow movement for mechanics, then progress to ball-fed, cue-based, and opponent-read movement for transfer.",
+      "example_drills": ["shadow_recovery_path", "coach_feed_known_direction", "random_direction_feed", "live_point_movement_constraint"],
+      "source_ids": ["src_usta_agility_movement", "src_itf_cssr_footwork_snc", "src_filipcic_split_step_2017"]
+    },
+    {
+      "id": "build_braking_before_speed",
+      "level": "all_levels",
+      "implication": "Do not add maximal first-step or wide-court feeds until the athlete can stop, balance, and reaccelerate safely.",
+      "example_drills": ["deceleration_hold", "brake_to_reaccelerate", "wide_feed_stop_recover", "surface_braking_ladder"],
+      "source_ids": ["src_usta_agility_movement", "src_itf_cssr_footwork_snc", "src_starbuck_surface_biomech_2016"]
+    },
+    {
+      "id": "train_adjustment_steps_on_variable_bounce",
+      "level": "all_levels",
+      "implication": "Use variable feeds and surface/bounce constraints so players learn to adjust before contact instead of relying on one rehearsed step pattern.",
+      "example_drills": ["spin_height_random_feed", "low_bounce_half_court", "deep_short_adjustment", "wind_or_bad_bounce_simulation"],
+      "source_ids": ["src_itpa_tennis_movements", "src_pluim_surface_physical_demands_2023", "src_reid_forehand_review_2013"]
+    },
+    {
+      "id": "track_movement_load_separately_from_hit_count",
+      "level": "all_levels",
+      "implication": "Session load should distinguish ball strikes from wide-ball braking, sliding, approach, serve recovery, and doubles net movement.",
+      "example_drills": ["session_load_tags", "wide_ball_count", "sliding_count", "approach_transition_count", "serve_plus_one_count"],
+      "source_ids": ["src_pluim_injury_epidemiology_2018", "src_starbuck_surface_biomech_2016", "src_fernandez_intensity_2006"]
+    },
+    {
+      "id": "assess_movement_by_task_not_cone_time_only",
+      "level": "all_levels",
+      "implication": "Movement testing should include live-ball or visual-cue quality markers, not only pre-planned cone times.",
+      "example_drills": ["split_timing_video_check", "return_first_step_assessment", "wide_ball_recovery_score", "approach_split_volley_score"],
+      "source_ids": ["src_filipcic_split_step_2017", "src_navia_return_split_step_2022", "src_usta_quickness_drills"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "id": "record_tennis_movement_cycle",
+      "record_type": "technical_model",
+      "title": "Tennis Movement Cycle",
+      "priority": "high",
+      "payload_fields": ["phase_sequence", "quality_markers", "common_errors", "assessment_cues", "level_scaling"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement", "src_filipcic_split_step_2017"]
+    },
+    {
+      "id": "record_split_step_timing",
+      "record_type": "skill",
+      "title": "Split-Step Timing",
+      "priority": "high",
+      "payload_fields": ["rally_context", "return_context", "timing_cues", "errors", "progressions"],
+      "source_ids": ["src_filipcic_split_step_2017", "src_navia_return_split_step_2022", "src_usta_quickness_drills"]
+    },
+    {
+      "id": "record_first_step_directional_push",
+      "record_type": "skill",
+      "title": "First-Step Directional Push",
+      "priority": "high",
+      "payload_fields": ["first_step_types", "direction_rules", "quality_markers", "drills", "assessment"],
+      "source_ids": ["src_usta_quickness_drills", "src_usta_agility_movement", "src_itpa_tennis_movements"]
+    },
+    {
+      "id": "record_shuffle_side_step",
+      "record_type": "skill",
+      "title": "Shuffle and Side-Step Footwork",
+      "priority": "medium",
+      "payload_fields": ["best_uses", "spacing_rules", "common_errors", "doubles_uses", "surface_notes"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "record_crossover_recovery",
+      "record_type": "skill",
+      "title": "Crossover Recovery",
+      "priority": "high",
+      "payload_fields": ["wide_ball_use", "recovery_use", "backhand_runaround_use", "errors", "progressions"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "record_adjustment_steps",
+      "record_type": "skill",
+      "title": "Adjustment Steps for Contact Spacing",
+      "priority": "high",
+      "payload_fields": ["contact_spacing", "bounce_adaptation", "surface_adaptation", "common_errors", "assessment"],
+      "source_ids": ["src_itpa_tennis_movements", "src_reid_forehand_review_2013", "src_pluim_surface_physical_demands_2023"]
+    },
+    {
+      "id": "record_baseline_recovery_rules",
+      "record_type": "tactical_rule_set",
+      "title": "Baseline Recovery Rules",
+      "priority": "high",
+      "payload_fields": ["crosscourt_rule", "down_line_rule", "wide_defense_rule", "shot_quality_adjustment", "surface_adjustment"],
+      "source_ids": ["src_prieto_womens_surface_2022", "src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "record_stance_movement_choices",
+      "record_type": "technical_model",
+      "title": "Open, Semi-Open, Neutral, and Closed Stance Movement",
+      "priority": "high",
+      "payload_fields": ["stance_options", "ball_contexts", "recovery_implications", "load_flags", "level_progressions"],
+      "source_ids": ["src_reid_forehand_review_2013", "src_martin_open_stance_hip_2020"]
+    },
+    {
+      "id": "record_wide_ball_recovery",
+      "record_type": "skill",
+      "title": "Wide-Ball Recovery",
+      "priority": "high",
+      "payload_fields": ["defensive_sequence", "counterattack_sequence", "surface_braking", "shot_selection", "load_tracking"],
+      "source_ids": ["src_usta_agility_movement", "src_starbuck_surface_biomech_2016", "src_pluim_surface_physical_demands_2023"]
+    },
+    {
+      "id": "record_approach_movement",
+      "record_type": "skill",
+      "title": "Approach Movement",
+      "priority": "high",
+      "payload_fields": ["read_short_ball", "forward_steps", "contact_spacing", "net_recovery", "common_errors"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "record_net_transition",
+      "record_type": "skill",
+      "title": "Net Transition and Pre-Volley Split",
+      "priority": "high",
+      "payload_fields": ["transition_phases", "split_timing", "volley_first_step", "lob_response", "doubles_variants"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "record_serve_recovery",
+      "record_type": "skill",
+      "title": "Serve Recovery and Plus-One Movement",
+      "priority": "high",
+      "payload_fields": ["serve_locations", "landing_quality", "first_step_after_serve", "plus_one_position", "load_flags"],
+      "source_ids": ["src_kovacs_physiology_2007", "src_fernandez_intensity_2006", "src_pluim_injury_epidemiology_2018"]
+    },
+    {
+      "id": "record_singles_movement_map",
+      "record_type": "context_model",
+      "title": "Singles Movement Map",
+      "priority": "high",
+      "payload_fields": ["baseline_coverage", "short_ball_coverage", "wide_ball_defense", "surface_variants", "assessment"],
+      "source_ids": ["src_prieto_womens_surface_2022", "src_fernandez_intensity_2006", "src_itpa_tennis_movements"]
+    },
+    {
+      "id": "record_doubles_movement_map",
+      "record_type": "context_model",
+      "title": "Doubles Movement Map",
+      "priority": "high",
+      "payload_fields": ["net_player_movement", "server_recovery", "returner_recovery", "poach_switch_rules", "communication_cues"],
+      "source_ids": ["src_itpa_tennis_movements", "src_usta_agility_movement"]
+    },
+    {
+      "id": "record_clay_movement_surface_profile",
+      "record_type": "surface_profile",
+      "title": "Clay Movement and Load Profile",
+      "priority": "high",
+      "payload_fields": ["bounce_effect", "sliding_exposure", "rally_tolerance", "tactical_rules", "load_risks"],
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_kilit_surface_senior_2024", "src_prieto_womens_surface_2022"]
+    },
+    {
+      "id": "record_hard_court_movement_surface_profile",
+      "record_type": "surface_profile",
+      "title": "Hard-Court Movement and Load Profile",
+      "priority": "high",
+      "payload_fields": ["impact_load", "braking_load", "balanced_tactics", "load_risks", "conditioning_rules"],
+      "source_ids": ["src_starbuck_surface_biomech_2016", "src_pluim_surface_physical_demands_2023", "src_itf_surface_injury_review_2022"]
+    },
+    {
+      "id": "record_grass_movement_surface_profile",
+      "record_type": "surface_profile",
+      "title": "Grass Movement and Load Profile",
+      "priority": "high",
+      "payload_fields": ["low_bounce", "reaction_time", "footing", "adjustment_steps", "load_risks"],
+      "source_ids": ["src_pluim_surface_physical_demands_2023", "src_prieto_womens_surface_2022", "src_starbuck_surface_biomech_2016"]
+    },
+    {
+      "id": "record_tennis_movement_load_channels",
+      "record_type": "load_metric_set",
+      "title": "Tennis Movement Load Channels",
+      "priority": "high",
+      "payload_fields": ["wide_ball_count", "deceleration_count", "sliding_count", "surface_transition_exposure", "serve_recovery_count", "approach_count", "doubles_poach_count"],
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007", "src_pluim_injury_epidemiology_2018"]
+    },
+    {
+      "id": "record_fatigue_movement_error_assessment",
+      "record_type": "assessment",
+      "title": "Fatigue Movement Error Assessment",
+      "priority": "high",
+      "payload_fields": ["late_split", "upright_recovery", "missed_adjustment_steps", "braking_collapse", "wrong_recovery_base", "stop_rules"],
+      "source_ids": ["src_fernandez_intensity_2006", "src_kovacs_physiology_2007", "src_usta_agility_movement"]
+    },
+    {
+      "id": "record_level_based_movement_progression",
+      "record_type": "teaching_progression",
+      "title": "Beginner to Advanced Movement Progression",
+      "priority": "high",
+      "payload_fields": ["beginner_scaled_court", "intermediate_reactive_recovery", "advanced_surface_tactical_movement", "promotion_criteria", "hold_criteria"],
+      "source_ids": ["src_itf_play_stay", "src_itf_tennis10s_manual", "src_itf_cssr_footwork_snc"]
+    }
+  ]
+}

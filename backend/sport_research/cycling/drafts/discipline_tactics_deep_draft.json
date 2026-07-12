@@ -1,0 +1,1354 @@
+{
+  "metadata": {
+    "domain": "discipline_tactics_deep",
+    "sport": "cycling",
+    "version": "deep_draft_v1",
+    "created_at": "2026-06-23",
+    "research_goal": "Create backend-ready cycling knowledge for discipline profiles, race tactics, route and weather context, terrain decisions, drafting, paceline, attacks, lead-outs, event-week preparation, sport IQ, physical demands, load risks, and planning implications across road, criterium, time trial, track, mountain bike, gravel, cyclocross, BMX, and triathlon cycling.",
+    "scope": "Discipline and tactics research only. Power-zone programming, beginner safety instruction, bike-fit diagnosis, and strength programming are included only where they directly change tactical choice, event-week planning, discipline profile, or backend load-risk rules.",
+    "source_method": "Original synthesis from international and national federation resources, official competition-rule repositories, reputable coaching/racing education, and peer-reviewed sport-science sources. No long prose is copied.",
+    "rule_context_note": "Competition rules, draft-legal status, equipment legality, and course formats vary by federation, event, category, and year. Backend rule logic should store event-rule context instead of hard-coding one universal rule set."
+  },
+  "source_refs": [
+    {
+      "id": "src_uci_disciplines",
+      "title": "UCI Disciplines",
+      "url": "https://www.uci.org/disciplines/all/2tLnZMo6WrUBplRXDxyEi7",
+      "source_type": "official_international_federation",
+      "organization_or_author": "Union Cycliste Internationale",
+      "evidence_use": "International discipline taxonomy across road, track, mountain bike, cyclo-cross, BMX, gravel, and related cycling formats."
+    },
+    {
+      "id": "src_uci_road_regulations",
+      "title": "UCI Cycling Regulations - Part 2 Road Races",
+      "url": "https://assets.ctfassets.net/761l7gh5x5an/4WYnkaMCfVzW90Qj9fQ4Z7/9cd0a95d5b3290342c6b18ac6fd814e3/2-ROA-20250101-E.pdf",
+      "source_type": "official_competition_regulations",
+      "organization_or_author": "Union Cycliste Internationale",
+      "evidence_use": "Road-race, time-trial, team, stage, circuit, and event-operations context."
+    },
+    {
+      "id": "src_usa_cycling_road_team",
+      "title": "Road Cycling",
+      "url": "https://usacycling.org/team-usa/road",
+      "source_type": "national_federation_discipline_overview",
+      "organization_or_author": "USA Cycling",
+      "evidence_use": "Road-cycling event family, race type context, tactical terrain differences, and athlete development framing."
+    },
+    {
+      "id": "src_usa_cycling_road_guide",
+      "title": "Ultimate Guide to Road Bike Racing",
+      "url": "https://usacycling.org/article/ultimate-guide-to-road-bike-racing",
+      "source_type": "national_federation_racing_education",
+      "organization_or_author": "USA Cycling",
+      "evidence_use": "Mass-start road racing, criterium, time trial, stage race, paceline, and bunch-riding concepts for racers."
+    },
+    {
+      "id": "src_usa_cycling_paceline",
+      "title": "Pacelines: Tips for Riding Faster Together",
+      "url": "https://usacycling.org/article/pacelines-tips-for-riding-faster-together",
+      "source_type": "national_federation_group_riding_guidance",
+      "organization_or_author": "USA Cycling",
+      "evidence_use": "Paceline rotation, rider spacing, communication, smooth pulls, and group-riding efficiency."
+    },
+    {
+      "id": "src_uci_track_about",
+      "title": "About Track Cycling",
+      "url": "https://www.uci.org/article/about-track-cycling/1du7QkAFLchuURUZw3eool",
+      "source_type": "official_international_federation_discipline_education",
+      "organization_or_author": "Union Cycliste Internationale",
+      "evidence_use": "Track event families, sprint and endurance formats, velodrome context, and high-speed tactical structure."
+    },
+    {
+      "id": "src_uci_mtb_formats",
+      "title": "Mountain Bike Formats",
+      "url": "https://www.uci.org/discipline/mountain-bike/4LArSj7CKcytMrGEDtKwkb?tab=formats",
+      "source_type": "official_international_federation_discipline_education",
+      "organization_or_author": "Union Cycliste Internationale",
+      "evidence_use": "Cross-country, short track, marathon, downhill, enduro, eliminator, and E-MTB format distinctions."
+    },
+    {
+      "id": "src_uci_cyclocross_discipline",
+      "title": "Cyclo-cross",
+      "url": "https://www.uci.org/discipline/cyclo-cross/33SsGmzyH4lEUbNfDaJriW",
+      "source_type": "official_international_federation_discipline_education",
+      "organization_or_author": "Union Cycliste Internationale",
+      "evidence_use": "Cyclocross discipline context, mixed terrain, running, obstacles, and season/course characteristics."
+    },
+    {
+      "id": "src_uci_cyclocross_regulations",
+      "title": "UCI Cycling Regulations - Part 5 Cyclo-cross",
+      "url": "https://assets.ctfassets.net/761l7gh5x5an/55FQoYD2VnF5Tp4KAmvUaE/9b47f4569f09b348fae8c8714d1867f8/5-CRO-20250101-E.pdf",
+      "source_type": "official_competition_regulations",
+      "organization_or_author": "Union Cycliste Internationale",
+      "evidence_use": "Cyclocross course, pit, race, equipment, and event-organization context."
+    },
+    {
+      "id": "src_usa_cycling_cx_guide",
+      "title": "USA Cycling Beginner's Guide to Cyclocross",
+      "url": "https://usacycling.org/article/beginners-guide-to-cyclocross",
+      "source_type": "national_federation_racing_education",
+      "organization_or_author": "USA Cycling",
+      "evidence_use": "Practical cyclocross racing education: dismounts, remounts, barriers, mud, grass, sand, pits, and race rhythm."
+    },
+    {
+      "id": "src_uci_bmx_racing_regulations",
+      "title": "UCI Cycling Regulations - Part 6 BMX Racing",
+      "url": "https://assets.ctfassets.net/761l7gh5x5an/4nIOzfikRQFY61XuVhiCJK/6e553e9c8b58a930f02068f382353b0e/6-BMX-20250101-E.pdf",
+      "source_type": "official_competition_regulations",
+      "organization_or_author": "Union Cycliste Internationale",
+      "evidence_use": "BMX racing event, track, gate, moto, transfer, and racing format context."
+    },
+    {
+      "id": "src_usa_cycling_bmx",
+      "title": "BMX Racing",
+      "url": "https://usacycling.org/team-usa/bmx-racing",
+      "source_type": "national_federation_discipline_overview",
+      "organization_or_author": "USA Cycling",
+      "evidence_use": "BMX racing athlete profile, Olympic discipline context, starts, jumps, and track-racing demands."
+    },
+    {
+      "id": "src_uci_gravel_world_series_regulations",
+      "title": "UCI Gravel World Series Regulations",
+      "url": "https://ucigravelworldseries.com/en/regulations/",
+      "source_type": "official_event_series_regulations",
+      "organization_or_author": "UCI Gravel World Series",
+      "evidence_use": "Gravel-race event context, qualification, course style, and mass-participation race structure."
+    },
+    {
+      "id": "src_world_triathlon_rules",
+      "title": "World Triathlon Competition Rules Documents",
+      "url": "https://triathlon.org/documents/competition-rules",
+      "source_type": "official_rules_repository",
+      "organization_or_author": "World Triathlon",
+      "evidence_use": "Triathlon competition-rule repository, bike-segment rules, draft-legal context, transition, and event-specific rule configuration."
+    },
+    {
+      "id": "src_world_triathlon_2025_rules_update",
+      "title": "Key Changes to the World Triathlon Competition Rules for 2025",
+      "url": "https://triathlon.org/news/key-changes-to-the-world-triathlon-competition-rules-for-2025",
+      "source_type": "official_rules_update",
+      "organization_or_author": "World Triathlon",
+      "evidence_use": "Triathlon rule-change awareness, including draft-zone and competition-rule versioning."
+    },
+    {
+      "id": "src_ironman_rules_2026",
+      "title": "IRONMAN 2026 Competition Rules",
+      "url": "https://www.ironman.com/competition-rules",
+      "source_type": "official_event_rules",
+      "organization_or_author": "IRONMAN",
+      "evidence_use": "Long-course triathlon draft-zone and non-drafting bike-leg context for event-specific planning."
+    },
+    {
+      "id": "src_cts_crosswinds_echelons",
+      "title": "How to Win the Fight Against Crosswinds and Echelons",
+      "url": "https://trainright.com/how-to-win-fight-against-crosswinds-echelons/",
+      "source_type": "credible_coaching_racing_source",
+      "organization_or_author": "CTS / TrainRight",
+      "evidence_use": "Crosswind positioning, shelter, echelon formation, and road-race decision rules."
+    },
+    {
+      "id": "src_cts_criterium_strategies",
+      "title": "4 Strategies to Help You Win a Criterium Race",
+      "url": "https://trainright.com/4-strategies-to-help-you-win-a-criterium-race/",
+      "source_type": "credible_coaching_racing_source",
+      "organization_or_author": "CTS / TrainRight",
+      "evidence_use": "Criterium positioning, cornering, energy conservation, attacks, and sprint preparation."
+    },
+    {
+      "id": "src_trainerroad_team_tactics",
+      "title": "Race Strategies for a Dominant Team",
+      "url": "https://www.trainerroad.com/blog/race-strategies-for-a-dominant-team/",
+      "source_type": "credible_coaching_racing_source",
+      "organization_or_author": "TrainerRoad",
+      "evidence_use": "Team tactics, breakaways, blocking, lead-outs, bridging, and race-role planning."
+    },
+    {
+      "id": "src_trainerroad_field_size",
+      "title": "Why Field Size Affects Your Tactics in Criterium and Road Racing",
+      "url": "https://www.trainerroad.com/blog/why-field-size-affects-your-tactics-in-criterium-and-road-racing/",
+      "source_type": "credible_coaching_racing_source",
+      "organization_or_author": "TrainerRoad",
+      "evidence_use": "How field size changes recovery, positioning, movement, crash exposure, and tactical timing."
+    },
+    {
+      "id": "src_british_cycling_tactical_workshops",
+      "title": "Road and Track Development Tactical Workshops",
+      "url": "https://www.britishcycling.org.uk/gbcyclingteam/article/20190208-gb-cyclingteam-news-Road-and-Track-Development-Tactical-Workshops--0",
+      "source_type": "national_federation_athlete_development",
+      "organization_or_author": "British Cycling",
+      "evidence_use": "Federation development emphasis on race-craft, tactical learning, positioning, and event-specific decision making."
+    },
+    {
+      "id": "src_sports_engineering_aerodynamics",
+      "title": "Racing Cyclist Power Requirements in the 4000 m Individual and Team Pursuits",
+      "url": "https://www.researchgate.net/publication/235806081_Racing_cyclist_power_requirements_in_the_4000_m_individual_and_team_pursuits",
+      "source_type": "peer_reviewed_sport_engineering",
+      "organization_or_author": "Lukes, Chin, and Haake",
+      "evidence_use": "Aerodynamic drag, pursuit pacing, and team-pursuit rotation implications."
+    },
+    {
+      "id": "src_jsc_road_sprinting",
+      "title": "Road Cycling Sprint Performance: A Systematic Review",
+      "url": "https://www.mdpi.com/2075-4663/11/3/63",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Journal of Sports Science and Medicine / MDPI Sports",
+      "evidence_use": "Sprint determinants, lead-out context, positioning, power-duration characteristics, and race-finish demands."
+    },
+    {
+      "id": "src_frontiers_xco_demands",
+      "title": "Physiological and Technical Demands of Cross-Country Mountain Bike Racing",
+      "url": "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2022.856839/full",
+      "source_type": "peer_reviewed_sport_science_review",
+      "organization_or_author": "Frontiers in Physiology",
+      "evidence_use": "XCO mountain bike intermittent demands, technical sections, repeated high-intensity efforts, climbs, descents, and skill-performance interaction."
+    },
+    {
+      "id": "src_bmx_physiology_review",
+      "title": "Physiological Profile of BMX Riders and Their Training Characteristics",
+      "url": "https://www.mdpi.com/1660-4601/20/3/2585",
+      "source_type": "peer_reviewed_sport_science_review",
+      "organization_or_author": "International Journal of Environmental Research and Public Health",
+      "evidence_use": "BMX racing start power, repeated-sprint characteristics, technical demands, and training implications."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "cycling_discipline_changes_game_model",
+      "name": "Discipline Changes The Game Model",
+      "summary": "Cycling tactics cannot be stored as one generic road-riding model. Road races, criteriums, time trials, track events, MTB, gravel, cyclocross, BMX, and triathlon bike legs reward different blends of drafting, pacing, positioning, handling, terrain reading, and risk control.",
+      "backend_translation": "Every tactic, workout, and race-prep recommendation should be keyed by discipline and event format before intensity or session detail is selected.",
+      "source_ids": ["src_uci_disciplines", "src_usa_cycling_road_team", "src_uci_track_about", "src_uci_mtb_formats", "src_world_triathlon_rules"]
+    },
+    {
+      "id": "drafting_is_a_tactical_resource",
+      "name": "Drafting Is A Tactical Resource",
+      "summary": "Shelter from aerodynamic drag changes energy cost, attack timing, paceline cooperation, lead-out structure, and triathlon legality. Drafting can be helpful, illegal, irrelevant, or dangerous depending on discipline and event rules.",
+      "backend_translation": "Store draft_allowed, draft_effective, draft_skill_required, and draft_risk flags by event context.",
+      "source_ids": ["src_usa_cycling_paceline", "src_usa_cycling_road_guide", "src_world_triathlon_rules", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "positioning_is_energy_management",
+      "name": "Positioning Is Energy Management",
+      "summary": "A rider's place in a group determines wind shelter, braking frequency, crash exposure, access to attacks, and ability to enter corners, climbs, technical sections, or feed zones safely.",
+      "backend_translation": "Race-IQ records should treat positioning as a trainable skill, not only as a tactical instruction given on race day.",
+      "source_ids": ["src_usa_cycling_road_guide", "src_cts_criterium_strategies", "src_trainerroad_field_size"]
+    },
+    {
+      "id": "route_context_selects_decisive_moments",
+      "name": "Route Context Selects Decisive Moments",
+      "summary": "Climbs, descents, corners, crosswind roads, gravel sectors, singletrack, barriers, rhythm sections, technical turns, aid stations, and transition areas create predictable moments where races split or mistakes compound.",
+      "backend_translation": "Plans should store route features and rehearse likely decisive segments rather than prescribe generic intervals only.",
+      "source_ids": ["src_uci_road_regulations", "src_uci_mtb_formats", "src_uci_cyclocross_discipline", "src_uci_gravel_world_series_regulations"]
+    },
+    {
+      "id": "wind_turns_roads_into_tactics",
+      "name": "Wind Turns Roads Into Tactics",
+      "summary": "Headwind discourages solo efforts, tailwind can reward committed attacks, and crosswind creates shelter scarcity and echelon risk. Wind direction can change whether a road segment is for recovery, attack, or survival.",
+      "backend_translation": "Use wind direction and exposed-road flags to alter pacing, attack, and group-positioning advice.",
+      "source_ids": ["src_cts_crosswinds_echelons", "src_usa_cycling_road_guide", "src_usa_cycling_paceline"]
+    },
+    {
+      "id": "climbing_reduces_bunch_shelter",
+      "name": "Climbing Reduces Bunch Shelter",
+      "summary": "On steep or slow climbs, drafting benefit drops and sustainable power, power-to-weight, cadence, traction, and pacing matter more. Climbs often expose riders who have been hiding efficiently on flat roads.",
+      "backend_translation": "Climb tactics should shift from pack-shelter logic to power pacing, line choice, cadence, and summit positioning.",
+      "source_ids": ["src_usa_cycling_road_team", "src_frontiers_xco_demands", "src_uci_mtb_formats"]
+    },
+    {
+      "id": "descending_is_skill_and_risk",
+      "name": "Descending Is Skill And Risk",
+      "summary": "Descending can create or erase gaps, but mistakes have high crash cost. Braking timing, line choice, vision, surface reading, and risk tolerance determine whether descending is a tactic or a liability.",
+      "backend_translation": "Only assign aggressive descending tactics to riders with demonstrated handling readiness and appropriate course familiarity.",
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "criterium_accordion_effect",
+      "name": "Criteriums Amplify The Accordion Effect",
+      "summary": "Repeated corners make riders at the back brake harder, accelerate harder, and experience more surges. A technically good rider near the front saves energy even at the same average speed.",
+      "backend_translation": "Crit readiness should include cornering, surge tolerance, and front-third positioning skill, not only FTP or sprint power.",
+      "source_ids": ["src_cts_criterium_strategies", "src_trainerroad_field_size", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "time_trial_is_pacing_under_constraint",
+      "name": "Time Trial Is Pacing Under Constraint",
+      "summary": "Time trials remove most group tactics and replace them with aerodynamic discipline, pacing, line choice, legal overtaking, controlled starts, and terrain-adjusted effort.",
+      "backend_translation": "TT sessions should include aero-position tolerance, power smoothing, race-position fueling, and course-specific pacing.",
+      "source_ids": ["src_uci_road_regulations", "src_usa_cycling_road_guide", "src_sports_engineering_aerodynamics"]
+    },
+    {
+      "id": "track_events_are_not_one_discipline",
+      "name": "Track Events Are Not One Discipline",
+      "summary": "Track sprint, keirin, team sprint, individual pursuit, team pursuit, points race, elimination, omnium, and Madison demand different tactical timing, energy systems, rotation behavior, and bike-handling confidence.",
+      "backend_translation": "Backend track profiles should split sprint-event, pursuit-event, and bunch-endurance records before assigning training or tactics.",
+      "source_ids": ["src_uci_track_about", "src_sports_engineering_aerodynamics", "src_british_cycling_tactical_workshops"]
+    },
+    {
+      "id": "off_road_tactics_are_traction_and_flow",
+      "name": "Off-Road Tactics Are Traction And Flow",
+      "summary": "MTB, gravel, and cyclocross tactics depend on surface grip, tire choice, line selection, passing windows, braking control, obstacle flow, and preserving momentum.",
+      "backend_translation": "Off-road records need surface, traction, tire, obstacle, and technical-fatigue fields, not only distance and elevation.",
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands", "src_usa_cycling_cx_guide", "src_uci_gravel_world_series_regulations"]
+    },
+    {
+      "id": "cyclocross_is_repeated_transition_racing",
+      "name": "Cyclocross Is Repeated Transition Racing",
+      "summary": "Cyclocross rewards repeated accelerations, corner exits, dismounts, remounts, running sections, barrier timing, mud or sand handling, pit decisions, and course-memory under fatigue.",
+      "backend_translation": "CX training records should include transition skill density and race-pace technical repetition, not only threshold intervals.",
+      "source_ids": ["src_uci_cyclocross_discipline", "src_uci_cyclocross_regulations", "src_usa_cycling_cx_guide"]
+    },
+    {
+      "id": "bmx_is_start_position_and_track_speed",
+      "name": "BMX Is Start Position And Track Speed",
+      "summary": "BMX racing is decided by gate reaction, first-straight acceleration, pump and jump rhythm, berm position, passing choices, and repeated heats rather than aerobic pack tactics.",
+      "backend_translation": "BMX profiles should emphasize starts, sprint power, track skills, heat recovery, and crash-risk gates.",
+      "source_ids": ["src_uci_bmx_racing_regulations", "src_usa_cycling_bmx", "src_bmx_physiology_review"]
+    },
+    {
+      "id": "triathlon_bike_preserves_run",
+      "name": "Triathlon Bike Preserves The Run",
+      "summary": "The fastest bike split is not always the best race strategy. Triathlon cycling must respect draft legality, aero-position tolerance, nutrition, transition, heat, and the need to run effectively afterward.",
+      "backend_translation": "Triathlon bike records should include run-preservation and total multisport load fields.",
+      "source_ids": ["src_world_triathlon_rules", "src_world_triathlon_2025_rules_update", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "race_week_removes_novelty",
+      "name": "Race Week Removes Novelty",
+      "summary": "As competition approaches, tactical rehearsal, equipment checks, course recon, fueling practice, and freshness matter more than new workouts, new bike positions, or untested race equipment.",
+      "backend_translation": "Event-week planning should gate novelty, reduce fatigue, confirm logistics, and rehearse only the highest-value race decisions.",
+      "source_ids": ["src_usa_cycling_road_guide", "src_uci_road_regulations", "src_world_triathlon_rules"]
+    },
+    {
+      "id": "field_size_changes_tactical_space",
+      "name": "Field Size Changes Tactical Space",
+      "summary": "Small fields can make moves easier to monitor and recovery harder to hide; large fields create more draft, traffic, crashes, and positioning battles. The same tactic can be sensible in one field and wasteful in another.",
+      "backend_translation": "Race plans should store field_size_class and modify attack, positioning, and risk-control recommendations.",
+      "source_ids": ["src_trainerroad_field_size", "src_usa_cycling_road_guide"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "cycling_discipline_profile_model",
+      "name": "Cycling Discipline Profile Model",
+      "fields": ["discipline", "event_format", "draft_legality", "terrain_primary", "surface_primary", "duration_band", "key_tactical_problem", "primary_power_demands", "primary_skill_demands", "risk_profile"],
+      "example_values": {
+        "road_race": "mass-start endurance race with drafting, terrain-based selection, attacks, breakaways, sprint or climb finishes",
+        "criterium": "short-lap road race with repeated corners, accelerations, positioning, and sprint/late-attack decisions",
+        "time_trial": "solo or team pacing event where aerodynamic position and legal passing replace bunch tactics",
+        "track_sprint": "velodrome event centered on acceleration, timing, position, and maximal power",
+        "mtb_xco": "technical off-road lap race with repeated high-intensity climbs and descents",
+        "bmx_race": "start-gate sprint over jumps and berms with moto-based race format",
+        "triathlon_non_draft_bike": "steady aero bike leg where pacing and fueling must preserve the run"
+      },
+      "source_ids": ["src_uci_disciplines", "src_usa_cycling_road_team", "src_uci_track_about", "src_uci_mtb_formats", "src_world_triathlon_rules"]
+    },
+    {
+      "id": "cycling_drafting_context_model",
+      "name": "Drafting Context Model",
+      "inputs": ["event_rules", "speed", "group_size", "wind_direction", "surface", "corner_frequency", "rider_handling_level", "triathlon_draft_status"],
+      "outputs": ["draft_benefit", "draft_legality", "shelter_priority", "follow_distance_risk", "communication_need", "paceline_suitability"],
+      "backend_use": "Decide whether to teach drafting, paceline, echelon, solo pacing, or non-drafting separation rules.",
+      "source_ids": ["src_usa_cycling_paceline", "src_world_triathlon_rules", "src_ironman_rules_2026", "src_cts_crosswinds_echelons"]
+    },
+    {
+      "id": "cycling_race_phase_model",
+      "name": "Race Phase Model",
+      "phases": ["pre_start", "start_or_rollout", "early_selection", "middle_conservation", "decisive_terrain", "late_positioning", "finish_execution", "post_race_review"],
+      "backend_use": "Attach tactical rules to phase instead of presenting every tactic at all times.",
+      "source_ids": ["src_usa_cycling_road_guide", "src_cts_criterium_strategies", "src_trainerroad_team_tactics"]
+    },
+    {
+      "id": "cycling_route_feature_model",
+      "name": "Route Feature Model",
+      "fields": ["climb_length", "climb_gradient", "summit_distance_to_finish", "descent_technicality", "corner_density", "road_width", "surface_change", "crosswind_exposure", "feed_zone_location", "pinch_points", "finish_type"],
+      "backend_use": "Generate route-aware race plans, interval simulations, warm-up priorities, and skill drills.",
+      "source_ids": ["src_uci_road_regulations", "src_uci_gravel_world_series_regulations", "src_uci_cyclocross_regulations", "src_uci_mtb_formats"]
+    },
+    {
+      "id": "cycling_wind_tactics_model",
+      "name": "Wind Tactics Model",
+      "conditions": {
+        "headwind": "prioritize shelter, avoid unsupported solo efforts unless selection or team goal justifies cost",
+        "tailwind": "attacks and breakaways can carry speed; sprint lead-outs may need earlier commitment",
+        "crosswind": "position toward shelter side, anticipate echelons and splits, avoid being trapped on exposed edge",
+        "gusty_or_wet": "increase handling margin and lower risky overlapping wheels"
+      },
+      "source_ids": ["src_cts_crosswinds_echelons", "src_usa_cycling_paceline"]
+    },
+    {
+      "id": "cycling_breakaway_decision_model",
+      "name": "Breakaway Decision Model",
+      "inputs": ["distance_remaining", "course_profile", "wind", "field_size", "team_representation", "rider_strength_match", "chase_organization", "finish_speed_profile", "time_gap", "fuel_status"],
+      "outputs": ["join", "bridge", "let_go", "chase", "block", "counterattack", "save_for_finish"],
+      "source_ids": ["src_trainerroad_team_tactics", "src_usa_cycling_road_guide", "src_cts_crosswinds_echelons"]
+    },
+    {
+      "id": "cycling_leadout_model",
+      "name": "Lead-Out Model",
+      "roles": ["protected_sprinter", "early_controller", "positioning_rider", "final_leadout", "freelance_sprinter"],
+      "decision_points": ["wind_direction", "corner_count_last_km", "road_width", "finish_gradient", "sprinter_jump_duration", "team_size", "rival_trains"],
+      "backend_use": "Assign sprint-finish tactics based on rider role, team support, and finish geometry.",
+      "source_ids": ["src_trainerroad_team_tactics", "src_jsc_road_sprinting", "src_cts_criterium_strategies"]
+    },
+    {
+      "id": "cycling_criterium_position_model",
+      "name": "Criterium Position Model",
+      "zones": ["front_10", "front_third", "middle", "back_third", "off_back"],
+      "rules_of_thumb": ["front_third_reduces_surge_cost", "back_third_increases_crash_and_acceleration_exposure", "front_10_can_cost_energy_if_overexposed", "position_before_last_corners_often_decides_sprint_access"],
+      "source_ids": ["src_cts_criterium_strategies", "src_trainerroad_field_size", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_time_trial_pacing_model",
+      "name": "Time Trial Pacing Model",
+      "inputs": ["course_duration", "wind", "climb_or_flat", "turns", "technicality", "aero_position_tolerance", "legal_passing_rules", "start_power_control"],
+      "outputs": ["target_power_band", "allowed_power_variability", "aero_break_points", "turn_acceleration_plan", "fueling_plan", "warmup_needs"],
+      "source_ids": ["src_uci_road_regulations", "src_usa_cycling_road_guide", "src_sports_engineering_aerodynamics"]
+    },
+    {
+      "id": "cycling_track_event_family_model",
+      "name": "Track Event Family Model",
+      "families": {
+        "sprint": ["match_sprint", "team_sprint", "keirin", "flying_200"],
+        "pursuit": ["individual_pursuit", "team_pursuit"],
+        "bunch_endurance": ["scratch", "points", "elimination", "omnium", "madison"]
+      },
+      "backend_use": "Split track tactics into acceleration/timing, rotation/pacing, and bunch-positioning records.",
+      "source_ids": ["src_uci_track_about", "src_sports_engineering_aerodynamics", "src_british_cycling_tactical_workshops"]
+    },
+    {
+      "id": "cycling_offroad_line_traction_model",
+      "name": "Off-Road Line And Traction Model",
+      "inputs": ["surface", "moisture", "gradient", "camber", "ruts", "rocks_roots", "tire_choice", "speed", "passing_space", "fatigue"],
+      "outputs": ["line_choice", "brake_timing", "cadence_choice", "seated_or_standing", "pass_now_or_wait", "dismount_or_ride"],
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands", "src_usa_cycling_cx_guide"]
+    },
+    {
+      "id": "cycling_cyclocross_transition_model",
+      "name": "Cyclocross Transition Model",
+      "transitions": ["ride_to_run", "dismount", "barrier_hurdle", "carry_or_push", "remount", "acceleration_after_remount", "pit_entry_exit"],
+      "backend_use": "Plan race-pace technical repetitions and tactical decisions around obstacles, mud, sand, stairs, and pits.",
+      "source_ids": ["src_uci_cyclocross_discipline", "src_uci_cyclocross_regulations", "src_usa_cycling_cx_guide"]
+    },
+    {
+      "id": "cycling_bmx_heat_model",
+      "name": "BMX Heat Model",
+      "fields": ["gate_reaction", "first_straight_power", "lane_draw", "berm_position", "rhythm_section_execution", "passing_windows", "moto_recovery", "transfer_requirement"],
+      "backend_use": "Model BMX race preparation around starts, track features, moto progression, and repeated high-power efforts.",
+      "source_ids": ["src_uci_bmx_racing_regulations", "src_usa_cycling_bmx", "src_bmx_physiology_review"]
+    },
+    {
+      "id": "cycling_triathlon_bike_leg_model",
+      "name": "Triathlon Bike-Leg Model",
+      "fields": ["draft_status", "bike_distance", "aero_position_duration", "run_after_bike", "fueling_target", "heat_or_wind", "transition_requirements", "legal_spacing", "course_technicality"],
+      "backend_use": "Plan cycling work that supports whole-race triathlon performance rather than isolated bike split chasing.",
+      "source_ids": ["src_world_triathlon_rules", "src_world_triathlon_2025_rules_update", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_event_week_decision_model",
+      "name": "Event Week Decision Model",
+      "inputs": ["discipline", "event_priority", "travel", "course_recon_availability", "weather_forecast", "equipment_status", "fatigue_state", "pain_state", "race_rules", "fueling_rehearsal_status"],
+      "outputs": ["taper_adjustment", "openers", "skill_rehearsal", "route_recon_plan", "no_novelty_flags", "race_day_checklist", "post_race_review_prompts"],
+      "source_ids": ["src_usa_cycling_road_guide", "src_uci_road_regulations", "src_world_triathlon_rules"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "cycling_rule_road_conserve_in_shelter",
+      "discipline": "road",
+      "situation": "mass_start_group_riding",
+      "rule": "In a road race or fast group, prioritize stable shelter and predictable movement before spending energy in the wind.",
+      "exceptions": ["team_control", "setting_up_teammate", "decisive_crosswind", "bridging_to_dangerous_move", "positioning_before_key_terrain"],
+      "source_ids": ["src_usa_cycling_road_guide", "src_usa_cycling_paceline"]
+    },
+    {
+      "id": "cycling_rule_paceline_smooth_over_hard",
+      "discipline": "road",
+      "situation": "paceline_or_chase_group",
+      "rule": "Paceline efficiency depends on smooth speed, steady pulls, clear communication, and predictable rotations more than maximal pull strength.",
+      "level_gate": "Do not assign tight paceline work until the rider can hold a straight line, look ahead, signal, and avoid wheel overlap.",
+      "source_ids": ["src_usa_cycling_paceline", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_rule_do_not_chase_every_attack",
+      "discipline": "road",
+      "situation": "repeated_attacks",
+      "rule": "A rider should not chase every move. Evaluate threat, team representation, course position, wind, rider match, and remaining distance before responding.",
+      "backend_condition": "If repeated high-power responses are accumulating without tactical payoff, recommend patience, teammate use, or counterattacking instead of direct chasing.",
+      "source_ids": ["src_trainerroad_team_tactics", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_rule_breakaway_needs_commitment_and_composition",
+      "discipline": "road",
+      "situation": "breakaway",
+      "rule": "A breakaway is stronger when the riders are committed, complementary, represented by key teams, and able to rotate without passengers disrupting pace.",
+      "backend_use": "Breakaway advice should include composition and chase likelihood, not only current gap size.",
+      "source_ids": ["src_trainerroad_team_tactics", "src_cts_crosswinds_echelons"]
+    },
+    {
+      "id": "cycling_rule_bridge_decisively_or_wait",
+      "discipline": "road",
+      "situation": "bridging",
+      "rule": "A bridge attempt should be decisive enough to reach the move without towing the whole bunch, or delayed until terrain, wind, or counters create a better opportunity.",
+      "risk_flag": "Half-bridging wastes anaerobic capacity and can leave the rider exposed between groups.",
+      "source_ids": ["src_trainerroad_team_tactics", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_rule_leadout_starts_from_finish_geometry",
+      "discipline": "road_criterium",
+      "situation": "sprint_finish",
+      "rule": "A lead-out plan should be built from finish geometry, wind, corner count, team size, and sprinter jump duration rather than a fixed distance.",
+      "backend_use": "Store finish_gradient, final_corner_distance, wind, and available_leadout_riders before assigning sprint timing.",
+      "source_ids": ["src_trainerroad_team_tactics", "src_jsc_road_sprinting", "src_cts_criterium_strategies"]
+    },
+    {
+      "id": "cycling_rule_protect_position_before_key_terrain",
+      "discipline": "road_gravel_mtb_cx",
+      "situation": "approaching_climb_corner_singletrack_or_barrier",
+      "rule": "Move up before the bottleneck or decisive terrain, not during it. Late moves into narrow, technical, or steep features cost more energy and carry more crash risk.",
+      "source_ids": ["src_trainerroad_field_size", "src_frontiers_xco_demands", "src_usa_cycling_cx_guide"]
+    },
+    {
+      "id": "cycling_rule_climb_at_sustainable_pressure",
+      "discipline": "road_gravel_mtb",
+      "situation": "climbing",
+      "rule": "On long climbs, pace near sustainable effort and avoid early surges unless the goal is selection, bridging, or covering a decisive move.",
+      "level_gate": "Beginners should prioritize gear choice, cadence, and non-grinding effort over racing surges.",
+      "source_ids": ["src_usa_cycling_road_team", "src_frontiers_xco_demands"]
+    },
+    {
+      "id": "cycling_rule_summit_position_matters",
+      "discipline": "road_mtb_gravel",
+      "situation": "over_the_top_of_climb",
+      "rule": "Riders should plan the final portion of a climb to crest in contact or in position, because gaps can expand quickly on the descent or flat after the summit.",
+      "source_ids": ["src_usa_cycling_road_guide", "src_frontiers_xco_demands"]
+    },
+    {
+      "id": "cycling_rule_descend_with_margin",
+      "discipline": "road_mtb_gravel",
+      "situation": "descending",
+      "rule": "Descending tactics should preserve traction, sightline, braking margin, and line choice. Risk-taking is not appropriate if handling skill, weather, surface, or visibility are poor.",
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_rule_crosswind_shelter_side",
+      "discipline": "road_gravel",
+      "situation": "crosswind",
+      "rule": "In crosswind, seek shelter on the leeward side, expect echelon formation, and avoid being pinned on the exposed edge of the road or group.",
+      "source_ids": ["src_cts_crosswinds_echelons", "src_usa_cycling_paceline"]
+    },
+    {
+      "id": "cycling_rule_headwind_penalizes_solo_efforts",
+      "discipline": "road_triathlon_gravel",
+      "situation": "headwind",
+      "rule": "Headwinds increase the cost of solo riding and front exposure; use shelter where legal, keep pacing controlled, and avoid low-payoff attacks into exposed wind.",
+      "exceptions": ["time_trial", "non_draft_triathlon", "final_selection", "team_plan"],
+      "source_ids": ["src_cts_crosswinds_echelons", "src_world_triathlon_rules", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_rule_tailwind_can_extend_attacks",
+      "discipline": "road_gravel",
+      "situation": "tailwind",
+      "rule": "Tailwind can make high-speed attacks and breakaways harder to bring back because the chasing group receives less relative shelter benefit.",
+      "backend_use": "Increase attack_viability when tailwind aligns with exposed fast roads and strong riders.",
+      "source_ids": ["src_cts_crosswinds_echelons", "src_trainerroad_team_tactics"]
+    },
+    {
+      "id": "cycling_rule_large_field_positioning_priority",
+      "discipline": "road_criterium",
+      "situation": "large_field",
+      "rule": "In large fields, position before the race compresses, avoid unnecessary lateral movement, and treat front-third access as a limited resource.",
+      "source_ids": ["src_trainerroad_field_size", "src_cts_criterium_strategies"]
+    },
+    {
+      "id": "cycling_rule_small_field_less_hiding",
+      "discipline": "road_criterium",
+      "situation": "small_field",
+      "rule": "In small fields, fewer riders means less hiding and fewer missed moves; racers must monitor threats and recover efficiently because every effort is more visible.",
+      "source_ids": ["src_trainerroad_field_size", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_rule_crit_front_third",
+      "discipline": "criterium",
+      "situation": "general_positioning",
+      "rule": "Aim to race near the front third without sitting permanently on the nose. This reduces accordion surges while avoiding unnecessary wind exposure.",
+      "source_ids": ["src_cts_criterium_strategies", "src_trainerroad_field_size"]
+    },
+    {
+      "id": "cycling_rule_crit_corner_exit_is_power_event",
+      "discipline": "criterium",
+      "situation": "cornering",
+      "rule": "A criterium corner is not finished at the apex; riders must exit smoothly, accelerate efficiently, and avoid repeated panic braking.",
+      "training_connection": "Include corner-entry, line choice, and repeated exit accelerations in crit-specific preparation.",
+      "source_ids": ["src_cts_criterium_strategies", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_rule_crit_attack_after_slowing",
+      "discipline": "criterium",
+      "situation": "attack_timing",
+      "rule": "Attacks often work better after corners, after a lull, after a prime sprint, or when the field is stretched than from predictable steady-speed sections.",
+      "source_ids": ["src_cts_criterium_strategies", "src_trainerroad_team_tactics"]
+    },
+    {
+      "id": "cycling_rule_crit_last_lap_position_is_constraint",
+      "discipline": "criterium",
+      "situation": "final_lap",
+      "rule": "A rider who is too far back before the final corners rarely fixes position in the sprint. Final-lap tactics start several laps earlier.",
+      "source_ids": ["src_cts_criterium_strategies", "src_jsc_road_sprinting"]
+    },
+    {
+      "id": "cycling_rule_tt_start_controlled",
+      "discipline": "time_trial",
+      "situation": "first_minutes",
+      "rule": "Begin a time trial with controlled power and fast settling into aero position rather than an unsustainable start surge.",
+      "source_ids": ["src_uci_road_regulations", "src_usa_cycling_road_guide", "src_sports_engineering_aerodynamics"]
+    },
+    {
+      "id": "cycling_rule_tt_aero_is_output",
+      "discipline": "time_trial_triathlon",
+      "situation": "aero_position",
+      "rule": "Aero position is part of performance output. If the rider cannot hold it safely and productively, pacing targets must be adjusted.",
+      "source_ids": ["src_sports_engineering_aerodynamics", "src_world_triathlon_rules", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_rule_tt_power_varies_only_for_course",
+      "discipline": "time_trial",
+      "situation": "pacing",
+      "rule": "Keep power smoother than road racing, allowing only purposeful variation for climbs, turns, descents, wind, and technical sections.",
+      "source_ids": ["src_uci_road_regulations", "src_sports_engineering_aerodynamics"]
+    },
+    {
+      "id": "cycling_rule_team_pursuit_rotations_are_tactics",
+      "discipline": "track_team_pursuit",
+      "situation": "team_rotation",
+      "rule": "Team-pursuit rotations should balance aerodynamic shelter, rider strength, pacing, and fatigue; rotation order is tactical, not just mechanical.",
+      "source_ids": ["src_uci_track_about", "src_sports_engineering_aerodynamics"]
+    },
+    {
+      "id": "cycling_rule_track_sprint_patience",
+      "discipline": "track_sprint",
+      "situation": "match_sprint",
+      "rule": "Track sprint tactics require timing and position patience before maximal effort; opening too early can give the opponent a draft and timing advantage.",
+      "source_ids": ["src_uci_track_about", "src_british_cycling_tactical_workshops"]
+    },
+    {
+      "id": "cycling_rule_track_bunch_keep_exits",
+      "discipline": "track_bunch_endurance",
+      "situation": "bunch_racing",
+      "rule": "In track bunch events, position should preserve line, awareness, and exit options while tracking points, laps, elimination pressure, or Madison exchanges.",
+      "source_ids": ["src_uci_track_about", "src_british_cycling_tactical_workshops"]
+    },
+    {
+      "id": "cycling_rule_mtb_pass_before_singletrack",
+      "discipline": "mountain_bike",
+      "situation": "approaching_singletrack_or_technical_climb",
+      "rule": "If passing space will disappear, move before singletrack or technical sections; forcing passes inside them wastes energy and raises crash risk.",
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands"]
+    },
+    {
+      "id": "cycling_rule_mtb_momentum_over_peak_power",
+      "discipline": "mountain_bike",
+      "situation": "technical_terrain",
+      "rule": "On technical terrain, preserving momentum through line choice, braking control, and traction can beat higher peak power with poor execution.",
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands"]
+    },
+    {
+      "id": "cycling_rule_mtb_traction_controls_cadence",
+      "discipline": "mountain_bike_gravel",
+      "situation": "loose_or_steep_climb",
+      "rule": "Use cadence, body position, and torque control to preserve rear-wheel traction; standing surges can be costly if they break grip.",
+      "source_ids": ["src_frontiers_xco_demands", "src_uci_mtb_formats"]
+    },
+    {
+      "id": "cycling_rule_gravel_group_shelter_until_surface_splits",
+      "discipline": "gravel",
+      "situation": "mixed_surface_group",
+      "rule": "On smoother exposed gravel, group shelter can be decisive; on rough, loose, or narrow sectors, line choice and equipment control can matter more than draft.",
+      "source_ids": ["src_uci_gravel_world_series_regulations", "src_cts_crosswinds_echelons"]
+    },
+    {
+      "id": "cycling_rule_gravel_fuel_early_and_protect_hands",
+      "discipline": "gravel",
+      "situation": "long_duration_rough_surface",
+      "rule": "Gravel tactics must include fueling, hydration, hand comfort, and mechanical risk because long rough races punish riders who treat them like short road races.",
+      "source_ids": ["src_uci_gravel_world_series_regulations", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_rule_cx_preride_identifies_dismounts",
+      "discipline": "cyclocross",
+      "situation": "course_recon",
+      "rule": "Pre-riding should identify ride-versus-run choices, tire pressure, passing zones, braking points, pit timing, and lines through mud, sand, off-camber, and barriers.",
+      "source_ids": ["src_uci_cyclocross_discipline", "src_uci_cyclocross_regulations", "src_usa_cycling_cx_guide"]
+    },
+    {
+      "id": "cycling_rule_cx_smooth_remount_before_power",
+      "discipline": "cyclocross",
+      "situation": "barriers_or_runups",
+      "rule": "Dismount and remount quality should stay smooth under race pace; a powerful acceleration after a poor remount is usually less efficient than clean transition flow.",
+      "source_ids": ["src_usa_cycling_cx_guide", "src_uci_cyclocross_discipline"]
+    },
+    {
+      "id": "cycling_rule_cx_pit_decision_is_tactical",
+      "discipline": "cyclocross",
+      "situation": "mud_mechanical_or_tire_change",
+      "rule": "Pit use should consider mud accumulation, mechanical risk, tire pressure, lap timing, and position, not only whether the bike is still moving.",
+      "source_ids": ["src_uci_cyclocross_regulations", "src_usa_cycling_cx_guide"]
+    },
+    {
+      "id": "cycling_rule_bmx_gate_first_straight_priority",
+      "discipline": "bmx_racing",
+      "situation": "start",
+      "rule": "BMX race priority starts with gate timing, first pedal strokes, and first-straight speed because early position controls line choice into later features.",
+      "source_ids": ["src_uci_bmx_racing_regulations", "src_usa_cycling_bmx", "src_bmx_physiology_review"]
+    },
+    {
+      "id": "cycling_rule_bmx_berm_position_before_pass",
+      "discipline": "bmx_racing",
+      "situation": "corner_or_berm",
+      "rule": "Passing attempts should account for berm entry position, exit speed, rider overlap, and next feature; forcing a pass without exit speed can lose more than it gains.",
+      "source_ids": ["src_uci_bmx_racing_regulations", "src_bmx_physiology_review"]
+    },
+    {
+      "id": "cycling_rule_bmx_moto_recovery",
+      "discipline": "bmx_racing",
+      "situation": "multi_heat_event",
+      "rule": "Between motos, prioritize neuromuscular freshness, track focus, and body reset rather than extra fatigue-producing riding.",
+      "source_ids": ["src_uci_bmx_racing_regulations", "src_bmx_physiology_review"]
+    },
+    {
+      "id": "cycling_rule_triathlon_non_draft_spacing",
+      "discipline": "triathlon_cycling",
+      "situation": "non_draft_event",
+      "rule": "In non-draft triathlon, plan pacing and overtaking around legal spacing, event-specific draft zones, and penalties rather than road-race wheel following.",
+      "source_ids": ["src_world_triathlon_rules", "src_world_triathlon_2025_rules_update", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_rule_triathlon_bike_pace_for_run",
+      "discipline": "triathlon_cycling",
+      "situation": "bike_leg_pacing",
+      "rule": "Bike pacing should leave the rider able to run. Avoid heroic bike surges that create disproportionate run fade unless race context demands it.",
+      "source_ids": ["src_world_triathlon_rules", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_rule_triathlon_fuel_in_aero",
+      "discipline": "triathlon_cycling",
+      "situation": "fueling",
+      "rule": "Triathlon riders should rehearse eating and drinking in race position and at race intensity, because missed bike fueling usually damages the run.",
+      "source_ids": ["src_world_triathlon_rules", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_rule_event_week_no_new_equipment",
+      "discipline": "all",
+      "situation": "event_week",
+      "rule": "Avoid new saddles, cleat positions, tires, aero positions, nutrition, or handling setups in the final race week unless required for safety.",
+      "risk_flag": "Novel equipment near an event can create fit pain, handling uncertainty, mechanical errors, or fueling problems.",
+      "source_ids": ["src_usa_cycling_road_guide", "src_world_triathlon_rules"]
+    },
+    {
+      "id": "cycling_rule_event_week_recon_before_intensity",
+      "discipline": "all",
+      "situation": "event_week",
+      "rule": "Course recon, weather review, rule review, equipment check, and tactical rehearsal should take priority over adding fitness in the final days.",
+      "source_ids": ["src_uci_road_regulations", "src_uci_cyclocross_regulations", "src_world_triathlon_rules"]
+    },
+    {
+      "id": "cycling_rule_race_review_store_patterns",
+      "discipline": "all",
+      "situation": "post_race_review",
+      "rule": "After racing, record where the rider lost contact, wasted energy, hesitated, crashed, fueled poorly, or executed well; use these facts to build the next block.",
+      "backend_use": "Create user-specific tactical weakness and strength records from post-event notes.",
+      "source_ids": ["src_british_cycling_tactical_workshops", "src_usa_cycling_road_guide"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "cycling_demand_road_race_durability",
+      "discipline": "road",
+      "quality": "Aerobic durability with repeated threshold, VO2, anaerobic, and sprint efforts after long time in a bunch.",
+      "tactical_link": "Late-race decisions require enough freshness to position, cover moves, climb, descend, or sprint after prior load.",
+      "source_ids": ["src_usa_cycling_road_team", "src_jsc_road_sprinting"]
+    },
+    {
+      "id": "cycling_demand_criterium_repeat_acceleration",
+      "discipline": "criterium",
+      "quality": "Repeated corner-exit accelerations, short anaerobic efforts, high neuromuscular demand, and sustained concentration.",
+      "tactical_link": "Efficient cornering reduces the need for repeated high-cost accelerations.",
+      "source_ids": ["src_cts_criterium_strategies", "src_trainerroad_field_size"]
+    },
+    {
+      "id": "cycling_demand_time_trial_aero_threshold",
+      "discipline": "time_trial",
+      "quality": "Sustained high power in aerodynamic position with controlled pacing, low power variability, neck and trunk tolerance, and discipline under discomfort.",
+      "tactical_link": "A rider who cannot hold aero position should not receive optimistic TT power targets.",
+      "source_ids": ["src_uci_road_regulations", "src_sports_engineering_aerodynamics"]
+    },
+    {
+      "id": "cycling_demand_track_sprint_power",
+      "discipline": "track_sprint",
+      "quality": "Maximal acceleration, peak power, high cadence, timing, and long recovery between high-quality sprint efforts.",
+      "tactical_link": "Sprint tactics fail if maximal efforts are trained while fatigued or without event-specific timing.",
+      "source_ids": ["src_uci_track_about", "src_british_cycling_tactical_workshops"]
+    },
+    {
+      "id": "cycling_demand_track_pursuit_rotation_power",
+      "discipline": "track_pursuit",
+      "quality": "Aerobic-anaerobic power, aerodynamic posture, team rotation tolerance, speed control, and pacing precision.",
+      "tactical_link": "Pursuit performance depends on matching effort distribution to rotation structure.",
+      "source_ids": ["src_uci_track_about", "src_sports_engineering_aerodynamics"]
+    },
+    {
+      "id": "cycling_demand_track_bunch_surges",
+      "discipline": "track_bunch",
+      "quality": "High-speed bunch handling, repeated surges, tactical awareness, and sprint capacity under event-rule pressure.",
+      "tactical_link": "Points, elimination, Madison, and scratch racing create different timing needs despite sharing the velodrome.",
+      "source_ids": ["src_uci_track_about", "src_british_cycling_tactical_workshops"]
+    },
+    {
+      "id": "cycling_demand_mtb_xco_intervals_and_skill",
+      "discipline": "mountain_bike_xco",
+      "quality": "Repeated high-intensity efforts, steep technical climbing, descending skill, upper-body support, braking control, and decision making under fatigue.",
+      "tactical_link": "Skill errors can neutralize fitness; technical practice is a performance demand, not a bonus.",
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands"]
+    },
+    {
+      "id": "cycling_demand_mtb_downhill_enduro_upper_body",
+      "discipline": "mountain_bike_downhill_enduro",
+      "quality": "High-force handling, grip, trunk and shoulder endurance, visual scanning, braking stamina, and impact tolerance.",
+      "tactical_link": "Race pace must account for technical fatigue and crash risk, not only cardiorespiratory output.",
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands"]
+    },
+    {
+      "id": "cycling_demand_gravel_long_duration_resilience",
+      "discipline": "gravel",
+      "quality": "Long-duration endurance, vibration tolerance, fueling consistency, surface-specific cadence control, and mechanical self-management.",
+      "tactical_link": "A strong rider can lose the event through underfueling, hand fatigue, flats, or poor line choice.",
+      "source_ids": ["src_uci_gravel_world_series_regulations", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_demand_cx_threshold_anaerobic_transitions",
+      "discipline": "cyclocross",
+      "quality": "High threshold, repeated accelerations, short running bouts, dismount/remount skill, carrying tolerance, and cornering under fatigue.",
+      "tactical_link": "Training should pair power with transitions and surface handling instead of separating fitness from race craft.",
+      "source_ids": ["src_uci_cyclocross_discipline", "src_usa_cycling_cx_guide"]
+    },
+    {
+      "id": "cycling_demand_bmx_start_power",
+      "discipline": "bmx_racing",
+      "quality": "Gate reaction, first-straight acceleration, explosive lower-body power, pump rhythm, jump control, and repeated moto recovery.",
+      "tactical_link": "Race position is often created before the first berm.",
+      "source_ids": ["src_uci_bmx_racing_regulations", "src_usa_cycling_bmx", "src_bmx_physiology_review"]
+    },
+    {
+      "id": "cycling_demand_triathlon_steady_aero_fuel",
+      "discipline": "triathlon_cycling",
+      "quality": "Steady power, aero-position tolerance, legal spacing awareness, fueling and hydration skill, heat control, and the ability to run after the bike.",
+      "tactical_link": "Bike effort must be judged by total race result, not only bike split rank.",
+      "source_ids": ["src_world_triathlon_rules", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_demand_group_riding_attention",
+      "discipline": "road_criterium_track_bunch_gravel_group",
+      "quality": "Continuous scanning, anticipation, relaxed upper body, straight-line control, braking modulation, and communication.",
+      "tactical_link": "Riders with poor group attention should not be advanced into dense racing scenarios.",
+      "source_ids": ["src_usa_cycling_paceline", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_demand_sprint_after_fatigue",
+      "discipline": "road_criterium_track_bunch",
+      "quality": "Ability to produce sprint power after high cumulative load, positioning stress, and repeated accelerations.",
+      "tactical_link": "Sprint workouts should eventually be trained in fatigue states that resemble event demands, while preserving technique and safety.",
+      "source_ids": ["src_jsc_road_sprinting", "src_cts_criterium_strategies"]
+    },
+    {
+      "id": "cycling_demand_weather_adaptation",
+      "discipline": "all_outdoor",
+      "quality": "Pacing, handling, fueling, clothing, and decision-making adjustment for wind, rain, heat, cold, mud, dust, and surface changes.",
+      "tactical_link": "Weather can change the best tactic even when the course is unchanged.",
+      "source_ids": ["src_cts_crosswinds_echelons", "src_uci_cyclocross_discipline", "src_world_triathlon_rules"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "cycling_risk_pack_crash_exposure",
+      "risk": "Dense bunches, wheel overlap, sudden braking, poor lines, and inattention increase crash risk in road, criterium, track bunch, and gravel group situations.",
+      "planning_response": "Gate fast group rides and races behind handling, straight-line, scanning, and braking readiness.",
+      "source_ids": ["src_usa_cycling_paceline", "src_usa_cycling_road_guide", "src_trainerroad_field_size"]
+    },
+    {
+      "id": "cycling_risk_criterium_corner_fatigue",
+      "risk": "Repeated high-speed corners and accelerations create fatigue-based handling errors, especially for riders sitting too far back.",
+      "planning_response": "Use skill-first crit sessions before adding high-density race simulations.",
+      "source_ids": ["src_cts_criterium_strategies", "src_trainerroad_field_size"]
+    },
+    {
+      "id": "cycling_risk_aero_position_overload",
+      "risk": "Long time-trial or triathlon aero position can aggravate neck, low-back, shoulder, saddle, hand, or hip discomfort.",
+      "planning_response": "Progress aero time gradually, monitor symptoms, and avoid race-week position changes unless safety requires it.",
+      "source_ids": ["src_sports_engineering_aerodynamics", "src_world_triathlon_rules", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_risk_wet_descending_crash",
+      "risk": "Wet roads, mud, loose gravel, roots, painted lines, or poor visibility increase descending and cornering crash risk.",
+      "planning_response": "Reduce aggressive descending tactics and prioritize braking margin, tire choice, and conservative lines.",
+      "source_ids": ["src_uci_mtb_formats", "src_usa_cycling_cx_guide", "src_cts_crosswinds_echelons"]
+    },
+    {
+      "id": "cycling_risk_offroad_upper_body_fatigue",
+      "risk": "MTB, gravel, and cyclocross rough surfaces increase hand, wrist, forearm, shoulder, neck, and trunk load.",
+      "planning_response": "Track rough-surface duration and technical descent load, not only mileage or power.",
+      "source_ids": ["src_frontiers_xco_demands", "src_uci_mtb_formats", "src_uci_gravel_world_series_regulations"]
+    },
+    {
+      "id": "cycling_risk_low_cadence_climbing_knee_load",
+      "risk": "Repeated big-gear, low-cadence climbing or torque-heavy gravel/MTB efforts can increase knee and tendon load in susceptible riders.",
+      "planning_response": "If knee symptoms appear, reduce torque-heavy efforts, review gearing/cadence, and shift to lower intensity until stable.",
+      "source_ids": ["src_frontiers_xco_demands", "src_usa_cycling_road_team"]
+    },
+    {
+      "id": "cycling_risk_underfueling_tactical_collapse",
+      "risk": "Long gravel, road, MTB marathon, cyclocross race days, and triathlon bike legs can fail tactically when fueling or hydration is missed.",
+      "planning_response": "Treat fueling practice as a tactical readiness item for events over beginner-short durations.",
+      "source_ids": ["src_uci_gravel_world_series_regulations", "src_ironman_rules_2026", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_risk_chasing_every_move",
+      "risk": "Repeated unnecessary responses to attacks can overload anaerobic capacity and leave the rider unable to execute decisive later tactics.",
+      "planning_response": "Use race-review notes to identify impulsive chasing and prescribe tactical restraint drills.",
+      "source_ids": ["src_trainerroad_team_tactics", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_risk_cx_dismount_running_load",
+      "risk": "Cyclocross run-ups, barriers, carrying, and remounts add calf, Achilles, hip, and low-back load beyond seated cycling.",
+      "planning_response": "Progress run-carry-remount volume gradually and avoid sudden spikes when entering CX season.",
+      "source_ids": ["src_uci_cyclocross_discipline", "src_usa_cycling_cx_guide"]
+    },
+    {
+      "id": "cycling_risk_bmx_crash_and_repeat_sprint",
+      "risk": "BMX racing combines explosive starts, jumps, berms, rider contact, and repeated motos, creating high crash and neuromuscular fatigue risk.",
+      "planning_response": "Keep sprint quality high, protect recovery between heats, and gate technical progressions by landing and track-skill control.",
+      "source_ids": ["src_uci_bmx_racing_regulations", "src_bmx_physiology_review"]
+    },
+    {
+      "id": "cycling_risk_stage_or_multi_day_fatigue",
+      "risk": "Stage races, omnium-style track events, multi-day gravel, or repeated race weekends create cumulative fatigue that changes tactical reliability.",
+      "planning_response": "Event-week and race-weekend logic should track cumulative fatigue, sleep, travel, fueling, soreness, and residual pain.",
+      "source_ids": ["src_uci_road_regulations", "src_uci_track_about", "src_uci_gravel_world_series_regulations"]
+    },
+    {
+      "id": "cycling_risk_illegal_or_unsafe_drafting",
+      "risk": "Drafting can be illegal in many triathlon contexts and unsafe for riders without group-riding competence.",
+      "planning_response": "Check event draft status and rider skill readiness before recommending wheel-following, paceline, or group positioning tactics.",
+      "source_ids": ["src_world_triathlon_rules", "src_ironman_rules_2026", "src_usa_cycling_paceline"]
+    },
+    {
+      "id": "cycling_risk_race_week_novelty",
+      "risk": "Untested tires, pressure, cleats, saddle, nutrition, aero bars, gearing, or bike fit near race day can cause mechanical, handling, or comfort failures.",
+      "planning_response": "Lock major equipment and nutrition choices before race week unless safety or rules require a change.",
+      "source_ids": ["src_usa_cycling_road_guide", "src_world_triathlon_rules"]
+    },
+    {
+      "id": "cycling_risk_heat_and_wind_overpacing",
+      "risk": "Heat, headwind, crosswind, and exposed courses can make target power or speed unsustainable and increase dehydration or concentration lapses.",
+      "planning_response": "Adjust pacing, hydration, and tactical ambition to conditions, especially in triathlon, gravel, and long road events.",
+      "source_ids": ["src_cts_crosswinds_echelons", "src_ironman_rules_2026", "src_uci_gravel_world_series_regulations"]
+    },
+    {
+      "id": "cycling_risk_descending_overconfidence",
+      "risk": "A rider with strong fitness but weak descending skill may choose tactics that exceed handling ability, particularly on unknown roads or technical MTB/gravel descents.",
+      "planning_response": "Use skill assessment and route recon before recommending aggressive descending or high-speed technical passing.",
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands", "src_usa_cycling_road_guide"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "cycling_training_choose_discipline_before_workout",
+      "summary": "The backend should ask discipline and event format before prescribing tactics or intensity. A road-race attack simulation, TT interval, CX transition session, BMX gate session, and triathlon bike workout are not interchangeable.",
+      "source_ids": ["src_uci_disciplines", "src_usa_cycling_road_team", "src_uci_track_about", "src_uci_mtb_formats"]
+    },
+    {
+      "id": "cycling_training_gate_group_riding",
+      "summary": "Fast group rides, pacelines, crits, and bunch races should require handling readiness: straight line, shoulder check, predictable braking, signaling, cornering, and emotional control in traffic.",
+      "source_ids": ["src_usa_cycling_paceline", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_training_practice_paceline_progression",
+      "summary": "Paceline progression should move from paired drafting, to small steady rotations, to larger groups, to wind-aware echelons only after control and communication are reliable.",
+      "source_ids": ["src_usa_cycling_paceline", "src_cts_crosswinds_echelons"]
+    },
+    {
+      "id": "cycling_training_route_specific_simulation",
+      "summary": "Build race simulations around route features: final climbs, last corners, gravel sectors, singletrack entries, barriers, wind-exposed roads, feed zones, or transition exits.",
+      "source_ids": ["src_uci_road_regulations", "src_uci_gravel_world_series_regulations", "src_uci_cyclocross_regulations"]
+    },
+    {
+      "id": "cycling_training_criterium_blocks",
+      "summary": "Crit preparation should combine repeated accelerations, front-third positioning practice, corner-entry and exit skill, sprint timing, and decision rules for primes, attacks, and final laps.",
+      "source_ids": ["src_cts_criterium_strategies", "src_trainerroad_field_size"]
+    },
+    {
+      "id": "cycling_training_road_race_tactics_blocks",
+      "summary": "Road-race training should include endurance durability, threshold and VO2 work, sprint-after-fatigue practice, climbing/descending tactics, breakaway simulations, and team-role rehearsal where relevant.",
+      "source_ids": ["src_usa_cycling_road_guide", "src_trainerroad_team_tactics", "src_jsc_road_sprinting"]
+    },
+    {
+      "id": "cycling_training_tt_position_and_pacing",
+      "summary": "TT and non-draft triathlon bike work should include race-position intervals, pacing discipline, start control, wind and climb pacing, legal passing awareness, and fueling while aero.",
+      "source_ids": ["src_uci_road_regulations", "src_sports_engineering_aerodynamics", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_training_track_split_by_event_family",
+      "summary": "Track plans should split sprint, pursuit, and bunch-endurance training because sprint timing, team-pursuit rotations, and points/elimination tactics are different decision systems.",
+      "source_ids": ["src_uci_track_about", "src_sports_engineering_aerodynamics"]
+    },
+    {
+      "id": "cycling_training_mtb_skill_under_power",
+      "summary": "MTB training should pair power with technical sections: climbing on loose surfaces, braking before turns, line choice, descending while fatigued, passing windows, and repeated hard efforts.",
+      "source_ids": ["src_uci_mtb_formats", "src_frontiers_xco_demands"]
+    },
+    {
+      "id": "cycling_training_gravel_durability_and_mechanics",
+      "summary": "Gravel preparation should include long-duration fueling, equipment checks, tire and pressure decisions, rough-surface handling, exposed-road tactics, and self-sufficiency for mechanical problems.",
+      "source_ids": ["src_uci_gravel_world_series_regulations", "src_cts_crosswinds_echelons"]
+    },
+    {
+      "id": "cycling_training_cx_transition_density",
+      "summary": "Cyclocross training should include repeated race-pace dismounts, remounts, barriers, run-ups, corner exits, sand or mud lines, and pit decisions, layered onto threshold and anaerobic fitness.",
+      "source_ids": ["src_uci_cyclocross_discipline", "src_usa_cycling_cx_guide"]
+    },
+    {
+      "id": "cycling_training_bmx_quality_sprints",
+      "summary": "BMX sessions should emphasize high-quality gate starts, first-straight power, pump rhythm, jumps, berm exits, and full recovery rather than endurance-style fatigue accumulation.",
+      "source_ids": ["src_uci_bmx_racing_regulations", "src_bmx_physiology_review"]
+    },
+    {
+      "id": "cycling_training_triathlon_integrated_load",
+      "summary": "Triathlon bike training must account for swim and run load, brick sessions, race-legal spacing, fueling, aero tolerance, and run-preservation pacing.",
+      "source_ids": ["src_world_triathlon_rules", "src_ironman_rules_2026"]
+    },
+    {
+      "id": "cycling_training_wind_rehearsal",
+      "summary": "Riders preparing for exposed road or gravel events should rehearse crosswind shelter, rotating echelons where safe and legal, headwind patience, and tailwind attack timing.",
+      "source_ids": ["src_cts_crosswinds_echelons", "src_usa_cycling_paceline"]
+    },
+    {
+      "id": "cycling_training_event_week_taper_skill_check",
+      "summary": "Event week should reduce fatigue, confirm equipment, keep short race-intensity openers if appropriate, rehearse key skills lightly, and complete course/rules/weather review.",
+      "source_ids": ["src_usa_cycling_road_guide", "src_uci_road_regulations", "src_world_triathlon_rules"]
+    },
+    {
+      "id": "cycling_training_beginner_race_iq_simplifies",
+      "summary": "Beginners need fewer tactics: safe line, predictable braking, easy pacing, legal riding, simple fueling, and avoiding risky groups. Advanced riders can handle conditional tactics and team roles.",
+      "source_ids": ["src_usa_cycling_paceline", "src_usa_cycling_road_guide"]
+    },
+    {
+      "id": "cycling_training_post_event_feedback_loop",
+      "summary": "Post-race review should update backend profiles with missed positioning, over-chasing, poor fueling, handling errors, successful lines, decisive terrain, and event-week readiness gaps.",
+      "source_ids": ["src_british_cycling_tactical_workshops", "src_trainerroad_team_tactics"]
+    },
+    {
+      "id": "cycling_training_weather_modifies_session_goals",
+      "summary": "When wind, heat, rain, mud, or trail conditions materially change safety or tactical value, the system should modify goals rather than force the planned session unchanged.",
+      "source_ids": ["src_cts_crosswinds_echelons", "src_uci_cyclocross_discipline", "src_uci_mtb_formats"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_road_race",
+      "purpose": "Mass-start road race profile with drafting, breakaway, bunch positioning, climbing, descending, lead-out, and finish-type fields.",
+      "priority": "high"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_criterium",
+      "purpose": "Criterium profile keyed to corner density, repeated accelerations, field size, primes, final laps, and sprint access.",
+      "priority": "high"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_time_trial",
+      "purpose": "TT profile keyed to aero position, pacing, start control, legal passing, course features, and power variability.",
+      "priority": "high"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_track_sprint",
+      "purpose": "Track sprint profile covering match sprint, flying sprint, keirin, team sprint, acceleration, timing, and high-quality recovery.",
+      "priority": "high"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_track_pursuit",
+      "purpose": "Track pursuit profile covering individual and team pursuit pacing, rotations, aerodynamics, and speed control.",
+      "priority": "medium"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_track_bunch_endurance",
+      "purpose": "Track bunch profile covering scratch, points, elimination, omnium, Madison, position, points, laps, and exchanges.",
+      "priority": "medium"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_mtb_xco",
+      "purpose": "XCO profile for technical climbing, descending, lap repeats, singletrack passing, and intermittent high-intensity demands.",
+      "priority": "high"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_mtb_downhill_enduro",
+      "purpose": "Gravity/off-road profile for technical descent, braking fatigue, line choice, upper-body load, and crash-risk gating.",
+      "priority": "medium"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_gravel",
+      "purpose": "Gravel profile for mixed surface, rough-road endurance, exposed wind, group shelter, fueling, tire choice, and mechanical self-sufficiency.",
+      "priority": "high"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_cyclocross",
+      "purpose": "Cyclocross profile for barriers, dismounts, remounts, running, mud, sand, pits, tire pressure, and race-pace transitions.",
+      "priority": "high"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_bmx_racing",
+      "purpose": "BMX racing profile for gate starts, first straight, jumps, berms, rhythm sections, motos, and transfer rules.",
+      "priority": "high"
+    },
+    {
+      "collection": "discipline_profiles",
+      "id": "cycling_profile_triathlon_bike_non_draft",
+      "purpose": "Triathlon non-draft bike profile for legal spacing, aero position, steady pacing, fueling, transition, and run preservation.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_drafting_context",
+      "purpose": "Rule family for when drafting is helpful, legal, illegal, or unsafe by discipline and event rules.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_paceline_progression",
+      "purpose": "Paceline rules for smooth pulls, rotation, communication, spacing, and readiness gates.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_crosswind_echelon",
+      "purpose": "Wind-context rules for shelter side, echelon risk, exposed roads, and split management.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_attack_decision",
+      "purpose": "Attack and chase decision rules based on field size, wind, terrain, team roles, distance remaining, and rider type.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_breakaway_decision",
+      "purpose": "Breakaway viability and response logic using composition, commitment, gap, route, wind, chase organization, and fuel status.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_leadout_finish",
+      "purpose": "Lead-out and sprint-finish model based on finish geometry, wind, team support, final corners, and sprinter profile.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_climbing",
+      "purpose": "Climbing tactics for pacing, power-to-weight selection, cadence, traction, summit positioning, and attack timing.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_descending",
+      "purpose": "Descending tactics with risk gates for line choice, braking margin, road/trail surface, weather, and skill level.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_criterium_positioning",
+      "purpose": "Crit-specific front-third, corner, accordion, attack, prime, and final-lap positioning rules.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_time_trial_pacing",
+      "purpose": "TT pacing and aero rules for controlled start, smooth power, terrain variability, turn handling, and legal passing.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_track_sprint_timing",
+      "purpose": "Track sprint timing and position rules for match sprint, keirin, and team sprint contexts.",
+      "priority": "medium"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_track_pursuit_rotation",
+      "purpose": "Team-pursuit rotation model using aerodynamic shelter, rider strength, split targets, and fatigue.",
+      "priority": "medium"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_mtb_line_choice",
+      "purpose": "MTB line-choice and passing model for singletrack, climbs, descents, technical features, and fatigue.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_gravel_surface_group",
+      "purpose": "Gravel rules for when to prioritize draft, line choice, tire management, nutrition, and mechanical risk.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_cyclocross_transitions",
+      "purpose": "CX tactical rules for pre-ride, ride-versus-run decisions, barriers, remounts, pits, mud, and sand.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_bmx_start_and_berm",
+      "purpose": "BMX rules for gate, first straight, lane, berm position, rhythm, passing, and moto recovery.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_tactical_rules",
+      "id": "cycling_tactic_triathlon_bike_leg",
+      "purpose": "Triathlon bike rules for draft legality, run preservation, aero fueling, legal overtaking, and transition context.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "cycling_train_route_specific_simulation",
+      "purpose": "Plan workouts around route features such as final climb, last corners, gravel sector, singletrack, barriers, wind-exposed road, or transition.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "cycling_train_crit_block",
+      "purpose": "Training block template for repeated accelerations, cornering, positioning, sprint-after-fatigue, and tactical scenarios.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "cycling_train_tt_block",
+      "purpose": "Training block template for aero position, pacing discipline, controlled start, and race-position fueling.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "cycling_train_mtb_skill_power_block",
+      "purpose": "MTB block pairing high-intensity efforts with technical climbing, descending, passing, and line choice.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "cycling_train_cx_transition_block",
+      "purpose": "CX block for race-pace dismount, remount, barrier, run-up, pit, and corner-exit repetitions.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "cycling_train_bmx_gate_block",
+      "purpose": "BMX block for gate reaction, first-straight power, pump rhythm, berm exits, and high-quality recovery.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "cycling_train_triathlon_bike_brick",
+      "purpose": "Triathlon bike block integrating aero pacing, fueling, legal spacing, and run-off-bike readiness.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_injury_load_rules",
+      "id": "cycling_load_group_crash_risk_gate",
+      "purpose": "Safety gate for dense group riding, criterium racing, and track bunch work based on handling readiness and fatigue.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_injury_load_rules",
+      "id": "cycling_load_aero_position_progression",
+      "purpose": "Progression and symptom rules for TT and triathlon aero-position time.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_injury_load_rules",
+      "id": "cycling_load_offroad_technical_fatigue",
+      "purpose": "Track MTB, gravel, and CX technical-fatigue exposure through rough-surface time, descents, braking, carrying, and crash events.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_injury_load_rules",
+      "id": "cycling_load_cx_run_carry_progression",
+      "purpose": "Progression rule for cyclocross running, carrying, barriers, calf/Achilles load, and remount volume.",
+      "priority": "medium"
+    },
+    {
+      "collection": "sport_injury_load_rules",
+      "id": "cycling_load_bmx_sprint_quality_gate",
+      "purpose": "BMX neuromuscular quality and crash-risk rule for starts, jumps, motos, and recovery between heats.",
+      "priority": "medium"
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "cycling_assess_group_riding_readiness",
+      "purpose": "Assessment for paceline, group ride, and race readiness: straight line, signaling, shoulder check, wheel spacing, braking, and communication.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "cycling_assess_criterium_readiness",
+      "purpose": "Assessment for crit readiness: corner entry/exit, front-third positioning, repeated surges, and safe close-quarters riding.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "cycling_assess_descending_readiness",
+      "purpose": "Assessment for descending tactics: braking timing, line choice, surface reading, vision, and risk judgment.",
+      "priority": "high"
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "cycling_assess_offroad_line_choice",
+      "purpose": "Assessment for MTB, gravel, and CX line choice, traction, cornering, and obstacle decisions under fatigue.",
+      "priority": "high"
+    },
+    {
+      "collection": "planning_rules",
+      "id": "cycling_planning_event_week_no_novelty",
+      "purpose": "Race-week planning rule that locks tested equipment, nutrition, and positions unless safety or rules require change.",
+      "priority": "high"
+    },
+    {
+      "collection": "planning_rules",
+      "id": "cycling_planning_event_week_recon",
+      "purpose": "Event-week route, weather, rules, equipment, fueling, openers, and course-recon checklist by discipline.",
+      "priority": "high"
+    },
+    {
+      "collection": "planning_rules",
+      "id": "cycling_planning_weather_adjustment",
+      "purpose": "Adjust sessions and race tactics for headwind, tailwind, crosswind, rain, heat, mud, dust, and surface changes.",
+      "priority": "high"
+    },
+    {
+      "collection": "planning_rules",
+      "id": "cycling_planning_field_size_modifier",
+      "purpose": "Modify attack, positioning, recovery, and risk strategy based on small, medium, or large field size.",
+      "priority": "medium"
+    },
+    {
+      "collection": "planning_rules",
+      "id": "cycling_planning_post_race_tactical_review",
+      "purpose": "Post-event review prompts for missed moves, over-chasing, poor fueling, handling errors, successful tactics, and next-block focus.",
+      "priority": "high"
+    }
+  ]
+}

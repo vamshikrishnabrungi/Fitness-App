@@ -4,8 +4,8 @@ interface FitnessAssessment {
   pushups: number;
   pullups: number;
   squats: number;
-  plank: number;
-  runPace: string;
+  plank_seconds: number;
+  run_pace_seconds_per_km: number | null;
 }
 
 interface SportDetail {
@@ -114,8 +114,8 @@ const initialState: Pick<
     pushups: 0,
     pullups: 0,
     squats: 0,
-    plank: 0,
-    runPace: '',
+    plank_seconds: 0,
+    run_pace_seconds_per_km: null,
   },
   sports: [],
   selectedGoals: [],
@@ -168,6 +168,13 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
       const parsed = Number(value);
       return Number.isFinite(parsed) && value.trim() !== '' ? parsed : null;
     };
+    const normalizedFitnessAssessment = {
+      pushups: state.fitnessAssessment.pushups,
+      pullups: state.fitnessAssessment.pullups,
+      squats: state.fitnessAssessment.squats,
+      plank_seconds: state.fitnessAssessment.plank_seconds,
+      run_pace_seconds_per_km: state.fitnessAssessment.run_pace_seconds_per_km,
+    };
     const primaryGoal = state.primaryGoal || state.selectedGoals[0] || state.goals[0] || '';
     return {
       onboarding_version: 2,
@@ -178,7 +185,7 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
       experience: state.experience,
       training_location: state.location,
       equipment: state.equipment,
-      fitness_assessment: state.fitnessAssessment,
+      fitness_assessment: normalizedFitnessAssessment,
       sports: state.sports,
       sport_details: state.sportDetails,
       competition_level: state.competitionLevel,

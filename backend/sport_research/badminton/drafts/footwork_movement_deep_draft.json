@@ -1,0 +1,664 @@
+{
+  "metadata": {
+    "domain": "footwork_movement_court_coverage",
+    "sport": "badminton",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready badminton knowledge focused only on footwork, movement, and court coverage: split-step timing, first step, chasse, cross step, lunge, scissor kick, jump and landing, recovery to base, six-corner movement, singles and doubles coverage differences, fatigue errors, teaching progressions, physical demands, injury/load risks, and planning implications.",
+    "researched_on": "2026-06-21",
+    "agent_scope": "footwork, movement, court coverage, movement load, and movement teaching"
+  },
+  "source_refs": [
+    {
+      "id": "src_bwf_coach_manual_level_1",
+      "title": "Badminton Coach Education: Coaches' Manual Level 1",
+      "url": "https://www.badminton-israel.co.il/newsNdata/General/CoachEducationBWF/BWF_Coach_Manual_Level_1.pdf",
+      "source_type": "official_coach_manual_pdf",
+      "organization_or_author": "Badminton World Federation coach education",
+      "notes": "Primary source for movement components: split-step, running steps, chasse, cross-behind, hop/pivot, lunge, jump, landing, movement-cycle chaining, recovery quality, singles court coverage, and doubles front/back versus side-by-side responsibilities."
+    },
+    {
+      "id": "src_bwf_shuttle_time_lesson_plans",
+      "title": "Schools Badminton Lesson Plans: Shuttle Time",
+      "url": "https://media.specialolympics.org/resources/sports-essentials/developmental-sports/Developmental-Sports-Shuttle-Time-Lesson-Plans-English.pdf",
+      "source_type": "official_school_coaching_resource_pdf",
+      "organization_or_author": "Badminton World Federation Shuttle Time / Special Olympics resource mirror",
+      "notes": "Used for beginner split-step, low center of gravity, lunge, chasse-step progression, balance games, spacing, and signal-based movement starts."
+    },
+    {
+      "id": "src_bwf_shuttle_time_teacher_manual",
+      "title": "BWF Shuttle Time Teacher Manual",
+      "url": "https://shuttletime.bwfbadminton.com/teacher-manual",
+      "source_type": "official_coaching_education",
+      "organization_or_author": "Badminton World Federation",
+      "notes": "Used for age-appropriate teaching progressions, safety constraints, and beginner-friendly movement sequencing."
+    },
+    {
+      "id": "src_science_of_badminton_review",
+      "title": "The Science of Badminton: Game Characteristics, Anthropometry, Physiology, Visual Fitness and Biomechanics",
+      "url": "https://www.worldbadminton.com/reference/research/documents/The_Science_of_Badminton_Game.pdf",
+      "source_type": "peer_reviewed_review_pdf",
+      "organization_or_author": "Phomsoupha and Laffaye",
+      "notes": "Used for high-intensity intermittent game structure, event categories, physical complexity, and performance-factor framing."
+    },
+    {
+      "id": "src_junior_match_demands",
+      "title": "Notational Analysis and Physiological and Metabolic Responses of Male Junior Badminton Match Play",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36828320/",
+      "source_type": "peer_reviewed_match_demand_study",
+      "organization_or_author": "Green, West, and Willems",
+      "notes": "Used for junior match-play demands, intermittent rally/rest structure, and the need to train movement quality under repeated efforts."
+    },
+    {
+      "id": "src_elite_injury_review",
+      "title": "Badminton Injuries in Elite Athletes: A Review of Epidemiology and Biomechanics",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7205924/",
+      "source_type": "peer_reviewed_injury_review",
+      "organization_or_author": "Pardiwala, Subbiah, Rao, and Modi",
+      "notes": "Used for common badminton injury locations, non-contact and overuse mechanisms, lower-limb loading, and biomechanical risk context."
+    },
+    {
+      "id": "src_systematic_injury_review",
+      "title": "Systematic Review on Badminton Injuries: Incidence, Characteristics and Risk Factors",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11781153/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Badminton injury review authors",
+      "notes": "Used for badminton as a high-intensity sport with repeated acceleration, deceleration, and change of direction demands, plus injury risk-factor framing."
+    },
+    {
+      "id": "src_lunge_scoping_review",
+      "title": "Biomechanics of Lower Limb in Badminton Lunge: A Systematic Scoping Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33194445/",
+      "source_type": "peer_reviewed_biomechanics_review",
+      "organization_or_author": "Lam, Wong, and colleagues",
+      "notes": "Used for lunge biomechanics, performance-injury tradeoffs, level differences, footwear/surface relevance, and the need for realistic unanticipated lunge testing."
+    },
+    {
+      "id": "src_plantar_load_lunge",
+      "title": "Characteristics of Plantar Loads in Maximum Forward Lunge Tasks in Badminton",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4569361/",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Hong, Wang, Lam, and Cheung",
+      "notes": "Used for forward-lunge plantar load implications and direction-specific lower-limb stress."
+    },
+    {
+      "id": "src_scissor_kick_achilles",
+      "title": "Adjusted Landing Technique Reduces the Load on the Achilles Tendon in Badminton Players",
+      "url": "https://www.jssm.org/researchjssm-21-224.xml.xml",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Kaldau, Nedergaard, Holmich, and Bencke",
+      "notes": "Used for scissor-kick landing technique, upper-body rotation, external leg/foot position, and Achilles tendon load management in rear-court jump strokes."
+    },
+    {
+      "id": "src_lunge_fatigue_biomechanics",
+      "title": "Impact of Gender, Lunge Direction, and Fatigue on the Lower Limb Biomechanics in Badminton Lunges",
+      "url": "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0327428",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Xie, Pan, Liang, Wu, Chen, Tan, Wu, and Huang",
+      "notes": "Used for fatigue-related lunge changes: reduced knee flexion, increased leg stiffness, direction differences, and training implications for lower-limb load."
+    },
+    {
+      "id": "src_balance_plyometric_cod",
+      "title": "The Effect of 6-Week Combined Balance and Plyometric Training on Change of Direction Performance of Badminton Athletes",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8222543/",
+      "source_type": "peer_reviewed_training_study",
+      "organization_or_author": "Badminton balance and plyometric training researchers",
+      "notes": "Used for training implications around balance, plyometrics, change-of-direction ability, and neuromuscular control."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "movement_cycle_drives_every_rally",
+      "concept": "Badminton footwork is a repeating movement cycle, not isolated steps.",
+      "details": "A rally movement should be modeled as cue-read, split-step, first push, travel pattern, stroke-position landing or lunge, recovery, and re-split for the next opponent contact.",
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "split_step_is_timing_and_prestretch",
+      "concept": "The split-step creates readiness only when it is timed to the opponent's strike.",
+      "details": "A useful split-step lands as the opponent's shot information becomes available, widens the base, flexes hips/knees/ankles, and lets the player push immediately in the chosen direction.",
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_bwf_shuttle_time_lesson_plans"]
+    },
+    {
+      "id": "first_step_is_the_main_speed_gate",
+      "concept": "Court speed usually fails at the first push, not at top speed.",
+      "details": "The first step should be a directional push from a balanced base, with the trunk inside the support base and racket-side/non-racket-side lead chosen by the target area and recovery need.",
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "base_position_is_probabilistic",
+      "concept": "Base is not a fixed dot; it is the best recovery position for the opponent's likely replies.",
+      "details": "A player recovers toward a base that reflects own shot quality, opponent position, straight-versus-cross options, format, handedness, and whether the next threat is front, mid, or rear court.",
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "six_corner_coverage_needs_pattern_choice",
+      "concept": "Six-corner coverage is solved by matching footwork pattern to distance, direction, and time.",
+      "details": "Forecourt corners often require split-step, chasse or running step, lunge, and chasse recovery. Midcourt sides bias fast lateral chasse or block-step recovery. Rear corners require running/cross steps, hop/pivot, scissor kick, jump, and forward recovery.",
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "recovery_quality_counts_as_skill",
+      "concept": "The movement after contact is part of the skill.",
+      "details": "Players who arrive well but recover tall, crossed, or late still lose coverage. Recovery should preserve posture, racket readiness, and enough time to split-step again.",
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "singles_and_doubles_have_different_coverage_logic",
+      "concept": "Singles rewards whole-court balance; doubles rewards shared coverage and interception.",
+      "details": "Singles players must cover all six areas alone and bias base by likely reply. Doubles players cover narrower zones, switch between front/back attack and side-by-side defense, and coordinate rotation so neither partner duplicates the same lane.",
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "fatigue_changes_technique_before_speed_disappears",
+      "concept": "Fatigue errors often appear as stiffer, taller, later movement before obvious slowing.",
+      "details": "Under fatigue, players may split late, land stiff, reduce knee flexion, overstride into lunges, recover upright, cross feet at bad times, and abandon base-position discipline.",
+      "source_ids": ["src_lunge_fatigue_biomechanics", "src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "footwork_load_is_highly_direction_specific",
+      "concept": "Not all footwork volume stresses the body the same way.",
+      "details": "Forward lunges, backhand-side lunges, rear-court jump landings, repeated chasse steps, and scissor-kick recoveries create different lower-limb, trunk, and tendon demands.",
+      "source_ids": ["src_lunge_scoping_review", "src_plantar_load_lunge", "src_scissor_kick_achilles"]
+    },
+    {
+      "id": "movement_training_must_progress_from_known_to_reactive",
+      "concept": "Shadow patterns build mechanics, but court coverage must become perceptual and reactive.",
+      "details": "Teach clean patterns first, then add shuttle feed, directional uncertainty, opponent cue reading, scoring constraints, fatigue, and format-specific movement decisions.",
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_balance_plyometric_cod"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "badminton_movement_cycle_model",
+      "model": "Opponent contact cue -> split-step landing -> first directional push -> travel pattern -> stroke-position action -> braking/landing -> recovery toward base -> re-split.",
+      "quality_markers": ["split_lands_on_time", "first_push_is_directional", "posture_stays_low_enough", "racket_ready_during_travel", "contact_and_footwork_finish_together", "recovery_allows_next_split"],
+      "common_errors": ["watching_without_split", "split_too_early", "upright_first_step", "overrunning_shuttle", "late_recovery", "recovering_to_fixed_center_after_every_shot"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "split_step_model",
+      "movement": "A shallow rebound from a ready stance that lands just as opponent shot direction becomes readable.",
+      "cues": ["feet_slightly_wider_than_hips", "hips_knees_ankles_flexed", "heels_light", "trunk_relaxed_and_slightly_forward", "racket_in_front", "land_then_push_without_pause"],
+      "teaching_points": ["start_with_signal_reaction_drills", "tie_landing_to_feed_or_opponent_contact", "allow_small_asymmetry_when_likely_direction_is_known", "avoid_big_jump"],
+      "common_errors": ["jumping_high", "landing_flat_and_stiff", "landing_before_opponent_strikes", "landing_after_shuttle_is_already_clear", "feet_too_narrow", "racket_drops"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_bwf_shuttle_time_lesson_plans"]
+    },
+    {
+      "id": "first_step_push_model",
+      "movement": "Explosive first push out of split-step using the outside/opposite leg to project the body toward the shuttle.",
+      "direction_rules": ["forecourt_far_ball_needs_push_plus_lunge", "midcourt_side_ball_needs_fast_lateral_push_and_brake", "rear_corner_needs_push_into_running_or_cross_step", "short_ball_near_body_needs_small_adjustment_not_large_stride"],
+      "quality_markers": ["head_and_chest_travel_with_hips", "inside_edge_push_is_clear", "first_step_does_not_cross_body_blindly", "eyes_track_shuttle_and_opponent_space"],
+      "common_errors": ["false_step_backward", "standing_up_before_push", "opening_hips_too_late", "reaching_with_racket_before_feet_move"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "chasse_model",
+      "movement": "A quick side-travel pattern where one foot leads and the other foot follows without the feet crossing.",
+      "best_uses": ["short_to_medium_lateral_moves", "forecourt_approach_after_split_step", "midcourt_side_coverage", "controlled_recovery_from_lunge", "doubles_small_lane_adjustments"],
+      "quality_markers": ["short_ground_contact", "feet_do_not_click_together", "hips_stay_low", "shoulders_stay_quiet", "last_step_can_brake_or_lunge"],
+      "common_errors": ["hopping_tall", "feet_touching_or_crossing", "too_many_small_steps_when_one_strong_step_is_needed", "drifting_past_base"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_bwf_shuttle_time_lesson_plans"]
+    },
+    {
+      "id": "cross_step_and_cross_behind_model",
+      "movement": "A distance-covering step in which the trail leg crosses in front or behind to help travel toward rear-court or wide-court positions while preserving orientation.",
+      "best_uses": ["rear_corner_chase", "wide_defensive_recovery", "transition_from_base_to_deep_corner", "advanced_rear_court_rotation"],
+      "quality_markers": ["cross_is_used_for_distance_not_as_default", "trunk_remains_controlled", "next_plant_can_brake_or_rotate", "player_can_still_see_shuttle_and_opponent"],
+      "common_errors": ["crossing_under_pressure_in_forecourt", "tangling_feet", "turning_back_to_shuttle", "arriving_too_side_on_to_recover"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "lunge_model",
+      "movement": "A braking and reaching action, usually into forecourt or wide midcourt, with the lead foot/knee aligned toward the shuttle and the body controlled over the base.",
+      "quality_markers": ["lead_foot_points_toward_contact_area", "knee_tracks_with_foot", "hip_knee_ankle_flex_to_absorb", "rear_foot_and_trunk_support_balance", "racket_contact_occurs_as_lunge_finishes", "push_back_starts_from_stable_position"],
+      "variants": ["forehand_forward_lunge", "backhand_forward_lunge", "side_lunge", "step_in_lunge", "kick_lunge", "hop_lunge"],
+      "common_errors": ["knee_collapses_inside", "foot_points_inward_while_knee_tracks_elsewhere", "overstride_with_locked_knee", "rear_leg_trails_without_helping_recovery", "head_falls_past_front_foot", "recovery_delayed_after_net_shot"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_lunge_scoping_review", "src_plantar_load_lunge", "src_lunge_fatigue_biomechanics"]
+    },
+    {
+      "id": "scissor_kick_rear_court_model",
+      "movement": "A rear-court jump/rotation pattern in which the legs switch in the air to convert backward movement into forward recovery.",
+      "quality_markers": ["arrive_side_on_or_slightly_rotated", "trunk_and_hips_rotate_together", "legs_switch_before_landing", "landing_leg_accepts_force_with_flexion", "momentum_finishes_forward_toward_base", "racket_recovers_early"],
+      "best_uses": ["round_the_head_rearcourt", "forehand_rearcourt_when_time_allows", "overhead_recovery_after_attacking_or_clear-like_contact"],
+      "common_errors": ["jumping_straight_up_without_rotation", "landing_neutral_and_stiff", "falling_backward_after_contact", "feet_land_too_narrow", "late_racket_recovery"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_scissor_kick_achilles"]
+    },
+    {
+      "id": "jump_and_landing_model",
+      "movement": "Any airborne stroke-position action should land with enough hip/knee/ankle flexion and trunk control to absorb force and recover into the next split-step.",
+      "quality_markers": ["quiet_landing", "knee_tracks_over_midfoot", "hips_absorb_not_only_ankles", "feet_land_with_useful_orientation", "no_pause_before_recovery", "second_step_restores_base"],
+      "common_errors": ["stiff_knee_landing", "heel_slaps_hard", "knee_valgus", "landing_on_one_line", "turning_ankle_in", "watching_shot_instead_of_recovering"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_scissor_kick_achilles", "src_lunge_fatigue_biomechanics"]
+    },
+    {
+      "id": "recovery_to_base_model",
+      "movement": "The return movement after contact toward the highest-value ready position for the next shot.",
+      "base_adjustments": ["move_slightly_forward_after_tight_net_threat_if_own_net_shot_is_good", "recover_deeper_after_lift_or_clear_context", "bias_toward_straight_reply_after_straight_attack", "do_not_overrecover_after_weak_shot_that_invites_kill", "in_doubles_recover_to_partner_shape_not_individual_center"],
+      "quality_markers": ["first_recovery_step_starts_immediately", "posture_stays_reactive", "racket_returns_in_front", "arrives_before_opponent_contact_or_splits_while_arriving"],
+      "common_errors": ["admiring_shot", "walking_recovery", "fixed_center_recovery", "overrunning_base", "recovering_across_partner_in_doubles"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "six_corner_movement_model",
+      "court_areas": [
+        {
+          "area": "forehand_forecourt",
+          "primary_patterns": ["split_step", "chasse_or_running_step", "racket_leg_lunge", "chasse_recovery"],
+          "main_risks": ["overstride", "knee_foot_misalignment", "late_recovery"]
+        },
+        {
+          "area": "backhand_forecourt",
+          "primary_patterns": ["split_step", "chasse_or_crossover_adjustment", "lunge", "push_back_recovery"],
+          "main_risks": ["turning_back_to_court", "ankle_inversion", "racket_reach_without_feet"]
+        },
+        {
+          "area": "forehand_midcourt",
+          "primary_patterns": ["split_step", "lateral_chasse", "block_step_or_side_lunge", "small_recovery"],
+          "main_risks": ["hopping_tall", "crossing_feet_unnecessarily", "poor_brake"]
+        },
+        {
+          "area": "backhand_midcourt",
+          "primary_patterns": ["split_step", "lateral_chasse_or_cross_step", "side_lunge_or_block_step", "recover_with_racket_ready"],
+          "main_risks": ["late_first_step", "body_falls_outside_base", "slow_racket_recovery"]
+        },
+        {
+          "area": "forehand_rearcourt",
+          "primary_patterns": ["split_step", "running_steps_or_cross_step", "hop_pivot", "jump_or_scissor", "forward_recovery"],
+          "main_risks": ["arriving_square", "landing_backward", "Achilles_or_calf_spike"]
+        },
+        {
+          "area": "backhand_rearcourt_round_the_head",
+          "primary_patterns": ["split_step", "cross_step_or_running_steps", "hip_turn", "scissor_or_jump_landing", "recover_forward"],
+          "main_risks": ["turning_late", "crossing_blind", "low_back_rotation_stress"]
+        }
+      ],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_lunge_scoping_review"]
+    },
+    {
+      "id": "singles_court_coverage_model",
+      "coverage_logic": "One player covers all six areas and must balance attacking position with protection against the largest open space.",
+      "movement_priorities": ["depth_recovery", "base_bias_by_shot_quality", "efficient_lunge_recovery", "patient_repeated_split_steps", "avoid_crosscourt_overcommitment", "preserve_stamina_for_long_rallies"],
+      "common_errors": ["recovering_too_far_forward_after_lift", "standing_in_geometric_center_after_bad_net_shot", "chasing_crosscourt_without_rebalancing", "late_rear_court_turn"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_science_of_badminton_review"]
+    },
+    {
+      "id": "doubles_court_coverage_model",
+      "coverage_logic": "Two players share court coverage through attacking front/back shape, defending side-by-side shape, and rotation when the attack or defense changes.",
+      "movement_priorities": ["small_fast_adjustments", "intercept_lanes", "avoid_partner_collision", "server_partner_mid_rear_coverage", "front_player_net_pressure", "rear_player_mid_rear_patience", "side_by_side_defensive_width"],
+      "common_errors": ["both_players_recovering_to_center", "front_player_retreats_without_call", "rear_player_overruns_front_player", "standing_front_back_while_defending_wide_attack", "side_by_side_pair_leaves_middle_gap"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "rule_split_to_opponent_contact",
+      "rule": "Split-step timing should be anchored to the opponent's strike, not to the player's own previous shot.",
+      "applies_to": ["singles", "doubles", "mixed_doubles", "all_levels"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_bwf_shuttle_time_lesson_plans"]
+    },
+    {
+      "id": "rule_base_follows_threat",
+      "rule": "Recover toward the position that covers the opponent's most likely high-value replies; do not always recover to geometric center.",
+      "applies_to": ["singles", "doubles", "advanced_beginner_and_up"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "rule_arrive_brake_recover",
+      "rule": "Every movement pattern must include braking and recovery; getting to the shuttle without a recovery solution is incomplete footwork.",
+      "applies_to": ["all_levels"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_lunge_scoping_review"]
+    },
+    {
+      "id": "rule_chasse_for_control_cross_for_distance",
+      "rule": "Use chasse for controlled short-to-medium lateral movement and cross steps when distance or rear-court travel demands it.",
+      "applies_to": ["intermediate", "advanced"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "rule_lunge_alignment_before_lunge_speed",
+      "rule": "Increase lunge speed and range only while lead foot, knee, hip, and trunk alignment remain controlled.",
+      "applies_to": ["all_levels", "return_to_play", "load_management"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_lunge_scoping_review", "src_lunge_fatigue_biomechanics"]
+    },
+    {
+      "id": "rule_rear_court_rotation_protects_recovery",
+      "rule": "Rear-court jump and scissor-kick actions should help the player rotate and recover forward rather than landing backward and static.",
+      "applies_to": ["intermediate", "advanced"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_scissor_kick_achilles"]
+    },
+    {
+      "id": "rule_singles_base_biased_by_own_shot",
+      "rule": "In singles, base position after contact should shift with the quality, direction, and likely reply created by the player's own shot context.",
+      "applies_to": ["singles"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "rule_doubles_shape_over_individual_base",
+      "rule": "In doubles, movement recovery should rebuild the pair's shape: front/back when attacking, side-by-side when defending, and rotational coverage during transitions.",
+      "applies_to": ["doubles", "mixed_doubles"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "rule_fatigue_quality_gate",
+      "rule": "When fatigue causes late splits, stiff landings, knee collapse, or repeated overstriding, reduce complexity before adding more court volume.",
+      "applies_to": ["conditioning", "multi_shuttle", "match_play", "return_to_training"],
+      "source_ids": ["src_lunge_fatigue_biomechanics", "src_systematic_injury_review"]
+    },
+    {
+      "id": "rule_reactive_after_pattern_mastery",
+      "rule": "Shadow movement should progress to feeds, random directions, opponent cues, and scoring constraints once the base pattern is technically stable.",
+      "applies_to": ["teaching", "skill_transfer"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_balance_plyometric_cod"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "repeat_acceleration_deceleration",
+      "quality": "Repeated short acceleration, braking, and re-acceleration over one to four steps.",
+      "movement_links": ["split_step", "first_step", "six_corner_movement", "doubles_interception"],
+      "training_notes": "Use short-court starts, six-corner feeds, and rally simulations with technical-quality gates.",
+      "source_ids": ["src_science_of_badminton_review", "src_junior_match_demands"]
+    },
+    {
+      "id": "lunge_eccentric_and_concentric_capacity",
+      "quality": "Hip, knee, ankle, calf, and foot capacity to absorb a lunge and push back to base.",
+      "movement_links": ["forecourt_lunge", "wide_midcourt_lunge", "net_recovery"],
+      "training_notes": "Build controlled lunge range, split stance strength, deceleration, and reactive recovery before heavy repeated multi-shuttle lunges.",
+      "source_ids": ["src_lunge_scoping_review", "src_plantar_load_lunge"]
+    },
+    {
+      "id": "elastic_strength_and_rebound",
+      "quality": "Rapid stretch-shortening ability for split-step rebound, chasse contacts, jump takeoff, and quick recovery steps.",
+      "movement_links": ["split_step", "chasse", "jump_landing", "scissor_kick"],
+      "training_notes": "Progress pogo, skipping, low-level hops, lateral bounds, and badminton-specific rebound drills by landing quality.",
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_balance_plyometric_cod"]
+    },
+    {
+      "id": "single_leg_balance_and_braking",
+      "quality": "Balance and frontal/transverse-plane control during lunges, side stops, and one-leg recoveries.",
+      "movement_links": ["lunge", "backhand_side_lunge", "jump_landing", "direction_change"],
+      "training_notes": "Use single-leg holds, hop-stick drills, lateral deceleration, and unstable recovery positions only after baseline alignment is clean.",
+      "source_ids": ["src_bwf_shuttle_time_lesson_plans", "src_balance_plyometric_cod"]
+    },
+    {
+      "id": "hip_and_adductor_control",
+      "quality": "Hip abductor, adductor, and external-rotator control to keep knees aligned and recover from wide lunges.",
+      "movement_links": ["side_lunge", "cross_step", "defensive_doubles_width"],
+      "training_notes": "Include lateral strength, Copenhagen-style progressions when appropriate, split squat variations, and controlled lateral bounds.",
+      "source_ids": ["src_lunge_scoping_review", "src_lunge_fatigue_biomechanics"]
+    },
+    {
+      "id": "trunk_rotation_and_rear_court_transfer",
+      "quality": "Trunk and hip rotation control for scissor-kick, rear-court turns, and safe landing orientation.",
+      "movement_links": ["scissor_kick", "rear_court_jump", "round_the_head_movement"],
+      "training_notes": "Pair thoracic/hip rotation mobility with medicine-ball patterns, rear-court shadow movement, and landing orientation coaching.",
+      "source_ids": ["src_scissor_kick_achilles", "src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "aerobic_recovery_between_rallies",
+      "quality": "Aerobic capacity supports repeated high-intensity efforts and recovery between rallies, games, and sessions.",
+      "movement_links": ["long_singles_rallies", "multi_shuttle_blocks", "tournament_density"],
+      "training_notes": "Condition with badminton-specific intervals plus enough general aerobic work to maintain movement quality late in sessions.",
+      "source_ids": ["src_science_of_badminton_review", "src_junior_match_demands"]
+    },
+    {
+      "id": "perceptual_reactive_agility",
+      "quality": "Reading opponent cues and selecting the correct movement pattern under uncertainty.",
+      "movement_links": ["split_step", "first_step", "base_adjustment", "doubles_rotation"],
+      "training_notes": "Move from coach signal to shuttle feed to opponent-fed and live-rally constraints.",
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_balance_plyometric_cod"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "lunge_knee_ankle_alignment_risk",
+      "risk": "High-volume or high-speed lunges with foot/knee mismatch can increase knee, ankle, and plantar load stress.",
+      "movement_context": ["forecourt_lunge", "backhand_forecourt", "wide_midcourt"],
+      "warning_signs": ["front_knee_collapses_in", "lead_foot_points_away_from_shuttle", "stiff_braking", "pain_or_swelling_after_lunge_blocks"],
+      "mitigation": ["teach_alignment_before_speed", "cap_repeated_lunge_volume", "alternate_directions", "use_24_hour_symptom_response"],
+      "source_ids": ["src_lunge_scoping_review", "src_plantar_load_lunge", "src_lunge_fatigue_biomechanics"]
+    },
+    {
+      "id": "fatigue_stiff_landing_risk",
+      "risk": "Fatigue can reduce knee flexion and increase leg stiffness, raising lower-limb load during lunges and landings.",
+      "movement_context": ["late_session_multi_shuttle", "long_singles_rallies", "tournament_repeated_matches"],
+      "warning_signs": ["landing_loudly", "standing_tall_after_split", "late_recovery", "shortened_lunge_range", "loss_of_knee_control"],
+      "mitigation": ["stop_or_regress_when_quality_drops", "use_fatigue_blocks_after_skill_is_stable", "monitor_next_day_tendon_joint_response"],
+      "source_ids": ["src_lunge_fatigue_biomechanics", "src_systematic_injury_review"]
+    },
+    {
+      "id": "achilles_calf_jump_landing_risk",
+      "risk": "Rear-court jumps, scissor-kick landings, and repeated rebounds can overload calf and Achilles tissues, especially in recreational players or after load spikes.",
+      "movement_context": ["scissor_kick", "rear_court_jump", "split_step_rebound", "plyometrics"],
+      "warning_signs": ["morning_Achilles_stiffness", "calf_tightness", "loss_of_push_off", "pain_after_jump_sessions"],
+      "mitigation": ["progress_jump_volume_gradually", "coach_external_leg_foot_landing_orientation_when_applicable", "build_calf_strength_and_tendon_capacity", "avoid_hard_surface_load_spikes"],
+      "source_ids": ["src_scissor_kick_achilles", "src_elite_injury_review"]
+    },
+    {
+      "id": "ankle_inversion_and_backhand_lunge_risk",
+      "risk": "Backhand-side and wide lunges can expose the ankle to inversion or poorly controlled edge loading when the player is late or fatigued.",
+      "movement_context": ["backhand_forecourt", "backhand_midcourt", "defensive_wide_lunge"],
+      "warning_signs": ["landing_on_outer_foot", "ankle_roll_history", "hesitation_on_backhand_lunge", "swelling_or_instability"],
+      "mitigation": ["use_balance_and_proprioception", "strengthen_peroneals_and_calf", "reduce_reactive_speed_until_control_returns", "use_appropriate_shoes_and_surface"],
+      "source_ids": ["src_lunge_scoping_review", "src_systematic_injury_review"]
+    },
+    {
+      "id": "patellar_tendon_and_anterior_knee_load",
+      "risk": "Repeated split-step, jump, lunge, and deceleration work can irritate the patellar tendon or anterior knee if load rises faster than tissue capacity.",
+      "movement_context": ["multi_shuttle", "six_corner_shadow", "jump_landing", "deep_lunges"],
+      "warning_signs": ["pain_below_kneecap", "pain_warming_up_then_returning_later", "pain_with_stairs_or_squats", "reduced_landing_confidence"],
+      "mitigation": ["track_jump_and_lunge_counts", "progress eccentric_isometric_strength", "avoid_sudden_volume_spikes", "use_pain_response_to_set_next_session"],
+      "source_ids": ["src_elite_injury_review", "src_systematic_injury_review"]
+    },
+    {
+      "id": "shin_foot_and_plantar_load_risk",
+      "risk": "Repeated hard-court starts, stops, and lunges can overload foot, shin, and plantar tissues.",
+      "movement_context": ["court_conditioning", "high_volume_shadow_footwork", "forecourt_lunges"],
+      "warning_signs": ["shin_tenderness", "plantar_heel_pain", "foot_arch_pain", "pain_worse_with_hard_court_sessions"],
+      "mitigation": ["manage_surface_and_footwear", "add_foot_intrinsic_and_calf_capacity", "separate_high_lunge_days", "avoid_large_weekly_spikes"],
+      "source_ids": ["src_plantar_load_lunge", "src_systematic_injury_review"]
+    },
+    {
+      "id": "low_back_and_hip_rotation_risk",
+      "risk": "Late rear-court turns, poor scissor-kick rotation, and repeated cross steps can increase low-back or hip stress when rotation is forced through the spine instead of shared by hips and trunk.",
+      "movement_context": ["round_the_head_movement", "rear_court_cross_step", "scissor_kick"],
+      "warning_signs": ["back_tightness_after_rear_court_work", "hip_pinch", "loss_of_rotation", "landing_with_twisted_trunk"],
+      "mitigation": ["teach_hip_turn_before_speed", "include_trunk_and_hip_rotation_control", "reduce_rear_court_jump_volume_when_symptoms_rise"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_scissor_kick_achilles"]
+    },
+    {
+      "id": "partner_collision_and_overlap_risk",
+      "risk": "Doubles players can collide or leave lanes exposed when both recover to the same space or rotate without a clear trigger.",
+      "movement_context": ["doubles_rotation", "serve_receive", "front_back_to_side_by_side_transition"],
+      "warning_signs": ["both_players_attack_same_middle_ball", "rear_player_runs_through_front_player", "unclear_call_on_lift_or_block", "wide_lane_left_open"],
+      "mitigation": ["train_shape_recovery", "use_call_words", "define_rotation_triggers", "practice constrained_front_back_and_side_by_side games"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "teach_beginner_movement_foundation",
+      "level": "beginner",
+      "summary": "Start with ready posture, safe spacing, low center of gravity, split-step on signal, simple chasse, lunge alignment, and recovery to a visible base marker.",
+      "progression": ["ready_position_and_balance_games", "signal_split_step", "chasse_without_racket", "lunge_to_static_shuttle", "split_step_chasse_lunge", "split_step_chasse_lunge_recover"],
+      "quality_gates": ["can_land_split_without_stiff_knees", "can_lunge_with_knee_and_foot_same_direction", "can_recover_without_turning_back", "can_repeat_10_controlled_reps_without_pain"],
+      "avoid": ["fatigue_first_agility", "deep_lunges_before_alignment", "random_six_corner_feeds_before_basic_braking"],
+      "source_ids": ["src_bwf_shuttle_time_lesson_plans", "src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "teach_intermediate_six_corner_coverage",
+      "level": "intermediate",
+      "summary": "Build full-court patterns and recovery: forecourt lunge, midcourt lateral coverage, rear-court cross step, hop/pivot, scissor-kick landing, and base adjustment.",
+      "progression": ["two_front_corners", "two_rear_corners", "fore_mid_rear_on_one_side", "six_corner_shadow", "coach_feed_random_two_options", "multi_shuttle_with_quality_stop_rule"],
+      "quality_gates": ["split_timing_stays_consistent", "first_step_changes_by_direction", "scissor_kick_recovers_forward", "base_adjusts_to_shot_context", "doubles_player_recovers_to_pair_shape"],
+      "avoid": ["max_speed_when_landing_loudly", "too_many_rear_court_jumps_in_one_session", "fixed_center_recovery_after_every_feed"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_lunge_scoping_review"]
+    },
+    {
+      "id": "teach_advanced_reactive_and_tactical_movement",
+      "level": "advanced",
+      "summary": "Move from pattern execution to opponent-cue reading, deceptive base shifts, format-specific court coverage, repeated high-intensity rally movement, and fatigue-resistant technique.",
+      "progression": ["opponent_cue_split_step", "random_six_corner_feeds", "straight_vs_cross_recovery_constraints", "singles_rally_scenario_coverage", "doubles_rotation_games", "fatigue_block_with_technique_gate"],
+      "quality_gates": ["maintains_split_timing_under_pressure", "chooses_chasse_cross_or_lunge_by_context", "recovers_based_on_likely_reply", "keeps_landing_alignment_late_in_block", "communicates_doubles_rotation_early"],
+      "avoid": ["conditioning_that_rewards_bad_late_movement", "untracked_jump_lunge_spikes", "complex_rotations_without_partner_lanes"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_junior_match_demands", "src_lunge_fatigue_biomechanics"]
+    },
+    {
+      "id": "program_movement_load_by_pattern",
+      "summary": "Track footwork load by movement type rather than court minutes only.",
+      "load_channels": ["split_step_rebounds", "forecourt_lunges", "wide_lunges", "rear_court_jumps", "scissor_kicks", "cross_steps", "multi_shuttle_reps", "live_rally_minutes"],
+      "planning_rule": "Increase one high-load channel at a time, and use 24-hour ankle, knee, Achilles, shin, hip, and back response to decide whether to progress.",
+      "source_ids": ["src_systematic_injury_review", "src_lunge_scoping_review", "src_scissor_kick_achilles"]
+    },
+    {
+      "id": "use_quality_stop_rules",
+      "summary": "Movement conditioning should stop, slow, or simplify when technical errors become repeated.",
+      "stop_or_regress_flags": ["late_split_three_times_in_row", "stiff_landing_or_loud_landing", "front_knee_collapse", "ankle_roll_or_near_roll", "cannot_recover_before_next_feed", "doubles_collision_or_lane_overlap"],
+      "regressions": ["reduce_feed_speed", "reduce_corners", "return_to_shadow_pattern", "remove_jump", "shorten_lunge_range", "increase_rest"],
+      "source_ids": ["src_lunge_fatigue_biomechanics", "src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "blend_preplanned_and_reactive_agility",
+      "summary": "Preplanned footwork teaches mechanics; reactive footwork teaches badminton coverage.",
+      "session_design": ["blocked_pattern_learning", "semi_random_two_choice_feed", "random_feed", "opponent_live_feed", "score_constraint", "fatigue_resistance_check"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_balance_plyometric_cod"]
+    },
+    {
+      "id": "separate_singles_and_doubles_movement_blocks",
+      "summary": "Singles movement blocks should emphasize whole-court recovery and base bias; doubles blocks should emphasize partner spacing, front/back attack, side-by-side defense, and transition triggers.",
+      "singles_examples": ["six_corner_shadow", "recover_after_straight_vs_cross", "deep_lift_to_front_net_sequence", "long_rally_interval"],
+      "doubles_examples": ["serve_receive_first_four_shots", "front_player_intercept_lanes", "rear_player_mid_rear_coverage", "side_by_side_defense_shift", "rotation_after_lift_or_attack"],
+      "source_ids": ["src_bwf_coach_manual_level_1"]
+    },
+    {
+      "id": "assess_movement_as_skill_and_load_capacity",
+      "summary": "Assessment should include technical quality, coverage decision, and load response.",
+      "assessment_items": ["split_step_timing", "first_step_direction", "forecourt_lunge_alignment", "rear_court_scissor_recovery", "six_corner_shadow_quality", "reactive_feed_success", "doubles_shape_recovery", "next_day_symptom_check"],
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_lunge_scoping_review", "src_systematic_injury_review"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "collection": "source_sections",
+      "id": "badminton_section_footwork_movement_deep",
+      "record_type": "source_section",
+      "summary": "Deep badminton footwork and court coverage section covering movement cycle, split-step, first step, chasse, cross step, lunge, scissor kick, landing, recovery, six-corner coverage, singles/doubles differences, fatigue errors, load risk, and teaching progression.",
+      "source_ids": ["src_bwf_coach_manual_level_1", "src_bwf_shuttle_time_lesson_plans", "src_lunge_scoping_review", "src_scissor_kick_achilles"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_movement_cycle_model",
+      "record_type": "technical_model",
+      "summary": "Opponent contact cue, split-step, first push, travel pattern, stroke-position action, braking/landing, recovery, and re-split should be treated as one repeatable movement cycle.",
+      "backend_tags": ["badminton", "footwork", "movement_cycle", "split_step", "recovery"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_split_step_timing_rule",
+      "record_type": "technical_rule",
+      "summary": "Split-step should land as opponent shot information becomes available; big early jumps and late flat-footed reactions should be corrected before speed is progressed.",
+      "backend_tags": ["split_step", "reaction", "first_step", "beginner_to_advanced"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_first_step_and_chasse_rule",
+      "record_type": "technical_rule",
+      "summary": "First step should push directionally from a balanced split; chasse is preferred for controlled short-to-medium lateral coverage and recovery, while cross steps cover larger distances.",
+      "backend_tags": ["first_step", "chasse", "cross_step", "direction_change"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_lunge_alignment_and_recovery_rule",
+      "record_type": "technical_safety_rule",
+      "summary": "Lunges should align lead foot, knee, and contact direction, absorb through hip/knee/ankle flexion, and include an immediate push-back recovery.",
+      "backend_tags": ["lunge", "knee_alignment", "ankle", "recovery", "load_management"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_scissor_kick_landing_rule",
+      "record_type": "technical_safety_rule",
+      "summary": "Rear-court scissor-kick and jump landings should use trunk/hip rotation, useful foot orientation, quiet force absorption, and forward recovery to reduce static or backward landings.",
+      "backend_tags": ["scissor_kick", "jump_landing", "Achilles", "rear_court"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_six_corner_coverage_model",
+      "record_type": "court_coverage_model",
+      "summary": "Map forehand/backhand forecourt, forehand/backhand midcourt, and forehand/backhand rearcourt to preferred movement patterns, recovery routes, and load risks.",
+      "backend_tags": ["six_corner", "court_coverage", "singles", "movement_patterns"]
+    },
+    {
+      "collection": "sport_training_rules",
+      "id": "badminton_singles_vs_doubles_movement_rule",
+      "record_type": "format_rule",
+      "summary": "Singles movement should bias whole-court base recovery; doubles movement should rebuild pair shape through front/back attack, side-by-side defense, and clear rotation triggers.",
+      "backend_tags": ["singles", "doubles", "court_coverage", "rotation", "base_position"]
+    },
+    {
+      "collection": "planning_rules",
+      "id": "badminton_footwork_load_channels_rule",
+      "record_type": "load_planning_rule",
+      "summary": "Track movement load by split-step rebounds, lunges, wide lunges, rear-court jumps, scissor kicks, cross steps, multi-shuttle reps, and live rally minutes rather than total practice time only.",
+      "backend_tags": ["load_management", "footwork_volume", "multi_shuttle", "injury_risk"]
+    },
+    {
+      "collection": "planning_rules",
+      "id": "badminton_fatigue_quality_stop_rule",
+      "record_type": "session_safety_rule",
+      "summary": "Regress or stop high-speed footwork when late splits, stiff landings, knee collapse, ankle instability, failed recovery, or doubles overlap repeats.",
+      "backend_tags": ["fatigue", "quality_gate", "injury_prevention", "conditioning"]
+    },
+    {
+      "collection": "sport_teaching_progressions",
+      "id": "badminton_teach_footwork_beginner",
+      "record_type": "teaching_progression",
+      "summary": "Ready posture and balance games -> signal split-step -> chasse -> static lunge -> split-step/chasse/lunge -> recovery to marked base.",
+      "level": "beginner",
+      "backend_tags": ["beginner", "split_step", "chasse", "lunge", "recovery"]
+    },
+    {
+      "collection": "sport_teaching_progressions",
+      "id": "badminton_teach_footwork_intermediate",
+      "record_type": "teaching_progression",
+      "summary": "Link forecourt, midcourt, and rear-court movement patterns into six-corner shadowing, fed shuttles, scissor-kick recovery, and base adjustment.",
+      "level": "intermediate",
+      "backend_tags": ["intermediate", "six_corner", "scissor_kick", "base_position", "multi_shuttle"]
+    },
+    {
+      "collection": "sport_teaching_progressions",
+      "id": "badminton_teach_footwork_advanced",
+      "record_type": "teaching_progression",
+      "summary": "Train opponent-cue split-step, random six-corner feeds, tactical base bias, singles/doubles movement scenarios, and fatigue-resistant landing quality.",
+      "level": "advanced",
+      "backend_tags": ["advanced", "reactive_agility", "singles", "doubles", "fatigue_resistance"]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "badminton_assess_split_step_first_step",
+      "record_type": "skill_assessment",
+      "summary": "Assess whether the player lands split-step on time, pushes in the correct direction without false steps, and reaches the shuttle without losing posture.",
+      "backend_tags": ["assessment", "split_step", "first_step"]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "badminton_assess_lunge_landing_recovery",
+      "record_type": "skill_assessment",
+      "summary": "Assess lead foot/knee alignment, force absorption, push-back recovery, scissor-kick landing, and ability to re-split before the next feed.",
+      "backend_tags": ["assessment", "lunge", "landing", "recovery", "injury_risk"]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "badminton_assess_six_corner_court_coverage",
+      "record_type": "skill_assessment",
+      "summary": "Assess six-corner movement quality, pattern choice, base recovery, and decision-making under both preplanned and random feed conditions.",
+      "backend_tags": ["assessment", "six_corner", "court_coverage", "reactive_agility"]
+    },
+    {
+      "collection": "sport_skill_assessments",
+      "id": "badminton_assess_doubles_shape_recovery",
+      "record_type": "skill_assessment",
+      "summary": "Assess whether a pair restores front/back attack, side-by-side defense, and rotation coverage without lane overlap or collision risk.",
+      "backend_tags": ["assessment", "doubles", "rotation", "partner_spacing"]
+    }
+  ]
+}

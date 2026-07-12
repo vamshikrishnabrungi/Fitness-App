@@ -1,0 +1,1031 @@
+{
+  "metadata": {
+    "domain": "positions_roles_demands",
+    "sport": "volleyball",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready volleyball role profiles for setter, outside hitter, opposite, middle blocker, libero, defensive specialist, and serving specialist, including phase responsibilities, role-specific skill priorities, physical demands, injury and load risks, and beginner/intermediate/advanced development implications."
+  },
+  "source_refs": [
+    {
+      "id": "src_fivb_rules_2025_2028",
+      "title": "FIVB Official Volleyball Rules 2025-2028",
+      "url": "https://www.fivb.com/wp-content/uploads/2025/01/FIVB-Volleyball_Rules2025_2028-EN-v05.pdf",
+      "source_type": "official_rules",
+      "organization_or_author": "Federation Internationale de Volleyball",
+      "notes": "Primary source for attack, block, back-row, service, substitution, and libero constraints."
+    },
+    {
+      "id": "src_fivb_the_game",
+      "title": "The Game - Volleyball",
+      "url": "https://www.fivb.com/volleyball/the-game/",
+      "source_type": "official_game_explainer",
+      "organization_or_author": "Federation Internationale de Volleyball",
+      "notes": "Concise official descriptions of setting as the tactical center, spiking, and block-defense purpose."
+    },
+    {
+      "id": "src_fivb_coaches_level_ii",
+      "title": "Coaches Manual Level II",
+      "url": "https://www.fivb.com/wp-content/uploads/2024/03/Coaches_Manual_Level_II_EN.pdf",
+      "source_type": "official_coaching_manual",
+      "organization_or_author": "Federation Internationale de Volleyball",
+      "notes": "Used for advanced tactics, side-out and transition framing, block reading cues, training principles, and volleyball mechanical stress characteristics."
+    },
+    {
+      "id": "src_fivb_medical_injury_prevention",
+      "title": "Principles of Prevention and Treatment of Common Volleyball Injuries",
+      "url": "https://www.fivb.com/wp-content/uploads/2024/03/FIVB_Medical_Injury_Prevention.pdf",
+      "source_type": "official_medical_resource",
+      "organization_or_author": "FIVB Medical Commission",
+      "notes": "Used for ankle sprain prevention, patellar tendinopathy risk factors, shoulder overuse, load reduction, scapular and core stabilization, and low-back red flags."
+    },
+    {
+      "id": "src_usav_setter_thoughts",
+      "title": "Thoughts for Setters",
+      "url": "https://usavolleyball.org/resource/thoughts-for-setters/",
+      "source_type": "coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for setter centrality, tempo control, decision-making, and influence on hitters and passers."
+    },
+    {
+      "id": "src_usav_recipe_setter",
+      "title": "Recipe for a Setter",
+      "url": "https://usavolleyball.org/resource/recipe-for-a-setter/",
+      "source_type": "coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for setter communication, leadership, pre-serve play calls, matchup awareness, and offensive tempo control."
+    },
+    {
+      "id": "src_usav_libero_impact",
+      "title": "How You Can Make a Huge Impact as a Libero",
+      "url": "https://usavolleyball.org/resource/how-you-can-make-a-huge-impact-as-a-libero/",
+      "source_type": "coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for libero serve-receive range, leadership, defensive consistency, tactical baiting, and freeing attackers from receive load."
+    },
+    {
+      "id": "src_usav_read_hitter",
+      "title": "So You Want to be a Great Defender?! Learn to Read the Hitter!!",
+      "url": "https://usavolleyball.org/resource/so-you-want-to-be-a-great-defender-learn-to-read-the-hitter/",
+      "source_type": "coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for defensive read sequence: opponent rotation, pass quality, setter, hitter approach, and shot tendencies."
+    },
+    {
+      "id": "src_usav_middle_blocking",
+      "title": "10 Keys to Middle Blocking",
+      "url": "https://usavolleyball.org/resource/10-keys-to-middle-blocking/",
+      "source_type": "coaching_resource",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for middle blocker reads, pass-quality cues, setter dump awareness, and overpass decisions."
+    },
+    {
+      "id": "src_usav_rules",
+      "title": "Rules of Volleyball",
+      "url": "https://usavolleyball.org/play/rules-of-volleyball/",
+      "source_type": "official_rules_summary",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for practical libero explanation, including back-row replacement and differences between international and some domestic serving rules."
+    },
+    {
+      "id": "src_sheppard_positions",
+      "title": "An Analysis of Playing Positions in Elite Men's Volleyball: Considerations for Competition Demands and Physiologic Characteristics",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19675472/",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Sheppard, Gabbett, and Stanganelli",
+      "notes": "Used for position-specific competition demand framing and physiologic characteristics in elite male volleyball."
+    },
+    {
+      "id": "src_marques_physical_fitness",
+      "title": "Physical Fitness Qualities of Professional Volleyball Players: Determination of Positional Differences",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19528849/",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Marques, van den Tillaar, Gabbett, Reis, and Gonzalez-Badillo",
+      "notes": "Used for positional differences in professional volleyball physical qualities."
+    },
+    {
+      "id": "src_millan_middle_review",
+      "title": "The Middle Blocker in Volleyball: A Systematic Review",
+      "url": "https://rua.ua.es/entities/publication/80f0a0ad-8737-44ca-94c5-5cf4204dafe0",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Millan-Sanchez, Morante Rabago, and Urena Espa",
+      "notes": "Used for middle blocker role emphasis, physical profile, first-tempo attack, blocking, and injury considerations."
+    },
+    {
+      "id": "src_bere_fivb_surveillance",
+      "title": "Injury Risk is Low Among World-Class Volleyball Players: 4-Year Data from the FIVB Injury Surveillance System",
+      "url": "https://bjsm.bmj.com/content/49/17/1132",
+      "source_type": "peer_reviewed_injury_surveillance",
+      "organization_or_author": "Bere, Kruczynski, Veintimilla, Hamu, and Bahr",
+      "notes": "Used for elite volleyball injury surveillance priorities: acute ankle/finger sprains and overuse injuries."
+    },
+    {
+      "id": "src_gouttebarge_injury_prevention",
+      "title": "The Prevention of Musculoskeletal Injuries in Volleyball: The Systematic Development of an Intervention and Its Feasibility",
+      "url": "https://link.springer.com/article/10.1186/s40621-017-0122-y",
+      "source_type": "peer_reviewed_injury_prevention",
+      "organization_or_author": "Gouttebarge, van Sluis, Verhagen, and Zwerver",
+      "notes": "Used for volleyball injury prevention warm-up priorities: shoulder, knee, ankle, finger/wrist, core stability, strength, balance, coordination, mobility."
+    },
+    {
+      "id": "src_haupenthal_brazil_injuries",
+      "title": "Injuries and Complaints in the Brazilian National Volleyball Male Team: A Case Study",
+      "url": "https://link.springer.com/article/10.1186/s13102-023-00687-3",
+      "source_type": "peer_reviewed_case_study",
+      "organization_or_author": "Haupenthal, Bufon, dos Santos, Matte, Dell'Antonio, Franco, Amaral, Costa, and Nunes",
+      "notes": "Used for elite team injury/complaint monitoring and supporting references on workload, recovery, and volleyball injury epidemiology."
+    },
+    {
+      "id": "src_gold_medal_squared_positions",
+      "title": "Volleyball Positions Explained",
+      "url": "https://www.goldmedalsquared.com/post/volleyball-positions",
+      "source_type": "coach_education_resource",
+      "organization_or_author": "Gold Medal Squared",
+      "notes": "Supplemental role definitions for outside hitter, opposite, defensive specialist, and serving specialist where official sources describe rules more than informal specialist role labels."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "volleyball_role_phase_model",
+      "title": "Volleyball role demands are phase-specific",
+      "summary": "A role profile should describe responsibilities separately for serve receive, offense, block, floor defense, and transition. The same player may have a primary responsibility in one phase and a support responsibility in another.",
+      "backend_use": "Store phase responsibility maps rather than a single free-text role description.",
+      "source_ids": ["src_fivb_coaches_level_ii", "src_fivb_the_game", "src_usav_read_hitter"]
+    },
+    {
+      "id": "legal_position_vs_specialized_role",
+      "title": "Legal court position is different from specialized role",
+      "summary": "All players rotate through court zones, but teams assign specialized roles such as setter, libero, middle, outside, opposite, defensive specialist, and serving specialist. Role logic must still respect front-row/back-row, attack-line, substitution, and libero rules.",
+      "backend_use": "Separate role tags from rotation/legal-position constraints in retrieval.",
+      "source_ids": ["src_fivb_rules_2025_2028", "src_usav_rules"]
+    },
+    {
+      "id": "setter_as_tactical_center",
+      "title": "The setter is the offense organizer",
+      "summary": "The setter usually owns the second contact, converts pass quality into hittable options, controls tempo, calls or signals plays, manages matchups, and decides when to involve each attacker or ask for help.",
+      "backend_use": "Setter plans should combine technical setting, decision-making, communication, and movement-to-ball work.",
+      "source_ids": ["src_fivb_the_game", "src_usav_setter_thoughts", "src_usav_recipe_setter"]
+    },
+    {
+      "id": "outside_hitter_all_around_outlet",
+      "title": "The outside hitter is usually the all-around pin and high-ball outlet",
+      "summary": "Outside hitters often combine serve-receive passing, left-side attacking, back-row defense, emergency high-ball attacking, and left-side blocking. Their role requires tolerance for imperfect sets and heavy scoring pressure.",
+      "backend_use": "Outside hitter profiles should prioritize passing plus out-of-system attack before advanced combination play.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_sheppard_positions", "src_marques_physical_fitness"]
+    },
+    {
+      "id": "opposite_as_right_side_balance",
+      "title": "The opposite provides right-side attack and block balance",
+      "summary": "Opposites play opposite the setter in many systems, attack from the right side, often block the opponent's outside hitter, may carry back-row attack load, and may or may not receive serve depending on level and roster.",
+      "backend_use": "Opposite records should allow both receive and non-receive variants.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_sheppard_positions"]
+    },
+    {
+      "id": "middle_blocker_speed_role",
+      "title": "The middle blocker is a speed, read, and net-control role",
+      "summary": "Middle blockers must read pass quality and setter cues, close blocks across the net, handle overpasses, attack first-tempo balls, and transition rapidly from block landing into approach availability.",
+      "backend_use": "Middle blocker plans should pair fast read-block footwork with quick-attack timing and landing capacity.",
+      "source_ids": ["src_usav_middle_blocking", "src_fivb_coaches_level_ii", "src_millan_middle_review"]
+    },
+    {
+      "id": "libero_back_row_anchor",
+      "title": "The libero anchors serve receive and floor defense",
+      "summary": "The libero is a back-row specialist with unique replacement rules and attack/block restrictions. Coaching priorities include serve-receive range, digging, free-ball handling, out-of-system second-ball help, communication, and defensive leadership.",
+      "backend_use": "Libero records should include both tactical leadership and legal restrictions.",
+      "source_ids": ["src_fivb_rules_2025_2028", "src_usav_rules", "src_usav_libero_impact"]
+    },
+    {
+      "id": "defensive_specialist_vs_libero",
+      "title": "A defensive specialist is a back-row substitution role, not the libero rule category",
+      "summary": "A defensive specialist usually enters through normal substitutions to improve serve receive, digging, serving, or back-row control. Unlike a libero, the defensive specialist is not defined by special libero replacement privileges or the same attack/block restrictions.",
+      "backend_use": "Treat defensive specialist as a tactical substitute role with normal substitution costs and optional serving.",
+      "source_ids": ["src_fivb_rules_2025_2028", "src_usav_rules", "src_gold_medal_squared_positions"]
+    },
+    {
+      "id": "serving_specialist_substitution_value",
+      "title": "A serving specialist is a short-exposure pressure role",
+      "summary": "Serving specialists enter primarily to create serve pressure, target a passer, change serve type, or manage a weak server's rotation. Their value depends on serve efficiency, substitution rules, and ability to defend immediately after serving if they remain in the rally.",
+      "backend_use": "Serving specialist records should include high-pressure routine, serve target selection, and cold-entry readiness.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_rules"]
+    },
+    {
+      "id": "block_defense_connection",
+      "title": "Blocking and floor defense are one system",
+      "summary": "The block may stop the attack outright or channel it to assigned defenders. Front-row players must coordinate hand position and timing with the floor defense behind them.",
+      "backend_use": "Block drills should specify the defender locations the block is protecting or conceding.",
+      "source_ids": ["src_fivb_the_game", "src_usav_read_hitter", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "volleyball_load_is_jump_overhead_low_stance",
+      "title": "Role load clusters into jumping, overhead swings, and low defensive posture",
+      "summary": "Hitters and middles carry more jump, landing, block, and swing load; setters carry repeated movement-to-second-ball and jump-setting/blocking load; liberos and defensive specialists carry low-stance, reaction, receive, dig, and dive load; serving specialists carry concentrated overhead serve exposure and cold-entry stress.",
+      "backend_use": "Physical demand rules should be role-weighted rather than one generic volleyball conditioning template.",
+      "source_ids": ["src_fivb_coaches_level_ii", "src_fivb_medical_injury_prevention", "src_sheppard_positions", "src_marques_physical_fitness"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "phase_responsibility_matrix",
+      "title": "Role phase responsibility matrix",
+      "model_type": "role_phase_model",
+      "description": "Map each role to primary and secondary actions in serve receive, offense, block, defense, and transition.",
+      "roles": {
+        "setter": {
+          "serve_receive": "Usually releases from receive pattern to setting target; may pass only in emergency or beginner systems.",
+          "offense": "Owns second contact, tempo, set selection, play calls, attacker confidence, and matchup exploitation.",
+          "block": "Front-row setter blocks in right-front or assigned zone; must handle setter dump decisions when opponent setter is front row.",
+          "defense": "Back-row setter defends assigned zone after serve; front-row setter covers tips/dumps when not blocking.",
+          "transition": "Moves from dig/block-cover into setting position or calls help when first contact removes access."
+        },
+        "outside_hitter": {
+          "serve_receive": "Common primary passer with libero and/or defensive specialist; manages seams and prepares full approach after pass.",
+          "offense": "Primary left-side attacker, high-ball outlet, out-of-system scorer, back-row option at advanced levels.",
+          "block": "Blocks opponent right-side attacker or assigned pin; sets outside edge and line/cross-court plan.",
+          "defense": "Defends left-back or perimeter zone by system; covers tips, rolls, and cross-court lanes.",
+          "transition": "Changes from pass/dig/block-cover into approach quickly, often on imperfect or high sets."
+        },
+        "opposite": {
+          "serve_receive": "May be hidden from receive or used as a passer depending on level, system, and roster.",
+          "offense": "Right-side front-row attacker, back-row right-side option in advanced systems, emergency set option when setter digs first ball.",
+          "block": "Frequently blocks the opponent outside hitter, so lateral speed, hand discipline, and matchup scouting matter.",
+          "defense": "Defends right-back or assigned perimeter zone; may protect line or cross-court behind block scheme.",
+          "transition": "Switches from blocking left-side attacks into right-side approach or from right-back defense into pipe/D-ball routes."
+        },
+        "middle_blocker": {
+          "serve_receive": "Usually limited receive role after beginner stages; prepares for quick approach if pass quality allows.",
+          "offense": "First-tempo quick attacker, slide option in some systems, overpass finisher, decoy to hold opposing middle.",
+          "block": "Central read blocker responsible for first-tempo threat and closing to both pins.",
+          "defense": "Front-row net defender; when back row, often replaced by libero, but may defend if roster or rules require.",
+          "transition": "Must land, turn, separate from net, and become available for quick or cover responsibility within a short time window."
+        },
+        "libero": {
+          "serve_receive": "Primary passer with the largest stable receive range the roster can support.",
+          "offense": "Cannot be a front-row attacker; provides out-of-system second-ball help and legal back-row setting choices.",
+          "block": "Does not block or attempt to block under FIVB rules.",
+          "defense": "Back-row defensive organizer, dig specialist, free-ball controller, and communication leader.",
+          "transition": "After first contact, covers attacker, handles second ball if setter defends, and resets team shape."
+        },
+        "defensive_specialist": {
+          "serve_receive": "Substitution-based passer for a front-row specialist or weaker receiver; may cover a seam or targeted server lane.",
+          "offense": "Usually limited attacking role but can back-row attack or emergency set if legal and trained.",
+          "block": "Normally not used for front-row blocking, unless roster/substitution pattern requires it.",
+          "defense": "Back-row dig, floor defense, serve receive, and ball-control stabilizer.",
+          "transition": "Converts dig/pass into coverage, out-of-system setting help, or controlled free-ball decisions."
+        },
+        "serving_specialist": {
+          "serve_receive": "Usually not inserted to receive unless also a defensive specialist.",
+          "offense": "Minimal offensive role; may need free-ball or emergency second contact if rally continues.",
+          "block": "Not a primary block role unless the serving substitution remains through front-row rotations.",
+          "defense": "Must be ready to defend immediately after serve, usually in right-back or assigned post-serve base.",
+          "transition": "Primary transition is serve-to-defense: finish serve, recover into base, read first opponent contact."
+        }
+      },
+      "source_ids": ["src_fivb_rules_2025_2028", "src_fivb_coaches_level_ii", "src_usav_libero_impact", "src_gold_medal_squared_positions"]
+    },
+    {
+      "id": "defensive_read_sequence_model",
+      "title": "Defensive read sequence",
+      "model_type": "perception_decision_model",
+      "sequence": [
+        "Know opponent rotation and whether the opposing setter is front row or back row.",
+        "Read pass quality because it constrains which attackers and tempos are realistic.",
+        "Read setter body, jump, contact point, and tendency.",
+        "Read hitter approach line, speed, shoulder, and hand.",
+        "Execute the block or floor defensive assignment that matches the team plan."
+      ],
+      "applies_to": ["setter", "outside_hitter", "opposite", "middle_blocker", "libero", "defensive_specialist"],
+      "backend_use": "Use as a shared match-IQ progression and specialize examples by role.",
+      "source_ids": ["src_usav_read_hitter", "src_usav_middle_blocking", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "serve_receive_to_attack_model",
+      "title": "Serve receive to attack connection",
+      "model_type": "phase_transition_model",
+      "description": "The passer's job is not finished at first contact. Outside hitters and opposites who pass must recover into an approach lane, middles must time quick availability based on pass quality, and the setter must convert the pass into the best available attack option.",
+      "backend_use": "Serve-receive drills for hitters should include pass-plus-approach and pass-plus-coverage constraints.",
+      "source_ids": ["src_fivb_coaches_level_ii", "src_usav_libero_impact", "src_gold_medal_squared_positions"]
+    },
+    {
+      "id": "setter_decision_model",
+      "title": "Setter decision model",
+      "model_type": "decision_tree",
+      "decision_steps": [
+        "Can the setter take the second contact with balance and legal contact quality?",
+        "What attacker options are available from pass location and tempo?",
+        "Which attacker has the best matchup, hot hand, or tactical advantage?",
+        "Will a faster tempo reduce blocker read time without lowering set quality?",
+        "If the setter cannot set, who has the cleanest second-ball responsibility?"
+      ],
+      "backend_use": "Create setter constraints that train movement, neutral body shape, communication, and set selection together.",
+      "source_ids": ["src_fivb_the_game", "src_usav_setter_thoughts", "src_usav_recipe_setter"]
+    },
+    {
+      "id": "blocker_read_to_close_model",
+      "title": "Blocker read-to-close model",
+      "model_type": "technical_tactical_model",
+      "sequence": [
+        "Start in balanced ready position with peripheral awareness.",
+        "Read serve/pass trajectory and speed.",
+        "Identify likely setter options from pass quality.",
+        "Track setter release and attacker approach.",
+        "Move with efficient shuffle, crossover, or swing-block pattern based on distance.",
+        "Jump on time, press hands into the opponent's space without early interference, land balanced, and transition."
+      ],
+      "applies_to": ["middle_blocker", "outside_hitter", "opposite", "setter_front_row"],
+      "backend_use": "Block progressions should not isolate jump height from reading, footwork, hand shape, and landing.",
+      "source_ids": ["src_fivb_rules_2025_2028", "src_fivb_coaches_level_ii", "src_usav_middle_blocking"]
+    },
+    {
+      "id": "role_development_stages",
+      "title": "Role development stages",
+      "model_type": "development_model",
+      "stages": {
+        "beginner": "Broad volleyball literacy first: serve, pass, set, attack approach basics, safe landing, simple base defense, communication, and rotation understanding.",
+        "intermediate": "Position-specific priority work layered onto all-around skills: serve-receive lanes, set tempo, role-specific block assignments, transition responsibilities, and low-error tactical choices.",
+        "advanced": "Scouting-driven specialization: rotation matchups, serve targeting, attacker tendency reads, opponent setter patterns, tempo variation, role-specific load management, and pressure routines."
+      },
+      "backend_use": "Avoid early over-specialization in beginner plans; increase role specificity as the athlete's skill and game model mature.",
+      "source_ids": ["src_fivb_coaches_level_ii", "src_usav_recipe_setter", "src_gouttebarge_injury_prevention"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "rule_libero_legal_constraints",
+      "category": "legal_role_constraint",
+      "applies_to": ["libero"],
+      "rule": "Under FIVB rules, the libero is restricted to back-row play, may not complete an attack hit when the ball is entirely above the net, may not block or attempt to block, and has limits on front-zone overhand setting that leads to an above-net attack.",
+      "backend_response": "When prescribing libero offensive tasks, use legal back-row setting, forearm set options, emergency second-ball control, and coverage rather than front-row attacking or blocking.",
+      "source_ids": ["src_fivb_rules_2025_2028", "src_usav_rules"]
+    },
+    {
+      "id": "rule_back_row_attack_line",
+      "category": "legal_role_constraint",
+      "applies_to": ["setter_back_row", "opposite_back_row", "outside_hitter_back_row", "defensive_specialist"],
+      "rule": "Back-row players may attack above net height only when takeoff is behind the attack line; this affects setter dumps, opposite D-ball routes, outside pipe routes, and DS emergency attacking.",
+      "backend_response": "Attach attack-line constraints to back-row attack drills and block attempts.",
+      "source_ids": ["src_fivb_rules_2025_2028"]
+    },
+    {
+      "id": "rule_setter_release_and_help",
+      "category": "offense",
+      "applies_to": ["setter", "libero", "defensive_specialist", "outside_hitter", "opposite"],
+      "rule": "In serve receive, the setter should release to the setting target when possible; if the setter takes first contact or cannot reach second contact cleanly, the pre-assigned help setter should take the ball.",
+      "backend_response": "Team drills should define emergency second-contact roles, commonly libero, right-back, or nearest non-attacking player.",
+      "source_ids": ["src_usav_recipe_setter", "src_usav_libero_impact"]
+    },
+    {
+      "id": "rule_outside_high_ball_responsibility",
+      "category": "offense",
+      "applies_to": ["outside_hitter"],
+      "rule": "The outside hitter should be trained as a reliable high-ball and imperfect-pass outlet because left-side high sets remain available when the pass pulls the setter off the net.",
+      "backend_response": "Outside hitter development should include out-of-system footwork, shot selection, block tooling, and error management.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "rule_opposite_blocks_primary_outside",
+      "category": "block_defense",
+      "applies_to": ["opposite"],
+      "rule": "Opposites often face the opponent's highest-volume outside attack, so their block plan must define line responsibility, cross-court channeling, hand discipline, and setter-front-row awareness.",
+      "backend_response": "Opposite training should include pin blocking and serve-to-block transition, not only attacking.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_the_game", "src_usav_read_hitter"]
+    },
+    {
+      "id": "rule_middle_pass_quality_read",
+      "category": "block_defense",
+      "applies_to": ["middle_blocker"],
+      "rule": "The middle blocker should use pass quality as an early cue: tight passes require overpass and setter-dump readiness, while off-net passes usually reduce quick-middle threat and shift attention to pins.",
+      "backend_response": "Middle blocker read drills should start with varied pass quality rather than predictable coach tosses only.",
+      "source_ids": ["src_usav_middle_blocking", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "rule_libero_can_change_receive_geometry",
+      "category": "serve_receive",
+      "applies_to": ["libero", "outside_hitter"],
+      "rule": "A high-range libero can absorb more court in serve receive, which can protect an outside hitter's approach or hide a weaker passer.",
+      "backend_response": "Serve-receive system recommendations should vary court-coverage load by libero range and outside hitter passing skill.",
+      "source_ids": ["src_usav_libero_impact"]
+    },
+    {
+      "id": "rule_defensive_specialist_substitution_cost",
+      "category": "substitution_strategy",
+      "applies_to": ["defensive_specialist"],
+      "rule": "A defensive specialist improves back-row ball control but generally uses normal substitutions, so the tactical value must exceed the substitution and rotation cost.",
+      "backend_response": "Use DS recommendations when a team needs serve receive/dig stability and has substitution capacity.",
+      "source_ids": ["src_fivb_rules_2025_2028", "src_gold_medal_squared_positions"]
+    },
+    {
+      "id": "rule_serving_specialist_pressure_threshold",
+      "category": "substitution_strategy",
+      "applies_to": ["serving_specialist"],
+      "rule": "A serving specialist is justified when the expected serve pressure, target matchup, or tactical change outweighs the risk of service error and the substitution cost.",
+      "backend_response": "Serving specialist drills should track both aces/poor passes forced and missed serves under cold-entry pressure.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_rules"]
+    },
+    {
+      "id": "rule_block_channels_defense",
+      "category": "block_defense",
+      "applies_to": ["outside_hitter", "opposite", "middle_blocker", "setter", "libero", "defensive_specialist"],
+      "rule": "The block and floor defense should agree what space is taken away and what space is intentionally defended.",
+      "backend_response": "Pair every blocking task with defender location, read, and dig target.",
+      "source_ids": ["src_fivb_the_game", "src_usav_read_hitter"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "demand_setter",
+      "role": "setter",
+      "primary_demands": ["repeated short accelerations to second contact", "jump setting and occasional front-row blocking", "overhead hand contact volume", "split-second decision-making", "trunk control while moving and setting"],
+      "physical_qualities": ["first-step quickness", "change-of-direction control", "hand and wrist coordination", "shoulder endurance", "core stability", "landing mechanics"],
+      "load_notes": "Setter load is more cognitive and movement-to-ball dense than maximal swing dense. Front-row setters still need block and landing preparation.",
+      "source_ids": ["src_usav_setter_thoughts", "src_usav_recipe_setter", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "demand_outside_hitter",
+      "role": "outside_hitter",
+      "primary_demands": ["high attack and approach volume", "serve-receive plus immediate approach", "left-side block jumps", "back-row digging", "high-ball and out-of-system swings"],
+      "physical_qualities": ["repeat jump ability", "approach power", "shoulder and scapular endurance", "landing and deceleration control", "serve-receive posture tolerance", "aerobic recovery between rallies"],
+      "load_notes": "Outside hitters often combine the largest all-around skill load: pass, attack, block, defend, and transition under pressure.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_sheppard_positions", "src_marques_physical_fitness", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "id": "demand_opposite",
+      "role": "opposite",
+      "primary_demands": ["right-side attacking", "blocking high-volume opposing outside hitters", "possible back-row D-ball attack", "right-back defense", "serve and transition to block/attack"],
+      "physical_qualities": ["pin-block lateral power", "approach power", "shoulder power and deceleration capacity", "repeat jump ability", "right-side footwork", "reaction to line/cross-court attacks"],
+      "load_notes": "Opposite physical load varies by system: some are protected from serve receive and carry more attack/block load, while others pass and play all-around.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_sheppard_positions", "src_fivb_the_game"]
+    },
+    {
+      "id": "demand_middle_blocker",
+      "role": "middle_blocker",
+      "primary_demands": ["rapid lateral movement along the net", "repeated block jumps", "quick-attack approach and takeoff", "overpass reaction", "fast block-to-attack transition"],
+      "physical_qualities": ["explosive first step", "vertical power", "reactive lateral footwork", "landing stiffness control", "trunk control in air", "hip and ankle mobility"],
+      "load_notes": "Middles have highly concentrated net load and must repeatedly jump, land, change direction, and become attack-available in short windows.",
+      "source_ids": ["src_usav_middle_blocking", "src_millan_middle_review", "src_sheppard_positions", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "demand_libero",
+      "role": "libero",
+      "primary_demands": ["large serve-receive coverage", "low defensive posture", "lateral shuffles and split steps", "digging hard-driven balls", "diving/rolling floor contacts", "communication and defensive scanning"],
+      "physical_qualities": ["reaction speed", "low-stance endurance", "lateral acceleration", "hip mobility", "trunk stiffness and rotation control", "shoulder/wrist/hand robustness for digs"],
+      "load_notes": "Libero load is lower in jumps but high in low posture, reaction, pass/dig contacts, and repeated floor-defense actions.",
+      "source_ids": ["src_usav_libero_impact", "src_usav_rules", "src_usav_read_hitter"]
+    },
+    {
+      "id": "demand_defensive_specialist",
+      "role": "defensive_specialist",
+      "primary_demands": ["cold-entry back-row readiness", "serve receive", "digging", "serving if substitution pattern includes serve", "coverage and emergency second-ball control"],
+      "physical_qualities": ["reaction speed", "passing platform control", "low-stance endurance", "lateral movement", "serve consistency", "mental readiness after sitting"],
+      "load_notes": "A defensive specialist may play fewer rallies but must execute immediately with limited rhythm; warm-up and readiness routines matter.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_rules", "src_usav_read_hitter"]
+    },
+    {
+      "id": "demand_serving_specialist",
+      "role": "serving_specialist",
+      "primary_demands": ["high-pressure serve execution", "serve target accuracy", "cold-entry shoulder and trunk readiness", "serve-to-defense recovery", "short tactical exposure"],
+      "physical_qualities": ["consistent toss mechanics", "shoulder and trunk control", "calf/Achilles stiffness for jump serve variants", "breathing and arousal control", "post-serve acceleration into base"],
+      "load_notes": "Serving specialists need low-volume but high-quality serving under pressure; the stress is less total workload and more precision on demand.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_rules_2025_2028", "src_fivb_medical_injury_prevention"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "risk_general_ankle_sprain",
+      "roles": ["outside_hitter", "opposite", "middle_blocker", "setter_front_row"],
+      "risk_area": "ankle",
+      "mechanism": "Net play, block/attack landings, and foot contact under the net increase acute ankle sprain risk, especially for frequent jumpers.",
+      "mitigation": ["teach vertical, controlled landings", "progress block footwork before maximal jumps", "include balance/proprioception work", "consider external ankle support for athletes with sprain history"],
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_bere_fivb_surveillance", "src_gouttebarge_injury_prevention"]
+    },
+    {
+      "id": "risk_general_patellar_tendinopathy",
+      "roles": ["middle_blocker", "outside_hitter", "opposite", "setter"],
+      "risk_area": "knee_patellar_tendon",
+      "mechanism": "High jump and landing volume, hard surfaces, spike approach mechanics, landing knee flexion/valgus stress, and large jumping ability can contribute to anterior knee pain and patellar tendinopathy.",
+      "mitigation": ["monitor jump volume and pain trend", "build hip/thigh/landing capacity", "use progressive plyometrics", "avoid sudden increases in approach/block jumps", "modify load when tendon symptoms rise"],
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_gouttebarge_injury_prevention"]
+    },
+    {
+      "id": "risk_general_shoulder_overuse",
+      "roles": ["outside_hitter", "opposite", "middle_blocker", "serving_specialist", "setter"],
+      "risk_area": "shoulder",
+      "mechanism": "Repeated spiking, serving, and overhead contacts can overload rotator cuff, scapular stabilizers, and the shoulder girdle; spiking volume, scapular control, core stability, and rotational strength balance matter.",
+      "mitigation": ["track weekly swing and serve volume", "train scapular stabilization and rotator cuff endurance", "include posterior shoulder mobility as appropriate", "build trunk power transfer", "reduce spikes/serves during symptoms"],
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_bere_fivb_surveillance", "src_gouttebarge_injury_prevention"]
+    },
+    {
+      "id": "risk_finger_wrist_block_dig",
+      "roles": ["middle_blocker", "outside_hitter", "opposite", "setter", "libero", "defensive_specialist"],
+      "risk_area": "finger_wrist_thumb",
+      "mechanism": "Blocks, digs, awkward hand contacts, and setting volume can stress fingers, thumbs, and wrists.",
+      "mitigation": ["teach strong but relaxed hand shape", "progress hard-driven dig volume", "use taping or support when clinically indicated", "avoid high-velocity blocking/digging volume in unprepared beginners"],
+      "source_ids": ["src_bere_fivb_surveillance", "src_gouttebarge_injury_prevention", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "id": "risk_low_back_extension_rotation",
+      "roles": ["outside_hitter", "opposite", "middle_blocker", "serving_specialist", "setter"],
+      "risk_area": "low_back",
+      "mechanism": "Serving, attacking, blocking reach, and repeated extension/rotation can irritate the low back; persistent extension-related back pain in young athletes warrants evaluation.",
+      "mitigation": ["build trunk strength and hip mobility", "manage serving/attacking spikes", "avoid forcing lumbar extension for power", "refer persistent limiting back pain to qualified medical care"],
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_haupenthal_brazil_injuries"]
+    },
+    {
+      "id": "risk_libero_ds_dive_load",
+      "roles": ["libero", "defensive_specialist"],
+      "risk_area": "shoulder_wrist_hip_knee",
+      "mechanism": "Repeated digs, sprawls, dives, rolls, and low defensive posture can stress wrists, shoulders, hips, knees, and low back even with low jump load.",
+      "mitigation": ["teach progressive floor skills", "condition low-stance endurance", "rotate high-volume digging drills", "monitor wrist/shoulder soreness", "include mobility and trunk control"],
+      "source_ids": ["src_usav_libero_impact", "src_usav_read_hitter", "src_gouttebarge_injury_prevention"]
+    },
+    {
+      "id": "risk_serving_specialist_cold_entry",
+      "roles": ["serving_specialist", "defensive_specialist"],
+      "risk_area": "shoulder_calf_achilles_readiness",
+      "mechanism": "A player entering cold for a high-pressure serve may spike shoulder, trunk, calf, or Achilles stress if warm-up and routine are poor.",
+      "mitigation": ["use a repeatable bench-to-serve readiness routine", "keep low-dose serving preparation available", "match serve type to physical readiness", "train serve-to-defense recovery"],
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_medical_injury_prevention"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "training_beginner_roles_all_around_first",
+      "level": "beginner",
+      "applies_to": ["all_roles"],
+      "implication": "Beginners should not be locked too early into narrow roles. They need serve, pass, set, attack approach, basic block footwork, defensive base, safe landing, communication, and rotation literacy before deep specialization.",
+      "backend_use": "Beginner role plans should include 60-80 percent shared volleyball fundamentals and 20-40 percent role emphasis.",
+      "source_ids": ["src_fivb_coaches_level_ii", "src_gouttebarge_injury_prevention"]
+    },
+    {
+      "id": "training_setter_progression",
+      "level": "all_levels",
+      "applies_to": ["setter"],
+      "implication": "Setter development should progress from footwork-to-target, balanced hand setting, and simple high-ball choices to tempo variation, jump setting, matchup decisions, emergency help calls, and leadership under pressure.",
+      "backend_use": "Setter workouts should pair technical setting with decision constraints rather than static target reps only.",
+      "source_ids": ["src_usav_setter_thoughts", "src_usav_recipe_setter", "src_fivb_the_game"]
+    },
+    {
+      "id": "training_outside_progression",
+      "level": "all_levels",
+      "applies_to": ["outside_hitter"],
+      "implication": "Outside hitters should first become stable passers and high-ball attackers, then add shot range, block tooling, seam responsibility, back-row defense, and advanced pipe/out-of-system attack.",
+      "backend_use": "Outside hitter drills should often require pass-to-approach or dig-to-transition, not isolated hitting only.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "training_opposite_progression",
+      "level": "all_levels",
+      "applies_to": ["opposite"],
+      "implication": "Opposite training should blend right-side attacking with blocking the opponent's outside hitter. At advanced levels, add back-row D-ball timing, setter-out first-ball emergency setting/attacking, and matchup serving patterns.",
+      "backend_use": "Opposite plans should expose both attack and block demands every week.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_read_hitter"]
+    },
+    {
+      "id": "training_middle_progression",
+      "level": "all_levels",
+      "applies_to": ["middle_blocker"],
+      "implication": "Middle blockers should progress from landing, block footwork, and simple quick timing to pass-quality reads, overpass decisions, slide/tempo options, commit/read-block choices, and fast block-to-attack transition.",
+      "backend_use": "Middle sessions should limit maximal jump volume until the athlete can read, move, land, and transition safely.",
+      "source_ids": ["src_usav_middle_blocking", "src_millan_middle_review", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "id": "training_libero_progression",
+      "level": "all_levels",
+      "applies_to": ["libero"],
+      "implication": "Libero development should move from platform control, serve-receive angles, and basic digging to large-area receive, seam leadership, tactical baiting, out-of-system setting, attacker coverage, and opponent tendency reads.",
+      "backend_use": "Libero plans should include communication and scanning tasks, not just passing reps.",
+      "source_ids": ["src_usav_libero_impact", "src_usav_read_hitter", "src_usav_rules"]
+    },
+    {
+      "id": "training_defensive_specialist_progression",
+      "level": "all_levels",
+      "applies_to": ["defensive_specialist"],
+      "implication": "Defensive specialists need libero-like passing and digging skills plus substitution readiness, serving consistency, and the flexibility to enter in different back-row patterns.",
+      "backend_use": "DS drills should include cold-entry serve receive, targeted-server pressure, and immediate communication with established passers.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_rules"]
+    },
+    {
+      "id": "training_serving_specialist_progression",
+      "level": "all_levels",
+      "applies_to": ["serving_specialist"],
+      "implication": "Serving specialists should develop a primary high-confidence serve, a target plan, a pressure routine, and serve-to-defense recovery. Advanced players can add serve-type variation and scouting-based target decisions.",
+      "backend_use": "Track serve outcome quality under pressure: error, in-system pass allowed, out-of-system pass forced, ace/free-ball, and tactical target hit.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_rules_2025_2028"]
+    },
+    {
+      "id": "training_role_specific_snc",
+      "level": "all_levels",
+      "applies_to": ["all_roles"],
+      "implication": "Volleyball S&C should include universal warm-up, landing mechanics, ankle balance, hip/trunk strength, shoulder/scapular durability, and mobility, then weight jump/overhead/low-stance loads by role.",
+      "backend_use": "Use role demand tags to adjust plyometric volume, shoulder prehab dose, and low-stance conditioning.",
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_gouttebarge_injury_prevention", "src_sheppard_positions"]
+    },
+    {
+      "id": "training_load_monitoring_by_role",
+      "level": "intermediate_advanced",
+      "applies_to": ["outside_hitter", "opposite", "middle_blocker", "setter", "libero", "defensive_specialist", "serving_specialist"],
+      "implication": "Track role-specific exposures: attack swings, serve attempts, jump sets, block jumps, approach jumps, hard dig reps, floor contacts, and minutes/rallies played. Pain trends should alter the next session before performance drops.",
+      "backend_use": "Create athlete-state checks that ask different load questions by role.",
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_haupenthal_brazil_injuries", "src_gouttebarge_injury_prevention"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "volleyball_role_profile",
+      "id": "role_profile_setter",
+      "role": "setter",
+      "display_name": "Setter",
+      "role_summary": "Primary offensive organizer who usually takes second contact, controls tempo, communicates plays, and converts pass quality into attack options.",
+      "responsibilities": {
+        "serve_receive": ["release to setting target", "avoid passing unless system or emergency requires it", "communicate receive pattern and help-setter responsibility"],
+        "offense": ["set hittable balls", "choose attacker and tempo", "manage matchups", "run quick, pin, and back-row options as skill allows", "call for help when off balance"],
+        "block": ["front-row right-side block responsibility in many systems", "read opponent setter dump", "coordinate with middle and defense"],
+        "defense": ["defend assigned back-row or front-row zone", "transition quickly after first contact", "cover tips/dumps when not blocking"],
+        "transition": ["move from defensive/base position to second-contact location", "set after dig/cover when possible", "communicate emergency second contact"]
+      },
+      "source_ids": ["src_fivb_the_game", "src_usav_setter_thoughts", "src_usav_recipe_setter"]
+    },
+    {
+      "record_type": "volleyball_role_profile",
+      "id": "role_profile_outside_hitter",
+      "role": "outside_hitter",
+      "display_name": "Outside Hitter",
+      "role_summary": "All-around left-side pin who commonly passes, attacks high and tempo sets, blocks the right-side threat, defends, and handles imperfect balls.",
+      "responsibilities": {
+        "serve_receive": ["primary or secondary passer", "manage seams with libero/DS", "recover to approach after pass"],
+        "offense": ["left-side attack", "high-ball outlet", "out-of-system attack", "shot selection against formed block", "advanced back-row attack option"],
+        "block": ["block opponent right-side or assigned pin", "set outside edge/line plan", "close with middle for double block"],
+        "defense": ["defend perimeter or left-back zone", "cover tips and rolls", "dig cross-court or line by system"],
+        "transition": ["convert pass/dig/block cover into attack readiness", "handle high balls when team is out of system"]
+      },
+      "source_ids": ["src_gold_medal_squared_positions", "src_sheppard_positions", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "record_type": "volleyball_role_profile",
+      "id": "role_profile_opposite",
+      "role": "opposite",
+      "display_name": "Opposite Hitter",
+      "role_summary": "Right-side attacker and blocker who balances the offense, often matches up with the opponent's outside hitter, and may be a major back-row attacking option.",
+      "responsibilities": {
+        "serve_receive": ["may be hidden from receive", "may pass in all-around systems", "communicate right-side seam if receiving"],
+        "offense": ["right-side front-row attack", "back-row D-ball at higher levels", "emergency attacking option when setter defends first contact", "attack against left-front block"],
+        "block": ["block opponent outside hitter", "handle line/cross-court plan", "support middle on quick/inside threats"],
+        "defense": ["defend right-back or assigned zone", "read outside hitter tendencies", "cover setter if setter blocks or defends first ball"],
+        "transition": ["serve-to-block", "block-to-approach", "right-back defense to D-ball route"]
+      },
+      "source_ids": ["src_gold_medal_squared_positions", "src_sheppard_positions", "src_usav_read_hitter"]
+    },
+    {
+      "record_type": "volleyball_role_profile",
+      "id": "role_profile_middle_blocker",
+      "role": "middle_blocker",
+      "display_name": "Middle Blocker",
+      "role_summary": "Central net player responsible for reading the pass and setter, controlling first-tempo threats, closing blocks to both pins, and attacking quick balls.",
+      "responsibilities": {
+        "serve_receive": ["usually limited receive load after beginner level", "prepare quick approach from receive pattern", "communicate availability to setter"],
+        "offense": ["quick attack", "slide or gap option where used", "overpass attack", "decoy to hold opposing middle"],
+        "block": ["read pass quality", "track setter and hitter", "block quick threat", "close to pins", "press hands and channel attack"],
+        "defense": ["front-row net defense", "cover tips/overpasses", "may be replaced by libero back row"],
+        "transition": ["land and separate from net", "become quick-available", "cover hitters after block movement"]
+      },
+      "source_ids": ["src_usav_middle_blocking", "src_fivb_coaches_level_ii", "src_millan_middle_review"]
+    },
+    {
+      "record_type": "volleyball_role_profile",
+      "id": "role_profile_libero",
+      "role": "libero",
+      "display_name": "Libero",
+      "role_summary": "Back-row defensive specialist with special replacement rules and attack/block restrictions who anchors serve receive, digging, floor leadership, and out-of-system ball control.",
+      "responsibilities": {
+        "serve_receive": ["primary passer", "cover large court area when capable", "manage seams", "communicate passer responsibilities"],
+        "offense": ["legal second-ball help", "free-ball control", "attacker coverage", "avoid illegal front-zone overhand set consequences"],
+        "block": ["does not block or attempt block under FIVB rules"],
+        "defense": ["defensive organizer", "dig hard-driven balls", "read hitter tendencies", "control free balls and tips"],
+        "transition": ["cover attackers", "set second ball if setter digs", "reset team after chaotic first contact"]
+      },
+      "source_ids": ["src_fivb_rules_2025_2028", "src_usav_rules", "src_usav_libero_impact"]
+    },
+    {
+      "record_type": "volleyball_role_profile",
+      "id": "role_profile_defensive_specialist",
+      "role": "defensive_specialist",
+      "display_name": "Defensive Specialist",
+      "role_summary": "Substitution-based back-row ball-control role used to improve serve receive, digging, serving, and defensive stability without using libero replacement rules.",
+      "responsibilities": {
+        "serve_receive": ["enter to pass for a weaker receiver or front-row specialist", "cover assigned seam", "stabilize target passing"],
+        "offense": ["emergency second contact", "controlled free-ball decisions", "possible legal back-row attack if trained"],
+        "block": ["normally not a block role unless substitution pattern places player front row"],
+        "defense": ["dig assigned zone", "communicate with libero/outside hitters", "defend immediately after serving if applicable"],
+        "transition": ["cover attackers", "help out-of-system setting", "maintain ball-control role after dig"]
+      },
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_rules_2025_2028", "src_usav_rules"]
+    },
+    {
+      "record_type": "volleyball_role_profile",
+      "id": "role_profile_serving_specialist",
+      "role": "serving_specialist",
+      "display_name": "Serving Specialist",
+      "role_summary": "Short-exposure substitution role used to create serve pressure, target a receiver, change serve type, or replace a weaker server.",
+      "responsibilities": {
+        "serve_receive": ["not primary receive role unless also a DS"],
+        "offense": ["minimal planned offense", "emergency free-ball or second contact if rally continues"],
+        "block": ["not primary block role unless remaining through front-row rotation"],
+        "defense": ["recover from serve into defensive base", "read opponent receive and setter", "execute assigned post-serve defense"],
+        "transition": ["bench-to-serve routine", "serve-to-defense recovery", "sub out or continue based on rotation plan"]
+      },
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_rules_2025_2028"]
+    },
+    {
+      "record_type": "volleyball_role_skill_priority",
+      "id": "skill_priority_setter",
+      "role": "setter",
+      "priority_tiers": {
+        "primary": ["movement to second contact", "hand setting accuracy", "set selection", "communication", "tempo control"],
+        "secondary": ["jump setting", "front-row blocking", "setter dump/tip decisions", "defensive base", "emergency setting from poor locations"],
+        "advanced": ["scouting matchups", "deception while staying neutral", "combination offense", "rotation-specific play calling", "pressure leadership"]
+      },
+      "development_by_level": {
+        "beginner": ["move feet before setting", "set high hittable balls", "call mine/help", "learn simple 4-2 or beginner target rules"],
+        "intermediate": ["set pins and middle from varied passes", "communicate plays before serve", "jump set selectively", "read blocker matchups"],
+        "advanced": ["vary tempo", "hold blockers", "manage hot hitter and weak blocker matchups", "run offense after imperfect passes"]
+      },
+      "source_ids": ["src_usav_setter_thoughts", "src_usav_recipe_setter"]
+    },
+    {
+      "record_type": "volleyball_role_skill_priority",
+      "id": "skill_priority_outside_hitter",
+      "role": "outside_hitter",
+      "priority_tiers": {
+        "primary": ["serve receive", "left-side attack", "high-ball attacking", "approach timing", "block and dig basics"],
+        "secondary": ["shot range", "block tooling", "seam communication", "back-row defense", "transition attack"],
+        "advanced": ["pipe attack", "scout-based shot selection", "out-of-system scoring", "serve targeting", "late block read"]
+      },
+      "development_by_level": {
+        "beginner": ["pass platform", "three- or four-step approach", "safe landing", "hit high and in", "base defense"],
+        "intermediate": ["pass-to-approach", "line/cross/tip choices", "formed-block solutions", "block edge responsibility"],
+        "advanced": ["score against organized blocks", "handle heavy receive volume", "combine pipe and left-side routes", "adapt to scouting"]
+      },
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "record_type": "volleyball_role_skill_priority",
+      "id": "skill_priority_opposite",
+      "role": "opposite",
+      "priority_tiers": {
+        "primary": ["right-side attack", "pin blocking", "serve", "right-back defense", "transition footwork"],
+        "secondary": ["back-row D-ball", "emergency setting/attacking when setter digs", "serve receive if system uses all-around opposite", "line/cross block decisions"],
+        "advanced": ["exploit single blocks", "block elite outside hitters", "tempo variation on right side", "scout-based serving and blocking"]
+      },
+      "development_by_level": {
+        "beginner": ["learn right-side approach", "serve consistently", "block footwork basics", "defend right-back"],
+        "intermediate": ["attack fast and high right-side sets", "block outside hitter tendencies", "add controlled D-ball work"],
+        "advanced": ["carry scoring load", "stress opponent receive/block with serve and attack", "adapt receive role to system"]
+      },
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_read_hitter"]
+    },
+    {
+      "record_type": "volleyball_role_skill_priority",
+      "id": "skill_priority_middle_blocker",
+      "role": "middle_blocker",
+      "priority_tiers": {
+        "primary": ["block reading", "lateral net footwork", "quick attack timing", "landing control", "overpass handling"],
+        "secondary": ["closing double blocks", "slide/gap attacks", "serve pressure", "block-to-attack transition", "setter dump reads"],
+        "advanced": ["commit/read-block decisions", "scout setter tendencies", "delay/deception in quick attack", "triple-block coordination"]
+      },
+      "development_by_level": {
+        "beginner": ["safe blocking posture", "basic quick approach", "hands over net without net faults", "land balanced"],
+        "intermediate": ["read pass quality", "close to pins", "time quicks", "transition off the net"],
+        "advanced": ["control opposing first tempo", "shape block for defense", "vary quick tempo/routes", "block from scouting cues"]
+      },
+      "source_ids": ["src_usav_middle_blocking", "src_millan_middle_review", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "record_type": "volleyball_role_skill_priority",
+      "id": "skill_priority_libero",
+      "role": "libero",
+      "priority_tiers": {
+        "primary": ["serve receive", "digging", "defensive communication", "free-ball control", "low-stance movement"],
+        "secondary": ["out-of-system setting", "large-area coverage", "tip/roll shot reads", "coverage after attack", "tactical receive positioning"],
+        "advanced": ["serve-receive baiting", "opponent tendency reads", "two-player receive systems", "pressure passer leadership"]
+      },
+      "development_by_level": {
+        "beginner": ["platform angle", "call seams", "dig to target", "move before contact", "understand libero restrictions"],
+        "intermediate": ["cover larger area", "read server and hitter", "take second ball legally", "lead back-row defense"],
+        "advanced": ["manipulate servers", "organize receive geometry", "stabilize team under pressure", "scout hitter/server tendencies"]
+      },
+      "source_ids": ["src_usav_libero_impact", "src_usav_read_hitter", "src_fivb_rules_2025_2028"]
+    },
+    {
+      "record_type": "volleyball_role_skill_priority",
+      "id": "skill_priority_defensive_specialist",
+      "role": "defensive_specialist",
+      "priority_tiers": {
+        "primary": ["serve receive", "digging", "serving", "communication", "cold-entry readiness"],
+        "secondary": ["emergency setting", "coverage", "short-zone defense", "seam ownership", "controlled free balls"],
+        "advanced": ["targeted-passer stabilization", "substitution pattern fluency", "serve plus defend role", "opponent tendency reads"]
+      },
+      "development_by_level": {
+        "beginner": ["consistent platform", "defensive base", "serve in", "call ball/seam", "learn substitution timing"],
+        "intermediate": ["enter cold and pass under pressure", "dig hard-driven balls", "serve tactical zones", "coordinate with libero"],
+        "advanced": ["stabilize a targeted rotation", "change receive geometry", "combine serve pressure with elite defense"]
+      },
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_rules"]
+    },
+    {
+      "record_type": "volleyball_role_skill_priority",
+      "id": "skill_priority_serving_specialist",
+      "role": "serving_specialist",
+      "priority_tiers": {
+        "primary": ["serve consistency", "serve pressure", "target accuracy", "pre-serve routine", "serve-to-defense recovery"],
+        "secondary": ["serve type variation", "scouting target choice", "cold-entry arousal control", "short defensive responsibility"],
+        "advanced": ["rotation-specific serve plan", "late-game pressure serving", "tactical float/topspin variation", "server-run management"]
+      },
+      "development_by_level": {
+        "beginner": ["reliable in-bounds serve", "same toss every rep", "recover into court after serve"],
+        "intermediate": ["target zones", "serve under substitution pressure", "serve then defend assigned base"],
+        "advanced": ["enter cold in high-leverage points", "target weak passer/seam", "vary serve by scouting and score state"]
+      },
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_rules_2025_2028"]
+    },
+    {
+      "record_type": "volleyball_role_physical_demand",
+      "id": "role_physical_setter",
+      "role": "setter",
+      "demand_profile_id": "demand_setter",
+      "priority_physical_qualities": ["quickness", "change_of_direction", "shoulder_endurance", "trunk_control", "landing_control"],
+      "monitoring_fields": ["jump_sets", "total_sets", "defensive_sprints_to_second_ball", "front_row_block_jumps", "finger_or_shoulder_soreness"],
+      "source_ids": ["src_fivb_coaches_level_ii", "src_usav_setter_thoughts"]
+    },
+    {
+      "record_type": "volleyball_role_physical_demand",
+      "id": "role_physical_outside_hitter",
+      "role": "outside_hitter",
+      "demand_profile_id": "demand_outside_hitter",
+      "priority_physical_qualities": ["repeat_jump_ability", "approach_power", "shoulder_durability", "serve_receive_posture", "landing_control"],
+      "monitoring_fields": ["attack_swings", "approach_jumps", "serve_receive_reps", "block_jumps", "shoulder_knee_ankle_soreness"],
+      "source_ids": ["src_sheppard_positions", "src_marques_physical_fitness", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "record_type": "volleyball_role_physical_demand",
+      "id": "role_physical_opposite",
+      "role": "opposite",
+      "demand_profile_id": "demand_opposite",
+      "priority_physical_qualities": ["pin_block_power", "approach_power", "shoulder_durability", "right_side_footwork", "repeat_jump_ability"],
+      "monitoring_fields": ["right_side_swings", "block_jumps_vs_outside", "back_row_attack_jumps", "serve_reps", "shoulder_knee_ankle_soreness"],
+      "source_ids": ["src_sheppard_positions", "src_fivb_the_game", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "record_type": "volleyball_role_physical_demand",
+      "id": "role_physical_middle_blocker",
+      "role": "middle_blocker",
+      "demand_profile_id": "demand_middle_blocker",
+      "priority_physical_qualities": ["vertical_power", "lateral_reactivity", "landing_control", "hip_ankle_mobility", "block_to_attack_repeatability"],
+      "monitoring_fields": ["block_jumps", "quick_attack_jumps", "net_lateral_reps", "landing_quality", "knee_ankle_finger_soreness"],
+      "source_ids": ["src_millan_middle_review", "src_usav_middle_blocking", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "record_type": "volleyball_role_physical_demand",
+      "id": "role_physical_libero",
+      "role": "libero",
+      "demand_profile_id": "demand_libero",
+      "priority_physical_qualities": ["reaction_speed", "lateral_quickness", "low_stance_endurance", "hip_mobility", "trunk_control"],
+      "monitoring_fields": ["serve_receive_reps", "dig_reps", "floor_contacts", "low_stance_duration", "wrist_shoulder_hip_low_back_soreness"],
+      "source_ids": ["src_usav_libero_impact", "src_usav_read_hitter", "src_gouttebarge_injury_prevention"]
+    },
+    {
+      "record_type": "volleyball_role_physical_demand",
+      "id": "role_physical_defensive_specialist",
+      "role": "defensive_specialist",
+      "demand_profile_id": "demand_defensive_specialist",
+      "priority_physical_qualities": ["reaction_speed", "lateral_quickness", "low_stance_endurance", "serve_consistency", "readiness_after_rest"],
+      "monitoring_fields": ["serve_receive_reps", "dig_reps", "serve_reps", "bench_to_play_interval", "wrist_shoulder_low_back_soreness"],
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_read_hitter"]
+    },
+    {
+      "record_type": "volleyball_role_physical_demand",
+      "id": "role_physical_serving_specialist",
+      "role": "serving_specialist",
+      "demand_profile_id": "demand_serving_specialist",
+      "priority_physical_qualities": ["serve_mechanics_repeatability", "shoulder_trunk_control", "cold_entry_readiness", "calf_achilles_capacity", "arousal_control"],
+      "monitoring_fields": ["serve_attempts", "serve_errors_under_pressure", "jump_serve_reps", "shoulder_soreness", "calf_achilles_soreness"],
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_medical_injury_prevention"]
+    },
+    {
+      "record_type": "volleyball_role_injury_risk",
+      "id": "role_risk_setter",
+      "role": "setter",
+      "risk_ids": ["risk_general_shoulder_overuse", "risk_finger_wrist_block_dig", "risk_low_back_extension_rotation", "risk_general_ankle_sprain"],
+      "role_specific_notes": "Setters need finger/hand tolerance for high set volume, shoulder endurance for repeated overhead contacts, and safe landing/blocking preparation if front row.",
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_usav_setter_thoughts"]
+    },
+    {
+      "record_type": "volleyball_role_injury_risk",
+      "id": "role_risk_outside_hitter",
+      "role": "outside_hitter",
+      "risk_ids": ["risk_general_ankle_sprain", "risk_general_patellar_tendinopathy", "risk_general_shoulder_overuse", "risk_low_back_extension_rotation"],
+      "role_specific_notes": "Outside hitters often stack receive, attack, block, and dig load, so swing count, jump count, and landing quality should be monitored together.",
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_bere_fivb_surveillance"]
+    },
+    {
+      "record_type": "volleyball_role_injury_risk",
+      "id": "role_risk_opposite",
+      "role": "opposite",
+      "risk_ids": ["risk_general_ankle_sprain", "risk_general_patellar_tendinopathy", "risk_general_shoulder_overuse", "risk_low_back_extension_rotation"],
+      "role_specific_notes": "Opposites may have heavy attack and block load with less receive movement; protect shoulder, knee, ankle, and back as right-side power demands rise.",
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_sheppard_positions"]
+    },
+    {
+      "record_type": "volleyball_role_injury_risk",
+      "id": "role_risk_middle_blocker",
+      "role": "middle_blocker",
+      "risk_ids": ["risk_general_ankle_sprain", "risk_general_patellar_tendinopathy", "risk_finger_wrist_block_dig", "risk_low_back_extension_rotation"],
+      "role_specific_notes": "Middle blockers need careful progression of block jumps, quick attacks, lateral net movement, and hand/finger exposure because net-play density is high.",
+      "source_ids": ["src_millan_middle_review", "src_fivb_medical_injury_prevention", "src_usav_middle_blocking"]
+    },
+    {
+      "record_type": "volleyball_role_injury_risk",
+      "id": "role_risk_libero",
+      "role": "libero",
+      "risk_ids": ["risk_libero_ds_dive_load", "risk_finger_wrist_block_dig"],
+      "role_specific_notes": "Liberos have lower jump load but high low-posture, dig, wrist/hand, dive, shoulder, hip, and low-back demands.",
+      "source_ids": ["src_usav_libero_impact", "src_gouttebarge_injury_prevention"]
+    },
+    {
+      "record_type": "volleyball_role_injury_risk",
+      "id": "role_risk_defensive_specialist",
+      "role": "defensive_specialist",
+      "risk_ids": ["risk_libero_ds_dive_load", "risk_finger_wrist_block_dig", "risk_serving_specialist_cold_entry"],
+      "role_specific_notes": "Defensive specialists share libero-like floor-defense risks and also need readiness routines because they may enter after sitting.",
+      "source_ids": ["src_gold_medal_squared_positions", "src_gouttebarge_injury_prevention"]
+    },
+    {
+      "record_type": "volleyball_role_injury_risk",
+      "id": "role_risk_serving_specialist",
+      "role": "serving_specialist",
+      "risk_ids": ["risk_general_shoulder_overuse", "risk_low_back_extension_rotation", "risk_serving_specialist_cold_entry"],
+      "role_specific_notes": "Serving specialists should not accumulate excessive serving volume just because their match role is short; quality and readiness matter more than bulk reps.",
+      "source_ids": ["src_fivb_medical_injury_prevention", "src_gold_medal_squared_positions"]
+    },
+    {
+      "record_type": "volleyball_role_training_implication",
+      "id": "role_training_setter",
+      "role": "setter",
+      "beginner": ["learn target location", "move feet to ball", "set high to pins", "communicate loudly", "play all skills in simple systems"],
+      "intermediate": ["add middle/right-side options", "learn jump set", "read blockers", "lead pre-serve calls", "train emergency setting"],
+      "advanced": ["run tempo offense", "exploit matchups", "deceive without losing set quality", "manage pressure and attacker confidence"],
+      "source_ids": ["src_usav_setter_thoughts", "src_usav_recipe_setter"]
+    },
+    {
+      "record_type": "volleyball_role_training_implication",
+      "id": "role_training_outside_hitter",
+      "role": "outside_hitter",
+      "beginner": ["serve receive platform", "approach and land safely", "hit high and in", "learn base defense"],
+      "intermediate": ["pass-to-hit", "tool/block-out", "serve receive seams", "left-side block assignments", "transition attack"],
+      "advanced": ["out-of-system scoring", "back-row pipe", "scout-based shot choice", "heavy receive and attack load management"],
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_coaches_level_ii"]
+    },
+    {
+      "record_type": "volleyball_role_training_implication",
+      "id": "role_training_opposite",
+      "role": "opposite",
+      "beginner": ["right-side approach", "serve consistency", "basic pin block", "right-back defense"],
+      "intermediate": ["attack varied right-side sets", "block outside hitter", "learn D-ball basics", "emergency help when setter digs"],
+      "advanced": ["carry scoring from right side", "matchup-based blocking", "back-row attack patterns", "adapt receive role to system"],
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_read_hitter"]
+    },
+    {
+      "record_type": "volleyball_role_training_implication",
+      "id": "role_training_middle_blocker",
+      "role": "middle_blocker",
+      "beginner": ["block ready position", "basic lateral footwork", "quick approach rhythm", "safe landing"],
+      "intermediate": ["read pass quality", "close to pins", "quick attack timing", "block-to-attack transition"],
+      "advanced": ["scout setter tendencies", "vary first-tempo routes", "coordinate block with defense", "manage high jump density"],
+      "source_ids": ["src_usav_middle_blocking", "src_millan_middle_review"]
+    },
+    {
+      "record_type": "volleyball_role_training_implication",
+      "id": "role_training_libero",
+      "role": "libero",
+      "beginner": ["platform control", "call seams", "dig to target", "understand restrictions"],
+      "intermediate": ["large-area serve receive", "out-of-system setting", "read server and hitter", "lead back-row communication"],
+      "advanced": ["manipulate serve receive geometry", "bait servers", "organize two-passer options", "stabilize late-set pressure"],
+      "source_ids": ["src_usav_libero_impact", "src_usav_read_hitter", "src_fivb_rules_2025_2028"]
+    },
+    {
+      "record_type": "volleyball_role_training_implication",
+      "id": "role_training_defensive_specialist",
+      "role": "defensive_specialist",
+      "beginner": ["consistent serve receive", "defensive base", "serve in", "substitution awareness"],
+      "intermediate": ["cold-entry passing", "dig hard-driven balls", "serve tactical zones", "emergency second-ball control"],
+      "advanced": ["stabilize targeted rotations", "coordinate with libero", "serve plus defend under pressure", "optimize substitution value"],
+      "source_ids": ["src_gold_medal_squared_positions", "src_usav_rules"]
+    },
+    {
+      "record_type": "volleyball_role_training_implication",
+      "id": "role_training_serving_specialist",
+      "role": "serving_specialist",
+      "beginner": ["repeatable toss", "serve in under light pressure", "recover into court"],
+      "intermediate": ["serve target zones", "enter cold from bench", "serve-to-defense base", "track error versus pressure"],
+      "advanced": ["serve scouting targets", "late-set pressure routine", "serve type variation", "substitution and score-state awareness"],
+      "source_ids": ["src_gold_medal_squared_positions", "src_fivb_rules_2025_2028"]
+    }
+  ]
+}

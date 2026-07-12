@@ -1,0 +1,1089 @@
+{
+  "metadata": {
+    "domain": "basketball_snc_injury_macro_planning",
+    "sport": "basketball",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready basketball strength-and-conditioning, injury-risk, workload-monitoring, return-to-play, match-week, readiness-adjustment, and macro-planning rules across youth, scholastic, collegiate, and adult players, with explicit physical-demand channels and age-sensitive safeguards."
+  },
+  "source_refs": [
+    {
+      "id": "src_fiba_team_physicians",
+      "title": "Medical Resource for Basketball Team Physicians",
+      "url": "https://assets.fiba.basketball/image/upload/documents-corporate-medical-team-medical-support-staff-resources.pdf",
+      "source_type": "official_medical_resource",
+      "organization_or_author": "FIBA Medical Commission",
+      "notes": "Used for basketball-specific medical priorities, including ankle injury prevention, knee sprains, chronic back pain, overuse tendon and bone injuries, concussion awareness, team-physician medical fitness, and competition medical support."
+    },
+    {
+      "id": "src_fiba_medical_staff",
+      "title": "Information for Medical Staff",
+      "url": "https://about.fiba.basketball/en/services/medical/information-for-medical-staff",
+      "source_type": "official_medical_resource",
+      "organization_or_author": "FIBA",
+      "notes": "Used for the official FIBA framing that basketball medical staff commonly encounter ankle and knee sprains, chronic back pain, overuse tendon and bone injuries, and must manage concussion under contemporary guidance."
+    },
+    {
+      "id": "src_nba_youth_guidelines",
+      "title": "Youth Basketball Guidelines",
+      "url": "https://youthguidelines.nba.com/",
+      "source_type": "official_youth_participation_guidance",
+      "organization_or_author": "NBA and USA Basketball",
+      "notes": "Used for age-based youth participation, weekly rest, annual time away from organized basketball, sleep, delayed specialization, and avoiding excessive competition density."
+    },
+    {
+      "id": "src_jr_nba_youth_guidelines",
+      "title": "NBA, USA Basketball Announce First-Ever Youth Basketball Guidelines",
+      "url": "https://jr.nba.com/youth-basketball-guidelines/",
+      "source_type": "official_youth_participation_guidance",
+      "organization_or_author": "Jr. NBA, NBA, and USA Basketball",
+      "notes": "Used as an official cross-check for youth rest, adequate sleep, yearly time away, delay of single-sport specialization, and age-appropriate participation limits."
+    },
+    {
+      "id": "src_usab_youth_guidebook",
+      "title": "USA Basketball Youth Development Guidebook",
+      "url": "https://www.usab.com/play/the-usa-basketball-coaching-guide-for-all-levels/usa-basketball-youth-development-guidebook",
+      "source_type": "official_coaching_development_resource",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for progressive youth player development and for keeping S&C prescriptions aligned with age, skill development, enjoyment, and long-term participation."
+    },
+    {
+      "id": "src_nba_participation_policy",
+      "title": "NBA Board of Governors Approves New Player Participation Policy",
+      "url": "https://www.nba.com/news/nba-board-of-governors-approves-new-player-participation-policy",
+      "source_type": "official_league_policy",
+      "organization_or_author": "NBA",
+      "notes": "Used to separate professional availability policy from medical load management: healthy-player rest decisions have policy constraints, while injury, rehabilitation, and medical fitness remain distinct."
+    },
+    {
+      "id": "src_ncaa_isp",
+      "title": "NCAA Injury Surveillance Program",
+      "url": "https://www.ncaa.org/sports/2018/4/9/ncaa-injury-surveillance-program.aspx",
+      "source_type": "official_injury_surveillance_resource",
+      "organization_or_author": "NCAA",
+      "notes": "Used for the principle that collegiate basketball safety planning should be informed by ongoing injury and illness surveillance, not only coach perception."
+    },
+    {
+      "id": "src_ncaa_wbb_epidemiology",
+      "title": "Epidemiology of Injuries in National Collegiate Athletic Association Women's Basketball: 2014-2015 Through 2018-2019",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8293880/",
+      "source_type": "peer_reviewed_injury_surveillance",
+      "organization_or_author": "NCAA Injury Surveillance Program researchers",
+      "notes": "Used for collegiate women's basketball injury patterning, including higher competition injury rates, preseason risk, ankle ligament injuries, concussions, and ACL tears."
+    },
+    {
+      "id": "src_collegiate_ankle_epidemiology",
+      "title": "10-Year Epidemiology of Ankle Injuries in Men's and Women's Collegiate Basketball",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6240983/",
+      "source_type": "peer_reviewed_injury_surveillance",
+      "organization_or_author": "NCAA basketball ankle injury epidemiology researchers",
+      "notes": "Used for ankle-injury timing and mechanism context, including preseason, contact-related episodes, conservative management, and prevention implications."
+    },
+    {
+      "id": "src_sports_injuries_review",
+      "title": "Sports Injuries in Basketball Players: A Systematic Review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11278090/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Basketball injury review authors",
+      "notes": "Used as a broad basketball injury pattern cross-check: ankle and knee injury prevalence, overuse concerns, and the need for prevention programming."
+    },
+    {
+      "id": "src_training_load_injury_review",
+      "title": "The Relationship between Training Load and Injury Risk in Basketball",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11431307/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Basketball training load and injury risk review authors",
+      "notes": "Used for workload-injury relationship logic, including the need to interpret internal and external load together and avoid simplistic single-metric risk prediction."
+    },
+    {
+      "id": "src_match_training_demands_review",
+      "title": "Training Load and Match-Play Demands in Basketball Based on Competition Level: A Systematic Review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7058381/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Russell, McLean, Impellizzeri, Strack, and Coutts",
+      "notes": "Used for competition-level differences, intermittent high-intensity demands, position/context variation, and the need to match training to match-play demands."
+    },
+    {
+      "id": "src_activity_demands_review",
+      "title": "The Activity Demands and Physiological Responses Encountered During Basketball Match-Play: A Systematic Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29039018/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Stojanovic, Stojiljkovic, Scanlan, Dalbo, Berkelmans, and Milanovic",
+      "notes": "Used for match-play movement and physiological demands, including repeated high-intensity efforts, sprinting, shuffling, and positional differences."
+    },
+    {
+      "id": "src_physiology_field_tests_review",
+      "title": "Physiology of Basketball: Field Tests. Review Article",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8008295/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Basketball physiology review authors",
+      "notes": "Used for basketball energy-system demands, aerobic support for recovery, anaerobic power, sprint and jump testing, and basketball-specific physical assessment."
+    },
+    {
+      "id": "src_gssi_physiologic_profile",
+      "title": "Physiologic Profile of Basketball Athletes",
+      "url": "https://www.gssiweb.org/sports-science-exchange/article/physiologic-profile-of-basketball-athletes",
+      "source_type": "reputable_sports_science_education",
+      "organization_or_author": "Gatorade Sports Science Institute",
+      "notes": "Used for practical energy-system framing: basketball relies heavily on anaerobic metabolism with aerobic contribution for recovery across repeated intermittent segments."
+    },
+    {
+      "id": "src_measuring_physical_demands",
+      "title": "Measuring Physical Demands in Basketball: An Explorative Systematic Review of Practices",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33151481/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Basketball physical-demand monitoring researchers",
+      "notes": "Used for monitoring technology and metric selection, including the need to be cautious about comparing outputs across devices and studies."
+    },
+    {
+      "id": "src_external_load_female_review",
+      "title": "External Load Monitoring in Female Basketball: A Systematic Review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10407319/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Female basketball external-load review authors",
+      "notes": "Used for female-basketball load monitoring, external load channels, technology limitations, and the importance of sex- and level-specific interpretation."
+    },
+    {
+      "id": "src_physical_persistency",
+      "title": "Physical Persistency Across Game Quarters and During Consecutive Games in Elite Basketball Players",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9099518/",
+      "source_type": "peer_reviewed_match_demand_study",
+      "organization_or_author": "Elite basketball physical performance researchers",
+      "notes": "Used for within-game and consecutive-game exposure logic, including acceleration, deceleration, PlayerLoad, and fatigue-resilience planning."
+    },
+    {
+      "id": "src_game_quarters_positions",
+      "title": "Differences in Physical Demands Between Game Quarters and Playing Positions on Professional Basketball Players During Official Competition",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7196749/",
+      "source_type": "peer_reviewed_match_demand_study",
+      "organization_or_author": "Professional basketball match-demand researchers",
+      "notes": "Used for position-specific planning, especially higher short intermittent high-intensity movement, defensive shuffle, and change-of-direction demands for guards."
+    },
+    {
+      "id": "src_lower_extremity_prevention",
+      "title": "Prevention of Lower Extremity Injuries in Basketball: A Systematic Review and Meta-Analysis",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4547118/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Taylor, Ford, Nguyen, Terry, and Hegedus",
+      "notes": "Used for evidence that prophylactic programs may reduce general lower-extremity injuries and ankle sprains in basketball, while ACL-specific effects are less certain."
+    },
+    {
+      "id": "src_neuromuscular_warmups",
+      "title": "The Effectiveness of Neuromuscular Warmups for Lower Extremity Injury Prevention in Basketball: A Systematic Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34529179/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Davis, Emptage, Pounds, Woo, Sallis, Romero, and Sharp",
+      "notes": "Used for multicomponent neuromuscular warm-up recommendations in basketball: balance, strength, agility, landing, and movement-control elements."
+    },
+    {
+      "id": "src_shred_basketball",
+      "title": "The SHRed Injuries Basketball Neuromuscular Training Warm-up Program Reduces Ankle and Knee Injury Rates by 36% in Youth Basketball",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34972488/",
+      "source_type": "peer_reviewed_injury_prevention_trial",
+      "organization_or_author": "Emery, Owoeye, Räisänen, and colleagues",
+      "notes": "Used for youth basketball injury-prevention programming and the practical value of a short multicomponent warm-up before practices and games."
+    },
+    {
+      "id": "src_shred_resources",
+      "title": "Basketball Neuromuscular Training Resources",
+      "url": "https://www.ucalgary.ca/shred-injuries/all-sports/basketball",
+      "source_type": "sports_medicine_education_resource",
+      "organization_or_author": "University of Calgary Sport Injury Prevention Research Centre",
+      "notes": "Used for practical SHRed warm-up components: aerobic, agility, strength, and balance exercises performed before sport-specific warm-up."
+    },
+    {
+      "id": "src_ankle_rtp_consensus",
+      "title": "Return to Sport Decisions After an Acute Lateral Ankle Sprain Injury: Introducing the PAASS Framework",
+      "url": "https://bjsm.bmj.com/content/55/22/1270",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Smith, Bleakley, Delahunt, and international consensus group",
+      "notes": "Used for ankle return-to-sport domains: pain, ankle impairments, athlete perception, sensorimotor control, and sport/functional performance."
+    },
+    {
+      "id": "src_ankle_rtp_review",
+      "title": "Return to Play in Athletes Following Ankle Injuries",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3497954/",
+      "source_type": "peer_reviewed_clinical_review",
+      "organization_or_author": "Sports medicine ankle return-to-play authors",
+      "notes": "Used for basketball ankle recurrence risk, prior ankle injury as a major risk factor, and the need for proprioception, strength, balance, hop, and sport-specific progression."
+    },
+    {
+      "id": "src_patellar_tendon",
+      "title": "Patellar Tendinopathy: Clinical Diagnosis, Load Management, and Advice for Challenging Case Presentations",
+      "url": "https://www.jospt.org/doi/10.2519/jospt.2015.5987",
+      "source_type": "peer_reviewed_clinical_guidance",
+      "organization_or_author": "Malliaras, Cook, Purdam, and Rio",
+      "notes": "Used for patellar tendon load management, pain-monitoring, 24-hour response, progressive loading, and return to sport after full training is tolerated."
+    },
+    {
+      "id": "src_acl_aspetar",
+      "title": "Aspetar Clinical Practice Guideline on Rehabilitation After Anterior Cruciate Ligament Reconstruction",
+      "url": "https://bjsm.bmj.com/content/57/9/500",
+      "source_type": "peer_reviewed_clinical_practice_guideline",
+      "organization_or_author": "Aspetar Orthopaedic and Sports Medicine Hospital guideline group",
+      "notes": "Used for criteria-based ACL rehabilitation, return-to-running, strength, hop, movement-quality, sport-specific exposure, and psychological readiness concepts."
+    },
+    {
+      "id": "src_return_to_sport_consensus",
+      "title": "2016 Consensus Statement on Return to Sport from the First World Congress in Sports Physical Therapy",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27226389/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Ardern and consensus group",
+      "notes": "Used for return-to-participation, return-to-sport, and return-to-performance staging across basketball injury types."
+    },
+    {
+      "id": "src_plyometric_meta",
+      "title": "The Effects of Plyometric Jump Training on Physical Fitness Attributes in Basketball Players: A Meta-Analysis",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9729929/",
+      "source_type": "peer_reviewed_meta_analysis",
+      "organization_or_author": "Basketball plyometric training meta-analysis authors",
+      "notes": "Used for plyometric jump training effects on jump performance, sprinting, change of direction, balance, and strength, with the caveat that dosage and landing quality matter."
+    },
+    {
+      "id": "src_cod_strength_plyo",
+      "title": "Effects of Plyometric, Strength and Change of Direction Training on Basketball-Specific Performance",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8120961/",
+      "source_type": "peer_reviewed_training_study",
+      "organization_or_author": "Basketball training intervention researchers",
+      "notes": "Used for the combined value of strength, plyometric, and change-of-direction training in basketball-specific performance preparation."
+    },
+    {
+      "id": "src_nsca_youth_basketball",
+      "title": "Integrative Neuromuscular Training for Youth Basketball Players",
+      "url": "https://www.nsca.com/contentassets/d8be90da8e4140dab334bb6c149c7efc/coach3.1-integrative_neuromuscular_training_for_youth_basketball.pdf",
+      "source_type": "reputable_s_and_c_education",
+      "organization_or_author": "NSCA Coach / Rick Howard",
+      "notes": "Used for youth needs analysis, integrative neuromuscular training, movement quality, strength development, and age-appropriate progression."
+    },
+    {
+      "id": "src_ioc_youth_development",
+      "title": "International Olympic Committee Consensus Statement on Youth Athletic Development",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26084524/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Bergeron and IOC consensus group",
+      "notes": "Used for youth maturation, long-term athletic development, diversified preparation, training age, growth-spurt sensitivity, and avoiding adult-like loading too early."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "basketball_load_is_multidirectional_and_multichannel",
+      "concept": "Basketball load is accumulated through accelerations, decelerations, changes of direction, lateral shuffling, jumps, landings, contact, skill repetitions, minutes, travel, psychological stress, and recovery state. Duration alone misses the largest tissue stressors.",
+      "backend_use": "Represent basketball sessions with separate load channels rather than one generic session difficulty score.",
+      "source_ids": ["src_match_training_demands_review", "src_measuring_physical_demands", "src_training_load_injury_review"]
+    },
+    {
+      "id": "deceleration_is_a_primary_basketball_stressor",
+      "concept": "Basketball frequently compresses sprint, stop, cut, reaccelerate, and jump actions into small spaces. Braking load can be high even when total distance is modest.",
+      "backend_use": "Track high-intensity decelerations, defensive closeouts, stop-jump actions, and cutting density separately from total distance.",
+      "source_ids": ["src_game_quarters_positions", "src_physical_persistency", "src_match_training_demands_review"]
+    },
+    {
+      "id": "jump_count_needs_landing_and_context",
+      "concept": "Jump volume matters, but the risk and adaptation value depend on jump type, landing type, fatigue, contact, role, surface, and recent tendon response.",
+      "backend_use": "Tag jump exposure as rebound, contest, layup, dunk, jump shot, block, tip, closeout-jump, or plyometric drill, and pair it with landing-control quality.",
+      "source_ids": ["src_plyometric_meta", "src_patellar_tendon", "src_lower_extremity_prevention"]
+    },
+    {
+      "id": "aerobic_fitness_supports_repeated_explosiveness",
+      "concept": "Basketball is heavily anaerobic during decisive actions, but aerobic fitness supports recovery between repeated explosive efforts, practices, quarters, and games.",
+      "backend_use": "Program aerobic support as low-to-moderate cost recovery capacity, not as generic long slow running that crowds skill and power work.",
+      "source_ids": ["src_physiology_field_tests_review", "src_gssi_physiologic_profile", "src_activity_demands_review"]
+    },
+    {
+      "id": "position_and_role_change_load_expression",
+      "concept": "Guards, wings, and bigs can experience different movement profiles: guards often accumulate more short high-intensity shuffling and direction changes, while forwards and centers may absorb more rebounding, screening, contact, and vertical contests.",
+      "backend_use": "Scale training plans by role, minutes, defensive assignment, and tactical style rather than only roster position label.",
+      "source_ids": ["src_activity_demands_review", "src_game_quarters_positions", "src_external_load_female_review"]
+    },
+    {
+      "id": "fatigue_changes_skill_and_movement_risk",
+      "concept": "Fatigue can degrade landing, deceleration, trunk control, shooting mechanics, and defensive stance quality before the athlete subjectively feels unable to continue.",
+      "backend_use": "Use movement-quality, jump-height, soreness, and session-RPE flags to reduce high-risk work even if planned volume remains incomplete.",
+      "source_ids": ["src_physical_persistency", "src_training_load_injury_review", "src_acl_aspetar"]
+    },
+    {
+      "id": "neuromuscular_warmup_is_a_minimum_standard",
+      "concept": "Basketball injury prevention should include repeated exposure to balance, strength, agility, landing, deceleration, and movement-control tasks in warm-ups, especially for youth and recurrent ankle/knee-risk athletes.",
+      "backend_use": "Auto-attach a basketball neuromuscular warm-up block to practice, game, and high-intensity court sessions unless specifically contraindicated.",
+      "source_ids": ["src_neuromuscular_warmups", "src_shred_basketball", "src_lower_extremity_prevention"]
+    },
+    {
+      "id": "tendon_capacity_requires_both_strength_and_energy_storage",
+      "concept": "Patellar and quadriceps tendon problems require load modification, progressive strength, and eventually reintroduction of fast stretch-shortening and basketball jump demands; complete unloading can reduce capacity.",
+      "backend_use": "Separate tendon-friendly strength from high-fast jumping and use 24-hour symptom response to progress or regress.",
+      "source_ids": ["src_patellar_tendon", "src_plyometric_meta"]
+    },
+    {
+      "id": "readiness_is_not_rest_alone",
+      "concept": "Load management should not mean simply removing all work. Players with low chronic exposure may be less prepared for game peaks, while overloaded or symptomatic players need selective reduction of the highest-risk channels.",
+      "backend_use": "Create readiness adjustments that preserve useful low-risk preparation while reducing tissue-specific spikes.",
+      "source_ids": ["src_training_load_injury_review", "src_nba_participation_policy", "src_return_to_sport_consensus"]
+    },
+    {
+      "id": "youth_players_are_not_small_adults",
+      "concept": "Youth basketball planning must account for maturation, growth spurts, sleep, school stress, sport sampling, and cumulative tournament exposure. Adult-style year-round competition and skill-only volume increase overuse and burnout risk.",
+      "backend_use": "Apply age and maturation gates to weekly game count, organized basketball days, jump density, resistance training progressions, and annual time away.",
+      "source_ids": ["src_nba_youth_guidelines", "src_jr_nba_youth_guidelines", "src_ioc_youth_development"]
+    },
+    {
+      "id": "return_to_play_is_a_continuum",
+      "concept": "Return from injury should move from participation to sport to performance, with basketball-specific exposure restored before unrestricted minutes.",
+      "backend_use": "Generate staged RTP plans that include medical clearance when indicated, movement tests, controlled skill exposure, practice integration, and minutes progression.",
+      "source_ids": ["src_return_to_sport_consensus", "src_acl_aspetar", "src_ankle_rtp_consensus"]
+    },
+    {
+      "id": "competition_week_plans_depend_on_actual_minutes",
+      "concept": "The day after a game should not be identical for a 35-minute starter, 12-minute rotation player, unused substitute, and returning injured player.",
+      "backend_use": "Use actual minutes, high-intensity events, injury history, and next-game timing to select recovery, top-up, maintenance, or reduced-load pathways.",
+      "source_ids": ["src_physical_persistency", "src_training_load_injury_review", "src_match_training_demands_review"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "basketball_external_internal_load_model",
+      "name": "Basketball External-Internal Load Model",
+      "model": {
+        "external_load_channels": ["minutes", "total_distance", "high_intensity_distance", "accelerations", "decelerations", "changes_of_direction", "jumps", "landings", "contacts", "playerload_or_inertial_load", "drill_density"],
+        "internal_load_channels": ["session_rpe", "heart_rate_response", "wellness", "sleep", "soreness", "pain_during", "next_day_response"],
+        "interpretation": "External work describes what the player did; internal response describes how costly it was for that athlete."
+      },
+      "backend_use": "Combine wearable, coach log, and athlete wellness fields before classifying readiness.",
+      "source_ids": ["src_training_load_injury_review", "src_measuring_physical_demands", "src_external_load_female_review"]
+    },
+    {
+      "id": "basketball_movement_quality_gate_model",
+      "name": "Movement Quality Gate Model",
+      "model": {
+        "green_gate": ["controlled landing", "quiet trunk", "knee tracks over foot", "decelerates without extra steps or collapse", "no pain escalation"],
+        "yellow_gate": ["minor asymmetry", "low confidence", "fatigue-related quality drop", "mild pain that is stable"],
+        "red_gate": ["swelling", "instability", "sharp pain", "giving way", "loss of normal gait", "neurological symptoms"]
+      },
+      "backend_use": "Gate progression to reactive cutting, dense plyometrics, live scrimmage, and full minutes.",
+      "source_ids": ["src_acl_aspetar", "src_ankle_rtp_consensus", "src_return_to_sport_consensus"]
+    },
+    {
+      "id": "jump_landing_exposure_model",
+      "name": "Jump-Landing Exposure Model",
+      "model": {
+        "jump_categories": ["planned_plyometric", "layup_or_finish", "jump_shot", "rebound", "block_or_contest", "tip_or_second_jump", "dunk", "fatigue_jump"],
+        "landing_categories": ["bilateral_controlled", "single_leg", "contact_landing", "off_axis", "crowded_space", "transition_landing"],
+        "risk_multipliers": ["prior_ankle_sprain", "patellar_tendon_pain", "growth_spurt", "late_session_fatigue", "new_surface", "weekly_jump_spike"]
+      },
+      "backend_use": "Make jump volume rules sensitive to landing context instead of raw count only.",
+      "source_ids": ["src_patellar_tendon", "src_collegiate_ankle_epidemiology", "src_plyometric_meta"]
+    },
+    {
+      "id": "basketball_accel_decel_cod_model",
+      "name": "Acceleration-Deceleration-COD Model",
+      "model": {
+        "micro_actions": ["first_step_acceleration", "closeout_brake", "defensive_slide", "crossover_cut", "backpedal_to_sprint", "screen_navigation", "transition_sprint", "stop_jump"],
+        "capacity_qualities": ["eccentric_strength", "single_leg_stiffness_control", "hip_trunk_control", "ankle_calf_capacity", "reactive_agility", "technical_braking_skill"],
+        "progression": ["linear deceleration", "planned angle cuts", "lateral shuffle and stick", "reactive COD", "contact and ball-decision COD", "fatigue-resistant COD"]
+      },
+      "backend_use": "Progress court-speed sessions from planned mechanics to reactive basketball decisions.",
+      "source_ids": ["src_game_quarters_positions", "src_activity_demands_review", "src_cod_strength_plyo"]
+    },
+    {
+      "id": "tendon_response_24_hour_model",
+      "name": "Tendon 24-Hour Response Model",
+      "model": {
+        "inputs": ["pain_during", "pain_after", "next_morning_stiffness", "jump_or_stair_response", "weekly_jump_load", "change_in_court_volume"],
+        "progress_if": "Pain is tolerable, stable, and not worse the next day; strength and movement quality are maintained.",
+        "regress_if": "Pain rises during session, next-day symptoms increase, jumping becomes guarded, or tendon stiffness worsens."
+      },
+      "backend_use": "Adjust patellar and quadriceps tendon plans without fully removing all lower-body training.",
+      "source_ids": ["src_patellar_tendon", "src_return_to_sport_consensus"]
+    },
+    {
+      "id": "youth_maturation_load_model",
+      "name": "Youth Maturation Load Model",
+      "model": {
+        "risk_flags": ["rapid_height_change", "new anterior_knee_pain", "heel_or_foot_pain", "coordination_drop", "high_tournament_density", "single_sport_year_round"],
+        "programming_bias": ["movement_literacy", "bodyweight_to_light_resistance_strength", "landing_skill", "balance", "age_appropriate_speed", "fun_and_skill_variety"],
+        "protective_rules": ["weekly_rest_day", "annual_time_away", "avoid adult match density", "delay specialization pressure"]
+      },
+      "backend_use": "Constrain youth plans during growth spurts and tournament-heavy seasons.",
+      "source_ids": ["src_nba_youth_guidelines", "src_usab_youth_guidebook", "src_ioc_youth_development", "src_nsca_youth_basketball"]
+    },
+    {
+      "id": "match_week_minutes_topup_model",
+      "name": "Match-Week Minutes and Top-Up Model",
+      "model": {
+        "starter_high_minutes": "Recovery, tissue check, mobility, low-volume strength maintenance later in week, no extra conditioning.",
+        "rotation_moderate_minutes": "Recovery plus selective top-up for missed qualities if readiness is green.",
+        "low_minutes_or_unused": "Controlled top-up speed, conditioning, strength, and skill exposure while respecting next-game role.",
+        "returning_player": "Minutes cap, no sudden back-to-back peak exposure, and next-day symptom monitoring."
+      },
+      "backend_use": "Split post-game and between-game plans by actual exposure.",
+      "source_ids": ["src_physical_persistency", "src_training_load_injury_review", "src_nba_participation_policy"]
+    },
+    {
+      "id": "return_to_performance_basketball_model",
+      "name": "Basketball Return-to-Performance Model",
+      "model": {
+        "phases": ["clinical_recovery", "basic_strength_and_range", "linear_run_and_jump", "planned_lateral_and_deceleration", "controlled_skill", "reactive_noncontact", "contact_practice", "restricted_minutes", "full_performance"],
+        "decision_domains": ["symptoms", "range", "strength", "balance", "hop_and_landing", "COD", "basketball_skill_tolerance", "confidence", "medical_clearance"],
+        "rollback_triggers": ["swelling", "instability", "sharp_pain", "next_day_worsening", "movement_quality_breakdown"]
+      },
+      "backend_use": "Create criteria-based RTP records for ankle, knee, tendon, hip/groin, back, and upper-extremity injuries.",
+      "source_ids": ["src_return_to_sport_consensus", "src_ankle_rtp_consensus", "src_acl_aspetar"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "defensive_style_changes_physical_load",
+      "rule": "Pressing, switching, trapping, and full-court pickup increase repeated accelerations, closeout brakes, lateral shuffles, and reactive COD compared with conservative half-court defense.",
+      "backend_use": "Increase deceleration, lateral, and neuromuscular-prep emphasis for weeks with press-heavy or switch-heavy tactical plans.",
+      "source_ids": ["src_game_quarters_positions", "src_activity_demands_review"]
+    },
+    {
+      "id": "pace_and_transition_change_conditioning_target",
+      "rule": "High-tempo transition play increases repeated sprint, reacceleration, and aerobic recovery requirements; slower half-court play can still impose high contact, screening, and jump-contest loads.",
+      "backend_use": "Select conditioning methods based on team pace and role rather than using the same court running for every player.",
+      "source_ids": ["src_match_training_demands_review", "src_gssi_physiologic_profile"]
+    },
+    {
+      "id": "role_specific_rebounding_contact_rule",
+      "rule": "Frontcourt and high-rebounding roles need strength, trunk stiffness, shoulder and wrist resilience, vertical contest tolerance, and landing skill under contact.",
+      "backend_use": "Add contact-prep and landing-under-contact progressions for bigs, wings who crash, and small guards assigned to box out bigger players.",
+      "source_ids": ["src_activity_demands_review", "src_fiba_team_physicians", "src_sports_injuries_review"]
+    },
+    {
+      "id": "ball_handler_cutting_rule",
+      "rule": "Primary ball handlers need repeated first-step acceleration, stop-start braking, lateral separation moves, and trunk control while dribbling and absorbing contact.",
+      "backend_use": "Bias guard plans toward acceleration, deceleration, lateral strength, foot-ankle capacity, and reactive COD.",
+      "source_ids": ["src_game_quarters_positions", "src_activity_demands_review", "src_cod_strength_plyo"]
+    },
+    {
+      "id": "shooting_volume_upper_extremity_rule",
+      "rule": "High shooting volume is lower collision load than rebounding, but it can still accumulate wrist, finger, shoulder, elbow, trunk, and low-back stress when layered on fatigue, strength work, and travel.",
+      "backend_use": "Track high-volume shooting days as skill load and avoid stacking with heavy upper-body pressing or symptomatic wrist/shoulder/back presentations.",
+      "source_ids": ["src_fiba_medical_staff", "src_sports_injuries_review"]
+    },
+    {
+      "id": "small_sided_games_density_rule",
+      "rule": "Small-sided and advantage-disadvantage drills can create very dense accelerations, decelerations, contacts, and reactive decisions despite short duration.",
+      "backend_use": "Classify drill density and court size so short practice blocks do not get undercounted.",
+      "source_ids": ["src_measuring_physical_demands", "src_training_load_injury_review"]
+    },
+    {
+      "id": "late_game_peak_exposure_rule",
+      "rule": "Late-game and close-score scenarios may preserve or increase high-intensity exposures while fatigue is high; conditioning should prepare repeated quality, not just early-session speed.",
+      "backend_use": "Include controlled fatigue-resistant movement blocks after base mechanics are competent.",
+      "source_ids": ["src_physical_persistency", "src_match_training_demands_review"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "repeated_acceleration_demand",
+      "name": "Repeated Acceleration Demand",
+      "description": "Basketball repeatedly requires first-step acceleration from static, shuffle, backpedal, and crossover positions in both offensive and defensive contexts.",
+      "load_channels": ["high_intensity_accelerations", "first_three_steps", "transition_sprints", "closeout_reaccelerations"],
+      "training_priority": "Short acceleration mechanics, horizontal force, hip extension strength, calf stiffness, and decision-linked starts.",
+      "source_ids": ["src_activity_demands_review", "src_game_quarters_positions"]
+    },
+    {
+      "id": "deceleration_braking_demand",
+      "name": "Deceleration and Braking Demand",
+      "description": "Stops, closeouts, jump stops, landing-to-cut sequences, and defensive recoveries create large eccentric demands on ankle, knee, hip, and trunk.",
+      "load_channels": ["high_intensity_decelerations", "stop_jump_count", "closeout_brakes", "cutting_angle"],
+      "training_priority": "Eccentric lower-body strength, single-leg control, trunk stiffness, technical braking, and progressive COD exposure.",
+      "source_ids": ["src_physical_persistency", "src_game_quarters_positions", "src_cod_strength_plyo"]
+    },
+    {
+      "id": "jump_and_landing_demand",
+      "name": "Jump and Landing Demand",
+      "description": "Rebounds, contests, shot blocks, jump shots, layups, dunks, and plyometrics impose repeated vertical force production and landing absorption.",
+      "load_channels": ["jump_count", "jump_intensity", "landing_type", "contact_landings", "second_jump_sequences"],
+      "training_priority": "Strength-power development, landing mechanics, ankle stiffness, hip-knee alignment, and weekly jump-load control.",
+      "source_ids": ["src_plyometric_meta", "src_patellar_tendon", "src_lower_extremity_prevention"]
+    },
+    {
+      "id": "lateral_shuffle_demand",
+      "name": "Lateral Movement and Defensive Shuffle Demand",
+      "description": "Defensive slides, screen navigation, switches, and closeout recovery require repeated lateral push-off, adductor/abductor control, and trunk positioning.",
+      "load_channels": ["lateral_shuffle_bouts", "reactive_lateral_cuts", "defensive_stance_time", "screen_navigation_contacts"],
+      "training_priority": "Lateral strength, adductor capacity, hip mobility, trunk control, and reactive agility.",
+      "source_ids": ["src_activity_demands_review", "src_game_quarters_positions"]
+    },
+    {
+      "id": "anaerobic_repeated_sprint_demand",
+      "name": "Repeated Sprint and Anaerobic Demand",
+      "description": "Possessions require repeated explosive efforts with incomplete recovery: transition runs, closeouts, cuts, screens, and rebounds.",
+      "load_channels": ["sprint_bouts", "high_intensity_actions_per_minute", "work_rest_ratio", "repeat_effort_sequences"],
+      "training_priority": "Alactic power, glycolytic tolerance when needed, repeated sprint ability, and enough aerobic fitness to recover between bursts.",
+      "source_ids": ["src_gssi_physiologic_profile", "src_physiology_field_tests_review", "src_activity_demands_review"]
+    },
+    {
+      "id": "aerobic_recovery_demand",
+      "name": "Aerobic Support Demand",
+      "description": "Aerobic capacity supports between-effort recovery, practice tolerance, between-quarter recovery, and multi-game tournament resilience.",
+      "load_channels": ["heart_rate_recovery", "session_rpe", "recovery_between_bouts", "multi_game_fatigue"],
+      "training_priority": "Low-cost aerobic development through tempo, extensive court intervals, bike/pool options, and recovery circuits that do not blunt power.",
+      "source_ids": ["src_gssi_physiologic_profile", "src_physiology_field_tests_review"]
+    },
+    {
+      "id": "ankle_foot_demand",
+      "name": "Ankle and Foot Demand",
+      "description": "Basketball stresses ankle inversion control, dorsiflexion, calf-soleus capacity, foot stiffness, landing stability, and cutting on hard courts.",
+      "load_channels": ["single_leg_landings", "lateral_cuts", "rebounds_in_traffic", "surface_change", "prior_sprain_history"],
+      "training_priority": "Calf and soleus strength, balance, proprioception, dorsiflexion mobility, bracing/taping when indicated, and hop progression.",
+      "source_ids": ["src_collegiate_ankle_epidemiology", "src_ankle_rtp_consensus", "src_ankle_rtp_review"]
+    },
+    {
+      "id": "knee_tendon_acl_demand",
+      "name": "Knee, Tendon, and ACL Demand",
+      "description": "Patellar/quad tendon and ACL-relevant tissues are stressed by repeated jumps, landings, stop-starts, cuts, and fatigue-related mechanics.",
+      "load_channels": ["jump_load", "deep_knee_flexion_volume", "decelerations", "valgus_or_poor_alignment_flags", "tendon_symptoms"],
+      "training_priority": "Quadriceps and hip strength, landing quality, progressive tendon loading, COD mechanics, and neuromuscular warm-ups.",
+      "source_ids": ["src_patellar_tendon", "src_acl_aspetar", "src_neuromuscular_warmups"]
+    },
+    {
+      "id": "hip_groin_demand",
+      "name": "Hip and Groin Demand",
+      "description": "Lateral slides, defensive stance, cutting, screen navigation, and contact require adductor, hip flexor, glute, and pelvic control.",
+      "load_channels": ["lateral_movement_density", "deep_stance_time", "cutting_volume", "contact_screens", "hip_flexor_repetition"],
+      "training_priority": "Adductor strength, glute strength, hip mobility, lateral deceleration, and trunk-pelvis control.",
+      "source_ids": ["src_activity_demands_review", "src_cod_strength_plyo", "src_nsca_youth_basketball"]
+    },
+    {
+      "id": "trunk_low_back_demand",
+      "name": "Trunk and Low-Back Demand",
+      "description": "Shooting, rebounding, contact, rotation, boxing out, defensive stance, and fatigue can stress the lumbar spine and trunk control system.",
+      "load_channels": ["contact_minutes", "extension_rotation_repetitions", "defensive_stance_time", "rebounding_contacts", "travel_sitting"],
+      "training_priority": "Anti-rotation, anti-extension, hip mobility, posterior-chain capacity, breathing/bracing, and recovery from travel.",
+      "source_ids": ["src_fiba_medical_staff", "src_fiba_team_physicians", "src_sports_injuries_review"]
+    },
+    {
+      "id": "shoulder_wrist_finger_demand",
+      "name": "Shoulder, Wrist, and Finger Demand",
+      "description": "Shooting, passing, deflections, steals, rebounding, falls, and ball contact create upper-extremity load and acute finger/wrist trauma risk.",
+      "load_channels": ["shooting_volume", "passing_volume", "rebounding_contacts", "falls", "jammed_finger_events"],
+      "training_priority": "Scapular and cuff support, wrist/forearm capacity, catching/contact skill, safe fall mechanics, and symptom-based shooting modification.",
+      "source_ids": ["src_sports_injuries_review", "src_fiba_team_physicians"]
+    },
+    {
+      "id": "contact_and_collision_demand",
+      "name": "Contact and Collision Demand",
+      "description": "Screens, drives, box-outs, charges, rebounds, loose balls, and vertical contests require strength and tissue tolerance for repeated contact.",
+      "load_channels": ["screen_contacts", "drive_contacts", "boxout_contacts", "falls", "contested_rebound_events"],
+      "training_priority": "Total-body strength, trunk stiffness, neck and upper-back robustness where appropriate, landing in traffic, and recovery monitoring.",
+      "source_ids": ["src_match_training_demands_review", "src_fiba_team_physicians"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "ankle_sprain_recurrence_risk",
+      "name": "Ankle Sprain and Recurrence Risk",
+      "risk_factors": ["prior_ankle_sprain", "landing_on_foot", "crowded_rebound", "poor_balance", "limited_dorsiflexion", "fatigue", "preseason_spike"],
+      "warning_signs": ["swelling", "instability", "recurrent_rolling", "pain_with_cutting", "cannot_hop", "loss_of_confidence"],
+      "mitigations": ["balance_proprioception", "calf_soleus_strength", "hop_progression", "landing_spacing", "bracing_or_taping_when_medically_indicated", "criteria_based_rtp"],
+      "source_ids": ["src_collegiate_ankle_epidemiology", "src_ankle_rtp_consensus", "src_ankle_rtp_review"]
+    },
+    {
+      "id": "patellar_quad_tendon_overload_risk",
+      "name": "Patellar and Quadriceps Tendon Overload Risk",
+      "risk_factors": ["jump_volume_spike", "hard_surface", "dense_plyometrics", "deep_knee_flexion_volume", "growth_spurt", "poor_landing", "low_strength_capacity"],
+      "warning_signs": ["localized_tendon_pain", "morning_stiffness", "pain_with_stairs", "worse_next_day_after_jumps", "declining_jump_quality"],
+      "mitigations": ["reduce_high_fast_jumps", "maintain_tolerable_strength", "isometrics_or_heavy_slow_resistance_when_appropriate", "24_hour_response_tracking", "gradual_energy_storage_reintroduction"],
+      "source_ids": ["src_patellar_tendon", "src_plyometric_meta"]
+    },
+    {
+      "id": "acl_knee_landing_cutting_risk",
+      "name": "ACL and Knee Landing/Cutting Risk",
+      "risk_factors": ["poor_trunk_control", "dynamic_knee_valgus", "uncontrolled_deceleration", "single_leg_landing_errors", "reactive_cutting_under_fatigue", "post_acl_status"],
+      "warning_signs": ["giving_way", "swelling", "locking", "cannot_land_or_cut", "fear_or_low_confidence"],
+      "mitigations": ["neuromuscular_warmup", "strength_and_landing_training", "planned_to_reactive_cod_progression", "criteria_based_acl_rtp", "fatigue_quality_monitoring"],
+      "source_ids": ["src_acl_aspetar", "src_neuromuscular_warmups", "src_shred_basketball"]
+    },
+    {
+      "id": "hip_groin_adductor_risk",
+      "name": "Hip, Groin, and Adductor Risk",
+      "risk_factors": ["high_lateral_shuffle_load", "defensive_stance_spike", "cutting_volume", "hip_mobility_deficit", "adductor_strength_deficit", "screen_contact"],
+      "warning_signs": ["groin_pain_with_lateral_push", "pain_with_cutting", "loss_of_stride", "hip_pinch", "pain_after_defensive_sessions"],
+      "mitigations": ["adductor_strength", "lateral_deceleration_progression", "hip_mobility", "glute_strength", "modify_defensive_density"],
+      "source_ids": ["src_activity_demands_review", "src_nsca_youth_basketball"]
+    },
+    {
+      "id": "low_back_overuse_contact_risk",
+      "name": "Low-Back Overuse and Contact Risk",
+      "risk_factors": ["high_shooting_volume", "extension_rotation_load", "rebounding_contact", "deep_defensive_stance", "travel", "hip_mobility_limit", "growth_spurt"],
+      "warning_signs": ["back_pain_with_extension", "radiating_symptoms", "pain_after_travel", "pain_with_jump_landing", "stiffness_that_worsens"],
+      "mitigations": ["medical_review_for_red_flags", "trunk_control", "hip_mobility", "load_reduce_extension_rotation", "posterior_chain_strength", "travel_recovery"],
+      "source_ids": ["src_fiba_medical_staff", "src_fiba_team_physicians", "src_sports_injuries_review"]
+    },
+    {
+      "id": "shoulder_wrist_finger_risk",
+      "name": "Shoulder, Wrist, and Finger Risk",
+      "risk_factors": ["high_shooting_or_passing_volume", "falls", "deflections", "rebounds", "contact_finishes", "heavy_upper_body_stacking"],
+      "warning_signs": ["finger_deformity", "wrist_swelling", "shoulder_instability", "loss_of_range", "painful_shooting", "numbness_or_tingling"],
+      "mitigations": ["protective_taping_when_appropriate", "shooting_volume_modification", "scapular_cuff_support", "forearm_strength", "medical_review_for_deformity_or_neuro_symptoms"],
+      "source_ids": ["src_sports_injuries_review", "src_fiba_team_physicians"]
+    },
+    {
+      "id": "fatigue_load_spike_risk",
+      "name": "Fatigue and Load-Spike Risk",
+      "risk_factors": ["acute_workload_spike", "low_chronic_load", "poor_sleep", "travel", "back_to_back_games", "high_session_rpe", "tournament_density"],
+      "warning_signs": ["movement_quality_drop", "jump_height_drop", "soreness_escalation", "irritability", "slow_recovery", "next_day_pain"],
+      "mitigations": ["reduce_high_risk_channels", "preserve_low_risk_skill", "split_starers_and_nonstarters", "sleep_recovery_prompts", "gradual_ramp"],
+      "source_ids": ["src_training_load_injury_review", "src_physical_persistency", "src_nba_youth_guidelines"]
+    },
+    {
+      "id": "preseason_reentry_risk",
+      "name": "Preseason and Return-from-Break Reentry Risk",
+      "risk_factors": ["low_offseason_exposure", "rapid_practice_density", "tryout_pressure", "two_a_days", "early_scrimmage_volume", "surface_change"],
+      "warning_signs": ["multi_region_soreness", "tendon_symptoms", "ankle_instability", "poor_landing", "high_rpe_for_standard_load"],
+      "mitigations": ["screen_injury_history", "gradual_court_ramp", "neuromuscular_warmup", "strength_base", "avoid_max_testing_stack", "monitor_next_day_response"],
+      "source_ids": ["src_ncaa_wbb_epidemiology", "src_collegiate_ankle_epidemiology", "src_training_load_injury_review"]
+    },
+    {
+      "id": "youth_overuse_burnout_risk",
+      "name": "Youth Overuse and Burnout Risk",
+      "risk_factors": ["year_round_single_sport", "no_weekly_rest", "no_annual_break", "excessive_tournaments", "growth_spurt", "sleep_deficit", "adult_training_load"],
+      "warning_signs": ["persistent_knee_or_heel_pain", "declining_enjoyment", "fatigue", "school_stress", "coordination_drop", "recurrent_minor_injuries"],
+      "mitigations": ["age_based_participation_limits", "weekly_rest", "annual_time_away", "delay_specialization", "movement_literacy", "parent_coach_education"],
+      "source_ids": ["src_nba_youth_guidelines", "src_jr_nba_youth_guidelines", "src_ioc_youth_development"]
+    },
+    {
+      "id": "concussion_and_head_impact_risk",
+      "name": "Concussion and Head Impact Risk",
+      "risk_factors": ["falls", "elbow_contact", "head_to_floor", "charges", "screens", "rebounds"],
+      "warning_signs": ["headache", "dizziness", "confusion", "vision_issue", "memory_issue", "loss_of_consciousness", "nausea"],
+      "mitigations": ["remove_from_play", "medical_assessment", "graduated_return", "no_same_day_return_if_suspected", "coach_athlete_symptom_reporting"],
+      "source_ids": ["src_fiba_medical_staff", "src_fiba_team_physicians", "src_return_to_sport_consensus"]
+    },
+    {
+      "id": "bone_stress_foot_shin_risk",
+      "name": "Foot, Shin, and Bone Stress Risk",
+      "risk_factors": ["hard_court_volume", "jump_and_run_spike", "low_energy_availability", "growth_spurt", "inadequate_recovery", "new_footwear"],
+      "warning_signs": ["focal_bone_pain", "pain_that_worsens_with_activity", "limp", "night_pain", "pain_with_hop"],
+      "mitigations": ["medical_referral_for_focal_bone_pain", "reduce_impact", "cross_train", "nutrition_sleep_review", "gradual_return_to_jump_run"],
+      "source_ids": ["src_fiba_medical_staff", "src_sports_injuries_review", "src_ioc_youth_development"]
+    },
+    {
+      "id": "calf_achilles_risk",
+      "name": "Calf and Achilles Risk",
+      "risk_factors": ["sprint_spike", "plyometric_spike", "hard_surface", "limited_ankle_dorsiflexion", "low_calf_capacity", "older_adult_player"],
+      "warning_signs": ["morning_stiffness", "pain_with_push_off", "calf_tightness_that_worsens", "sudden_pop", "loss_of_single_leg_calf_raise"],
+      "mitigations": ["calf_soleus_strength", "reduce_plyometric_sprint_load", "tendon_response_monitoring", "medical_review_for_pop_or_defect", "gradual_reloading"],
+      "source_ids": ["src_ankle_rtp_review", "src_patellar_tendon", "src_sports_injuries_review"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "offseason_build_capacity_before_density",
+      "recommendation": "Offseason training should build strength, tendon capacity, movement quality, aerobic support, and progressive plyometric skill before high-density live play and tournaments.",
+      "season_phase": "off_season",
+      "source_ids": ["src_plyometric_meta", "src_cod_strength_plyo", "src_nsca_youth_basketball"]
+    },
+    {
+      "id": "preseason_ramp_court_load",
+      "recommendation": "Preseason should ramp court volume, jumps, decelerations, and scrimmage density gradually while screening injury history and preserving recovery between high-demand days.",
+      "season_phase": "pre_season",
+      "source_ids": ["src_ncaa_wbb_epidemiology", "src_collegiate_ankle_epidemiology", "src_training_load_injury_review"]
+    },
+    {
+      "id": "inseason_maintain_strength_power",
+      "recommendation": "In-season strength should maintain lower-body force, trunk control, calf capacity, shoulder support, and power with low soreness cost and careful placement relative to games.",
+      "season_phase": "in_season",
+      "source_ids": ["src_match_training_demands_review", "src_training_load_injury_review", "src_cod_strength_plyo"]
+    },
+    {
+      "id": "match_week_taper_without_detraining",
+      "recommendation": "Near game day, reduce volume and soreness-heavy work while preserving short activation, shooting rhythm, tactical clarity, and neuromuscular readiness.",
+      "season_phase": "competition_week",
+      "source_ids": ["src_physical_persistency", "src_match_training_demands_review"]
+    },
+    {
+      "id": "separate_starters_rotation_and_nonstarters",
+      "recommendation": "Post-game and between-game plans should split players by actual minutes and high-intensity exposure: recovery for heavy-minute players, selective top-ups for low-minute players, and controlled progression for returners.",
+      "season_phase": "in_season",
+      "source_ids": ["src_physical_persistency", "src_training_load_injury_review"]
+    },
+    {
+      "id": "neuromuscular_warmup_every_court_day",
+      "recommendation": "Use a basketball neuromuscular warm-up before practices and games: pulse raise, mobility, balance, landing, strength, agility, and low-volume basketball-speed movement.",
+      "season_phase": "all",
+      "source_ids": ["src_neuromuscular_warmups", "src_shred_basketball", "src_shred_resources"]
+    },
+    {
+      "id": "deceleration_training_is_programmed_not_accidental",
+      "recommendation": "Train deceleration from planned to reactive contexts: stick landings, stop mechanics, angle cuts, closeouts, screen recovery, and late-session quality checks.",
+      "season_phase": "all",
+      "source_ids": ["src_game_quarters_positions", "src_cod_strength_plyo", "src_acl_aspetar"]
+    },
+    {
+      "id": "plyometrics_need_dose_and_landing_control",
+      "recommendation": "Plyometric training can improve basketball performance, but prescriptions should control contacts, intensity, surface, fatigue, and landing quality, especially for tendon or growth-spurt athletes.",
+      "season_phase": "all",
+      "source_ids": ["src_plyometric_meta", "src_patellar_tendon", "src_ioc_youth_development"]
+    },
+    {
+      "id": "aerobic_work_should_support_skill_and_recovery",
+      "recommendation": "Use aerobic training to improve recovery between efforts and games; avoid excessive steady running that competes with power, skill, and tissue recovery.",
+      "season_phase": "all",
+      "source_ids": ["src_gssi_physiologic_profile", "src_physiology_field_tests_review"]
+    },
+    {
+      "id": "ankle_history_changes_programming",
+      "recommendation": "Players with prior ankle sprain need ongoing balance, calf, hop, landing, and proprioceptive work, plus bracing or taping decisions when clinically appropriate.",
+      "season_phase": "all",
+      "source_ids": ["src_ankle_rtp_review", "src_collegiate_ankle_epidemiology", "src_ankle_rtp_consensus"]
+    },
+    {
+      "id": "tendon_pain_uses_response_based_progression",
+      "recommendation": "For patellar or quadriceps tendon symptoms, reduce high-fast jumping first, preserve tolerable strength work, and progress only when 24-hour response remains stable.",
+      "season_phase": "all",
+      "source_ids": ["src_patellar_tendon"]
+    },
+    {
+      "id": "youth_plans_must_include_rest",
+      "recommendation": "Youth plans must include at least one weekly rest day from organized basketball, adequate sleep, annual time away, and age-appropriate limits on games, tournaments, and specialization.",
+      "season_phase": "youth_all",
+      "source_ids": ["src_nba_youth_guidelines", "src_jr_nba_youth_guidelines", "src_usab_youth_guidebook"]
+    },
+    {
+      "id": "return_to_play_requires_basketball_specific_exposure",
+      "recommendation": "Return-to-play should not stop at pain-free gym tests; players must restore basketball-specific running, jumping, cutting, landing, skill, contact, confidence, and minutes tolerance.",
+      "season_phase": "return_to_play",
+      "source_ids": ["src_return_to_sport_consensus", "src_ankle_rtp_consensus", "src_acl_aspetar"]
+    },
+    {
+      "id": "load_monitoring_needs_human_review",
+      "recommendation": "Wearable and wellness data should trigger coach and medical review, not automatic removal. Interpret device metrics, session RPE, symptoms, schedule, and role together.",
+      "season_phase": "all",
+      "source_ids": ["src_measuring_physical_demands", "src_training_load_injury_review", "src_external_load_female_review"]
+    },
+    {
+      "id": "upper_extremity_load_is_skill_load",
+      "recommendation": "High shooting, passing, rebounding, and contact days should be counted as upper-extremity and trunk skill load, particularly when wrist, finger, shoulder, or back symptoms exist.",
+      "season_phase": "all",
+      "source_ids": ["src_sports_injuries_review", "src_fiba_team_physicians"]
+    },
+    {
+      "id": "competition_tournament_week_prioritizes_availability",
+      "recommendation": "During tournament or congested weeks, prioritize readiness, sleep, hydration, short activation, mobility, symptom checks, and selective top-ups over new overload.",
+      "season_phase": "tournament_or_congested_week",
+      "source_ids": ["src_nba_youth_guidelines", "src_training_load_injury_review", "src_physical_persistency"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "basketball_physical_demand",
+      "record_id": "basketball_physical_demand_accel_decel_cod",
+      "name": "Acceleration, Deceleration, and COD Demand",
+      "payload_fields": {
+        "demand_channels": ["first_step_acceleration", "high_intensity_deceleration", "defensive_shuffle", "closeout_brake", "reactive_cut", "stop_jump"],
+        "priority_roles": ["guard", "wing", "primary_ball_handler", "point_of_attack_defender"],
+        "level_scaling": {
+          "youth": "planned mechanics, balance, and low-volume change of direction",
+          "intermediate": "planned-to-reactive COD and controlled closeout braking",
+          "advanced": "role-specific reactive COD under fatigue, contact, and decision pressure"
+        },
+        "linked_risks": ["acl_knee_landing_cutting_risk", "hip_groin_adductor_risk", "fatigue_load_spike_risk"]
+      },
+      "source_ids": ["src_game_quarters_positions", "src_activity_demands_review", "src_cod_strength_plyo"]
+    },
+    {
+      "record_type": "basketball_physical_demand",
+      "record_id": "basketball_physical_demand_jump_landing",
+      "name": "Jump and Landing Demand",
+      "payload_fields": {
+        "demand_channels": ["rebound_jump", "contest_jump", "jump_shot", "layup_finish", "dunk", "second_jump", "plyometric_contact"],
+        "monitoring": ["jump_count", "jump_type", "landing_context", "tendon_response", "next_day_knee_or_ankle_symptoms"],
+        "linked_risks": ["ankle_sprain_recurrence_risk", "patellar_quad_tendon_overload_risk", "acl_knee_landing_cutting_risk"]
+      },
+      "source_ids": ["src_plyometric_meta", "src_patellar_tendon", "src_lower_extremity_prevention"]
+    },
+    {
+      "record_type": "basketball_physical_demand",
+      "record_id": "basketball_physical_demand_repeated_sprint_aerobic",
+      "name": "Repeated Sprint and Aerobic Recovery Demand",
+      "payload_fields": {
+        "demand_channels": ["transition_sprint", "repeat_effort_sequence", "work_rest_ratio", "heart_rate_recovery", "multi_game_fatigue"],
+        "programming_note": "Train anaerobic power and repeated explosive efforts while preserving aerobic support for recovery between possessions, quarters, practices, and games.",
+        "linked_risks": ["fatigue_load_spike_risk", "preseason_reentry_risk"]
+      },
+      "source_ids": ["src_gssi_physiologic_profile", "src_physiology_field_tests_review", "src_activity_demands_review"]
+    },
+    {
+      "record_type": "basketball_physical_demand",
+      "record_id": "basketball_physical_demand_contact_upper_trunk",
+      "name": "Contact, Upper-Extremity, and Trunk Demand",
+      "payload_fields": {
+        "demand_channels": ["screen_contact", "boxout_contact", "rebounding_contact", "shooting_volume", "passing_volume", "falls", "extension_rotation_load"],
+        "priority_roles": ["center", "forward", "rebounding_guard", "high_usage_shooter"],
+        "linked_risks": ["shoulder_wrist_finger_risk", "low_back_overuse_contact_risk"]
+      },
+      "source_ids": ["src_fiba_team_physicians", "src_sports_injuries_review"]
+    },
+    {
+      "record_type": "basketball_injury_risk_rule",
+      "record_id": "basketball_injury_risk_rule_ankle_sprain",
+      "name": "Ankle Sprain Risk Rule",
+      "trigger_conditions": ["prior ankle sprain", "ankle swelling", "instability", "landing in traffic", "pain with cutting", "preseason spike"],
+      "recommended_adjustment": "Reduce chaotic jumping and cutting, add balance/proprioception/calf work, check bracing or taping plan if appropriate, and require hop and sport-specific progression before full return.",
+      "hard_stop_conditions": ["cannot bear weight", "marked swelling", "gross instability", "suspected fracture", "cannot hop"],
+      "source_ids": ["src_collegiate_ankle_epidemiology", "src_ankle_rtp_consensus", "src_ankle_rtp_review"]
+    },
+    {
+      "record_type": "basketball_injury_risk_rule",
+      "record_id": "basketball_injury_risk_rule_patellar_quad_tendon",
+      "name": "Patellar and Quad Tendon Load Rule",
+      "trigger_conditions": ["patellar tendon pain", "quad tendon pain", "next-day knee stiffness", "jump spike", "growth spurt", "hard-court tournament"],
+      "recommended_adjustment": "Reduce high-fast jumps and dense plyometrics, maintain tolerable strength or isometrics when appropriate, and progress by 24-hour symptom response.",
+      "hard_stop_conditions": ["sharp worsening pain", "swelling", "loss of knee extension", "limp", "suspected acute tendon injury"],
+      "source_ids": ["src_patellar_tendon", "src_plyometric_meta"]
+    },
+    {
+      "record_type": "basketball_injury_risk_rule",
+      "record_id": "basketball_injury_risk_rule_acl_knee",
+      "name": "ACL and Knee Control Risk Rule",
+      "trigger_conditions": ["knee swelling", "giving way", "dynamic knee valgus", "poor landing", "post ACL status", "reactive cutting breakdown"],
+      "recommended_adjustment": "Stop or regress reactive basketball; rebuild strength, landing, planned COD, and confidence before reactive contact and full minutes.",
+      "hard_stop_conditions": ["acute swelling", "instability", "locking", "cannot land or cut", "suspected ligament injury"],
+      "source_ids": ["src_acl_aspetar", "src_neuromuscular_warmups", "src_shred_basketball"]
+    },
+    {
+      "record_type": "basketball_injury_risk_rule",
+      "record_id": "basketball_injury_risk_rule_hip_groin",
+      "name": "Hip and Groin Risk Rule",
+      "trigger_conditions": ["groin pain", "hip pinch", "pain with lateral push", "defensive stance spike", "cutting volume spike"],
+      "recommended_adjustment": "Reduce lateral and deep-stance density, add adductor/glute/trunk work, restore hip mobility, then progress planned to reactive lateral movement.",
+      "hard_stop_conditions": ["limp", "sharp hip or groin pain", "painful walking", "night pain", "loss of range with pain"],
+      "source_ids": ["src_activity_demands_review", "src_nsca_youth_basketball"]
+    },
+    {
+      "record_type": "basketball_injury_risk_rule",
+      "record_id": "basketball_injury_risk_rule_low_back",
+      "name": "Low-Back Risk Rule",
+      "trigger_conditions": ["back pain with extension", "travel stiffness", "growth spurt", "high shooting load", "rebounding contact", "deep stance volume"],
+      "recommended_adjustment": "Reduce extension-rotation and contact load, emphasize hip mobility and trunk control, and seek medical review for red flags.",
+      "hard_stop_conditions": ["radiating pain", "numbness", "weakness", "night pain", "pain with cough or sneeze", "persistent worsening symptoms"],
+      "source_ids": ["src_fiba_medical_staff", "src_fiba_team_physicians"]
+    },
+    {
+      "record_type": "basketball_injury_risk_rule",
+      "record_id": "basketball_injury_risk_rule_upper_extremity",
+      "name": "Shoulder, Wrist, and Finger Risk Rule",
+      "trigger_conditions": ["jammed finger", "wrist swelling", "shoulder pain", "high shooting volume", "fall on hand", "rebounding contact"],
+      "recommended_adjustment": "Modify shooting and contact volume, add scapular/cuff and forearm support when appropriate, and refer for deformity, instability, neurological symptoms, or suspected fracture.",
+      "hard_stop_conditions": ["visible deformity", "loss of sensation", "significant swelling", "instability", "cannot grip or shoot without sharp pain"],
+      "source_ids": ["src_sports_injuries_review", "src_fiba_team_physicians"]
+    },
+    {
+      "record_type": "basketball_injury_risk_rule",
+      "record_id": "basketball_injury_risk_rule_fatigue_congestion",
+      "name": "Fatigue and Congested Schedule Risk Rule",
+      "trigger_conditions": ["back to back games", "tournament weekend", "poor sleep", "travel", "high session RPE", "movement quality drop", "load spike"],
+      "recommended_adjustment": "Reduce optional high-risk volume, split plans by minutes, prioritize recovery and short activation, and avoid new overload until readiness normalizes.",
+      "hard_stop_conditions": ["red flag pain", "acute injury", "suspected concussion", "severe fatigue with unsafe movement"],
+      "source_ids": ["src_training_load_injury_review", "src_physical_persistency", "src_nba_youth_guidelines"]
+    },
+    {
+      "record_type": "basketball_injury_risk_rule",
+      "record_id": "basketball_injury_risk_rule_youth_growth",
+      "name": "Youth Growth and Overuse Risk Rule",
+      "trigger_conditions": ["rapid height change", "new knee heel hip back pain", "no weekly rest", "high tournament density", "single sport year round", "sleep deficit"],
+      "recommended_adjustment": "Reduce impact and high-intensity density, preserve skill and movement quality, add rest, and follow age-appropriate participation limits.",
+      "hard_stop_conditions": ["persistent pain", "limp", "focal bone pain", "pain worsening with play", "loss of enjoyment with fatigue and recurrent symptoms"],
+      "source_ids": ["src_nba_youth_guidelines", "src_jr_nba_youth_guidelines", "src_ioc_youth_development"]
+    },
+    {
+      "record_type": "basketball_macro_planning_rule",
+      "record_id": "basketball_macro_planning_rule_offseason",
+      "name": "Offseason Capacity Block",
+      "summary": "Build physical capacity before dense basketball exposure.",
+      "rules": {
+        "primary_priorities": ["lower_body_strength", "single_leg_control", "calf_soleus_capacity", "adductor_glute_strength", "trunk_control", "aerobic_support", "progressive_plyometrics", "mobility"],
+        "court_load": "Keep basketball skill exposure but avoid sudden tournament-level density.",
+        "testing": "Use jump, sprint, COD, movement-quality, wellness, and injury-history screening without stacking maximal tests on one day.",
+        "avoid": ["year_round_no_break", "jump_volume_without_strength", "conditioning_only_blocks", "ignoring_pain_history"]
+      },
+      "source_ids": ["src_plyometric_meta", "src_cod_strength_plyo", "src_nsca_youth_basketball"]
+    },
+    {
+      "record_type": "basketball_macro_planning_rule",
+      "record_id": "basketball_macro_planning_rule_preseason_ramp",
+      "name": "Preseason Court Load Ramp",
+      "summary": "Ramp practice, scrimmage, jump, deceleration, and contact exposure before full competition density.",
+      "rules": {
+        "week_1": "Movement quality, strength re-entry, low-to-moderate court volume, basic neuromuscular warm-up, and injury-history checks.",
+        "week_2_to_3": "Increase live drills, COD, repeated efforts, controlled scrimmage, and role-specific jump/contact exposure.",
+        "week_4_plus": "Approach match demands while avoiding abrupt spikes in minutes, jumps, hard practices, and scrimmage density.",
+        "monitor": ["session_rpe", "wellness", "tendon_response", "ankle_symptoms", "jump_landing_quality"]
+      },
+      "source_ids": ["src_ncaa_wbb_epidemiology", "src_collegiate_ankle_epidemiology", "src_training_load_injury_review"]
+    },
+    {
+      "record_type": "basketball_macro_planning_rule",
+      "record_id": "basketball_macro_planning_rule_inseason",
+      "name": "In-Season Maintenance Rule",
+      "summary": "Maintain strength, power, mobility, and tissue capacity while protecting game readiness.",
+      "rules": {
+        "strength": "Use low-to-moderate volume, high-quality strength and power away from game day.",
+        "plyometrics": "Microdose quality contacts when readiness is green; avoid dense novel plyometrics near games.",
+        "conditioning": "Use role- and minutes-based top-ups rather than blanket conditioning.",
+        "recovery": "Adjust by sleep, travel, minutes, symptoms, and next-game timing."
+      },
+      "source_ids": ["src_match_training_demands_review", "src_training_load_injury_review", "src_physical_persistency"]
+    },
+    {
+      "record_type": "basketball_macro_planning_rule",
+      "record_id": "basketball_macro_planning_rule_youth_year",
+      "name": "Youth Year-Round Planning Rule",
+      "summary": "Youth basketball plans must protect development, recovery, and sport enjoyment.",
+      "rules": {
+        "weekly": "At least one rest day from organized basketball and age-appropriate total exposure.",
+        "annual": "Schedule extended time away from organized basketball.",
+        "development": "Prioritize movement literacy, strength technique, skill variety, and delayed specialization pressure.",
+        "growth_spurt": "Reduce impact density when rapid growth, pain, or coordination drop appears."
+      },
+      "source_ids": ["src_nba_youth_guidelines", "src_usab_youth_guidebook", "src_ioc_youth_development"]
+    },
+    {
+      "record_type": "basketball_return_to_play_rule",
+      "record_id": "basketball_return_to_play_rule_general",
+      "name": "General Basketball Return-to-Play Continuum",
+      "summary": "Progress from return to participation to return to sport to return to performance.",
+      "phase_gates": ["pain_and_swelling_controlled", "range_and_strength_restored", "linear_run_and_basic_jump", "planned_lateral_and_deceleration", "controlled_basketball_skill", "reactive_noncontact", "contact_practice", "restricted_minutes", "full_performance"],
+      "rollback_triggers": ["swelling", "instability", "sharp_pain", "next_day_worsening", "movement_quality_breakdown", "loss_of_confidence"],
+      "source_ids": ["src_return_to_sport_consensus", "src_acl_aspetar", "src_ankle_rtp_consensus"]
+    },
+    {
+      "record_type": "basketball_return_to_play_rule",
+      "record_id": "basketball_return_to_play_rule_ankle",
+      "name": "Return After Ankle Sprain",
+      "summary": "Restore pain, impairments, perception, sensorimotor control, and sport performance before unrestricted basketball.",
+      "phase_gates": ["walk_without_limp", "range_and_swelling_control", "single_leg_balance", "calf_raise_capacity", "linear_hop", "lateral_hop", "planned_cut", "reactive_cut", "jump_landing_in_traffic", "practice", "minutes_progression"],
+      "prevention_addons": ["balance_training", "calf_soleus_strength", "dorsiflexion_mobility", "brace_or_tape_when_indicated", "landing_spacing"],
+      "source_ids": ["src_ankle_rtp_consensus", "src_ankle_rtp_review", "src_collegiate_ankle_epidemiology"]
+    },
+    {
+      "record_type": "basketball_return_to_play_rule",
+      "record_id": "basketball_return_to_play_rule_knee_acl",
+      "name": "Return After ACL or Major Knee Injury",
+      "summary": "Knee RTP must be criteria-based and restore strength, hop, landing, COD, reactive basketball skill, contact tolerance, confidence, and minutes.",
+      "phase_gates": ["swelling_control", "quadriceps_strength", "hop_quality", "landing_alignment", "planned_COD", "reactive_COD", "basketball_skill_under_fatigue", "contact_practice", "restricted_minutes", "full_performance"],
+      "source_ids": ["src_acl_aspetar", "src_return_to_sport_consensus", "src_neuromuscular_warmups"]
+    },
+    {
+      "record_type": "basketball_return_to_play_rule",
+      "record_id": "basketball_return_to_play_rule_tendon",
+      "name": "Return With Patellar or Quad Tendon Symptoms",
+      "summary": "Tendon RTP should progress from tolerable strength to energy-storage and basketball-specific jump loads using 24-hour response.",
+      "phase_gates": ["pain_stable", "isometric_or_strength_tolerated", "isotonic_strength", "low_level_plyometric", "controlled_jump_landing", "basketball_jump_types", "practice_jump_volume", "game_minutes"],
+      "monitoring": ["pain_during", "next_morning_stiffness", "jump_quality", "weekly_jump_count", "tendon_load_test_response"],
+      "source_ids": ["src_patellar_tendon", "src_return_to_sport_consensus"]
+    },
+    {
+      "record_type": "basketball_return_to_play_rule",
+      "record_id": "basketball_return_to_play_rule_back_hip_groin",
+      "name": "Return After Back, Hip, or Groin Symptoms",
+      "summary": "Restore pain-free movement, trunk and hip strength, lateral push-off, cutting, stance tolerance, contact, and sport skill before unrestricted play.",
+      "phase_gates": ["red_flags_cleared", "range_and_basic_strength", "linear_running", "lateral_movement", "defensive_stance", "planned_cutting", "reactive_cutting", "contact_and_rebounding", "practice", "minutes_progression"],
+      "source_ids": ["src_fiba_medical_staff", "src_activity_demands_review", "src_return_to_sport_consensus"]
+    },
+    {
+      "record_type": "basketball_readiness_adjustment_rule",
+      "record_id": "basketball_readiness_adjustment_rule_traffic_light",
+      "name": "Basketball Readiness Traffic Light",
+      "summary": "Classify readiness before high-risk basketball sessions.",
+      "green": "No escalating pain, normal soreness, good sleep, stable wellness, and acceptable movement quality; proceed as planned.",
+      "yellow": "Low sleep, high soreness, minor stable symptoms, recent load spike, or mild quality drop; reduce volume or remove riskiest channel.",
+      "orange": "Pain changing mechanics, next-day worsening, poor landing, or high fatigue; remove high-risk jumping, cutting, contact, or conditioning and consider clinician input.",
+      "red": "Acute injury, swelling, instability, suspected concussion, severe pain, neurological symptoms, or suspected fracture; stop and refer.",
+      "source_ids": ["src_training_load_injury_review", "src_return_to_sport_consensus", "src_fiba_medical_staff"]
+    },
+    {
+      "record_type": "basketball_readiness_adjustment_rule",
+      "record_id": "basketball_readiness_adjustment_rule_minutes",
+      "name": "Minutes and Exposure Adjustment",
+      "summary": "Adjust next-session load by actual minutes and event exposure.",
+      "rules": {
+        "starter_high_minutes": "Prioritize recovery, tissue check, mobility, and delayed low-volume strength maintenance.",
+        "rotation_moderate_minutes": "Use selective top-up only if readiness is green and next game timing allows.",
+        "low_minutes_or_unused": "Use controlled court conditioning, strength, and skill top-up matched to role.",
+        "returning_player": "Progress minutes gradually and avoid immediate back-to-back peak exposure."
+      },
+      "source_ids": ["src_physical_persistency", "src_training_load_injury_review", "src_nba_participation_policy"]
+    },
+    {
+      "record_type": "basketball_readiness_adjustment_rule",
+      "record_id": "basketball_readiness_adjustment_rule_body_region",
+      "name": "Body-Region Symptom Adjustment",
+      "summary": "Modify the session according to the symptomatic tissue and basketball load channel.",
+      "rules": {
+        "ankle": "Reduce chaotic cutting, landing in traffic, and reactive hops; add balance and calf work.",
+        "knee_tendon": "Reduce high-fast jumps and deep deceleration density; preserve tolerable strength.",
+        "hip_groin": "Reduce lateral shuffle, cutting, and deep stance density; add adductor and hip control.",
+        "low_back": "Reduce extension-rotation, contact, and high-volume shooting if symptomatic; add hip/trunk work.",
+        "shoulder_wrist_finger": "Modify shooting, passing, rebounding contact, and upper-body loading."
+      },
+      "source_ids": ["src_ankle_rtp_consensus", "src_patellar_tendon", "src_fiba_team_physicians"]
+    },
+    {
+      "record_type": "basketball_readiness_adjustment_rule",
+      "record_id": "basketball_readiness_adjustment_rule_youth_growth_spurt",
+      "name": "Youth Growth-Spurt Adjustment",
+      "summary": "Protect youth players during rapid growth, pain onset, or coordination disruption.",
+      "rules": {
+        "load_response": "Temporarily reduce high-impact jump, sprint, cutting, and tournament density.",
+        "training_focus": "Keep movement literacy, strength technique, mobility, balance, and low-symptom skill.",
+        "medical_flag": "Persistent knee, heel, hip, back, or focal bone pain requires clinical review."
+      },
+      "source_ids": ["src_nba_youth_guidelines", "src_ioc_youth_development", "src_nsca_youth_basketball"]
+    },
+    {
+      "record_type": "basketball_match_week_rule",
+      "record_id": "basketball_match_week_rule_one_game_week",
+      "name": "Standard One-Game Week",
+      "summary": "Use recovery after the game, main load early or midweek, and taper volume while preserving speed, rhythm, and tactical clarity.",
+      "rules": {
+        "G_plus_1": "Recovery for heavy-minute players; controlled top-up for low-minute players.",
+        "G_minus_4_or_3": "Main strength, power, speed, COD, or conditioning window depending on recovery.",
+        "G_minus_2": "Moderate court load and low-volume power or speed touches.",
+        "G_minus_1": "Activation, shooting rhythm, tactical walkthrough, mobility, no fatigue.",
+        "G": "Warm-up, game, exposure log, post-game downregulation."
+      },
+      "source_ids": ["src_match_training_demands_review", "src_physical_persistency", "src_training_load_injury_review"]
+    },
+    {
+      "record_type": "basketball_match_week_rule",
+      "record_id": "basketball_match_week_rule_two_game_week",
+      "name": "Two-Game or Back-to-Back Week",
+      "summary": "Prioritize availability, recovery, and microdosed readiness when recovery windows are short.",
+      "rules": {
+        "between_games_short": "Recovery, medical/readiness checks, film/tactical clarity, short activation, and limited shooting rhythm.",
+        "starters": "No added conditioning; monitor tendon, ankle, back, and fatigue symptoms.",
+        "nonstarters": "Top-up only if it does not compromise next-game availability.",
+        "returning_players": "Avoid sudden minutes spikes and monitor next-day response."
+      },
+      "source_ids": ["src_training_load_injury_review", "src_physical_persistency", "src_nba_participation_policy"]
+    },
+    {
+      "record_type": "basketball_match_week_rule",
+      "record_id": "basketball_match_week_rule_tournament",
+      "name": "Tournament Week Rule",
+      "summary": "Tournament weeks shift the objective from adaptation to repeatability, recovery, and symptom containment.",
+      "rules": {
+        "allowed": ["short_neuromuscular_warmup", "mobility", "activation", "light_shooting_rhythm", "sleep_hydration_nutrition_prompts", "brief_recovery_aerobic"],
+        "blocked": ["new_exercises", "heavy_eccentrics", "dense_plyometrics", "punishment_conditioning", "extra_scrimmage_volume", "max_testing"],
+        "youth_note": "Check age-based participation limits, weekly rest, sleep, and annual basketball break history."
+      },
+      "source_ids": ["src_nba_youth_guidelines", "src_jr_nba_youth_guidelines", "src_training_load_injury_review"]
+    },
+    {
+      "record_type": "basketball_match_week_rule",
+      "record_id": "basketball_match_week_rule_returning_player",
+      "name": "Returning Player Match-Week Rule",
+      "summary": "Players returning from injury need exposure restoration before full minutes, especially in congested schedules.",
+      "rules": {
+        "before_game": "Confirm symptom stability, basketball-specific drills, contact tolerance, and confidence.",
+        "minutes": "Use planned minutes caps and avoid sudden back-to-back high-minute exposure.",
+        "after_game": "Check next-day symptoms and movement quality before progressing.",
+        "topup": "Do not top up a returning player with high-risk load after game exposure unless medically and performance cleared."
+      },
+      "source_ids": ["src_return_to_sport_consensus", "src_acl_aspetar", "src_ankle_rtp_consensus"]
+    }
+  ]
+}

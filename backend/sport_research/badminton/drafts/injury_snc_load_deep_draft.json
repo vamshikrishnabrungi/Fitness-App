@@ -1,0 +1,2651 @@
+{
+  "metadata": {
+    "domain": "badminton_injury_snc_load_return_to_court",
+    "sport": "badminton",
+    "version": "draft_v1",
+    "created_at": "2026-06-21",
+    "focus_scope": [
+      "injury_risk",
+      "strength_and_conditioning",
+      "load_management",
+      "readiness",
+      "return_to_court"
+    ],
+    "excluded_scope": [
+      "stroke_teaching_details_except_load_context",
+      "match_tactics_except_exposure_management",
+      "rules_and_scoring",
+      "nutrition",
+      "equipment_reviews"
+    ],
+    "research_goal": "Create backend-ready badminton records focused only on injury risk, S&C priorities, load management, readiness adjustment, and return-to-court progression across beginner, intermediate, and advanced players. Explicitly preserve badminton-specific exposure channels: lunge volume, smash and overhead stroke volume, jump and landing load, deceleration, tournament density, and tissue-specific risk flags."
+  },
+  "source_refs": [
+    {
+      "id": "src_bwf_coach_manual_l1",
+      "title": "Badminton Coaches' Manual Level 1",
+      "url": "https://www.badminton-israel.co.il/newsNdata/General/CoachEducationBWF/BWF_Coach_Manual_Level_1.pdf",
+      "source_type": "official_coaching_manual_pdf",
+      "organization_or_author": "Badminton World Federation coach education",
+      "notes": "Used for badminton physical-factor framing: strength endurance, elastic strength/power, flexibility, endurance, speed, ABCS qualities, warm-up/cool-down, youth progression, and qualified supervision for heavier loading."
+    },
+    {
+      "id": "src_bwf_research_projects",
+      "title": "BWF Research Projects",
+      "url": "https://development.bwfbadminton.com/sport-science/bwf-research/bwf-research-projects",
+      "source_type": "official_sport_science_resource",
+      "organization_or_author": "Badminton World Federation",
+      "notes": "Used as official support that badminton movement modelling is relevant to injury prevention and performance enhancement."
+    },
+    {
+      "id": "src_bmj_badminton_injuries_systematic_review",
+      "title": "Systematic Review on Badminton Injuries: Incidence, Characteristics, Mechanisms, and Risk Factors",
+      "url": "https://bmjopensem.bmj.com/content/11/1/e002127",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "BMJ Open Sport & Exercise Medicine review authors",
+      "notes": "Used for injury incidence, common locations, injury mechanisms, and the need to interpret badminton injury risk by exposure context."
+    },
+    {
+      "id": "src_elite_injury_review",
+      "title": "Badminton Injuries in Elite Athletes: A Review of Epidemiology and Biomechanics",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7205924/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Pardiwala, Subbiah, Rao, and Modi",
+      "notes": "Used for elite injury patterning, lower-limb and upper-limb risk, lunge and smash biomechanics, and kinetic-chain framing."
+    },
+    {
+      "id": "src_guermont_elite_prospective",
+      "title": "Epidemiology of Injuries in Elite Badminton Players: A Prospective Study",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32852303/",
+      "source_type": "peer_reviewed_prospective_cohort",
+      "organization_or_author": "Guermont, Le Van, Marcelli, Reboursiere, and Drigny",
+      "notes": "Used for elite-season injury incidence context, match versus training injury-rate distinction, lower-limb predominance, musculotendinous injury burden, and the finding that smash and lunge were frequent injury-associated actions."
+    },
+    {
+      "id": "src_marchena_aetiology_review",
+      "title": "Aetiology, Epidemiology and Treatment of Musculoskeletal Injuries in Badminton Players: A Systematic Review and Meta-Analysis",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38761131/",
+      "source_type": "peer_reviewed_systematic_review_meta_analysis",
+      "organization_or_author": "Marchena-Rodriguez, Cabello-Manrique, Ortega-Avila, Martinez-Rico, Cervera-Garvi, and Gijon-Nogueron",
+      "notes": "Used for broad musculoskeletal injury synthesis and the emphasis that lower-limb injuries commonly affect badminton players of all levels."
+    },
+    {
+      "id": "src_youth_epidemiology_7_22",
+      "title": "Epidemiological Characteristics of Injury in 7-22-Year-Old Badminton Players",
+      "url": "https://www.nature.com/articles/s41598-025-86358-4",
+      "source_type": "peer_reviewed_epidemiology_study",
+      "organization_or_author": "Scientific Reports authors",
+      "notes": "Used for youth and young-adult injury distribution: knee, ankle, lower back, and shoulder injuries frequently occur, with age-related peaks in injury incidence."
+    },
+    {
+      "id": "src_world_elite_junior_training_injuries",
+      "title": "Training and Injuries Among World Elite Junior Badminton Players: Identifying the Problems",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34458102/",
+      "source_type": "peer_reviewed_junior_elite_study",
+      "organization_or_author": "Kaldau, Kerr, McCaig, and Holmich",
+      "notes": "Used for elite-junior training-hour and injury-prevalence context, supporting youth readiness, growth, and load monitoring."
+    },
+    {
+      "id": "src_junior_championship_injury_risk",
+      "title": "Incidence and Risk Factors for Musculoskeletal Injuries Among Indonesian Junior Badminton Athletes During a National Elite Championship",
+      "url": "https://doi.org/10.47895/amp.v56i1.3808",
+      "source_type": "peer_reviewed_championship_injury_study",
+      "organization_or_author": "Suryanto, Widyahening, and Tobing",
+      "notes": "Used for tournament-density risk logic: junior championship injury risk increased with age >= 15 years and match count >= 3 in that event sample."
+    },
+    {
+      "id": "src_fittoplay_badminton_common_injuries",
+      "title": "The Most Common Injuries in Badminton",
+      "url": "https://fittoplay.org/sports/badminton/the-most-common-injuries-in-badminton/",
+      "source_type": "sports_medicine_education_resource",
+      "organization_or_author": "FitToPlay / Oslo Sports Trauma Research Center collaboration",
+      "notes": "Used as a clinician-facing cross-check for common badminton risks: patellofemoral pain, jumper's knee, collateral ligament injury, shin splints, ankle sprain, thrower's shoulder, plantar fascia, Achilles rupture, and back pain."
+    },
+    {
+      "id": "src_lunge_scoping_review",
+      "title": "Biomechanics of Lower Limb in Badminton Lunge: A Systematic Scoping Review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7648456/",
+      "source_type": "peer_reviewed_scoping_review",
+      "organization_or_author": "Lam, Wong, and Lee",
+      "notes": "Used for lunge biomechanics, impact attenuation, knee and ankle loading, elite versus amateur differences, and caution that lunge type and instruction affect mechanics."
+    },
+    {
+      "id": "src_lunge_impact_loading",
+      "title": "Understanding the Impact Loading Characteristics of a Badminton Lunge Among Badminton Players",
+      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0205800",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Lam, Lee, Park, Ryue, Yoon, and Ryu",
+      "notes": "Used for extreme lunge impact loading and the need to progress lunge intensity, distance, and skill level rather than only counting repetitions."
+    },
+    {
+      "id": "src_lunge_fatigue_direction",
+      "title": "Impact of Gender, Lunge Direction, and Fatigue on the Lower Limb Biomechanics in Badminton Lunges",
+      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0327428",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "PLOS ONE biomechanics study authors",
+      "notes": "Used for fatigue and lunge-direction risk logic: fatigue can reduce knee flexion and increase leg stiffness, while forehand and backhand lunges create different lower-limb strategies."
+    },
+    {
+      "id": "src_ankle_foot_rotation_lunge",
+      "title": "Effects of Foot Rotation on Ankle Control and Injury Risk During Badminton Lunge Landings",
+      "url": "https://link.springer.com/article/10.1186/s13102-025-01393-y",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Sports Medicine - Open authors",
+      "notes": "Used for toe-in, neutral, and toe-out foot-orientation implications during lunge landings and ankle-control risk."
+    },
+    {
+      "id": "src_achilles_scissor_kick_landing",
+      "title": "Adjusted Landing Technique Reduces the Load on the Achilles Tendon During Badminton Scissor-Kick Jump",
+      "url": "https://www.jssm.org/researchjssm-21-224.xml.xml",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Journal of Sports Science and Medicine authors",
+      "notes": "Used for rear-court scissor-kick jump landing, Achilles tendon load, and coaching landing technique without sacrificing jump height."
+    },
+    {
+      "id": "src_achilles_rupture_badminton",
+      "title": "Achilles Tendon Rupture in Badminton",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1478636/",
+      "source_type": "peer_reviewed_clinical_report",
+      "organization_or_author": "Kaalund, Lass, Hogsaa, and Nohr",
+      "notes": "Used for historical badminton-specific Achilles rupture concern, especially relevant to older or deconditioned recreational players."
+    },
+    {
+      "id": "src_tendon_stress_elite_badminton",
+      "title": "Evidence of Accumulated Stress in Achilles and Anterior Knee Tendons in Elite Badminton Players",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20652535/",
+      "source_type": "peer_reviewed_tendon_study",
+      "organization_or_author": "Boesen, Boesen, Koenig, Bliddal, Torp-Pedersen, and Langberg",
+      "notes": "Used for tendon-load monitoring in elite badminton and accumulated stress in Achilles and anterior knee tendons."
+    },
+    {
+      "id": "src_patellar_tendon_properties_badminton",
+      "title": "Differences in Tendon Properties in Elite Badminton Players With or Without Patellar Tendinopathy",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23227947/",
+      "source_type": "peer_reviewed_tendon_study",
+      "organization_or_author": "Couppe, Kongsgaard, Aagaard, Vinther, Boesen, Kjaer, and colleagues",
+      "notes": "Used for patellar tendinopathy relevance in elite badminton and the need for tendon-specific capacity and symptom response tracking."
+    },
+    {
+      "id": "src_shoulder_pain_young_players",
+      "title": "Risk Factors for, and Prediction of, Shoulder Pain in Young Badminton Players: A Prospective Cohort Study",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36293672/",
+      "source_type": "peer_reviewed_prospective_cohort",
+      "organization_or_author": "Shoulder pain prospective cohort authors",
+      "notes": "Used for young-player shoulder pain risk, especially limited shoulder internal rotation range as a risk marker."
+    },
+    {
+      "id": "src_shoulder_rotational_strength",
+      "title": "Shoulder Rotational Strength Profiles of Danish National Level Badminton Players",
+      "url": "https://ijspt.scholasticahq.com/article/21531-shoulder-rotational-strength-profiles-of-danish-national-level-badminton-players",
+      "source_type": "peer_reviewed_cross_sectional_study",
+      "organization_or_author": "Danish national-level badminton shoulder strength researchers",
+      "notes": "Used for internal/external rotation strength profile monitoring and age/sex/context considerations in overhead athletes."
+    },
+    {
+      "id": "src_shoulder_fitness_risk",
+      "title": "Assessing the Association of Shoulder Pain Risk With Physical Fitness in Badminton Players",
+      "url": "https://brieflands.com/journals/asjsm/articles/129916",
+      "source_type": "peer_reviewed_case_control_study",
+      "organization_or_author": "Japanese university badminton shoulder-pain researchers",
+      "notes": "Used for shoulder-pain associations with trunk rotation and single-leg balance deficits, supporting kinetic-chain and trunk/scapular programming."
+    },
+    {
+      "id": "src_amateur_injury_incidence",
+      "title": "Incidence of Injuries Among Amateur Badminton Players: A Cross-Sectional Study",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7440239/",
+      "source_type": "peer_reviewed_cross_sectional_study",
+      "organization_or_author": "Marchena-Rodriguez, Gijon-Nogueron, Cabello-Manrique, and Ortega-Avila",
+      "notes": "Used for recreational/amateur injury patterning and upper-limb shoulder, elbow, and wrist risk context."
+    },
+    {
+      "id": "src_older_injuries_badminton_pubmed",
+      "title": "Injuries in Badminton",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2197700/",
+      "source_type": "peer_reviewed_injury_report",
+      "organization_or_author": "Badminton injury report authors",
+      "notes": "Used for historical foot/ankle localization, Achilles tendinitis, and tennis elbow context."
+    },
+    {
+      "id": "src_match_demands_junior",
+      "title": "Notational Analysis and Physiological and Metabolic Responses of Male Junior Badminton Match Play",
+      "url": "https://www.mdpi.com/2075-4663/11/2/35",
+      "source_type": "peer_reviewed_match_demand_study",
+      "organization_or_author": "Sports journal authors",
+      "notes": "Used for junior match-play demands, intermittent physiology, and rally/rest context for conditioning design."
+    },
+    {
+      "id": "src_match_vs_multiball_smash",
+      "title": "Comparison of Energy Contributions and Workloads in Male and Female Badminton Matches Versus Frequently Used Multi-Ball Smash Practices",
+      "url": "https://www.frontiersin.org/articles/10.3389/fphys.2021.640199/full",
+      "source_type": "peer_reviewed_workload_study",
+      "organization_or_author": "Frontiers in Physiology authors",
+      "notes": "Used for the principle that multiball smash practice can create workload patterns that differ from match play and should be monitored as its own exposure."
+    },
+    {
+      "id": "src_imu_external_load_singles",
+      "title": "Using Inertial Measurement Units to Quantify External Load in Men's Singles Badminton Matches",
+      "url": "https://www.jssm.org/24-4-901.php",
+      "source_type": "peer_reviewed_external_load_study",
+      "organization_or_author": "Journal of Sports Science and Medicine authors",
+      "notes": "Used for badminton-specific external-load monitoring with kinematic variables and set/match context."
+    },
+    {
+      "id": "src_balance_training_footwork",
+      "title": "Effect of Balance Training on Footwork Performance in Badminton",
+      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0277775",
+      "source_type": "peer_reviewed_intervention_study",
+      "organization_or_author": "Malwanage, Senadheera, and Dassanayake",
+      "notes": "Used for dynamic balance and sport-specific footwork training in adolescent competitive players."
+    },
+    {
+      "id": "src_integrated_neuromuscular_training",
+      "title": "Effect of Integrative Neuromuscular Training for Injury Prevention and Sports Performance of Female Badminton Players",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33987438/",
+      "source_type": "peer_reviewed_intervention_study",
+      "organization_or_author": "Zhao and colleagues",
+      "notes": "Used for integrated neuromuscular training, asymmetry reduction, movement control, and injury-prevention implications in badminton."
+    },
+    {
+      "id": "src_plyometric_racket_sports_review",
+      "title": "Effects of Plyometric Training on Measures of Physical Fitness in Racket Sport Athletes: A Systematic Review and Meta-Analysis",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10726777/",
+      "source_type": "peer_reviewed_systematic_review_meta_analysis",
+      "organization_or_author": "Racket-sport plyometric training review authors",
+      "notes": "Used for plyometric training benefits to power, agility, speed, and balance, with caution to dose plyometrics by tissue capacity and landing control."
+    },
+    {
+      "id": "src_core_strength_badminton_review",
+      "title": "Effect of Core Strength Training on the Badminton Player's Performance",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11168634/",
+      "source_type": "peer_reviewed_meta_analysis",
+      "organization_or_author": "Core strength training review authors",
+      "notes": "Used for trunk capacity, balance, stability, and front/back-court movement implications."
+    },
+    {
+      "id": "src_session_rpe_review",
+      "title": "Session-RPE Method for Training Load Monitoring: Validity, Ecological Usefulness, and Influencing Factors",
+      "url": "https://www.frontiersin.org/articles/10.3389/fnins.2017.00612/full",
+      "source_type": "peer_reviewed_training_load_review",
+      "organization_or_author": "Haddad, Stylianides, Djaoui, Dellal, and Chamari",
+      "notes": "Used for internal load monitoring through session duration multiplied by perceived intensity, and for interpreting RPE with context."
+    },
+    {
+      "id": "src_ioc_load_part1",
+      "title": "How Much Is Too Much? Part 1: IOC Consensus Statement on Load in Sport and Risk of Injury",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27535989/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Soligard, Schwellnus, Alonso, Bahr, Clarsen, Dijkstra, Gabbett, and colleagues",
+      "notes": "Used for training and competition load prescription, monitoring, and injury-risk framing across sports."
+    },
+    {
+      "id": "src_ioc_load_part2",
+      "title": "How Much Is Too Much? Part 2: IOC Consensus Statement on Load in Sport and Risk of Illness",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27535991/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Schwellnus, Soligard, Alonso, Bahr, Clarsen, Dijkstra, Gabbett, and colleagues",
+      "notes": "Used for readiness interpretation that illness, sleep, stress, and recovery matter alongside external load."
+    },
+    {
+      "id": "src_ioc_youth_development",
+      "title": "International Olympic Committee Consensus Statement on Youth Athletic Development",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26084524/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Bergeron and IOC consensus group",
+      "notes": "Used for youth athlete development, growth and maturation sensitivity, diversified preparation, and avoiding adult-like load too early."
+    },
+    {
+      "id": "src_rts_consensus_2016",
+      "title": "2016 Consensus Statement on Return to Sport From the First World Congress in Sports Physical Therapy",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27226389/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Ardern, Glasgow, Schneiders, Witvrouw, Clarsen, Cools, Gojanovic, and colleagues",
+      "notes": "Used for return-to-participation, return-to-sport, and return-to-performance continuum."
+    },
+    {
+      "id": "src_paass_ankle_rts",
+      "title": "Return to Sport Decisions After an Acute Lateral Ankle Sprain Injury: Introducing the PAASS Framework",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34158354/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Smith, Vicenzino, Bahr, Bandholm, Cooke, Mendonca, Fourchet, and colleagues",
+      "notes": "Used for ankle return-to-sport domains: pain, ankle impairments, athlete perception, sensorimotor control, and sport/functional performance."
+    },
+    {
+      "id": "src_patellar_tendinopathy_load",
+      "title": "Patellar Tendinopathy: Clinical Diagnosis, Load Management, and Advice for Challenging Case Presentations",
+      "url": "https://www.jospt.org/doi/10.2519/jospt.2015.5987",
+      "source_type": "peer_reviewed_clinical_guidance",
+      "organization_or_author": "Malliaras, Cook, Purdam, and Rio",
+      "notes": "Used for patellar tendon load management, progressive tendon loading, pain response, 24-hour response, and full-training tolerance before return to sport."
+    },
+    {
+      "id": "src_achilles_cpg_2024",
+      "title": "Achilles Pain, Stiffness, and Muscle Power Deficits: Midportion Achilles Tendinopathy Revision 2024",
+      "url": "https://www.jospt.org/doi/10.2519/jospt.2024.0302",
+      "source_type": "peer_reviewed_clinical_practice_guideline",
+      "organization_or_author": "JOSPT Achilles tendinopathy guideline group",
+      "notes": "Used for Achilles tendinopathy loading exercise, eccentric or heavy slow loading, symptom-guided intensity, and calf power restoration."
+    },
+    {
+      "id": "src_mtss_risk_review",
+      "title": "Medial Tibial Stress Syndrome in Active Individuals: A Systematic Review and Meta-Analysis of Risk Factors",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5435145/",
+      "source_type": "peer_reviewed_systematic_review_meta_analysis",
+      "organization_or_author": "MTSS risk-factor review authors",
+      "notes": "Used for shin-pain risk factors and lower-leg load monitoring when badminton adds running, jumping, and repeated starts/stops."
+    },
+    {
+      "id": "src_wilk_shoulder_rts",
+      "title": "Return to Sport Participation Criteria Following Shoulder Injury: A Clinical Commentary",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7735686/",
+      "source_type": "peer_reviewed_clinical_commentary",
+      "organization_or_author": "Wilk, Bagwell, Davies, and Arrigo",
+      "notes": "Used for criteria-based shoulder return-to-sport domains: pain, range of motion, strength, functional performance, kinetic chain, and sport-specific exposure."
+    },
+    {
+      "id": "src_lauersen_exercise_prevention",
+      "title": "The Effectiveness of Exercise Interventions to Prevent Sports Injuries: A Systematic Review and Meta-Analysis of Randomised Controlled Trials",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24100287/",
+      "source_type": "peer_reviewed_systematic_review_meta_analysis",
+      "organization_or_author": "Lauersen, Bertelsen, and Andersen",
+      "notes": "Used for broad support that strength training and multi-component exercise interventions can reduce sport injury risk."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "badminton_load_is_multichannel",
+      "concept": "Badminton load should be modeled as separate exposure channels: lunge volume and intensity, overhead and smash volume, jump and landing count, acceleration/deceleration density, low stance time, rally density, match/tournament density, gym load, and recovery status.",
+      "backend_use": "Do not collapse badminton court load into session duration alone. Store load channels separately so a smash-heavy multiball session and a lunge-heavy defensive session can trigger different risk rules.",
+      "source_ids": [
+        "src_ioc_load_part1",
+        "src_session_rpe_review",
+        "src_match_vs_multiball_smash",
+        "src_imu_external_load_singles"
+      ]
+    },
+    {
+      "id": "smash_and_lunge_are_key_exposure_markers",
+      "concept": "The smash and the lunge are not merely technical actions; they are high-value exposure markers. Smash volume concentrates overhead, trunk-rotation, elbow, wrist, and landing load, while lunge volume concentrates knee, ankle, Achilles, shin, hip, and back load.",
+      "backend_use": "Track smashes and lunges as first-class load metrics and link them to tissue-specific plan adjustments.",
+      "source_ids": [
+        "src_guermont_elite_prospective",
+        "src_elite_injury_review",
+        "src_lunge_scoping_review",
+        "src_match_vs_multiball_smash"
+      ]
+    },
+    {
+      "id": "lunge_quality_modifies_lunge_quantity",
+      "concept": "Lunge count is not enough. Direction, foot orientation, approach speed, fatigue state, skill level, reach distance, stance width, trunk control, and recovery step all alter lower-limb load.",
+      "backend_use": "When lunge mechanics are flagged as poor, reduce lunge intensity or fatigue density before reducing every badminton session equally.",
+      "source_ids": [
+        "src_lunge_scoping_review",
+        "src_lunge_impact_loading",
+        "src_lunge_fatigue_direction",
+        "src_ankle_foot_rotation_lunge"
+      ]
+    },
+    {
+      "id": "jump_landing_load_needs_type_and_context",
+      "concept": "A scissor-kick recovery jump, jump smash, split-step hop, defensive block jump, and reactive reach landing have different tissue demands. Landing quality and fatigue are as important as jump count.",
+      "backend_use": "Classify jumps into split_step, jump_smash, scissor_kick, reactive_reach, repeated_hop, and low_amplitude_rally_hop where possible.",
+      "source_ids": [
+        "src_achilles_scissor_kick_landing",
+        "src_elite_injury_review",
+        "src_lunge_fatigue_direction",
+        "src_imu_external_load_singles"
+      ]
+    },
+    {
+      "id": "tendon_capacity_requires_slow_and_fast_loading",
+      "concept": "Patellar and Achilles tendons need progressive capacity from heavy slow or eccentric/isometric loading plus gradual reintroduction of fast energy-storage loads such as lunges, hops, split-steps, and jump landings.",
+      "backend_use": "For tendon-sensitive athletes, preserve tolerable strength loading while temporarily reducing high-fast court exposure and checking 24-hour symptom response.",
+      "source_ids": [
+        "src_tendon_stress_elite_badminton",
+        "src_patellar_tendon_properties_badminton",
+        "src_patellar_tendinopathy_load",
+        "src_achilles_cpg_2024"
+      ]
+    },
+    {
+      "id": "overhead_load_is_kinetic_chain_load",
+      "concept": "Shoulder, elbow, and wrist symptoms should not be managed only at the joint. Smash and overhead stroke tolerance depends on trunk rotation, scapular control, rotator cuff capacity, thoracic mobility, grip/forearm capacity, timing, and lower-body positioning.",
+      "backend_use": "Shoulder or elbow flags should retrieve trunk, scapular, rotator-cuff, forearm, and stroke-volume records together.",
+      "source_ids": [
+        "src_shoulder_pain_young_players",
+        "src_shoulder_rotational_strength",
+        "src_shoulder_fitness_risk",
+        "src_wilk_shoulder_rts"
+      ]
+    },
+    {
+      "id": "readiness_is_local_and_global",
+      "concept": "A player can be globally fresh but locally overloaded at the patellar tendon, Achilles, shoulder, forearm, or low back. Readiness therefore needs whole-athlete markers and region-specific pain or stiffness markers.",
+      "backend_use": "Combine session RPE, sleep, stress, illness, mood, soreness, and body-region pain/stiffness before assigning court and gym exposure.",
+      "source_ids": [
+        "src_ioc_load_part1",
+        "src_ioc_load_part2",
+        "src_session_rpe_review",
+        "src_patellar_tendinopathy_load"
+      ]
+    },
+    {
+      "id": "tournament_density_changes_the_goal",
+      "concept": "Dense tournament periods are not the place to chase new fitness adaptation. They require exposure budgeting, warm-up consistency, post-match downregulation, tissue checks, sleep protection, and tactical choices that reduce unnecessary jumps, lunges, and maximum smashes when possible.",
+      "backend_use": "When match_count_in_event or matches_per_48h is high, switch plans from overload to readiness, activation, and recovery with only microdosed maintenance.",
+      "source_ids": [
+        "src_junior_championship_injury_risk",
+        "src_ioc_load_part1",
+        "src_world_elite_junior_training_injuries"
+      ]
+    },
+    {
+      "id": "beginner_progression_prioritizes_tissue_and_movement_literacy",
+      "concept": "Beginners need braking, landing, lunge shape, balance, trunk control, basic strength, calf capacity, and shoulder preparation before dense multishuttle lunges, maximal jump smashes, or fatigue drills.",
+      "backend_use": "Gate beginner court conditioning by movement quality and soreness response, not by ambition or match calendar.",
+      "source_ids": [
+        "src_bwf_coach_manual_l1",
+        "src_lauersen_exercise_prevention",
+        "src_balance_training_footwork",
+        "src_ioc_youth_development"
+      ]
+    },
+    {
+      "id": "intermediate_progression_adds_specificity_one_channel_at_a_time",
+      "concept": "Intermediate players can progress badminton-specific load, but should not spike lunge depth, smash count, jump landing, and match density in the same week.",
+      "backend_use": "Allow one primary exposure emphasis per week unless the athlete has high training age and green readiness.",
+      "source_ids": [
+        "src_ioc_load_part1",
+        "src_lunge_impact_loading",
+        "src_match_vs_multiball_smash",
+        "src_plyometric_racket_sports_review"
+      ]
+    },
+    {
+      "id": "advanced_progression_requires_individual_load_history",
+      "concept": "Advanced players need high specific capacity, but the risk question becomes whether the current week matches their personal load history, event density, tissue response, and role/discipline demands.",
+      "backend_use": "Use rolling exposure baselines for smashes, lunges, jumps, sRPE load, and match count, while avoiding universal thresholds detached from individual history.",
+      "source_ids": [
+        "src_ioc_load_part1",
+        "src_session_rpe_review",
+        "src_imu_external_load_singles",
+        "src_guermont_elite_prospective"
+      ]
+    },
+    {
+      "id": "return_to_court_is_not_binary",
+      "concept": "Return-to-court should progress from pain-controlled capacity to controlled footwork, controlled hitting, integrated rallies, practice participation, match exposure, and finally return to performance.",
+      "backend_use": "Create staged badminton return records rather than a single cleared/not-cleared flag.",
+      "source_ids": [
+        "src_rts_consensus_2016",
+        "src_paass_ankle_rts",
+        "src_wilk_shoulder_rts",
+        "src_patellar_tendinopathy_load"
+      ]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "badminton_load_accounting_model",
+      "name": "Badminton Load Accounting Model",
+      "model": {
+        "external_load_channels": [
+          "lunge_count",
+          "lunge_depth_or_reach",
+          "lunge_direction",
+          "lunge_recovery_speed",
+          "smash_count",
+          "overhead_contact_count",
+          "max_intent_overhead_count",
+          "jump_count",
+          "landing_count",
+          "split_step_hop_density",
+          "acceleration_count",
+          "deceleration_count",
+          "change_of_direction_count",
+          "low_stance_minutes",
+          "rally_count",
+          "rally_density",
+          "multi_shuttle_feed_volume",
+          "match_count",
+          "minutes_on_court",
+          "gym_lower_body_load",
+          "gym_upper_body_load"
+        ],
+        "internal_load_channels": [
+          "session_rpe",
+          "localized_pain_0_10",
+          "next_morning_stiffness",
+          "perceived_leg_heaviness",
+          "shoulder_fatigue",
+          "forearm_grip_fatigue",
+          "low_back_tightness",
+          "sleep_quality",
+          "illness_flag",
+          "stress_level",
+          "readiness_score"
+        ],
+        "context_tags": [
+          "level",
+          "age_band",
+          "growth_spurt_flag",
+          "training_age",
+          "singles_or_doubles",
+          "season_phase",
+          "tournament_week",
+          "match_day_minus",
+          "court_surface",
+          "shoe_change",
+          "recent_layoff",
+          "recent_return_from_injury",
+          "prior_injury_region"
+        ]
+      },
+      "coaching_translation": "A session can be high-risk because it is lunge-heavy, smash-heavy, jump-heavy, deceleration-heavy, or recovery-poor. The backend should preserve the load reason.",
+      "source_ids": [
+        "src_ioc_load_part1",
+        "src_session_rpe_review",
+        "src_match_vs_multiball_smash",
+        "src_imu_external_load_singles"
+      ]
+    },
+    {
+      "id": "badminton_action_tissue_map",
+      "name": "Action To Tissue Stress Map",
+      "model": {
+        "max_smash_or_jump_smash": {
+          "primary_tissues": [
+            "shoulder_rotator_cuff",
+            "scapulothoracic_muscles",
+            "elbow_flexor_extensor_tendons",
+            "forearm_pronator_supinator",
+            "wrist_tendons",
+            "thoracolumbar_spine",
+            "patellar_tendon",
+            "achilles_tendon"
+          ],
+          "load_modifiers": [
+            "max_intent",
+            "jump_takeoff",
+            "landing_quality",
+            "late_contact",
+            "poor_trunk_rotation",
+            "fatigue",
+            "multi_shuttle_density"
+          ]
+        },
+        "deep_forward_lunge": {
+          "primary_tissues": [
+            "ankle_ligaments",
+            "knee_patellofemoral_joint",
+            "patellar_tendon",
+            "achilles_tendon",
+            "calf_soleus",
+            "tibial_bone_and_periosteum",
+            "hip_adductors",
+            "lumbar_spine"
+          ],
+          "load_modifiers": [
+            "reach_distance",
+            "approach_speed",
+            "forehand_vs_backhand",
+            "toe_orientation",
+            "fatigue",
+            "repeated_recovery_under_time_pressure"
+          ]
+        },
+        "split_step_and_repeated_hops": {
+          "primary_tissues": [
+            "achilles_tendon",
+            "plantar_fascia",
+            "calf_soleus",
+            "ankle_ligaments",
+            "tibial_stress_complex"
+          ],
+          "load_modifiers": [
+            "rally_density",
+            "court_time",
+            "shoe_surface_change",
+            "calf_strength",
+            "lower_leg_stiffness"
+          ]
+        },
+        "low_defensive_stance_and_lateral_recovery": {
+          "primary_tissues": [
+            "quadriceps",
+            "patellofemoral_joint",
+            "adductors",
+            "gluteals",
+            "lumbar_spine"
+          ],
+          "load_modifiers": [
+            "low_stance_minutes",
+            "lateral_deceleration",
+            "repeated_reacceleration",
+            "trunk_control"
+          ]
+        }
+      },
+      "backend_use": "Use the action tag to retrieve the correct injury-risk, S&C, and return-to-court records.",
+      "source_ids": [
+        "src_elite_injury_review",
+        "src_lunge_scoping_review",
+        "src_achilles_scissor_kick_landing",
+        "src_fittoplay_badminton_common_injuries"
+      ]
+    },
+    {
+      "id": "smash_volume_taxonomy",
+      "name": "Smash And Overhead Contact Volume Taxonomy",
+      "model": {
+        "contact_types": [
+          "standing_clear",
+          "standing_drop",
+          "controlled_smash",
+          "max_smash",
+          "jump_smash",
+          "round_the_head_overhead",
+          "late_defensive_overhead",
+          "multi_shuttle_repeated_smash",
+          "warmup_overhead",
+          "serve_high_or_flick",
+          "net_kill"
+        ],
+        "monitoring_units": [
+          "contacts_by_type_per_session",
+          "max_intent_contacts",
+          "jump_overhead_contacts",
+          "contacts_after_fatigue",
+          "contacts_after_shoulder_pain_start",
+          "weekly_overhead_contact_trend"
+        ],
+        "risk_flags": [
+          "shoulder_pain_during_or_after",
+          "loss_of_internal_rotation",
+          "external_rotation_weakness",
+          "scapular_control_deficit",
+          "elbow_lateral_pain",
+          "wrist_pain_or_grip_fatigue",
+          "low_back_extension_rotation_pain"
+        ]
+      },
+      "level_implications": {
+        "beginner": "Count only high-intent overheads when formal tracking is not practical; avoid repeated max smashes under fatigue.",
+        "intermediate": "Track max smashes, jump smashes, and multi-shuttle overhead blocks separately from normal rally contacts.",
+        "advanced": "Track total overhead contacts, high-intent contacts, jump overheads, and 24-hour shoulder/elbow/wrist response."
+      },
+      "source_ids": [
+        "src_match_vs_multiball_smash",
+        "src_guermont_elite_prospective",
+        "src_shoulder_pain_young_players",
+        "src_wilk_shoulder_rts"
+      ]
+    },
+    {
+      "id": "lunge_volume_taxonomy",
+      "name": "Lunge Volume And Intensity Taxonomy",
+      "model": {
+        "lunge_types": [
+          "front_forehand_lunge",
+          "front_backhand_lunge",
+          "side_forehand_lunge",
+          "side_backhand_lunge",
+          "rear_court_recovery_lunge",
+          "deep_stretch_lunge",
+          "kick_lunge",
+          "hop_lunge",
+          "step_in_lunge",
+          "fatigued_repeated_lunge"
+        ],
+        "intensity_modifiers": [
+          "approach_speed",
+          "distance_to_shuttle",
+          "braking_time",
+          "foot_orientation",
+          "knee_flexion_angle_available",
+          "trunk_inclination",
+          "racket_reach",
+          "recovery_step_speed",
+          "fatigue_state"
+        ],
+        "monitoring_units": [
+          "total_lunges",
+          "deep_lunges",
+          "reactive_lunges",
+          "fatigued_lunges",
+          "lunges_after_pain_start",
+          "weekly_lunge_spike"
+        ]
+      },
+      "backend_use": "Progress lunge depth, speed, density, and reactivity separately. A high-count low-depth teaching session should not be treated the same as a low-count maximal defensive lunge session.",
+      "source_ids": [
+        "src_lunge_scoping_review",
+        "src_lunge_impact_loading",
+        "src_lunge_fatigue_direction",
+        "src_ankle_foot_rotation_lunge"
+      ]
+    },
+    {
+      "id": "jump_landing_taxonomy",
+      "name": "Jump And Landing Load Taxonomy",
+      "model": {
+        "jump_types": [
+          "split_step_hop",
+          "repeated_low_amplitude_hop",
+          "jump_smash_takeoff",
+          "jump_smash_landing",
+          "scissor_kick_jump",
+          "rear_court_scissor_landing",
+          "net_kill_jump",
+          "reactive_reach_jump",
+          "plyometric_training_jump"
+        ],
+        "landing_quality_checks": [
+          "quiet_controlled_contact_when_appropriate",
+          "knee_tracks_over_foot",
+          "hip_knee_ankle_flexion_available",
+          "no_stiff_locked_knee_landing",
+          "trunk_control",
+          "calf_achilles_absorption",
+          "stable_first_step_after_landing",
+          "no_pain_or_apprehension"
+        ],
+        "load_modifiers": [
+          "jump_height",
+          "single_leg_or_asymmetric_landing",
+          "rotation_on_landing",
+          "fatigue",
+          "rear_court_to_front_court_transition",
+          "previous_day_tendon_response"
+        ]
+      },
+      "source_ids": [
+        "src_achilles_scissor_kick_landing",
+        "src_lunge_fatigue_direction",
+        "src_plyometric_racket_sports_review",
+        "src_tendon_stress_elite_badminton"
+      ]
+    },
+    {
+      "id": "badminton_readiness_traffic_light",
+      "name": "Badminton Readiness Traffic Light",
+      "model": {
+        "green": {
+          "criteria": [
+            "sleep_normal_or_good",
+            "no_illness_flag",
+            "localized_pain_0_to_2",
+            "no_next_day_tendon_or_shin_worsening",
+            "normal_warmup_movement_quality",
+            "no_apprehension_with_lunge_or_overhead"
+          ],
+          "allowed_training": [
+            "planned_court_load",
+            "planned_strength",
+            "power_or_plyometric_work_if_scheduled",
+            "normal_technical_volume"
+          ]
+        },
+        "yellow": {
+          "criteria": [
+            "pain_3_to_4_or_region_specific_stiffness",
+            "poor_sleep_or_high_stress",
+            "mild_readiness_drop",
+            "warmup_quality_below_normal",
+            "recent_load_spike"
+          ],
+          "training_adjustment": [
+            "reduce_one_or_more_exposure_channels",
+            "keep_skill_quality",
+            "avoid_fatigue_finishers",
+            "preserve_nonprovocative_strength",
+            "recheck_24_hour_response"
+          ]
+        },
+        "red": {
+          "criteria": [
+            "pain_5_plus",
+            "swelling_or_instability",
+            "sharp_pain",
+            "progressive_next_day_symptoms",
+            "limp_or_compensated_lunge",
+            "shoulder_pain_with_basic_overhead",
+            "suspected_stress_fracture_or_acute_rupture",
+            "illness_with_systemic_symptoms"
+          ],
+          "training_adjustment": [
+            "stop_provocative_court_load",
+            "refer_to_clinician_when_needed",
+            "replace_with_pain_free_capacity_or_recovery",
+            "do_not_progress_return_to_court"
+          ]
+        }
+      },
+      "source_ids": [
+        "src_ioc_load_part1",
+        "src_ioc_load_part2",
+        "src_patellar_tendinopathy_load",
+        "src_paass_ankle_rts"
+      ]
+    },
+    {
+      "id": "return_to_court_stage_model",
+      "name": "Badminton Return-To-Court Stage Model",
+      "model": {
+        "stage_0_medical_and_symptom_control": {
+          "goal": "Control pain, swelling, irritability, and basic daily function before badminton-specific loading.",
+          "court_exposure": "none_or_nonprovocative_shadow_only",
+          "gate_to_progress": [
+            "daily_activity_tolerated",
+            "no_red_flag_symptoms",
+            "clinician_clearance_when_needed"
+          ]
+        },
+        "stage_1_capacity_rebuild": {
+          "goal": "Restore local strength, mobility, balance, and trunk control without chaotic court demand.",
+          "court_exposure": "basic shadow movement, no maximal lunges, no max smashes, no reactive play",
+          "gate_to_progress": [
+            "pain_0_to_2_during",
+            "no_next_day_worsening",
+            "region_specific_strength_and_rom_improving"
+          ]
+        },
+        "stage_2_controlled_footwork_and_hitting": {
+          "goal": "Reintroduce planned badminton patterns at low to moderate intensity.",
+          "court_exposure": [
+            "planned split-step",
+            "submax footwork",
+            "controlled lunges",
+            "controlled clears_and_drops",
+            "limited controlled smashes if shoulder/back tolerant"
+          ],
+          "gate_to_progress": [
+            "quality maintained under low fatigue",
+            "no instability",
+            "24_hour_response acceptable"
+          ]
+        },
+        "stage_3_integrated_drills": {
+          "goal": "Blend movement and hitting with moderate reactivity while controlling volume.",
+          "court_exposure": [
+            "multi_direction footwork",
+            "limited multishuttle",
+            "moderate reactive lunges",
+            "progressive overhead contacts",
+            "low_volume jump_landings"
+          ],
+          "gate_to_progress": [
+            "pain_stable_0_to_2",
+            "movement symmetry acceptable",
+            "no next_day tendon_or_shin escalation",
+            "confidence improving"
+          ]
+        },
+        "stage_4_practice_participation": {
+          "goal": "Return to normal practice with exposure caps and no competition density.",
+          "court_exposure": [
+            "controlled full-court rallies",
+            "practice games",
+            "progressive smash volume",
+            "progressive lunge density",
+            "progressive jump_landings"
+          ],
+          "gate_to_progress": [
+            "full practice tolerated",
+            "region_specific tests passed",
+            "coach observes no compensations",
+            "readiness remains green_or_low_yellow"
+          ]
+        },
+        "stage_5_match_exposure": {
+          "goal": "Return to competition in managed dose.",
+          "court_exposure": [
+            "limited match minutes_or_games",
+            "avoid back_to_back_dense_matches_initially",
+            "monitor smashes_lunges_jumps",
+            "post_match_24_to_48_hour_check"
+          ],
+          "gate_to_progress": [
+            "match exposure tolerated",
+            "no symptom flare",
+            "confidence and decision speed acceptable"
+          ]
+        },
+        "stage_6_return_to_performance": {
+          "goal": "Restore pre-injury or target performance load, tournament density, and high-intensity skill execution.",
+          "court_exposure": [
+            "full training",
+            "full match schedule",
+            "role_or_discipline_specific exposure",
+            "tournament density only after repeat tolerance"
+          ],
+          "gate_to_maintain": [
+            "load history restored",
+            "performance metrics restored",
+            "no recurring region-specific response",
+            "ongoing maintenance plan active"
+          ]
+        }
+      },
+      "source_ids": [
+        "src_rts_consensus_2016",
+        "src_paass_ankle_rts",
+        "src_wilk_shoulder_rts",
+        "src_patellar_tendinopathy_load"
+      ]
+    },
+    {
+      "id": "snc_priority_stack",
+      "name": "Badminton S&C Priority Stack",
+      "model": {
+        "base_capacity": [
+          "hip_knee_ankle_strength",
+          "calf_soleus_capacity",
+          "trunk_anti_rotation_and_extension_control",
+          "shoulder_external_rotation_and_scapular_control",
+          "forearm_grip_wrist_capacity",
+          "mobility_for_ankle_hip_t_spine_shoulder"
+        ],
+        "movement_capacity": [
+          "deceleration",
+          "lunge_absorption_and_push_off",
+          "split_step_elasticity",
+          "single_leg_balance",
+          "landing_control",
+          "change_of_direction"
+        ],
+        "power_capacity": [
+          "low_volume_plyometrics",
+          "horizontal_and_lateral_bounds",
+          "medicine_ball_rotational_power",
+          "jump_smash_takeoff_and_landing_control",
+          "reactive_strength_with_quality"
+        ],
+        "repeatability": [
+          "rally_repeat_efforts",
+          "repeat_lunge_quality",
+          "repeat_smash_quality",
+          "recover_between_points",
+          "maintain_decision_quality_under_fatigue"
+        ]
+      },
+      "backend_use": "Retrieve foundational S&C before advanced plyometrics when the player lacks strength, balance, trunk, or landing control.",
+      "source_ids": [
+        "src_bwf_coach_manual_l1",
+        "src_balance_training_footwork",
+        "src_integrated_neuromuscular_training",
+        "src_lauersen_exercise_prevention",
+        "src_core_strength_badminton_review"
+      ]
+    },
+    {
+      "id": "level_progression_model",
+      "name": "Beginner Intermediate Advanced Load Progression Model",
+      "model": {
+        "beginner": {
+          "primary_goal": "Movement literacy and tissue tolerance.",
+          "court_load": "short technical blocks, planned footwork, low-volume lunges, controlled overheads, low-amplitude hops.",
+          "snc": "bodyweight strength, balance, trunk control, calf raises, shoulder/scapular basics, landing and braking mechanics.",
+          "avoid": [
+            "fatigue multishuttle lunges",
+            "repeated max jump smashes",
+            "hard plyometric circuits",
+            "dense tournaments without recovery"
+          ]
+        },
+        "intermediate": {
+          "primary_goal": "Specific capacity with controlled exposure progression.",
+          "court_load": "tracked lunge and smash blocks, progressive jump landing, moderate multishuttle, planned match play.",
+          "snc": "progressive lower-body strength, unilateral strength, deceleration, lateral power, trunk rotation control, cuff/scapular and forearm work.",
+          "avoid": [
+            "spiking lunge_smash_jump load together",
+            "heavy eccentric lower body before match",
+            "ignoring yellow readiness flags"
+          ]
+        },
+        "advanced": {
+          "primary_goal": "High specific tolerance and performance repeatability.",
+          "court_load": "individualized smash, lunge, jump, rally, and tournament exposure based on history and readiness.",
+          "snc": "strength and power maintenance, microdosed plyometrics, individualized tendon and shoulder durability, high-quality deceleration and reactive work.",
+          "avoid": [
+            "novel soreness-producing gym blocks in competition weeks",
+            "high smash multiball on top of shoulder symptoms",
+            "unmanaged match density after layoff"
+          ]
+        }
+      },
+      "source_ids": [
+        "src_bwf_coach_manual_l1",
+        "src_ioc_youth_development",
+        "src_ioc_load_part1",
+        "src_plyometric_racket_sports_review"
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "readiness_adjusts_court_load_rule",
+      "category": "readiness",
+      "rule": "If readiness is yellow, reduce the most relevant exposure channel rather than deleting all badminton. If readiness is red, stop provocative court load and route to clinical review when indicated.",
+      "rationale": "Load management is about matching exposure to current capacity and tissue response, not blanket rest or blanket overload.",
+      "backend_action": [
+        "identify_primary_risk_channel",
+        "reduce_smash_lunge_jump_or_deceleration_channel",
+        "preserve_pain_free_skill_or_capacity",
+        "recheck_next_day_response"
+      ],
+      "source_ids": [
+        "src_ioc_load_part1",
+        "src_ioc_load_part2",
+        "src_session_rpe_review"
+      ]
+    },
+    {
+      "id": "smash_volume_guardrail_rule",
+      "category": "overhead_load",
+      "rule": "High-intent smashes, jump smashes, and repeated multishuttle smashes should be capped or reduced when shoulder, elbow, wrist, low back, or landing symptoms are present, or when the player has a recent overhead-volume spike.",
+      "rationale": "Smashes concentrate overhead kinetic-chain and landing stress; multiball practice may not match normal match workload and can create dense repeated exposure.",
+      "backend_action": [
+        "track_max_intent_smash_count",
+        "separate_multishuttle_smashes_from_rally_overheads",
+        "replace_some_max_smashes_with_controlled_clears_drops_or_tactical_rallies",
+        "add_scapular_rotator_cuff_trunk_forearm_support"
+      ],
+      "source_ids": [
+        "src_match_vs_multiball_smash",
+        "src_guermont_elite_prospective",
+        "src_shoulder_pain_young_players",
+        "src_wilk_shoulder_rts"
+      ]
+    },
+    {
+      "id": "lunge_volume_guardrail_rule",
+      "category": "lower_limb_load",
+      "rule": "Deep, fast, reactive, and fatigued lunge exposure should progress gradually, especially after layoff, growth spurt, ankle sprain, knee pain, Achilles symptoms, shin pain, or back pain.",
+      "rationale": "Lunge biomechanics and injury risk are modified by depth, approach speed, fatigue, direction, foot orientation, and skill level.",
+      "backend_action": [
+        "track_lunge_count_and_deep_lunge_count",
+        "reduce_reactive_or_fatigued_lunges_first",
+        "keep_technical_footwork_at_pain_free_depth",
+        "add_deceleration_balance_calf_quad_hip_trunk_work"
+      ],
+      "source_ids": [
+        "src_lunge_scoping_review",
+        "src_lunge_impact_loading",
+        "src_lunge_fatigue_direction",
+        "src_ankle_foot_rotation_lunge"
+      ]
+    },
+    {
+      "id": "jump_landing_quality_gate_rule",
+      "category": "plyometrics_and_landing",
+      "rule": "Do not add dense plyometrics, jump smashes, or repeated scissor-kick landing blocks unless landing quality is stable and the previous 24-hour tendon, knee, shin, and back response is acceptable.",
+      "rationale": "Jump and landing stress can be productive when dosed and coached, but stiff or fatigued landings increase tissue load.",
+      "backend_action": [
+        "gate_plyometrics_by_landing_quality",
+        "start_low_volume_high_quality",
+        "progress_one_variable_at_a_time",
+        "avoid_fatigue_landing_circuits_for_beginners"
+      ],
+      "source_ids": [
+        "src_achilles_scissor_kick_landing",
+        "src_plyometric_racket_sports_review",
+        "src_patellar_tendinopathy_load",
+        "src_achilles_cpg_2024"
+      ]
+    },
+    {
+      "id": "tournament_density_rule",
+      "category": "competition_density",
+      "rule": "During tournament weeks or events with three or more matches in a short window, reduce new overload and prioritize activation, warm-up quality, recovery, tissue checks, and exposure budgeting.",
+      "rationale": "Dense match exposure, uncertain scheduling, travel, repeated warm-ups, and limited recovery change the goal from adaptation to availability and repeatability.",
+      "backend_action": [
+        "switch_to_tournament_mode",
+        "remove_soreness_inducing_strength",
+        "microdose_power_only_if_green_ready",
+        "cap_extra_smash_and_lunge_practice",
+        "schedule_post_match_recovery_and_24_hour_check"
+      ],
+      "source_ids": [
+        "src_junior_championship_injury_risk",
+        "src_ioc_load_part1",
+        "src_world_elite_junior_training_injuries"
+      ]
+    },
+    {
+      "id": "match_day_minus_one_rule",
+      "category": "microcycle",
+      "rule": "The day before a meaningful match should avoid heavy eccentric lower-body loading, dense lunge conditioning, high-volume jump landings, and high-volume max smashes.",
+      "rationale": "Badminton performance depends on sharp footwork, shoulder timing, decision speed, and fresh tendons. Fatiguing loads close to competition can degrade quality.",
+      "backend_action": [
+        "assign_activation_mobility_light_power_primer",
+        "keep_smash_and_lunge_volume_low_to_moderate",
+        "avoid_new_exercises",
+        "confirm_readiness_and_pain_flags"
+      ],
+      "source_ids": [
+        "src_bwf_coach_manual_l1",
+        "src_ioc_load_part1",
+        "src_session_rpe_review"
+      ]
+    },
+    {
+      "id": "post_match_response_rule",
+      "category": "microcycle",
+      "rule": "The day after high match exposure should start with region-specific checks: ankle stability, knee/tendon response, shin pain, Achilles stiffness, shoulder/elbow/wrist soreness, and low-back symptoms.",
+      "rationale": "Delayed symptom response is central for tendons and bone stress, and match exposure can be highly individual.",
+      "backend_action": [
+        "collect_pain_and_stiffness_by_region",
+        "compare_to_baseline",
+        "assign_recovery_or_maintenance",
+        "delay_high_fast_load_if_24_hour_response_worsened"
+      ],
+      "source_ids": [
+        "src_patellar_tendinopathy_load",
+        "src_achilles_cpg_2024",
+        "src_ioc_load_part1",
+        "src_session_rpe_review"
+      ]
+    },
+    {
+      "id": "youth_growth_spurt_rule",
+      "category": "youth_load",
+      "rule": "When growth-spurt or adolescent maturation flags are present, avoid adult-like spikes in plyometrics, deep lunges, max smashes, match density, and heavy loading. Keep strength technique, balance, trunk control, mobility, and recovery habits high priority.",
+      "rationale": "Youth athletes require maturation-sensitive programming and can be vulnerable when sport-specific load rises faster than tissue capacity.",
+      "backend_action": [
+        "lower_weekly_spike_tolerance",
+        "cap_tournament_extra_training",
+        "prioritize_technical_strength_and_movement_quality",
+        "monitor_knee_shin_heel_back_shoulder_symptoms"
+      ],
+      "source_ids": [
+        "src_ioc_youth_development",
+        "src_youth_epidemiology_7_22",
+        "src_world_elite_junior_training_injuries",
+        "src_bwf_coach_manual_l1"
+      ]
+    },
+    {
+      "id": "return_to_court_no_skip_rule",
+      "category": "return_to_court",
+      "rule": "Do not move from pain-controlled rehab directly to full match play. Return must pass controlled footwork, controlled hitting, integrated reactive drills, full practice tolerance, and limited match exposure.",
+      "rationale": "Return-to-sport is a continuum; badminton requires restoration of tissue tolerance, movement quality, reaction, timing, confidence, and competition density.",
+      "backend_action": [
+        "assign_current_return_stage",
+        "enforce_stage_gate",
+        "progress_exposure_channel_by_channel",
+        "require_24_hour_response_check"
+      ],
+      "source_ids": [
+        "src_rts_consensus_2016",
+        "src_paass_ankle_rts",
+        "src_wilk_shoulder_rts",
+        "src_patellar_tendinopathy_load"
+      ]
+    },
+    {
+      "id": "pain_escalation_referral_rule",
+      "category": "safety",
+      "rule": "Sharp pain, swelling, giving way, suspected rupture, neurological symptoms, night pain, worsening shin focal bony pain, or pain that changes gait or stroke mechanics should stop progression and trigger medical review.",
+      "rationale": "These features may indicate injuries that are not appropriate for normal load modification alone.",
+      "backend_action": [
+        "block_high_intensity_court_work",
+        "recommend_clinical_assessment",
+        "assign_pain_free_alternatives_only",
+        "do_not_return_to_match_until_cleared"
+      ],
+      "source_ids": [
+        "src_paass_ankle_rts",
+        "src_mtss_risk_review",
+        "src_achilles_cpg_2024",
+        "src_rts_consensus_2016"
+      ]
+    },
+    {
+      "id": "strength_before_complex_plyometric_rule",
+      "category": "snc_progression",
+      "rule": "Complex plyometrics and reactive deceleration drills should be layered on top of adequate lower-body strength, calf capacity, balance, and landing skill, not used as a substitute for them.",
+      "rationale": "Plyometrics can improve power and agility, but poor tissue capacity and landing control can turn useful elastic work into excessive joint and tendon load.",
+      "backend_action": [
+        "check_strength_balance_landing_prerequisites",
+        "start_with_low_amplitude_contacts",
+        "progress_to_lateral_and_multidirectional_contacts",
+        "stop_when_speed_or_alignment_degrades"
+      ],
+      "source_ids": [
+        "src_plyometric_racket_sports_review",
+        "src_integrated_neuromuscular_training",
+        "src_balance_training_footwork",
+        "src_lauersen_exercise_prevention"
+      ]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "lower_body_strength_capacity",
+      "name": "Lower-Body Strength Capacity",
+      "description": "Badminton requires repeated split-steps, accelerations, decelerations, lunges, jump takeoffs, and landings. Squat, hinge, step-down, split-squat, calf, and hip strength support both performance and load tolerance.",
+      "priority_by_level": {
+        "beginner": "high - bodyweight and light external load with technical control",
+        "intermediate": "high - progressive bilateral and unilateral loading",
+        "advanced": "high - individualized strength maintenance or development around competition"
+      },
+      "linked_risks": [
+        "knee_patellofemoral_and_patellar_tendon_risk",
+        "achilles_tendon_overload_or_rupture_risk",
+        "shin_load_and_bone_stress_risk",
+        "ankle_sprain_lunge_landing_risk"
+      ],
+      "source_ids": [
+        "src_bwf_coach_manual_l1",
+        "src_lauersen_exercise_prevention",
+        "src_tendon_stress_elite_badminton"
+      ]
+    },
+    {
+      "id": "lunge_absorption_and_push_off",
+      "name": "Lunge Absorption And Push-Off",
+      "description": "Players must brake into deep positions, absorb impact, control knee/ankle/trunk alignment, strike or defend, and push off rapidly without losing balance.",
+      "monitoring": [
+        "lunge_count",
+        "deep_lunge_count",
+        "fatigued_lunge_count",
+        "pain_during_lunge",
+        "next_day_knee_ankle_achilles_shin_response"
+      ],
+      "training_methods": [
+        "split_squat_progressions",
+        "step_down_control",
+        "deceleration_to_lunge",
+        "isometric_lunge_holds",
+        "reactive_lunge_progressions",
+        "balance_and_recovery_step_work"
+      ],
+      "source_ids": [
+        "src_lunge_scoping_review",
+        "src_lunge_impact_loading",
+        "src_balance_training_footwork"
+      ]
+    },
+    {
+      "id": "deceleration_and_reacceleration",
+      "name": "Deceleration And Reacceleration",
+      "description": "Badminton repeatedly asks players to stop, redirect, and accelerate from unstable or stretched positions, often with little time between actions.",
+      "training_methods": [
+        "braking_mechanics",
+        "low_volume_stop_start_drills",
+        "lateral_deceleration",
+        "drop_step_to_recover",
+        "planned_then_reactive_change_of_direction",
+        "quality_based_shuttle_runs"
+      ],
+      "programming_notes": [
+        "Teach braking before fatigue conditioning.",
+        "Progress speed before density only when alignment is stable.",
+        "Pair with trunk and hip strength so the knee and ankle are not absorbing all load."
+      ],
+      "source_ids": [
+        "src_fittoplay_badminton_common_injuries",
+        "src_bwf_coach_manual_l1",
+        "src_integrated_neuromuscular_training"
+      ]
+    },
+    {
+      "id": "jump_and_landing_load",
+      "name": "Jump And Landing Load",
+      "description": "Split-steps, repeated hops, scissor-kick jumps, net kills, and jump smashes create recurring ankle, Achilles, knee, hip, and back load.",
+      "training_methods": [
+        "landing_mechanics",
+        "low_amplitude_pogo_progressions",
+        "snap_downs",
+        "lateral_hops",
+        "scissor_kick_landing_rehearsal",
+        "jump_smash_landing_cueing",
+        "microdosed_plyometrics"
+      ],
+      "progression_constraints": [
+        "no_next_day_tendon_or_shin_worsening",
+        "landing_quality_maintained",
+        "volume_progressed_before_intensity_or_reactivity",
+        "avoid_dense_contacts_before_matches"
+      ],
+      "source_ids": [
+        "src_achilles_scissor_kick_landing",
+        "src_plyometric_racket_sports_review",
+        "src_achilles_cpg_2024"
+      ]
+    },
+    {
+      "id": "shoulder_scapular_rotator_cuff_capacity",
+      "name": "Shoulder, Scapular, And Rotator Cuff Capacity",
+      "description": "Overhead strokes and smashes require repeated shoulder rotation, scapular control, trunk contribution, and fatigue-resistant external rotation capacity.",
+      "training_methods": [
+        "external_rotation_strength",
+        "scapular_upward_rotation_and_posterior_tilt_control",
+        "lower_trap_and_serratus_work",
+        "horizontal_pull_strength",
+        "thoracic_rotation_mobility",
+        "medicine_ball_rotational_power_when_ready",
+        "controlled_overhead_return_progression"
+      ],
+      "monitoring": [
+        "shoulder_pain",
+        "internal_rotation_range",
+        "external_rotation_strength",
+        "scapular_control",
+        "overhead_contact_count",
+        "next_day_soreness"
+      ],
+      "source_ids": [
+        "src_shoulder_pain_young_players",
+        "src_shoulder_rotational_strength",
+        "src_shoulder_fitness_risk",
+        "src_wilk_shoulder_rts"
+      ]
+    },
+    {
+      "id": "elbow_wrist_forearm_capacity",
+      "name": "Elbow, Wrist, And Forearm Capacity",
+      "description": "Repeated gripping, rapid pronation/supination, net kills, drives, late hits, and high-intent smashes can overload wrist and elbow tendons when stroke volume or grip tension spikes.",
+      "training_methods": [
+        "forearm_pronation_supination_control",
+        "wrist_extensor_and_flexor_capacity",
+        "grip_endurance_without_excess_tension",
+        "eccentric_wrist_extensor_progressions_when_appropriate",
+        "technical_relaxation_and_contact_timing",
+        "overhead_volume_management"
+      ],
+      "linked_risks": [
+        "lateral_elbow_tendinopathy_risk",
+        "medial_elbow_or_flexor_pronator_irritation",
+        "wrist_tendinopathy_or_impaction_risk"
+      ],
+      "source_ids": [
+        "src_elite_injury_review",
+        "src_amateur_injury_incidence",
+        "src_older_injuries_badminton_pubmed"
+      ]
+    },
+    {
+      "id": "trunk_rotation_and_spine_capacity",
+      "name": "Trunk Rotation And Spine Capacity",
+      "description": "The trunk transfers force between lower body and racket during smashes and controls posture during lunges, low stances, late overheads, and recovery steps.",
+      "training_methods": [
+        "anti_rotation_strength",
+        "anti_extension_control",
+        "loaded_carry_variations",
+        "hip_trunk_dissociation",
+        "thoracic_rotation_mobility",
+        "medicine_ball_rotational_power",
+        "lunge_with_trunk_control"
+      ],
+      "linked_risks": [
+        "low_back_extension_rotation_overload_risk",
+        "shoulder_pain_kinetic_chain_risk",
+        "lunge_compensation_risk"
+      ],
+      "source_ids": [
+        "src_shoulder_fitness_risk",
+        "src_core_strength_badminton_review",
+        "src_elite_injury_review",
+        "src_fittoplay_badminton_common_injuries"
+      ]
+    },
+    {
+      "id": "calf_soleus_and_foot_ankle_capacity",
+      "name": "Calf, Soleus, Foot, And Ankle Capacity",
+      "description": "Badminton demands repeated elastic split-steps, forefoot loading, lunges, rapid push-offs, and landing absorption, making calf-soleus and ankle capacity central to performance and risk control.",
+      "training_methods": [
+        "straight_knee_calf_strength",
+        "bent_knee_soleus_strength",
+        "single_leg_balance",
+        "foot_intrinsic_work",
+        "ankle_eversion_inversion_control",
+        "progressive_hopping",
+        "achilles_tendon_loading_progression"
+      ],
+      "linked_risks": [
+        "ankle_sprain_lunge_landing_risk",
+        "achilles_tendon_overload_or_rupture_risk",
+        "shin_load_and_bone_stress_risk",
+        "plantar_fascia_heel_pain_risk"
+      ],
+      "source_ids": [
+        "src_paass_ankle_rts",
+        "src_achilles_cpg_2024",
+        "src_achilles_rupture_badminton",
+        "src_mtss_risk_review"
+      ]
+    },
+    {
+      "id": "repeat_rally_conditioning",
+      "name": "Repeat Rally Conditioning",
+      "description": "Players need to repeat short high-intensity rallies with fast recovery while preserving lunge quality, overhead timing, decision quality, and landing mechanics.",
+      "training_methods": [
+        "quality_intervals",
+        "rally_simulation",
+        "short_repeated_shuttle_blocks",
+        "controlled_multishuttle",
+        "aerobic_support_work",
+        "session_rpe_monitoring"
+      ],
+      "programming_notes": [
+        "Conditioning should not be so fatiguing that lunge or landing mechanics degrade for large volumes.",
+        "Use aerobic support away from dense match periods when recovery is poor.",
+        "Multishuttle conditioning should be counted as both conditioning and skill-load exposure."
+      ],
+      "source_ids": [
+        "src_match_demands_junior",
+        "src_match_vs_multiball_smash",
+        "src_session_rpe_review",
+        "src_bwf_coach_manual_l1"
+      ]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "ankle_sprain_lunge_landing_risk",
+      "name": "Ankle Sprain From Lunge, Split-Step, Or Landing",
+      "body_region": "ankle",
+      "mechanism": "Fast lunges, unstable foot orientation, split-step hops, jump landings, change-of-direction, or landing on an opponent/partner foot can create inversion, eversion, or instability episodes.",
+      "risk_modifiers": [
+        "prior_ankle_sprain",
+        "poor_single_leg_balance",
+        "fatigued_lunges",
+        "backhand_or_far_reach_lunges",
+        "toe_orientation_control_deficit",
+        "shoe_or_surface_change",
+        "tournament_density"
+      ],
+      "monitoring_flags": [
+        "giving_way",
+        "swelling",
+        "pain_with_lunge_or_hop",
+        "loss_of_confidence",
+        "reduced_single_leg_balance",
+        "compensated_recovery_step"
+      ],
+      "prevention_or_management": [
+        "Use balance and proprioception work.",
+        "Restore calf, peroneal, and foot strength.",
+        "Progress lunges from planned to reactive.",
+        "Use PAASS-style criteria for return after acute sprain.",
+        "Consider brace or taping decisions with a clinician for recurrent sprain history."
+      ],
+      "source_ids": [
+        "src_lunge_scoping_review",
+        "src_ankle_foot_rotation_lunge",
+        "src_paass_ankle_rts",
+        "src_fittoplay_badminton_common_injuries"
+      ]
+    },
+    {
+      "id": "knee_patellofemoral_and_patellar_tendon_risk",
+      "name": "Knee Pain, Patellofemoral Load, And Patellar Tendon Overload",
+      "body_region": "knee",
+      "mechanism": "Repeated lunges, braking, low stances, jump landings, and rapid direction changes increase knee extensor and patellofemoral demand, especially when hip/calf strength or landing mechanics are insufficient.",
+      "risk_modifiers": [
+        "rapid_lunge_or_jump_volume_spike",
+        "deep_knee_flexion_under_fatigue",
+        "growth_spurt",
+        "limited_ankle_mobility",
+        "weak_hip_or_calf",
+        "hard_court_density",
+        "next_day_tendon_pain"
+      ],
+      "monitoring_flags": [
+        "anterior_knee_pain",
+        "patellar_tendon_pain",
+        "pain_with_single_leg_decline_or_squat",
+        "pain_after_lunge_day",
+        "jump_landing_pain",
+        "morning_stiffness"
+      ],
+      "prevention_or_management": [
+        "Track lunges, jumps, and next-day response.",
+        "Use progressive heavy slow, isometric, or strength loading when appropriate.",
+        "Reduce high-fast jumping and deep fatigued lunges during reactive symptom phases.",
+        "Progress energy-storage work before full return to match density."
+      ],
+      "source_ids": [
+        "src_youth_epidemiology_7_22",
+        "src_patellar_tendon_properties_badminton",
+        "src_patellar_tendinopathy_load",
+        "src_lunge_impact_loading"
+      ]
+    },
+    {
+      "id": "achilles_tendon_overload_or_rupture_risk",
+      "name": "Achilles Tendon Overload Or Rupture Risk",
+      "body_region": "achilles",
+      "mechanism": "Repeated split-steps, forefoot push-offs, scissor-kick landings, jump smashes, and rapid accelerations load the Achilles tendon heavily. Sudden spikes or deconditioned return increase concern.",
+      "risk_modifiers": [
+        "age_or_recreational_deconditioning",
+        "previous_achilles_pain",
+        "calf_soleus_weakness",
+        "rapid_return_after_layoff",
+        "hard_court_or_shoe_change",
+        "dense_jump_or_split_step_volume",
+        "poor_scissor_kick_landing"
+      ],
+      "monitoring_flags": [
+        "morning_achilles_stiffness",
+        "pain_during_hops",
+        "pain_with_calf_raise",
+        "thickening_or_tenderness",
+        "sudden_pop_or_loss_of_push_off"
+      ],
+      "prevention_or_management": [
+        "Build calf and soleus capacity progressively.",
+        "Use eccentric or heavy slow loading as clinically appropriate.",
+        "Progress hops and jump landings gradually.",
+        "Treat sudden rupture signs as urgent medical referral.",
+        "Use 24- to 72-hour tendon response to guide high-fast load."
+      ],
+      "source_ids": [
+        "src_achilles_rupture_badminton",
+        "src_tendon_stress_elite_badminton",
+        "src_achilles_scissor_kick_landing",
+        "src_achilles_cpg_2024"
+      ]
+    },
+    {
+      "id": "shin_load_and_bone_stress_risk",
+      "name": "Shin Pain, Medial Tibial Stress, And Bone-Stress Risk",
+      "body_region": "shin_lower_leg",
+      "mechanism": "Repeated impact from split-steps, hops, running drills, jumping, hard braking, and sudden increases in court volume can irritate the tibial stress complex.",
+      "risk_modifiers": [
+        "rapid_training_increase",
+        "new_surface_or_shoes",
+        "low_calf_capacity",
+        "high_hop_or_running_volume",
+        "growth_spurt",
+        "poor_recovery",
+        "history_of_bone_stress"
+      ],
+      "monitoring_flags": [
+        "diffuse_medial_tibial_pain",
+        "focal_bony_tenderness",
+        "pain_that_worsens_during_session",
+        "pain_with_hopping",
+        "pain_with_daily_walking",
+        "night_or_rest_pain"
+      ],
+      "prevention_or_management": [
+        "Reduce impact and hop density early.",
+        "Maintain fitness with lower-impact conditioning when needed.",
+        "Build calf, soleus, foot, hip, and trunk capacity.",
+        "Progress return to hopping and court load only when symptoms are stable.",
+        "Refer when pain is focal, worsening, or stress fracture is suspected."
+      ],
+      "source_ids": [
+        "src_fittoplay_badminton_common_injuries",
+        "src_youth_epidemiology_7_22",
+        "src_mtss_risk_review",
+        "src_ioc_youth_development"
+      ]
+    },
+    {
+      "id": "shoulder_overhead_smash_overload_risk",
+      "name": "Shoulder Overhead And Smash Overload",
+      "body_region": "shoulder",
+      "mechanism": "Repeated overhead strokes, smashes, jump smashes, late contacts, poor scapular control, limited shoulder rotation, and insufficient trunk contribution can overload rotator cuff and shoulder structures.",
+      "risk_modifiers": [
+        "high_overhead_contact_count",
+        "multi_shuttle_smash_density",
+        "limited_internal_rotation",
+        "external_rotation_strength_deficit",
+        "scapular_dyskinesis_or_control_deficit",
+        "trunk_rotation_deficit",
+        "poor_single_leg_balance",
+        "playing_through_pain"
+      ],
+      "monitoring_flags": [
+        "pain_with_overhead",
+        "night_pain",
+        "loss_of_range",
+        "loss_of_smash_speed",
+        "pain_after_session",
+        "compensatory_trunk_extension"
+      ],
+      "prevention_or_management": [
+        "Track overhead and max smash volume.",
+        "Build rotator cuff external rotation and scapular control.",
+        "Train trunk rotation and balance.",
+        "Avoid sudden multi-shuttle smash spikes.",
+        "Use criteria-based staged overhead return after injury."
+      ],
+      "source_ids": [
+        "src_shoulder_pain_young_players",
+        "src_shoulder_rotational_strength",
+        "src_shoulder_fitness_risk",
+        "src_wilk_shoulder_rts"
+      ]
+    },
+    {
+      "id": "elbow_tendinopathy_grip_stroke_risk",
+      "name": "Elbow Tendinopathy And Grip-Stroke Overload",
+      "body_region": "elbow",
+      "mechanism": "High volumes of gripping, late contact, repeated drives, smashes, backhands, and wrist-dominant strokes can overload lateral or medial elbow tendons.",
+      "risk_modifiers": [
+        "high_drive_or_smash_volume",
+        "excessive_grip_tension",
+        "late_contact",
+        "wrist_dominant_stroke_strategy",
+        "racket_or_string_change",
+        "forearm_strength_deficit",
+        "shoulder_or_trunk_deficit_increasing_distal_load"
+      ],
+      "monitoring_flags": [
+        "lateral_elbow_pain",
+        "medial_elbow_pain",
+        "pain_with_grip",
+        "pain_with_backhand_or_drive",
+        "forearm_fatigue",
+        "reduced_racket_control"
+      ],
+      "prevention_or_management": [
+        "Reduce high-intent and late-contact stroke volume.",
+        "Build wrist extensor/flexor and pronation/supination capacity.",
+        "Address shoulder, trunk, and timing deficits.",
+        "Avoid sudden equipment changes during high-load phases."
+      ],
+      "source_ids": [
+        "src_older_injuries_badminton_pubmed",
+        "src_elite_injury_review",
+        "src_amateur_injury_incidence"
+      ]
+    },
+    {
+      "id": "wrist_forearm_overload_risk",
+      "name": "Wrist And Forearm Overload",
+      "body_region": "wrist_forearm",
+      "mechanism": "Fast racket-head actions, net kills, drives, deceptive holds, late defensive contacts, and repeated pronation/supination can overload wrist and forearm tissues.",
+      "risk_modifiers": [
+        "high_net_kill_or_drive_volume",
+        "late_contact_under_pressure",
+        "poor_relaxation_between_strokes",
+        "forearm_capacity_deficit",
+        "rapid_change_in_racket_or_string_tension",
+        "shoulder_trunk_deficit"
+      ],
+      "monitoring_flags": [
+        "wrist_pain",
+        "forearm_tightness",
+        "loss_of_grip_endurance",
+        "pain_with_pronation_or_supination",
+        "pain_with_deception_or_net_kill"
+      ],
+      "prevention_or_management": [
+        "Track high-speed wrist actions when symptomatic.",
+        "Use progressive forearm and grip endurance work.",
+        "Improve kinetic-chain contribution so the wrist is not the sole power source.",
+        "Reduce painful stroke types temporarily."
+      ],
+      "source_ids": [
+        "src_elite_injury_review",
+        "src_amateur_injury_incidence",
+        "src_shoulder_fitness_risk"
+      ]
+    },
+    {
+      "id": "low_back_extension_rotation_overload_risk",
+      "name": "Low Back Extension, Rotation, And Lunge Compensation Overload",
+      "body_region": "low_back",
+      "mechanism": "Smashes, late overheads, round-the-head actions, repeated low stances, deep lunges, and poor hip/trunk control can overload the lumbar region through extension, rotation, side bend, or fatigue compensation.",
+      "risk_modifiers": [
+        "high_smash_volume",
+        "limited_trunk_or_hip_mobility",
+        "weak_trunk_anti_rotation",
+        "deep_lunges_under_fatigue",
+        "growth_spurt",
+        "low_back_history",
+        "poor_recovery_after_tournament"
+      ],
+      "monitoring_flags": [
+        "low_back_pain_with_smash",
+        "pain_with_lunge_recovery",
+        "pain_with_extension_rotation",
+        "radiating_symptoms",
+        "stiffness_next_morning",
+        "loss_of_footwork_quality"
+      ],
+      "prevention_or_management": [
+        "Build trunk anti-rotation and anti-extension capacity.",
+        "Improve hip and thoracic mobility.",
+        "Reduce late overhead and max-smash density when symptomatic.",
+        "Progress lunge depth and court coverage without compensation.",
+        "Refer for neurological symptoms or persistent/worsening pain."
+      ],
+      "source_ids": [
+        "src_youth_epidemiology_7_22",
+        "src_fittoplay_badminton_common_injuries",
+        "src_core_strength_badminton_review",
+        "src_shoulder_fitness_risk"
+      ]
+    },
+    {
+      "id": "tournament_density_overload_risk",
+      "name": "Tournament Density And Repeated Match Exposure Risk",
+      "body_region": "whole_athlete",
+      "mechanism": "Multiple matches in short windows create repeated warm-ups, high arousal, variable rest, travel, sleep disruption, and compressed lunge, smash, jump, and deceleration exposure.",
+      "risk_modifiers": [
+        "three_or_more_matches_in_event",
+        "back_to_back_days",
+        "age_15_plus_youth",
+        "recent_layoff",
+        "prior_injury",
+        "poor_sleep",
+        "late_matches",
+        "extra_training_between_matches"
+      ],
+      "monitoring_flags": [
+        "performance_drop",
+        "rising_session_rpe",
+        "localized_pain",
+        "loss_of_landing_quality",
+        "shoulder_or_forearm_fatigue",
+        "sleep_debt",
+        "poor_appetite_or_illness"
+      ],
+      "prevention_or_management": [
+        "Switch to tournament-mode microcycles.",
+        "Use activation and mobility rather than overload.",
+        "Budget smashes, lunges, and jumps.",
+        "Use post-match recovery and tissue checks.",
+        "Avoid extra conditioning during dense events."
+      ],
+      "source_ids": [
+        "src_junior_championship_injury_risk",
+        "src_ioc_load_part1",
+        "src_ioc_load_part2"
+      ]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "beginner_training_implications",
+      "level": "beginner",
+      "recommendation": "Build movement literacy and tissue capacity before badminton-specific fatigue. Teach landing, braking, split-step rhythm, controlled lunges, shoulder preparation, trunk control, and calf capacity with low soreness.",
+      "preferred_training": [
+        "dynamic_warmup",
+        "basic_strength",
+        "single_leg_balance",
+        "low_depth_lunge_shapes",
+        "calf_soleus_strength",
+        "scapular_and_rotator_cuff_basics",
+        "short_technical_rallies",
+        "low_amplitude_plyometrics_only_when_controlled"
+      ],
+      "avoid": [
+        "high_volume_multishuttle_lunges",
+        "max_smash_repetition_blocks",
+        "jump_smash_conditioning",
+        "fatigue_drills_that_degrade_landing",
+        "heavy_loading_without_technique_or_supervision"
+      ],
+      "source_ids": [
+        "src_bwf_coach_manual_l1",
+        "src_ioc_youth_development",
+        "src_balance_training_footwork",
+        "src_lauersen_exercise_prevention"
+      ]
+    },
+    {
+      "id": "intermediate_training_implications",
+      "level": "intermediate",
+      "recommendation": "Introduce specific capacity while controlling exposure spikes. Track lunge, smash, jump, and match density; add progressive lower-body strength, trunk/scapular work, calf capacity, deceleration, and planned plyometrics.",
+      "preferred_training": [
+        "progressive_unilateral_strength",
+        "lunge_absorption_and_recovery",
+        "lateral_deceleration",
+        "rotator_cuff_and_scapular_strength",
+        "trunk_rotation_control",
+        "forearm_capacity",
+        "moderate_multishuttle_with_exposure_caps",
+        "planned_match_play"
+      ],
+      "avoid": [
+        "spiking_smash_lunge_jump_load_in_same_week",
+        "heavy_eccentric_lower_body_work_before_matches",
+        "ignoring_yellow_readiness",
+        "unplanned_extra_court_sessions_after_soreness"
+      ],
+      "source_ids": [
+        "src_ioc_load_part1",
+        "src_lunge_impact_loading",
+        "src_match_vs_multiball_smash",
+        "src_integrated_neuromuscular_training"
+      ]
+    },
+    {
+      "id": "advanced_training_implications",
+      "level": "advanced",
+      "recommendation": "Individualize exposure using load history and performance goals. Maintain high strength and power, microdose plyometrics in-season, track tissue-specific response, and protect freshness during tournament blocks.",
+      "preferred_training": [
+        "individualized_strength_maintenance",
+        "high_quality_power_microdoses",
+        "reactive_deceleration_when_green",
+        "tendon_specific_loading",
+        "shoulder_and_forearm_maintenance",
+        "rally_specific_conditioning",
+        "load_history_guided_court_exposure"
+      ],
+      "avoid": [
+        "novel_soreness_close_to_competition",
+        "extra_multishuttle_smash_blocks_during_shoulder_symptoms",
+        "returning_to_full_tournament_density_without_stage_gates",
+        "single_metric_load_decisions"
+      ],
+      "source_ids": [
+        "src_ioc_load_part1",
+        "src_session_rpe_review",
+        "src_imu_external_load_singles",
+        "src_guermont_elite_prospective"
+      ]
+    },
+    {
+      "id": "plyometric_programming_implications",
+      "category": "plyometrics",
+      "recommendation": "Use plyometrics as high-quality, low-to-moderate volume power work, not conditioning punishment. Begin with landing and low-amplitude elastic contacts, then progress to lateral, horizontal, rotational, and reactive contacts.",
+      "progression": [
+        "landing_snap_down_and_stick",
+        "low_amplitude_pogo",
+        "linear_hops",
+        "lateral_hops",
+        "bounds_and_deceleration",
+        "reactive_split_step_to_lunge",
+        "jump_smash_or_scissor_kick_landing_integration"
+      ],
+      "stop_or_regress_when": [
+        "landing_noise_and_stiffness_increase",
+        "knee_or_achilles_or_shin_pain_rises",
+        "alignment_degrades",
+        "jump_height_or_speed_drops_meaningfully",
+        "next_day_symptoms_worsen"
+      ],
+      "source_ids": [
+        "src_plyometric_racket_sports_review",
+        "src_achilles_scissor_kick_landing",
+        "src_patellar_tendinopathy_load",
+        "src_achilles_cpg_2024"
+      ]
+    },
+    {
+      "id": "deceleration_programming_implications",
+      "category": "deceleration",
+      "recommendation": "Train braking as a skill before using shuttle runs as fatigue conditioning. Athletes should own trunk position, hip-knee-ankle flexion, foot pressure, and recovery step before reactive or dense work.",
+      "progression": [
+        "bilateral_braking",
+        "single_leg_step_down_control",
+        "planned_stop_from_jog",
+        "lateral_braking",
+        "brake_to_controlled_lunge",
+        "reactive_call_to_lunge",
+        "rally_context_deceleration"
+      ],
+      "source_ids": [
+        "src_lunge_scoping_review",
+        "src_lunge_fatigue_direction",
+        "src_integrated_neuromuscular_training",
+        "src_balance_training_footwork"
+      ]
+    },
+    {
+      "id": "shoulder_scapular_trunk_programming_implications",
+      "category": "upper_body_and_trunk",
+      "recommendation": "Treat smash durability as kinetic-chain capacity. Include thoracic mobility, trunk rotation power/control, scapular control, cuff strength, horizontal pulling, forearm capacity, and volume-managed overhead exposure.",
+      "weekly_priorities": [
+        "external_rotation_strength",
+        "scapular_control",
+        "serratus_lower_trap_work",
+        "horizontal_pull",
+        "anti_rotation_and_rotation_control",
+        "forearm_pronation_supination_and_wrist_capacity",
+        "overhead_contact_monitoring"
+      ],
+      "source_ids": [
+        "src_shoulder_pain_young_players",
+        "src_shoulder_rotational_strength",
+        "src_shoulder_fitness_risk",
+        "src_wilk_shoulder_rts"
+      ]
+    },
+    {
+      "id": "tendon_sensitive_training_implications",
+      "category": "tendon_load",
+      "recommendation": "When patellar or Achilles tendon symptoms are present, reduce high-fast court loads first while preserving clinically appropriate slow strength. Use pain and 24-hour response to decide whether to progress, maintain, or regress.",
+      "modify_first": [
+        "jump_smash_volume",
+        "repeated_hops",
+        "fatigued_lunges",
+        "deep_lunge_density",
+        "plyometric_contacts",
+        "match_density"
+      ],
+      "preserve_when_tolerated": [
+        "isometric_loading",
+        "heavy_slow_resistance",
+        "calf_soleus_strength",
+        "hip_and_trunk_strength",
+        "nonprovocative_conditioning"
+      ],
+      "source_ids": [
+        "src_patellar_tendinopathy_load",
+        "src_achilles_cpg_2024",
+        "src_tendon_stress_elite_badminton",
+        "src_patellar_tendon_properties_badminton"
+      ]
+    },
+    {
+      "id": "tournament_week_training_implications",
+      "category": "tournament_density",
+      "recommendation": "Tournament weeks should prioritize repeatability and availability. Training should become activation, mobility, light technical rhythm, scouting or tactical rehearsal with controlled physical load, and recovery.",
+      "preferred_training": [
+        "warmup_consistency",
+        "short_activation",
+        "mobility_and_tissue_prep",
+        "light_power_primer_if_green",
+        "short_technical_timing",
+        "post_match_downregulation",
+        "sleep_and_recovery_protection"
+      ],
+      "avoid": [
+        "new_strength_exercises",
+        "maximal_testing",
+        "high_volume_smash_practice",
+        "dense_lunge_conditioning",
+        "extra_running_or_jump_conditioning"
+      ],
+      "source_ids": [
+        "src_junior_championship_injury_risk",
+        "src_ioc_load_part1",
+        "src_ioc_load_part2"
+      ]
+    },
+    {
+      "id": "return_to_court_training_implications",
+      "category": "return_to_court",
+      "recommendation": "Return-to-court plans should stage individual exposure channels. A player may be ready for controlled clears before max smashes, shadow footwork before deep reactive lunges, and practice before tournament density.",
+      "required_tracking": [
+        "current_return_stage",
+        "injured_region",
+        "pain_during",
+        "pain_24_hours_after",
+        "confidence",
+        "movement_quality",
+        "exposure_channel_dose",
+        "stage_gate_passed"
+      ],
+      "source_ids": [
+        "src_rts_consensus_2016",
+        "src_paass_ankle_rts",
+        "src_wilk_shoulder_rts",
+        "src_patellar_tendinopathy_load"
+      ]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "badminton_physical_demand",
+      "record_id": "badminton_lunge_absorption_push_off_demand",
+      "name": "Badminton Lunge Absorption And Push-Off Demand",
+      "payload_fields": {
+        "demand_channels": [
+          "lunge_count",
+          "deep_lunge_count",
+          "lunge_direction",
+          "fatigued_lunge_count",
+          "recovery_step_quality"
+        ],
+        "linked_risks": [
+          "ankle_sprain_lunge_landing_risk",
+          "knee_patellofemoral_and_patellar_tendon_risk",
+          "achilles_tendon_overload_or_rupture_risk",
+          "shin_load_and_bone_stress_risk",
+          "low_back_extension_rotation_overload_risk"
+        ],
+        "source_ids": [
+          "src_lunge_scoping_review",
+          "src_lunge_impact_loading",
+          "src_lunge_fatigue_direction"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_physical_demand",
+      "record_id": "badminton_smash_overhead_load_demand",
+      "name": "Badminton Smash And Overhead Load Demand",
+      "payload_fields": {
+        "demand_channels": [
+          "total_overhead_contacts",
+          "max_smash_count",
+          "jump_smash_count",
+          "multi_shuttle_smash_count",
+          "late_overhead_contacts",
+          "next_day_shoulder_elbow_wrist_response"
+        ],
+        "linked_risks": [
+          "shoulder_overhead_smash_overload_risk",
+          "elbow_tendinopathy_grip_stroke_risk",
+          "wrist_forearm_overload_risk",
+          "low_back_extension_rotation_overload_risk"
+        ],
+        "source_ids": [
+          "src_match_vs_multiball_smash",
+          "src_guermont_elite_prospective",
+          "src_shoulder_pain_young_players"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_physical_demand",
+      "record_id": "badminton_jump_landing_load_demand",
+      "name": "Badminton Jump And Landing Load Demand",
+      "payload_fields": {
+        "demand_channels": [
+          "split_step_hops",
+          "jump_smashes",
+          "scissor_kick_landings",
+          "reactive_reach_jumps",
+          "plyometric_contacts"
+        ],
+        "linked_risks": [
+          "achilles_tendon_overload_or_rupture_risk",
+          "knee_patellofemoral_and_patellar_tendon_risk",
+          "ankle_sprain_lunge_landing_risk",
+          "shin_load_and_bone_stress_risk"
+        ],
+        "source_ids": [
+          "src_achilles_scissor_kick_landing",
+          "src_plyometric_racket_sports_review",
+          "src_achilles_cpg_2024"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_load_model",
+      "record_id": "badminton_multichannel_load_accounting",
+      "name": "Badminton Multichannel Load Accounting",
+      "payload_fields": {
+        "external_channels": [
+          "lunge_volume",
+          "smash_volume",
+          "jump_landing_load",
+          "deceleration_density",
+          "rally_density",
+          "tournament_density",
+          "gym_load"
+        ],
+        "internal_channels": [
+          "session_rpe",
+          "sleep",
+          "stress",
+          "illness",
+          "localized_pain",
+          "next_day_stiffness",
+          "readiness"
+        ],
+        "context_tags": [
+          "level",
+          "age_band",
+          "season_phase",
+          "match_day_minus",
+          "tournament_week",
+          "recent_return_from_injury",
+          "growth_spurt_flag"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_readiness_rule",
+      "record_id": "badminton_readiness_traffic_light_rule",
+      "name": "Badminton Readiness Traffic Light Rule",
+      "payload_fields": {
+        "green_action": [
+          "planned_training_allowed"
+        ],
+        "yellow_action": [
+          "reduce_primary_exposure_channel",
+          "remove_fatigue_finishers",
+          "preserve_pain_free_skill",
+          "check_24_hour_response"
+        ],
+        "red_action": [
+          "stop_provocative_load",
+          "refer_when_indicated",
+          "no_progression_to_match"
+        ],
+        "source_ids": [
+          "src_ioc_load_part1",
+          "src_ioc_load_part2",
+          "src_session_rpe_review"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_injury_risk_rule",
+      "record_id": "badminton_ankle_sprain_lunge_landing_rule",
+      "name": "Badminton Ankle Sprain Lunge And Landing Rule",
+      "payload_fields": {
+        "if": [
+          "prior_ankle_sprain",
+          "ankle_swelling_or_instability",
+          "pain_with_lunge_or_hop",
+          "poor_balance",
+          "fatigued_lunge_block"
+        ],
+        "then": [
+          "reduce_reactive_lunges",
+          "add_balance_proprioception",
+          "add_calf_peroneal_foot_strength",
+          "progress_planned_before_reactive",
+          "use_paass_return_criteria_after_sprain"
+        ],
+        "source_ids": [
+          "src_paass_ankle_rts",
+          "src_lunge_scoping_review",
+          "src_ankle_foot_rotation_lunge"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_injury_risk_rule",
+      "record_id": "badminton_knee_patellar_tendon_rule",
+      "name": "Badminton Knee And Patellar Tendon Load Rule",
+      "payload_fields": {
+        "if": [
+          "anterior_knee_pain",
+          "patellar_tendon_pain",
+          "next_day_knee_pain_increase",
+          "weekly_jump_or_lunge_spike",
+          "growth_spurt_flag"
+        ],
+        "then": [
+          "reduce_high_fast_lunges_and_jumps",
+          "preserve_tolerable_strength_loading",
+          "track_24_hour_response",
+          "avoid_max_jump_testing",
+          "return_to_full_play_after_full_training_tolerated"
+        ],
+        "source_ids": [
+          "src_patellar_tendinopathy_load",
+          "src_patellar_tendon_properties_badminton",
+          "src_lunge_impact_loading"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_injury_risk_rule",
+      "record_id": "badminton_achilles_load_rule",
+      "name": "Badminton Achilles Load Rule",
+      "payload_fields": {
+        "if": [
+          "morning_achilles_stiffness",
+          "pain_with_calf_raise_or_hop",
+          "rapid_return_after_layoff",
+          "high_split_step_or_jump_volume",
+          "older_recreational_player_deconditioned"
+        ],
+        "then": [
+          "reduce_hops_jump_smashes_and_scissor_landings",
+          "add_calf_soleus_loading",
+          "progress_hops_gradually",
+          "monitor_24_to_72_hour_response",
+          "urgent_referral_for_pop_or_loss_of_push_off"
+        ],
+        "source_ids": [
+          "src_achilles_cpg_2024",
+          "src_achilles_rupture_badminton",
+          "src_achilles_scissor_kick_landing"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_injury_risk_rule",
+      "record_id": "badminton_shin_load_rule",
+      "name": "Badminton Shin Load And Bone Stress Rule",
+      "payload_fields": {
+        "if": [
+          "medial_tibial_pain",
+          "focal_bony_tenderness",
+          "pain_with_hopping",
+          "recent_impact_spike",
+          "growth_spurt_flag"
+        ],
+        "then": [
+          "reduce_impact_and_hop_density",
+          "replace_with_lower_impact_conditioning",
+          "build_calf_foot_hip_trunk_capacity",
+          "do_not_progress_if_pain_worsens",
+          "refer_for_focal_or_rest_pain"
+        ],
+        "source_ids": [
+          "src_mtss_risk_review",
+          "src_fittoplay_badminton_common_injuries",
+          "src_youth_epidemiology_7_22"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_injury_risk_rule",
+      "record_id": "badminton_shoulder_overhead_rule",
+      "name": "Badminton Shoulder Overhead Load Rule",
+      "payload_fields": {
+        "if": [
+          "shoulder_pain",
+          "loss_of_internal_rotation",
+          "external_rotation_weakness",
+          "high_smash_volume",
+          "poor_trunk_or_balance_control"
+        ],
+        "then": [
+          "reduce_high_intent_overheads",
+          "add_rotator_cuff_and_scapular_work",
+          "add_trunk_rotation_and_balance_work",
+          "progress_overheads_by_stage",
+          "use_criteria_based_return_for_shoulder"
+        ],
+        "source_ids": [
+          "src_shoulder_pain_young_players",
+          "src_shoulder_rotational_strength",
+          "src_wilk_shoulder_rts"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_injury_risk_rule",
+      "record_id": "badminton_elbow_wrist_forearm_rule",
+      "name": "Badminton Elbow Wrist Forearm Load Rule",
+      "payload_fields": {
+        "if": [
+          "lateral_or_medial_elbow_pain",
+          "wrist_pain",
+          "grip_pain",
+          "forearm_fatigue",
+          "high_drive_net_kill_or_smash_volume"
+        ],
+        "then": [
+          "reduce_painful_high_speed_strokes",
+          "add_forearm_wrist_capacity",
+          "address_grip_tension_and_timing",
+          "check_shoulder_trunk_contribution",
+          "avoid_equipment_changes_during_symptom_phase"
+        ],
+        "source_ids": [
+          "src_older_injuries_badminton_pubmed",
+          "src_amateur_injury_incidence",
+          "src_elite_injury_review"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_injury_risk_rule",
+      "record_id": "badminton_low_back_load_rule",
+      "name": "Badminton Low Back Load Rule",
+      "payload_fields": {
+        "if": [
+          "low_back_pain",
+          "pain_with_smash_extension_rotation",
+          "pain_with_deep_lunge_recovery",
+          "trunk_control_deficit",
+          "high_tournament_or_smash_load"
+        ],
+        "then": [
+          "reduce_late_overheads_and_max_smashes",
+          "reduce_deep_fatigued_lunges",
+          "add_trunk_anti_rotation_anti_extension",
+          "add_hip_thoracic_mobility",
+          "refer_for_neurological_or_worsening_symptoms"
+        ],
+        "source_ids": [
+          "src_core_strength_badminton_review",
+          "src_shoulder_fitness_risk",
+          "src_youth_epidemiology_7_22"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_training_rule",
+      "record_id": "badminton_beginner_snc_progression",
+      "name": "Badminton Beginner S&C Progression",
+      "payload_fields": {
+        "priorities": [
+          "movement_literacy",
+          "landing_control",
+          "basic_strength",
+          "balance",
+          "calf_capacity",
+          "trunk_control",
+          "shoulder_scapular_basics"
+        ],
+        "avoid": [
+          "dense_multishuttle_lunges",
+          "max_jump_smash_blocks",
+          "fatigue_landing_circuits"
+        ],
+        "source_ids": [
+          "src_bwf_coach_manual_l1",
+          "src_ioc_youth_development",
+          "src_balance_training_footwork"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_training_rule",
+      "record_id": "badminton_intermediate_snc_progression",
+      "name": "Badminton Intermediate S&C Progression",
+      "payload_fields": {
+        "priorities": [
+          "progressive_unilateral_strength",
+          "lunge_capacity",
+          "deceleration",
+          "controlled_plyometrics",
+          "smash_volume_awareness",
+          "rotator_cuff_scapular_trunk_forearm_work"
+        ],
+        "guardrail": "Progress one main exposure channel at a time when possible.",
+        "source_ids": [
+          "src_ioc_load_part1",
+          "src_integrated_neuromuscular_training",
+          "src_plyometric_racket_sports_review"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_training_rule",
+      "record_id": "badminton_advanced_snc_progression",
+      "name": "Badminton Advanced S&C Progression",
+      "payload_fields": {
+        "priorities": [
+          "individual_load_history",
+          "strength_power_maintenance",
+          "microdosed_plyometrics",
+          "tendon_specific_loading",
+          "overhead_volume_monitoring",
+          "tournament_density_management"
+        ],
+        "guardrail": "High specific load is allowed only when supported by history, readiness, and tissue response.",
+        "source_ids": [
+          "src_ioc_load_part1",
+          "src_session_rpe_review",
+          "src_imu_external_load_singles"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_planning_rule",
+      "record_id": "badminton_match_day_minus_one_load_rule",
+      "name": "Badminton Match Day Minus One Load Rule",
+      "payload_fields": {
+        "avoid": [
+          "heavy_eccentric_lower_body",
+          "dense_lunge_conditioning",
+          "high_volume_jump_landings",
+          "high_volume_max_smashes",
+          "novel_soreness_exercises"
+        ],
+        "prefer": [
+          "activation",
+          "mobility",
+          "light_power_primer",
+          "short_technical_timing",
+          "readiness_check"
+        ],
+        "source_ids": [
+          "src_ioc_load_part1",
+          "src_bwf_coach_manual_l1"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_planning_rule",
+      "record_id": "badminton_tournament_density_mode",
+      "name": "Badminton Tournament Density Mode",
+      "payload_fields": {
+        "trigger_conditions": [
+          "tournament_week",
+          "match_count_in_event_ge_3",
+          "matches_on_back_to_back_days",
+          "poor_sleep_or_travel",
+          "recent_return_from_injury"
+        ],
+        "actions": [
+          "remove_new_overload",
+          "cap_extra_smash_lunge_jump_volume",
+          "microdose_power_only_if_green",
+          "prioritize_recovery_and_tissue_checks",
+          "avoid_extra_conditioning"
+        ],
+        "source_ids": [
+          "src_junior_championship_injury_risk",
+          "src_ioc_load_part1",
+          "src_ioc_load_part2"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_return_to_court_stage",
+      "record_id": "badminton_rtc_stage_0_symptom_control",
+      "name": "RTC Stage 0 Symptom Control",
+      "payload_fields": {
+        "goal": "Pain and irritability control before badminton-specific loading.",
+        "allowed": [
+          "clinical_rehab",
+          "pain_free_general_capacity",
+          "nonprovocative_shadow_only_if_cleared"
+        ],
+        "progress_gate": [
+          "daily_activity_tolerated",
+          "no_red_flags",
+          "clinician_clearance_when_needed"
+        ],
+        "source_ids": [
+          "src_rts_consensus_2016"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_return_to_court_stage",
+      "record_id": "badminton_rtc_stage_1_capacity_rebuild",
+      "name": "RTC Stage 1 Capacity Rebuild",
+      "payload_fields": {
+        "goal": "Restore strength, mobility, balance, and trunk/shoulder/calf capacity.",
+        "allowed": [
+          "low_irritability_strength",
+          "balance",
+          "controlled_shadow_footwork",
+          "no_max_lunges_or_smashes"
+        ],
+        "progress_gate": [
+          "pain_0_to_2",
+          "no_next_day_worsening",
+          "region_specific_capacity_improving"
+        ],
+        "source_ids": [
+          "src_rts_consensus_2016",
+          "src_patellar_tendinopathy_load",
+          "src_achilles_cpg_2024"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_return_to_court_stage",
+      "record_id": "badminton_rtc_stage_2_controlled_footwork_hitting",
+      "name": "RTC Stage 2 Controlled Footwork And Hitting",
+      "payload_fields": {
+        "goal": "Reintroduce planned badminton patterns.",
+        "allowed": [
+          "controlled_lunges",
+          "submax_split_step",
+          "controlled_clears_drops",
+          "limited_overhead_if_tolerated",
+          "no_reactive_fatigue"
+        ],
+        "progress_gate": [
+          "quality_maintained",
+          "no_instability",
+          "24_hour_response_acceptable"
+        ],
+        "source_ids": [
+          "src_paass_ankle_rts",
+          "src_wilk_shoulder_rts",
+          "src_rts_consensus_2016"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_return_to_court_stage",
+      "record_id": "badminton_rtc_stage_3_integrated_drills",
+      "name": "RTC Stage 3 Integrated Drills",
+      "payload_fields": {
+        "goal": "Blend movement and hitting with moderate reactivity.",
+        "allowed": [
+          "multi_direction_footwork",
+          "limited_multishuttle",
+          "progressive_overheads",
+          "moderate_reactive_lunges",
+          "low_volume_jump_landings"
+        ],
+        "progress_gate": [
+          "pain_stable_0_to_2",
+          "movement_symmetry_acceptable",
+          "no_next_day_tendon_shin_or_shoulder_escalation"
+        ],
+        "source_ids": [
+          "src_rts_consensus_2016",
+          "src_patellar_tendinopathy_load",
+          "src_wilk_shoulder_rts"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_return_to_court_stage",
+      "record_id": "badminton_rtc_stage_4_practice_participation",
+      "name": "RTC Stage 4 Practice Participation",
+      "payload_fields": {
+        "goal": "Return to normal practice with exposure caps.",
+        "allowed": [
+          "full_court_rallies",
+          "practice_games",
+          "progressive_smash_volume",
+          "progressive_lunge_density",
+          "progressive_jump_landings"
+        ],
+        "progress_gate": [
+          "full_practice_tolerated",
+          "region_specific_tests_passed",
+          "no_compensations",
+          "readiness_green_or_low_yellow"
+        ],
+        "source_ids": [
+          "src_rts_consensus_2016",
+          "src_paass_ankle_rts",
+          "src_wilk_shoulder_rts"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_return_to_court_stage",
+      "record_id": "badminton_rtc_stage_5_match_exposure",
+      "name": "RTC Stage 5 Match Exposure",
+      "payload_fields": {
+        "goal": "Return to competition in managed dose.",
+        "allowed": [
+          "limited_matches_or_games",
+          "tracked_smashes_lunges_jumps",
+          "post_match_24_to_48_hour_check",
+          "avoid_dense_tournament_initially"
+        ],
+        "progress_gate": [
+          "match_exposure_tolerated",
+          "no_symptom_flare",
+          "confidence_and_decision_speed_acceptable"
+        ],
+        "source_ids": [
+          "src_rts_consensus_2016",
+          "src_ioc_load_part1"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_return_to_court_stage",
+      "record_id": "badminton_rtc_stage_6_return_to_performance",
+      "name": "RTC Stage 6 Return To Performance",
+      "payload_fields": {
+        "goal": "Restore full training, full match schedule, and tournament density.",
+        "allowed": [
+          "full_training",
+          "full_match_schedule",
+          "discipline_specific_load",
+          "tournament_density_after_repeat_tolerance"
+        ],
+        "maintain_gate": [
+          "load_history_restored",
+          "performance_metrics_restored",
+          "no_recurrent_region_specific_response",
+          "maintenance_plan_active"
+        ],
+        "source_ids": [
+          "src_rts_consensus_2016",
+          "src_ioc_load_part1"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_snc_template",
+      "record_id": "badminton_shoulder_scapular_trunk_template",
+      "name": "Badminton Shoulder Scapular Trunk Durability Template",
+      "payload_fields": {
+        "components": [
+          "external_rotation_strength",
+          "scapular_control",
+          "serratus_lower_trap",
+          "horizontal_pulling",
+          "thoracic_rotation",
+          "trunk_anti_rotation",
+          "forearm_capacity"
+        ],
+        "use_when": [
+          "high_smash_volume",
+          "shoulder_history",
+          "return_from_shoulder_elbow_wrist_issue",
+          "advanced_competition_block"
+        ],
+        "source_ids": [
+          "src_shoulder_pain_young_players",
+          "src_shoulder_rotational_strength",
+          "src_shoulder_fitness_risk"
+        ]
+      }
+    },
+    {
+      "record_type": "badminton_snc_template",
+      "record_id": "badminton_lower_limb_tendon_landing_template",
+      "name": "Badminton Lower-Limb Tendon And Landing Durability Template",
+      "payload_fields": {
+        "components": [
+          "quad_strength",
+          "calf_soleus_strength",
+          "single_leg_balance",
+          "landing_control",
+          "lunge_absorption",
+          "progressive_hops",
+          "hip_trunk_control"
+        ],
+        "use_when": [
+          "high_lunge_volume",
+          "high_jump_landing_load",
+          "knee_or_achilles_history",
+          "return_from_lower_limb_injury",
+          "pre_tournament_preparation"
+        ],
+        "source_ids": [
+          "src_patellar_tendinopathy_load",
+          "src_achilles_cpg_2024",
+          "src_lunge_scoping_review",
+          "src_balance_training_footwork"
+        ]
+      }
+    }
+  ]
+}

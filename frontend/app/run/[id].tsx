@@ -34,7 +34,7 @@ interface Reflection {
 }
 
 const feelingEmoji: Record<string, string> = {
-  great: '🔥', good: '👍', tired: '😮‍💨', struggling: '😤',
+  great: '✓', good: 'OK', tired: 'Tired', struggling: 'Hard',
 };
 
 const fmtDuration = (sec: number) => {
@@ -110,7 +110,7 @@ export default function RunDetailScreen() {
   if (loading) {
     return (
       <View style={[styles.container, styles.centered, { paddingTop: insets.top }]}>
-        <ActivityIndicator size="large" color={colors.accentOrange} />
+        <ActivityIndicator size="large" color={colors.textPrimary} />
       </View>
     );
   }
@@ -143,7 +143,7 @@ export default function RunDetailScreen() {
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 40 }]} showsVerticalScrollIndicator={false}>
         {/* Hero */}
         <LinearGradient
-          colors={run.is_loop ? [colors.accentOrange, '#FF8E53'] : [colors.accentBlue, '#5B8DEF']}
+          colors={run.is_loop ? [colors.textPrimary, '#2B2B2B'] : [colors.accentBlue, '#5B8DEF']}
           style={styles.hero}
         >
           <View style={styles.heroIcon}>
@@ -183,7 +183,7 @@ export default function RunDetailScreen() {
             </View>
             <View style={styles.xpBreakdown}>
               <Text style={styles.xpBreakdownText}>Territory: {run.territory_captured.toFixed(4)} km²</Text>
-              {run.is_loop && <Text style={[styles.xpBreakdownText, { color: colors.accentOrange }]}>Loop territory boost</Text>}
+              {run.is_loop && <Text style={[styles.xpBreakdownText, { color: colors.textPrimary }]}>Loop territory boost</Text>}
             </View>
           </View>
         </GlassCard>
@@ -251,8 +251,8 @@ export default function RunDetailScreen() {
             disabled={!shareText.trim() || sharing}
           >
             {sharing
-              ? <ActivityIndicator size="small" color="#000" />
-              : <><Ionicons name="send" size={16} color="#000" /><Text style={styles.sharePostBtnText}>Post to Feed</Text></>}
+              ? <ActivityIndicator size="small" color={colors.background} />
+              : <><Ionicons name="send" size={16} color={colors.background} /><Text style={styles.sharePostBtnText}>Post to Feed</Text></>}
           </TouchableOpacity>
         </GlassCard>
       </ScrollView>
@@ -273,8 +273,8 @@ const styles = StyleSheet.create({
 
   // Not found
   notFoundText: { ...typography.h4, color: colors.textSecondary },
-  backBtn: { backgroundColor: colors.accentOrange, paddingHorizontal: spacing.xl, paddingVertical: spacing.sm, borderRadius: borderRadius.full },
-  backBtnText: { color: '#000', fontWeight: '700' },
+  backBtn: { backgroundColor: colors.textPrimary, paddingHorizontal: spacing.xl, paddingVertical: spacing.sm, borderRadius: borderRadius.full },
+  backBtnText: { color: colors.background, fontWeight: '700' },
 
   // Hero
   hero: { borderRadius: borderRadius.xl, padding: spacing.xl, alignItems: 'center', gap: spacing.sm },
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
   xpCard: { padding: spacing.lg },
   xpRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   xpLabel: { ...typography.caption, color: colors.textTertiary, letterSpacing: 1, fontWeight: '600' },
-  xpValue: { fontSize: 40, fontWeight: '900', color: colors.accentOrange },
+  xpValue: { fontSize: 40, fontWeight: '900', color: colors.textPrimary },
   xpBreakdown: { alignItems: 'flex-end', gap: 4 },
   xpBreakdownText: { ...typography.caption, color: colors.textSecondary },
 
@@ -320,6 +320,6 @@ const styles = StyleSheet.create({
   shareBtnRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   shareChip: { backgroundColor: colors.surface, paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: borderRadius.full, borderWidth: 1, borderColor: colors.border },
   shareChipText: { ...typography.caption, color: colors.textSecondary },
-  sharePostBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm, backgroundColor: colors.accentOrange, paddingVertical: spacing.md, borderRadius: borderRadius.full },
-  sharePostBtnText: { color: '#000', fontWeight: '700', fontSize: 14 },
+  sharePostBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm, backgroundColor: colors.textPrimary, paddingVertical: spacing.md, borderRadius: borderRadius.full },
+  sharePostBtnText: { color: colors.background, fontWeight: '700', fontSize: 14 },
 });

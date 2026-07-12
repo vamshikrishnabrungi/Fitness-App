@@ -1,0 +1,1279 @@
+{
+  "metadata": {
+    "domain": "offensive_skills",
+    "sport": "basketball",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready basketball coaching knowledge for offensive skill development across ball handling, dribbling, passing, shooting, finishing, footwork, screening, pick-and-roll, spacing, cutting, off-ball movement, and decision-making, with beginner-to-advanced progressions, common errors, corrections, physical qualities, and load-risk constraints."
+  },
+  "source_refs": [
+    {
+      "title": "WABC Coaches Manual Basketball - English",
+      "url": "https://assets.fiba.basketball/image/upload/documents-corporate-wabc-coaches-manual-eng.pdf",
+      "source_type": "official_coaching_manual",
+      "organization_or_author": "FIBA / World Association of Basketball Coaches",
+      "notes": "Used for broad coach education framing, rule vocabulary, youth-development responsibilities, and skill-to-game transfer principles."
+    },
+    {
+      "title": "WABC Level 1 Coaches Course Manual - English",
+      "url": "https://assets.fiba.basketball/image/upload/documents-corporate-wabc-coaching-level-manuals-level-1-eng.pdf",
+      "source_type": "official_coaching_manual",
+      "organization_or_author": "FIBA / World Association of Basketball Coaches",
+      "notes": "Primary official source for offensive basketball skills: stance, balance, footwork, stopping, pivoting, triple threat, passing, dribbling, shooting, lay-up footwork, perimeter offense, fakes, catch-and-shoot, and penetration."
+    },
+    {
+      "title": "WABC Coaching Courses",
+      "url": "https://about.fiba.basketball/en/wabc-documents",
+      "source_type": "official_resource_index",
+      "organization_or_author": "FIBA / World Association of Basketball Coaches",
+      "notes": "Official index confirming the WABC manuals, mini-basketball manuals, start coaching books, and level course manuals as FIBA coach education resources."
+    },
+    {
+      "title": "WABC Mini Basketball Coaches Manual - English",
+      "url": "https://assets.fiba.basketball/image/upload/documents-corporate-wabc-coaching-manual-mini-basketball-eng.pdf",
+      "source_type": "official_coaching_manual",
+      "organization_or_author": "FIBA / World Association of Basketball Coaches",
+      "notes": "Used for age-appropriate beginner development: play-based skill learning, movement literacy, throwing and catching, games before analytical over-coaching, and confidence-building."
+    },
+    {
+      "title": "WABC Start Coaching Activities Book - English",
+      "url": "https://assets.fiba.basketball/image/upload/documents-corporate-wabc-start-coaching-eng-activities-book.pdf",
+      "source_type": "official_activity_book",
+      "organization_or_author": "FIBA / World Association of Basketball Coaches",
+      "notes": "Used for activity progressions that combine dribbling, passing, shooting, movement, and adding defense."
+    },
+    {
+      "title": "Youth Basketball Guidelines",
+      "url": "https://www.usab.com/play/youth-basketball-guidelines",
+      "source_type": "national_federation_youth_guidelines",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for youth development, age-appropriate play, participation, health and wellness, and avoiding adult-style specialization too early."
+    },
+    {
+      "title": "USA Basketball Youth Development Guidebook",
+      "url": "https://cdn1.sportngin.com/attachments/document/0095/3630/200.30_16.3.24_USA_BASKETBALL_YOUTH_DEVELOPMENT_GUIDEBOOK.pdf",
+      "source_type": "national_federation_curriculum",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for staged player development, progressive teaching standards, health-and-wellness orientation, and age-level skill expectations."
+    },
+    {
+      "title": "Rookie Practice Plans",
+      "url": "https://jr.nba.com/basketball-practice-plans/rookie/",
+      "source_type": "official_youth_curriculum",
+      "organization_or_author": "Jr. NBA",
+      "notes": "Used for beginner skill definitions and cues for passing, ball handling, shooting, balance, target focus, stepping to pass, backspin, and small-sided practice design."
+    },
+    {
+      "title": "All-Star Practice Plans",
+      "url": "https://jr.nba.com/basketball-practice-plans/all-star/",
+      "source_type": "official_youth_curriculum",
+      "organization_or_author": "Jr. NBA",
+      "notes": "Used for advanced youth constraints such as 3-on-3 no-dribble games, quick decisions, spacing, screening, passing, and live offensive reads."
+    },
+    {
+      "title": "Pass and Cut Drill",
+      "url": "https://jr.nba.com/video/pass-and-cut-drill/",
+      "source_type": "official_youth_skill_drill",
+      "organization_or_author": "Jr. NBA",
+      "notes": "Used for pass-and-cut movement, teamwork, and teaching off-ball action after the pass."
+    },
+    {
+      "title": "Basketball 101: Fundamentals of Passing",
+      "url": "https://www.usab.com/news/2014/01/basketball-101-fundamentals-of-passing",
+      "source_type": "national_federation_coaching_article",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for passing technique, stepping toward the receiver, catching toward the ball, backspin, two-hand chest pass, bounce pass, overhead pass, and pass selection."
+    },
+    {
+      "title": "10 Fundamentals for Proper Footwork",
+      "url": "https://www.usab.com/news/2014/01/10-fundamentals-for-proper-footwork",
+      "source_type": "national_federation_coaching_article",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for ready feet, inside-foot 1-2 catch-and-shoot footwork, layup steps, jump stops, pivots, jab steps, and balance."
+    },
+    {
+      "title": "5 Crossover Dribbling Techniques",
+      "url": "https://www.usab.com/news/2014/01/5-crossover-dribbling-techniques",
+      "source_type": "national_federation_coaching_article",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for change-of-direction dribbling, low hard crosses, outside-foot push-off, between-the-legs, behind-the-back, reverse, and change-of-pace principles."
+    },
+    {
+      "title": "7 Tips To Improve Your Shooting Mechanics",
+      "url": "https://www.usab.com/news/2014/01/7-tips-to-improve-your-shooting-mechanics",
+      "source_type": "national_federation_coaching_article",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for shooting alignment, elbow-under-ball, guide-hand discipline, direct ball path, follow-through, and repeatable mechanics."
+    },
+    {
+      "title": "4 Steps to a Perfect Shot",
+      "url": "https://www.usab.com/news/2014/01/4-steps-to-a-perfect-shot",
+      "source_type": "national_federation_coaching_article",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for power-line alignment, shooting-side stacking, balance, and whole-body shooting setup."
+    },
+    {
+      "title": "The Basic Jump Shot",
+      "url": "https://www.usab.com/news/2014/01/the-basic-jump-shot",
+      "source_type": "national_federation_coaching_article",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for jump-shot progression, release timing, balance, and learning the jumper from close range outward."
+    },
+    {
+      "title": "The Stride - Stop Layup",
+      "url": "https://www.usab.com/news/2014/01/the-stride-stop-layup",
+      "source_type": "national_federation_coaching_article",
+      "organization_or_author": "USA Basketball",
+      "notes": "Used for layup after ending a dribble or cut, stride-stop control, and finishing-footwork options."
+    },
+    {
+      "title": "WABC 3x3 Players Guide",
+      "url": "https://fiba3x3.com/docs/wabc-3x3-players-guide.pdf",
+      "source_type": "official_player_development_guide",
+      "organization_or_author": "FIBA / World Association of Basketball Coaches",
+      "notes": "Used for spacing, cutting, flare actions, 3x3 decision speed, and player skill transfer in condensed space."
+    },
+    {
+      "title": "FIBA Europe Basketball Terminology",
+      "url": "https://assets.fiba.basketball/image/upload/documents-corporate-regional-offices-europe-programs-fiba-europe-coaching-certificate-fiba-europe-basketball-terminology.pdf",
+      "source_type": "official_terminology_resource",
+      "organization_or_author": "FIBA Europe",
+      "notes": "Used for consistent terminology around screens, pick-and-roll, pick-and-pop, cuts, spacing, and offensive actions."
+    },
+    {
+      "title": "Biomechanical Analysis of the Jump Shot in Basketball",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4234772/",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Struzik, Pietraszewski, and Zawadzki",
+      "notes": "Used for jump-shot lower-limb mechanics and the relationship between vertical impulse, jump execution, and shot movement organization."
+    },
+    {
+      "title": "Biomechanical characteristics of proficient free-throw shooters",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10436204/",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Tran and colleagues",
+      "notes": "Used for free-throw consistency, controlled center-of-mass and knee motion, and repeatable movement rhythm."
+    },
+    {
+      "title": "Biomechanical Adjustments of the Basketball Jump Shot Performed Over Opponents of Different Height",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9465762/",
+      "source_type": "peer_reviewed_biomechanics_study",
+      "organization_or_author": "Cabarkapa and colleagues",
+      "notes": "Used for contested shooting constraints, higher release demands, altered mechanics against taller defenders, and representative shooting practice."
+    },
+    {
+      "title": "Training load and match-play demands in basketball based on competition level: A systematic review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7058381/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Fox, Stanton, and Scanlan",
+      "notes": "Used for intermittent basketball demands, acceleration, deceleration, changes of direction, technical-tactical load, and the need for training that resembles match-play."
+    },
+    {
+      "title": "High-Intensity Acceleration and Deceleration Demands in Elite Team Sports Competitive Match Play",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6851047/",
+      "source_type": "peer_reviewed_systematic_review_meta_analysis",
+      "organization_or_author": "Harper, Carling, and Kiely",
+      "notes": "Used for deceleration as a meaningful mechanical load in court invasion sports and for monitoring repeated stop-start offensive work."
+    },
+    {
+      "title": "Epidemiology of Injuries Among National Basketball Association Players",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38877729/",
+      "source_type": "peer_reviewed_injury_epidemiology",
+      "organization_or_author": "Makhni and colleagues",
+      "notes": "Used for basketball injury context, game-loss injuries, lower-extremity relevance, and load-risk framing for skill sessions."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "offensive_skill_is_perception_action",
+      "concept": "Basketball offense is a perception-action skill: the player must see defender position, teammate spacing, basket location, clock context, and help rotations while executing technique.",
+      "coaching_application": "Progress from isolated form work to tasks with targets, time limits, defenders, advantage-disadvantage constraints, and pass-dribble-shoot choices.",
+      "source_refs": [
+        "WABC Level 1 Coaches Course Manual - English",
+        "All-Star Practice Plans",
+        "Training load and match-play demands in basketball based on competition level: A systematic review"
+      ]
+    },
+    {
+      "id": "stance_balance_and_footwork_underpin_every_skill",
+      "concept": "Ready stance, balance, stopping, pivoting, and efficient footwork are the base of shooting, passing, driving, screening, and finishing.",
+      "coaching_application": "Teach every skill from an athletic base: eyes up, hips loaded, feet active, torso controlled, and the ball protected in a position that can become a pass, shot, or drive.",
+      "source_refs": [
+        "WABC Level 1 Coaches Course Manual - English",
+        "10 Fundamentals for Proper Footwork"
+      ]
+    },
+    {
+      "id": "triple_threat_is_a_decision_platform",
+      "concept": "Triple threat is not a static pose; it is a balanced catch position from which the player can shoot, pass, rip, jab, pivot, or drive without telegraphing.",
+      "coaching_application": "Reward quick catch-ready feet, eyes on rim, ball protection, and a first action based on the defender's closeout rather than a pre-planned move.",
+      "source_refs": [
+        "WABC Level 1 Coaches Course Manual - English",
+        "10 Fundamentals for Proper Footwork"
+      ]
+    },
+    {
+      "id": "dribbling_should_create_an_advantage",
+      "concept": "A dribble should improve the offense: beat a defender, create a passing angle, escape pressure, improve spacing, or enter an action.",
+      "coaching_application": "Use dribble limits, advantage games, and live reads so players learn when not to dribble as much as how to dribble.",
+      "source_refs": [
+        "WABC Level 1 Coaches Course Manual - English",
+        "Rookie Practice Plans",
+        "All-Star Practice Plans"
+      ]
+    },
+    {
+      "id": "change_of_pace_is_as_important_as_change_of_direction",
+      "concept": "Effective ball handlers separate with rhythm disruption: slow-fast, high-low body level, hesitation, retreat, stop-start, and then directional change.",
+      "coaching_application": "Teach moves with a setup, speed change, shoulder/hip deception, low hard transfer, and acceleration for two steps after the move.",
+      "source_refs": [
+        "5 Crossover Dribbling Techniques",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    },
+    {
+      "id": "passing_moves_defenders_faster_than_dribbling",
+      "concept": "Passing can shift the defense faster than the ball handler can dribble, but only when the passer reads the receiver, defender, timing, and pass window.",
+      "coaching_application": "Train pass type, pass timing, receiver movement, target hands, and next action together instead of only stationary partner passing.",
+      "source_refs": [
+        "Basketball 101: Fundamentals of Passing",
+        "Rookie Practice Plans",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    },
+    {
+      "id": "shooting_is_repeatable_energy_transfer",
+      "concept": "Shooting accuracy depends on repeatable lower-body loading, stable balance, ball path, elbow and wrist organization, guide-hand control, release angle, arc, and follow-through.",
+      "coaching_application": "Start close enough that the player can keep the same motion, then extend range only when mechanics stay stable under fatigue, movement, and contest.",
+      "source_refs": [
+        "7 Tips To Improve Your Shooting Mechanics",
+        "4 Steps to a Perfect Shot",
+        "Biomechanical Analysis of the Jump Shot in Basketball"
+      ]
+    },
+    {
+      "id": "free_throws_are_closed_skill_with_pressure",
+      "concept": "Free throws are performed without defender pressure but under fatigue, score pressure, and self-regulation demands, so routine and movement consistency matter.",
+      "coaching_application": "Build a short routine, consistent breathing, stable stance, one target focus, and controlled knee and center-of-mass rhythm; avoid changing mechanics during pressure sets.",
+      "source_refs": [
+        "Biomechanical characteristics of proficient free-throw shooters",
+        "USA Basketball Youth Development Guidebook"
+      ]
+    },
+    {
+      "id": "catch_and_shoot_starts_before_the_catch",
+      "concept": "Catch-and-shoot quality is created by off-ball readiness: relocation, hands ready, feet organized before or during the catch, eyes to the rim, and quick shot preparation.",
+      "coaching_application": "Coach the preparatory hop or 1-2 step, catch pocket, shoulders to rim, and immediate decision to shoot, drive a closeout, or swing.",
+      "source_refs": [
+        "10 Fundamentals for Proper Footwork",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    },
+    {
+      "id": "off_dribble_shooting_adds_braking_and_realignment",
+      "concept": "Off-dribble shooting requires the player to decelerate, gather, align feet and shoulders, transfer the ball cleanly from dribble to shot pocket, and release before the defender recovers.",
+      "coaching_application": "Train pickup timing, one-two and hop gathers, inside-foot stops, balance after separation, and contested release windows.",
+      "source_refs": [
+        "The Basic Jump Shot",
+        "Biomechanical Adjustments of the Basketball Jump Shot Performed Over Opponents of Different Height",
+        "High-Intensity Acceleration and Deceleration Demands in Elite Team Sports Competitive Match Play"
+      ]
+    },
+    {
+      "id": "finishing_is_angle_timing_and_contact_management",
+      "concept": "Rim finishing combines approach angle, gather footwork, takeoff choice, ball protection, body control, touch, backboard use, and reading the shot blocker.",
+      "coaching_application": "Teach same-foot and opposite-foot finishes, outside-hand layups, stride stops, jump stops, floaters, inside-hand finishes, and pass-out reads against help.",
+      "source_refs": [
+        "The Stride - Stop Layup",
+        "10 Fundamentals for Proper Footwork",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    },
+    {
+      "id": "spacing_is_a_team_skill",
+      "concept": "Spacing is maintained by all five offensive players through width, depth, corner occupation, slot balance, dunker or short-corner use, and timely replacement after drives or cuts.",
+      "coaching_application": "Use small-sided games to teach lift, drift, fill, replace, cut-through, and exit spacing when the ball drives or a screen is used.",
+      "source_refs": [
+        "WABC 3x3 Players Guide",
+        "All-Star Practice Plans",
+        "FIBA Europe Basketball Terminology"
+      ]
+    },
+    {
+      "id": "screening_is_timing_angle_and_separation",
+      "concept": "A screen creates advantage only when the screener arrives with legal body position, the cutter or handler uses the screen shoulder-to-shoulder, and the off-ball players preserve passing lanes.",
+      "coaching_application": "Teach screen angle, stationary contact point, waiting for the screen, rubbing the defender, and then rolling, popping, slipping, or rescreening based on coverage.",
+      "source_refs": [
+        "FIBA Europe Basketball Terminology",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    },
+    {
+      "id": "pick_and_roll_is_a_multi_player_read",
+      "concept": "Pick-and-roll is not only a two-player action; the handler, screener, corner, slot, and weak-side players all affect the tag, stunt, roll lane, kickout, and second-side attack.",
+      "coaching_application": "Progress from 2-on-0 timing to 2-on-2 reads, then 3-on-3 with a corner spacer, then 4-on-4 or 5-on-5 with tag and rotation decisions.",
+      "source_refs": [
+        "FIBA Europe Basketball Terminology",
+        "WABC 3x3 Players Guide",
+        "All-Star Practice Plans"
+      ]
+    },
+    {
+      "id": "small_sided_games_accelerate_decision_making",
+      "concept": "1-on-1, 2-on-2, 3-on-3, and constraint games produce more touches, more spacing decisions, and clearer feedback than full 5-on-5 repetition for developing players.",
+      "coaching_application": "Use constraints such as two-dribble max, no-dribble, score after a paint touch, score after a cut, or advantage starts to connect technique to tactical decisions.",
+      "source_refs": [
+        "WABC Mini Basketball Coaches Manual - English",
+        "Rookie Practice Plans",
+        "All-Star Practice Plans"
+      ]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "ball_handling_control_model",
+      "skill_area": "ball_handling",
+      "model": "Control, protect, scan, separate, decide.",
+      "components": [
+        "Athletic stance with hips low enough to change direction.",
+        "Eyes available to read floor, not fixed on the ball.",
+        "Finger-pad control with relaxed hand and variable dribble height.",
+        "Ball protected outside the defender's reach with body, arm bar, and angle.",
+        "Moves connected to an outcome: pass, drive, shot, escape, or enter offense."
+      ],
+      "beginner_progression": [
+        "Stationary pound dribbles with both hands.",
+        "Stationary height changes: ankle, knee, waist.",
+        "Walking dribble with eyes up and target calls.",
+        "Cone or line dribble with stop and pivot."
+      ],
+      "intermediate_progression": [
+        "Retreat dribble into crossover, between-the-legs, or behind-the-back.",
+        "Change-of-pace dribble into two-step acceleration.",
+        "1-on-1 from wing with two-dribble limit.",
+        "Pressure escape to pass or attack."
+      ],
+      "advanced_progression": [
+        "Live ball-screen setup and snake dribble reads.",
+        "Split, reject, hostage, and retreat reads against coverage.",
+        "Late-clock isolation with help defenders.",
+        "Full-court pressure handling with pass-ahead decisions."
+      ],
+      "common_errors_and_corrections": [
+        {
+          "error": "Player dribbles with eyes down.",
+          "correction": "Add visual calls, colored cones, numbered fingers, or passing targets that require head-up information."
+        },
+        {
+          "error": "Change-of-direction move is wide and slow.",
+          "correction": "Cue low hard transfer, outside-foot push, hip drop, and two fast steps after the move."
+        },
+        {
+          "error": "Player dribbles without purpose.",
+          "correction": "Use dribble limits and score only after paint touch, pass advantage, or open shot creation."
+        },
+        {
+          "error": "Ball is exposed to the defender.",
+          "correction": "Teach body between ball and defender, outside-hand dribble, and chin-shoulder checks before exposing the ball."
+        }
+      ],
+      "source_refs": [
+        "WABC Level 1 Coaches Course Manual - English",
+        "5 Crossover Dribbling Techniques",
+        "Rookie Practice Plans"
+      ]
+    },
+    {
+      "id": "passing_catching_model",
+      "skill_area": "passing",
+      "model": "See the advantage, create the window, pass on time, catch ready, continue the action.",
+      "pass_families": [
+        "Two-hand chest pass for direct open lanes.",
+        "Bounce pass for defender hands high or pocket-feed windows.",
+        "Overhead pass for size, outlet, skip, and post-entry angles.",
+        "One-hand push pass for drive-and-kick or off-dribble passing.",
+        "Hook, wrap, pocket, lob, and drift passes for advanced pick-and-roll or help reads."
+      ],
+      "receiver_responsibilities": [
+        "Create a target with hands.",
+        "Step toward or move to the pass line.",
+        "Catch with balance and eyes to rim.",
+        "Convert immediately to shot, pass, drive, or pivot."
+      ],
+      "beginner_progression": [
+        "Stationary partner chest and bounce passing with target hands.",
+        "Wall passing to targets with step and backspin.",
+        "Pass and follow, pass and cut, pass and replace.",
+        "Three-player passing with no defense."
+      ],
+      "intermediate_progression": [
+        "Passing on the move with layup or catch-and-shoot finish.",
+        "Drive-and-kick with corner and slot receivers.",
+        "Post entry from wing with defender fronting or behind.",
+        "Advantage 3-on-2 and 4-on-3 decisions."
+      ],
+      "advanced_progression": [
+        "Pick-and-roll reads: pocket, hit-ahead, skip, lift, drift, and short-roll pass.",
+        "Passing against traps with pivot, fake, and split vision.",
+        "Second-side reversal after paint touch.",
+        "Late-clock passing with shot-quality decision rules."
+      ],
+      "common_errors_and_corrections": [
+        {
+          "error": "Pass floats or arrives late.",
+          "correction": "Cue step to target, firm wrist snap, shorter passing window, and earlier decision from the catch."
+        },
+        {
+          "error": "Receiver waits flat-footed.",
+          "correction": "Require receiver to show hands, step to ball, or move into a passing lane before the pass can be made."
+        },
+        {
+          "error": "Player predetermines pass into covered lane.",
+          "correction": "Add live defender with score for deflections and coach passer to read defender chest and hand position."
+        },
+        {
+          "error": "Passer jumps without a plan.",
+          "correction": "Teach jump passes only as advanced emergency actions; emphasize pivoting, pass fakes, and landing on two before passing."
+        }
+      ],
+      "source_refs": [
+        "Basketball 101: Fundamentals of Passing",
+        "Rookie Practice Plans",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    },
+    {
+      "id": "shooting_mechanics_model",
+      "skill_area": "shooting",
+      "model": "Base, line, lift, release, repeat.",
+      "components": [
+        "Balanced feet with knees and hips loaded.",
+        "Shooting-side alignment through foot, knee, hip, shoulder, elbow, hand, and eye as much as anatomy allows.",
+        "Ball moves to shot pocket without unnecessary drift.",
+        "Shooting elbow organized under or slightly inside the ball.",
+        "Guide hand stabilizes but does not push.",
+        "Legs and trunk transfer force smoothly into arm extension.",
+        "Release has relaxed wrist snap, backspin, and held follow-through."
+      ],
+      "shot_contexts": [
+        "Form shooting close to rim.",
+        "Free throw.",
+        "Catch-and-shoot.",
+        "Relocation catch-and-shoot.",
+        "Off-dribble pull-up.",
+        "Contested shot over a closeout.",
+        "Step-back or side-step only after base mechanics are stable."
+      ],
+      "beginner_progression": [
+        "One-hand form shooting near basket.",
+        "Add guide hand without guide-hand push.",
+        "Set shot from short range.",
+        "Free throw routine with stable stance."
+      ],
+      "intermediate_progression": [
+        "1-2 and hop footwork catch-and-shoot.",
+        "Relocation shooting from corner, wing, and slot.",
+        "One-dribble pull-up going both directions.",
+        "Shot fake to one-dribble shot or pass."
+      ],
+      "advanced_progression": [
+        "Movement shooting from pin-down, flare, drift, lift, and transition trails.",
+        "Off-dribble shooting after change of pace, ball screen, or retreat.",
+        "Contested shooting with late closeout.",
+        "Fatigue and score-pressure shooting sets."
+      ],
+      "common_errors_and_corrections": [
+        {
+          "error": "Range is too far and mechanics collapse.",
+          "correction": "Move closer until arc, elbow path, and follow-through are repeatable; extend only after makes with stable form."
+        },
+        {
+          "error": "Guide hand pushes or twists the ball.",
+          "correction": "Use one-hand form shooting, guide-hand freeze, and check that guide fingers finish quiet to the side."
+        },
+        {
+          "error": "Player catches with feet unready.",
+          "correction": "Cue feet and hands ready before the pass, then use hop or inside-foot 1-2 into a balanced base."
+        },
+        {
+          "error": "Off-dribble shot fades sideways.",
+          "correction": "Train deceleration, gather under hips, shoulders to rim, and vertical landing after release."
+        }
+      ],
+      "source_refs": [
+        "7 Tips To Improve Your Shooting Mechanics",
+        "4 Steps to a Perfect Shot",
+        "The Basic Jump Shot",
+        "Biomechanical Analysis of the Jump Shot in Basketball"
+      ]
+    },
+    {
+      "id": "free_throw_model",
+      "skill_area": "free_throws",
+      "model": "Routine, breath, target, rhythm, hold.",
+      "components": [
+        "Same pre-shot routine every repetition.",
+        "Balanced stance and relaxed shoulders.",
+        "Controlled knee bend and center-of-mass rhythm.",
+        "Stable gaze on a precise target.",
+        "Smooth release with follow-through held until the ball reaches the rim."
+      ],
+      "training_progression": [
+        "Blocked free throws for routine learning.",
+        "One-and-one pressure sets with consequence.",
+        "Free throws after sprint, defensive slide, or contact finish.",
+        "Game-scenario sets by score and clock."
+      ],
+      "common_errors_and_corrections": [
+        {
+          "error": "Routine changes after misses.",
+          "correction": "Track process adherence separately from makes and require the same routine after make or miss."
+        },
+        {
+          "error": "Player rushes under pressure.",
+          "correction": "Use breath count and a fixed cue word before the shooting motion starts."
+        },
+        {
+          "error": "Excessive knee or trunk motion changes release.",
+          "correction": "Use video from side and front to stabilize rhythm and release timing."
+        }
+      ],
+      "source_refs": [
+        "Biomechanical characteristics of proficient free-throw shooters",
+        "USA Basketball Youth Development Guidebook"
+      ]
+    },
+    {
+      "id": "finishing_model",
+      "skill_area": "finishing",
+      "model": "Get paint advantage, gather under control, protect the ball, choose finish, land ready.",
+      "finish_families": [
+        "Outside-hand layup off correct footwork.",
+        "Inside-hand layup to shield from shot blocker.",
+        "Power layup off jump stop or stride stop.",
+        "Reverse finish using rim as protection.",
+        "Floater or runner before the shot blocker can contest.",
+        "Euro, pro-hop, spin, or stride variation after fundamentals are stable.",
+        "Pass-out to corner, dunker spot, or lift when help commits."
+      ],
+      "beginner_progression": [
+        "No-dribble one-step and two-step layup footwork.",
+        "Mikan-style alternating finishes close to rim.",
+        "Dribble from wing into outside-hand layup.",
+        "Stride-stop layup after pass or cut."
+      ],
+      "intermediate_progression": [
+        "Finishing through pad contact.",
+        "Inside-hand and reverse layups.",
+        "Floater off one foot and two feet.",
+        "1-on-1 from advantage start with help defender."
+      ],
+      "advanced_progression": [
+        "Ball-screen downhill finishes against drop, switch, and late help.",
+        "Paint decision games: finish, lob, drift pass, kickout, or short pass.",
+        "Contested rim reads with verticality and shot blocker timing.",
+        "Transition finishing at speed with trailing defender."
+      ],
+      "common_errors_and_corrections": [
+        {
+          "error": "Player gathers too early and gets blocked.",
+          "correction": "Teach long first step, late pickup, ball outside frame, and alternate finish angles."
+        },
+        {
+          "error": "Player avoids contact and drifts away from rim.",
+          "correction": "Train shoulder-to-chest line, two-foot power gathers, and controlled contact pads before live defense."
+        },
+        {
+          "error": "Layup footwork is reversed or causes travels.",
+          "correction": "Return to slow one-step and two-step rhythm, then add dribble only after steps are automatic."
+        },
+        {
+          "error": "Floater has flat trajectory.",
+          "correction": "Cue soft hand, high release, vertical body, and target above front rim or backboard area depending on angle."
+        }
+      ],
+      "source_refs": [
+        "The Stride - Stop Layup",
+        "10 Fundamentals for Proper Footwork",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    },
+    {
+      "id": "footwork_and_triple_threat_model",
+      "skill_area": "footwork",
+      "model": "Stop balanced, protect pivot, threaten rim, move defender, attack advantage.",
+      "components": [
+        "Jump stop and stride stop.",
+        "Front pivot and reverse pivot.",
+        "Rip-through and sweep below or above defender hands.",
+        "Jab step to move defender without losing balance.",
+        "Shot fake and drive fake with eyes and body believable.",
+        "Inside-foot 1-2 and hop footwork into shot."
+      ],
+      "beginner_progression": [
+        "Athletic stance and jump-stop freeze.",
+        "Pivot square to basket without traveling.",
+        "Triple-threat catch with eyes to rim.",
+        "Jab and return to balance."
+      ],
+      "intermediate_progression": [
+        "Jab to drive, jab to shot, shot fake to one-dribble pull-up.",
+        "Pivot out of pressure and pass.",
+        "Catch on wing, read closeout, choose shoot-drive-swing.",
+        "Stride stop into pivot and finish."
+      ],
+      "advanced_progression": [
+        "Pressure catches with live defender.",
+        "Late-clock pivot package.",
+        "Post-perimeter hybrid footwork: rip, drop, step-through, fade, pass.",
+        "Closeout attack with second defender help read."
+      ],
+      "common_errors_and_corrections": [
+        {
+          "error": "Player travels on pivot.",
+          "correction": "Call and mark pivot foot, freeze after each move, and add defense only after legal foot discipline holds."
+        },
+        {
+          "error": "Jab step makes player stand tall.",
+          "correction": "Cue short violent jab, chest over hips, ball protected, and immediate return to loaded stance."
+        },
+        {
+          "error": "Shot fake is not believable.",
+          "correction": "Require eyes to rim, ball to shot pocket, and same lower-body load as the player's real shot."
+        }
+      ],
+      "source_refs": [
+        "10 Fundamentals for Proper Footwork",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "spacing_fill_corners_and_slots",
+      "rule": "Maintain usable width and depth: corners stretch help, slots create reversal lanes, and one interior or short-corner player can occupy rim protection without clogging drives.",
+      "why_it_matters": "Poor spacing lets one defender guard two players, shrinks driving lanes, removes passing angles, and reduces shot quality.",
+      "coaching_cues": [
+        "If you cut through, another player fills behind.",
+        "If the ball drives baseline, weak-side players drift or lift to visible windows.",
+        "If the ball drives middle, corners stay spaced and slots prepare for kickout or extra pass.",
+        "Do not stand in the same vertical lane as a teammate unless screening or cutting with purpose."
+      ],
+      "progression": [
+        "3-on-0 pass-cut-replace.",
+        "3-on-3 no-dribble spacing game.",
+        "4-on-4 drive-and-kick with drift and lift rules.",
+        "5-on-5 advantage shell with paint-touch scoring."
+      ],
+      "source_refs": [
+        "WABC 3x3 Players Guide",
+        "All-Star Practice Plans"
+      ]
+    },
+    {
+      "id": "cut_when_overplayed_or_after_passing",
+      "rule": "Cut when denied, after passing if the lane is open, or when a defender turns their head; replace when a teammate cuts through.",
+      "why_it_matters": "Cutting punishes ball watching, creates layups, opens second-side space, and teaches off-ball players to be active decision-makers.",
+      "coaching_cues": [
+        "Set up the defender before cutting.",
+        "Show target hands late.",
+        "Cut hard to score, not just to move.",
+        "Clear to opposite side if not open."
+      ],
+      "source_refs": [
+        "WABC Level 1 Coaches Course Manual - English",
+        "Pass and Cut Drill"
+      ]
+    },
+    {
+      "id": "closeout_attack_decision_rule",
+      "rule": "On the catch, read the closeout: shoot if late and balanced, drive if long or out of control, swing if help is loaded and a teammate has a better advantage.",
+      "why_it_matters": "This links triple threat, catch-and-shoot, passing, and driving into one decision instead of isolated skills.",
+      "coaching_cues": [
+        "Eyes to rim on every catch.",
+        "Make the decision before the ball sticks.",
+        "One hard advantage dribble beats more than three neutral dribbles.",
+        "If you draw help, pass on time."
+      ],
+      "source_refs": [
+        "10 Fundamentals for Proper Footwork",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    },
+    {
+      "id": "pick_and_roll_basic_rule",
+      "rule": "The handler creates separation, waits for the screen angle, uses the screen tight, reads the screener's defender, and then scores, hits the roller, kicks to spacing, rejects, or resets.",
+      "why_it_matters": "A ball screen only creates advantage when timing, angle, spacing, and coverage reads align.",
+      "roles": {
+        "handler": [
+          "Set up defender with pace, jab, retreat, or change of angle.",
+          "Rub shoulders with screener.",
+          "Keep dribble alive until the help decision is clear.",
+          "Read drop, switch, hedge, trap, under, and ice-style positioning."
+        ],
+        "screener": [
+          "Sprint to screen with legal stationary body position.",
+          "Angle the screen to the intended attack lane.",
+          "Hold contact long enough for handler to use it.",
+          "Roll, pop, slip, or rescreen based on defender behavior."
+        ],
+        "spacers": [
+          "Occupy corners and slots.",
+          "Lift, drift, or cut only when it opens the passing lane.",
+          "Be shot-ready on kickout.",
+          "Attack the second closeout."
+        ]
+      },
+      "progression": [
+        "2-on-0 timing and footwork.",
+        "2-on-2 live with one coverage.",
+        "3-on-3 with corner spacer and tag defender.",
+        "4-on-4 with lift or drift decisions.",
+        "5-on-5 with second-side advantage."
+      ],
+      "source_refs": [
+        "FIBA Europe Basketball Terminology",
+        "WABC 3x3 Players Guide",
+        "All-Star Practice Plans"
+      ]
+    },
+    {
+      "id": "screening_rule",
+      "rule": "Screens must be legal, timed, and used tightly; the cutter or handler should wait for contact angle before exploding off the screen.",
+      "why_it_matters": "Early cuts, moving screens, and wide routes remove the screen advantage and can create turnovers or fouls.",
+      "coaching_cues": [
+        "Screener: sprint, stop, be wide and strong, hands protected.",
+        "User: walk defender into screen, shoulder-to-hip path, explode after the screen.",
+        "After contact: roll, pop, slip, or re-screen with eyes to the ball."
+      ],
+      "source_refs": [
+        "FIBA Europe Basketball Terminology",
+        "WABC Level 1 Coaches Course Manual - English"
+      ]
+    },
+    {
+      "id": "paint_touch_rule",
+      "rule": "A paint touch should trigger a scoring decision: finish, pass to dunker or short corner, kick to corner, pass to lift, or spray to second side.",
+      "why_it_matters": "The paint touch forces help and creates high-value shots only if teammates maintain passing windows and the handler reads early.",
+      "coaching_cues": [
+        "Do not drive into a crowd without a pass plan.",
+        "Corner players show visible hands.",
+        "Weak-side slot lifts if their defender tags the roller.",
+        "After kickout, attack the closeout before the defense fully recovers."
+      ],
+      "source_refs": [
+        "WABC 3x3 Players Guide",
+        "All-Star Practice Plans"
+      ]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "lower_body_power_and_elasticity",
+      "quality": "Lower-body strength, power, and elastic stiffness support first step, vertical jump, shot range, rebounding into second shots, and finishing through contact.",
+      "skill_links": [
+        "Off-dribble separation",
+        "Jump shot lift",
+        "Layup and floater takeoff",
+        "Contact finishing"
+      ],
+      "training_implication": "Use age-appropriate jumping, landing, sprinting, strength, and mobility progressions before high-volume advanced shooting or contact finishing."
+    },
+    {
+      "id": "deceleration_and_braking_capacity",
+      "quality": "Basketball offense repeatedly requires stopping from sprints, drives, cuts, and ball-screen attacks.",
+      "skill_links": [
+        "Pull-up shooting",
+        "Stride stop layups",
+        "Jump stop pivots",
+        "Change-of-direction dribbling",
+        "Off-ball cuts"
+      ],
+      "training_implication": "Teach landing mechanics, hip-knee-ankle flexion, trunk control, and progressive braking volume before high-speed pull-ups and aggressive change-of-direction work.",
+      "source_refs": [
+        "Training load and match-play demands in basketball based on competition level: A systematic review",
+        "High-Intensity Acceleration and Deceleration Demands in Elite Team Sports Competitive Match Play"
+      ]
+    },
+    {
+      "id": "coordination_and_rhythm",
+      "quality": "Fine motor control, bilateral coordination, timing, and rhythm support dribble control, passing touch, shooting sequence, and finishing variety.",
+      "skill_links": [
+        "Weak-hand dribbling",
+        "Off-hand layups",
+        "Ball pickup into shot",
+        "Pass timing",
+        "Free-throw routine"
+      ],
+      "training_implication": "Use varied rhythms, both hands, different ball sizes for youth when appropriate, and constraints that force timing changes without overloading intensity."
+    },
+    {
+      "id": "trunk_control_and_body_balance",
+      "quality": "Trunk control lets players absorb contact, keep shooting line, pivot without travel, pass through pressure, and finish at non-straight angles.",
+      "skill_links": [
+        "Triple threat",
+        "Passing under pressure",
+        "Contested shooting",
+        "Rim finishing",
+        "Screen contact"
+      ],
+      "training_implication": "Integrate balance, single-leg strength, anti-rotation, landing stability, and contact-control drills into skill work."
+    },
+    {
+      "id": "aerobic_and_repeated_sprint_capacity",
+      "quality": "Basketball is intermittent and demands repeated high-intensity actions with short recovery.",
+      "skill_links": [
+        "Transition offense",
+        "Repeated cuts",
+        "Late-game shooting consistency",
+        "Defensive-to-offensive conversion"
+      ],
+      "training_implication": "Condition through representative small-sided games, transition sequences, and work-rest intervals rather than only long steady running."
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "deceleration_and_change_of_direction_load",
+      "risk": "High volumes of stops, cuts, side-steps, pull-ups, and direction changes can overload ankles, knees, hips, and low back, especially if added suddenly.",
+      "risk_controls": [
+        "Progress speed and volume gradually.",
+        "Teach braking with hip-knee-ankle flexion and trunk control.",
+        "Alternate high-speed change-of-direction days with lower-impact skill days.",
+        "Monitor soreness, landing quality, and fatigue-related knee valgus or trunk collapse."
+      ],
+      "source_refs": [
+        "High-Intensity Acceleration and Deceleration Demands in Elite Team Sports Competitive Match Play",
+        "Training load and match-play demands in basketball based on competition level: A systematic review"
+      ]
+    },
+    {
+      "id": "jump_landing_and_repeated_shooting_load",
+      "risk": "High-volume jump shots, contested shooting, layups, and finishing drills add repeated takeoff and landing load.",
+      "risk_controls": [
+        "Build from set shooting to jump shooting to movement shooting.",
+        "Control shot-count spikes, especially for youth and return-to-play athletes.",
+        "Use landing-quality checks during fatigue.",
+        "Mix form shooting, free throws, passing, and tactical decision work between high-jump blocks."
+      ],
+      "source_refs": [
+        "Biomechanical Analysis of the Jump Shot in Basketball",
+        "Epidemiology of Injuries Among National Basketball Association Players"
+      ]
+    },
+    {
+      "id": "contact_finishing_and_screening_risk",
+      "risk": "Contact finishes and screening drills increase collision, shoulder, wrist, rib, hip, knee, and ankle risk if players lack body control or legal screening technique.",
+      "risk_controls": [
+        "Introduce pads before live bodies.",
+        "Teach legal stationary screens and safe angles.",
+        "Pair players by size and readiness.",
+        "Stop drills when contact quality becomes reckless."
+      ],
+      "source_refs": [
+        "WABC Level 1 Coaches Course Manual - English",
+        "Epidemiology of Injuries Among National Basketball Association Players"
+      ]
+    },
+    {
+      "id": "youth_specialization_and_range_risk",
+      "risk": "Young players who shoot from regulation three-point range before strength and mechanics are ready often develop compensations such as heaving, low release, guide-hand push, or excessive trunk motion.",
+      "risk_controls": [
+        "Use age-appropriate ball size and basket height when available.",
+        "Prioritize close-range form and free throws before long-range volume.",
+        "Move players closer when mechanics degrade.",
+        "Avoid making deep shooting the main marker of youth offensive value."
+      ],
+      "source_refs": [
+        "USA Basketball Youth Development Guidebook",
+        "WABC Mini Basketball Coaches Manual - English",
+        "7 Tips To Improve Your Shooting Mechanics"
+      ]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "progress_from_technique_to_skill",
+      "principle": "Teach mechanics clearly, then quickly add perception, timing, defense, and scoring context.",
+      "example_session_flow": [
+        "Form or footwork primer.",
+        "Guided partner or small-group drill.",
+        "Decision drill with one defender or coach cue.",
+        "Small-sided live game with a constraint.",
+        "Short reflection on decision quality, not only makes."
+      ]
+    },
+    {
+      "id": "use_constraints_to_shape_decision_making",
+      "principle": "Constraints such as no dribble, two dribbles, mandatory paint touch, score after cut, or bonus for extra pass teach players why and when skills matter.",
+      "examples": [
+        "3-on-3 no dribble to teach cutting, spacing, and passing.",
+        "1-on-1 two dribbles to teach efficient first step and shot quality.",
+        "4-on-3 advantage to teach pass timing and help reads.",
+        "Pick-and-roll 3-on-3 with corner spacer to teach tag and kickout."
+      ]
+    },
+    {
+      "id": "separate_correction_focus_from_game_goal",
+      "principle": "Do not overload a developing player with five cues at once; pick the highest-leverage correction for the current skill.",
+      "examples": [
+        "For shooting, focus on base and guide hand before contested range.",
+        "For dribbling, focus on eyes up and change of pace before advanced move variety.",
+        "For finishing, focus on legal gather and ball protection before acrobatic finishes."
+      ]
+    },
+    {
+      "id": "build_bilateral_and_multi_angle_skill",
+      "principle": "Offensive players need both hands and multiple approach angles because defenses remove preferred options.",
+      "examples": [
+        "Weak-hand stationary and moving dribbles.",
+        "Left and right hand layups from both sides.",
+        "Inside-hand finishes from each side.",
+        "Passing off either foot and either hand after penetration."
+      ]
+    },
+    {
+      "id": "measure_process_and_shot_quality",
+      "principle": "Track more than makes: footwork legality, decision speed, paint touches, open-shot rate, turnover rate, pass timing, and repeatable mechanics.",
+      "examples": [
+        "Chart catch-and-shoot attempts where feet and hands were ready.",
+        "Score pick-and-roll reps by correct read before scoring outcome.",
+        "Count turnovers caused by late passing windows.",
+        "Track free-throw routine adherence under fatigue."
+      ]
+    },
+    {
+      "id": "respect_load_when_skills_become_game_speed",
+      "principle": "A skill session becomes a physical load session when it includes high-speed changes, jumps, contested finishes, or repeated transition reps.",
+      "examples": [
+        "Cap high-speed pull-up reps.",
+        "Alternate shooting blocks with passing or tactical walk-throughs.",
+        "Use small-sided games for conditioning but monitor landing and braking quality.",
+        "Reduce contact volume when athletes show fatigue or poor control."
+      ]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "basketball_ball_handling_model",
+      "id": "bh_control_protect_scan_separate_decide",
+      "name": "Ball Handling: Control, Protect, Scan, Separate, Decide",
+      "summary": "A ball handling model that ties dribble control to advantage creation and decision-making rather than move collection.",
+      "source_refs": [
+        "WABC Level 1 Coaches Course Manual - English",
+        "5 Crossover Dribbling Techniques"
+      ],
+      "payload": {
+        "core_cues": [
+          "Eyes up",
+          "Low hips",
+          "Finger-pad control",
+          "Ball outside defender reach",
+          "Change pace before changing direction",
+          "Accelerate after the move"
+        ],
+        "progressions": {
+          "beginner": [
+            "Stationary control both hands",
+            "Walking eyes-up dribble",
+            "Stop and pivot with ball protected"
+          ],
+          "intermediate": [
+            "Retreat to change direction",
+            "1-on-1 two-dribble attacks",
+            "Pressure escape into pass"
+          ],
+          "advanced": [
+            "Ball-screen setup and reject",
+            "Trap escape",
+            "Late-clock separation reads"
+          ]
+        }
+      }
+    },
+    {
+      "record_type": "basketball_passing_model",
+      "id": "pass_read_window_timing_receiver",
+      "name": "Passing: Read, Window, Timing, Receiver",
+      "summary": "Passing development model for choosing pass type and timing while receivers create usable targets.",
+      "source_refs": [
+        "Basketball 101: Fundamentals of Passing",
+        "Rookie Practice Plans"
+      ],
+      "payload": {
+        "pass_types": [
+          "chest",
+          "bounce",
+          "overhead",
+          "push",
+          "wrap",
+          "pocket",
+          "skip",
+          "lob"
+        ],
+        "common_errors": [
+          "late pass",
+          "floating pass",
+          "receiver flat-footed",
+          "jumping without a pass plan"
+        ],
+        "corrections": [
+          "step to target",
+          "snap wrists",
+          "receiver shows hands and steps to ball",
+          "pivot and fake before leaving feet"
+        ]
+      }
+    },
+    {
+      "record_type": "basketball_shooting_model",
+      "id": "shot_base_line_lift_release_repeat",
+      "name": "Shooting: Base, Line, Lift, Release, Repeat",
+      "summary": "Whole-body shooting mechanics model for form shooting, free throws, catch-and-shoot, and off-dribble shooting.",
+      "source_refs": [
+        "7 Tips To Improve Your Shooting Mechanics",
+        "4 Steps to a Perfect Shot",
+        "Biomechanical Analysis of the Jump Shot in Basketball"
+      ],
+      "payload": {
+        "components": [
+          "balanced base",
+          "shooting-side alignment",
+          "guide-hand discipline",
+          "smooth energy transfer",
+          "wrist snap and follow-through"
+        ],
+        "contexts": [
+          "form shooting",
+          "free throw",
+          "catch-and-shoot",
+          "off-dribble",
+          "contested"
+        ],
+        "range_rule": "Extend range only when mechanics remain stable and repeatable."
+      }
+    },
+    {
+      "record_type": "basketball_shooting_model",
+      "id": "free_throw_routine_consistency_model",
+      "name": "Free Throw: Routine and Controlled Rhythm",
+      "summary": "Free-throw model emphasizing routine, breathing, target focus, controlled knee and center-of-mass rhythm, and pressure repetition.",
+      "source_refs": [
+        "Biomechanical characteristics of proficient free-throw shooters"
+      ],
+      "payload": {
+        "routine_parts": [
+          "same ball preparation",
+          "breath",
+          "target focus",
+          "controlled bend",
+          "smooth release",
+          "held follow-through"
+        ],
+        "progressions": [
+          "blocked routine practice",
+          "one-and-one pressure",
+          "fatigue free throws",
+          "score-clock scenarios"
+        ]
+      }
+    },
+    {
+      "record_type": "basketball_finishing_model",
+      "id": "finish_angle_gather_protect_choose",
+      "name": "Finishing: Angle, Gather, Protect, Choose",
+      "summary": "Rim-finishing model covering layups, power finishes, inside-hand finishes, reverse finishes, floaters, and pass-out decisions.",
+      "source_refs": [
+        "The Stride - Stop Layup",
+        "10 Fundamentals for Proper Footwork",
+        "WABC Level 1 Coaches Course Manual - English"
+      ],
+      "payload": {
+        "finish_families": [
+          "outside-hand layup",
+          "inside-hand layup",
+          "power layup",
+          "reverse",
+          "floater",
+          "euro or pro-hop",
+          "pass-out"
+        ],
+        "common_errors": [
+          "early gather",
+          "ball exposed",
+          "wrong-foot travel",
+          "avoiding contact"
+        ],
+        "corrections": [
+          "late pickup",
+          "body between ball and defender",
+          "slow footwork rebuild",
+          "pad contact progressions"
+        ]
+      }
+    },
+    {
+      "record_type": "basketball_footwork_model",
+      "id": "triple_threat_pivot_jab_model",
+      "name": "Triple Threat, Pivot, and Jab Step Model",
+      "summary": "Footwork model for catch readiness, legal pivots, jabs, shot fakes, rip-throughs, and closeout attack.",
+      "source_refs": [
+        "10 Fundamentals for Proper Footwork",
+        "WABC Level 1 Coaches Course Manual - English"
+      ],
+      "payload": {
+        "components": [
+          "jump stop",
+          "stride stop",
+          "front pivot",
+          "reverse pivot",
+          "triple threat",
+          "jab",
+          "shot fake",
+          "rip-through"
+        ],
+        "decision_rule": "On the catch, read closeout: shoot, drive, pass, or pivot to protect."
+      }
+    },
+    {
+      "record_type": "basketball_pick_roll_rule",
+      "id": "pnr_handler_screener_spacer_reads",
+      "name": "Pick-and-Roll: Handler, Screener, Spacer Reads",
+      "summary": "Basic pick-and-roll rule set for creating separation, using legal screen angle, rolling or popping, and spacing around the action.",
+      "source_refs": [
+        "FIBA Europe Basketball Terminology",
+        "WABC 3x3 Players Guide"
+      ],
+      "payload": {
+        "handler_reads": [
+          "turn corner",
+          "reject",
+          "hit roller",
+          "pocket pass",
+          "kick to corner",
+          "skip",
+          "reset"
+        ],
+        "screener_reads": [
+          "roll",
+          "pop",
+          "slip",
+          "short roll",
+          "rescreen"
+        ],
+        "spacing_reads": [
+          "corner hold",
+          "drift",
+          "lift",
+          "fill behind",
+          "second-side attack"
+        ]
+      }
+    },
+    {
+      "record_type": "basketball_spacing_rule",
+      "id": "drive_spacing_drift_lift_fill_replace",
+      "name": "Drive Spacing: Drift, Lift, Fill, Replace",
+      "summary": "Spacing rule for teammates reacting to penetration and maintaining passing windows.",
+      "source_refs": [
+        "WABC 3x3 Players Guide",
+        "All-Star Practice Plans"
+      ],
+      "payload": {
+        "rules": [
+          "Baseline drive triggers corner drift and weak-side lift.",
+          "Middle drive triggers corner spacing and slot readiness.",
+          "After cutting through, fill the empty spot.",
+          "Do not bring your defender into the driving lane."
+        ],
+        "small_sided_games": [
+          "3-on-3 no dribble",
+          "4-on-4 paint touch",
+          "drive-kick-extra",
+          "advantage 4-on-3"
+        ]
+      }
+    },
+    {
+      "record_type": "basketball_offensive_skill_progression",
+      "id": "beginner_offensive_skill_progression",
+      "name": "Beginner Offensive Skill Progression",
+      "summary": "Beginner progression focused on movement literacy, ball control, legal footwork, simple passing, close-range shooting, basic layups, and small-sided games.",
+      "source_refs": [
+        "WABC Mini Basketball Coaches Manual - English",
+        "Rookie Practice Plans",
+        "USA Basketball Youth Development Guidebook"
+      ],
+      "payload": {
+        "priorities": [
+          "fun and confidence",
+          "both-hand ball familiarity",
+          "throwing and catching",
+          "jump stop and pivot",
+          "close-range form shooting",
+          "right and left layup footwork",
+          "pass-cut-replace"
+        ],
+        "avoid": [
+          "early overemphasis on plays",
+          "deep range heaving",
+          "long lines with low touches"
+        ]
+      }
+    },
+    {
+      "record_type": "basketball_offensive_skill_progression",
+      "id": "intermediate_offensive_skill_progression",
+      "name": "Intermediate Offensive Skill Progression",
+      "summary": "Intermediate progression adding pressure, closeout reads, change of pace, weak-hand skill, off-dribble shooting, contact finishing, and 2-on-2 or 3-on-3 tactics.",
+      "source_refs": [
+        "WABC Level 1 Coaches Course Manual - English",
+        "All-Star Practice Plans"
+      ],
+      "payload": {
+        "priorities": [
+          "change pace and direction",
+          "pass on the move",
+          "catch-and-shoot footwork",
+          "one-dribble pull-ups",
+          "inside-hand and reverse finishes",
+          "basic ball screens",
+          "spacing after penetration"
+        ],
+        "representative_constraints": [
+          "two-dribble max",
+          "score after paint touch",
+          "3-on-3 no dribble",
+          "2-on-2 ball screen"
+        ]
+      }
+    },
+    {
+      "record_type": "basketball_offensive_skill_progression",
+      "id": "advanced_offensive_skill_progression",
+      "name": "Advanced Offensive Skill Progression",
+      "summary": "Advanced progression for contested shots, ball-screen coverage reads, second-side passing, contact and shot-blocker finishing, relocation shooting, and fatigue-pressure execution.",
+      "source_refs": [
+        "Biomechanical Adjustments of the Basketball Jump Shot Performed Over Opponents of Different Height",
+        "Training load and match-play demands in basketball based on competition level: A systematic review",
+        "WABC 3x3 Players Guide"
+      ],
+      "payload": {
+        "priorities": [
+          "coverage-specific pick-and-roll reads",
+          "relocation and movement shooting",
+          "off-dribble braking into shot",
+          "finishing against help and shot blockers",
+          "skip and spray passing",
+          "late-clock decision-making",
+          "load-managed game-speed repetition"
+        ],
+        "advanced_constraints": [
+          "live tag defender",
+          "short-clock possessions",
+          "score and foul context",
+          "fatigue free throws",
+          "second-side advantage after closeout"
+        ]
+      }
+    }
+  ]
+}

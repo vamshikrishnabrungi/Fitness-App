@@ -1,0 +1,339 @@
+{
+  "research_goal": "Create backend-ready wrestling top, bottom, riding, turning, par terre, mat return, escape, reversal, and defensive-position knowledge for SFTC.",
+  "source_refs": [
+    {
+      "title": "USA Wrestling Core Curriculum",
+      "organization_or_author": "USA Wrestling",
+      "url": "https://www.usawmembership.com/usa_wrestling_core_curriculum",
+      "source_type": "official_coaching_education",
+      "notes": "Used for foundational top, bottom, control, and defensive wrestling progressions."
+    },
+    {
+      "title": "USA Wrestling Athlete Development Model",
+      "organization_or_author": "USA Wrestling",
+      "url": "https://content.themat.com/CoachesCorner/LTADPoster.pdf",
+      "source_type": "official_athlete_development",
+      "notes": "Used for staged progression and age/development awareness."
+    },
+    {
+      "title": "United World Wrestling Regulations for Olympic Wrestling",
+      "organization_or_author": "United World Wrestling",
+      "url": "https://uww.org/governance/regulations-olympic-wrestling",
+      "source_type": "official_rules",
+      "notes": "Used for freestyle and Greco par terre, exposure, and style context."
+    },
+    {
+      "title": "NCAA Wrestling Rules",
+      "organization_or_author": "NCAA",
+      "url": "https://www.ncaapublications.com/productdownloads/WR26.pdf",
+      "source_type": "official_rules",
+      "notes": "Used for folkstyle top, bottom, riding, escape, reversal, and near-fall context."
+    }
+  ],
+  "domains_covered": [
+    "wrestling_top_control_turns",
+    "wrestling_bottom_escapes_reversals",
+    "wrestling_par_terre",
+    "wrestling_mat_returns",
+    "wrestling_turn_defense"
+  ],
+  "technical_principles": [
+    {
+      "id": "wrestling_top_control_is_hips_wrists_pressure",
+      "summary": "Top control starts with controlling hips, wrists, pressure, angles, and mat returns. Turns or near-fall/exposure attempts should come from broken base and controlled pressure, not random force."
+    },
+    {
+      "id": "wrestling_bottom_escape_starts_with_base_and_hand_control",
+      "summary": "Bottom wrestling starts with building base, protecting from turns, winning hand control, creating hip separation, and choosing stand-up, sit-out, switch, or reversal paths."
+    },
+    {
+      "id": "wrestling_par_terre_is_time_sensitive",
+      "summary": "Freestyle and Greco par terre require quick conversion to turns or strong defense because scoring windows and restart pressures are different from folkstyle riding."
+    },
+    {
+      "id": "wrestling_mat_returns_are_control_not_chaos",
+      "summary": "Mat returns should control lift, direction, hip position, opponent safety, and follow-up control. Beginners need low-amplitude return mechanics before live mat-return work."
+    }
+  ],
+  "level_guidance": {
+    "beginner": {
+      "priorities": [
+        "basic top pressure",
+        "tight waist and wrist control",
+        "safe breakdowns",
+        "base building",
+        "hand control",
+        "stand-up escape",
+        "belly-down turn defense"
+      ],
+      "avoid_until_ready": [
+        "legs-in riding systems",
+        "hard mat returns",
+        "complex rolls",
+        "high-amplitude par terre lifts"
+      ]
+    },
+    "intermediate": {
+      "priorities": [
+        "breakdown-to-turn chains",
+        "spiral ride and wrist series",
+        "mat return timing",
+        "switch and sit-out chains",
+        "turn defense",
+        "par terre gut-wrench or lace awareness when style-appropriate"
+      ],
+      "avoid_until_ready": [
+        "advanced leg rides with knee/hip/ankle irritation",
+        "live mat returns without safe landing skill",
+        "fatigue-based top/bottom rounds when technique collapses"
+      ]
+    },
+    "advanced": {
+      "priorities": [
+        "style-specific top systems",
+        "ride-time/control strategy for folkstyle",
+        "quick par terre conversion for freestyle and Greco",
+        "opponent-specific bottom counters",
+        "edge and score-state mat decisions"
+      ],
+      "avoid_until_ready": [
+        "late-week novelty",
+        "high-volume hard mat wrestling with neck, rib, shoulder, or back symptoms",
+        "unsafe lift/return volume near competition"
+      ]
+    }
+  },
+  "drills_or_practice_design": [
+    "tight waist wrist-control breakdown",
+    "spiral ride pressure drill",
+    "wrist ride to tilt setup",
+    "mat return footwork drill",
+    "stand-up hand-control sequence",
+    "sit-out to hip-heist sequence",
+    "switch entry from referee position",
+    "belly-down turn-defense hold",
+    "par terre gut-wrench technical reps",
+    "30-second top ride or escape rounds"
+  ],
+  "common_errors": [
+    "riding with arms only and losing hip pressure",
+    "chasing turns before breaking the base",
+    "bottom athlete standing without hand control",
+    "rolling blindly and exposing the back",
+    "mat returning without controlling direction or landing",
+    "using freestyle par terre logic in folkstyle riding without adapting goals",
+    "using folkstyle riding logic in freestyle when quick exposure matters"
+  ],
+  "safety_constraints": [
+    "Regress hard top/bottom rounds with neck, shoulder, rib, low-back, knee, or hip symptoms.",
+    "Do not prescribe high-amplitude mat returns for beginners.",
+    "Do not use complex rolls before basic base, hand control, and safe landing are reliable.",
+    "Greco/freestyle lift work requires technical coaching and safe mats."
+  ],
+  "backend_records": {
+    "sport_training_rules": [
+      {
+        "id": "wrestling_rule_top_control_before_turns",
+        "sport": "wrestling",
+        "domain": "wrestling_top_control_turns",
+        "category": "technical_model",
+        "rule": "Teach top control, hip pressure, wrist control, base breakdown, and safe pressure before turn chains.",
+        "recommended_action": [
+          "Use breakdown-to-control drills before near-fall or exposure attempts.",
+          "Choose folkstyle ride work or freestyle/Greco par terre work based on user style."
+        ],
+        "blocked_action": [
+          "Do not chase turns before control is established.",
+          "Do not prescribe high-amplitude returns for beginners."
+        ],
+        "retrieval_tags": [
+          "wrestling",
+          "top_control",
+          "turns",
+          "folkstyle",
+          "freestyle",
+          "greco"
+        ]
+      },
+      {
+        "id": "wrestling_rule_bottom_escape_base_hand_control",
+        "sport": "wrestling",
+        "domain": "wrestling_bottom_escapes_reversals",
+        "category": "technical_model",
+        "rule": "Bottom escape starts with base, hand control, hip separation, and turn defense before complex rolls or reversals.",
+        "recommended_action": [
+          "Teach base, hand control, stand-up, and hip-heist first.",
+          "Progress to switches, sit-outs, and ride-specific counters."
+        ],
+        "blocked_action": [
+          "Avoid blind rolls for beginners or users with neck/back symptoms."
+        ],
+        "retrieval_tags": [
+          "wrestling",
+          "bottom",
+          "escapes",
+          "reversals",
+          "folkstyle"
+        ]
+      }
+    ],
+    "planning_rules": [
+      {
+        "id": "wrestling_plan_top_bottom_style_specificity",
+        "sport": "wrestling",
+        "category": "style_specificity",
+        "applies_to": [
+          "wrestling",
+          "folkstyle",
+          "freestyle",
+          "greco"
+        ],
+        "priority": 86,
+        "rule": "Top/bottom training emphasis must match the user's wrestling style: folkstyle needs more riding, escapes, reversals, and mat returns; freestyle/Greco need more par terre exposure and defense.",
+        "recommended_action": [
+          "Ask or infer style before choosing top/bottom emphasis.",
+          "Use general mat control when style is unknown."
+        ],
+        "blocked_action": [
+          "Do not prescribe leg attacks in Greco-specific profiles."
+        ],
+        "retrieval_tags": [
+          "wrestling",
+          "style_specificity",
+          "top_bottom",
+          "par_terre"
+        ]
+      }
+    ],
+    "teaching_progressions": [
+      {
+        "id": "wrestling_teach_top_control_beginner",
+        "sport": "wrestling",
+        "domain": "wrestling_top_control_turns",
+        "level": "beginner",
+        "learning_goal": "Build safe top pressure, hip control, wrist control, and basic breakdown skill.",
+        "teaching_priorities": [
+          "tight waist",
+          "wrist control",
+          "hip pressure",
+          "safe breakdown",
+          "hold without overreaching"
+        ],
+        "practice_design": [
+          "tight waist wrist-control drill",
+          "breakdown to chest pressure",
+          "20-second hold and reset"
+        ],
+        "avoid_until_ready": [
+          "legs-in rides",
+          "high-amplitude mat returns",
+          "complex tilts"
+        ],
+        "progression_signals": [
+          "maintains pressure without grabbing dangerously",
+          "breaks base safely",
+          "does not lose control chasing turn"
+        ],
+        "retrieval_tags": [
+          "wrestling",
+          "beginner",
+          "top_control"
+        ]
+      },
+      {
+        "id": "wrestling_teach_bottom_escape_beginner",
+        "sport": "wrestling",
+        "domain": "wrestling_bottom_escapes_reversals",
+        "level": "beginner",
+        "learning_goal": "Build base, hand control, stand-up, hip separation, and basic turn defense.",
+        "teaching_priorities": [
+          "base",
+          "hand control",
+          "stand-up",
+          "hip heist",
+          "belly-down turn defense"
+        ],
+        "practice_design": [
+          "base-building reps",
+          "hand-control stand-up",
+          "hip-heist drill",
+          "turn defense hold"
+        ],
+        "avoid_until_ready": [
+          "blind granby rolls",
+          "complex switches",
+          "hard mat-return defense"
+        ],
+        "progression_signals": [
+          "builds base without neck/back pain",
+          "wins hand control before standing",
+          "returns safely after mat pressure"
+        ],
+        "retrieval_tags": [
+          "wrestling",
+          "beginner",
+          "bottom",
+          "escape"
+        ]
+      }
+    ],
+    "skill_assessments": [
+      {
+        "id": "wrestling_assess_top_bottom_control",
+        "sport": "wrestling",
+        "domain": "wrestling_top_control_turns",
+        "summary": "Assess top and bottom skill through control, base, pressure, escape sequence, style-specific scoring transfer, and symptom response.",
+        "metrics": [
+          "top pressure",
+          "wrist control",
+          "base building",
+          "hand control",
+          "stand-up quality",
+          "turn defense",
+          "style-specific transfer",
+          "pain response"
+        ],
+        "hold_if": [
+          "neck, shoulder, rib, low-back, hip, or knee symptoms worsen",
+          "athlete uses unsafe rolls",
+          "mat returns are uncontrolled"
+        ],
+        "retrieval_tags": [
+          "wrestling",
+          "assessment",
+          "top_bottom"
+        ]
+      }
+    ],
+    "level_transition_rules": [
+      {
+        "id": "wrestling_top_bottom_beginner_to_intermediate",
+        "sport": "wrestling",
+        "from_level": "beginner",
+        "to_level": "intermediate",
+        "minimum_evidence": [
+          "can control top position safely for short rounds",
+          "can build base and stand up with hand control",
+          "can defend simple turns without panic",
+          "no worsening neck, shoulder, back, hip, or knee symptoms"
+        ],
+        "promote_when": [
+          "top pressure and bottom escape are stable under light resistance",
+          "understands style-specific scoring goal",
+          "uses safe mat return and landing behavior"
+        ],
+        "hold_when": [
+          "blind rolling",
+          "unsafe mat return behavior",
+          "pain or symptoms worsen"
+        ],
+        "backend_action": "Unlock controlled top/bottom short-goes and simple ride/escape chains.",
+        "retrieval_tags": [
+          "wrestling",
+          "level_review",
+          "top_bottom"
+        ]
+      }
+    ]
+  }
+}

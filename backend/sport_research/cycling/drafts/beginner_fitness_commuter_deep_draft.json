@@ -1,0 +1,473 @@
+{
+  "metadata": {
+    "sport": "cycling",
+    "domain": "beginner_fitness_commuter_cycling",
+    "version": "2026-06-24",
+    "research_goal": "Create backend-ready cycling records for learn-to-ride, general fitness, commuting, indoor cycling, older adults, habit formation, beginner safety, and conservative progression.",
+    "write_scope": "single draft file for beginner, fitness, commuter, indoor, and accessible cycling contexts",
+    "synthesis_note": "Records prioritize progression, safety, accessibility, and backend plan adjustments rather than race-performance programming."
+  },
+  "source_refs": [
+    {
+      "id": "SRC_GOV_UK_NATIONAL_STANDARD",
+      "title": "National standard for cycle training",
+      "url": "https://www.gov.uk/government/publications/national-standard-for-cycle-training",
+      "source_type": "government cycle training standard",
+      "evidence_use": "Progression from basic control to road environments and responsible cycling behavior."
+    },
+    {
+      "id": "SRC_BIKEABILITY_CYCLE_TRAINING",
+      "title": "Bikeability cycle training",
+      "url": "https://www.bikeability.org.uk/cycle-training/",
+      "source_type": "official cycle training provider",
+      "evidence_use": "Beginner-friendly cycling levels, skill confidence, and safe route progression."
+    },
+    {
+      "id": "SRC_NHTSA_BICYCLE_SAFETY",
+      "title": "Bicycle safety",
+      "url": "https://www.nhtsa.gov/road-safety/bicycle-safety",
+      "source_type": "government road safety guidance",
+      "evidence_use": "Helmet, visibility, traffic awareness, predictability, and bike-safety checks."
+    },
+    {
+      "id": "SRC_BIKELEAGUE_RIDE_SMART",
+      "title": "Ride Smart",
+      "url": "https://bikeleague.org/ridesmart/",
+      "source_type": "cycling education organization",
+      "evidence_use": "Adult cycling education, commuting skills, traffic positioning, and confidence development."
+    },
+    {
+      "id": "SRC_CYCLING_UK_COMMUTING",
+      "title": "Cycle commuting",
+      "url": "https://www.cyclinguk.org/cycle-commuting",
+      "source_type": "cycling advocacy and education resource",
+      "evidence_use": "Commuting preparation, route choice, equipment, and practical habit support."
+    },
+    {
+      "id": "SRC_CDC_ADULT_ACTIVITY",
+      "title": "Adult physical activity guidelines",
+      "url": "https://www.cdc.gov/physical-activity-basics/guidelines/adults.html",
+      "source_type": "public health guideline",
+      "evidence_use": "Minimum aerobic activity and strength-training targets for general health."
+    },
+    {
+      "id": "SRC_WHO_PHYSICAL_ACTIVITY",
+      "title": "Physical activity fact sheet",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/physical-activity",
+      "source_type": "public health guideline",
+      "evidence_use": "Population-level activity dose, sedentary behavior, and gradual activity promotion."
+    },
+    {
+      "id": "SRC_BRITISH_CYCLING_KNOWLEDGE",
+      "title": "British Cycling knowledge",
+      "url": "https://www.britishcycling.org.uk/knowledge",
+      "source_type": "official federation coaching and rider knowledge",
+      "evidence_use": "Rider development, training basics, skills, and practical cycling education."
+    },
+    {
+      "id": "SRC_USA_CYCLING_RESOURCES",
+      "title": "USA Cycling resources",
+      "url": "https://usacycling.org/resources",
+      "source_type": "official federation resource hub",
+      "evidence_use": "Rider development, rules, coaching, racing pathways, and safety context."
+    },
+    {
+      "id": "SRC_ACSM_ACTIVITY_GUIDELINES",
+      "title": "Physical activity guidelines resources",
+      "url": "https://www.acsm.org/education-resources/trending-topics-resources/physical-activity-guidelines",
+      "source_type": "sports medicine and exercise science organization",
+      "evidence_use": "General exercise progression, strength support, and activity-dose framing."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "KC_BEGINNER_CYCLING_IS_SKILL_PLUS_AEROBIC",
+      "concept": "Beginner cycling is a safety, handling, confidence, and aerobic-habit problem, not only an endurance problem.",
+      "backend_use": "Beginner plans should include handling drills, short easy rides, route choice, bike checks, and recovery before hard intervals.",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_BIKEABILITY_CYCLE_TRAINING", "SRC_NHTSA_BICYCLE_SAFETY"]
+    },
+    {
+      "id": "KC_CONFIDENCE_BEFORE_SPEED",
+      "concept": "Confidence in starting, stopping, turning, braking, looking, and shifting should come before speed, traffic complexity, or group riding.",
+      "backend_use": "Block high-speed descents, fast group rides, and maximal sprints until handling readiness is marked true.",
+      "source_ids": ["SRC_BIKEABILITY_CYCLE_TRAINING", "SRC_BIKELEAGUE_RIDE_SMART"]
+    },
+    {
+      "id": "KC_COMMUTING_IS_REPEAT_EXPOSURE",
+      "concept": "Commuting creates frequent low-to-moderate exposure that can build fitness but also accumulates fatigue and contact-point irritation.",
+      "backend_use": "Count commute rides in weekly load and protect recovery when commute volume rises.",
+      "source_ids": ["SRC_CYCLING_UK_COMMUTING", "SRC_CDC_ADULT_ACTIVITY"]
+    },
+    {
+      "id": "KC_INDOOR_CYCLING_REDUCES_HANDLING_LOAD",
+      "concept": "Indoor cycling removes traffic and handling demands but increases monotony, heat stress, fixed-position time, and saddle/contact-point load.",
+      "backend_use": "Indoor plans need ventilation, hydration, position changes, and progressive duration even when fitness feels ready.",
+      "source_ids": ["SRC_BRITISH_CYCLING_KNOWLEDGE", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "id": "KC_LOW_IMPACT_NOT_NO_LOAD",
+      "concept": "Cycling is low impact but high repetition, so beginners can still develop knee, saddle, hand, neck, or low-back symptoms.",
+      "backend_use": "Do not progress duration or intensity when contact-point pain or joint pain worsens.",
+      "source_ids": ["SRC_ACSM_ACTIVITY_GUIDELINES", "SRC_NHTSA_BICYCLE_SAFETY"]
+    },
+    {
+      "id": "KC_GENERAL_HEALTH_TARGETS",
+      "concept": "Cycling can help users reach weekly aerobic activity targets, but strength work should still support major muscle groups and posture.",
+      "backend_use": "Fitness cycling plans should include two weekly strength or mobility-support sessions when possible.",
+      "source_ids": ["SRC_CDC_ADULT_ACTIVITY", "SRC_WHO_PHYSICAL_ACTIVITY", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "id": "KC_ROUTE_CHOICE_IS_PROGRAMMING",
+      "concept": "Route difficulty is a training variable: traffic, turns, hills, surface, weather, lighting, and stop-start density change session demand.",
+      "backend_use": "Store route context and reduce planned intensity when the route already contains hills, traffic stress, or technical handling.",
+      "source_ids": ["SRC_BIKELEAGUE_RIDE_SMART", "SRC_CYCLING_UK_COMMUTING"]
+    },
+    {
+      "id": "KC_BEGINNER_FUELING_SIMPLE",
+      "concept": "Most short beginner rides need simple hydration and normal meals, but longer rides need planned fluids and carbohydrate availability.",
+      "backend_use": "Trigger fueling guidance when ride duration exceeds 60-75 minutes or when heat, hills, or low energy are reported.",
+      "source_ids": ["SRC_BRITISH_CYCLING_KNOWLEDGE", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "TM_BEGINNER_CONTROL_LADDER",
+      "name": "Beginner cycling control ladder",
+      "stages": ["bike check", "mount and dismount", "start and stop", "straight-line riding", "controlled braking", "wide turns", "look and signal", "simple gear shifting", "quiet-route ride"],
+      "progression_signal": "Advance only when the rider can start, stop, brake, turn, and scan without panic or wobbling.",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "id": "TM_SAFE_COMMUTE_LADDER",
+      "name": "Safe commute progression ladder",
+      "stages": ["static route planning", "walk or preview route", "traffic-free ride", "quiet-road ride", "same route at low-traffic time", "normal commute", "weather/low-light preparation"],
+      "progression_signal": "Advance when route navigation and traffic behavior are predictable without elevated stress.",
+      "source_ids": ["SRC_CYCLING_UK_COMMUTING", "SRC_BIKELEAGUE_RIDE_SMART"]
+    },
+    {
+      "id": "TM_FITNESS_RIDE_DURATION_LADDER",
+      "name": "Beginner fitness duration ladder",
+      "stages": ["10-20 min easy", "20-30 min easy", "30-45 min easy", "45-60 min easy", "60-90 min easy with fueling practice"],
+      "progression_signal": "Increase duration only when next-day knee, saddle, hand, neck, and low-back response is stable.",
+      "source_ids": ["SRC_CDC_ADULT_ACTIVITY", "SRC_WHO_PHYSICAL_ACTIVITY"]
+    },
+    {
+      "id": "TM_INDOOR_BEGINNER_SESSION",
+      "name": "Indoor beginner cycling session model",
+      "structure": ["5-8 min easy warmup", "10-30 min conversational riding", "2-4 short cadence changes if ready", "5 min cooldown", "post-ride contact-point check"],
+      "avoid": ["maximal sprint intervals", "long fixed-position rides", "high heat without fan or fluids"],
+      "source_ids": ["SRC_BRITISH_CYCLING_KNOWLEDGE", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "id": "TM_COMMUTE_LOAD_ACCOUNTING",
+      "name": "Commute load accounting model",
+      "inputs": ["commute distance", "frequency", "hills", "traffic stress", "backpack/load", "weather", "sleep", "workday fatigue"],
+      "backend_use": "Treat commuting as training volume, especially when the user rides both directions or carries load.",
+      "source_ids": ["SRC_CYCLING_UK_COMMUTING", "SRC_CDC_ADULT_ACTIVITY"]
+    },
+    {
+      "id": "TM_OLDER_ADULT_ACCESSIBILITY",
+      "name": "Older adult accessible cycling model",
+      "options": ["stationary bike", "recumbent bike", "traffic-free paths", "shorter frequent rides", "lower cadence resistance", "strength support"],
+      "backend_use": "Prefer stable, low-risk environments and gradual time progression when balance, joint pain, or confidence is limited.",
+      "source_ids": ["SRC_WHO_PHYSICAL_ACTIVITY", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "id": "TM_BEGINNER_RPE_MODEL",
+      "name": "Beginner RPE model",
+      "targets": ["easy conversational", "moderate but controlled", "short harder efforts only after base and safety"],
+      "backend_use": "Use RPE and talk-test language before power zones for most new riders.",
+      "source_ids": ["SRC_BRITISH_CYCLING_KNOWLEDGE", "SRC_CDC_ADULT_ACTIVITY"]
+    },
+    {
+      "id": "TM_BASIC_BIKE_CHECK",
+      "name": "Basic pre-ride bike check",
+      "elements": ["air in tires", "brakes working", "chain/gears functioning", "quick releases or axles secure", "helmet fit", "lights/visibility when needed"],
+      "backend_use": "Include as a recurring beginner safety task before outdoor rides.",
+      "source_ids": ["SRC_NHTSA_BICYCLE_SAFETY", "SRC_BIKELEAGUE_RIDE_SMART"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "TR_BEGINNER_NO_TRAFFIC_COMPLEXITY_FIRST",
+      "rule": "New riders should first learn control skills away from traffic before progressing to quiet roads and then busier environments.",
+      "backend_trigger": "experience_level = beginner OR handling_confidence = low",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "id": "TR_ROUTE_DIFFICULTY_REPLACES_INTENSITY",
+      "rule": "If a beginner route has traffic, hills, poor surface, night riding, or bad weather, do not also prescribe hard intensity.",
+      "backend_trigger": "route_complexity = moderate_or_high",
+      "source_ids": ["SRC_CYCLING_UK_COMMUTING", "SRC_NHTSA_BICYCLE_SAFETY"]
+    },
+    {
+      "id": "TR_COMMUTE_COUNTS_AS_TRAINING",
+      "rule": "Commuting rides count toward weekly aerobic and fatigue load even when the user does not label them workouts.",
+      "backend_trigger": "commute_rides_per_week > 0",
+      "source_ids": ["SRC_CYCLING_UK_COMMUTING", "SRC_CDC_ADULT_ACTIVITY"]
+    },
+    {
+      "id": "TR_NO_FAST_GROUP_RIDES_UNTIL_READY",
+      "rule": "Fast group rides should wait until the user can ride predictably, brake smoothly, hold line, signal, and manage proximity.",
+      "backend_trigger": "group_ride_ready = false",
+      "source_ids": ["SRC_BIKELEAGUE_RIDE_SMART", "SRC_USA_CYCLING_RESOURCES"]
+    },
+    {
+      "id": "TR_INDOOR_HEAT_MANAGEMENT",
+      "rule": "Indoor rides longer than 30 minutes should include ventilation and hydration prompts because heat buildup increases perceived effort.",
+      "backend_trigger": "ride_location = indoor AND duration_min >= 30",
+      "source_ids": ["SRC_BRITISH_CYCLING_KNOWLEDGE", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "id": "TR_BEGINNER_HILLS_ARE_INTENSITY",
+      "rule": "For beginner fitness riders, hills should be treated as intensity even if the planned session says easy.",
+      "backend_trigger": "experience_level = beginner AND route_hills = true",
+      "source_ids": ["SRC_CYCLING_UK_COMMUTING", "SRC_BRITISH_CYCLING_KNOWLEDGE"]
+    },
+    {
+      "id": "TR_CONTACT_PAIN_BLOCKS_DURATION_PROGRESSION",
+      "rule": "Do not increase ride duration when saddle, hand, neck, knee, or low-back discomfort worsens after recent rides.",
+      "backend_trigger": "pain_trend = worsening",
+      "source_ids": ["SRC_ACSM_ACTIVITY_GUIDELINES", "SRC_NHTSA_BICYCLE_SAFETY"]
+    },
+    {
+      "id": "TR_BEGINNER_WEIGHT_LOSS_NO_PUNISHMENT_RIDES",
+      "rule": "For weight-loss users, use repeatable moderate rides and strength support instead of exhausting punishment rides that disrupt consistency.",
+      "backend_trigger": "goal = weight_loss OR goal = general_fitness",
+      "source_ids": ["SRC_CDC_ADULT_ACTIVITY", "SRC_WHO_PHYSICAL_ACTIVITY"]
+    },
+    {
+      "id": "TR_VISIBILITY_FOR_COMMUTING",
+      "rule": "Low-light, night, rain, or traffic-heavy commutes require visibility, route, and safety prompts before performance goals.",
+      "backend_trigger": "commute_context includes low_light OR rain OR high_traffic",
+      "source_ids": ["SRC_NHTSA_BICYCLE_SAFETY", "SRC_CYCLING_UK_COMMUTING"]
+    },
+    {
+      "id": "TR_EASY_RIDES_KEEP_TALK_TEST",
+      "rule": "Beginner easy rides should remain conversational; if the user cannot talk in short sentences, reduce resistance, gear, hill exposure, or pace.",
+      "backend_trigger": "session_type = beginner_easy_ride",
+      "source_ids": ["SRC_CDC_ADULT_ACTIVITY", "SRC_BRITISH_CYCLING_KNOWLEDGE"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "PD_BEGINNER_AEROBIC_BASE",
+      "quality": "aerobic base",
+      "beginner_expression": "short easy rides repeated consistently",
+      "backend_use": "Increase frequency and duration before hard intensity."
+    },
+    {
+      "id": "PD_SADDLE_TOLERANCE",
+      "quality": "contact-point tolerance",
+      "beginner_expression": "saddle, hand, neck, and back comfort during and after rides",
+      "backend_use": "Gate duration progression."
+    },
+    {
+      "id": "PD_BRAKING_CONTROL",
+      "quality": "braking control",
+      "beginner_expression": "smooth stop without panic or skid",
+      "backend_use": "Gate outdoor route complexity."
+    },
+    {
+      "id": "PD_CADENCE_COMFORT",
+      "quality": "cadence comfort",
+      "beginner_expression": "pedal smoothly without grinding heavy gears",
+      "backend_use": "Reduce knee stress and improve ride economy."
+    },
+    {
+      "id": "PD_TRUNK_POSTURE",
+      "quality": "trunk and upper-back endurance",
+      "beginner_expression": "hold relaxed position without neck/hand overload",
+      "backend_use": "Add mobility and strength support."
+    },
+    {
+      "id": "PD_ROUTE_ATTENTION",
+      "quality": "attention and scanning",
+      "beginner_expression": "look ahead, signal, notice hazards, and maintain line",
+      "backend_use": "Gate commuting and group riding."
+    },
+    {
+      "id": "PD_BASIC_LEG_ENDURANCE",
+      "quality": "lower-body muscular endurance",
+      "beginner_expression": "repeat low-to-moderate pedal force without knee irritation",
+      "backend_use": "Progress duration and mild hills conservatively."
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "RISK_SADDLE_DISCOMFORT",
+      "risk": "saddle discomfort",
+      "common_triggers": ["sudden duration increase", "poor saddle fit", "no position changes", "indoor fixed-position rides"],
+      "backend_adjustment": "Hold duration, suggest fit/contact review, and break long rides into shorter blocks."
+    },
+    {
+      "id": "RISK_HAND_NUMBNESS_BEGINNER",
+      "risk": "hand numbness or wrist pressure",
+      "common_triggers": ["too much weight through hands", "long fixed posture", "poor reach", "rough surface"],
+      "backend_adjustment": "Add posture cues, upper-back support, grip changes, and fit review."
+    },
+    {
+      "id": "RISK_NECK_BACK_BEGINNER",
+      "risk": "neck or low-back discomfort",
+      "common_triggers": ["aggressive position", "long ride duration", "weak trunk endurance", "indoor fixed posture"],
+      "backend_adjustment": "Reduce duration, choose upright setup, add trunk/hip mobility and strength support."
+    },
+    {
+      "id": "RISK_KNEE_GRINDING",
+      "risk": "knee discomfort from heavy gear grinding",
+      "common_triggers": ["low cadence", "hills", "too much resistance", "cleat/saddle setup"],
+      "backend_adjustment": "Use easier gears, reduce hills, keep cadence comfortable, and flag fit review if persistent."
+    },
+    {
+      "id": "RISK_TRAFFIC_STRESS",
+      "risk": "traffic stress and decision fatigue",
+      "common_triggers": ["busy roads", "junctions", "low visibility", "new route"],
+      "backend_adjustment": "Use lower-intensity route practice and avoid performance goals that day."
+    },
+    {
+      "id": "RISK_INDOOR_OVERHEAT",
+      "risk": "indoor overheating",
+      "common_triggers": ["no fan", "long ride", "high intensity", "poor hydration"],
+      "backend_adjustment": "Prompt fan/fluids and lower intensity if RPE drifts above target."
+    },
+    {
+      "id": "RISK_COMMUTE_FATIGUE",
+      "risk": "hidden commute fatigue",
+      "common_triggers": ["daily commute", "hilly route", "work stress", "backpack load"],
+      "backend_adjustment": "Reduce added training intensity and count commute rides in weekly load."
+    },
+    {
+      "id": "RISK_BEGINNER_CRASH",
+      "risk": "beginner fall or crash",
+      "common_triggers": ["poor braking", "sharp turns", "traffic", "wet roads", "fast group ride"],
+      "backend_adjustment": "Require skill progression and safe environment before speed or complexity."
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "TI_START_WITH_FREQUENCY_AND_CONFIDENCE",
+      "implication": "For new riders, two to four short easy rides per week is usually better than one long exhausting ride.",
+      "backend_use": "Prioritize frequency and confidence before long-ride build."
+    },
+    {
+      "id": "TI_USE_TALK_TEST_FIRST",
+      "implication": "RPE and talk test are more useful than FTP for true beginners.",
+      "backend_use": "Do not require power zones during onboarding."
+    },
+    {
+      "id": "TI_ADD_STRENGTH_SUPPORT",
+      "implication": "General fitness cyclists still need strength and mobility support for posture, hips, trunk, and major muscle groups.",
+      "backend_use": "Pair cycling with simple S&C sessions when schedule allows."
+    },
+    {
+      "id": "TI_COMMUTE_ADJUSTS_TRAINING_WEEK",
+      "implication": "A user commuting four to ten rides per week may already have significant aerobic load.",
+      "backend_use": "Auto-adjust hard sessions downward when commute load is high."
+    },
+    {
+      "id": "TI_BEGINNER_HILLS_PROGRESS_LATER",
+      "implication": "Hills should be introduced gradually after flat-route control and easy ride tolerance.",
+      "backend_use": "Use hill exposure as a progression, not a default."
+    },
+    {
+      "id": "TI_INDOOR_NEEDS_BREAKS",
+      "implication": "Indoor beginners may tolerate cardiovascular load before contact points are ready.",
+      "backend_use": "Progress indoor duration slowly and include position changes."
+    },
+    {
+      "id": "TI_SAFETY_CAN_BE_SESSION_GOAL",
+      "implication": "For beginners and commuters, a session can legitimately target braking, route practice, or signaling rather than fitness.",
+      "backend_use": "Allow cycling skill sessions in program output."
+    },
+    {
+      "id": "TI_WEIGHT_LOSS_NEEDS_REPEATABILITY",
+      "implication": "Fitness and weight-loss users need repeatable energy expenditure, not aggressive interval density.",
+      "backend_use": "Use easy/moderate rides, gradual duration, and recovery consistency."
+    },
+    {
+      "id": "TI_OLDER_ADULT_LOW_RISK_CONTEXT",
+      "implication": "Older adults or users with balance concerns may need stationary/recumbent bikes or protected paths first.",
+      "backend_use": "Match cycling mode to balance, confidence, and joint history."
+    },
+    {
+      "id": "TI_FUELING_TRIGGER",
+      "implication": "Fueling guidance becomes more important as ride duration passes 60-75 minutes or heat/hills increase.",
+      "backend_use": "Trigger simple pre-ride and on-ride fueling prompts."
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "sport_teaching_progression",
+      "name": "Cycling beginner control ladder",
+      "payload_seed": "Bike check, mount/dismount, start/stop, straight-line ride, braking, wide turns, look/signal, shifting, quiet-route ride.",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "Beginner cycling easy-ride rule",
+      "payload_seed": "Use conversational RPE, short duration, flat safe routes, and next-day symptom checks before progressing.",
+      "source_ids": ["SRC_CDC_ADULT_ACTIVITY", "SRC_BRITISH_CYCLING_KNOWLEDGE"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Commute rides count as training load",
+      "payload_seed": "Add commute duration/frequency/hills/traffic stress to weekly load and reduce extra intervals when commute load is high.",
+      "source_ids": ["SRC_CYCLING_UK_COMMUTING"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "Indoor beginner cycling setup",
+      "payload_seed": "Include fan, fluids, easy warmup, progressive duration, position changes, and no maximal work for low-readiness users.",
+      "source_ids": ["SRC_BRITISH_CYCLING_KNOWLEDGE", "SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "record_type": "sport_injury_load_rule",
+      "name": "Beginner contact-point pain hold",
+      "payload_seed": "Hold ride duration progression when saddle, hand, neck, or low-back discomfort worsens.",
+      "source_ids": ["SRC_ACSM_ACTIVITY_GUIDELINES"]
+    },
+    {
+      "record_type": "sport_skill_assessment",
+      "name": "Beginner road readiness",
+      "payload_seed": "Can start, stop, brake, turn, scan, signal, shift, and hold line calmly in low-complexity settings.",
+      "source_ids": ["SRC_GOV_UK_NATIONAL_STANDARD", "SRC_BIKEABILITY_CYCLE_TRAINING"]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "name": "Cycling for general health baseline",
+      "payload_seed": "Build toward public-health aerobic activity targets while preserving two weekly strength-support opportunities when possible.",
+      "source_ids": ["SRC_CDC_ADULT_ACTIVITY", "SRC_WHO_PHYSICAL_ACTIVITY"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Route complexity modifies intensity",
+      "payload_seed": "High traffic, poor visibility, hills, rain, or unfamiliar routes reduce or replace planned intensity.",
+      "source_ids": ["SRC_NHTSA_BICYCLE_SAFETY", "SRC_CYCLING_UK_COMMUTING"]
+    },
+    {
+      "record_type": "sport_profile",
+      "name": "Fitness cycling profile",
+      "payload_seed": "General aerobic health, weight loss, low-impact conditioning, habit formation, progressive duration, and basic strength support.",
+      "source_ids": ["SRC_CDC_ADULT_ACTIVITY", "SRC_WHO_PHYSICAL_ACTIVITY"]
+    },
+    {
+      "record_type": "sport_profile",
+      "name": "Commuter cycling profile",
+      "payload_seed": "Frequent practical rides, route/safety demands, hidden training load, weather/visibility factors, and equipment practicality.",
+      "source_ids": ["SRC_CYCLING_UK_COMMUTING", "SRC_BIKELEAGUE_RIDE_SMART"]
+    },
+    {
+      "record_type": "macro_plan_template",
+      "name": "Beginner cycling confidence foundation",
+      "payload_seed": "Four-week pattern: control skills, short easy rides, flat-route exposure, route planning, and contact-point monitoring.",
+      "source_ids": ["SRC_BIKEABILITY_CYCLE_TRAINING", "SRC_NHTSA_BICYCLE_SAFETY"]
+    },
+    {
+      "record_type": "planning_rule",
+      "name": "Beginner no fast group ride gate",
+      "payload_seed": "Block fast group riding until line-holding, smooth braking, signaling, proximity comfort, and route awareness are stable.",
+      "source_ids": ["SRC_BIKELEAGUE_RIDE_SMART", "SRC_USA_CYCLING_RESOURCES"]
+    }
+  ]
+}
+

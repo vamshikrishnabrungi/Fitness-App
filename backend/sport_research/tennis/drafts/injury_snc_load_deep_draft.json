@@ -1,0 +1,1758 @@
+{
+  "metadata": {
+    "sport": "tennis",
+    "domain": "injury_snc_load",
+    "version": "0.1.0",
+    "research_goal": "Deep research draft for tennis injury risk, strength and conditioning, load management, readiness, and return-to-tennis rules that can be converted into backend planning records.",
+    "created_by_agent": "injury_snc_load_agent",
+    "scope": [
+      "serve count and high-intent serve count",
+      "shoulder, elbow, wrist, trunk, low-back, hip, knee, ankle, calf, and Achilles load",
+      "forehand and backhand volume",
+      "sprint, deceleration, and change-of-direction exposure",
+      "surface impact",
+      "match and tournament density",
+      "youth growth and older adult contexts",
+      "warm-up and cooldown",
+      "strength and conditioning qualities",
+      "rotational power, medicine ball, and plyometrics",
+      "return-to-play stages",
+      "readiness traffic light rules",
+      "backend record creation needs"
+    ]
+  },
+  "source_refs": [
+    {
+      "id": "src_usta_workload",
+      "title": "USTA Player Development - Workload Monitoring Guide",
+      "url": "https://s3.amazonaws.com/ustaassets/assets/1/usta_import/usta/dps/doc_437_269.pdf",
+      "source_type": "official_guidance",
+      "notes": "Official USTA workload guidance for monitoring tennis training and competition stress."
+    },
+    {
+      "id": "src_usta_strength_conditioning",
+      "title": "USTA Player Development - Strength and Conditioning",
+      "url": "https://www.playerdevelopment.usta.com/Strength_Conditioning/",
+      "source_type": "official_guidance",
+      "notes": "USTA player development strength and conditioning resource hub."
+    },
+    {
+      "id": "src_usta_recovery",
+      "title": "USTA Player Development - Recovery in Training and Competition",
+      "url": "https://s3.amazonaws.com/ustaassets/assets/1/15/RECOVERY%20PROJECT%205-26-14.pdf",
+      "source_type": "official_guidance",
+      "notes": "Official USTA recovery resource for tennis training and competition."
+    },
+    {
+      "id": "src_usta_hpp_injury",
+      "title": "USTA High Performance Profile - Injury Prevention",
+      "url": "https://www.playerdevelopment.usta.com/Improve-Your-Game/Sport-Science/114691_Injury_Prevention/",
+      "source_type": "official_guidance",
+      "notes": "USTA high-performance injury prevention material."
+    },
+    {
+      "id": "src_lta_injury_prevention",
+      "title": "LTA - Tennis Injury Prevention Routine",
+      "url": "https://www.lta.org.uk/4aa8eb/siteassets/play/adult-tennis/health-benefits-of-tennis/tennis-injury-prevention-routine.pdf",
+      "source_type": "official_guidance",
+      "notes": "LTA routine emphasizing strength, mobility, and preparation for common tennis injury areas."
+    },
+    {
+      "id": "src_lta_physical_demands",
+      "title": "LTA - Preparing British Tennis Players for the Physical Demands of Tennis",
+      "url": "https://www.lta.org.uk/4a4d9e/siteassets/roles/coach/documents/player-development/12u-player-development-framework/physcial-development-framework/preparing-british-tennis-players-for-the-physical-demands-of-tennis-booklet.pdf",
+      "source_type": "official_guidance",
+      "notes": "LTA physical development framework covering movement, robustness, and tennis-specific physical preparation."
+    },
+    {
+      "id": "src_itf_abdominal_strain",
+      "title": "ITF Tennis iCoach - Abdominal Muscle Strain",
+      "url": "https://www.itf-academy.com/?view=itfview&academy=103&itemid=1195",
+      "source_type": "official_guidance",
+      "notes": "ITF tennis medicine content on abdominal strain mechanisms and prevention."
+    },
+    {
+      "id": "src_itf_jumper_knee",
+      "title": "ITF Tennis iCoach - Jumper's Knee in Tennis",
+      "url": "https://www.itf-academy.com/?view=itfview&academy=103&itemid=1198",
+      "source_type": "official_guidance",
+      "notes": "ITF tennis medicine content on patellar tendon load and prevention."
+    },
+    {
+      "id": "src_itf_wrist_tendinopathy",
+      "title": "ITF Tennis iCoach - Wrist Tendinopathy in Tennis",
+      "url": "https://www.itf-academy.com/?view=itfview&academy=103&itemid=1201",
+      "source_type": "official_guidance",
+      "notes": "ITF tennis medicine content on wrist tendinopathy and tennis loading factors."
+    },
+    {
+      "id": "src_ioc_load_injury",
+      "title": "International Olympic Committee Consensus Statement on Load in Sport and Risk of Injury",
+      "url": "https://bjsm.bmj.com/content/50/17/1030",
+      "source_type": "consensus_statement",
+      "notes": "IOC consensus paper on external/internal load, acute and chronic load, and injury risk."
+    },
+    {
+      "id": "src_ioc_youth_development",
+      "title": "International Olympic Committee Consensus Statement on Youth Athletic Development",
+      "url": "https://bjsm.bmj.com/content/49/13/843",
+      "source_type": "consensus_statement",
+      "notes": "IOC consensus guidance on age-appropriate development, maturation, and youth athlete risk management."
+    },
+    {
+      "id": "src_return_to_sport_consensus",
+      "title": "2016 Consensus Statement on Return to Sport from the First World Congress in Sports Physical Therapy",
+      "url": "https://bjsm.bmj.com/content/50/14/853",
+      "source_type": "consensus_statement",
+      "notes": "Return-to-sport continuum: return to participation, return to sport, and return to performance."
+    },
+    {
+      "id": "src_pain_monitoring_achilles",
+      "title": "Continued Sports Activity Using a Pain-Monitoring Model During Rehabilitation in Patients with Achilles Tendinopathy",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16757677/",
+      "source_type": "peer_reviewed_study",
+      "notes": "Pain-monitoring model often used to guide progressive sport exposure in tendon rehabilitation."
+    },
+    {
+      "id": "src_tennis_injury_epidemiology",
+      "title": "Epidemiology of Injuries in Tennis Players",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5825333/",
+      "source_type": "peer_reviewed_review",
+      "notes": "Review of tennis injury locations and patterns across upper limb, trunk, and lower limb."
+    },
+    {
+      "id": "src_tennis_match_intensity",
+      "title": "Intensity of Tennis Match Play",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2653872/",
+      "source_type": "peer_reviewed_review",
+      "notes": "Review of tennis match demands, intermittent structure, rally/rest rhythm, and physiological load."
+    },
+    {
+      "id": "src_serve_eight_stage_model",
+      "title": "An 8-Stage Model for Evaluating the Tennis Serve: Implications for Performance Enhancement and Injury Prevention",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13095676/",
+      "source_type": "peer_reviewed_review",
+      "notes": "Serve phase model tying technique, kinetic chain, performance, and injury risk."
+    },
+    {
+      "id": "src_biomechanics_and_tennis",
+      "title": "Biomechanics and Tennis",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2577481/",
+      "source_type": "peer_reviewed_review",
+      "notes": "Tennis biomechanics review covering kinetic chain concepts and stroke load implications."
+    },
+    {
+      "id": "src_surface_plantar_pressure",
+      "title": "Effect of Tennis Court Surface on Plantar Pressure Distribution and Potential Injuries",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2465293/",
+      "source_type": "peer_reviewed_study",
+      "notes": "Study of court surface effects on plantar pressures and injury-relevant loading patterns."
+    },
+    {
+      "id": "src_womens_surface_match_analysis",
+      "title": "Physical and Game Actions Differences in Professional Women's Tennis on Hard, Clay and Grass Courts",
+      "url": "https://www.mdpi.com/1660-4601/19/13/7955",
+      "source_type": "peer_reviewed_study",
+      "notes": "Surface-specific analysis of match actions and physical demands in professional women's tennis."
+    },
+    {
+      "id": "src_junior_demands_review",
+      "title": "The Demands of Training and Match-Play on Elite and Highly Trained Junior Tennis Players: A Systematic Review",
+      "url": "https://e-space.mmu.ac.uk/630650/1/The%20demands%20of%20training%20and%20match-play%20on%20elite%20and%20highly%20trained%20junior%20tennis%20players%20-%20A%20systematic%20review.pdf",
+      "source_type": "peer_reviewed_review",
+      "notes": "Systematic review of junior tennis training and match demands."
+    },
+    {
+      "id": "src_veteran_tennis_health",
+      "title": "Health Benefits for Veteran Tennis Players",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3666466/",
+      "source_type": "peer_reviewed_review",
+      "notes": "Review of tennis participation, health, and considerations for veteran players."
+    },
+    {
+      "id": "src_plyometric_tennis_review",
+      "title": "Effects of Plyometric Training on Physical Fitness in Team Sport Athletes: A Systematic Review and Meta-Analysis Including Tennis Evidence",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8839185/",
+      "source_type": "peer_reviewed_review",
+      "notes": "Review evidence relevant to plyometric development of speed, power, and change-of-direction qualities."
+    },
+    {
+      "id": "src_strength_injury_prevention",
+      "title": "The Effectiveness of Exercise Interventions to Prevent Sports Injuries: A Systematic Review and Meta-Analysis",
+      "url": "https://bjsm.bmj.com/content/48/11/871",
+      "source_type": "peer_reviewed_review",
+      "notes": "Meta-analysis supporting strength training as an injury prevention intervention across sports."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "concept_load_channels",
+      "name": "Tennis load must be tracked by anatomical and technical channels",
+      "summary": "A useful tennis backend should separate serve load, high-intent serve load, forehand volume, backhand volume, overhead volume, sprint/deceleration/COD density, surface exposure, gym load, match density, and next-day joint response.",
+      "backend_use": "Create separate load counters instead of one generic session duration score.",
+      "source_refs": [
+        "src_usta_workload",
+        "src_ioc_load_injury",
+        "src_tennis_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "concept_external_internal_load_pairing",
+      "name": "External load only matters when paired with internal response",
+      "summary": "Serve counts, stroke counts, sprints, minutes, and matches should be paired with pain, soreness, energy, sleep, range of motion, and next-day readiness because the same external load can affect players differently.",
+      "backend_use": "Store external_load_fields and internal_response_fields on session summaries.",
+      "source_refs": [
+        "src_ioc_load_injury",
+        "src_usta_workload",
+        "src_usta_recovery"
+      ]
+    },
+    {
+      "id": "concept_serve_is_unique_load",
+      "name": "Serve is a distinct high-load stroke family",
+      "summary": "The serve combines leg drive, trunk extension and rotation, shoulder external/internal rotation, elbow extension, forearm pronation, wrist motion, landing, and recovery. It should not be counted as equivalent to groundstroke volume.",
+      "backend_use": "Create serve_count and high_intent_serve_count fields independent from total hitting volume.",
+      "source_refs": [
+        "src_serve_eight_stage_model",
+        "src_biomechanics_and_tennis",
+        "src_tennis_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "concept_high_intent_serves",
+      "name": "High-intent serves are a separate exposure class",
+      "summary": "First serves, maximal-velocity serves, heavy kick serves, and pressure-point serves create greater trunk, shoulder, elbow, wrist, abdominal, and landing demand than technical shadow serves or submaximal placement serves.",
+      "backend_use": "Use high_intent_serve_count as the primary acute upper-body and trunk spike flag.",
+      "source_refs": [
+        "src_serve_eight_stage_model",
+        "src_itf_abdominal_strain",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "concept_kinetic_chain_buffer",
+      "name": "Efficient kinetic-chain transfer reduces local overload",
+      "summary": "Tennis strokes depend on coordinated force transfer from legs and hips through trunk, scapula, arm, forearm, wrist, and racket. Breakdowns in legs, trunk, scapula, or timing can push excess load to the shoulder, elbow, wrist, or lumbar spine.",
+      "backend_use": "Attach technique-risk flags to load rules, especially for serve, forehand, and one-handed backhand.",
+      "source_refs": [
+        "src_biomechanics_and_tennis",
+        "src_serve_eight_stage_model",
+        "src_usta_hpp_injury"
+      ]
+    },
+    {
+      "id": "concept_repeated_deceleration_sport",
+      "name": "Tennis is a repeated braking and reacceleration sport",
+      "summary": "Court movement is dominated by short accelerations, lateral recovery, braking, split-step timing, change of direction, and repeated restart demands rather than continuous running.",
+      "backend_use": "Conditioning records should prescribe tennis-shaped repeat efforts and deceleration capacity, not only generic steady-state or random HIIT.",
+      "source_refs": [
+        "src_tennis_match_intensity",
+        "src_lta_physical_demands",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "concept_surface_modifies_load",
+      "name": "Surface changes tactical and tissue load",
+      "summary": "Clay, grass, and hard courts change bounce, rally length, sliding or braking style, plantar pressure, lower-limb impact, and movement rhythm. Surface should modify conditioning, warm-up, footwear, and recovery planning.",
+      "backend_use": "Add surface as a required context for match, session, and tournament load records.",
+      "source_refs": [
+        "src_surface_plantar_pressure",
+        "src_womens_surface_match_analysis",
+        "src_tennis_match_intensity"
+      ]
+    },
+    {
+      "id": "concept_tournament_density",
+      "name": "Tournament density is a recovery and injury-risk context",
+      "summary": "Multiple matches across consecutive days compress recovery time and can stack serve, groundstroke, change-of-direction, and psychological load even if each match looks tolerable in isolation.",
+      "backend_use": "Create competition_density flags from matches_in_7_days, matches_in_48_hours, and projected next match.",
+      "source_refs": [
+        "src_usta_workload",
+        "src_usta_recovery",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "concept_youth_growth",
+      "name": "Youth growth and maturation alter load tolerance",
+      "summary": "Junior players need staged development, growth-spurt awareness, movement quality, recovery, and careful volume progression because maturation changes coordination, tendon-bone stress, and fatigue response.",
+      "backend_use": "Add growth_spurt_status and maturation_notes to youth planning gates where available.",
+      "source_refs": [
+        "src_ioc_youth_development",
+        "src_junior_demands_review",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "concept_older_adult_context",
+      "name": "Older adult tennis needs capacity and recovery buffers",
+      "summary": "Veteran tennis can support health and fitness, but planning should respect lower recovery reserve, prior joint history, tendon stiffness, balance, warm-up time, and progressive strength/power exposure.",
+      "backend_use": "Add older_adult modifiers for warm-up duration, load progression, recovery spacing, balance, and tendon capacity.",
+      "source_refs": [
+        "src_veteran_tennis_health",
+        "src_lta_injury_prevention",
+        "src_strength_injury_prevention"
+      ]
+    },
+    {
+      "id": "concept_readiness_traffic_light",
+      "name": "Readiness should be traffic-lighted from pain, function, and trend",
+      "summary": "Green, yellow, and red readiness states should combine pain during play, next-day response, swelling, range of motion, confidence, sleep/fatigue, and recent load spikes.",
+      "backend_use": "Return one readiness_status and specific load modifications from readiness rules.",
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_pain_monitoring_achilles",
+        "src_ioc_load_injury",
+        "src_usta_recovery"
+      ]
+    },
+    {
+      "id": "concept_return_to_tennis_continuum",
+      "name": "Return to tennis is a continuum, not a binary clearance",
+      "summary": "Return should progress from participation, to controlled tennis practice, to competitive tennis, to full performance with staged serve, stroke, movement, and match-density exposure.",
+      "backend_use": "Create staged return_to_tennis records with pass criteria and progression caps.",
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_usta_workload",
+        "src_serve_eight_stage_model"
+      ]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "model_serve_load_sequence",
+      "name": "Serve load sequence",
+      "model": [
+        "setup and rhythm",
+        "toss",
+        "loading and knee bend",
+        "trunk coil and extension",
+        "racket drop and shoulder external rotation",
+        "leg drive and trunk rotation",
+        "contact with shoulder internal rotation, elbow extension, forearm pronation, and wrist contribution",
+        "deceleration, landing, and recovery"
+      ],
+      "risk_logic": "High volumes or abrupt spikes in high-intent serves stress the shoulder, elbow, wrist, abdominal wall, low back, landing leg, and calf/Achilles chain.",
+      "backend_fields": [
+        "serve_count",
+        "high_intent_serve_count",
+        "kick_serve_count",
+        "serve_velocity_intent",
+        "serve_pain_body_region",
+        "next_day_serve_response"
+      ],
+      "source_refs": [
+        "src_serve_eight_stage_model",
+        "src_biomechanics_and_tennis",
+        "src_itf_abdominal_strain"
+      ]
+    },
+    {
+      "id": "model_shoulder_scapula_chain",
+      "name": "Shoulder and scapular durability model",
+      "model": "Track shoulder load through serve and overhead volume, racket acceleration intent, scapular control, rotator cuff endurance, trunk contribution, and next-day ache or ROM change.",
+      "risk_logic": "When trunk or scapular contribution is insufficient, the shoulder may absorb more repetitive acceleration and deceleration demand.",
+      "backend_fields": [
+        "serve_count",
+        "overhead_count",
+        "shoulder_pain_score",
+        "shoulder_rom_flag",
+        "scap_control_flag"
+      ],
+      "source_refs": [
+        "src_usta_hpp_injury",
+        "src_tennis_injury_epidemiology",
+        "src_biomechanics_and_tennis"
+      ]
+    },
+    {
+      "id": "model_elbow_forearm_chain",
+      "name": "Elbow and forearm load model",
+      "model": "Elbow load rises with high-intent serving, late contact, heavy topspin, grip stress, one-handed backhand stress, forearm fatigue, and rapid changes in racket or string setup.",
+      "risk_logic": "Elbow symptoms should trigger reductions in high-intent serve and high-volume heavy-spin hitting while forearm, shoulder, trunk, and technique factors are addressed.",
+      "backend_fields": [
+        "elbow_pain_score",
+        "forehand_count",
+        "backhand_count",
+        "one_handed_backhand_flag",
+        "topspin_intent",
+        "racket_setup_change"
+      ],
+      "source_refs": [
+        "src_tennis_injury_epidemiology",
+        "src_biomechanics_and_tennis",
+        "src_usta_hpp_injury"
+      ]
+    },
+    {
+      "id": "model_wrist_load",
+      "name": "Wrist load model",
+      "model": "Wrist exposure should account for forehand/backhand volume, extreme grips, heavy spin, late or jammed contact, return impact, volley block volume, and ball-striking intensity.",
+      "risk_logic": "Wrist tendinopathy risk rises when repetitive stroke volume and impact increase faster than forearm and wrist capacity.",
+      "backend_fields": [
+        "wrist_pain_score",
+        "forehand_count",
+        "backhand_count",
+        "return_count",
+        "late_contact_flag",
+        "grip_extreme_flag"
+      ],
+      "source_refs": [
+        "src_itf_wrist_tendinopathy",
+        "src_tennis_injury_epidemiology",
+        "src_biomechanics_and_tennis"
+      ]
+    },
+    {
+      "id": "model_trunk_low_back_rotation",
+      "name": "Trunk and low-back rotation model",
+      "model": "Track trunk load through serve count, kick serve count, forehand/backhand rotation volume, open-stance repetition, defensive stretch hits, medicine-ball volume, and fatigue-related loss of hip contribution.",
+      "risk_logic": "Low-back and abdominal issues are more likely when rotation, extension, and lateral flexion volume spike or when hips and trunk cannot share force efficiently.",
+      "backend_fields": [
+        "low_back_pain_score",
+        "abdominal_pain_score",
+        "rotational_stroke_count",
+        "kick_serve_count",
+        "med_ball_rotational_throw_count",
+        "hip_rotation_quality"
+      ],
+      "source_refs": [
+        "src_itf_abdominal_strain",
+        "src_serve_eight_stage_model",
+        "src_tennis_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "model_groundstroke_volume",
+      "name": "Forehand and backhand volume model",
+      "model": "Forehand and backhand load should be counted separately because stance, grip, contact height, spin, stroke side, and one-handed versus two-handed mechanics change tissue stress.",
+      "risk_logic": "High forehand volume can increase shoulder, wrist, trunk, hip, and open-stance loading; backhand volume can stress wrist, elbow, trunk, and front-side braking depending on technique.",
+      "backend_fields": [
+        "forehand_count",
+        "backhand_count",
+        "one_handed_backhand_count",
+        "two_handed_backhand_count",
+        "slice_backhand_count",
+        "high_spin_count"
+      ],
+      "source_refs": [
+        "src_biomechanics_and_tennis",
+        "src_tennis_injury_epidemiology",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "model_sprint_decel_cod",
+      "name": "Sprint, deceleration, and COD density model",
+      "model": "Track repeated short accelerations, lateral shuffles, crossover recoveries, hard stops, wide-ball braking events, and direction changes per minute or per drill.",
+      "risk_logic": "High COD density with poor braking mechanics increases hip, knee, ankle, calf, Achilles, and low-back stress.",
+      "backend_fields": [
+        "sprint_count",
+        "hard_deceleration_count",
+        "change_of_direction_count",
+        "wide_ball_deceleration_count",
+        "split_step_quality",
+        "movement_fatigue_flag"
+      ],
+      "source_refs": [
+        "src_tennis_match_intensity",
+        "src_lta_physical_demands",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "model_lower_limb_tendon_chain",
+      "name": "Lower-limb tendon chain model",
+      "model": "Hip, knee, ankle, calf, and Achilles risk should be modeled from acceleration, braking, jumping, landing, sliding, surface stiffness, footwear change, and plyometric/gym exposure.",
+      "risk_logic": "Tendon and joint symptoms often reflect cumulative changes in load, surface, and recovery rather than one isolated session.",
+      "backend_fields": [
+        "hip_pain_score",
+        "knee_pain_score",
+        "ankle_pain_score",
+        "calf_pain_score",
+        "achilles_pain_score",
+        "plyometric_contacts",
+        "surface"
+      ],
+      "source_refs": [
+        "src_itf_jumper_knee",
+        "src_surface_plantar_pressure",
+        "src_strength_injury_prevention"
+      ]
+    },
+    {
+      "id": "model_surface_adjustment",
+      "name": "Surface adjustment model",
+      "model": "Hard court should flag impact and braking load; clay should flag longer rallies, sliding exposure, adductor/hip/calf control, and higher movement volume; grass should flag low bounce, reaction time, slipping, and hamstring/calf readiness.",
+      "risk_logic": "Changing surfaces rapidly is a load change even if total tennis minutes do not increase.",
+      "backend_fields": [
+        "surface",
+        "surface_change_days",
+        "sliding_exposure",
+        "rally_length_estimate",
+        "footwear_surface_match",
+        "surface_pain_response"
+      ],
+      "source_refs": [
+        "src_surface_plantar_pressure",
+        "src_womens_surface_match_analysis",
+        "src_tennis_match_intensity"
+      ]
+    },
+    {
+      "id": "model_readiness_inputs",
+      "name": "Readiness input model",
+      "model": "Readiness should combine symptom severity, next-day response, joint swelling, range of motion, movement quality, fatigue, sleep, mood, recent load spike, and competition density.",
+      "risk_logic": "A single readiness score hides the reason load should change; backend rules should expose the limiting input.",
+      "backend_fields": [
+        "pain_score_by_region",
+        "next_day_response",
+        "sleep_quality",
+        "fatigue_score",
+        "rom_change_flag",
+        "swelling_flag",
+        "load_spike_flag"
+      ],
+      "source_refs": [
+        "src_ioc_load_injury",
+        "src_usta_recovery",
+        "src_return_to_sport_consensus"
+      ]
+    },
+    {
+      "id": "model_return_to_tennis_stages",
+      "name": "Return-to-tennis staged exposure model",
+      "model": [
+        "medical or clinical clearance where needed",
+        "pain-free daily function and baseline strength/mobility",
+        "nonimpact aerobic and strength restoration",
+        "controlled footwork and shadow strokes",
+        "mini-tennis and cooperative rally",
+        "controlled groundstroke volume",
+        "progressive serve reintroduction from low intent to high intent",
+        "reactive movement and point play",
+        "practice set and tournament simulation",
+        "full match density and performance"
+      ],
+      "risk_logic": "Serve, high-speed movement, reactive play, and tournament density should return after basic function and controlled hitting tolerate next-day checks.",
+      "backend_fields": [
+        "return_stage",
+        "stage_pass_criteria",
+        "stage_load_caps",
+        "allowed_strokes",
+        "allowed_movement_intensity",
+        "competition_clearance_status"
+      ],
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_pain_monitoring_achilles",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "model_med_ball_rotational_power",
+      "name": "Rotational medicine-ball power model",
+      "model": "Rotational throws should progress from low-volume, controlled hip-trunk sequencing to faster tennis-specific throws, with throws separated from peak serve-load days if trunk or shoulder risk is elevated.",
+      "risk_logic": "Medicine-ball work can train useful rotational power but adds trunk, shoulder, elbow, wrist, and landing load when volume or intent spikes.",
+      "backend_fields": [
+        "med_ball_throw_type",
+        "med_ball_throw_count",
+        "med_ball_intent",
+        "same_day_serve_load",
+        "trunk_response_next_day"
+      ],
+      "source_refs": [
+        "src_usta_strength_conditioning",
+        "src_lta_physical_demands",
+        "src_biomechanics_and_tennis"
+      ]
+    },
+    {
+      "id": "model_plyometric_dose",
+      "name": "Plyometric and landing-dose model",
+      "model": "Plyometric training should be tracked by contacts, intensity, direction, surface, landing quality, and proximity to match play because tennis already includes repeated jump, split-step, and braking contacts.",
+      "risk_logic": "Plyometric work can improve speed and power, but should be reduced when Achilles, patellar tendon, calf, ankle, knee, or growth-related symptoms are present.",
+      "backend_fields": [
+        "plyometric_contacts",
+        "plyometric_intensity",
+        "lateral_plyometric_contacts",
+        "landing_quality",
+        "match_proximity_hours",
+        "tendon_symptom_flag"
+      ],
+      "source_refs": [
+        "src_plyometric_tennis_review",
+        "src_itf_jumper_knee",
+        "src_ioc_youth_development"
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "rule_elbow_pain_reduce_serve_spin",
+      "name": "Elbow pain tactical substitution",
+      "condition": "elbow_pain_score >= 3 or next_day_elbow_worse == true",
+      "action": "Reduce high-intent serves, heavy topspin forehands, and one-handed backhand volume; bias cooperative rally tolerance, return blocking, footwork, and lower-intensity placement serving.",
+      "why": "Elbow symptoms should not be paired with maximal serve, high spin, and high racket-impact exposure in the same microcycle.",
+      "source_refs": [
+        "src_tennis_injury_epidemiology",
+        "src_biomechanics_and_tennis",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "rule_shoulder_pain_no_peak_overhead_day",
+      "name": "Shoulder pain overhead-load cap",
+      "condition": "shoulder_pain_score >= 3 or shoulder_rom_flag == true",
+      "action": "Remove maximal serving, overhead smashes, and high-volume return drills; use submaximal technical serves only if pain remains green and next-day response is stable.",
+      "why": "Shoulder overload may worsen when serve and overhead volume continue despite pain or range-of-motion change.",
+      "source_refs": [
+        "src_serve_eight_stage_model",
+        "src_usta_hpp_injury",
+        "src_return_to_sport_consensus"
+      ]
+    },
+    {
+      "id": "rule_low_back_rotation_modifier",
+      "name": "Low-back rotation modifier",
+      "condition": "low_back_pain_score >= 3 or back_stiffness_next_day == true",
+      "action": "Reduce kick serves, maximal trunk-rotation medicine-ball throws, open-stance power drilling, defensive wide-ball hitting, and fatigue-based point play.",
+      "why": "Low-back symptoms need reduced extension-rotation volume while hip mobility, trunk endurance, and controlled stroke mechanics are restored.",
+      "source_refs": [
+        "src_itf_abdominal_strain",
+        "src_serve_eight_stage_model",
+        "src_tennis_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "rule_wrist_pain_contact_quality",
+      "name": "Wrist pain contact-quality rule",
+      "condition": "wrist_pain_score >= 3 or next_day_wrist_worse == true",
+      "action": "Reduce high-spin, late-contact, high-pace return, and jammed-volley work; prioritize cleaner contact spacing, lower ball speed, and forearm/wrist capacity work.",
+      "why": "Wrist symptoms are sensitive to repetitive stroke volume, impact, grip mechanics, and late contact.",
+      "source_refs": [
+        "src_itf_wrist_tendinopathy",
+        "src_tennis_injury_epidemiology",
+        "src_biomechanics_and_tennis"
+      ]
+    },
+    {
+      "id": "rule_serve_plus_forehand_spike",
+      "name": "Serve plus forehand spike guard",
+      "condition": "high_intent_serve_count increased > 25% week_to_week and forehand_count increased > 25% week_to_week",
+      "action": "Do not add a maximal upper-body gym or rotational power day; keep next session technical, lower-volume, or movement-quality focused.",
+      "why": "Stacking high-intent serve and forehand volume with upper-body loading creates an avoidable shoulder, elbow, wrist, trunk, and hip-load cluster.",
+      "source_refs": [
+        "src_ioc_load_injury",
+        "src_usta_workload",
+        "src_serve_eight_stage_model"
+      ]
+    },
+    {
+      "id": "rule_match_minus_one",
+      "name": "Match-day minus one load rule",
+      "condition": "next_match_hours <= 36",
+      "action": "Keep high-intent serve count low to moderate, avoid novel plyometric or heavy eccentric lower-body work, rehearse patterns, and end with recovery and mobility.",
+      "why": "The day before competition should preserve freshness and avoid novel soreness while retaining rhythm and confidence.",
+      "source_refs": [
+        "src_usta_recovery",
+        "src_usta_workload",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "rule_between_matches_same_day",
+      "name": "Same-day multiple-match rule",
+      "condition": "matches_today >= 2",
+      "action": "Prioritize hydration, refueling, shade/cooling as needed, low-volume mobility, light rhythm hits only, and defer S&C or extra serve reps.",
+      "why": "Compressed recovery between matches requires energy restoration and symptom monitoring more than added training load.",
+      "source_refs": [
+        "src_usta_recovery",
+        "src_usta_workload",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "rule_hard_court_impact_gate",
+      "name": "Hard-court impact gate",
+      "condition": "surface == 'hard' and lower_limb_pain_score >= 3",
+      "action": "Reduce hard decelerations, lateral plyometrics, jump contacts, and long point-play blocks; use lower-impact conditioning or technical hitting as needed.",
+      "why": "Hard court can increase impact and braking stress, so lower-limb symptoms should alter movement dose.",
+      "source_refs": [
+        "src_surface_plantar_pressure",
+        "src_lta_injury_prevention",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "rule_clay_sliding_progression",
+      "name": "Clay sliding progression",
+      "condition": "surface == 'clay' and sliding_experience == 'low'",
+      "action": "Introduce sliding as a technical progression before high-volume live points; build hip, adductor, calf, and trunk control before long defensive rallies.",
+      "why": "Clay changes movement strategy and can increase sliding and longer-rally demands, especially after a surface switch.",
+      "source_refs": [
+        "src_womens_surface_match_analysis",
+        "src_lta_physical_demands",
+        "src_surface_plantar_pressure"
+      ]
+    },
+    {
+      "id": "rule_grass_low_bounce_reaction",
+      "name": "Grass reaction and slip guard",
+      "condition": "surface == 'grass' or recent_surface_change_to_grass == true",
+      "action": "Warm up calves, hamstrings, groin, and balance; emphasize lower ready position, shorter adjustment steps, controlled first-step drills, and footwear check before maximal point play.",
+      "why": "Low and skidding bounce changes reaction time, posture, and slip risk.",
+      "source_refs": [
+        "src_womens_surface_match_analysis",
+        "src_lta_physical_demands",
+        "src_tennis_match_intensity"
+      ]
+    },
+    {
+      "id": "rule_youth_growth_spurt",
+      "name": "Youth growth-spurt load modifier",
+      "condition": "age_group == 'youth' and growth_spurt_flag == true",
+      "action": "Reduce abrupt spikes in serve volume, plyometrics, long defensive rallies, and maximal COD drills; emphasize movement quality, coordination, mobility, strength basics, and recovery.",
+      "why": "Maturation changes coordination and tissue load tolerance, so growth periods need conservative progression.",
+      "source_refs": [
+        "src_ioc_youth_development",
+        "src_junior_demands_review",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "rule_older_adult_recovery_spacing",
+      "name": "Older adult recovery-spacing rule",
+      "condition": "age_group == 'older_adult' and session_intensity == 'high'",
+      "action": "Increase warm-up time, avoid stacking high-intent serve and high-impact movement on consecutive days, and schedule strength, mobility, and balance support around tennis.",
+      "why": "Older players often need longer tissue preparation and recovery spacing while still benefiting from progressive strength and power training.",
+      "source_refs": [
+        "src_veteran_tennis_health",
+        "src_lta_injury_prevention",
+        "src_strength_injury_prevention"
+      ]
+    },
+    {
+      "id": "rule_readiness_green",
+      "name": "Green readiness rule",
+      "condition": "pain_score <= 2 and no_swelling == true and no_rom_loss == true and next_day_response == 'baseline' and fatigue_score <= 3",
+      "action": "Proceed with planned session; keep normal technique quality checks and avoid unnecessary novelty during dense competition weeks.",
+      "why": "Low stable symptoms and normal next-day response support planned progression.",
+      "source_refs": [
+        "src_pain_monitoring_achilles",
+        "src_return_to_sport_consensus",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "rule_readiness_yellow",
+      "name": "Yellow readiness rule",
+      "condition": "pain_score == 3 or pain_score == 4 or next_day_response == 'mildly_worse' or fatigue_score >= 4",
+      "action": "Reduce high-intent serve, maximal sprint/COD, plyometrics, and long point-play volume by 25-50%; choose technical quality, controlled hitting, mobility, or aerobic recovery.",
+      "why": "Moderate symptoms or fatigue should trigger a load adjustment without automatically removing all tennis exposure.",
+      "source_refs": [
+        "src_pain_monitoring_achilles",
+        "src_ioc_load_injury",
+        "src_usta_recovery"
+      ]
+    },
+    {
+      "id": "rule_readiness_red",
+      "name": "Red readiness rule",
+      "condition": "pain_score >= 5 or sharp_pain == true or swelling == true or rom_loss == true or limping == true or neurological_symptoms == true",
+      "action": "Stop aggravating tennis load, remove high-intent serve and reactive movement, and recommend qualified medical assessment before return progression.",
+      "why": "High pain, swelling, function loss, or neurological signs exceed self-managed training modification.",
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_pain_monitoring_achilles",
+        "src_usta_hpp_injury"
+      ]
+    },
+    {
+      "id": "rule_return_stage_progression",
+      "name": "Return-stage progression rule",
+      "condition": "return_stage_completed == true and next_day_response == 'baseline' for 2 consecutive exposures",
+      "action": "Progress one exposure variable at a time: duration, intensity, serve intent, reactive movement, point pressure, or match density.",
+      "why": "Return-to-sport progression is safer when exposure changes are staged and monitored.",
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_ioc_load_injury",
+        "src_usta_workload"
+      ]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "demand_repeat_short_acceleration",
+      "name": "Repeated short acceleration",
+      "description": "Tennis movement repeatedly asks for explosive first steps over short distances rather than long continuous sprinting.",
+      "planning_implication": "Use short court-start drills, split-step to first-step work, and repeat-effort recovery matched to rally/rest rhythm.",
+      "source_refs": [
+        "src_tennis_match_intensity",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "demand_deceleration_braking",
+      "name": "Deceleration and braking",
+      "description": "Wide-ball defense, recovery, approach, and direction changes create repeated braking load through hip, knee, ankle, calf, Achilles, and trunk.",
+      "planning_implication": "Train landing, braking angles, eccentric strength, and controlled COD before chaotic live-ball volume.",
+      "source_refs": [
+        "src_lta_physical_demands",
+        "src_strength_injury_prevention"
+      ]
+    },
+    {
+      "id": "demand_lateral_cod",
+      "name": "Lateral change of direction",
+      "description": "Baseline exchange demands lateral movement, split-step timing, shuffle, crossover recovery, and repeated lateral-to-forward transitions.",
+      "planning_implication": "COD density should be counted in live points, basket drills, and conditioning blocks.",
+      "source_refs": [
+        "src_tennis_match_intensity",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "demand_rotational_power",
+      "name": "Rotational power",
+      "description": "Serve, forehand, backhand, and open-stance hitting require hip-trunk separation, trunk stiffness, sequential rotation, and controlled deceleration.",
+      "planning_implication": "Include medicine-ball throws, cable/lift patterns, anti-rotation work, and hip mobility based on readiness.",
+      "source_refs": [
+        "src_biomechanics_and_tennis",
+        "src_serve_eight_stage_model",
+        "src_usta_strength_conditioning"
+      ]
+    },
+    {
+      "id": "demand_shoulder_arm_deceleration",
+      "name": "Shoulder and arm deceleration",
+      "description": "Serve and overhead strokes require rapid arm acceleration and then controlled deceleration of the shoulder, elbow, forearm, and wrist.",
+      "planning_implication": "Rotator cuff, scapular, posterior shoulder, forearm, and trunk endurance should support serve progression.",
+      "source_refs": [
+        "src_serve_eight_stage_model",
+        "src_usta_hpp_injury",
+        "src_biomechanics_and_tennis"
+      ]
+    },
+    {
+      "id": "demand_anaerobic_repeat_effort",
+      "name": "Anaerobic repeat-effort ability",
+      "description": "Points include bursts of intense movement and stroke actions with incomplete but meaningful recovery between points.",
+      "planning_implication": "Use interval formats that resemble tennis work-rest patterns and include technical quality constraints.",
+      "source_refs": [
+        "src_tennis_match_intensity",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "demand_aerobic_recovery_base",
+      "name": "Aerobic recovery base",
+      "description": "Aerobic fitness supports between-point recovery, repeat-match recovery, heat tolerance, and tournament durability.",
+      "planning_implication": "Prescribe aerobic base and recovery conditioning without replacing tennis-specific speed and power needs.",
+      "source_refs": [
+        "src_tennis_match_intensity",
+        "src_usta_recovery"
+      ]
+    },
+    {
+      "id": "demand_tendon_stiffness_capacity",
+      "name": "Tendon stiffness and capacity",
+      "description": "Split steps, serve landings, lateral hops, hard stops, and repeated starts load the patellar tendon, Achilles, calf, and plantar structures.",
+      "planning_implication": "Progress calf, soleus, quadriceps, hamstring, glute, and plyometric exposure with surface and symptoms in mind.",
+      "source_refs": [
+        "src_itf_jumper_knee",
+        "src_surface_plantar_pressure",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "demand_reactive_perception_action",
+      "name": "Reactive perception-action demand",
+      "description": "Players move and strike based on opponent, ball flight, spin, score, and surface rather than pre-planned movement only.",
+      "planning_implication": "Return stages should move from closed drills to cooperative rally to reactive point play and then match pressure.",
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_tennis_match_intensity"
+      ]
+    },
+    {
+      "id": "demand_surface_specific_footwork",
+      "name": "Surface-specific footwork",
+      "description": "Clay, grass, and hard courts alter traction, sliding, braking, bounce, reaction time, and rally rhythm.",
+      "planning_implication": "Add surface-specific warm-ups and movement progressions before full-intensity points after a surface change.",
+      "source_refs": [
+        "src_surface_plantar_pressure",
+        "src_womens_surface_match_analysis",
+        "src_lta_physical_demands"
+      ]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "risk_shoulder_overload",
+      "region": "shoulder",
+      "drivers": [
+        "high-intent serve spike",
+        "overhead volume",
+        "poor scapular control",
+        "trunk contribution deficit",
+        "fatigue-related technique change"
+      ],
+      "early_signals": [
+        "pain during acceleration or follow-through",
+        "loss of serve velocity",
+        "next-day ache",
+        "range-of-motion change"
+      ],
+      "load_response": "Reduce high-intent serve and overhead count; maintain pain-free mobility, cuff/scapular endurance, and low-intent technical work only if symptoms remain green.",
+      "source_refs": [
+        "src_serve_eight_stage_model",
+        "src_tennis_injury_epidemiology",
+        "src_usta_hpp_injury"
+      ]
+    },
+    {
+      "id": "risk_elbow_overload",
+      "region": "elbow",
+      "drivers": [
+        "maximal serving",
+        "heavy topspin",
+        "late contact",
+        "one-handed backhand stress",
+        "forearm fatigue"
+      ],
+      "early_signals": [
+        "medial or lateral elbow pain",
+        "grip weakness",
+        "pain with serve or backhand",
+        "next-day tenderness"
+      ],
+      "load_response": "Cut high-intent serves and heavy-spin volume first; retain lower-load footwork, tactical, and cooperative rally drills as tolerated.",
+      "source_refs": [
+        "src_tennis_injury_epidemiology",
+        "src_biomechanics_and_tennis",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "risk_wrist_tendinopathy",
+      "region": "wrist",
+      "drivers": [
+        "high groundstroke volume",
+        "extreme grips",
+        "late contact",
+        "return impact",
+        "high-spin repetition"
+      ],
+      "early_signals": [
+        "pain gripping racket",
+        "pain at contact",
+        "next-day wrist stiffness",
+        "loss of racket control"
+      ],
+      "load_response": "Reduce stroke-impact volume, return pace, and high-spin drills; add grip/contact-quality checks and forearm capacity work.",
+      "source_refs": [
+        "src_itf_wrist_tendinopathy",
+        "src_tennis_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "risk_abdominal_strain",
+      "region": "abdominal_wall",
+      "drivers": [
+        "serve trunk extension and rotation",
+        "kick serve volume",
+        "abrupt high-intent serve spike",
+        "rotational medicine-ball spike",
+        "fatigued trunk control"
+      ],
+      "early_signals": [
+        "side abdominal pain during serve",
+        "pain with trunk rotation",
+        "pain coughing or bracing",
+        "loss of serve confidence"
+      ],
+      "load_response": "Remove high-intent serve and maximal rotation; progress trunk isometrics, controlled rotation, then staged serve reintroduction.",
+      "source_refs": [
+        "src_itf_abdominal_strain",
+        "src_serve_eight_stage_model"
+      ]
+    },
+    {
+      "id": "risk_low_back_rotation_extension",
+      "region": "lumbar_spine",
+      "drivers": [
+        "serve extension-rotation",
+        "open-stance power hitting",
+        "defensive stretched strokes",
+        "hip mobility deficit",
+        "fatigue and poor recovery"
+      ],
+      "early_signals": [
+        "stiffness after serving",
+        "pain with rotation",
+        "reduced ready-position posture",
+        "next-day back ache"
+      ],
+      "load_response": "Reduce serve and rotation volume; emphasize hip mobility, trunk endurance, controlled footwork, and gradual reactivity.",
+      "source_refs": [
+        "src_tennis_injury_epidemiology",
+        "src_itf_abdominal_strain",
+        "src_biomechanics_and_tennis"
+      ]
+    },
+    {
+      "id": "risk_hip_groin_overload",
+      "region": "hip_groin",
+      "drivers": [
+        "wide-ball recovery",
+        "sliding on clay",
+        "lateral COD",
+        "open-stance rotation",
+        "surface transition"
+      ],
+      "early_signals": [
+        "groin tightness",
+        "pinch during lateral lunge",
+        "reduced push-off",
+        "avoidance of wide balls"
+      ],
+      "load_response": "Reduce sliding and wide-ball drills; train hip strength, adductor capacity, trunk control, and progressive lateral movement.",
+      "source_refs": [
+        "src_lta_physical_demands",
+        "src_womens_surface_match_analysis",
+        "src_tennis_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "risk_knee_patellar_tendon",
+      "region": "knee_patellar_tendon",
+      "drivers": [
+        "split-step and jump contacts",
+        "serve landing",
+        "hard stops",
+        "lateral plyometrics",
+        "rapid volume increase"
+      ],
+      "early_signals": [
+        "pain below kneecap",
+        "morning tendon stiffness",
+        "pain on stairs or jumps",
+        "reduced braking confidence"
+      ],
+      "load_response": "Manage plyometric contacts and hard decelerations; build quadriceps, calf, glute, landing, and tendon capacity.",
+      "source_refs": [
+        "src_itf_jumper_knee",
+        "src_plyometric_tennis_review",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "risk_ankle_sprain",
+      "region": "ankle",
+      "drivers": [
+        "rapid direction change",
+        "surface traction change",
+        "slip or edge landing",
+        "fatigue",
+        "poor balance or proprioception"
+      ],
+      "early_signals": [
+        "instability feeling",
+        "hesitation on cuts",
+        "swelling",
+        "pain with lateral push-off"
+      ],
+      "load_response": "Use bracing/taping if clinically indicated, proprioception, landing mechanics, and progressive COD before full live points.",
+      "source_refs": [
+        "src_lta_injury_prevention",
+        "src_tennis_injury_epidemiology",
+        "src_surface_plantar_pressure"
+      ]
+    },
+    {
+      "id": "risk_calf_achilles",
+      "region": "calf_achilles",
+      "drivers": [
+        "repeated split steps",
+        "hard-court starts and stops",
+        "serve landing",
+        "plyometrics",
+        "older age or sudden training return"
+      ],
+      "early_signals": [
+        "morning Achilles stiffness",
+        "calf tightness",
+        "pain warming up",
+        "loss of push-off"
+      ],
+      "load_response": "Reduce jump contacts and hard COD; use pain-monitored calf and Achilles strengthening with gradual tennis return.",
+      "source_refs": [
+        "src_pain_monitoring_achilles",
+        "src_surface_plantar_pressure",
+        "src_veteran_tennis_health"
+      ]
+    },
+    {
+      "id": "risk_surface_transition_spike",
+      "region": "whole_body",
+      "drivers": [
+        "switch from clay to hard",
+        "switch to grass",
+        "new footwear",
+        "different bounce and traction",
+        "higher or lower rally length"
+      ],
+      "early_signals": [
+        "unusual lower-limb soreness",
+        "timing errors",
+        "slipping",
+        "unexpected back or calf response"
+      ],
+      "load_response": "Add adaptation sessions and reduce first-week intensity after a surface change.",
+      "source_refs": [
+        "src_surface_plantar_pressure",
+        "src_womens_surface_match_analysis"
+      ]
+    },
+    {
+      "id": "risk_tournament_accumulation",
+      "region": "whole_body",
+      "drivers": [
+        "multiple matches in short period",
+        "warm-up and match repetition",
+        "travel",
+        "heat",
+        "sleep disruption",
+        "repeated high-intent serves"
+      ],
+      "early_signals": [
+        "declining serve speed",
+        "slower first step",
+        "higher soreness",
+        "poor sleep",
+        "pain spreading to multiple regions"
+      ],
+      "load_response": "Shift to recovery, refueling, low-volume rhythm, and readiness checks between matches.",
+      "source_refs": [
+        "src_usta_recovery",
+        "src_usta_workload",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "risk_youth_overuse",
+      "region": "youth_whole_body",
+      "drivers": [
+        "rapid training increase",
+        "single-stroke overemphasis",
+        "serve spikes",
+        "growth spurt",
+        "insufficient recovery"
+      ],
+      "early_signals": [
+        "persistent pain",
+        "coordination regression",
+        "fatigue",
+        "mood change",
+        "loss of appetite or sleep disruption"
+      ],
+      "load_response": "Reduce volume spikes, rotate skills, protect recovery, and monitor growth-related soreness closely.",
+      "source_refs": [
+        "src_ioc_youth_development",
+        "src_junior_demands_review",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "risk_older_adult_tendon_joint_response",
+      "region": "older_adult_whole_body",
+      "drivers": [
+        "compressed recovery",
+        "return after layoff",
+        "hard-court impact",
+        "high-intent serve without preparation",
+        "balance and strength deficits"
+      ],
+      "early_signals": [
+        "soreness lasting more than 48 hours",
+        "morning stiffness",
+        "reduced balance",
+        "compensatory movement",
+        "new joint swelling"
+      ],
+      "load_response": "Increase warm-up, build strength and tendon capacity, avoid consecutive high-impact days, and use conservative progression.",
+      "source_refs": [
+        "src_veteran_tennis_health",
+        "src_lta_injury_prevention",
+        "src_strength_injury_prevention"
+      ]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "training_warmup_required",
+      "name": "Warm-up is a required readiness intervention",
+      "recommendation": "Before tennis, use progressive pulse-raising work, dynamic mobility, activation, split-step/footwork rehearsal, progressive groundstrokes, and progressive serve build-up.",
+      "backend_rule": "Every tennis session should include warmup_block_id unless user explicitly logs independent warm-up.",
+      "source_refs": [
+        "src_lta_injury_prevention",
+        "src_usta_hpp_injury",
+        "src_usta_recovery"
+      ]
+    },
+    {
+      "id": "training_cooldown_recovery",
+      "name": "Cooldown and recovery should be planned after high-load sessions",
+      "recommendation": "After hard matches or intense sessions, prioritize low-intensity movement, mobility, hydration, carbohydrate and protein refueling, sleep, and symptom logging.",
+      "backend_rule": "Attach cooldown_recovery_block when session_rpe >= 7, match_play == true, or matches_today >= 1.",
+      "source_refs": [
+        "src_usta_recovery",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "training_strength_foundation",
+      "name": "Strength is a primary injury-risk reduction quality",
+      "recommendation": "Build lower-body, trunk, shoulder/scapular, and forearm strength progressively; do not rely only on stretching or conditioning for injury prevention.",
+      "backend_rule": "Weekly plans should include age- and level-appropriate strength support unless blocked by readiness.",
+      "source_refs": [
+        "src_strength_injury_prevention",
+        "src_usta_strength_conditioning",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "training_rotational_power_progression",
+      "name": "Rotational power needs staged progression",
+      "recommendation": "Progress trunk and hip sequencing from controlled anti-rotation and cable work to medicine-ball throws and tennis-specific high-speed rotation.",
+      "backend_rule": "Medicine-ball throw count should not increase in the same week as a large high-intent serve spike.",
+      "source_refs": [
+        "src_biomechanics_and_tennis",
+        "src_usta_strength_conditioning",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "training_med_ball_dose",
+      "name": "Medicine-ball dose counts as tennis-relevant load",
+      "recommendation": "Count rotational throws, overhead throws, and scoop throws as trunk and shoulder load; adjust if abdominal, shoulder, elbow, wrist, or low-back symptoms appear.",
+      "backend_rule": "Add med_ball_rotational_throw_count to trunk and upper-body weekly load summaries.",
+      "source_refs": [
+        "src_biomechanics_and_tennis",
+        "src_itf_abdominal_strain",
+        "src_usta_strength_conditioning"
+      ]
+    },
+    {
+      "id": "training_plyometric_progression",
+      "name": "Plyometrics need contact-count and symptom gates",
+      "recommendation": "Start with low contacts and high landing quality, then progress direction, speed, reactivity, and density. Reduce dose for tendon pain, growth-spurt flags, or tournament weeks.",
+      "backend_rule": "Track plyometric_contacts and lateral_plyometric_contacts as separate lower-limb load fields.",
+      "source_refs": [
+        "src_plyometric_tennis_review",
+        "src_itf_jumper_knee",
+        "src_ioc_youth_development"
+      ]
+    },
+    {
+      "id": "training_deceleration_capacity",
+      "name": "Deceleration capacity should precede chaotic point volume",
+      "recommendation": "Teach braking posture, hip/knee/ankle alignment, trunk control, and recovery steps before dense live-ball wide-court drills.",
+      "backend_rule": "Gate high COD sessions behind movement_quality_status and lower_limb_readiness.",
+      "source_refs": [
+        "src_lta_physical_demands",
+        "src_tennis_match_intensity"
+      ]
+    },
+    {
+      "id": "training_serve_ramp",
+      "name": "Serve load should ramp from low intent to high intent",
+      "recommendation": "Progress serve after injury or layoff from shadow rhythm to low-intent placement, moderate-intent targets, limited high-intent serves, then full serve games.",
+      "backend_rule": "Use separate caps for total_serve_count and high_intent_serve_count.",
+      "source_refs": [
+        "src_serve_eight_stage_model",
+        "src_return_to_sport_consensus",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "training_upper_lower_stack",
+      "name": "Avoid stacking peak upper- and lower-body load blindly",
+      "recommendation": "Do not combine peak high-intent serve volume, high forehand volume, rotational medicine-ball work, heavy upper-body gym, hard-court COD, and plyometrics without readiness and recovery support.",
+      "backend_rule": "Flag high_load_cluster when three or more peak load channels occur within 48 hours.",
+      "source_refs": [
+        "src_ioc_load_injury",
+        "src_usta_workload",
+        "src_usta_recovery"
+      ]
+    },
+    {
+      "id": "training_surface_specific_blocks",
+      "name": "Surface-specific preparation should precede competition",
+      "recommendation": "Before surface-specific events, rehearse movement, footwear, bounce timing, rally patterns, and recovery strategies on that surface when possible.",
+      "backend_rule": "If target_surface differs from recent_surface, insert surface_adaptation_block.",
+      "source_refs": [
+        "src_surface_plantar_pressure",
+        "src_womens_surface_match_analysis",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "training_youth_multilateral",
+      "name": "Youth training should stay multilateral and staged",
+      "recommendation": "For juniors, develop movement literacy, coordination, strength basics, age-appropriate power, and technical variety rather than early repetitive high-intent specialization.",
+      "backend_rule": "Youth plans should cap high-intent serve spikes and include movement-quality and recovery fields.",
+      "source_refs": [
+        "src_ioc_youth_development",
+        "src_junior_demands_review",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "training_older_adult_progression",
+      "name": "Older adult progression should prioritize preparation and recovery",
+      "recommendation": "Use longer warm-ups, balance, strength, power at appropriate dose, mobility, and conservative jumps in match or serve density.",
+      "backend_rule": "For older_adult profiles, default to lower weekly progression and longer recovery spacing after high-load days.",
+      "source_refs": [
+        "src_veteran_tennis_health",
+        "src_strength_injury_prevention",
+        "src_lta_injury_prevention"
+      ]
+    },
+    {
+      "id": "training_readiness_logging",
+      "name": "Readiness logging should happen before and after sessions",
+      "recommendation": "Capture pain by region, fatigue, sleep, soreness, confidence, session RPE, and next-day response so load rules can adapt.",
+      "backend_rule": "Require readiness_check before high-load sessions and followup_response within 24 hours when any pain score >= 3.",
+      "source_refs": [
+        "src_ioc_load_injury",
+        "src_usta_workload",
+        "src_usta_recovery"
+      ]
+    },
+    {
+      "id": "training_return_tennis_one_variable",
+      "name": "Return-to-tennis should progress one major variable at a time",
+      "recommendation": "Do not simultaneously increase duration, serve intent, point pressure, sprint/COD demand, and match density during return.",
+      "backend_rule": "Return-stage progression should modify only one exposure_axis per stage.",
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "training_aerobic_recovery",
+      "name": "Aerobic work supports tournament resilience",
+      "recommendation": "Use aerobic base and low-intensity recovery sessions to support repeat-match readiness without adding excessive impact.",
+      "backend_rule": "Add aerobic_recovery option when competition_density is high or lower-limb impact needs reduction.",
+      "source_refs": [
+        "src_tennis_match_intensity",
+        "src_usta_recovery"
+      ]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "id": "record_tennis_load_channel_schema",
+      "record_type": "load_schema",
+      "slug": "tennis-load-channel-schema",
+      "title": "Tennis Load Channel Schema",
+      "fields": [
+        "total_tennis_minutes",
+        "session_rpe",
+        "serve_count",
+        "high_intent_serve_count",
+        "kick_serve_count",
+        "forehand_count",
+        "backhand_count",
+        "overhead_count",
+        "return_count",
+        "sprint_count",
+        "hard_deceleration_count",
+        "change_of_direction_count",
+        "sliding_exposure",
+        "surface",
+        "match_count",
+        "gym_upper_load",
+        "gym_lower_load",
+        "plyometric_contacts",
+        "med_ball_throw_count"
+      ],
+      "source_refs": [
+        "src_usta_workload",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "record_readiness_check",
+      "record_type": "assessment",
+      "slug": "tennis-readiness-check",
+      "title": "Tennis Readiness Check",
+      "fields": [
+        "pain_score_by_region",
+        "fatigue_score",
+        "sleep_quality",
+        "soreness_score",
+        "swelling_flag",
+        "rom_loss_flag",
+        "limping_flag",
+        "confidence_score",
+        "next_day_response"
+      ],
+      "source_refs": [
+        "src_ioc_load_injury",
+        "src_usta_recovery",
+        "src_return_to_sport_consensus"
+      ]
+    },
+    {
+      "id": "record_readiness_traffic_light_rule",
+      "record_type": "planning_rule",
+      "slug": "tennis-readiness-traffic-light",
+      "title": "Tennis Readiness Traffic Light",
+      "outputs": [
+        "green_full_planned_load",
+        "yellow_reduce_peak_load_25_to_50_percent",
+        "red_stop_aggravating_load_and_seek_medical_assessment"
+      ],
+      "source_refs": [
+        "src_pain_monitoring_achilles",
+        "src_return_to_sport_consensus",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "record_serve_load_gate",
+      "record_type": "planning_rule",
+      "slug": "tennis-serve-load-gate",
+      "title": "Serve Load Gate",
+      "fields": [
+        "serve_count",
+        "high_intent_serve_count",
+        "kick_serve_count",
+        "shoulder_pain_score",
+        "elbow_pain_score",
+        "wrist_pain_score",
+        "abdominal_pain_score",
+        "low_back_pain_score",
+        "next_day_response"
+      ],
+      "source_refs": [
+        "src_serve_eight_stage_model",
+        "src_itf_abdominal_strain",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "record_upper_limb_pain_gate",
+      "record_type": "planning_rule",
+      "slug": "tennis-upper-limb-pain-gate",
+      "title": "Shoulder Elbow Wrist Pain Gate",
+      "outputs": [
+        "reduce_high_intent_serves",
+        "reduce_heavy_spin",
+        "reduce_return_impact",
+        "use_technical_or_footwork_substitution",
+        "recommend_medical_assessment_when_red"
+      ],
+      "source_refs": [
+        "src_tennis_injury_epidemiology",
+        "src_itf_wrist_tendinopathy",
+        "src_usta_hpp_injury"
+      ]
+    },
+    {
+      "id": "record_trunk_back_rotation_gate",
+      "record_type": "planning_rule",
+      "slug": "tennis-trunk-low-back-rotation-gate",
+      "title": "Trunk and Low-Back Rotation Gate",
+      "outputs": [
+        "reduce_kick_serves",
+        "reduce_max_rotation_throws",
+        "reduce_open_stance_power_drills",
+        "prioritize_hip_trunk_control",
+        "return_with_staged_rotation"
+      ],
+      "source_refs": [
+        "src_itf_abdominal_strain",
+        "src_serve_eight_stage_model",
+        "src_tennis_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "record_lower_limb_impact_gate",
+      "record_type": "planning_rule",
+      "slug": "tennis-lower-limb-impact-gate",
+      "title": "Lower-Limb Impact and Tendon Gate",
+      "fields": [
+        "hip_pain_score",
+        "knee_pain_score",
+        "ankle_pain_score",
+        "calf_pain_score",
+        "achilles_pain_score",
+        "hard_deceleration_count",
+        "plyometric_contacts",
+        "surface"
+      ],
+      "source_refs": [
+        "src_itf_jumper_knee",
+        "src_surface_plantar_pressure",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "record_surface_adjustment_rule",
+      "record_type": "planning_rule",
+      "slug": "tennis-surface-adjustment-rule",
+      "title": "Surface Adjustment Rule",
+      "outputs": [
+        "hard_court_impact_modifier",
+        "clay_sliding_and_long_rally_modifier",
+        "grass_low_bounce_slip_modifier",
+        "surface_transition_adaptation_block"
+      ],
+      "source_refs": [
+        "src_surface_plantar_pressure",
+        "src_womens_surface_match_analysis",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "record_tournament_density_rule",
+      "record_type": "planning_rule",
+      "slug": "tennis-tournament-density-rule",
+      "title": "Tournament Density Rule",
+      "fields": [
+        "matches_in_24h",
+        "matches_in_48h",
+        "matches_in_7d",
+        "sets_played",
+        "total_match_minutes",
+        "next_match_hours",
+        "travel_flag",
+        "heat_flag"
+      ],
+      "source_refs": [
+        "src_usta_workload",
+        "src_usta_recovery",
+        "src_ioc_load_injury"
+      ]
+    },
+    {
+      "id": "record_warmup_template",
+      "record_type": "session_block",
+      "slug": "tennis-warmup-template",
+      "title": "Tennis Warm-Up Template",
+      "components": [
+        "pulse_raise",
+        "dynamic_mobility",
+        "activation",
+        "footwork_progression",
+        "progressive_groundstrokes",
+        "progressive_serves"
+      ],
+      "source_refs": [
+        "src_lta_injury_prevention",
+        "src_usta_hpp_injury"
+      ]
+    },
+    {
+      "id": "record_cooldown_recovery_template",
+      "record_type": "session_block",
+      "slug": "tennis-cooldown-recovery-template",
+      "title": "Tennis Cooldown and Recovery Template",
+      "components": [
+        "low_intensity_flush",
+        "mobility",
+        "hydration",
+        "refuel",
+        "sleep_prompt",
+        "next_day_symptom_check"
+      ],
+      "source_refs": [
+        "src_usta_recovery",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "record_rotational_power_progression",
+      "record_type": "training_progression",
+      "slug": "tennis-rotational-power-progression",
+      "title": "Rotational Power Progression",
+      "stages": [
+        "anti_rotation_control",
+        "hip_trunk_sequencing",
+        "low_intent_medicine_ball",
+        "high_intent_medicine_ball",
+        "serve_and_groundstroke_transfer"
+      ],
+      "source_refs": [
+        "src_biomechanics_and_tennis",
+        "src_usta_strength_conditioning",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "record_plyometric_progression",
+      "record_type": "training_progression",
+      "slug": "tennis-plyometric-progression",
+      "title": "Plyometric and Landing Progression",
+      "stages": [
+        "landing_quality",
+        "low_level_hops",
+        "linear_contacts",
+        "lateral_contacts",
+        "reactive_split_step",
+        "tennis_specific_cod"
+      ],
+      "source_refs": [
+        "src_plyometric_tennis_review",
+        "src_itf_jumper_knee",
+        "src_lta_physical_demands"
+      ]
+    },
+    {
+      "id": "record_youth_growth_modifier",
+      "record_type": "population_modifier",
+      "slug": "tennis-youth-growth-modifier",
+      "title": "Youth Growth and Maturation Modifier",
+      "fields": [
+        "age",
+        "training_age",
+        "growth_spurt_flag",
+        "coordination_change_flag",
+        "pain_persistence_flag",
+        "recovery_quality",
+        "parent_coach_notes"
+      ],
+      "source_refs": [
+        "src_ioc_youth_development",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "record_older_adult_modifier",
+      "record_type": "population_modifier",
+      "slug": "tennis-older-adult-modifier",
+      "title": "Older Adult Tennis Modifier",
+      "fields": [
+        "prior_joint_history",
+        "balance_status",
+        "warmup_duration",
+        "recovery_days_after_high_load",
+        "tendon_symptom_history",
+        "strength_training_status"
+      ],
+      "source_refs": [
+        "src_veteran_tennis_health",
+        "src_strength_injury_prevention",
+        "src_lta_injury_prevention"
+      ]
+    },
+    {
+      "id": "record_return_to_tennis_stage_0",
+      "record_type": "return_to_play_stage",
+      "slug": "tennis-return-stage-0-medical-function",
+      "title": "Return Stage 0 - Medical and Daily Function",
+      "pass_criteria": [
+        "red_flags_cleared",
+        "daily_activity_tolerated",
+        "pain_baseline_or_green",
+        "no_swelling_or_rom_loss"
+      ],
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "record_return_to_tennis_stage_1",
+      "record_type": "return_to_play_stage",
+      "slug": "tennis-return-stage-1-strength-mobility",
+      "title": "Return Stage 1 - Strength Mobility and Nonreactive Movement",
+      "allowed": [
+        "mobility",
+        "strength_restore",
+        "low_impact_conditioning",
+        "shadow_strokes",
+        "controlled_footwork"
+      ],
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_strength_injury_prevention"
+      ]
+    },
+    {
+      "id": "record_return_to_tennis_stage_2",
+      "record_type": "return_to_play_stage",
+      "slug": "tennis-return-stage-2-controlled-hitting",
+      "title": "Return Stage 2 - Controlled Hitting",
+      "allowed": [
+        "mini_tennis",
+        "cooperative_groundstrokes",
+        "low_velocity_returns",
+        "no_max_serves",
+        "limited_COD"
+      ],
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "record_return_to_tennis_stage_3",
+      "record_type": "return_to_play_stage",
+      "slug": "tennis-return-stage-3-progressive-serve-reactive-movement",
+      "title": "Return Stage 3 - Progressive Serve and Reactive Movement",
+      "allowed": [
+        "moderate_groundstroke_volume",
+        "serve_ramp_low_to_moderate_intent",
+        "planned_COD",
+        "limited_reactive_points",
+        "next_day_check_required"
+      ],
+      "source_refs": [
+        "src_serve_eight_stage_model",
+        "src_return_to_sport_consensus",
+        "src_usta_workload"
+      ]
+    },
+    {
+      "id": "record_return_to_tennis_stage_4",
+      "record_type": "return_to_play_stage",
+      "slug": "tennis-return-stage-4-practice-sets",
+      "title": "Return Stage 4 - Practice Sets and Match Simulation",
+      "allowed": [
+        "limited_high_intent_serves",
+        "practice_sets",
+        "reactive_COD",
+        "score_pressure",
+        "surface_specific_preparation"
+      ],
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_tennis_match_intensity"
+      ]
+    },
+    {
+      "id": "record_return_to_tennis_stage_5",
+      "record_type": "return_to_play_stage",
+      "slug": "tennis-return-stage-5-full-competition-density",
+      "title": "Return Stage 5 - Full Competition Density",
+      "allowed": [
+        "full_match",
+        "normal_serve_intent",
+        "normal_surface_specific_movement",
+        "tournament_density_progression",
+        "performance_goals"
+      ],
+      "source_refs": [
+        "src_return_to_sport_consensus",
+        "src_usta_recovery",
+        "src_usta_workload"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,455 @@
+{
+  "research_goal": "Create backend-ready MMA wrestling, clinch, cage-control, ground-control, submission, escape, and transition knowledge for SFTC. This draft focuses on what MMA athletes need beyond pure wrestling or pure grappling: strike-to-wrestle entries, wall wrestling, positional control, ground-and-pound, submission safety, and returning to the feet.",
+  "source_refs": [
+    {
+      "title": "USA Wrestling Core Curriculum",
+      "organization_or_author": "USA Wrestling",
+      "url": "https://www.usawmembership.com/usa_wrestling_core_curriculum",
+      "source_type": "official_coaching_education",
+      "notes": "Used for wrestling stance, motion, takedown, and defensive progression concepts."
+    },
+    {
+      "title": "USA Wrestling Athlete Development Model",
+      "organization_or_author": "USA Wrestling",
+      "url": "https://content.themat.com/CoachesCorner/LTADPoster.pdf",
+      "source_type": "official_athlete_development",
+      "notes": "Used for long-term progression and youth/beginner skill development principles."
+    },
+    {
+      "title": "IBJJF Rules, Books and Videos",
+      "organization_or_author": "International Brazilian Jiu-Jitsu Federation",
+      "url": "https://ibjjf.com/books-videos",
+      "source_type": "official_grappling_rules",
+      "notes": "Used for positional hierarchy and submission/grappling terminology context."
+    },
+    {
+      "title": "ADCC Rules and Regulations",
+      "organization_or_author": "ADCC",
+      "url": "https://adcombat.com/adcc-rules-regulations/",
+      "source_type": "official_grappling_rules",
+      "notes": "Used for no-gi grappling control and submission context."
+    },
+    {
+      "title": "Unified MMA Rules",
+      "organization_or_author": "Association of Boxing Commissions",
+      "url": "https://www.abcboxing.com/wp-content/uploads/2024/07/unified-mma-rules-rev-july-2024.pdf",
+      "source_type": "official_rules",
+      "notes": "Used to align grappling control with effective grappling and legal/illegal actions."
+    },
+    {
+      "title": "The Physiological Profile of Mixed Martial Artists",
+      "organization_or_author": "Peer-reviewed review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6628448/",
+      "source_type": "peer_reviewed_review",
+      "notes": "Used for grappling and wrestling physical demand context."
+    }
+  ],
+  "domains_covered": [
+    "mma_wrestling",
+    "mma_takedown_entries",
+    "mma_takedown_defense",
+    "mma_clinch_cage",
+    "mma_ground_control",
+    "mma_submissions",
+    "mma_escapes_scrambles",
+    "mma_ground_and_pound",
+    "mma_transitions"
+  ],
+  "technical_principles": [
+    {
+      "id": "mma_wrestling_is_phase_connection",
+      "summary": "MMA wrestling must connect strikes, clinch entries, cage pressure, takedowns, control, ground strikes, and stand-ups. Pure wrestling shots without strike setup or cage awareness expose the athlete to counters, sprawls, front headlocks, and fatigue."
+    },
+    {
+      "id": "head_position_and_underhooks_drive_clinch_control",
+      "summary": "Clinch control is built from head position, underhooks/overhooks, wrist control, hip position, posture, and foot placement. These determine whether the athlete can strike, turn, trip, defend, or separate."
+    },
+    {
+      "id": "cage_wrestling_changes_the_takedown_game",
+      "summary": "Against the cage, athletes need pummeling, level-change timing, mat returns, wall walking, wrist fighting, hip heisting, and turning off the fence. The wall can support defense or help the attacker trap posture."
+    },
+    {
+      "id": "position_before_submission_or_ground_and_pound",
+      "summary": "Beginners should learn position, base, posture, and safe escape before chasing submissions or strikes. Ground-and-pound and submissions are useful only when position and partner safety are controlled."
+    },
+    {
+      "id": "scramble_decisions_matter_more_than_random_effort",
+      "summary": "Scrambles should train decision trees: build base, win inside position, face opponent, control wrists, recover guard, stand up, or advance position. Random explosive effort wastes energy and can increase injury risk."
+    }
+  ],
+  "level_guidance": {
+    "beginner": {
+      "priorities": [
+        "wrestling stance and motion",
+        "safe breakfalls and mat awareness",
+        "basic level change and penetration step without impact",
+        "sprawl shape and hip pressure",
+        "underhook and overhook awareness",
+        "wall-walk and technical stand-up basics",
+        "positional hierarchy: guard, half guard, side control, mount, back"
+      ],
+      "avoid_until_ready": [
+        "uncontrolled live takedowns",
+        "neck cranks",
+        "heel hooks and twisting leg locks",
+        "hard ground-and-pound",
+        "high-amplitude throws",
+        "fatigue-based wrestling rounds"
+      ]
+    },
+    "intermediate": {
+      "priorities": [
+        "strike-to-shot entries",
+        "single-leg and double-leg options with cage finish",
+        "takedown defense chains: sprawl, underhook, whizzer, circle, wall walk",
+        "positional sparring from cage, half guard, mount, back, and turtle",
+        "controlled ground-and-pound posture and defense",
+        "submission threat recognition and safe escapes"
+      ],
+      "avoid_until_ready": [
+        "hard wrestling on poor readiness days",
+        "submission intensity without tap discipline",
+        "stacking hard sparring, hard grappling, and heavy lifting"
+      ]
+    },
+    "advanced": {
+      "priorities": [
+        "opponent-specific wrestling plan",
+        "chain wrestling from striking reactions",
+        "cage mat-return strategy",
+        "top control by score state and round time",
+        "ground-and-pound to submission transitions",
+        "scramble control under fatigue",
+        "camp-specific live rounds with load tracking"
+      ],
+      "avoid_until_ready": [
+        "late-camp novelty",
+        "high-risk submissions when joints are irritated",
+        "unplanned volume spikes in live wrestling or hard grappling"
+      ]
+    }
+  },
+  "drills_or_practice_design": [
+    "stance-motion-line drill",
+    "level-change-to-shot-entry rehearsal",
+    "sprawl-and-circle partner feed",
+    "underhook pummeling rounds",
+    "wall-walk from seated hip position",
+    "single-leg finish to cage mat return",
+    "half-guard top control to safe posture",
+    "mount escape technical bridge and elbow-knee path",
+    "back-control hand-fighting escape",
+    "ground-and-pound posture drill with soft targets",
+    "submission recognition and early tap drill",
+    "strike-to-shot-to-control chain at technical pace"
+  ],
+  "common_errors": [
+    "shooting from too far without strike setup",
+    "dropping the head outside safe alignment on shots",
+    "accepting bottom position against the cage without building base",
+    "chasing submissions while losing position",
+    "using ground-and-pound before posture and partner safety are controlled",
+    "turning away during scrambles and giving back exposure",
+    "doing live wrestling volume before neck, shoulder, hip, and knee tolerance is ready"
+  ],
+  "safety_constraints": [
+    "No uncontrolled high-amplitude throws for beginners.",
+    "No neck cranks, heel hooks, or twisting leg locks for beginners.",
+    "Stop or regress when neck, shoulder, elbow, wrist, knee, rib, or back pain worsens.",
+    "Ground-and-pound drills must use controlled targets, clear rules, and no head impact for beginner learning.",
+    "Do not pair hard live wrestling with heavy lower-body strength, hard sparring, or poor readiness."
+  ],
+  "backend_records": {
+    "sport_training_rules": [
+      {
+        "id": "mma_rule_wrestling_connects_phases",
+        "sport": "mma",
+        "domain": "mma_wrestling",
+        "category": "technical_model",
+        "rule": "MMA wrestling should connect striking entries, clinch/cage control, takedown finish, positional control, and safe exit or attack.",
+        "recommended_action": [
+          "Pair takedown entries with a strike or feint cue.",
+          "Teach the finish and next control position together.",
+          "Include escape and stand-up options for bottom athletes."
+        ],
+        "blocked_action": [
+          "Do not prescribe isolated high-fatigue shots as the main wrestling method for beginners.",
+          "Do not use live takedowns before safe falling and control rules are learned."
+        ],
+        "retrieval_tags": [
+          "mma",
+          "mma_wrestling",
+          "takedown_entries",
+          "phase_connection",
+          "beginner",
+          "intermediate"
+        ]
+      },
+      {
+        "id": "mma_rule_cage_control_requires_head_hands_hips",
+        "sport": "mma",
+        "domain": "mma_clinch_cage",
+        "category": "technical_model",
+        "rule": "Cage wrestling should teach head position, underhooks, wrist control, hip pressure, foot position, mat returns, and wall-walk defense.",
+        "recommended_action": [
+          "Use short pummeling and wall-walk rounds before live cage wrestling.",
+          "Teach attacker and defender responsibilities in the same block."
+        ],
+        "blocked_action": [
+          "Do not run hard cage rounds when neck, shoulder, rib, or knee symptoms are increasing."
+        ],
+        "retrieval_tags": [
+          "mma",
+          "cage_wrestling",
+          "clinch",
+          "wall_walk",
+          "underhook"
+        ]
+      },
+      {
+        "id": "mma_rule_ground_position_before_attack",
+        "sport": "mma",
+        "domain": "mma_ground_control",
+        "category": "technical_model",
+        "rule": "Ground work should prioritize position, posture, base, frames, and escape pathways before submissions or ground-and-pound intensity.",
+        "recommended_action": [
+          "Teach positional hierarchy and escape routes.",
+          "Use positional sparring constraints before open grappling."
+        ],
+        "blocked_action": [
+          "Do not prescribe aggressive submissions or hard ground-and-pound before positional control and tap culture are reliable."
+        ],
+        "retrieval_tags": [
+          "mma",
+          "ground_control",
+          "submissions",
+          "ground_and_pound",
+          "safety"
+        ]
+      }
+    ],
+    "planning_rules": [
+      {
+        "id": "mma_plan_live_wrestling_load_gate",
+        "sport": "mma",
+        "category": "load_management",
+        "applies_to": [
+          "mma",
+          "combat_sports"
+        ],
+        "priority": 94,
+        "rule": "Hard live wrestling, hard grappling, and hard sparring should not be stacked with heavy lower-body or neck/trunk loading on the same poor-readiness day.",
+        "recommended_action": [
+          "Separate hard contact/grappling and heavy S&C by at least one recovery buffer when possible.",
+          "Use technical drilling or aerobic work when readiness is poor."
+        ],
+        "blocked_action": [
+          "Hard live wrestling plus hard sparring plus heavy lower-body strength in one session for non-advanced users."
+        ],
+        "retrieval_tags": [
+          "mma",
+          "wrestling",
+          "grappling",
+          "contact_load",
+          "readiness"
+        ]
+      }
+    ],
+    "teaching_progressions": [
+      {
+        "id": "mma_teach_wrestling_beginner",
+        "sport": "mma",
+        "domain": "mma_wrestling",
+        "level": "beginner",
+        "learning_goal": "Build wrestling stance, motion, level change, sprawl, and safe takedown awareness without uncontrolled impact.",
+        "teaching_priorities": [
+          "stance and motion",
+          "level change without reaching",
+          "penetration step pattern",
+          "sprawl shape",
+          "safe fall and reset"
+        ],
+        "practice_design": [
+          "stance-motion-line drill",
+          "level-change reps",
+          "technical sprawl to circle",
+          "partner grip awareness without finish"
+        ],
+        "avoid_until_ready": [
+          "live takedowns",
+          "high-amplitude throws",
+          "fatigue shots"
+        ],
+        "progression_signals": [
+          "keeps posture and balance on level change",
+          "sprawls without neck or low-back symptoms",
+          "can safely reset after partner contact"
+        ],
+        "retrieval_tags": [
+          "mma",
+          "beginner",
+          "wrestling",
+          "takedown_defense"
+        ]
+      },
+      {
+        "id": "mma_teach_cage_wrestling_intermediate",
+        "sport": "mma",
+        "domain": "mma_clinch_cage",
+        "level": "intermediate",
+        "learning_goal": "Link clinch position, cage pressure, mat-return attempts, and wall-walk defense under controlled partner resistance.",
+        "teaching_priorities": [
+          "underhook and head position",
+          "wrist control",
+          "hip pressure",
+          "wall walk",
+          "mat return timing"
+        ],
+        "practice_design": [
+          "pummeling against wall",
+          "single-leg to cage finish",
+          "seated wall-walk escape",
+          "30-second cage control rounds"
+        ],
+        "avoid_until_ready": [
+          "hard mat returns",
+          "full-speed cage rounds",
+          "knee/rib/neck symptom escalation"
+        ],
+        "progression_signals": [
+          "wins inside position without panic",
+          "uses wall walk under controlled pressure",
+          "maintains breathing and posture through cage rounds"
+        ],
+        "retrieval_tags": [
+          "mma",
+          "intermediate",
+          "cage_wrestling",
+          "clinch"
+        ]
+      },
+      {
+        "id": "mma_teach_ground_control_beginner",
+        "sport": "mma",
+        "domain": "mma_ground_control",
+        "level": "beginner",
+        "learning_goal": "Understand positional hierarchy, frames, base, posture, safe tap culture, and basic escapes before submissions or ground-and-pound intensity.",
+        "teaching_priorities": [
+          "guard and half guard awareness",
+          "side control and mount safety",
+          "technical stand-up",
+          "tap early",
+          "frames and hip escape"
+        ],
+        "practice_design": [
+          "position naming rounds",
+          "bridge and shrimp",
+          "technical stand-up",
+          "mount escape path",
+          "back-control hand fighting"
+        ],
+        "avoid_until_ready": [
+          "neck cranks",
+          "heel hooks",
+          "hard ground-and-pound",
+          "open grappling"
+        ],
+        "progression_signals": [
+          "recognizes major positions",
+          "uses tap and verbal safety correctly",
+          "escapes basic positions without panic"
+        ],
+        "retrieval_tags": [
+          "mma",
+          "beginner",
+          "ground_control",
+          "escapes",
+          "submissions"
+        ]
+      }
+    ],
+    "skill_assessments": [
+      {
+        "id": "mma_assess_wrestling_cage",
+        "sport": "mma",
+        "domain": "mma_wrestling",
+        "summary": "Assess MMA wrestling through stance, level change, shot setup, sprawl, underhook control, cage wall-walk, mat-return defense, and symptom response.",
+        "metrics": [
+          "stance balance",
+          "level change posture",
+          "sprawl quality",
+          "underhook control",
+          "wall-walk competence",
+          "pain response"
+        ],
+        "hold_if": [
+          "neck, rib, shoulder, knee, or back symptoms worsen",
+          "athlete cannot fall, reset, or tap safely",
+          "panic or uncontrolled intensity appears during partner work"
+        ],
+        "retrieval_tags": [
+          "mma",
+          "assessment",
+          "wrestling",
+          "cage_wrestling"
+        ]
+      },
+      {
+        "id": "mma_assess_ground_control",
+        "sport": "mma",
+        "domain": "mma_ground_control",
+        "summary": "Assess ground skill through positional awareness, base/posture, escape quality, submission safety, ground-and-pound control, and fatigue response.",
+        "metrics": [
+          "position recognition",
+          "base and posture",
+          "escape sequence",
+          "tap culture",
+          "controlled strike posture",
+          "fatigue decision quality"
+        ],
+        "hold_if": [
+          "submission intensity exceeds control",
+          "hard head contact occurs in learning rounds",
+          "joint pain or neck symptoms worsen"
+        ],
+        "retrieval_tags": [
+          "mma",
+          "assessment",
+          "ground_control",
+          "submission_safety"
+        ]
+      }
+    ],
+    "level_transition_rules": [
+      {
+        "id": "mma_grappling_beginner_to_intermediate",
+        "sport": "mma",
+        "from_level": "beginner",
+        "to_level": "intermediate",
+        "minimum_evidence": [
+          "8+ completed MMA grappling or wrestling skill sessions",
+          "safe fall, sprawl, wall-walk, technical stand-up, and tap culture are reliable",
+          "no worsening neck, shoulder, rib, knee, or back symptoms"
+        ],
+        "promote_when": [
+          "can perform controlled partner entries and escapes",
+          "maintains posture and breathing under light resistance",
+          "uses safe reset rather than panic scrambling"
+        ],
+        "hold_when": [
+          "unsafe falling or tapping",
+          "joint or neck symptoms worsen",
+          "uncontrolled live intensity appears"
+        ],
+        "backend_action": "Unlock controlled positional sparring and cage-wrestling drills, not hard live grappling.",
+        "retrieval_tags": [
+          "mma",
+          "level_review",
+          "grappling",
+          "beginner",
+          "intermediate"
+        ]
+      }
+    ]
+  }
+}

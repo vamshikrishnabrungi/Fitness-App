@@ -1,0 +1,1481 @@
+{
+  "sport": "cricket",
+  "domain": "conditions_match_iq",
+  "executive_summary": "Cricket conditions IQ is the ability to link pitch surface, weather, ball age, format, innings phase, and match state into practical batting, bowling, fielding, toss, and workload decisions. The strongest evidence comes from laws and playing conditions for what is permitted, turf preparation guidance for how moisture, grass, compaction, and wear affect the surface, and aerodynamics research for swing and reverse swing mechanisms. Tactical claims about green pitches, dry turners, dew, chasing, overcast skies, and humidity should be stored with evidence labels because some are robust coaching principles while others are venue-dependent or partly tradition. The backend should treat conditions as a live state that is revised after the toss, first spells, ball behavior, outfield speed, dew onset, rain risk, and innings phase rather than as a fixed pre-match label.",
+  "key_concepts": [
+    {
+      "name": "condition_reading_before_strategy",
+      "summary": "A useful pre-match read combines pitch color, grass cover, moisture, hardness, cracks, expected weather, start time, ball type, format, and team strengths. Any initial read should be updated after the first 3-5 overs because live carry, seam, swing, turn, and outfield speed are more reliable than labels.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Laws of Cricket", "ICC Playing Conditions", "ECB Cricket Surface Types", "NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "name": "green_pitch",
+      "summary": "A grass-covered pitch can preserve moisture, help seamers grip or deflect the ball, and make early batting more uncertain. It is not automatically unplayable: hardness, grass length, moisture, and ball quality decide whether it seams, carries, or skids.",
+      "evidence_level": "moderate",
+      "source_refs": ["ECB Cricket Surface Types", "NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "name": "dry_pitch",
+      "summary": "A dry, grassless surface generally loses moisture faster, can become abrasive, and may help spin or reverse swing as the match progresses. The tactical value depends on whether it remains hard and true or breaks into loose, dusty, variable-bounce areas.",
+      "evidence_level": "moderate",
+      "source_refs": ["ECB Cricket Surface Types", "NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "name": "hard_bouncy_pitch",
+      "summary": "A well-compacted hard pitch tends to provide pace, carry, and bounce. Batters can score square of the wicket when bounce is true, while seamers can use back-of-length, shoulder-height bounce, and catching fields behind the wicket.",
+      "evidence_level": "moderate",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "name": "slow_low_pitch",
+      "summary": "A soft, tired, or underprepared surface can slow the ball and reduce carry. Batters need later contact, straight options, and running discipline, while bowlers can use stump-to-stump lines, cutters, cross-seam, and pace-off variation.",
+      "evidence_level": "moderate",
+      "source_refs": ["ECB Cricket Surface Types", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "name": "turning_pitch",
+      "summary": "Turn comes from ball revolutions interacting with a gripping surface, rough patches, loose soil, footmarks, and wear. Batting plans should manage both turn and bounce, not only side-spin.",
+      "evidence_level": "moderate",
+      "source_refs": ["MCC Laws of Cricket", "NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "name": "cracked_or_worn_pitch",
+      "summary": "A worn pitch can create variable bounce, seam deviation from cracks, and more effective spin into rough. The risk usually increases later in multi-day cricket and late in a limited-overs innings on abrasive surfaces.",
+      "evidence_level": "moderate",
+      "source_refs": ["MCC Laws of Cricket", "NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "name": "damp_pitch",
+      "summary": "A damp surface can make the ball seam, grip, stop, or skid depending on how wet the top is and whether it is drying. It also raises footing and safety issues that umpires must monitor under the Laws and playing conditions.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 2 The Umpires", "MCC Law 6 The Pitch", "MCC Law 10 Covering the Pitch"]
+    },
+    {
+      "name": "pitch_deterioration",
+      "summary": "In multi-day cricket, pitch behavior can shift from new-ball pace and seam to easier batting and then to spin, reverse swing, and variable bounce. This lifecycle is a strong tactical framework, but exact timing is venue and weather dependent.",
+      "evidence_level": "moderate",
+      "source_refs": ["MCC Law 9 Preparation and Maintenance", "ICC Pitch and Outfield Ratings", "NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "name": "ball_condition_legality",
+      "summary": "Players may not alter the ball illegally. Umpires control ball replacement, ball condition checks, and unfair-play penalties, so tactical ball management must stay inside the permitted polishing, drying, and natural wear boundaries.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 4 The Ball", "MCC Law 41 Unfair Play", "ICC Playing Conditions"]
+    },
+    {
+      "name": "red_ball_vs_white_ball",
+      "summary": "Red-ball cricket usually gives longer spells, heavier emphasis on new-ball and old-ball phases, and more pitch wear across days. White-ball cricket has field restrictions, a shorter innings, a harder scoring tempo, and ball-condition rules that limit how old the ball becomes.",
+      "evidence_level": "strong",
+      "source_refs": ["ICC Playing Conditions", "ICC Playing Conditions 2025 Changes"]
+    },
+    {
+      "name": "white_ball_odi_age_change",
+      "summary": "ICC changes announced for men's ODIs mean two new balls are used until over 34, after which the fielding side selects one of the two balls for the rest of the innings. This makes white-ball aging and reverse-swing chances different before and after that point.",
+      "evidence_level": "strong",
+      "source_refs": ["ICC Playing Conditions 2025 Changes"]
+    },
+    {
+      "name": "new_ball_phase",
+      "summary": "A new ball has a harder seam, more shine, more bounce, and usually more conventional swing and seam opportunity. Batters should reassess risk when a new ball is taken or introduced.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 4 The Ball", "Review and Reassessment of Cricket Ball Swing", "ICC Playing Conditions"]
+    },
+    {
+      "name": "old_ball_phase",
+      "summary": "As the ball ages, conventional swing generally reduces, but reverse swing, cutters, spin, and pitch-based variation can become more important if the ball is roughened naturally and one side is maintained legally.",
+      "evidence_level": "moderate",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "Fluid Mechanics of Cricket Ball Swing"]
+    },
+    {
+      "name": "conventional_swing",
+      "summary": "Conventional swing depends on seam orientation, release quality, surface contrast, speed, and airflow. It is strongest when the bowler can keep the seam stable and one side smoother than the other without illegal alteration.",
+      "evidence_level": "strong",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "Fluid Mechanics of Cricket Ball Swing"]
+    },
+    {
+      "name": "reverse_swing",
+      "summary": "Reverse swing is linked to high speed, surface roughness asymmetry, and boundary-layer behavior around the ball. It is a legitimate old-ball weapon when produced by natural wear and legal care, but it is highly dependent on ball, surface, pace, and skill.",
+      "evidence_level": "strong",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "Fluid Mechanics of Cricket Ball Swing", "MCC Law 41 Unfair Play"]
+    },
+    {
+      "name": "seam_movement",
+      "summary": "Seam movement is not the same as swing: it is deviation after pitching, helped by seam presentation, pitch grass, moisture, unevenness, or cracks. Batting responses should focus on playing late and reducing hard-handed edges.",
+      "evidence_level": "moderate",
+      "source_refs": ["ECB Cricket Surface Types", "NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "name": "spin_and_pitch_wear",
+      "summary": "Spin threat rises when pitch wear, footmarks, rough, or dryness allow the ball to grip. Bowling threat is created by the combination of revolutions, drift, dip, pace, angle, and the surface rather than turn alone.",
+      "evidence_level": "moderate",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "name": "dew",
+      "summary": "Dew can make the ball wet, reduce grip for spinners and slower-ball bowlers, increase skidding, complicate catching and throwing, and change toss decisions in day-night games. Its impact is venue, season, grass, wind, and start-time dependent.",
+      "evidence_level": "moderate",
+      "source_refs": ["Cricket Australia Dew Analysis", "ICC Playing Conditions", "ESPNcricinfo T20 World Cup Trends"]
+    },
+    {
+      "name": "humidity_and_overcast_uncertainty",
+      "summary": "The common claim that humidity or cloud automatically causes swing should be treated cautiously. Aerodynamics research does not support humidity alone as a simple causal explanation; live ball behavior is more reliable than the weather label.",
+      "evidence_level": "strong",
+      "source_refs": ["Atmospheric Conditions and Cricket Ball Swing", "Review and Reassessment of Cricket Ball Swing", "ABC Science of Swing"]
+    },
+    {
+      "name": "wind",
+      "summary": "Wind can change swing, drift, bowling run-up comfort, high catching, boundary-hitting direction, and tactical value of bowling from one end. Its effect is directional and can help one bowler type while hurting another.",
+      "evidence_level": "moderate",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "ICC Playing Conditions"]
+    },
+    {
+      "name": "heat",
+      "summary": "Heat can dry surfaces, accelerate cracking, increase dehydration and fatigue, and raise the cost of long fielding innings or fast-bowling spells. Heat effects should be treated as tactical and load-management inputs.",
+      "evidence_level": "moderate",
+      "source_refs": ["ICC Playing Conditions", "NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "name": "rain_interruptions",
+      "summary": "Rain changes playing time, ball/outfield wetness, pitch moisture, restart rhythm, and limited-overs targets. In ODIs and T20s, DLS makes wickets and overs remaining explicit resources, so match IQ must track par score and wicket preservation.",
+      "evidence_level": "strong",
+      "source_refs": ["ICC Duckworth-Lewis-Stern Method", "ICC Playing Conditions", "MCC Law 2 The Umpires"]
+    },
+    {
+      "name": "toss_decision_context",
+      "summary": "Toss value is real but context specific. Research finds toss effects can be smaller than popular belief and vary by format, venue, and team quality, so toss rules should be conditional rather than absolute.",
+      "evidence_level": "moderate",
+      "source_refs": ["Analysis of Toss Advantage in Cricket", "Toss Related Analysis of ODI Cricket", "Run Scoring Advantage in Test Cricket"]
+    },
+    {
+      "name": "batting_first_vs_chasing",
+      "summary": "Batting first can exploit a fresh dry pitch and avoid late deterioration; chasing can be favored by dew, clearer target setting, and some limited-overs venue patterns. Rain probability and DLS can change both choices.",
+      "evidence_level": "moderate",
+      "source_refs": ["ICC Duckworth-Lewis-Stern Method", "Analysis of Toss Advantage in Cricket", "ESPNcricinfo T20 World Cup Trends"]
+    },
+    {
+      "name": "format_difference",
+      "summary": "Tests reward patience, pitch lifecycle reading, new-ball cycles, workload management, and long-form risk control. ODIs require powerplay, middle-overs, death, and DLS awareness. T20 compresses decisions around matchups, field restrictions, dew, and high-risk scoring windows.",
+      "evidence_level": "strong",
+      "source_refs": ["ICC Playing Conditions", "ICC Playing Conditions 2025 Changes"]
+    },
+    {
+      "name": "live_evidence_priority",
+      "summary": "The best condition calls combine pre-match evidence with live data: keeper carry, ball swing, seam deviation, spin bite, outfield speed, bat timing, bowler control, dew on the ball, and footing. The backend should let live observations override pre-match assumptions.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 2 The Umpires", "ICC Playing Conditions", "Review and Reassessment of Cricket Ball Swing"]
+    }
+  ],
+  "technical_models": [
+    {
+      "name": "pitch_surface_state_model",
+      "inputs": ["grass_cover", "moisture", "hardness", "compaction", "cracks", "rough", "footmarks", "rolling_history", "weather_forecast"],
+      "outputs": ["pace", "carry", "seam_deviation", "grip_for_spin", "variable_bounce", "abrasiveness", "footing_risk"],
+      "evidence_level": "moderate",
+      "source_refs": ["ECB Cricket Surface Types", "NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "name": "pitch_lifecycle_model",
+      "inputs": ["format_days", "overs_bowled", "sun_heat", "rain", "grass_loss", "footmark_development"],
+      "outputs": ["new_ball_assistance", "batting_ease", "spin_threat", "reverse_swing_potential", "variable_bounce"],
+      "evidence_level": "moderate",
+      "source_refs": ["MCC Law 9 Preparation and Maintenance", "ICC Pitch and Outfield Ratings", "Run Scoring Advantage in Test Cricket"]
+    },
+    {
+      "name": "ball_aerodynamics_model",
+      "inputs": ["ball_age", "seam_orientation", "release_wrist_stability", "speed", "surface_roughness_contrast", "wind", "legal_polishing"],
+      "outputs": ["conventional_swing", "reverse_swing", "late_swing_risk", "seam_or_scrambled_seam_value"],
+      "evidence_level": "strong",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "Fluid Mechanics of Cricket Ball Swing", "MCC Law 41 Unfair Play"]
+    },
+    {
+      "name": "ball_age_phase_model",
+      "inputs": ["format", "overs_on_ball", "red_or_white_ball", "new_ball_availability", "surface_abrasion", "dew_or_wetness"],
+      "outputs": ["new_ball_attack", "middle_ball_scoring_window", "old_ball_reverse_or_spin_window", "wet_ball_control_risk"],
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 4 The Ball", "ICC Playing Conditions", "ICC Playing Conditions 2025 Changes"]
+    },
+    {
+      "name": "weather_confidence_model",
+      "inputs": ["cloud", "humidity", "wind", "temperature", "dew_point", "rain_probability", "live_swing_observation"],
+      "outputs": ["swing_claim_confidence", "dew_risk", "heat_load_risk", "rain_interruption_risk"],
+      "evidence_level": "strong",
+      "source_refs": ["Atmospheric Conditions and Cricket Ball Swing", "Review and Reassessment of Cricket Ball Swing"]
+    },
+    {
+      "name": "dew_effect_model",
+      "inputs": ["start_time", "venue_dew_history", "grass_moisture", "wind", "humidity", "temperature_drop", "ball_wetness_observation"],
+      "outputs": ["spinner_grip_loss", "skidding_ball", "outfield_speed_change", "catching_and_throwing_risk", "chasing_bias"],
+      "evidence_level": "moderate",
+      "source_refs": ["Cricket Australia Dew Analysis", "ESPNcricinfo T20 World Cup Trends", "ICC Playing Conditions"]
+    },
+    {
+      "name": "rain_interruption_model",
+      "inputs": ["format", "overs_remaining", "wickets_lost", "DLS_par", "restart_time", "wet_ball", "wet_outfield", "pitch_covering"],
+      "outputs": ["resource_pressure", "target_adjustment", "wicket_value", "tempo_shift", "restart_warmup_need"],
+      "evidence_level": "strong",
+      "source_refs": ["ICC Duckworth-Lewis-Stern Method", "ICC Playing Conditions", "MCC Law 10 Covering the Pitch"]
+    },
+    {
+      "name": "toss_decision_model",
+      "inputs": ["pitch_now", "pitch_later", "dew_likelihood", "rain_likelihood", "team_batting_depth", "bowling_attack_type", "format", "venue_history"],
+      "outputs": ["bat_first_score", "bowl_first_score", "toss_confidence", "main_uncertainties"],
+      "evidence_level": "moderate",
+      "source_refs": ["Analysis of Toss Advantage in Cricket", "Toss Related Analysis of ODI Cricket", "ESPNcricinfo T20 World Cup Trends"]
+    },
+    {
+      "name": "format_strategy_model",
+      "inputs": ["test_ODI_T20", "field_restrictions", "new_ball_rules", "innings_length", "follow_on_or_declaration_context", "DLS_context"],
+      "outputs": ["risk_appetite", "new_ball_value", "spin_window", "death_bowling_value", "chase_pressure"],
+      "evidence_level": "strong",
+      "source_refs": ["ICC Playing Conditions", "ICC Duckworth-Lewis-Stern Method"]
+    },
+    {
+      "name": "live_conditions_feedback_model",
+      "inputs": ["keeper_carry", "edge_carry", "seam_deviation", "swing_observed", "spin_turn_and_bounce", "bat_timing", "outfield_speed", "ball_wetness", "bowler_control"],
+      "outputs": ["update_pitch_type", "update_ball_plan", "update_batting_risk", "update_toss_assumption", "update_training_note"],
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 2 The Umpires", "ICC Playing Conditions", "Review and Reassessment of Cricket Ball Swing"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "conditions_rule_001",
+      "condition": "green_pitch",
+      "phase": "new_ball",
+      "rule": "On a green pitch, batters should prioritize leaving well, playing under the eyes, and using soft hands until live seam and carry are known.",
+      "batting_response": "Reduce early drive risk away from the body, let balls outside off pass, and value singles behind square when the ball moves.",
+      "bowling_response": "Attack a fuller good length around top of off with slips and catching cover if carry is present.",
+      "evidence_level": "moderate",
+      "source_refs": ["ECB Cricket Surface Types", "NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_002",
+      "condition": "green_pitch",
+      "phase": "new_ball",
+      "rule": "If grass is present but the pitch is hard, expect carry as well as seam rather than assuming the ball will stop.",
+      "batting_response": "Prepare for back-foot scoring once bounce is true, but delay committing to hard-handed drives.",
+      "bowling_response": "Keep slips longer and test both fourth-stump seam and back-of-length bounce.",
+      "evidence_level": "moderate",
+      "source_refs": ["Basic Guide to Turf Cricket Pitch Preparation", "NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_003",
+      "condition": "green_pitch",
+      "phase": "middle_overs",
+      "rule": "If early movement fades, green-pitch risk should be downgraded quickly and scoring plans should expand.",
+      "batting_response": "Move from survival to controlled scoring once the seam stops deviating and timing improves.",
+      "bowling_response": "Shift from pure seam attack to pressure lines, wobble seam, cutters, or short-ball plans according to carry.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ECB Cricket Surface Types"]
+    },
+    {
+      "id": "conditions_rule_004",
+      "condition": "dry_pitch",
+      "phase": "pre_match_toss",
+      "rule": "A dry pitch with visible wear risk increases the value of batting first, especially in multi-day cricket.",
+      "batting_response": "Treat the first innings as the clearest chance to score before spin and variable bounce rise.",
+      "bowling_response": "If bowling first, create early wickets because control may shift to spinners and old-ball plans later.",
+      "evidence_level": "moderate",
+      "source_refs": ["Run Scoring Advantage in Test Cricket", "NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_005",
+      "condition": "dry_pitch",
+      "phase": "old_ball",
+      "rule": "On abrasive dry surfaces, old-ball plans should include legal ball care, reverse-swing assessment, and spin into rough.",
+      "batting_response": "Watch for late full swing at the stumps and resist planting the front pad across the line.",
+      "bowling_response": "Preserve one side legally, use full attacking lengths for reverse swing, and bring spin into rough patches.",
+      "evidence_level": "strong",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "MCC Law 41 Unfair Play"]
+    },
+    {
+      "id": "conditions_rule_006",
+      "condition": "dry_pitch",
+      "phase": "limited_overs_middle",
+      "rule": "On dry, gripping limited-overs pitches, pace-off bowling and spin are often higher value than repeated hard length.",
+      "batting_response": "Use sweep, feet, late cuts, and hard running rather than relying only on hitting through the line.",
+      "bowling_response": "Use cutters, cross-seam, slower bouncers, and spin pace changes into the surface.",
+      "evidence_level": "moderate",
+      "source_refs": ["Basic Guide to Turf Cricket Pitch Preparation", "ESPNcricinfo T20 World Cup Trends"]
+    },
+    {
+      "id": "conditions_rule_007",
+      "condition": "hard_bouncy_pitch",
+      "phase": "new_ball",
+      "rule": "On hard bouncy pitches, batters should expect carry to slips and wicketkeepers even when lateral movement is limited.",
+      "batting_response": "Play close to the body early and avoid reaching at width until pace and bounce are calibrated.",
+      "bowling_response": "Use a fuller good length first, then move to back-of-length when the batter starts driving on the up.",
+      "evidence_level": "moderate",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "id": "conditions_rule_008",
+      "condition": "hard_bouncy_pitch",
+      "phase": "short_ball_plan",
+      "rule": "True bounce increases the tactical value of controlled short balls, but only when field protection and over limits support the plan.",
+      "batting_response": "Use sway, duck, and selective pull or hook rather than automatic aggression.",
+      "bowling_response": "Set leg-side catchers or boundary protection before committing to repeated short balls.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_009",
+      "condition": "hard_bouncy_pitch",
+      "phase": "scoring_window",
+      "rule": "If bounce is true, horizontal-bat scoring and back-foot punches become safer than on two-paced pitches.",
+      "batting_response": "Look for cut, pull, punch, and glide options after seeing bounce consistency.",
+      "bowling_response": "Avoid predictable short width; use top-of-off pressure and body lines with field support.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_010",
+      "condition": "slow_low_pitch",
+      "phase": "all_innings",
+      "rule": "On slow low pitches, batters should delay contact and avoid swinging through the line too early.",
+      "batting_response": "Use late hands, straight hitting, soft singles, and low-risk rotation into gaps.",
+      "bowling_response": "Bowl stump-to-stump, cutters, cross-seam, and pace-off into the pitch.",
+      "evidence_level": "moderate",
+      "source_refs": ["ECB Cricket Surface Types", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "id": "conditions_rule_011",
+      "condition": "slow_low_pitch",
+      "phase": "death_overs",
+      "rule": "On slow low pitches, death bowling should favor yorkers, into-the-pitch slower balls, and straight boundaries over shoulder-high bounce plans.",
+      "batting_response": "Set early for straight or square-low options and expect the ball to arrive later than normal.",
+      "bowling_response": "Use yorker and pace-off variation with a field that protects miscued leg-side hits.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ESPNcricinfo T20 World Cup Trends"]
+    },
+    {
+      "id": "conditions_rule_012",
+      "condition": "slow_low_pitch",
+      "phase": "fielding",
+      "rule": "Reduced carry on slow low pitches should pull catching positions closer and lower.",
+      "batting_response": "Expect close catchers to be active and keep defensive hands soft.",
+      "bowling_response": "Bring slips, short cover, short midwicket, or keeper position closer when edges are dying.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ECB Cricket Surface Types"]
+    },
+    {
+      "id": "conditions_rule_013",
+      "condition": "turning_pitch",
+      "phase": "spin_spell",
+      "rule": "On a turning pitch, the batter's first job is to control line and length; scoring comes after deciding whether to smother, use depth, sweep, or use the feet.",
+      "batting_response": "Commit to a method: forward smother, back-and-across depth, sweep, or decisive footwork rather than half-strides.",
+      "bowling_response": "Vary pace, flight, angle, and crease position while keeping the stumps and bat-pad catchers involved.",
+      "evidence_level": "moderate",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "id": "conditions_rule_014",
+      "condition": "turning_pitch",
+      "phase": "matchups",
+      "rule": "When rough exists outside a batter's off stump, bowling from around the wicket or across the batter can raise both edge and bowled/LBW threats.",
+      "batting_response": "Use feet, pad-line awareness, and scoring shots that avoid being trapped on the crease.",
+      "bowling_response": "Aim into rough with catchers around the bat and a boundary plan for the release shot.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["MCC Law 9 Preparation and Maintenance"]
+    },
+    {
+      "id": "conditions_rule_015",
+      "condition": "turning_pitch",
+      "phase": "limited_overs_middle",
+      "rule": "On a dry turner in white-ball cricket, batting sides should not let dot balls accumulate while waiting for the perfect boundary option.",
+      "batting_response": "Rotate with sweep variants, drop-and-run, and hitting with the spin when available.",
+      "bowling_response": "Protect the batter's obvious release shot and change pace more than length.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ESPNcricinfo T20 World Cup Trends"]
+    },
+    {
+      "id": "conditions_rule_016",
+      "condition": "cracked_worn_pitch",
+      "phase": "late_match",
+      "rule": "On cracked or worn pitches, batters should reduce premeditation because line and bounce can change after pitching.",
+      "batting_response": "Play late, use compact swings, and prioritize watching from the hand and off the pitch.",
+      "bowling_response": "Hit cracks, rough, and footmarks with seam, cross-seam, cutters, or spin depending on skill set.",
+      "evidence_level": "moderate",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide", "Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "id": "conditions_rule_017",
+      "condition": "cracked_worn_pitch",
+      "phase": "fast_bowling",
+      "rule": "Cross-seam and scrambled-seam deliveries can be useful on cracked or uneven pitches because they reduce predictability after pitching.",
+      "batting_response": "Avoid assuming normal bounce from a length; keep hands close and eyes level.",
+      "bowling_response": "Use cross-seam into the pitch with catchers for mis-hits and gloves.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "id": "conditions_rule_018",
+      "condition": "cracked_worn_pitch",
+      "phase": "spin_spell",
+      "rule": "Worn pitches raise the value of close catchers because defensive contact is more likely to be uncertain.",
+      "batting_response": "Use decisive footwork and keep defensive hands soft to reduce bat-pad chances.",
+      "bowling_response": "Use short leg, silly point, slip, and catching midwicket when match state allows attack.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["MCC Law 9 Preparation and Maintenance"]
+    },
+    {
+      "id": "conditions_rule_019",
+      "condition": "damp_pitch",
+      "phase": "pre_match_toss",
+      "rule": "A damp pitch or wet top increases the case for bowling first if conditions are safe and expected to improve.",
+      "batting_response": "If batting first, accept a lower-risk first spell and reassess after the surface dries.",
+      "bowling_response": "Use seamers early with fuller lengths and catching support while moisture remains.",
+      "evidence_level": "moderate",
+      "source_refs": ["MCC Law 2 The Umpires", "MCC Law 10 Covering the Pitch"]
+    },
+    {
+      "id": "conditions_rule_020",
+      "condition": "damp_pitch",
+      "phase": "drying_surface",
+      "rule": "A drying damp surface can be two-paced, so batters should be cautious driving on the up.",
+      "batting_response": "Keep the bat path compact, play later, and avoid committing to the bounce too early.",
+      "bowling_response": "Use cutters, seam-up deliveries, and fuller lengths until the surface becomes predictable.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "id": "conditions_rule_021",
+      "condition": "damp_pitch",
+      "phase": "safety",
+      "rule": "If dampness affects landing areas, run-up traction, or batter footing, safety overrides tactical advantage.",
+      "batting_response": "Report slipping immediately and avoid unnecessary sharp turns between wickets until footing is stable.",
+      "bowling_response": "Reduce run-up speed or suspend bowling if landing stability is compromised.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 2 The Umpires", "ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_022",
+      "condition": "new_red_ball",
+      "phase": "first_10_overs",
+      "rule": "Against a new red ball, batters should treat the first spell as a high-information phase rather than only a scoring phase.",
+      "batting_response": "Assess swing direction, seam response, bounce, and carry before expanding drives.",
+      "bowling_response": "Attack with upright seam, slips, and repeated top-of-off questions while the ball is hard.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 4 The Ball", "Review and Reassessment of Cricket Ball Swing"]
+    },
+    {
+      "id": "conditions_rule_023",
+      "condition": "new_white_ball",
+      "phase": "powerplay",
+      "rule": "A new white ball can still swing and seam, but the limited-overs field usually forces a balance between wicket-taking and boundary prevention.",
+      "batting_response": "Respect the first movement spell, then exploit field restrictions once control and length are clear.",
+      "bowling_response": "Use attacking lengths early but protect the high-value boundary zones for the batter's strengths.",
+      "evidence_level": "moderate",
+      "source_refs": ["ICC Playing Conditions", "Review and Reassessment of Cricket Ball Swing"]
+    },
+    {
+      "id": "conditions_rule_024",
+      "condition": "odi_white_ball",
+      "phase": "overs_35_to_50",
+      "rule": "Under the 2025 ODI ball-condition change, over 35 onward should trigger a fresh assessment of which selected ball is older, rougher, or easier to grip.",
+      "batting_response": "Watch whether the retained ball reverses, grips, or gets softer before pre-setting death-over options.",
+      "bowling_response": "Select the ball that best supports control, reverse swing, spin grip, or pace-off tactics within the rules.",
+      "evidence_level": "strong",
+      "source_refs": ["ICC Playing Conditions 2025 Changes"]
+    },
+    {
+      "id": "conditions_rule_025",
+      "condition": "middle_age_ball",
+      "phase": "overs_10_to_35",
+      "rule": "When swing has faded and the pitch is true, batting sides should identify the middle-ball scoring window before old-ball variation increases.",
+      "batting_response": "Raise strike rotation and boundary intent against bowlers without lateral movement or pace-off control.",
+      "bowling_response": "Shift to hard-to-score lengths, matchups, and field pressure rather than waiting for new-ball movement.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_026",
+      "condition": "old_red_ball",
+      "phase": "pre_new_ball",
+      "rule": "Before the second new ball is due, batting sides should expect reverse swing, cutters, and spin rather than conventional new-ball behavior.",
+      "batting_response": "Watch full straight balls for late movement and avoid lazy pad-first defense.",
+      "bowling_response": "Use attacking full lengths for reverse swing or tie down with spin while preparing the new-ball choice.",
+      "evidence_level": "moderate",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "MCC Law 4 The Ball"]
+    },
+    {
+      "id": "conditions_rule_027",
+      "condition": "new_ball_available",
+      "phase": "after_80_overs",
+      "rule": "When a new ball becomes available in long-form cricket, both teams should treat it as a tactical reset rather than a routine event.",
+      "batting_response": "Restart leave discipline and avoid assuming old-ball scoring rhythm will continue.",
+      "bowling_response": "Take the new ball when wicket-taking upside outweighs losing old-ball reverse or spin control.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 4 The Ball", "ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_028",
+      "condition": "wet_ball",
+      "phase": "dew_or_rain",
+      "rule": "A wet ball reduces grip reliability for bowlers and fielders, so plans should favor deliveries and throws with the highest control margin.",
+      "batting_response": "Expect more missed yorkers, fuller errors, skidding pace, and fewer high-rev spin deliveries.",
+      "bowling_response": "Use towels where allowed, simplify slower-ball options, and choose fields for control errors.",
+      "evidence_level": "moderate",
+      "source_refs": ["ICC Playing Conditions", "Cricket Australia Dew Analysis"]
+    },
+    {
+      "id": "conditions_rule_029",
+      "condition": "legal_ball_care",
+      "phase": "all_innings",
+      "rule": "Ball-maintenance tactics must stay inside legal boundaries; artificial alteration should never be represented as a tactical option.",
+      "batting_response": "Understand that sudden illegal ball-change issues may reset movement conditions.",
+      "bowling_response": "Use permitted polishing and drying only, and rely on natural wear for old-ball plans.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 41 Unfair Play", "ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_030",
+      "condition": "conventional_swing",
+      "phase": "new_ball_or_shiny_ball",
+      "rule": "When conventional swing is visible, batting should prioritize late contact and line judgment over front-foot dominance.",
+      "batting_response": "Leave outside off, play under the eyes, and avoid pushing at the ball away from the body.",
+      "bowling_response": "Keep seam presentation stable, use attacking catchers, and repeat the corridor before widening the batter.",
+      "evidence_level": "strong",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "Fluid Mechanics of Cricket Ball Swing"]
+    },
+    {
+      "id": "conditions_rule_031",
+      "condition": "reverse_swing",
+      "phase": "old_ball",
+      "rule": "When reverse swing appears, batting risk increases most against full straight balls and yorker lengths.",
+      "batting_response": "Watch the ball late, keep the front pad clear, and be ready for movement into the stumps.",
+      "bowling_response": "Use full lengths, stumps, and set-up balls that make the batter protect both edges.",
+      "evidence_level": "strong",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "Fluid Mechanics of Cricket Ball Swing"]
+    },
+    {
+      "id": "conditions_rule_032",
+      "condition": "seam_movement",
+      "phase": "any_ball_age",
+      "rule": "When seam deviation is greater than swing, the bowler should prioritize pitch contact quality and the batter should prioritize playing late.",
+      "batting_response": "Use soft hands, avoid hard pushes, and leave on length and line when possible.",
+      "bowling_response": "Use upright seam, wobble seam, or scrambled seam depending on which produces deviation.",
+      "evidence_level": "moderate",
+      "source_refs": ["ECB Cricket Surface Types", "NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_033",
+      "condition": "cutters",
+      "phase": "slow_or_dry_pitch",
+      "rule": "Cutters are higher value when the surface grips or the ball is older and harder to time.",
+      "batting_response": "Delay the swing and target areas where pace-off mis-hits are less costly.",
+      "bowling_response": "Use cutters into the pitch with a field for miscued straight and leg-side hits.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["Basic Guide to Turf Cricket Pitch Preparation"]
+    },
+    {
+      "id": "conditions_rule_034",
+      "condition": "wind",
+      "phase": "bowling_end_selection",
+      "rule": "Strong wind should influence bowler end selection because it can alter swing, drift, run-up rhythm, and boundary dimensions.",
+      "batting_response": "Reassess aerial shots into the wind and expect different ball behavior from each end.",
+      "bowling_response": "Use the wind-aided end for swing, drift, or short-ball tactics when the matchup fits.",
+      "evidence_level": "moderate",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing"]
+    },
+    {
+      "id": "conditions_rule_035",
+      "condition": "wind",
+      "phase": "fielding",
+      "rule": "High catches and boundary options should be adjusted for wind direction and gust consistency.",
+      "batting_response": "Prefer hitting with the wind only when boundary shape and field allow it; avoid casual lofts into crosswind.",
+      "bowling_response": "Set deeper catchers where the wind carries lofted shots and protect the wind-assisted hitting arc.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_036",
+      "condition": "dew",
+      "phase": "pre_match_toss",
+      "rule": "In day-night limited-overs matches, likely heavy dew raises the value of chasing unless pitch deterioration is expected to be severe.",
+      "batting_response": "If batting first, aim for a score that accounts for easier skidding conditions later.",
+      "bowling_response": "If bowling second, prepare wet-ball lengths and simpler grip-dependent variations.",
+      "evidence_level": "moderate",
+      "source_refs": ["Cricket Australia Dew Analysis", "ESPNcricinfo T20 World Cup Trends"]
+    },
+    {
+      "id": "conditions_rule_037",
+      "condition": "dew",
+      "phase": "spin_spell",
+      "rule": "When dew is heavy, spinners should expect reduced grip and should simplify pace, length, and field plans.",
+      "batting_response": "Look to score when the spinner cannot grip, but still respect skid into the stumps.",
+      "bowling_response": "Bowl flatter or into the pitch when needed, protect straight and leg-side skids, and dry the ball legally.",
+      "evidence_level": "moderate",
+      "source_refs": ["Cricket Australia Dew Analysis"]
+    },
+    {
+      "id": "conditions_rule_038",
+      "condition": "dew",
+      "phase": "pace_bowling",
+      "rule": "Wet-ball pace bowling should favor high-control yorkers, hard lengths, and predictable slower balls over complex grip variations.",
+      "batting_response": "Prepare for skidding pace and more full balls if the bowler loses slower-ball grip.",
+      "bowling_response": "Reduce back-of-the-hand and finger-split variation if release control drops.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["Cricket Australia Dew Analysis"]
+    },
+    {
+      "id": "conditions_rule_039",
+      "condition": "dew",
+      "phase": "fielding",
+      "rule": "Dew should increase conservative fielding technique because wet grass and a wet ball change pickup, sliding, catching, and throwing risk.",
+      "batting_response": "Push hard for twos when fielders are slow to gather, but account for slipping during turns.",
+      "bowling_response": "Set boundary riders who are comfortable sliding and throwing with a wet ball.",
+      "evidence_level": "moderate",
+      "source_refs": ["Cricket Australia Dew Analysis", "ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_040",
+      "condition": "humidity_overcast",
+      "phase": "pre_match_read",
+      "rule": "Do not assume high humidity alone will create swing; use live swing and seam evidence before changing the whole plan.",
+      "batting_response": "Start with normal new-ball discipline, then upgrade or downgrade swing risk based on actual movement.",
+      "bowling_response": "Try swing plans early if conditions suggest it, but move on quickly if the ball does not move.",
+      "evidence_level": "strong",
+      "source_refs": ["Atmospheric Conditions and Cricket Ball Swing", "Review and Reassessment of Cricket Ball Swing"]
+    },
+    {
+      "id": "conditions_rule_041",
+      "condition": "overcast",
+      "phase": "new_ball",
+      "rule": "Overcast skies may coincide with swing-friendly spells, but the causal mechanism is uncertain enough that it should be stored as a low-confidence weather cue.",
+      "batting_response": "Respect the first spell but do not surrender scoring options if the ball is not swinging.",
+      "bowling_response": "Use the first overs to test swing, then base field and length decisions on observed movement.",
+      "evidence_level": "moderate",
+      "source_refs": ["ABC Science of Swing", "Review and Reassessment of Cricket Ball Swing"]
+    },
+    {
+      "id": "conditions_rule_042",
+      "condition": "heat",
+      "phase": "pre_match_toss",
+      "rule": "Extreme heat can dry the surface and increase the physical cost of bowling and fielding first.",
+      "batting_response": "If batting first on a hot dry day, understand that a long innings can fatigue the opposition before their chase.",
+      "bowling_response": "Plan shorter spells, hydration, and cooling breaks rather than chasing one long hostile spell.",
+      "evidence_level": "moderate",
+      "source_refs": ["ICC Playing Conditions", "NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_043",
+      "condition": "heat",
+      "phase": "late_day",
+      "rule": "Heat-driven drying can make a previously true pitch grip or crack later in the match.",
+      "batting_response": "Score while timing is good and prepare for later spin or variable bounce.",
+      "bowling_response": "Keep spinners and cutters ready as the pitch loses moisture.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_044",
+      "condition": "rain",
+      "phase": "limited_overs_chase",
+      "rule": "In a rain-threatened chase, wickets are resources under DLS, so reckless early wickets can damage par position even if the required rate looks manageable.",
+      "batting_response": "Track DLS par, preserve wickets before likely interruptions, and accelerate from a resource-strong position.",
+      "bowling_response": "Attack wickets if the batting side is near par because each wicket can shift the DLS equation.",
+      "evidence_level": "strong",
+      "source_refs": ["ICC Duckworth-Lewis-Stern Method"]
+    },
+    {
+      "id": "conditions_rule_045",
+      "condition": "rain",
+      "phase": "limited_overs_first_innings",
+      "rule": "If rain is likely to reduce overs, the batting side should monitor whether par pressure rewards earlier acceleration or wicket preservation.",
+      "batting_response": "Use DLS-aware tempo rather than assuming a full-overs pacing model.",
+      "bowling_response": "Keep wicket-taking plans active because wickets reduce the batting side's projected resource base.",
+      "evidence_level": "strong",
+      "source_refs": ["ICC Duckworth-Lewis-Stern Method"]
+    },
+    {
+      "id": "conditions_rule_046",
+      "condition": "rain_delay",
+      "phase": "restart",
+      "rule": "After a rain delay, both teams should treat the restart as a new mini-phase because the ball, outfield, pitch top, and body readiness may all have changed.",
+      "batting_response": "Restart with a short recalibration period for pace, bounce, and outfield speed.",
+      "bowling_response": "Use a thorough re-warm-up and reassess grip, run-up footing, and ball condition before full effort.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 2 The Umpires", "ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_047",
+      "condition": "wet_outfield",
+      "phase": "restart",
+      "rule": "A wet outfield can slow along-ground scoring while also making the ball and footing harder to control.",
+      "batting_response": "Value hard-run singles and twos, but turn safely and test whether drives reach the boundary.",
+      "bowling_response": "Expect reduced ball shine control and choose safer fielding positions for pickups and throws.",
+      "evidence_level": "moderate",
+      "source_refs": ["ICC Playing Conditions", "MCC Law 2 The Umpires"]
+    },
+    {
+      "id": "conditions_rule_048",
+      "condition": "toss",
+      "phase": "decision_framework",
+      "rule": "The toss decision should be based on four competing values: best batting conditions now, best bowling conditions now, deterioration later, and dew/rain later.",
+      "batting_response": "Bat first when pitch deterioration or scoreboard pressure outweighs early movement risk.",
+      "bowling_response": "Bowl first when live wicket-taking conditions are likely to decline or dew makes defending harder.",
+      "evidence_level": "moderate",
+      "source_refs": ["Analysis of Toss Advantage in Cricket", "Toss Related Analysis of ODI Cricket"]
+    },
+    {
+      "id": "conditions_rule_049",
+      "condition": "toss",
+      "phase": "test_cricket",
+      "rule": "In red-ball cricket, batting first is often preferred on dry surfaces expected to deteriorate, but bowling first can be correct on safe green or damp surfaces with strong seam resources.",
+      "batting_response": "If inserted, manage the first session as survival and information gathering.",
+      "bowling_response": "If choosing to bowl, attack hard early because the decision loses value if wickets do not come.",
+      "evidence_level": "moderate",
+      "source_refs": ["Run Scoring Advantage in Test Cricket", "Analysis of Toss Advantage in Cricket"]
+    },
+    {
+      "id": "conditions_rule_050",
+      "condition": "toss",
+      "phase": "t20",
+      "rule": "In T20s, chasing preference should be venue and dew dependent rather than automatic.",
+      "batting_response": "If batting first, build a score that accounts for venue par and second-innings dew.",
+      "bowling_response": "If bowling first, exploit matchup and powerplay wickets rather than assuming chase comfort alone wins.",
+      "evidence_level": "moderate",
+      "source_refs": ["ESPNcricinfo T20 World Cup Trends", "Analysis of Toss Advantage in Cricket"]
+    },
+    {
+      "id": "conditions_rule_051",
+      "condition": "toss",
+      "phase": "odi",
+      "rule": "In ODIs, toss value is mixed and should be moderated by pitch, dew, DLS risk, and the team's ability to use middle-overs spin or death bowling.",
+      "batting_response": "Avoid overcorrecting to chase unless venue and weather support it.",
+      "bowling_response": "Treat new-ball wickets and middle-overs control as more actionable than generic toss narratives.",
+      "evidence_level": "moderate",
+      "source_refs": ["Toss Related Analysis of ODI Cricket", "ICC Playing Conditions 2025 Changes"]
+    },
+    {
+      "id": "conditions_rule_052",
+      "condition": "test_first_session",
+      "phase": "red_ball",
+      "rule": "The first session of a Test should be treated as a high-leverage new-ball and information phase.",
+      "batting_response": "Reward leave discipline, tight defense, and strike rotation over forcing a session-winning run rate.",
+      "bowling_response": "Set attacking fields and bowl repeated wicket-taking lengths while the ball and pitch are fresh.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ICC Playing Conditions", "MCC Law 4 The Ball"]
+    },
+    {
+      "id": "conditions_rule_053",
+      "condition": "test_day_four_five",
+      "phase": "late_match",
+      "rule": "Late in a Test on a worn dry pitch, spin, footmarks, variable bounce, and close catching become central match factors.",
+      "batting_response": "Use clear methods against spin and avoid being trapped on the crease.",
+      "bowling_response": "Use rough, attacking fields, and repeated pressure to make defensive contact uncertain.",
+      "evidence_level": "moderate",
+      "source_refs": ["Run Scoring Advantage in Test Cricket", "NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_054",
+      "condition": "declaration_follow_on_context",
+      "phase": "long_format",
+      "rule": "Long-format condition decisions should include future pitch wear and bowling workload, not only current scoreboard advantage.",
+      "batting_response": "Push tempo if declaring before the best bowling conditions disappear.",
+      "bowling_response": "Balance enforcing follow-on or bowling again against pace-bowling fatigue and later surface help.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_055",
+      "condition": "odi_powerplay",
+      "phase": "overs_1_to_10",
+      "rule": "ODI powerplays require reading whether the new ball offers wickets or whether field restrictions make attack too expensive.",
+      "batting_response": "Take boundary options once movement is absent, but do not donate wickets if the ball is moving.",
+      "bowling_response": "Attack with slips if movement exists; if not, move to boundary-denial plans earlier.",
+      "evidence_level": "moderate",
+      "source_refs": ["ICC Playing Conditions", "Review and Reassessment of Cricket Ball Swing"]
+    },
+    {
+      "id": "conditions_rule_056",
+      "condition": "odi_middle_overs",
+      "phase": "overs_11_to_40",
+      "rule": "ODI middle overs on slow or dry surfaces should value spin pressure and cutters because dot balls force risk later.",
+      "batting_response": "Rotate early in the over, target matchup balls, and avoid being stalled by one-sided fields.",
+      "bowling_response": "Stack dots through pace change, spin, and field plans that block the batter's release zones.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ICC Playing Conditions", "ESPNcricinfo T20 World Cup Trends"]
+    },
+    {
+      "id": "conditions_rule_057",
+      "condition": "odi_death_overs",
+      "phase": "overs_41_to_50",
+      "rule": "ODI death tactics should be conditioned by whether the ball is dry enough for slower balls or wet enough to demand simpler release options.",
+      "batting_response": "Read grip control early; attack predictable full balls when wet-ball variation disappears.",
+      "bowling_response": "Choose between yorker, hard length, bouncer, and slower ball based on grip, pitch, and boundary size.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ICC Playing Conditions 2025 Changes", "Cricket Australia Dew Analysis"]
+    },
+    {
+      "id": "conditions_rule_058",
+      "condition": "t20_powerplay_green_or_damp",
+      "phase": "overs_1_to_6",
+      "rule": "In T20 powerplays on green or damp pitches, preserving wickets can be more valuable than chasing a flat-pitch powerplay score.",
+      "batting_response": "Accept fewer forced boundaries if seam and swing are real, then recover through matchup overs.",
+      "bowling_response": "Use wicket-taking fields and lengths because early wickets change the innings ceiling.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ESPNcricinfo T20 World Cup Trends", "ECB Cricket Surface Types"]
+    },
+    {
+      "id": "conditions_rule_059",
+      "condition": "t20_powerplay_flat_or_dew",
+      "phase": "overs_1_to_6",
+      "rule": "On flat or dewy T20 surfaces, powerplay batting should exploit field restrictions before bowlers shift to defensive variation.",
+      "batting_response": "Use high-percentage boundary options over infielders and target bowlers without movement.",
+      "bowling_response": "Protect the batter's best arc and use surprise hard length or yorker rather than predictable slot balls.",
+      "evidence_level": "moderate",
+      "source_refs": ["ESPNcricinfo T20 World Cup Trends", "Cricket Australia Dew Analysis"]
+    },
+    {
+      "id": "conditions_rule_060",
+      "condition": "t20_middle_overs_turning",
+      "phase": "overs_7_to_15",
+      "rule": "On a turning T20 pitch, middle-over batting should attack matchups before the required rate forces low-percentage options.",
+      "batting_response": "Use sweep, feet, and targeted boundary options against the spinner or angle you read best.",
+      "bowling_response": "Hold the spinner for matchups and protect the batter's pre-planned release shot.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ESPNcricinfo T20 World Cup Trends"]
+    },
+    {
+      "id": "conditions_rule_061",
+      "condition": "t20_death_dew",
+      "phase": "overs_16_to_20",
+      "rule": "Heavy dew at the T20 death should reduce reliance on grip-heavy slower balls unless the bowler proves control.",
+      "batting_response": "Expect more full pace and skidding errors; stay balanced for yorker and low full toss.",
+      "bowling_response": "Use the most reliable yorker, hard length, or wide line plan and set a field for execution miss patterns.",
+      "evidence_level": "moderate",
+      "source_refs": ["Cricket Australia Dew Analysis"]
+    },
+    {
+      "id": "conditions_rule_062",
+      "condition": "batting_against_swing",
+      "phase": "new_ball",
+      "rule": "Against visible swing, technical simplicity matters more than expanding the scoring map.",
+      "batting_response": "Keep head still, play close, leave late, and let the ball come under the eyes.",
+      "bowling_response": "Set up the batter with repeated away or in-swing threats before using the surprise ball.",
+      "evidence_level": "strong",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "Fluid Mechanics of Cricket Ball Swing"]
+    },
+    {
+      "id": "conditions_rule_063",
+      "condition": "batting_against_seam",
+      "phase": "green_or_damp",
+      "rule": "Against seam movement off the pitch, soft hands and compact defensive contact reduce edge carry and bat-pad risk.",
+      "batting_response": "Do not chase balls that seam away from a sixth-stump line; make the bowler bowl at the stumps.",
+      "bowling_response": "Challenge the batter's judgment with channel balls and occasional straighter wicket balls.",
+      "evidence_level": "moderate",
+      "source_refs": ["ECB Cricket Surface Types"]
+    },
+    {
+      "id": "conditions_rule_064",
+      "condition": "batting_against_bounce",
+      "phase": "hard_bouncy",
+      "rule": "Against steeper bounce, batters should separate evasion from scoring: not every short ball is a scoring ball.",
+      "batting_response": "Use sway, duck, or controlled roll; hook only when length, line, field, and personal skill support it.",
+      "bowling_response": "Use short balls as part of a set-up, not as a default length without field cover.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_065",
+      "condition": "batting_against_spin",
+      "phase": "turning_pitch",
+      "rule": "Against spin on a gripping pitch, half-committed footwork is high risk.",
+      "batting_response": "Choose a clear forward, back, sweep, or use-of-feet option and commit to it.",
+      "bowling_response": "Vary flight and pace to create indecision and keep catchers in play.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_066",
+      "condition": "batting_on_slow_pitch",
+      "phase": "limited_overs",
+      "rule": "On slow pitches, running between wickets can be the safest way to maintain rate while boundaries are harder to time.",
+      "batting_response": "Commit to hard singles, twos, and hitting to larger gaps rather than forcing every ball to the rope.",
+      "bowling_response": "Use in-out fields and change pace to keep batters hitting to protected zones.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ECB Cricket Surface Types"]
+    },
+    {
+      "id": "conditions_rule_067",
+      "condition": "bowling_on_green_damp",
+      "phase": "pace_spell",
+      "rule": "On green or damp pitches, seamers should be patient enough to let the surface create chances.",
+      "batting_response": "Make the bowler change length by leaving well and defending straight.",
+      "bowling_response": "Avoid over-searching for magic balls; repeat a threatening length and line.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ECB Cricket Surface Types", "MCC Law 6 The Pitch"]
+    },
+    {
+      "id": "conditions_rule_068",
+      "condition": "bowling_on_hard_bouncy",
+      "phase": "pace_spell",
+      "rule": "On hard bouncy pitches, bowling plans should combine top-of-off pressure with body-line variation and catchers behind square.",
+      "batting_response": "Score when the bowler misses too short or too wide, but protect the glove and edge zones.",
+      "bowling_response": "Use bounce to create uncertainty while keeping enough deliveries at the stumps to threaten dismissal.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_069",
+      "condition": "bowling_on_turner",
+      "phase": "spin_spell",
+      "rule": "On turners, the field should match the spinner's actual threat: edge, bat-pad, miscued loft, or trapped crease.",
+      "batting_response": "Identify which dismissal mode the field is selling and choose the lowest-risk release option.",
+      "bowling_response": "Do not copy a generic close field; place catchers where your spin, angle, and pace produce mistakes.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["NZC Cricket Pitch Preparation Guide"]
+    },
+    {
+      "id": "conditions_rule_070",
+      "condition": "bowling_in_dew",
+      "phase": "defending_total",
+      "rule": "When defending with dew, bowlers should plan around execution misses before they happen.",
+      "batting_response": "Look for bowlers losing release consistency and pressure them with quick twos and boundary intent.",
+      "bowling_response": "Set protection for full-toss, slot, and overpitched misses caused by wet-ball grip loss.",
+      "evidence_level": "moderate",
+      "source_refs": ["Cricket Australia Dew Analysis"]
+    },
+    {
+      "id": "conditions_rule_071",
+      "condition": "field_placement",
+      "phase": "green_pitch",
+      "rule": "If edges carry on a green pitch, catching cordons are worth more than boundary protection early.",
+      "batting_response": "Avoid low-percentage drives into the catching arc.",
+      "bowling_response": "Keep enough catchers for the plan; removing slips too early wastes movement.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ECB Cricket Surface Types"]
+    },
+    {
+      "id": "conditions_rule_072",
+      "condition": "field_placement",
+      "phase": "slow_low_pitch",
+      "rule": "If edges do not carry, conventional slips may be less valuable than close catchers, ring pressure, or boundary-saving positions.",
+      "batting_response": "Use soft hands and drop-and-run options when the field retreats.",
+      "bowling_response": "Move catchers closer or change the field to create pressure through dots and miscues.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ECB Cricket Surface Types"]
+    },
+    {
+      "id": "conditions_rule_073",
+      "condition": "heat_load",
+      "phase": "fast_bowling_spell",
+      "rule": "In hot conditions, fast-bowling spell planning should account for fatigue before tactical accuracy collapses.",
+      "batting_response": "Extend spells through leaving and running hard if the opposition bowler is visibly fatigued.",
+      "bowling_response": "Use shorter spells, hydration, and end rotation to preserve pace and accuracy.",
+      "evidence_level": "moderate",
+      "source_refs": ["ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_074",
+      "condition": "footing",
+      "phase": "damp_or_dew",
+      "rule": "Wet or damp footing should change running, fielding, and bowling intensity decisions immediately.",
+      "batting_response": "Use controlled turns and call early; do not rely on last-second direction changes.",
+      "bowling_response": "Check run-up and landing grip before full-speed spells or boundary throws.",
+      "evidence_level": "strong",
+      "source_refs": ["MCC Law 2 The Umpires", "ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_075",
+      "condition": "hard_surface_load",
+      "phase": "pace_bowling",
+      "rule": "Hard bouncy pitches can increase the temptation for high-effort short-ball spells, so workload should be monitored with tactical intent.",
+      "batting_response": "Force the bowler into repeated spells by leaving and rotating when possible.",
+      "bowling_response": "Use short-ball spells as planned bursts rather than continuous high-force default bowling.",
+      "evidence_level": "coaching-tradition",
+      "source_refs": ["ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_076",
+      "condition": "rain_delay_load",
+      "phase": "restart",
+      "rule": "Rain delays require a fresh warm-up because tissue temperature, rhythm, and run-up feel can drop during stoppages.",
+      "batting_response": "Use restart balls to regain timing before forcing high-risk shots.",
+      "bowling_response": "Complete progressive run-ups and bowling-specific prep before full pace.",
+      "evidence_level": "strong",
+      "source_refs": ["ICC Playing Conditions", "MCC Law 2 The Umpires"]
+    },
+    {
+      "id": "conditions_rule_077",
+      "condition": "live_feedback",
+      "phase": "first_overs",
+      "rule": "If live evidence contradicts the pre-match label, update the plan quickly.",
+      "batting_response": "If a green pitch plays flat, expand scoring; if a flat pitch seams, tighten technique immediately.",
+      "bowling_response": "If the planned movement is absent, change length, end, field, or bowler type rather than waiting.",
+      "evidence_level": "strong",
+      "source_refs": ["Review and Reassessment of Cricket Ball Swing", "ICC Playing Conditions"]
+    },
+    {
+      "id": "conditions_rule_078",
+      "condition": "uncertain_conditions",
+      "phase": "all_formats",
+      "rule": "When evidence is uncertain, choose a flexible plan that preserves wickets, bowling options, and field adjustment capacity.",
+      "batting_response": "Avoid committing the whole innings to a pre-match story before the surface and ball reveal themselves.",
+      "bowling_response": "Use early overs to collect information, then commit fields and matchups once conditions are clearer.",
+      "evidence_level": "strong",
+      "source_refs": ["Analysis of Toss Advantage in Cricket", "Review and Reassessment of Cricket Ball Swing"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "name": "heat_tolerance",
+      "summary": "Hot days raise hydration, cooling, concentration, and repeated-sprint demands, especially for fielders and fast bowlers.",
+      "condition_context": ["heat", "dry_pitch", "long_fielding_innings"],
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "wet_ball_grip_strength",
+      "summary": "Dew and rain increase demands on finger, wrist, and forearm control for bowling, catching, and throwing.",
+      "condition_context": ["dew", "rain", "wet_outfield"],
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "footing_and_deceleration",
+      "summary": "Damp, dewy, or loose surfaces increase the need for controlled deceleration, turning, sliding, and landing mechanics.",
+      "condition_context": ["damp_pitch", "dew", "wet_outfield"],
+      "evidence_level": "strong"
+    },
+    {
+      "name": "fast_bowling_repeat_power",
+      "summary": "Hard bouncy or green conditions can invite longer high-effort pace spells, requiring repeat power and trunk stiffness.",
+      "condition_context": ["green_pitch", "hard_bouncy_pitch", "new_ball"],
+      "evidence_level": "coaching-tradition"
+    },
+    {
+      "name": "spin_finger_and_wrist_capacity",
+      "summary": "Turning, dry, or worn pitches increase spin-bowling volume and demand repeatable finger, wrist, shoulder, and trunk work.",
+      "condition_context": ["turning_pitch", "dry_pitch", "cracked_worn_pitch"],
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "batting_reaction_and_balance",
+      "summary": "Seam, swing, variable bounce, and spin require stable head position, balance recovery, and late visual tracking.",
+      "condition_context": ["green_pitch", "damp_pitch", "cracked_worn_pitch", "turning_pitch"],
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "running_between_wickets",
+      "summary": "Slow pitches and large wet outfields increase the value of acceleration, braking, turning, and repeated short sprints.",
+      "condition_context": ["slow_low_pitch", "wet_outfield", "limited_overs"],
+      "evidence_level": "coaching-tradition"
+    },
+    {
+      "name": "fielding_low_position_repeats",
+      "summary": "Slow low pitches and ring-field pressure increase low pickups, short reactions, and repeated crouch-to-throw movements.",
+      "condition_context": ["slow_low_pitch", "middle_overs", "spin_spell"],
+      "evidence_level": "coaching-tradition"
+    },
+    {
+      "name": "restart_readiness",
+      "summary": "Rain delays and long interruptions demand the ability to re-warm, regain bowling rhythm, and restore batting timing quickly.",
+      "condition_context": ["rain_delay", "restart"],
+      "evidence_level": "strong"
+    },
+    {
+      "name": "mental_flexibility",
+      "summary": "Condition-heavy cricket rewards rapid plan updates, uncertainty tolerance, and disciplined risk selection under changing information.",
+      "condition_context": ["uncertain_conditions", "toss", "DLS", "dew"],
+      "evidence_level": "moderate"
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "name": "fast_bowling_heat_fatigue",
+      "risk": "Heat can degrade run-up rhythm, landing control, pace, and decision quality during long spells.",
+      "mitigation": "Shorter spells, hydration, cooling, end rotation, and avoiding unnecessary high-effort bouncer spells.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "wet_runup_slip",
+      "risk": "Damp run-ups, wet landing areas, and dewy grass increase slipping risk for bowlers.",
+      "mitigation": "Inspect run-up, use appropriate spikes, progressive run-ups after breaks, and stop if landing stability is unsafe.",
+      "evidence_level": "strong"
+    },
+    {
+      "name": "wet_turning_between_wickets",
+      "risk": "Wet grass and soft ground increase slipping risk during sharp turns and emergency dives.",
+      "mitigation": "Earlier calls, controlled turning, footwear check, and avoiding unnecessary blind turns.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "throwing_with_wet_ball",
+      "risk": "A wet ball can encourage over-gripping, altered release, and rushed throws from unstable positions.",
+      "mitigation": "Use safer gather mechanics, shorter relay throws, and controlled release practice in wet conditions.",
+      "evidence_level": "coaching-tradition"
+    },
+    {
+      "name": "hard_pitch_short_ball_load",
+      "risk": "Hard bouncy pitches can increase repeated high-force fast-bowling efforts if the tactical plan overuses short balls.",
+      "mitigation": "Use short-ball bursts, rotate bowlers, and monitor trunk, back, calf, and ankle fatigue.",
+      "evidence_level": "coaching-tradition"
+    },
+    {
+      "name": "spinner_finger_overload",
+      "risk": "Turning pitches can lead to high spin volume and repeated high-rev attempts that stress fingers, wrist, elbow, and shoulder.",
+      "mitigation": "Cap high-intensity spin volume, rotate ends, and include forearm and shoulder capacity work.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "rain_delay_cold_restart",
+      "risk": "Restarting after rain without warm-up can raise soft-tissue and bowling rhythm risk.",
+      "mitigation": "Use structured re-warm-up, gradual bowling build-up, and timing reset for batters.",
+      "evidence_level": "strong"
+    },
+    {
+      "name": "low_slow_pitch_fielding_volume",
+      "risk": "Slow pitches can create more ring-field pickups, low catches, and repeated change-of-direction efforts.",
+      "mitigation": "Train low-position strength, hip mobility, groin tolerance, and repeat sprint mechanics.",
+      "evidence_level": "coaching-tradition"
+    },
+    {
+      "name": "dehydration_concentration_drop",
+      "risk": "Heat and long fielding innings can reduce concentration, catching quality, running intensity, and tactical judgment.",
+      "mitigation": "Hydration planning, cooling, nutrition, shade use when available, and role-specific spell rotation.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "variable_bounce_batting_impact",
+      "risk": "Cracked or worn pitches can increase impact risk from balls that climb or stay low unexpectedly.",
+      "mitigation": "Use protective equipment, compact technique, and avoid unnecessary hooks or front-pad plants.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "wet_boundary_sliding",
+      "risk": "Dew and rain increase sliding speed and reduce stopping control near the boundary.",
+      "mitigation": "Practice wet-ground sliding mechanics, communicate chase roles, and prioritize body position over desperation stops.",
+      "evidence_level": "coaching-tradition"
+    },
+    {
+      "name": "high_workload_condition_opportunity",
+      "risk": "Helpful conditions can tempt captains to overuse the bowler who is most dangerous in that phase.",
+      "mitigation": "Track overs, spell length, recent workload, and next-match needs even when conditions are favorable.",
+      "evidence_level": "moderate"
+    }
+  ],
+  "training_implications": [
+    {
+      "name": "condition_scenario_nets",
+      "summary": "Nets should include scenario labels such as green new ball, slow low chase, wet-ball death overs, dry turner, and old-ball reverse so players connect technique to match context.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "live_read_checklist",
+      "summary": "Train players to log first-over observations: carry, seam, swing, bounce, spin bite, ball wetness, outfield speed, and footing.",
+      "evidence_level": "strong"
+    },
+    {
+      "name": "new_ball_batting_block",
+      "summary": "Batters need blocks for leaving, late contact, soft hands, and decision-making against swing and seam rather than only throwdown volume.",
+      "evidence_level": "strong"
+    },
+    {
+      "name": "slow_pitch_batting_block",
+      "summary": "Batters should practice delayed contact, sweep options, rotation, and hitting pace-off balls from a stable base.",
+      "evidence_level": "coaching-tradition"
+    },
+    {
+      "name": "turning_pitch_methods",
+      "summary": "Batters should rehearse multiple spin methods: forward smother, back-foot depth, sweep, feet use, and strike rotation under close-field pressure.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "wet_ball_bowling",
+      "summary": "Bowlers should practice legal wet-ball handling, towel routines where permitted, yorkers, hard length, and simplified slower balls.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "reverse_swing_skill",
+      "summary": "Pace bowlers should train legal ball-care awareness, seam/wrist control, full attacking lengths, and old-ball field plans without teaching illegal alteration.",
+      "evidence_level": "strong"
+    },
+    {
+      "name": "cross_seam_and_cutter_block",
+      "summary": "Pace bowlers need practice using cross-seam, wobble seam, and cutters on surfaces that grip, stop, or vary in bounce.",
+      "evidence_level": "coaching-tradition"
+    },
+    {
+      "name": "dew_fielding_block",
+      "summary": "Fielding sessions should include wet-ball catching, ground pickups, sliding, and relay throws when teams play day-night cricket.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "DLS_game_sense",
+      "summary": "Limited-overs preparation should include DLS par-score simulations where batters and bowlers adjust for wickets and overs remaining.",
+      "evidence_level": "strong"
+    },
+    {
+      "name": "toss_decision_walkthrough",
+      "summary": "Teams should rehearse toss calls using conditional frameworks rather than simple bat-first or chase-first habits.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "heat_preparation",
+      "summary": "Hot-weather matches require hydration plans, cooling strategies, spell planning, and lower gym stress near heavy cricket load.",
+      "evidence_level": "moderate"
+    },
+    {
+      "name": "rain_delay_restart_protocol",
+      "summary": "Players should rehearse restart routines for batting timing, bowling run-up build-up, and fielding readiness after interruptions.",
+      "evidence_level": "strong"
+    },
+    {
+      "name": "uncertainty_language",
+      "summary": "Coaches should teach evidence labels: strong legal/physical facts, moderate venue-supported patterns, and coaching-tradition heuristics that need live confirmation.",
+      "evidence_level": "strong"
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "condition_profile",
+      "name": "pitch_type_profiles",
+      "fields": ["green", "dry", "hard_bouncy", "slow_low", "turning", "cracked_worn", "damp"],
+      "usage": "Map observed pitch labels to batting, bowling, fielding, and load implications."
+    },
+    {
+      "record_type": "ball_state",
+      "name": "ball_age_and_condition_tracker",
+      "fields": ["format", "ball_color", "overs_on_ball", "new_ball_available", "wetness", "shine_status", "roughness", "legal_care_notes"],
+      "usage": "Drive new-ball, old-ball, reverse-swing, spin, and wet-ball tactical prompts."
+    },
+    {
+      "record_type": "weather_state",
+      "name": "cricket_weather_context",
+      "fields": ["temperature", "humidity", "cloud", "wind_speed_direction", "dew_likelihood", "rain_probability", "heat_risk", "uncertainty_notes"],
+      "usage": "Separate strong weather inputs from uncertain swing folklore."
+    },
+    {
+      "record_type": "toss_advisor_rule",
+      "name": "conditional_toss_decision",
+      "fields": ["format", "pitch_now", "pitch_later", "dew", "rain_DLS", "team_strengths", "venue_history", "confidence"],
+      "usage": "Produce conditional bat-first or bowl-first recommendations with uncertainty."
+    },
+    {
+      "record_type": "innings_phase_rule",
+      "name": "format_phase_condition_rules",
+      "fields": ["format", "phase", "condition", "batting_response", "bowling_response", "field_response", "evidence_level"],
+      "usage": "Feed match IQ prompts for Test, ODI, and T20 phases."
+    },
+    {
+      "record_type": "DLS_context",
+      "name": "rain_interruption_decision_support",
+      "fields": ["overs_remaining", "wickets_lost", "par_score", "resources", "batting_tempo_note", "bowling_wicket_value"],
+      "usage": "Support limited-overs rain strategy without implementing scoring rules in this draft."
+    },
+    {
+      "record_type": "training_scenario",
+      "name": "conditions_based_practice_blocks",
+      "fields": ["scenario", "role", "skill_focus", "physical_focus", "constraints", "evidence_level"],
+      "usage": "Convert condition IQ into practical training sessions."
+    },
+    {
+      "record_type": "load_modifier",
+      "name": "condition_load_risk_modifiers",
+      "fields": ["heat", "wet_footing", "hard_pitch", "rain_delay", "helpful_bowling_conditions", "spin_volume"],
+      "usage": "Adjust role-specific workload and recovery plans around match conditions."
+    },
+    {
+      "record_type": "evidence_tag",
+      "name": "cricket_conditions_evidence_levels",
+      "fields": ["strong", "moderate", "coaching_tradition", "requires_live_confirmation"],
+      "usage": "Prevent uncertain coaching folklore from being presented as settled fact."
+    },
+    {
+      "record_type": "live_observation",
+      "name": "first_overs_condition_feedback",
+      "fields": ["keeper_carry", "edge_carry", "seam", "swing", "turn", "bounce", "outfield_speed", "dew", "footing", "plan_update"],
+      "usage": "Let match plans update after live evidence."
+    }
+  ],
+  "open_questions": [
+    {
+      "question": "How should the app quantify venue-specific dew likelihood without maintaining a full historical weather database?",
+      "why_it_matters": "Dew can strongly change day-night toss and bowling decisions, but it is local and seasonal."
+    },
+    {
+      "question": "What minimum live observations are enough to override a pre-match pitch label?",
+      "why_it_matters": "A green-looking pitch can play flat, and a dry-looking pitch can still carry or seam."
+    },
+    {
+      "question": "Should humidity be stored as an independent swing cue or only as part of a low-confidence weather bundle?",
+      "why_it_matters": "Research cautions against simple humidity-causes-swing claims."
+    },
+    {
+      "question": "How should the backend represent ICC ball-rule changes across competitions and dates?",
+      "why_it_matters": "ODI ball-aging tactics changed under 2025 playing-condition updates and may differ by competition."
+    },
+    {
+      "question": "What local-league rules differ from ICC playing conditions for ball replacement, interruptions, and pitch covering?",
+      "why_it_matters": "Community cricket often uses modified rules that affect match IQ."
+    },
+    {
+      "question": "Can toss-decision recommendations safely use venue history if sample sizes are small?",
+      "why_it_matters": "Toss trends can be overfit and misleading without enough matches."
+    },
+    {
+      "question": "How should pitch wear be estimated in amateur cricket without ball-tracking or surface sensors?",
+      "why_it_matters": "Most app users will have visual and subjective observations only."
+    },
+    {
+      "question": "Should training plans change automatically after rain delays, or only after user-reported workload and match minutes?",
+      "why_it_matters": "Restart risk is real, but not every interruption creates high training impact."
+    },
+    {
+      "question": "How should the app distinguish tactical workload from physical workload when helpful conditions lead to longer spells?",
+      "why_it_matters": "A bowler can have a tactically valuable spell that still creates recovery risk."
+    },
+    {
+      "question": "What evidence threshold should be required before storing coaching-tradition rules as user-facing advice?",
+      "why_it_matters": "Many useful cricket heuristics are practical but not strongly studied."
+    }
+  ],
+  "source_refs": [
+    {
+      "title": "MCC Laws of Cricket",
+      "url": "https://www.lords.org/mcc/the-laws",
+      "source_type": "governing_body_laws",
+      "notes": "Primary source for Laws including ball, pitch, umpires, covering, unfair play, and weather/light authority."
+    },
+    {
+      "title": "MCC Law 2 The Umpires",
+      "url": "https://www.lords.org/mcc/the-laws/the-umpires",
+      "source_type": "governing_body_laws",
+      "notes": "Used for safety, fitness of ground/weather/light, and interruption context."
+    },
+    {
+      "title": "MCC Law 4 The Ball",
+      "url": "https://www.lords.org/mcc/the-laws/the-ball",
+      "source_type": "governing_body_laws",
+      "notes": "Used for ball replacement, new-ball availability, and ball-control principles."
+    },
+    {
+      "title": "MCC Law 6 The Pitch",
+      "url": "https://www.lords.org/mcc/the-laws/the-pitch",
+      "source_type": "governing_body_laws",
+      "notes": "Used for pitch definition and context around the playing surface."
+    },
+    {
+      "title": "MCC Law 9 Preparation and Maintenance",
+      "url": "https://www.lords.org/mcc/the-laws/preparation-and-maintenance-of-the-playing-area",
+      "source_type": "governing_body_laws",
+      "notes": "Used for rolling, maintenance, and pitch lifecycle framing."
+    },
+    {
+      "title": "MCC Law 10 Covering the Pitch",
+      "url": "https://www.lords.org/mcc/the-laws/covering-the-pitch",
+      "source_type": "governing_body_laws",
+      "notes": "Used for damp pitch and rain-covering context."
+    },
+    {
+      "title": "MCC Law 41 Unfair Play",
+      "url": "https://www.lords.org/mcc/the-laws/unfair-play",
+      "source_type": "governing_body_laws",
+      "notes": "Used for legal limits on ball-condition tactics."
+    },
+    {
+      "title": "ICC Playing Conditions",
+      "url": "https://www.icc-cricket.com/about/cricket/rules-and-regulations/playing-conditions",
+      "source_type": "governing_body_playing_conditions",
+      "notes": "Primary source hub for international format playing conditions, interruptions, balls, and match regulations."
+    },
+    {
+      "title": "ICC Playing Conditions 2025 Changes",
+      "url": "https://www.icc-cricket.com/news/several-changes-made-to-playing-conditions",
+      "source_type": "governing_body_update",
+      "notes": "Used for the men's ODI two-new-ball adjustment from over 35 onward and related playing-condition updates."
+    },
+    {
+      "title": "ICC Duckworth-Lewis-Stern Method",
+      "url": "https://www.icc-cricket.com/about/cricket/rules-and-regulations/duckworth-lewis-stern",
+      "source_type": "governing_body_method",
+      "notes": "Used for rain-interruption and limited-overs resource strategy."
+    },
+    {
+      "title": "ICC Pitch and Outfield Ratings",
+      "url": "https://www.icc-cricket.com/about/cricket/rules-and-regulations/pitch-ratings",
+      "source_type": "governing_body_pitch_standard",
+      "notes": "Used for pitch/outfield quality framing and official condition assessment concepts."
+    },
+    {
+      "title": "ECB Cricket Surface Types",
+      "url": "https://www.ecb.co.uk/news/74645/cricket-surface-types",
+      "source_type": "national_board_ground_guidance",
+      "notes": "Used for surface categories and general turf cricket surface behavior."
+    },
+    {
+      "title": "ECB Recommended Guidelines for the Construction, Preparation and Maintenance of Cricket Pitches and Outfields",
+      "url": "https://resources.ecb.co.uk/ecb/document/2025/03/25/13f929e5-65d5-4ddb-b784-4d42202887e6/Cricket-Pitches-and-Outfields-Jan-2025.pdf",
+      "source_type": "national_board_ground_guidance",
+      "notes": "Used as formal pitch and outfield preparation guidance."
+    },
+    {
+      "title": "NZC Cricket Pitch Preparation Guide",
+      "url": "https://www.nzc.nz/media/10212/nzc_pitch-prep_pages_digital_1608.pdf",
+      "source_type": "national_board_ground_guidance",
+      "notes": "Used for practical pitch preparation, moisture, compaction, and surface-behavior framing."
+    },
+    {
+      "title": "Basic Guide to Turf Cricket Pitch Preparation",
+      "url": "https://www.sportsturfwa.asn.au/wp-content/uploads/2021/02/Basic-Guide-to-Turf-Cricket-Pitch-Preparation-by-John-Shannon-2010.pdf",
+      "source_type": "turf_management_guidance",
+      "notes": "Used for practical turf preparation concepts around grass, moisture, rolling, hardness, and surface behavior."
+    },
+    {
+      "title": "Review and Reassessment of the Aerodynamics of Cricket Ball Swing",
+      "url": "https://www.cambridge.org/core/journals/flow/article/review-and-reassessment-of-the-aerodynamics-of-cricket-ball-swing/389B2E66A420FF51FAB3EC2186AFE0AE",
+      "source_type": "peer_reviewed_research",
+      "notes": "Used for swing, reverse swing, seam, airflow, and uncertainty around atmospheric explanations."
+    },
+    {
+      "title": "Fluid Mechanics of Cricket Ball Swing",
+      "url": "https://torroja.dmt.upm.es/turbdata/agard/chapter4/AGARD_AR_335-04.pdf",
+      "source_type": "technical_research_review",
+      "notes": "Used for conventional and reverse swing mechanics from a fluid-mechanics perspective."
+    },
+    {
+      "title": "Atmospheric Conditions and Cricket Ball Swing",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1877705812017111",
+      "source_type": "research_paper",
+      "notes": "Used for uncertainty around humidity and atmospheric swing claims."
+    },
+    {
+      "title": "ABC Science of Swing",
+      "url": "https://www.abc.net.au/news/science/2018-03-23/the-science-of-swing-bowling-cricket/9578086",
+      "source_type": "reputable_science_journalism",
+      "notes": "Used for accessible expert discussion of swing and common overcast/humidity claims."
+    },
+    {
+      "title": "Analysis of Toss Advantage in Cricket",
+      "url": "https://ar5iv.labs.arxiv.org/html/2204.00998",
+      "source_type": "statistical_research_preprint",
+      "notes": "Used for cautious toss-advantage framing across cricket matches."
+    },
+    {
+      "title": "Toss Related Analysis of ODI Cricket",
+      "url": "https://www.sfu.ca/~tswartz/papers/cricket.pdf",
+      "source_type": "statistical_research",
+      "notes": "Used for ODI toss and decision analysis, including evidence that toss effects should not be overstated."
+    },
+    {
+      "title": "Run Scoring Advantage in Test Cricket",
+      "url": "https://doi.org/10.1080/02640414.2020.1809153",
+      "source_type": "peer_reviewed_research",
+      "notes": "Used for innings and pitch-lifecycle framing in Test cricket."
+    },
+    {
+      "title": "Cricket Australia Dew Analysis",
+      "url": "https://www.cricket.com.au/news/3314338/what-is-the-dew-factor-and-how-does-it-impact-cricket",
+      "source_type": "national_board_analysis",
+      "notes": "Used for dew effects on grip, skidding, and day-night match strategy."
+    },
+    {
+      "title": "ESPNcricinfo T20 World Cup Trends",
+      "url": "https://www.espncricinfo.com/story/t20-world-cup-trends-batting-first-v-chasing-dew-and-powerplay-wickets-1292203",
+      "source_type": "reputable_cricket_analysis",
+      "notes": "Used for limited-overs trend framing around chasing, dew, and powerplay wickets."
+    }
+  ]
+}

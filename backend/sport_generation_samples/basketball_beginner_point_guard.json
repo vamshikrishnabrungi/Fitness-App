@@ -1,0 +1,300 @@
+{
+  "profile_name": "basketball_beginner_point_guard",
+  "generated_at": "2026-06-27T10:12:21.654451+00:00",
+  "model": "claude-haiku-4-5-20251001",
+  "source": "anthropic",
+  "sports": [
+    "basketball"
+  ],
+  "input_profile": {
+    "user_id": "sample_basketball_beginner_point_guard",
+    "sports": [
+      "Basketball"
+    ],
+    "sport_details": [
+      {
+        "sport": "Basketball",
+        "role": "Point Guard"
+      }
+    ],
+    "experience": "beginner",
+    "selected_goals": [
+      "Sport Performance",
+      "Conditioning"
+    ],
+    "primary_goal": "Sport Performance",
+    "training_location": "gym",
+    "equipment": [
+      "dumbbells",
+      "bands",
+      "court"
+    ],
+    "training_days_per_week": 1,
+    "session_duration_min": 60,
+    "pain_areas": [
+      "ankle"
+    ],
+    "current_injuries": [
+      {
+        "area": "ankle",
+        "severity": "mild",
+        "note": "history of rolling ankle"
+      }
+    ],
+    "preferred_training_days": [
+      "Monday"
+    ],
+    "sleep_avg_hours": 7,
+    "stress_level": "moderate"
+  },
+  "knowledge_context_summary": {
+    "programming_rule_ids": [
+      "mob_rule_activation_before_power",
+      "plyo_template_basketball_preseason",
+      "basketball_training_rule_basketball_readiness_adjustment_rule_basketball_readiness_adjustment_rule_youth_growth_spurt",
+      "basketball_plan_basketball_macro_planning_rule_preseason_ramp"
+    ],
+    "teaching_progression_ids": [
+      "basketball_teach_ball_handling_beginner",
+      "basketball_teach_transition_beginner",
+      "basketball_teach_pick_and_roll_beginner",
+      "basketball_teach_shooting_beginner"
+    ],
+    "assessment_ids": [
+      "basketball_assess_transition",
+      "basketball_assess_shooting"
+    ]
+  },
+  "program": {
+    "title": "Basketball Point Guard Ankle Resilience & Movement Foundation",
+    "goal": "Sport Performance",
+    "sports": [
+      "Basketball"
+    ],
+    "duration_weeks": 1,
+    "athlete_analysis": {
+      "profile_summary": "Beginner Point Guard with mild ankle injury history (rolling ankle). Single session per week, 60 min gym capacity. Needs low-impact, controlled single-leg work and ankle stability without high-volume plyometrics.",
+      "primary_constraints": [
+        "History of ankle rolling—avoid rapid cutting, uncontrolled landing, high-impact volume",
+        "1 session/week limits volume; must prioritize transfer movements",
+        "Gym + court access; dumbbells and bands available"
+      ],
+      "sport_demands": [
+        "Point Guard: repeated acceleration, deceleration, lateral cuts, ball handling during movement, court transitions",
+        "Ankle stability critical for safe change-of-direction and landing control",
+        "Single-leg control and hip stability needed for pivot footwork and isolation moves"
+      ],
+      "block_priority": "Build ankle stiffness, hip control, and deceleration capacity in controlled single-leg patterns. Prepare for full-speed court transitions with pain-free landing mechanics and trunk stability during dribble penetration."
+    },
+    "blocks": [
+      {
+        "name": "Movement Foundation & Ankle Readiness",
+        "start_week": 1,
+        "end_week": 1,
+        "emphasis": [
+          "ankle_stability",
+          "single_leg_control",
+          "deceleration",
+          "hip_control",
+          "trunk_stiffness"
+        ]
+      }
+    ],
+    "weeks": [
+      {
+        "week_number": 1,
+        "theme": "Ankle Stiffness, Single-Leg Strength, Deceleration Setup",
+        "workouts": [
+          {
+            "day": "Monday",
+            "title": "PG Ankle Resilience & Deceleration Base",
+            "category": "Strength",
+            "duration_min": 60,
+            "intensity": "moderate",
+            "adaptation_targets": [
+              "ankle_stiffness",
+              "single_leg_control",
+              "deceleration",
+              "hip_extension_strength",
+              "trunk_anti_rotation"
+            ],
+            "sport_transfer": [
+              "Loaded ankle plantarflexion builds calf resilience for cuts and push-offs without rolling risk",
+              "Single-leg stepping trains deceleration landing control for court transitions and defensive slides",
+              "Anti-rotation core bracing protects spine during dribble penetration and cross-body passes"
+            ],
+            "why_this_session": "Single weekly session must address Point Guard ankle fragility and deceleration control. Avoid plyometric volume; use strength-based single-leg work to prepare for safe court speed.",
+            "warmup": [
+              {
+                "name": "Bird Dog",
+                "exercise_id": "mob_drill_bird_dog",
+                "purpose": "Activate trunk stiffness and anti-rotation stability before loaded work",
+                "category": null,
+                "sets": 2,
+                "reps": "8 per side",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": null,
+                "rest": "45 sec",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Dead Bug",
+                "exercise_id": "mob_drill_dead_bug",
+                "purpose": "Supine core activation and hip flexor control before standing movements",
+                "category": null,
+                "sets": 2,
+                "reps": "8 per side",
+                "duration": null,
+                "load_guidance": null,
+                "rpe": null,
+                "rest": "45 sec",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Lateral Band Walk",
+                "exercise_id": "mob_drill_lateral_band_walk",
+                "purpose": "Hip abductor activation for single-leg stability and cutting readiness",
+                "category": null,
+                "sets": 2,
+                "reps": "10 per direction",
+                "duration": null,
+                "load_guidance": "Light band tension; full control",
+                "rpe": null,
+                "rest": "60 sec",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "main_work": [
+              {
+                "name": "Standing Calf Raise",
+                "exercise_id": "ex_standing_calf_raise",
+                "purpose": "Build loaded ankle plantarflexion strength and calf stiffness for push-off and ankle stability during cuts",
+                "category": null,
+                "sets": 3,
+                "reps": "12-15",
+                "duration": null,
+                "load_guidance": "Dumbbells: choose load for RPE 6-7 at rep 12; full range stretch at bottom, full lockout at top",
+                "rpe": "6-7",
+                "rest": "90 sec",
+                "tempo": "2-0-2",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Dumbbell Split Squat",
+                "exercise_id": "ex_split_squat",
+                "purpose": "Unilateral leg strength and single-leg control without stepping deceleration demands; teaches hip/knee/ankle alignment under load",
+                "category": null,
+                "sets": 3,
+                "reps": "10 per leg",
+                "duration": null,
+                "load_guidance": "Dumbbells at sides; RPE 6-7; long stable stance, weight distributed through whole front foot",
+                "rpe": "6-7",
+                "rest": "90 sec",
+                "tempo": "2-1-2",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Step-Up",
+                "exercise_id": "ex_step_up",
+                "purpose": "Single-leg deceleration and loading in stepping pattern; transfers to court transitions and defensive positioning",
+                "category": null,
+                "sets": 3,
+                "reps": "8 per leg",
+                "duration": null,
+                "load_guidance": "Dumbbells in hand or at sides; box 12-16 inches; place whole foot on box; RPE 6-7",
+                "rpe": "6-7",
+                "rest": "90 sec",
+                "tempo": "3-0-2 (emphasize 3-sec lowering on descent)",
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Tall-Kneeling Pallof Press",
+                "exercise_id": "ex_tall_kneeling_pallof_press",
+                "purpose": "Anti-rotation core stability and trunk stiffness during offset loading; prepares trunk for dribble-penetration balance and contact tolerance",
+                "category": null,
+                "sets": 2,
+                "reps": "10 per side",
+                "duration": null,
+                "load_guidance": "Band or light cable; RPE 5-6; knees hip-width, rib stacked over pelvis",
+                "rpe": "5-6",
+                "rest": "75 sec",
+                "tempo": "1-1-2",
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "cooldown": [
+              {
+                "name": "Deep Squat Pry",
+                "exercise_id": "mob_drill_deep_squat_pry",
+                "purpose": "Restore hip and ankle mobility post-strength work; maintain squat pattern range",
+                "category": null,
+                "sets": null,
+                "reps": null,
+                "duration": "2 min",
+                "load_guidance": null,
+                "rpe": null,
+                "rest": null,
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              },
+              {
+                "name": "Side Plank from Knees",
+                "exercise_id": "ex_side_plank_from_knees",
+                "purpose": "Anti-lateral flexion hold; closes session with trunk stiffness reinforcement",
+                "category": null,
+                "sets": 2,
+                "reps": null,
+                "duration": "20-30 sec per side",
+                "load_guidance": "Knees bent and stacked; shoulders stacked over elbow",
+                "rpe": null,
+                "rest": "60 sec",
+                "tempo": null,
+                "coaching_notes": [],
+                "substitutions": []
+              }
+            ],
+            "injury_modifications": [
+              "If ankle plantarflexion pain occurs during standing calf raise, reduce range or substitute bodyweight Seated Calf Raise to maintain strength without end-range stress",
+              "If ankle inversion pain triggers during step-up or split squat, reduce box height, use band ankle support, or narrow stance width to limit plantarflexion demand",
+              "If pain-free range is limited, perform all work within pain-free range only; do not force ROM; focus on strength at available depth"
+            ]
+          }
+        ],
+        "progression_rule": "Establish pain-free single-leg control and loaded hip/ankle stability. Use split stance and step patterns to teach deceleration without high-impact volume. Prepare ankle for court changes of direction.",
+        "deload_note": null
+      }
+    ],
+    "nutrition_focus": "Support recovery and ankle tissue health. Ensure adequate protein (1.6-2.0 g/kg) for strength adaptation; include anti-inflammatory foods (omega-3, berries, leafy greens); hydration for joint mobility.",
+    "recovery_focus": [
+      "Sleep: Maintain 7h nightly to support neuromuscular adaptation and ankle healing",
+      "Post-session: Ankle ice or compression 10-15 min if swelling occurs; elevate if needed",
+      "Mobility snacks: 2-3 min lateral band walks or deep squats on off-days to maintain hip/ankle range"
+    ],
+    "safety_notes": [
+      "Ankle history of rolling: Avoid rapid uncontrolled direction changes, sprints without warm-up, and plyometric volume until pain-free single-leg control is demonstrated",
+      "Foot placement critical: All single-leg work requires whole foot on ground; partial weight on toes increases inversion risk",
+      "Pain-free rule: Stop any exercise if sharp ankle pain occurs; modify load, range, or stance before resuming"
+    ],
+    "assumptions": [
+      "No current pain; ankle history is remote and managed with controlled load progressions",
+      "Dumbbells and band access confirmed; no barbell or machine requirement this week",
+      "Point Guard role prioritizes ball-handling during movement; strength session complements court skill practice, not replaces it",
+      "1 session/week is entry-level commitment; coach may add court-based movement literacy work separately"
+    ]
+  },
+  "workout_titles": [
+    "PG Ankle Resilience & Deceleration Base"
+  ]
+}

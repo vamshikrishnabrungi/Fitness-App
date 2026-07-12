@@ -1,0 +1,942 @@
+{
+  "metadata": {
+    "domain": "dribbling_1v1_carrying_turning",
+    "sport": "soccer",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready soccer coaching knowledge for dribbling, 1v1 attacking and defending, carrying, running with the ball, shielding, turning under pressure, dribble/pass decisions, common corrections, physical demands, load risks, and beginner to advanced progressions."
+  },
+  "source_refs": [
+    {
+      "title": "Dribbling to beat an opponent",
+      "url": "https://www.fifatrainingcentre.com/en/practice/futsal/block-1/dribbling-to-beat-an-opponent.php",
+      "source_type": "official_coach_education_practice",
+      "organization_or_author": "FIFA Training Centre / Jorge Bras",
+      "notes": "Used for 1v1 attacking constraints, wide-channel isolation, feints, attacking at pace, unpredictability, engaging defenders, and creating space for teammates."
+    },
+    {
+      "title": "Running with the ball with awareness and speed",
+      "url": "https://www.fifatrainingcentre.com/en/practice/futsal/block-1/running-with-the-ball-with-awareness-and-speed.php",
+      "source_type": "official_coach_education_practice",
+      "organization_or_author": "FIFA Training Centre / Graeme Dell",
+      "notes": "Used for running with the ball to progress play, moving through thirds, retaining numerical advantages, forward intent, directional changes, and follow-up support after a carry."
+    },
+    {
+      "title": "Defending in 1v1: Orientating attackers away from goal",
+      "url": "https://www.fifatrainingcentre.com/en/practice/talent-coach-programme/deny-and-protect/defending-in-1v1-orientating-attackers-away-from-goal.php",
+      "source_type": "official_coach_education_practice",
+      "organization_or_author": "FIFA Training Centre / FIFA Talent Coach Programme",
+      "notes": "Used for 1v1 defending body shape, approach angle, forcing play wide, timing engagement, decelerating before contact, and staying balanced."
+    },
+    {
+      "title": "Finishing: Dribbling past the defender and scoring",
+      "url": "https://www.fifatrainingcentre.com/en/practice/talent-coach-programme/create-and-finish/finishing-dribbling-past-the-defender-and-scoring.php",
+      "source_type": "official_coach_education_practice",
+      "organization_or_author": "FIFA Training Centre / FIFA Talent Coach Programme",
+      "notes": "Used for receiving on the move, first-touch momentum, body between ball and defender, directional control, diagonal runs, and direct 1v1 finishing."
+    },
+    {
+      "title": "Control under pressure",
+      "url": "https://www.fifatrainingcentre.com/en/practice/futsal/block-1/control-under-pressure.php",
+      "source_type": "official_coach_education_practice",
+      "organization_or_author": "FIFA Training Centre / Jose Venancio Lopez",
+      "notes": "Used for close-control foundations, sole and instep use, oriented control, body orientation, scanning, feinting, and creating space in limited areas."
+    },
+    {
+      "title": "Look for the 1v1",
+      "url": "https://www.fifatrainingcentre.com/en/practice/grassroots/12-to-15/look-for-the-1v1.php",
+      "source_type": "official_grassroots_practice",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for youth 1v1 progression, game-based dribbling constraints, deciding when to dribble or pass, using both feet, and safety spacing."
+    },
+    {
+      "title": "Champions League performance insights: Going 1v1",
+      "url": "https://www.uefa.com/uefachampionsleague/news/028a-1a1bf7e6d9ae-9ea32505034e-1000--champions-league-performance-insights-going-1v1/",
+      "source_type": "official_technical_observer_article",
+      "organization_or_author": "UEFA",
+      "notes": "Used for modern 1v1 defending demands: face-on, back-to-play, diagonal, lateral, high-line defending, and rest-defense implications."
+    },
+    {
+      "title": "Women's Champions League Performance Insights: Managing wing-back threats",
+      "url": "https://www.uefa.com/womenschampionsleague/news/02a0-1f6c81206382-0b256e5c13fc-1000--women-s-champions-league-performance-insights-managing-wi/",
+      "source_type": "official_technical_observer_article",
+      "organization_or_author": "UEFA",
+      "notes": "Used for tactical value of switches of play, wide 1v1 isolation, recycling when the 1v1 is not on, and area/moment-based defending."
+    },
+    {
+      "title": "How to help 5-11s develop their skills on the ball",
+      "url": "https://learn.englandfootball.com/articles-and-resources/coaching/resources/2023/How-to-help-5-11s-develop-their-skills-on-the-ball",
+      "source_type": "national_federation_coach_education",
+      "organization_or_author": "England Football Learning / The FA",
+      "notes": "Used for ball mastery, staying on the ball, hiding and protecting the ball, youth confidence, and when young players should be encouraged to stay on it."
+    },
+    {
+      "title": "How to encourage running with the ball in football",
+      "url": "https://learn.englandfootball.com/articles-and-resources/coaching/resources/2023/How-to-encourage-running-with-the-ball-in-football",
+      "source_type": "national_federation_coach_education",
+      "organization_or_author": "England Football Learning / The FA",
+      "notes": "Used for the distinction between running with the ball into space and tighter dribbling, touch-size decisions, all-position relevance, and learning through games."
+    },
+    {
+      "title": "Top tips for dribbling in football",
+      "url": "https://learn.englandfootball.com/articles-and-resources/coaching/resources/2022/top-tips-for-dribbling-in-football",
+      "source_type": "national_federation_coach_education",
+      "organization_or_author": "England Football Learning / The FA",
+      "notes": "Used for dribble decision-making, individual tactics, awareness, body position, close/far control, and evaluation of execution."
+    },
+    {
+      "title": "Turning session: improving turning techniques",
+      "url": "https://learn.englandfootball.com/sessions/resources/2024/Turning-session-improving-turning-techniques",
+      "source_type": "national_federation_session_plan",
+      "organization_or_author": "England Football Learning / The FA",
+      "notes": "Used for turning under pressure, controlled-to-game progression, awareness, ball control, and decision-making."
+    },
+    {
+      "title": "U.S. Soccer Grassroots Player Development Framework",
+      "url": "https://static.ussdcc.com/users/227808/458431/us-soccer-grassroots-11v11-player-development-framework.pdf",
+      "source_type": "national_federation_player_development_framework",
+      "organization_or_author": "U.S. Soccer Federation",
+      "notes": "Used for grassroots player-development themes: decision-making, initiative, 1v1 creation and regaining, pass-or-dribble-forward behavior, support, and progressive age expectations."
+    },
+    {
+      "title": "The decision-making in dribbling: a video analysis study of U10 soccer players' skills and coaches' quality evaluation",
+      "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1200208/full",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Iuliano, Bonavolonta, Ferrari, Bragazzi, Capasso, Kuvacic, and De Giorgio",
+      "notes": "Used for dribbling as a decision-making action, ecological practice context, and the importance of what happens after a successful dribble, especially accurate continuation passes."
+    },
+    {
+      "title": "Importance of Reactive Agility and Change of Direction Speed in Differentiating Performance Levels in Junior Soccer Players",
+      "url": "https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2018.00506/full",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Pojskic, Aslin, Krolo, Jukic, Uljevic, Spasic, and Sekulic",
+      "notes": "Used for separating pre-planned change-of-direction speed from reactive agility, sport-specific testing, stop-go movement, and the need for perceptual decision-making in agility training."
+    },
+    {
+      "title": "Characterization and analyses of dribbling actions in soccer: a novel definition and effectiveness of dribbles in the 2018 FIFA World Cup Russia",
+      "url": "https://hummov.awf.wroc.pl/Characterization-and-analyses-of-dribbling-actions-in-soccer-a-novel-definition-and%2C127628%2C0%2C2.html",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Leal, Pinto, Torres, Elferink-Gemser, and Cunha",
+      "notes": "Used for distinguishing dribbling from non-dribble ball movement or protection, and for evaluating dribble effectiveness by both volume and success."
+    },
+    {
+      "title": "Measuring skill via player dynamics in football dribbling",
+      "url": "https://www.nature.com/articles/s41598-023-45914-6",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Brink, Ha, Snowdon, Vidal-Codina, Rauch, Wang, Wu, Lopez-Felip, Clanet, and Hosoi",
+      "notes": "Used for 1v1 dribbling as an attacker-defender coupled system, the relevance of top speed and behavioral aggressiveness, and context-specific dribble evaluation beyond raw success counts."
+    },
+    {
+      "title": "Repeated Dribbling Ability in Young Soccer Players",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5260585/",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Young soccer repeated-dribbling performance researchers",
+      "notes": "Used for treating dribbling as an intermittent high-intensity skill that may need repeated-effort tolerance and quality under fatigue."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "dribbling_vs_carrying_vs_running_with_ball",
+      "concept": "Dribbling, carrying, and running with the ball are related but not identical actions.",
+      "details": "Use dribbling when a player is manipulating the ball under close control, often to beat or evade pressure. Use carrying or running with the ball when the player travels into space to gain territory or change the attack. A 1v1 take-on is a dribble/carry against an opponent who can challenge.",
+      "backend_tags": ["definitions", "dribbling", "carrying", "1v1"]
+    },
+    {
+      "id": "close_control_foundation",
+      "concept": "Close control is the base for dribbling, turning, shielding, and receiving under pressure.",
+      "details": "Players need enough touches with different foot surfaces to stop, start, roll, drag, push, and reposition the ball without losing balance or awareness. Close control does not mean tiny touches at all times; touch size should fit the pressure and available space.",
+      "backend_tags": ["close_control", "ball_mastery"]
+    },
+    {
+      "id": "touch_size_matches_space",
+      "concept": "Touch size changes with pressure, speed, and space.",
+      "details": "In open grass, a larger touch can help the ball carrier run quickly and attack territory. In tight spaces, smaller touches help change direction, protect the ball, and keep the next action available. Overly large touches lose the ball; overly small touches can waste the space that was available.",
+      "backend_tags": ["carrying", "decision_making", "running_with_ball"]
+    },
+    {
+      "id": "head_up_without_ignoring_ball",
+      "concept": "Ball carriers must alternate between ball contact and game information.",
+      "details": "The useful cue is not simply 'never look at the ball'. Beginners may need ball glances, but the progression is to scan before receiving, glance up between touches, read defender body shape, and know the next action before pressure arrives.",
+      "backend_tags": ["scanning", "awareness", "perception_action"]
+    },
+    {
+      "id": "body_between_ball_and_defender",
+      "concept": "Protection starts with body position, not only foot skill.",
+      "details": "When pressure is close, players should place their body mass, hip, shoulder, or arm frame between the defender and the ball while keeping the ball on the far foot or outside the defender's reach. This supports shielding, turning, and contact-resilient carries.",
+      "backend_tags": ["shielding", "protecting", "body_orientation"]
+    },
+    {
+      "id": "momentum_first_touch",
+      "concept": "A first touch on the move can beat a defender before a separate dribble is needed.",
+      "details": "In 1v1 finishing and transition scenarios, timing the run and taking a directional first touch into the open space can use momentum to pass the defender. The receiving foot should allow the attacker to protect the ball and continue without breaking stride.",
+      "backend_tags": ["first_touch", "1v1_attacking", "finishing"]
+    },
+    {
+      "id": "deception_changes_defender_information",
+      "concept": "Body feints, shoulder drops, stutters, and disguise work by changing the defender's perception.",
+      "details": "A feint is useful when it makes the defender shift weight, open hips, slow down, or commit. The attacking player then exits with a change of direction, change of pace, or both. Rehearsed tricks without a defender response are incomplete.",
+      "backend_tags": ["body_feints", "deception", "change_of_direction"]
+    },
+    {
+      "id": "change_of_pace_finishes_the_move",
+      "concept": "Most 1v1 moves need a burst after the defender is unbalanced.",
+      "details": "The move is not complete at the touch past the defender. The attacker needs a sharp first step, ball out of tackling range, and immediate acceleration into the exit lane before the defender can recover.",
+      "backend_tags": ["acceleration", "1v1_attacking", "exit_touch"]
+    },
+    {
+      "id": "turning_under_pressure",
+      "concept": "Turning is a pressure-management and direction-change skill.",
+      "details": "Turns help players escape pressure, change the point of attack, create a forward option, or protect possession until support arrives. Useful turn families include inside/outside cut, sole roll, drag-back, Cruyff-style cut, step-over turn, and shield-and-roll.",
+      "backend_tags": ["turning", "pressure_escape"]
+    },
+    {
+      "id": "shielding_as_active_solution",
+      "concept": "Shielding is not passive holding; it buys time, changes angle, and prepares the next action.",
+      "details": "A shield should include scanning, a stable base, ball on the far side, contact awareness, and an exit plan: turn out, bounce pass, draw a foul safely, roll away, or release to support.",
+      "backend_tags": ["shielding", "support", "turning"]
+    },
+    {
+      "id": "dribble_to_commit",
+      "concept": "A carry can be valuable even without beating the defender directly.",
+      "details": "Driving toward a defender can commit them, open a passing lane, free a teammate, or force a defensive line to collapse. The best outcome may be a pass after the defender is engaged rather than a solo take-on.",
+      "backend_tags": ["carrying", "creating_space", "pass_after_dribble"]
+    },
+    {
+      "id": "wide_isolation_1v1",
+      "concept": "Switches of play can create high-value wide 1v1s.",
+      "details": "When the defending team is shifted to one side, the attacking team can switch quickly to leave a winger, fullback, or wingback in space against one defender. If the defender has cover or the lane is closed, recycling and switching again may be the better decision.",
+      "backend_tags": ["wide_play", "switch_play", "1v1_attacking"]
+    },
+    {
+      "id": "1v1_defending_is_multiple_contexts",
+      "concept": "1v1 defending includes face-on, back-to-play, diagonal, lateral, and retreating situations.",
+      "details": "The defender's body shape, distance, and tackling decision change by context. A center back defending a striker with back to goal, a fullback defending a winger wide, and a midfielder delaying a counterattack all require different 1v1 behaviors.",
+      "backend_tags": ["1v1_defending", "position_specific"]
+    },
+    {
+      "id": "defender_delay_before_steal",
+      "concept": "The first defender often wins by slowing and shaping the attack before tackling.",
+      "details": "A defender should close space quickly, decelerate under control, stay low and side-on, show the attacker away from danger, and tackle only when the touch is loose, the attacker is off balance, or support has closed the trap.",
+      "backend_tags": ["1v1_defending", "delay", "tackling"]
+    },
+    {
+      "id": "dribble_decision_is_contextual",
+      "concept": "The dribble/pass decision is based on space, pressure, support, field zone, score risk, and next action.",
+      "details": "A player should consider whether the dribble creates danger, gains territory, escapes pressure, or commits a defender. Passing is preferred when a teammate has a better forward option, the ball carrier has drawn pressure, or cover makes the dribble low value.",
+      "backend_tags": ["decision_making", "dribble_vs_pass"]
+    },
+    {
+      "id": "post_dribble_quality",
+      "concept": "A successful dribble must be judged by the next action, not only by getting past an opponent.",
+      "details": "Peer-reviewed youth data supports looking at accurate continuation after dribbling. Backend assessment should track whether the action leads to a shot, chance, forward pass, retained possession, foul won, territory gained, or immediate turnover.",
+      "backend_tags": ["assessment", "post_action", "performance_indicators"]
+    },
+    {
+      "id": "reactive_agility_not_only_cone_agility",
+      "concept": "Soccer agility for 1v1 play combines physical COD ability with perception and decision-making.",
+      "details": "Pre-planned cone patterns can develop mechanics, but 1v1 dribbling and defending require reacting to opponents, ball movement, and changing space. Training should include both planned technical repetition and representative, reactive practice.",
+      "backend_tags": ["agility", "change_of_direction", "reactive_training"]
+    },
+    {
+      "id": "constraints_build_decision_skill",
+      "concept": "Game constraints can teach when to dribble without overcoaching a single answer.",
+      "details": "Examples include scoring only after a dribble through a gate, requiring a take-on before passing in one zone, creating wide 1v1 channels, or adding recovery defenders. Constraints should be released into free play so players learn recognition, not only rule compliance.",
+      "backend_tags": ["constraints_led", "practice_design"]
+    },
+    {
+      "id": "beginner_intermediate_advanced_progression",
+      "concept": "Progression moves from comfort on the ball, to opposed decision-making, to game-speed tactical use.",
+      "details": "Beginners need confidence, many touches, turns, and simple 1v1 bravery. Intermediates add scanning, weak-foot use, shielding, changes of pace, and decisions against active defenders. Advanced players solve position-specific 1v1s, manipulate defenders for teammates, and preserve quality under fatigue and match constraints.",
+      "backend_tags": ["progression", "levels"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "football_dribbling_action_phase_model",
+      "model": "Dribbling action phase model",
+      "phases": [
+        "pre_receive_scan",
+        "first_touch_or_set_touch",
+        "approach_or_protect",
+        "engage_defender_or_attack_space",
+        "deceive_change_direction_or_change_pace",
+        "exit_touch",
+        "next_action"
+      ],
+      "coaching_use": "Use this model to identify which part failed. A player who beats a defender but cannot pass, shoot, or retain the ball has an exit/next-action problem, not just a dribbling-success problem.",
+      "common_errors": [
+        "head down throughout the action",
+        "touch too far when pressure is close",
+        "touch too tight when space is open",
+        "move performed too far from or too close to defender",
+        "no acceleration after the exit touch",
+        "successful dribble followed by rushed turnover"
+      ],
+      "corrections": [
+        "scan before first touch and again after the second touch",
+        "change touch size to match space",
+        "approach at a speed that allows disguise and exit",
+        "time the feint when the defender can be moved",
+        "coach the pass, shot, or second carry after the dribble"
+      ]
+    },
+    {
+      "id": "football_close_control_surface_model",
+      "model": "Close-control surfaces and uses",
+      "components": [
+        {
+          "surface": "inside_foot",
+          "uses": ["small redirections", "inside cuts", "secure passing setup"]
+        },
+        {
+          "surface": "outside_foot",
+          "uses": ["speed carries", "outside cuts", "hiding ball from central pressure"]
+        },
+        {
+          "surface": "sole",
+          "uses": ["rolls", "drag-backs", "stops", "shield-and-turn actions"]
+        },
+        {
+          "surface": "instep_laces",
+          "uses": ["faster running with the ball", "longer push touches into space"]
+        }
+      ],
+      "coaching_use": "Teach surfaces through game problems rather than isolated tricks only: escape pressure, keep the ball away from a foot, open a passing angle, or accelerate into space."
+    },
+    {
+      "id": "football_carrying_running_with_ball_model",
+      "model": "Carry and run-with-ball decision model",
+      "phases": ["scan_space", "push_touch_into_path", "accelerate", "look_up_between_touches", "protect_if_pressure_arrives", "release_or_continue"],
+      "key_cues": [
+        "attack open space before it closes",
+        "bigger touches in space, smaller touches near pressure",
+        "drive with purpose toward goal or a line-breaking lane",
+        "follow the pass after carrying to support the next action"
+      ],
+      "assessment": [
+        "territory gained",
+        "defender committed",
+        "line broken",
+        "chance created",
+        "possession retained after pressure"
+      ]
+    },
+    {
+      "id": "football_1v1_attacking_model",
+      "model": "1v1 attacking model",
+      "phases": ["isolate_or_recognize_1v1", "approach_with_control", "move_defender", "attack_front_or_back_foot", "exit_with_pace", "finish_pass_cross_or_recycle"],
+      "attacker_cues": [
+        "approach fast enough to threaten but controlled enough to change",
+        "look at defender hips, feet, cover, and space behind",
+        "use disguise to shift defender weight",
+        "take the exit touch beyond tackling range",
+        "accelerate after the move"
+      ],
+      "context_variations": [
+        "wide_isolation",
+        "central_counterattack",
+        "receiving_on_the_move",
+        "back_to_goal_turn_and_attack",
+        "final_third_shot_or_cross"
+      ]
+    },
+    {
+      "id": "football_1v1_defending_model",
+      "model": "1v1 defending model",
+      "phases": ["recover_or_close", "decelerate", "set_side_on", "show_away_from_danger", "delay_or_engage", "tackle_block_or_force_recycle"],
+      "defender_cues": [
+        "close space quickly but arrive balanced",
+        "short controlled steps before the attacker acts",
+        "stay low and side-on",
+        "protect the inside or the route to goal first",
+        "watch ball and body cues without diving in",
+        "tackle when the ball is exposed or support has arrived"
+      ],
+      "context_variations": [
+        "face_on_take_on",
+        "wide_lateral_defending",
+        "diagonal_covering_run",
+        "retreating_toward_own_goal",
+        "striker_back_to_play"
+      ]
+    },
+    {
+      "id": "football_turning_under_pressure_model",
+      "model": "Turning under pressure model",
+      "phases": ["scan_before_receiving", "feel_or_see_pressure", "secure_first_touch", "protect_ball", "turn_or_roll_away", "accelerate_or_release"],
+      "turn_families": [
+        "inside_cut",
+        "outside_cut",
+        "sole_roll",
+        "drag_back",
+        "Cruyff_cut",
+        "step_over_turn",
+        "shield_and_roll"
+      ],
+      "common_errors": [
+        "turning blind into pressure",
+        "standing upright and being pushed off the ball",
+        "ball left on defender-side foot",
+        "turn too slow with no exit action",
+        "same turn repeated regardless of defender position"
+      ],
+      "corrections": [
+        "scan before the pass arrives",
+        "receive side-on when possible",
+        "lower center of mass and use arm frame legally",
+        "put the ball on the far foot",
+        "turn into space and accelerate or pass immediately"
+      ]
+    },
+    {
+      "id": "football_shielding_model",
+      "model": "Shielding and protecting model",
+      "components": [
+        "ball_on_far_side",
+        "body_between_defender_and_ball",
+        "stable_base",
+        "legal_upper_body_frame",
+        "awareness_of_support",
+        "exit_plan"
+      ],
+      "coaching_use": "Use shielding when passing options are compromised, pressure is tight, or the player needs to secure possession long enough for support or a new angle to appear.",
+      "progressions": [
+        "static protect and turn",
+        "moving protect through gates",
+        "back-to-pressure receive and bounce",
+        "active defender and second defender",
+        "game scenario with transition after regain"
+      ]
+    },
+    {
+      "id": "football_level_progression_model",
+      "model": "Beginner to advanced dribbling and 1v1 progression",
+      "levels": [
+        {
+          "level": "beginner",
+          "priorities": ["confidence on the ball", "lots of touches", "inside/outside/sole surfaces", "simple turns", "1v1 bravery", "stop-start control"],
+          "practice_design": ["every player with a ball", "tag and gate games", "small-sided games with safe spaces", "light pressure before full pressure"],
+          "success_markers": ["keeps ball close when needed", "can turn away from a cone or passive defender", "tries to dribble when space or 1v1 appears"]
+        },
+        {
+          "level": "intermediate",
+          "priorities": ["scan while carrying", "change pace and direction", "shield under contact", "use both feet", "choose dribble or pass", "attack isolated defenders"],
+          "practice_design": ["opposed 1v1s", "wide-channel games", "directional small-sided games", "recovering defender pressure", "pass after dribble constraints"],
+          "success_markers": ["dribble leads to retained possession or chance", "uses varied exits", "can defend 1v1 without diving in"]
+        },
+        {
+          "level": "advanced",
+          "priorities": ["position-specific 1v1s", "manipulate defenders for teammates", "high-speed carries", "turn under multi-angle pressure", "repeat actions under fatigue", "link dribble to final action"],
+          "practice_design": ["game-model scenarios", "transition carries", "overload-to-isolation tasks", "fatigued repeated 1v1 bouts", "video review of decision and next action"],
+          "success_markers": ["recognizes when not to dribble", "creates or prevents high-value attacks", "quality remains stable late in sessions or matches"]
+        }
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "dribble_when_space_changes_attack",
+      "rule": "Dribble or carry when travelling with the ball changes the game state more than an available pass.",
+      "application": "Use when there is open space ahead, the defense is disorganized, a line can be broken, or the ball carrier can force a defender to leave shape.",
+      "avoid_when": "Avoid if the dribble moves into a compact trap, ignores a better forward pass, or risks possession in a low-reward zone."
+    },
+    {
+      "id": "pass_after_committing_defender",
+      "rule": "If a carry commits a defender and opens a teammate, release the ball before the defender can recover.",
+      "application": "Useful for midfield carries, wide 1v1s where cover steps out, and counterattacks where a defender must choose between ball and runner.",
+      "backend_decision_tags": ["draw_and_pass", "third_player", "2v1_creation"]
+    },
+    {
+      "id": "attack_isolated_1v1_in_final_third",
+      "rule": "Take on the defender when the ball carrier is isolated against one opponent near goal and has a clear exit to shoot, cross, cut back, or enter the box.",
+      "application": "Especially useful after switches of play, counterattacks, or when a winger has a defender without immediate cover.",
+      "avoid_when": "Recycle if the defender has strong cover, the touchline acts as a second defender, or the next action is unclear."
+    },
+    {
+      "id": "running_with_ball_through_thirds",
+      "rule": "When the ball carrier can progress through a zone without pressure, run with the ball instead of slowing the attack with unnecessary passes.",
+      "application": "Supports fullbacks carrying down wings, center backs stepping into midfield, midfielders breaking a line, and forwards attacking space in transition."
+    },
+    {
+      "id": "carry_to_create_passing_lines",
+      "rule": "Carry diagonally or laterally to create a new passing lane when straight forward passing is blocked.",
+      "application": "The purpose is not always to beat a player; sometimes the carry changes the angle enough to access a teammate between or behind lines."
+    },
+    {
+      "id": "stay_on_ball_when_options_compromised",
+      "rule": "Shield, turn, or carry away from pressure when all immediate passes are backward, sideways, or likely to put a teammate under worse pressure.",
+      "application": "Useful for youth development and midfield play under pressure. The player should protect first, scan, and release once the picture improves."
+    },
+    {
+      "id": "no_blind_turns_central",
+      "rule": "Do not turn blind into central pressure unless the player has scanned or has a clear teammate cue.",
+      "application": "Use a bounce pass, protect-and-roll, or first touch away from pressure if the central picture is unknown."
+    },
+    {
+      "id": "wide_1v1_recycle_if_not_on",
+      "rule": "A wide 1v1 is high value only if the attacker can threaten behind, inside, cross, or cut back; otherwise recycle to move the block and create a better isolation.",
+      "application": "Matches UEFA technical-observer examples where switches create wide 1v1s but patient recycling remains part of the attacking plan."
+    },
+    {
+      "id": "defender_show_away_from_goal",
+      "rule": "In dangerous central or edge-of-box 1v1s, the defender should normally protect the inside route and show the attacker wide or away from goal.",
+      "application": "Use a low, side-on shape and controlled approach angle; adjust if team tactics intentionally press toward a specific trap."
+    },
+    {
+      "id": "defender_decelerate_before_engagement",
+      "rule": "Close quickly, then decelerate before the attacker can make the decisive touch.",
+      "application": "Short controlled steps help the defender react to the first move and reduce the chance of being beaten by the attacker's first touch."
+    },
+    {
+      "id": "first_defender_delays_for_cover",
+      "rule": "If the defender cannot win cleanly, delay and guide the attacker so teammates can recover, cover, or block the dangerous lane.",
+      "application": "Important in transition defense, fullback 1v1s, and center backs defending large space behind them."
+    },
+    {
+      "id": "rest_defense_prepares_for_1v1",
+      "rule": "Teams attacking high must position defenders to handle immediate 1v1s if possession is lost.",
+      "application": "Modern center backs and fullbacks may need to defend higher, wider, and with more space behind, so training should include counterpress and rest-defense 1v1s."
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "acceleration_with_ball",
+      "demand": "Acceleration while maintaining enough ball control for the next action.",
+      "details": "1v1 exits and transition carries require a fast first step after a feint, first touch, or regain. The player must push the ball far enough to sprint but not so far that the defender or goalkeeper can claim it.",
+      "training_link": ["short accelerations with ball", "exit-touch races", "1v1 to finish"]
+    },
+    {
+      "id": "deceleration_and_reacceleration",
+      "demand": "Repeated braking and reacceleration in stop-start duels.",
+      "details": "Dribbling and defending both require fast approach, controlled deceleration, body reorientation, and another acceleration. This is a major difference between cone dribbling and live 1v1s.",
+      "training_link": ["braking mechanics", "defender close-decelerate-set tasks", "cut and burst drills"]
+    },
+    {
+      "id": "change_of_direction_and_cutting",
+      "demand": "Efficient cutting with and without the ball.",
+      "details": "Players need trunk control, hip/knee/ankle alignment, foot placement, and strength to cut sharply while keeping the ball playable. Defenders need the same qualities to mirror or channel attackers.",
+      "training_link": ["planned COD", "reactive COD", "inside/outside cut under pressure"]
+    },
+    {
+      "id": "reactive_agility",
+      "demand": "Perception-driven agility based on opponent, ball, and space cues.",
+      "details": "Peer-reviewed soccer agility research separates pre-planned COD from reactive agility. 1v1 training should include defender cues, loose-touch triggers, and changing support positions, not only pre-set patterns.",
+      "training_link": ["mirror games", "live 1v1s", "coach-call to opponent-led progressions"]
+    },
+    {
+      "id": "balance_and_contact_strength",
+      "demand": "Balance, trunk stiffness, and legal contact tolerance.",
+      "details": "Shielding, turning, and protecting the ball require a stable base, hip strength, trunk control, and the ability to absorb shoulder-to-shoulder pressure without losing the ball or fouling.",
+      "training_link": ["shield-and-turn games", "single-leg strength", "trunk anti-rotation"]
+    },
+    {
+      "id": "repeated_dribbling_ability",
+      "demand": "Repeated high-intensity dribbling actions with short recovery.",
+      "details": "Match play may require consecutive carries, presses, recoveries, and 1v1s. Repeated dribbling ability should preserve touch quality, scanning, and decision-making, not only time to complete a dribble course.",
+      "training_link": ["repeated 1v1 bouts", "small-sided games", "work-rest intervals with quality targets"]
+    },
+    {
+      "id": "bilateral_coordination",
+      "demand": "Both-foot manipulation for unpredictable exits and pressure escape.",
+      "details": "Players who can only turn or exit to one side are easier to show into traps. Both feet and multiple surfaces expand the available solutions.",
+      "training_link": ["weak-foot carry constraints", "both-foot gate games", "alternate-foot turn sequences"]
+    },
+    {
+      "id": "speed_control_under_fatigue",
+      "demand": "Maintaining decision speed and technical quality when fatigued.",
+      "details": "Late-session or late-match fatigue can make touches heavy, scanning narrow, and defensive approach timing poor. Advanced practice should measure quality after repeated efforts."
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "cod_deceleration_spike",
+      "risk": "High volumes of sharp cuts, stops, and reaccelerations can overload knees, ankles, calves, and adductors if progressed too quickly.",
+      "mitigation": "Progress planned COD before fully reactive duels, dose total high-intensity reps, coach braking mechanics, and avoid sudden spikes in repeated 1v1 volume."
+    },
+    {
+      "id": "groin_adductor_load",
+      "risk": "Wide cuts, lateral defending, shielding, and inside-foot reaches increase adductor and groin demand.",
+      "mitigation": "Build adductor strength and tolerance, keep early-season 1v1 volumes conservative, and watch for pain during cutting, striking, or side-to-side defending."
+    },
+    {
+      "id": "hamstring_calf_high_speed_carry",
+      "risk": "Long high-speed carries and chase recoveries can stress hamstrings and calves, especially when players are underprepared for sprint exposure.",
+      "mitigation": "Include progressive sprint and acceleration exposure without the ball and with the ball before using repeated transition 1v1s."
+    },
+    {
+      "id": "ankle_contact_and_tackling",
+      "risk": "Live 1v1 tackling can create ankle contact, tripping, and foot-on-ball incidents.",
+      "mitigation": "Teach defenders to delay and steal cleanly before slide or poke tackles; use safe spaces, appropriate surfaces, and clear rules for no reckless challenges in training."
+    },
+    {
+      "id": "fatigue_technical_breakdown",
+      "risk": "Fatigue can increase heavy touches, late tackles, upright defending, and poor landing or cutting positions.",
+      "mitigation": "Stop or regress drills when quality drops, alternate high-intensity duels with lower-load technical work, and track errors late in bouts."
+    },
+    {
+      "id": "youth_growth_coordination",
+      "risk": "Rapid growth can temporarily affect coordination, balance, stride control, and tissue tolerance during dribbling and cutting.",
+      "mitigation": "Scale area size, speed, contact, and complexity for maturation status rather than chronological age only."
+    },
+    {
+      "id": "crowded_space_collision",
+      "risk": "Too many players in small dribbling areas increases head-up scanning demands and collision risk.",
+      "mitigation": "Create safe zones between pitches, limit simultaneous runners through central zones, and increase space or reduce numbers for beginners."
+    },
+    {
+      "id": "overemphasis_on_1v1_failure",
+      "risk": "Players may avoid dribbling if every lost ball is punished, reducing skill exploration and confidence.",
+      "mitigation": "Separate development reps from match-accountability reps, reward correct recognition and brave attempts, and review decision quality rather than outcome only."
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "teach_ball_mastery_then_decision",
+      "implication": "Start with ball familiarity, but move quickly toward decisions in realistic spaces.",
+      "application": "Use isolated touches for beginners or new surfaces, then add gates, tag games, defenders, targets, and team direction so technique is linked to perception."
+    },
+    {
+      "id": "coach_touch_size",
+      "implication": "Touch size is a primary coaching variable.",
+      "application": "Cue larger push touches for open-space carries and tighter touches for pressure, turning, and final-third 1v1s."
+    },
+    {
+      "id": "include_next_action_constraint",
+      "implication": "Assess the action after the dribble.",
+      "application": "Add scoring, crossing, cutback, forward pass, or keep-possession requirements after beating a defender so players learn to connect dribbling to game outcomes."
+    },
+    {
+      "id": "use_opposed_progressions",
+      "implication": "Progress from unopposed repetition to passive pressure, active pressure, and game-speed opposition.",
+      "application": "Do not leave players at cone-only dribbling if the goal is 1v1 skill; live defenders are needed for timing, deception, and decision-making."
+    },
+    {
+      "id": "practice_when_not_to_dribble",
+      "implication": "Decision training must include pass and recycle options.",
+      "application": "Design games where the best solution sometimes is a pass after drawing a defender, a bounce pass under pressure, or recycling from a wide 1v1."
+    },
+    {
+      "id": "develop_defenders_safely",
+      "implication": "1v1 defending should progress from movement and body shape to clean winning of the ball.",
+      "application": "Teach close-decelerate-set, low side-on stance, channeling, and timing before increasing tackle freedom or transition stakes."
+    },
+    {
+      "id": "make_1v1_context_specific",
+      "implication": "Train 1v1s by pitch zone and role.",
+      "application": "Wide attackers need isolation and crossing/cutback exits; center backs need retreating and diagonal 1v1s; midfielders need pressure escape and carry-to-commit actions."
+    },
+    {
+      "id": "mix_planned_cod_and_reactive_agility",
+      "implication": "Physical preparation should include both mechanics and perception.",
+      "application": "Use planned cut mechanics for quality, then add opponent-led cues, ball cues, and transition triggers."
+    },
+    {
+      "id": "encourage_safe_risk_in_youth",
+      "implication": "Young players need permission to stay on the ball and try 1v1s.",
+      "application": "Reward recognition and effort, not only successful outcomes. Avoid building a habit where the safest backward pass is always praised over a good dribble opportunity."
+    },
+    {
+      "id": "dose_repeated_duels",
+      "implication": "Repeated 1v1s are high neuromuscular and psychological load.",
+      "application": "Use short bouts, adequate rest, rotation of attackers and defenders, and quality cutoffs. Monitor contacts and late-session tackle timing."
+    },
+    {
+      "id": "use_constraints_then_free_play",
+      "implication": "Constraints can create repetition, but they must be released.",
+      "application": "A rule like 'dribble before passing' can provoke attempts, but finish with free play to see whether players recognize real moments."
+    },
+    {
+      "id": "video_review_for_advanced_players",
+      "implication": "Advanced players benefit from reviewing defender cues and next actions.",
+      "application": "Tag approach speed, defender hip orientation, cover position, exit touch, and outcome after dribble. Compare successful, unnecessary, and missed dribble opportunities."
+    },
+    {
+      "id": "common_errors_correction_bank",
+      "implication": "Build a backend correction map for common dribbling and 1v1 errors.",
+      "application": "Map error to cue: heavy touch to touch-size constraint; upright defending to lower center of mass; repeated same move to varied exit gates; blind turn to scan-before-receive rule; overdribbling to draw-and-release task."
+    },
+    {
+      "id": "assessment_should_be_multidimensional",
+      "implication": "Do not assess dribbling only by timed cone tests.",
+      "application": "Use technical, tactical, and physical markers: ball security, defender beaten, carry distance, chance creation, pass after dribble, turnover location, speed control, and defensive recovery."
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "football_dribbling_model",
+      "id": "close_control_foundation",
+      "name": "Close control foundation",
+      "level": "beginner",
+      "description": "Develop comfort manipulating the ball with inside, outside, sole, and instep surfaces while changing direction and speed.",
+      "coaching_cues": ["lots of soft touches", "keep the ball close when pressure is near", "use both feet", "look up between touches"],
+      "progressions": ["unopposed surface exploration", "gate dribbling", "tag with ball", "1v1 to end zone"],
+      "common_errors": ["staring only at the ball", "using one foot only", "touches too heavy in traffic"],
+      "corrections": ["pause-scan-touch rhythm", "weak-foot scoring bonus", "smaller-area control game"]
+    },
+    {
+      "record_type": "football_dribbling_model",
+      "id": "change_of_direction_dribbling",
+      "name": "Change of direction dribbling",
+      "level": "beginner_to_intermediate",
+      "description": "Use cuts, rolls, drag-backs, and turns to move away from pressure and open new lanes.",
+      "coaching_cues": ["sell one direction", "plant outside the ball", "move the ball across the defender line", "accelerate after the cut"],
+      "progressions": ["cones", "passive defender", "active defender", "two-goal 1v1"],
+      "linked_physical_qualities": ["deceleration", "hip control", "ankle stiffness", "reactive agility"]
+    },
+    {
+      "record_type": "football_dribbling_model",
+      "id": "body_feint_and_exit",
+      "name": "Body feint and exit touch",
+      "level": "intermediate",
+      "description": "Use shoulder, hip, eye, and step disguise to move a defender before exiting into space.",
+      "coaching_cues": ["attack the defender", "drop shoulder to move their weight", "exit past the front foot or back foot", "burst after the touch"],
+      "common_errors": ["feint too early", "no speed after move", "exit touch within tackling reach"],
+      "corrections": ["start feint closer to defender", "race to exit gate", "place exit gate beyond defender reach"]
+    },
+    {
+      "record_type": "football_dribbling_model",
+      "id": "advanced_dribble_next_action",
+      "name": "Advanced dribble linked to final action",
+      "level": "advanced",
+      "description": "Beat or move an opponent and immediately connect to shot, cross, cutback, through pass, combination, or retained possession.",
+      "coaching_cues": ["know the next action before the exit", "scan support before engaging", "do not admire the move", "finish the attack"],
+      "assessment_metrics": ["defender beaten", "chance created", "accurate pass after dribble", "turnover location", "shot or cross quality"]
+    },
+    {
+      "record_type": "football_carrying_model",
+      "id": "running_with_ball_into_space",
+      "name": "Running with the ball into space",
+      "level": "beginner_to_intermediate",
+      "description": "Travel quickly with the ball through or into open space to gain territory and change the attack.",
+      "coaching_cues": ["scan for open grass", "push the ball into stride", "use bigger touches when free", "look up between touches"],
+      "use_when": ["space ahead", "defense disorganized", "counterattack", "line can be broken"],
+      "avoid_when": ["pressure close", "better forward pass open", "low-value congested zone"]
+    },
+    {
+      "record_type": "football_carrying_model",
+      "id": "carry_to_commit_defender",
+      "name": "Carry to commit defender",
+      "level": "intermediate",
+      "description": "Drive toward a defender to force a decision and open a passing, shooting, or dribbling lane.",
+      "coaching_cues": ["carry at the defender's line", "read when they step", "release as the lane opens", "continue support after passing"],
+      "assessment_metrics": ["defender engaged", "free teammate found", "line broken", "team keeps advantage"]
+    },
+    {
+      "record_type": "football_carrying_model",
+      "id": "transition_carry",
+      "name": "Transition carry",
+      "level": "intermediate_to_advanced",
+      "description": "After regain or loose ball, carry forward quickly before the opponent regains shape.",
+      "coaching_cues": ["first look forward", "attack central or wide space at speed", "decide early: pass, continue, or shoot", "protect if pressure recovers"],
+      "load_note": "High-speed transition carries should be dosed with sprint exposure and adequate recovery."
+    },
+    {
+      "record_type": "football_turning_model",
+      "id": "basic_turn_family",
+      "name": "Basic turn family",
+      "level": "beginner",
+      "description": "Teach inside cut, outside cut, sole roll, and drag-back as ways to change direction while keeping possession.",
+      "coaching_cues": ["slow enough to control", "turn into space", "take the ball with you", "accelerate after the turn"],
+      "progressions": ["call-out turns", "turn through gates", "defender shadow", "turn and pass"]
+    },
+    {
+      "record_type": "football_turning_model",
+      "id": "turn_under_pressure",
+      "name": "Turn under pressure",
+      "level": "intermediate",
+      "description": "Receive, protect, and turn away from an active defender to escape pressure or change the point of attack.",
+      "coaching_cues": ["scan before receiving", "feel pressure", "ball on far foot", "use body first, then turn", "release or accelerate"],
+      "common_errors": ["blind turn", "upright body", "ball on defender side"],
+      "corrections": ["shoulder-check rule", "contact balance game", "far-foot receiving constraint"]
+    },
+    {
+      "record_type": "football_turning_model",
+      "id": "advanced_turn_to_break_pressure",
+      "name": "Advanced turn to break pressure",
+      "level": "advanced",
+      "description": "Use disguise, body contact, and multi-directional exits to beat pressure and create a forward action.",
+      "coaching_cues": ["invite pressure only if support or exit exists", "hide the ball", "turn across the defender line", "play forward once pressure is broken"],
+      "assessment_metrics": ["pressure escaped", "forward action created", "turnover avoided", "foul won safely"]
+    },
+    {
+      "record_type": "football_1v1_model",
+      "id": "attacking_face_on_1v1",
+      "name": "Attacking face-on 1v1",
+      "phase": "in_possession",
+      "level": "intermediate",
+      "description": "Attack a defender who is set in front of the ball carrier.",
+      "coaching_cues": ["approach under control", "move defender with disguise", "attack a shoulder or foot", "exit with pace", "finish with pass, shot, cross, or carry"],
+      "practice_design": ["two-goal 1v1", "wide-channel 1v1", "1v1 plus recovery defender"]
+    },
+    {
+      "record_type": "football_1v1_model",
+      "id": "attacking_1v1_on_the_move",
+      "name": "Attacking 1v1 on the move",
+      "phase": "in_possession",
+      "level": "intermediate_to_advanced",
+      "description": "Receive while moving toward a defender and use first touch, momentum, and body position to beat them.",
+      "coaching_cues": ["time the run", "meet the pass in stride", "first touch protects the ball", "drive into open space", "finish quickly"],
+      "source_basis": ["FIFA finishing dribbling past defender practice"]
+    },
+    {
+      "record_type": "football_1v1_model",
+      "id": "wide_isolation_attacking_1v1",
+      "name": "Wide isolation attacking 1v1",
+      "phase": "chance_creation",
+      "level": "advanced",
+      "description": "Use width and switches of play to isolate a wide attacker against one defender.",
+      "coaching_cues": ["receive wide enough to stretch defender", "recognize cover distance", "attack early if isolated", "cross or cut back after separation", "recycle if lane is closed"],
+      "assessment_metrics": ["box entry", "cross or cutback created", "defender beaten", "possession retained when 1v1 not on"]
+    },
+    {
+      "record_type": "football_1v1_model",
+      "id": "defending_face_on_1v1",
+      "name": "Defending face-on 1v1",
+      "phase": "out_of_possession",
+      "level": "beginner_to_intermediate",
+      "description": "Defend an attacker carrying directly at goal or toward a dangerous area.",
+      "coaching_cues": ["close space", "slow down before contact", "low side-on stance", "show away from goal", "do not dive in", "tackle on loose touch"],
+      "common_errors": ["charging past attacker", "flat feet", "standing tall", "opening inside lane"],
+      "corrections": ["deceleration gate", "inside-line protection", "loose-touch trigger game"]
+    },
+    {
+      "record_type": "football_1v1_model",
+      "id": "defending_diagonal_and_lateral_1v1",
+      "name": "Defending diagonal and lateral 1v1",
+      "phase": "out_of_possession",
+      "level": "advanced",
+      "description": "Defend wide or diagonal carries when the defender is covering across rather than standing square in front.",
+      "coaching_cues": ["recover on an angle", "protect route to goal first", "match speed before engaging", "use touchline or cover as help", "block cross if beaten outside"],
+      "role_relevance": ["fullback", "wingback", "center_back", "defensive_midfielder"]
+    },
+    {
+      "record_type": "football_1v1_model",
+      "id": "defending_back_to_play",
+      "name": "Defending opponent with back to play",
+      "phase": "out_of_possession",
+      "level": "advanced",
+      "description": "Manage a striker or midfielder receiving with back to goal before they can turn.",
+      "coaching_cues": ["arrive tight but controlled", "prevent easy turn", "feel ball-side shoulder", "do not foul through the back", "be ready if they bounce pass and spin"],
+      "assessment_metrics": ["turn denied", "foul avoided", "forced backward pass", "interception or clean regain"]
+    },
+    {
+      "record_type": "football_dribble_decision_rule",
+      "id": "dribble_when_open_space",
+      "name": "Dribble when open space is available",
+      "condition": "The player has space ahead or to the side and a carry will gain territory, break a line, or force a defender to engage.",
+      "preferred_action": "Carry or run with the ball.",
+      "fallback_action": "Pass if a teammate has a clearer forward advantage."
+    },
+    {
+      "record_type": "football_dribble_decision_rule",
+      "id": "dribble_when_isolated_1v1",
+      "name": "Dribble when isolated against one defender",
+      "condition": "The ball carrier is in the attacking half or final third, cover is late, and the exit can create a shot, cross, cutback, or box entry.",
+      "preferred_action": "Take on the defender with change of pace and direction.",
+      "fallback_action": "Recycle or combine if cover closes the lane."
+    },
+    {
+      "record_type": "football_dribble_decision_rule",
+      "id": "pass_when_defender_committed",
+      "name": "Pass when the carry has committed pressure",
+      "condition": "A defender steps to the ball carrier and opens a teammate between, behind, or outside the line.",
+      "preferred_action": "Release quickly with appropriate pass speed.",
+      "fallback_action": "Continue carrying if the defender does not engage and space remains."
+    },
+    {
+      "record_type": "football_dribble_decision_rule",
+      "id": "shield_when_options_compromised",
+      "name": "Shield when immediate options are compromised",
+      "condition": "Pressure is tight, passing options are blocked, or a rushed pass would put a teammate in trouble.",
+      "preferred_action": "Protect the ball, turn away, or hold until support changes.",
+      "fallback_action": "Bounce pass or draw safe contact if support arrives."
+    },
+    {
+      "record_type": "football_dribble_decision_rule",
+      "id": "avoid_dribble_into_trap",
+      "name": "Avoid dribbling into compact traps",
+      "condition": "The ball carrier faces multiple defenders, the touchline limits exits, and no high-value outcome is available.",
+      "preferred_action": "Pass, recycle, switch, or secure possession.",
+      "fallback_action": "Use a turn or shield only to escape pressure, not to force a low-value take-on."
+    },
+    {
+      "record_type": "football_dribble_decision_rule",
+      "id": "turn_when_pressure_blocks_forward_play",
+      "name": "Turn when pressure blocks forward play",
+      "condition": "The defender blocks the forward lane but space exists behind, beside, or away from pressure.",
+      "preferred_action": "Use a protected turn and accelerate or pass into the new angle.",
+      "fallback_action": "Bounce pass if the turn is blind or central pressure is unknown."
+    },
+    {
+      "record_type": "football_dribbling_model",
+      "id": "common_error_heavy_touch",
+      "name": "Common error: heavy touch near pressure",
+      "error": "The player pushes the ball outside playable distance when a defender is close.",
+      "correction": "Use smaller touches before pressure is beaten, put the ball on the far foot, and enlarge the touch only after the exit lane opens.",
+      "drill_constraint": "Defender scores by touching the ball if it leaves a one-step control radius in a tight-zone game."
+    },
+    {
+      "record_type": "football_dribbling_model",
+      "id": "common_error_overdribbling",
+      "name": "Common error: overdribbling after advantage is created",
+      "error": "The player beats or commits a defender but keeps carrying until the advantage disappears.",
+      "correction": "Add a one- or two-touch next-action window after the defender is beaten or committed.",
+      "drill_constraint": "Goal counts double if the player beats a defender and assists or shoots within three seconds."
+    },
+    {
+      "record_type": "football_dribbling_model",
+      "id": "common_error_no_scan",
+      "name": "Common error: no scan before or during carry",
+      "error": "The player only watches the ball and misses pressure, support, or open space.",
+      "correction": "Require a verbal color/number call before receiving or between touches, then progress to natural scanning in free play.",
+      "assessment_metric": "Number of correct pre-action scans before carry or turn."
+    },
+    {
+      "record_type": "football_1v1_model",
+      "id": "common_error_defender_dives_in",
+      "name": "Common error: defender dives in",
+      "error": "The defender lunges before the attacker exposes the ball and gets eliminated.",
+      "correction": "Coach close-decelerate-set, show outside, and tackle only on loose-touch triggers.",
+      "drill_constraint": "Defender scores for forcing the attacker wide or backward, not only for winning the ball."
+    },
+    {
+      "record_type": "football_turning_model",
+      "id": "common_error_blind_turn",
+      "name": "Common error: blind turn into pressure",
+      "error": "The player turns without scanning and carries into a defender.",
+      "correction": "Use scan-before-receive, open body when possible, and bounce-pass fallback if the picture is unclear.",
+      "drill_constraint": "Coach or teammate gives a pressure cue that changes whether the player turns, shields, or bounces."
+    },
+    {
+      "record_type": "football_carrying_model",
+      "id": "beginner_carry_progression",
+      "name": "Beginner carry progression",
+      "level": "beginner",
+      "steps": ["carry through gates", "bigger touch into open space", "stop-start on signal", "simple defender chase", "small-sided game reward for carrying into space"],
+      "success_criteria": ["can keep ball in stride", "looks up at least once before next action", "recognizes obvious open space"]
+    },
+    {
+      "record_type": "football_dribbling_model",
+      "id": "intermediate_dribble_progression",
+      "name": "Intermediate dribble progression",
+      "level": "intermediate",
+      "steps": ["opposed 1v1 to two goals", "body feint plus exit", "shield then turn", "dribble to commit and pass", "wide-channel game with recycle option"],
+      "success_criteria": ["uses more than one exit", "can protect under pressure", "chooses pass after committing defender"]
+    },
+    {
+      "record_type": "football_1v1_model",
+      "id": "advanced_1v1_progression",
+      "name": "Advanced 1v1 progression",
+      "level": "advanced",
+      "steps": ["role-specific 1v1s", "transition 1v1 with recovery defender", "wide isolation after switch", "center-back high-line diagonal defending", "fatigued repeated duel with video review"],
+      "success_criteria": ["maintains quality under fatigue", "solves multiple 1v1 contexts", "knows when to dribble, pass, recycle, or delay"]
+    },
+    {
+      "record_type": "football_dribble_decision_rule",
+      "id": "assessment_dribble_quality",
+      "name": "Assess dribble quality by outcome chain",
+      "condition": "A dribble or carry is evaluated after the next action, not only at the moment the defender is beaten.",
+      "preferred_action": "Track defender beaten, territory gained, pass/shot/cross quality, possession retained, foul won, and turnover risk.",
+      "fallback_action": "Use timed dribble tests only as supplementary physical-technical data."
+    }
+  ]
+}

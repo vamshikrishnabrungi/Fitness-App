@@ -1,0 +1,937 @@
+{
+  "research_goal": "Create backend-ready MMA striking and kickboxing/Muay Thai-in-MMA knowledge covering stance, guard, distance, boxing entries, kicks, knees, elbows, checking kicks, defense, countering, cage footwork, stance matchups, and beginner-to-advanced teaching progressions.",
+  "sport": "mma",
+  "domain": "striking_kickboxing_mma",
+  "researched_on": "2026-06-26",
+  "source_refs": [
+    {
+      "title": "IMMAF Rules Document, October 2022",
+      "organization_or_author": "International Mixed Martial Arts Federation",
+      "url": "https://immaf.org/wp-content/uploads/2022/10/IMMAF-Rules-Document-as-of-Oct-2022.pdf",
+      "source_type": "official_amateur_mma_rules_pdf",
+      "notes": "Used for amateur MMA striking constraints, illegal techniques, protective equipment, age/experience divisions, and safety differences from professional MMA."
+    },
+    {
+      "title": "Participant Pathways",
+      "organization_or_author": "International Mixed Martial Arts Federation",
+      "url": "https://immaf.org/get-involved/participant-pathways/",
+      "source_type": "official_development_pathway",
+      "notes": "Used for staged technical criteria around stance, posture, balance, space control, fluency, striking skills, and progression from novice to skilled participant."
+    },
+    {
+      "title": "Unified Rules of Mixed Martial Arts",
+      "organization_or_author": "Association of Boxing Commissions and Combative Sports",
+      "url": "https://www.abcboxing.com/wp-content/uploads/2024/07/unified-mma-rules-rev-july-2024.pdf",
+      "source_type": "official_professional_mma_rules_pdf",
+      "notes": "Used for professional rules context, grounded-opponent definition, legal/illegal tactics, cage interaction, scoring criteria, and the July 2024 rules update."
+    },
+    {
+      "title": "Unified Rules of Mixed Martial Arts",
+      "organization_or_author": "UFC",
+      "url": "https://www.ufc.com/unified-rules-mixed-martial-arts",
+      "source_type": "official_mma_rules_summary",
+      "notes": "Used as a UFC-facing public rules reference for permitted competition context, fouls, and general bout structure."
+    },
+    {
+      "title": "UFC Performance Institute Journal",
+      "organization_or_author": "UFC Performance Institute",
+      "url": "https://www.ufcpi.com/journal",
+      "source_type": "official_performance_education",
+      "notes": "Used for evidence-led MMA performance framing, preparation, injury risk, and coach/athlete education context."
+    },
+    {
+      "title": "A Cross-Sectional Performance Analysis and Projection of the UFC Athlete",
+      "organization_or_author": "UFC Performance Institute",
+      "url": "https://media.ufc.tv/ufcpi/UFCPI_Book_2018.pdf",
+      "source_type": "official_performance_report_pdf",
+      "notes": "Used for MMA athlete demands, performance profiling, and the need to integrate technical striking with conditioning, recovery, and injury management."
+    },
+    {
+      "title": "USA Boxing Grassroots Task Force Training Manual v.01",
+      "organization_or_author": "USA Boxing",
+      "url": "https://d36m266ykvepgv.cloudfront.net/uploads/media/lYivrDbNV6/o/usab-gtf-trainingmanual-v-01-1.pdf",
+      "source_type": "official_boxing_coach_manual_pdf",
+      "notes": "Used for stance, guard, straight punches, hooks, defense, footwork, coach cueing, and beginner progression concepts adapted to MMA context."
+    },
+    {
+      "title": "AIBA Coach Regulations Manual",
+      "organization_or_author": "International Boxing Association",
+      "url": "https://www.iba.sport/wp-content/uploads/2019/01/AIBA-Coach-Regulations-Manual_WEB_2019_01-1.pdf",
+      "source_type": "official_boxing_coach_manual_pdf",
+      "notes": "Used for structured boxing teaching, movement fundamentals, defense categories, and progression from controlled drills to applied use."
+    },
+    {
+      "title": "Rules and Regulations",
+      "organization_or_author": "International Federation of Muaythai Associations",
+      "url": "https://muaythai.sport/wp-content/uploads/2016/09/IFMA-RULES-AND-REGULATIONS_16SEP2016_UPDATED.pdf",
+      "source_type": "official_muay_thai_rules_pdf",
+      "notes": "Used for Muay Thai striking families, clinch/knee/elbow context, legal target framing, and traditional stand-up rules before adapting to MMA constraints."
+    },
+    {
+      "title": "WAKO Rules",
+      "organization_or_author": "World Association of Kickboxing Organizations",
+      "url": "https://kickboxingeurope.com/wp-content/uploads/2023/02/03-04-WAKO-Rules.pdf",
+      "source_type": "official_kickboxing_rules_pdf",
+      "notes": "Used for kickboxing discipline context, ring striking categories, safety framing, and differences between kickboxing rulesets and MMA application."
+    },
+    {
+      "title": "Kinematic Analysis of the Roundhouse Kick in Muay Thai",
+      "organization_or_author": "Gavagan and Sayers",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3737916/",
+      "source_type": "peer_reviewed_biomechanics_article",
+      "notes": "Used for hip rotation, lower-limb sequencing, and technical constraints relevant to teaching round kicks and kick recovery."
+    },
+    {
+      "title": "Impact Force and Velocities for Kicking Strikes in Combat Sports",
+      "organization_or_author": "Vagner et al.",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8196733/",
+      "source_type": "peer_reviewed_biomechanics_article",
+      "notes": "Used for the safety importance of progressive kicking load, impact management, and technique quality under contact."
+    },
+    {
+      "title": "The Epidemiology of Injuries in Mixed Martial Arts: A Systematic Review and Meta-analysis",
+      "organization_or_author": "Lystad et al.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24458581/",
+      "source_type": "peer_reviewed_injury_review",
+      "notes": "Used for head/face injury risk context, contact progression, and the need to separate technical practice from hard sparring volume."
+    },
+    {
+      "title": "Injury Profile of Mixed Martial Arts Competitions in the United States",
+      "organization_or_author": "Bledsoe et al.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17208788/",
+      "source_type": "peer_reviewed_injury_article",
+      "notes": "Used for competition injury pattern context and conservative training safety gates."
+    },
+    {
+      "title": "Physiological and Performance Characteristics of Amateur Mixed Martial Artists",
+      "organization_or_author": "Amtmann et al.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23860290/",
+      "source_type": "peer_reviewed_performance_article",
+      "notes": "Used for MMA physical demand context and the need to preserve striking mechanics under intermittent fatigue."
+    }
+  ],
+  "domains_covered": {
+    "mma_stance_guard": {
+      "summary": "MMA stance is an adaptive base for punches, kicks, clinch entries, takedown defense, and exits. It is usually less bladed than pure boxing and less square/static than traditional Muay Thai, with hands ready for striking, framing, underhooks, and defense.",
+      "core_teaching_points": [
+        "Feet shoulder-width or slightly wider with rear heel light, knees soft, hips able to sprawl, check, pivot, or kick.",
+        "Hands protect chin and temples while avoiding extended fingers toward the opponent's eyes.",
+        "Lead hand manages range, hand-fights, frames, posts, and jabs; rear hand protects and fires straight counters.",
+        "Guard changes by range: long guard or frame outside, high guard/parry at boxing range, collar tie/frame in clinch, underhook/sprawl readiness near takedown range.",
+        "Stance must reset after every strike so the athlete can defend the next punch, kick, shot, or clinch."
+      ],
+      "backend_tags": ["stance", "guard", "base", "takedown_defense", "range", "beginner_foundation"]
+    },
+    "striking_entries": {
+      "summary": "MMA boxing entries must cross kicking, punching, clinch, and takedown danger. Reliable entries combine feint, jab, level-change cue, angle step, guard return, and planned exit or tie-up.",
+      "core_teaching_points": [
+        "Enter behind information: feint, jab, touch, hand fight, low kick threat, or level-change cue before committing.",
+        "Move the head off center on rear-hand entries and do not finish square with feet trapped.",
+        "Use short combinations that end with exit, angle, clinch, or takedown threat rather than long static boxing flurries.",
+        "Blend strike-to-grapple and grapple-to-strike: punch into underhook, jab to level change, failed shot to hook, break from clinch to elbow or cross.",
+        "Match entry to range: jab/teep from long, double jab or cross from mid, hook/uppercut/elbow at close, knee/elbow from clinch control."
+      ],
+      "backend_tags": ["entries", "jab", "cross", "feint", "level_change", "combo_exit"]
+    },
+    "kicking": {
+      "summary": "MMA kicking uses low kicks, calf kicks, body kicks, teeps, switch kicks, high kicks, and occasional spinning kicks, but every kick must account for catches, counters, stance recovery, and takedown exposure.",
+      "core_teaching_points": [
+        "Set up kicks with hands, feints, stance movement, or opponent reactions; naked kicks are easier to catch or counter.",
+        "Turn the hip and standing foot for round kicks while keeping the non-kicking hand responsible for counters.",
+        "Return the kicking leg to stance quickly; a beautiful kick that leaves the athlete square is a poor MMA kick.",
+        "Low kicks are highest value when timed as the opponent steps, loads, retreats, or posts weight on the lead leg.",
+        "High kicks and spinning attacks require stronger gates: balance, flexibility, range reading, recovery, and ruleset-safe partner constraints."
+      ],
+      "backend_tags": ["low_kick", "calf_kick", "body_kick", "teep", "kick_recovery", "kick_setup"]
+    },
+    "clinch_striking": {
+      "summary": "Clinch striking in MMA is control-first: knees, elbows, short punches, and breaks work when posture, head position, frames, underhooks, and cage position are already managed.",
+      "core_teaching_points": [
+        "Strike from dominant or neutral control, not while reaching with poor posture.",
+        "Use head position, underhooks, wrist control, collar ties, biceps ties, and frames to create knee and elbow lanes.",
+        "Knees are strongest after posture breaks, opponent pressure into the fence, or a frame that pins the hips or shoulders.",
+        "Elbows need close range, stable base, and responsible exits; they are often inappropriate for beginner or amateur rulesets.",
+        "Breaks from clinch should include a strike, frame, step-out, or angle rather than backing straight out with chin high."
+      ],
+      "backend_tags": ["clinch", "knees", "elbows", "underhook", "collar_tie", "cage_clinch"]
+    },
+    "striking_defense": {
+      "summary": "MMA defense is layered: distance, stance, footwork, guard, parry, slip, roll, pull, block, check, catch, frame, underhook, sprawl, and cage exit. Defensive choices must not create worse wrestling, knee, kick, or elbow exposure.",
+      "core_teaching_points": [
+        "First defense is range and angle; blocking everything in place becomes passive and invites level changes.",
+        "Head movement stays small and aware of knees, kicks, and uppercuts; deep ducking is a high-risk habit.",
+        "Kick defense includes checking, lifting the leg, withdrawing, angling out, catching when rules and skill allow, and countering the kicker's recovery.",
+        "Checks use shin/knee angle, hip turn, posture, and guard; do not collapse the checking leg or turn away blindly.",
+        "Every defense should lead to counter, clinch, underhook, sprawl, exit, or reset."
+      ],
+      "backend_tags": ["defense", "check", "block", "parry", "slip", "sprawl", "counter_exit"]
+    },
+    "countering": {
+      "summary": "MMA counters exploit timing windows after missed punches, checked kicks, kick recovery, stance square-ups, failed shots, clinch breaks, and cage exits. Counters should improve position, not just land one shot.",
+      "core_teaching_points": [
+        "Counter off a specific trigger: jab, cross, low kick, body kick, naked teep, overextended hook, failed shot, or fence turn.",
+        "High-percentage beginner counters include catch/parry jab to cross, check low kick to cross or low kick, slip outside jab to cross, and block hook to angle out.",
+        "Intermediate counters add kick catch to strike or takedown, pull cross, cross-hook-low kick, and clinch-break elbow or cross.",
+        "Advanced counters use layered reads, stance traps, hand fighting, cage pressure, and opponent-specific tendencies.",
+        "Countering while off balance, square, or emotionally chasing creates return-fire and takedown risk."
+      ],
+      "backend_tags": ["countering", "trigger", "timing", "defense_to_offense", "kick_counter", "cage_counter"]
+    },
+    "southpaw_orthodox": {
+      "summary": "Open-stance MMA changes hand lanes, kick lanes, lead-foot position, clinch entries, and takedown angles. The outside-foot battle matters, but it should not replace balance, range, and defense.",
+      "core_teaching_points": [
+        "Outside lead foot can open rear straight and rear kick lanes, but overreaching for it exposes counters and takedowns.",
+        "Lead-hand control is central: hand fight, paw, post, jab to occupy vision, then fire rear-side weapons.",
+        "Open stance increases rear body kick, rear straight, lead hook, inside low kick, and double-leg/single-leg angle relevance.",
+        "Closed stance keeps jab, lead hook, outside low kick, and conventional boxing rhythm more available.",
+        "Switching stance should be taught only after the athlete can keep guard, base, and defense during simple stance movement."
+      ],
+      "backend_tags": ["southpaw", "orthodox", "open_stance", "lead_foot", "rear_hand", "stance_switch"]
+    },
+    "footwork": {
+      "summary": "MMA footwork controls range, angle, cage position, stance matchups, and safe exits. Ringcraft concepts transfer, but cage work requires curved exits, fence awareness, and no reliance on ropes for rebound.",
+      "core_teaching_points": [
+        "Use small steps, stance recovery, and pivots; do not cross feet or hop into square positions.",
+        "Retreating straight to the fence is a tactical error; exit on an angle before the fence removes space.",
+        "Cage pressure means cutting lanes, taking center, steering with feints, and attacking exits rather than chasing.",
+        "At the fence, frame, underhook, turn, pivot, or clinch-break instead of shelling passively.",
+        "Footwork should be trained with range calls, stance calls, cage-zone calls, and strike/clinch/takedown options."
+      ],
+      "backend_tags": ["footwork", "cage", "ringcraft", "pivot", "angle_exit", "pressure"]
+    }
+  },
+  "technical_principles": [
+    {
+      "id": "mma_principle_striking_integrates_all_threats",
+      "principle": "MMA striking cannot be taught as isolated kickboxing; every strike must respect takedowns, clinch, cage position, grounded rules, and glove-size defense.",
+      "applies_to": ["mma_stance_guard", "striking_entries", "striking_defense", "countering"]
+    },
+    {
+      "id": "mma_principle_base_before_power",
+      "principle": "Power is useful only when the athlete can strike, recover stance, and defend the next phase without falling forward or squaring up.",
+      "applies_to": ["striking_entries", "kicking", "clinch_striking"]
+    },
+    {
+      "id": "mma_principle_guard_is_active",
+      "principle": "Guard is a working position for covering, framing, hand-fighting, pummeling, posting, and striking rather than a static shell.",
+      "applies_to": ["mma_stance_guard", "striking_defense", "clinch_striking"]
+    },
+    {
+      "id": "mma_principle_range_bands_drive_choices",
+      "principle": "Out-of-range, kicking range, boxing range, pocket, clinch, cage, and grounded-risk range require different strike choices and exits.",
+      "applies_to": ["striking_entries", "kicking", "footwork"]
+    },
+    {
+      "id": "mma_principle_entry_requires_information",
+      "principle": "Before entering, gather or create a reaction with feints, jabs, low-kick threats, hand fighting, stance pressure, or level-change cues.",
+      "applies_to": ["striking_entries", "southpaw_orthodox"]
+    },
+    {
+      "id": "mma_principle_short_combos_with_exits",
+      "principle": "MMA combinations should usually be short, defensible, and exit-linked; long stationary flurries increase clinch, counter, and takedown risk.",
+      "applies_to": ["striking_entries", "countering", "footwork"]
+    },
+    {
+      "id": "mma_principle_head_off_line_not_head_down",
+      "principle": "Move the head subtly off center while striking, but do not duck blindly into knees, kicks, uppercuts, or front-headlock entries.",
+      "applies_to": ["striking_entries", "striking_defense", "countering"]
+    },
+    {
+      "id": "mma_principle_low_kicks_need_timing",
+      "principle": "Low kicks score best when timed with opponent weight transfer, retreat, stance reset, hand guard distraction, or cage pressure.",
+      "applies_to": ["kicking", "countering", "footwork"]
+    },
+    {
+      "id": "mma_principle_kick_recovery_is_part_of_the_kick",
+      "principle": "A kick is not complete until the leg returns to a defensible stance or the athlete has entered a planned clinch/takedown sequence.",
+      "applies_to": ["kicking", "striking_defense"]
+    },
+    {
+      "id": "mma_principle_check_and_answer",
+      "principle": "A checked kick should become a counter window: cross, hook, low kick, entry, or angle while the kicker is recovering.",
+      "applies_to": ["striking_defense", "countering", "kicking"]
+    },
+    {
+      "id": "mma_principle_clinch_striking_control_first",
+      "principle": "Knees and elbows should be taught from posture, head position, frames, underhooks, wrist control, or cage control before power is emphasized.",
+      "applies_to": ["clinch_striking"]
+    },
+    {
+      "id": "mma_principle_elbows_are_close_range_tools",
+      "principle": "Elbows require range, angle, and safety gates; they should be introduced with pads and ruleset filters before partner contact.",
+      "applies_to": ["clinch_striking", "safety_constraints"]
+    },
+    {
+      "id": "mma_principle_defense_must_improve_position",
+      "principle": "A defensive action should create a counter, underhook, clinch, exit, angle, sprawl, or reset rather than only absorb impact.",
+      "applies_to": ["striking_defense", "countering", "footwork"]
+    },
+    {
+      "id": "mma_principle_cage_changes_footwork",
+      "principle": "Cage footwork rewards early angle exits, center control, wall turns, and lane cutting; straight retreats become worse as the fence approaches.",
+      "applies_to": ["footwork", "countering"]
+    },
+    {
+      "id": "mma_principle_open_stance_rear_side_lanes",
+      "principle": "Southpaw/orthodox exchanges emphasize lead-hand control, lead-foot position, rear straight lanes, rear body kicks, inside low kicks, and stance-aware exits.",
+      "applies_to": ["southpaw_orthodox", "footwork", "kicking"]
+    },
+    {
+      "id": "mma_principle_contact_progresses_after_control",
+      "principle": "Technical quality, rules understanding, and defensive competence must gate contact intensity, especially for head strikes, elbows, knees, and checks.",
+      "applies_to": ["level_guidance", "safety_constraints"]
+    },
+    {
+      "id": "mma_principle_fatigue_reduces_complexity",
+      "principle": "As fatigue rises, training should bias high-percentage stance, jab, low kick, check, clinch, and exit patterns instead of complex spinning or switch sequences.",
+      "applies_to": ["planning_rules", "level_guidance"]
+    },
+    {
+      "id": "mma_principle_ruleset_filters_technique",
+      "principle": "Technique libraries must filter by ruleset, age, amateur/pro status, equipment, jurisdiction, and gym policy before generating drills or sparring tasks.",
+      "applies_to": ["safety_constraints", "clinch_striking", "kicking"]
+    }
+  ],
+  "level_guidance": {
+    "beginner": {
+      "training_focus": [
+        "Athletic MMA stance, guard recovery, footwork without crossing feet, and safe range awareness.",
+        "Jab, cross, lead hook mechanics with immediate guard return and simple exits.",
+        "Basic low kick, teep, body kick mechanics on pads or bag with stance recovery.",
+        "High guard, parry, small slip, step-back, angle exit, low-kick check, and sprawl awareness.",
+        "Introductory clinch posture, frames, underhooks, body knees to pads, and legal/safety rules."
+      ],
+      "recommended_drill_intensity": "Mostly non-contact to light technical contact; use shadowboxing, bag, pads, cooperative partner feeds, and constrained touch sparring only after rule and defense checks.",
+      "avoid_until_ready": [
+        "Hard head sparring",
+        "Partner elbows",
+        "Full-power knees to partner",
+        "Live high-kick sparring",
+        "Spinning attacks under fatigue",
+        "Advanced stance switching"
+      ]
+    },
+    "intermediate": {
+      "training_focus": [
+        "Blend punches, kicks, level-change feints, and exits into two-to-four action sequences.",
+        "Add kick defense chains: check-return, withdraw-counter, catch-counter, and angle out.",
+        "Introduce cage footwork, fence exits, pressure lane cutting, and clinch breaks.",
+        "Train open-stance tactics: lead-hand control, outside-foot awareness, rear-hand/rear-kick lanes.",
+        "Use controlled sparring constraints that isolate entries, kick exchanges, clinch striking, and cage zones."
+      ],
+      "recommended_drill_intensity": "Technical to moderate contact with clear constraints, protective equipment, coach oversight, and reduced volume when mechanics degrade.",
+      "avoid_until_ready": [
+        "Unstructured all-tools sparring without goals",
+        "Hard elbow exchanges",
+        "Repeated checked-kick impact spikes",
+        "Blind high-volume cage brawls",
+        "Opponent-specific tactics before basic reads are stable"
+      ]
+    },
+    "advanced": {
+      "training_focus": [
+        "Opponent-specific striking plans based on stance, range habits, cage reactions, defensive triggers, and wrestling counters.",
+        "Layered feints, double attacks, stance switches, blitz entries, counter-kick chains, and strike-to-grapple transitions.",
+        "Advanced cage tactics: steering, trapping, clinch-break counters, wall turns, and pressure resets.",
+        "Fight-camp sparring design with controlled hard rounds, technical rounds, situational rounds, recovery management, and injury surveillance.",
+        "High-risk tools such as spinning attacks, knees in transition, elbows, and high kicks only inside ruleset-safe gates."
+      ],
+      "recommended_drill_intensity": "Variable intensity based on camp phase and athlete health; hard contact is planned, sparse, documented, and never used to learn a new movement.",
+      "avoid_until_ready": [
+        "Adding power to techniques that lack balance",
+        "Rule-ambiguous knees/elbows",
+        "Hard sparring after head symptoms",
+        "Complex tactical tasks when basic defense is failing"
+      ]
+    }
+  },
+  "drills_or_practice_design": [
+    {
+      "id": "mma_drill_stance_guard_reset_shadow",
+      "domain": "mma_stance_guard",
+      "design": "Shadowbox 3 x 2 minutes with coach calls for jab, cross, low kick, check, sprawl cue, and angle exit; score stance reset after each action.",
+      "progression": "No contact -> mirror partner -> light touch partner -> bag/pad round with reset scoring."
+    },
+    {
+      "id": "mma_drill_range_ladder_jab_teep_low_kick",
+      "domain": "striking_entries",
+      "design": "Move through out-of-range, kick range, boxing range, and clinch range; athlete selects jab, teep, low kick, frame, or exit on coach call.",
+      "progression": "Known calls -> random calls -> partner pressure -> cage-zone calls."
+    },
+    {
+      "id": "mma_drill_jab_cross_angle_exit",
+      "domain": "striking_entries",
+      "design": "Jab-cross with head off line, lead hook or low kick, then pivot or L-step exit; require guard return before next repetition.",
+      "progression": "Pads -> moving pads -> partner with light counter -> constrained sparring."
+    },
+    {
+      "id": "mma_drill_low_kick_setup_return",
+      "domain": "kicking",
+      "design": "Feint jab or touch lead hand, low kick to pad/bag, return to stance, defend a simulated counter with high guard or angle.",
+      "progression": "Stationary -> moving target -> partner check feed -> check-return exchange."
+    },
+    {
+      "id": "mma_drill_check_return_chain",
+      "domain": "striking_defense",
+      "design": "Partner feeds light low kick to shield or shin guard; defender checks, lands cross or low kick return, then exits.",
+      "progression": "Predictable side -> random side -> kick-or-jab feed -> controlled sparring start after the check."
+    },
+    {
+      "id": "mma_drill_slip_sprawl_counter",
+      "domain": "countering",
+      "design": "Partner feeds jab or level-change cue; defender slips or sprawls, then counters with cross, front headlock frame, or angle out.",
+      "progression": "Named cue -> random cue -> add cage boundary -> constrained entry sparring."
+    },
+    {
+      "id": "mma_drill_teep_to_frame_exit",
+      "domain": "kicking",
+      "design": "Teep to body shield, partner steps in, athlete frames with lead hand/forearm, circles out, and resets stance.",
+      "progression": "Bag -> shield holder -> light pressure -> fence approach."
+    },
+    {
+      "id": "mma_drill_clinch_knee_posture_break",
+      "domain": "clinch_striking",
+      "design": "From collar tie or over-under on pads, create posture break or frame, knee to body shield, pummel to safe exit.",
+      "progression": "Static tie -> pummel entry -> cage pummel -> controlled knee-touch sparring where rules permit."
+    },
+    {
+      "id": "mma_drill_elbow_pad_entries",
+      "domain": "clinch_striking",
+      "design": "Use pads only: jab-to-frame-to-horizontal elbow, collar-tie elbow, or clinch-break elbow; finish with guard and angle.",
+      "progression": "Pads only -> partner hand target at touch speed -> ruleset-approved technical sparring if appropriate."
+    },
+    {
+      "id": "mma_drill_cage_exit_quadrants",
+      "domain": "footwork",
+      "design": "Mark center, open lane, fence, and corner zones; athlete must call zone, exit on angle, then jab or clinch-frame before reset.",
+      "progression": "Solo -> pad holder pressure -> partner pressure -> constrained cage sparring."
+    },
+    {
+      "id": "mma_drill_cut_cage_with_feints",
+      "domain": "footwork",
+      "design": "Pressure athlete holds center, feints to freeze, steps to deny lateral exit, and attacks with jab/low kick when partner reaches fence line.",
+      "progression": "Walking pace -> live footwork only -> add jab/low kick touch -> add clinch entry."
+    },
+    {
+      "id": "mma_drill_open_stance_hand_foot_battle",
+      "domain": "southpaw_orthodox",
+      "design": "Orthodox vs southpaw partners hand-fight and step for outside lead foot without striking, then add jab or rear straight on command.",
+      "progression": "No strikes -> jab only -> rear hand/rear kick threat -> controlled open-stance sparring."
+    },
+    {
+      "id": "mma_drill_defense_counter_choice",
+      "domain": "countering",
+      "design": "Partner feeds one of jab, cross, hook, low kick, or teep; defender must choose defense and one counter plus exit.",
+      "progression": "Known feed -> random single feed -> two-strike feed -> 30-second constrained rounds."
+    },
+    {
+      "id": "mma_drill_fatigue_quality_round",
+      "domain": "planning_rules",
+      "design": "After conditioning interval, run a low-complexity technical round: jab, low kick, check, sprawl cue, cage exit; stop or simplify if stance/guard fail.",
+      "progression": "Low fatigue -> moderate fatigue -> late-round simulation with strict quality scoring."
+    }
+  ],
+  "common_errors": [
+    {
+      "id": "mma_error_boxing_stance_too_blade",
+      "error": "Using a pure boxing stance that is too bladed for MMA.",
+      "correction": "Square hips enough to check kicks, sprawl, kick, and pummel while keeping punching lanes.",
+      "risk": "Low-kick damage, single-leg exposure, slow kick defense."
+    },
+    {
+      "id": "mma_error_muay_thai_stance_too_tall",
+      "error": "Standing tall and static like traditional Muay Thai when the opponent can shoot or cage pressure.",
+      "correction": "Keep knees soft, hips back enough to defend level changes, and feet ready to angle.",
+      "risk": "Takedown entries, cage pressure, poor lateral exit."
+    },
+    {
+      "id": "mma_error_extended_fingers",
+      "error": "Posting or measuring with open fingers aimed at the opponent's face.",
+      "correction": "Use closed fist, palm-down frame, wrist/forearm frame, or controlled hand fighting according to rules.",
+      "risk": "Eye fouls, penalties, unsafe partner training."
+    },
+    {
+      "id": "mma_error_naked_entry",
+      "error": "Blitzing into boxing range without feint, jab, angle, or level-change setup.",
+      "correction": "Require an information action before entry and a planned exit or clinch.",
+      "risk": "Counters, knees, clinch tie-ups, takedowns."
+    },
+    {
+      "id": "mma_error_long_combo_stationary",
+      "error": "Throwing long punch combinations while feet stop moving.",
+      "correction": "Use two-to-four action sequences ending in angle, kick, clinch, or reset.",
+      "risk": "Return fire, level changes, fence traps."
+    },
+    {
+      "id": "mma_error_overcommitted_low_kick",
+      "error": "Swinging low kicks with no setup and slow recovery.",
+      "correction": "Set up with hands/feints, turn hip, land balanced, and recover stance immediately.",
+      "risk": "Kick catch, straight counter, takedown."
+    },
+    {
+      "id": "mma_error_turning_away_on_check",
+      "error": "Turning away or closing eyes while checking kicks.",
+      "correction": "Lift and turn the shin/knee with posture, eyes up, opposite hand guarding.",
+      "risk": "Follow-up punches, balance loss, body kick exposure."
+    },
+    {
+      "id": "mma_error_deep_ducking",
+      "error": "Ducking deeply under punches like a pure boxing roll without seeing knees or kicks.",
+      "correction": "Use small slips/rolls and pair head movement with stance, hand position, and opponent hip awareness.",
+      "risk": "Knees, head kicks, guillotine/front-headlock."
+    },
+    {
+      "id": "mma_error_passive_high_shell",
+      "error": "Shelling in place after contact.",
+      "correction": "Add angle, frame, underhook, counter, sprawl, or clinch after each cover.",
+      "risk": "Cage pressure, body shots, takedowns, accumulation."
+    },
+    {
+      "id": "mma_error_clinch_striking_without_control",
+      "error": "Throwing knees or elbows while losing posture or underhook position.",
+      "correction": "Win head position, frame, tie, wrist control, or underhook before striking.",
+      "risk": "Takedown, reversal, accidental foul."
+    },
+    {
+      "id": "mma_error_backing_to_cage",
+      "error": "Retreating straight backward until the fence removes space.",
+      "correction": "Circle early, pivot, L-step, frame, or clinch-turn before reaching the fence.",
+      "risk": "Fence trap, extended exchanges, takedown chain."
+    },
+    {
+      "id": "mma_error_chasing_pressure",
+      "error": "Following the opponent around the cage instead of cutting exit lanes.",
+      "correction": "Hold center, step to the escape side, use feints to freeze, and attack when the opponent's path closes.",
+      "risk": "Wasted energy, counter angles, missed pressure opportunities."
+    },
+    {
+      "id": "mma_error_outside_foot_overreach",
+      "error": "Overreaching for outside lead foot in southpaw/orthodox stance.",
+      "correction": "Treat foot position as one cue; keep head safe, hands active, and base underneath.",
+      "risk": "Cross counters, low kicks, takedowns."
+    },
+    {
+      "id": "mma_error_partner_elbows_too_early",
+      "error": "Adding partner elbows before pad accuracy, rules understanding, and contact control.",
+      "correction": "Use pads and touch-only technical drills until the athlete meets ruleset and safety gates.",
+      "risk": "Cuts, concussions, unsafe sparring culture."
+    },
+    {
+      "id": "mma_error_fatigue_skill_decay",
+      "error": "Continuing complex striking after stance, guard, and decision quality have collapsed.",
+      "correction": "Reduce complexity, lower contact, extend rest, or stop the round.",
+      "risk": "Injury, poor motor learning, bad habits."
+    }
+  ],
+  "safety_constraints": [
+    {
+      "id": "mma_safety_ruleset_first",
+      "constraint": "Filter all striking drills by ruleset, age, athlete level, amateur/pro status, jurisdiction, gym policy, and equipment before assigning.",
+      "applies_to": ["all_domains"]
+    },
+    {
+      "id": "mma_safety_head_symptoms_stop",
+      "constraint": "Headache, dizziness, visual disturbance, confusion, nausea, unusual fatigue, or suspected concussion stops contact immediately and requires medical/return-to-play protocol.",
+      "applies_to": ["sparring", "head_contact"]
+    },
+    {
+      "id": "mma_safety_contact_progression",
+      "constraint": "Progress from shadow, bag, pads, cooperative partner, light technical contact, constrained sparring, and then harder sparring only after skill gates are met.",
+      "applies_to": ["planning", "level_transition"]
+    },
+    {
+      "id": "mma_safety_amateur_elbow_filter",
+      "constraint": "Many amateur MMA rulesets prohibit elbows or forearm strikes; generate elbow work as pad-only unless ruleset and coach explicitly allow controlled partner contact.",
+      "applies_to": ["clinch_striking", "elbows"]
+    },
+    {
+      "id": "mma_safety_grounded_knee_filter",
+      "constraint": "Knees and kicks near grounded-opponent situations are ruleset-sensitive; all drills must define legal target, athlete posture, and stop cues.",
+      "applies_to": ["knees", "cage", "scrambles"]
+    },
+    {
+      "id": "mma_safety_eye_foul_guard",
+      "constraint": "Do not teach measuring with extended fingers toward the face; use closed-fist, palm-down, forearm, or shoulder frames.",
+      "applies_to": ["guard", "range_management"]
+    },
+    {
+      "id": "mma_safety_kick_impact_progression",
+      "constraint": "Increase kicking and checking impact gradually; monitor shin, ankle, knee, hip, and low-back symptoms after low-kick/check sessions.",
+      "applies_to": ["kicking", "checking_kicks"]
+    },
+    {
+      "id": "mma_safety_high_kick_partner_limits",
+      "constraint": "High kicks in partner work should use controlled speed, appropriate guards, shin/instep protection, and clear target restrictions until advanced readiness.",
+      "applies_to": ["kicking", "sparring"]
+    },
+    {
+      "id": "mma_safety_cage_wall_awareness",
+      "constraint": "Cage/wall drills require padding, clear boundaries, no uncontrolled throws into hard surfaces, and immediate stop if athlete cannot protect head or posture.",
+      "applies_to": ["footwork", "clinch_striking"]
+    },
+    {
+      "id": "mma_safety_no_new_skills_in_hard_sparring",
+      "constraint": "Do not introduce new knees, elbows, high kicks, stance switches, or spinning attacks during hard sparring.",
+      "applies_to": ["advanced_training", "sparring"]
+    },
+    {
+      "id": "mma_safety_fatigue_quality_gate",
+      "constraint": "When fatigue causes dropped guard, crossed feet, blind head movement, or uncontrolled impact, lower intensity or stop the task.",
+      "applies_to": ["conditioning", "sparring", "drills"]
+    },
+    {
+      "id": "mma_safety_protective_equipment",
+      "constraint": "Use appropriate gloves, mouthguard, groin/chest protection as relevant, shin guards, headgear when gym policy requires it, wraps, and clean mats/pads.",
+      "applies_to": ["contact_training"]
+    },
+    {
+      "id": "mma_safety_medical_clearance",
+      "constraint": "Previous concussion, eye injury, neck injury, severe joint pain, or unresolved neurological symptoms require medical clearance before contact striking.",
+      "applies_to": ["injury_management"]
+    }
+  ],
+  "backend_records": {
+    "sport_training_rules": [
+      {
+        "id": "mma_rule_stance_guard_mma_base",
+        "domain": "mma_stance_guard",
+        "rule": "Teach stance as punch-kick-clinch-takedown base: balanced feet, soft knees, rear heel light, chin protected, hips ready, and no extended fingers.",
+        "retrieval_tags": ["stance", "guard", "base", "beginner"]
+      },
+      {
+        "id": "mma_rule_guard_dynamic_by_range",
+        "domain": "mma_stance_guard",
+        "rule": "Guard selection changes by range: long guard/frame outside, high guard/parry at boxing range, underhook/frame in clinch, sprawl-ready near level changes.",
+        "retrieval_tags": ["guard", "range", "defense"]
+      },
+      {
+        "id": "mma_rule_range_band_selection",
+        "domain": "striking_entries",
+        "rule": "Select weapons by range band: jab/teep/low kick at long range, straights and hooks at boxing range, elbows/knees at clinch range, exits before fence pressure.",
+        "retrieval_tags": ["range", "weapon_selection", "entries"]
+      },
+      {
+        "id": "mma_rule_entry_no_naked_blitz",
+        "domain": "striking_entries",
+        "rule": "Require a setup action before entering: feint, jab, hand fight, low-kick threat, level-change cue, stance step, or cage pressure.",
+        "retrieval_tags": ["entries", "feints", "jab"]
+      },
+      {
+        "id": "mma_rule_boxing_entries_head_off_line",
+        "domain": "striking_entries",
+        "rule": "Punch entries must move the head slightly off center, keep feet under hips, and finish with a counter-ready exit, clinch, or angle.",
+        "retrieval_tags": ["boxing", "head_movement", "exit"]
+      },
+      {
+        "id": "mma_rule_low_kick_setup_recovery",
+        "domain": "kicking",
+        "rule": "Low kicks should be hidden by hands/feints or timed on weight transfer, then recovered to stance before the opponent can catch, counter, or shoot.",
+        "retrieval_tags": ["low_kick", "setup", "recovery"]
+      },
+      {
+        "id": "mma_rule_teep_range_management",
+        "domain": "kicking",
+        "rule": "Use teeps to manage distance, interrupt entries, and create exits; recover the leg quickly and guard against catches or overhands.",
+        "retrieval_tags": ["teep", "range", "defense"]
+      },
+      {
+        "id": "mma_rule_check_kick_structure",
+        "domain": "striking_defense",
+        "rule": "A check uses shin/knee angle, hip turn, upright posture, eyes on opponent, and opposite-side hand protection; answer or exit after contact.",
+        "retrieval_tags": ["check", "low_kick_defense", "counter"]
+      },
+      {
+        "id": "mma_rule_kick_defense_layers",
+        "domain": "striking_defense",
+        "rule": "Teach kick defense layers: range withdrawal, angle, check, block, catch where appropriate, counter during recovery, and avoid turning away.",
+        "retrieval_tags": ["kick_defense", "check", "catch", "counter"]
+      },
+      {
+        "id": "mma_rule_clinch_striking_control_first",
+        "domain": "clinch_striking",
+        "rule": "Knees, elbows, and short punches require posture, head position, frame, tie, wrist control, underhook, or cage control before power.",
+        "retrieval_tags": ["clinch", "knees", "elbows", "control"]
+      },
+      {
+        "id": "mma_rule_elbow_range_entry",
+        "domain": "clinch_striking",
+        "rule": "Elbows are close-range tools taught through pads first, then touch technical work only when ruleset, equipment, and athlete control allow.",
+        "retrieval_tags": ["elbows", "pads", "ruleset"]
+      },
+      {
+        "id": "mma_rule_knee_strike_posture_break",
+        "domain": "clinch_striking",
+        "rule": "Knees are safest and highest percentage after a posture break, frame, collar tie, underhook, or cage pin that limits opponent counters.",
+        "retrieval_tags": ["knees", "posture_break", "clinch"]
+      },
+      {
+        "id": "mma_rule_defense_counter_exit",
+        "domain": "striking_defense",
+        "rule": "Every defensive drill ends with counter, angle, clinch, underhook, sprawl, exit, or reset instead of passive covering.",
+        "retrieval_tags": ["defense", "countering", "exit"]
+      },
+      {
+        "id": "mma_rule_head_movement_mma_context",
+        "domain": "striking_defense",
+        "rule": "Head movement must be small, visible, and stance-connected; avoid blind dips that expose knees, kicks, uppercuts, and front-headlocks.",
+        "retrieval_tags": ["head_movement", "knees", "safety"]
+      },
+      {
+        "id": "mma_rule_open_stance_rear_side_lanes",
+        "domain": "southpaw_orthodox",
+        "rule": "In open stance, teach lead-hand control, balanced outside-foot pressure, rear straight/rear kick lanes, inside low kick, and stance-aware exit.",
+        "retrieval_tags": ["southpaw", "orthodox", "open_stance"]
+      },
+      {
+        "id": "mma_rule_cage_footwork_exit_before_exchange",
+        "domain": "footwork",
+        "rule": "When near the cage, prioritize angle exit, frame, underhook, wall turn, or clinch-break before extended pocket exchanges.",
+        "retrieval_tags": ["cage", "footwork", "exit"]
+      }
+    ],
+    "planning_rules": [
+      {
+        "id": "mma_plan_contact_progression",
+        "domain": "safety_constraints",
+        "rule": "Plan striking contact as shadow -> bag -> pads -> cooperative feed -> light technical contact -> constrained sparring -> harder sparring.",
+        "constraints": ["advance_only_after_defense_quality", "coach_supervision_required"]
+      },
+      {
+        "id": "mma_plan_ruleset_filter",
+        "domain": "safety_constraints",
+        "rule": "Before assigning knees, elbows, grounded transitions, cage work, or high kicks, filter by ruleset, age, amateur/pro level, and gym policy.",
+        "constraints": ["ruleset_required", "unsafe_if_unknown"]
+      },
+      {
+        "id": "mma_plan_head_contact_volume_limit",
+        "domain": "safety_constraints",
+        "rule": "Keep hard head-contact rounds sparse, planned, and never used as conditioning filler or first exposure to a skill.",
+        "constraints": ["symptoms_stop", "record_contact_load"]
+      },
+      {
+        "id": "mma_plan_kick_impact_load",
+        "domain": "kicking",
+        "rule": "Track hard low-kick reps, check reps, bag density, shin tenderness, knee/ankle pain, and day-after soreness.",
+        "constraints": ["increase_gradually", "decrease_if_pain"]
+      },
+      {
+        "id": "mma_plan_drill_order",
+        "domain": "planning_rules",
+        "rule": "Teach new striking mechanics before fatigue; use fatigue rounds for simple patterns already owned by the athlete.",
+        "constraints": ["new_skill_fresh", "fatigue_simplifies"]
+      },
+      {
+        "id": "mma_plan_cage_wall_safety",
+        "domain": "footwork",
+        "rule": "Cage/wall sessions require safe surface, boundaries, padding, stop cues, and constraints on uncontrolled collisions.",
+        "constraints": ["no_hard_surface_collisions", "coach_control"]
+      },
+      {
+        "id": "mma_plan_stance_matchup_complexity",
+        "domain": "southpaw_orthodox",
+        "rule": "Add open-stance strategy after basic stance, jab, cross, kick defense, and exit skills remain stable under light pressure.",
+        "constraints": ["no_advanced_switching_for_unstable_base"]
+      },
+      {
+        "id": "mma_plan_clinch_striking_gate",
+        "domain": "clinch_striking",
+        "rule": "Knee and elbow intensity is capped until athlete demonstrates posture control, pummeling safety, target control, and rule knowledge.",
+        "constraints": ["pad_first", "partner_contact_later"]
+      },
+      {
+        "id": "mma_plan_fatigue_quality_gate",
+        "domain": "planning_rules",
+        "rule": "If guard drops, feet cross, checks turn away, or head movement becomes blind, reduce complexity/contact or stop the round.",
+        "constraints": ["quality_over_volume"]
+      },
+      {
+        "id": "mma_plan_recovery_injury_flags",
+        "domain": "safety_constraints",
+        "rule": "Any head symptom, eye injury, neck pain, severe joint pain, or neurological symptom blocks contact striking until cleared.",
+        "constraints": ["medical_clearance_if_needed"]
+      }
+    ],
+    "teaching_progressions": [
+      {
+        "id": "mma_progression_stance_to_entries",
+        "domain": "mma_stance_guard",
+        "steps": ["stance_and_guard", "step_slide", "jab_touch", "jab_cross", "angle_exit", "light_counter_feed"],
+        "exit_criteria": "Athlete keeps base and guard during 60-90 seconds of basic movement and jab/cross entries."
+      },
+      {
+        "id": "mma_progression_jab_cross_to_mma_entry",
+        "domain": "striking_entries",
+        "steps": ["jab_range_probe", "cross_head_off_line", "two_punch_combo", "combo_to_exit", "combo_to_clinch_or_level_change"],
+        "exit_criteria": "Athlete enters without falling forward and finishes with exit or tie-up on at least 8 of 10 reps."
+      },
+      {
+        "id": "mma_progression_low_kick",
+        "domain": "kicking",
+        "steps": ["shadow_low_kick", "bag_low_kick", "pad_low_kick", "jab_to_low_kick", "low_kick_recover_vs_counter", "light_check_exchange"],
+        "exit_criteria": "Athlete lands and recovers stance without turning away or dropping both hands."
+      },
+      {
+        "id": "mma_progression_kick_defense_check",
+        "domain": "striking_defense",
+        "steps": ["leg_lift_pattern", "shin_angle_on_pad", "light_partner_check", "check_to_cross", "check_to_low_kick", "random_kick_or_punch_feed"],
+        "exit_criteria": "Athlete checks both sides with posture and eyes up, then counters or exits under light random feed."
+      },
+      {
+        "id": "mma_progression_clinch_knees",
+        "domain": "clinch_striking",
+        "steps": ["clinch_posture", "frames_and_underhooks", "body_knee_to_bag", "body_knee_to_shield", "pummel_to_knee", "knee_to_exit"],
+        "exit_criteria": "Athlete controls posture and lands to safe target without pulling partner off balance unsafely."
+      },
+      {
+        "id": "mma_progression_elbows",
+        "domain": "clinch_striking",
+        "steps": ["elbow_path_shadow", "elbow_to_pad", "jab_frame_elbow_pad", "clinch_break_elbow_pad", "touch_target_if_rules_allow"],
+        "exit_criteria": "Athlete demonstrates target control, legal understanding, and immediate guard/angle after elbow."
+      },
+      {
+        "id": "mma_progression_defense_counter",
+        "domain": "countering",
+        "steps": ["named_defense", "named_counter", "defense_counter_exit", "random_single_feed", "two_feed_sequence", "constrained_sparring"],
+        "exit_criteria": "Athlete chooses appropriate defense and returns balanced counter or exit under random light feed."
+      },
+      {
+        "id": "mma_progression_cage_footwork",
+        "domain": "footwork",
+        "steps": ["center_footwork", "fence_awareness", "angle_exit", "frame_exit", "underhook_turn", "cage_pressure_constrained_round"],
+        "exit_criteria": "Athlete avoids backing straight to fence and exits safely under moderate footwork pressure."
+      },
+      {
+        "id": "mma_progression_southpaw_orthodox",
+        "domain": "southpaw_orthodox",
+        "steps": ["identify_stance", "lead_hand_control", "outside_foot_without_strikes", "rear_straight_lane", "rear_kick_lane", "open_stance_spar_constraint"],
+        "exit_criteria": "Athlete manages open-stance position without overreaching, crossing feet, or losing guard."
+      },
+      {
+        "id": "mma_progression_sparring",
+        "domain": "safety_constraints",
+        "steps": ["technical_touch_round", "single_tool_constraint", "entry_exit_constraint", "kick_exchange_constraint", "cage_zone_constraint", "integrated_light_sparring"],
+        "exit_criteria": "Athlete follows rules, protects partner, responds to stop cues, and preserves defense under pressure."
+      }
+    ],
+    "skill_assessments": [
+      {
+        "id": "mma_assess_stance_guard_balance",
+        "domain": "mma_stance_guard",
+        "assessment": "Move, jab, cross, low kick shadow, check, and sprawl cue for 90 seconds.",
+        "pass_criteria": ["no_crossed_feet", "guard_recovers", "chin_protected", "stance_recovers_after_kick"]
+      },
+      {
+        "id": "mma_assess_entry_exit_quality",
+        "domain": "striking_entries",
+        "assessment": "Perform 10 entries from long range with setup, two-strike max, and exit or clinch.",
+        "pass_criteria": ["setup_present", "head_not_centered_on_rear_hand", "balanced_exit", "no_stationary_flurry"]
+      },
+      {
+        "id": "mma_assess_kick_recovery",
+        "domain": "kicking",
+        "assessment": "Throw low kick, body kick, and teep to pads while partner simulates counter pressure.",
+        "pass_criteria": ["quick_leg_return", "opposite_hand_responsible", "no_turning_away", "base_ready_after_kick"]
+      },
+      {
+        "id": "mma_assess_check_counter",
+        "domain": "striking_defense",
+        "assessment": "Defend random light low kicks with check, withdrawal, or angle, then counter or exit.",
+        "pass_criteria": ["eyes_up", "shin_knee_structure", "balanced_counter", "no_blind_turn"]
+      },
+      {
+        "id": "mma_assess_clinch_striking_control",
+        "domain": "clinch_striking",
+        "assessment": "From pummel or collar-tie entry, create safe knee or elbow-pad lane and exit.",
+        "pass_criteria": ["posture_control", "legal_target", "partner_safety", "exit_after_strike"]
+      },
+      {
+        "id": "mma_assess_defense_counter_decision",
+        "domain": "countering",
+        "assessment": "Partner feeds random jab, cross, hook, low kick, or level-change cue; athlete defends and chooses counter/exit.",
+        "pass_criteria": ["correct_defense_family", "counter_balanced", "exit_or_tie_up", "no_panic_shell"]
+      },
+      {
+        "id": "mma_assess_cage_awareness",
+        "domain": "footwork",
+        "assessment": "Constrained round where athlete starts near fence and must exit, frame, turn, or clinch safely.",
+        "pass_criteria": ["no_straight_retreat_to_fence", "uses_angle_or_frame", "keeps_base", "does_not_grab_fence"]
+      },
+      {
+        "id": "mma_assess_open_stance",
+        "domain": "southpaw_orthodox",
+        "assessment": "Open-stance hand/foot positioning with jab, rear straight, rear kick, and exit calls.",
+        "pass_criteria": ["identifies_stance", "lead_hand_control", "balanced_outside_foot", "defends_rear_side"]
+      },
+      {
+        "id": "mma_assess_sparring_readiness",
+        "domain": "safety_constraints",
+        "assessment": "Technical sparring pre-check covering rules, stop cues, equipment, defensive competence, and partner control.",
+        "pass_criteria": ["rules_understood", "equipment_ready", "can_defend_common_attacks", "responds_to_stop"]
+      },
+      {
+        "id": "mma_assess_fatigue_skill_retention",
+        "domain": "planning_rules",
+        "assessment": "After moderate fatigue, perform jab-low kick-check-exit round with coach scoring mechanics.",
+        "pass_criteria": ["guard_retained", "no_blind_head_movement", "feet_stable", "impact_controlled"]
+      }
+    ],
+    "level_transition_rules": [
+      {
+        "id": "mma_level_beginner_to_intermediate_stance_entries",
+        "from": "beginner",
+        "to": "intermediate",
+        "requirements": ["mma_assess_stance_guard_balance", "mma_assess_entry_exit_quality"],
+        "rule": "Progress after stance, guard, basic entries, and exits remain stable under light partner pressure."
+      },
+      {
+        "id": "mma_level_beginner_to_intermediate_kicking",
+        "from": "beginner",
+        "to": "intermediate",
+        "requirements": ["mma_assess_kick_recovery", "mma_assess_check_counter"],
+        "rule": "Progress kicking after low kick, teep, body kick, check, and recovery are controlled with light counters."
+      },
+      {
+        "id": "mma_level_beginner_to_intermediate_contact",
+        "from": "beginner",
+        "to": "intermediate",
+        "requirements": ["mma_assess_sparring_readiness"],
+        "rule": "Progress contact only after rules, stop cues, equipment, and defensive responses are demonstrated."
+      },
+      {
+        "id": "mma_level_intermediate_to_advanced_striking_blend",
+        "from": "intermediate",
+        "to": "advanced",
+        "requirements": ["mma_assess_defense_counter_decision", "mma_assess_fatigue_skill_retention"],
+        "rule": "Progress when athlete blends entries, kicks, defense, counters, and exits under random moderate pressure without skill collapse."
+      },
+      {
+        "id": "mma_level_intermediate_to_advanced_cage",
+        "from": "intermediate",
+        "to": "advanced",
+        "requirements": ["mma_assess_cage_awareness", "mma_assess_clinch_striking_control"],
+        "rule": "Progress cage striking after athlete can exit fence, clinch-turn, strike safely, and avoid passive shelling."
+      },
+      {
+        "id": "mma_level_intermediate_to_advanced_open_stance",
+        "from": "intermediate",
+        "to": "advanced",
+        "requirements": ["mma_assess_open_stance"],
+        "rule": "Progress to advanced stance-switch and open-stance tactics after lead-hand, lead-foot, rear-lane, and defensive awareness are stable."
+      },
+      {
+        "id": "mma_level_contact_regression_rule",
+        "from": "any",
+        "to": "lower_contact",
+        "requirements": ["coach_observation"],
+        "rule": "Regress contact and complexity if the athlete loses guard, turns away from kicks, backs straight to cage, ignores stop cues, or cannot protect partner."
+      },
+      {
+        "id": "mma_level_return_from_symptoms",
+        "from": "symptom_hold",
+        "to": "technical_non_contact",
+        "requirements": ["medical_clearance_when_required", "symptom_free_progression"],
+        "rule": "After head or neurological symptoms, return only through non-contact technical work and formal return-to-contact steps."
+      }
+    ]
+  }
+}

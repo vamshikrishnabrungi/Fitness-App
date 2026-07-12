@@ -1,0 +1,1692 @@
+{
+  "metadata": {
+    "sport": "cycling",
+    "domain": "cycling_injury_snc_bike_fit_load_management",
+    "version": "draft_v1",
+    "created_at": "2026-06-23",
+    "research_goal": "Create backend-ready cycling records for injury risk, strength and conditioning, bike-fit triage, return-to-ride logic, pain rules, crash-risk controls, and load monitoring across recreational, road, gravel, MTB, indoor, triathlon, and racing cyclists.",
+    "focus_scope": [
+      "knee_pain",
+      "low_back_pain",
+      "neck_shoulder_and_hand_symptoms",
+      "saddle_and_perineal_discomfort",
+      "achilles_and_calf_symptoms",
+      "overtraining_and_load_management",
+      "crash_risk",
+      "bike_fit_flags",
+      "strength_and_mobility_programming",
+      "return_to_ride_rules"
+    ],
+    "excluded_scope": [
+      "detailed_race_tactics",
+      "power_zone_programming_except_injury_context",
+      "nutrition_except_load_and_recovery_flags",
+      "product_reviews",
+      "clinical_diagnosis_or_treatment_beyond_referral_flags"
+    ]
+  },
+  "source_refs": [
+    {
+      "id": "src_clarsen_overuse_pro_cyclists",
+      "title": "Overuse Injuries in Professional Road Cyclists",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20847225/",
+      "source_type": "peer_reviewed_prospective_cohort",
+      "organization_or_author": "Clarsen, Krosshaug, and Bahr",
+      "notes": "Used for professional road-cycling overuse patterns and the prominence of low-back and knee complaints."
+    },
+    {
+      "id": "src_dettori_nontraumatic_review",
+      "title": "Non-Traumatic Bicycle Injuries: A Review of the Literature",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12696996/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Dettori and Norvell",
+      "notes": "Used for common non-traumatic cycling injury sites, including knee, neck, shoulder, hands, buttock, and perineum."
+    },
+    {
+      "id": "src_road_cycling_systematic_review",
+      "title": "As Easy as Riding a Bike: A Systematic Review of Injuries and Illness in Road Cycling",
+      "url": "https://bmjopensem.bmj.com/content/6/1/e000840",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "BMJ Open Sport & Exercise Medicine authors",
+      "notes": "Used for road-cycling injury burden, traumatic injury patterns, and illness/injury surveillance framing."
+    },
+    {
+      "id": "src_saddle_height_review",
+      "title": "Effects of Bicycle Saddle Height on Knee Injury Risk and Cycling Performance",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21615188/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Bini, Hume, and Croft",
+      "notes": "Used for saddle-height links to knee kinematics, joint moments, and performance consequences."
+    },
+    {
+      "id": "src_low_back_systematic_review",
+      "title": "Relationship Between Body Positioning, Muscle Activity, and Spinal Kinematics in Cyclists With and Without Low Back Pain: A Systematic Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28504060/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Streisfeld, Bartoszek, Creran, Inge, McShane, and Johnston",
+      "notes": "Used for prolonged flexed posture, spinal kinematics, and trunk-muscle activation issues in cyclists with low-back pain."
+    },
+    {
+      "id": "src_bike_fit_pain_survey",
+      "title": "A Retrospective International Study on Factors Associated With Injury, Discomfort and Pain Perception Among Cyclists",
+      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0211197",
+      "source_type": "peer_reviewed_cross_sectional_study",
+      "organization_or_author": "Priego Quesada, Kerr, Bertucci, Carpes, and colleagues",
+      "notes": "Used for associations among injury, discomfort, pain perception, cycling experience, and bike fit factors."
+    },
+    {
+      "id": "src_bike_fitting_survey",
+      "title": "A Survey on Bike Fitting: Perspectives of Cyclists and Bike Fitters",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34763670/",
+      "source_type": "peer_reviewed_survey",
+      "organization_or_author": "Priego Quesada, Kerr, Bertucci, Carpes, and colleagues",
+      "notes": "Used for practical bike-fitting domains: saddle, handlebar, cleat, comfort, pain, and rider-fitter perception gaps."
+    },
+    {
+      "id": "src_median_ulnar_review",
+      "title": "Median and Ulnar Nerve Injuries in Cyclists: A Narrative Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34973191/",
+      "source_type": "peer_reviewed_narrative_review",
+      "organization_or_author": "Cycling hand nerve injury review authors",
+      "notes": "Used for hand numbness mechanisms involving handlebar pressure, wrist position, compression, and traction."
+    },
+    {
+      "id": "src_achilles_cyclists",
+      "title": "Factors Associated With Achilles Tendon Pain in Cyclists in the Eastern Province of Saudi Arabia",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8496546/",
+      "source_type": "peer_reviewed_cross_sectional_study",
+      "organization_or_author": "Althunyan and colleagues",
+      "notes": "Used for Achilles tendon pain associations with cycling exposure, recent duration or intensity increase, and fit/load factors."
+    },
+    {
+      "id": "src_perineum_systematic_review",
+      "title": "Strategies for Reducing the Impact of Cycling on the Perineum in Healthy Males: Systematic Review and Meta-Analysis",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34254587/",
+      "source_type": "peer_reviewed_systematic_review_meta_analysis",
+      "organization_or_author": "Litwinowicz, Wolski, and colleagues",
+      "notes": "Used for saddle/perineal pressure mitigation strategies such as saddle design and intermittent pressure relief."
+    },
+    {
+      "id": "src_saddle_sores_scoping_review",
+      "title": "Getting to the Bottom of Saddle Sores: A Scoping Review of the Definition, Prevalence, Management and Prevention of Saddle Sores in Cycling",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10576128/",
+      "source_type": "peer_reviewed_scoping_review",
+      "organization_or_author": "Sports dermatology and cycling saddle-sore review authors",
+      "notes": "Used for saddle-sore risk, hygiene, equipment fit, skin-friction prevention, and referral flags for skin breakdown."
+    },
+    {
+      "id": "src_ioc_load_consensus",
+      "title": "How Much Is Too Much? International Olympic Committee Consensus Statement on Load in Sport and Risk of Injury",
+      "url": "https://bjsm.bmj.com/content/50/17/1030",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Soligard, Schwellnus, Alonso, Bahr, Clarsen, Dijkstra, Gabbett, Gleeson, Hagglund, Hutchinson, Janse van Rensburg, Khan, Meeusen, Orchard, Pluim, Raftery, Budgett, and Engebretsen",
+      "notes": "Used for load monitoring, internal and external load distinction, recovery, and avoiding excessive spikes."
+    },
+    {
+      "id": "src_training_load_fatigue_monitoring",
+      "title": "Monitoring Training Load to Understand Fatigue in Athletes",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4213373/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Halson",
+      "notes": "Used for internal and external load measures such as session RPE, heart rate, power output, wellness, fatigue, and recovery response."
+    },
+    {
+      "id": "src_workload_models_female_cyclists",
+      "title": "Various Workload Models and Preseason Are Associated With Injuries in Professional Female Cyclists",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33970795/",
+      "source_type": "peer_reviewed_cohort_study",
+      "organization_or_author": "Professional female cyclist workload researchers",
+      "notes": "Used for cycling-specific workload-injury monitoring and the warning that preseason and workload models can identify higher-risk windows."
+    },
+    {
+      "id": "src_overtraining_consensus",
+      "title": "Prevention, Diagnosis, and Treatment of the Overtraining Syndrome: Joint Consensus Statement of the European College of Sport Science and the American College of Sports Medicine",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23247672/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Meeusen, Duclos, Foster, Fry, Gleeson, Nieman, Raglin, Rietjens, Steinacker, and Urhausen",
+      "notes": "Used for functional overreaching, nonfunctional overreaching, overtraining syndrome, mood/performance flags, and recovery requirements."
+    },
+    {
+      "id": "src_strength_training_cyclists_meta",
+      "title": "Effects of Strength Training on the Physiological Determinants of Middle- and Long-Distance Endurance Performance: A Systematic Review and Meta-Analysis",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5983157/",
+      "source_type": "peer_reviewed_systematic_review_meta_analysis",
+      "organization_or_author": "Berryman, Mujika, and Bosquet",
+      "notes": "Used for endurance-athlete strength training transfer to economy, power, and performance-relevant determinants."
+    },
+    {
+      "id": "src_strength_training_uci_cyclists",
+      "title": "Strength Training Among Professional UCI Road Cyclists: Rationales, Implementation and Perspectives",
+      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0320365",
+      "source_type": "peer_reviewed_survey",
+      "organization_or_author": "Professional UCI road cyclist strength-training researchers",
+      "notes": "Used for contemporary elite practice, strength-training rationales, implementation, and integration concerns in road cyclists."
+    },
+    {
+      "id": "src_british_cycling_strength",
+      "title": "Strength Training for Cyclists",
+      "url": "https://www.britishcycling.org.uk/knowledge/article/izn20150824-Strength-Training-for-Cyclists-0",
+      "source_type": "official_federation_coaching_resource",
+      "organization_or_author": "British Cycling",
+      "notes": "Used for practical off-bike strength exercise categories and coach-facing programming themes."
+    },
+    {
+      "id": "src_usa_cycling_pre_ride_check",
+      "title": "Cycling Safety: What to Check on Your Bike Before Every Ride",
+      "url": "https://usacycling.org/article/cycling-safety-what-to-check-on-your-bike-before-every-ride",
+      "source_type": "official_federation_safety_resource",
+      "organization_or_author": "USA Cycling",
+      "notes": "Used for pre-ride equipment safety checks, especially tires, brakes, wheels, drivetrain, bolts, and quick-release or thru-axle security."
+    },
+    {
+      "id": "src_cdc_bicycle_safety",
+      "title": "Bicycle Safety",
+      "url": "https://www.cdc.gov/bicycle-safety/",
+      "source_type": "official_public_health_guidance",
+      "organization_or_author": "Centers for Disease Control and Prevention",
+      "notes": "Used for helmet use, visibility, traffic safety, and bicycle crash injury-prevention guidance."
+    },
+    {
+      "id": "src_pain_monitoring_achilles",
+      "title": "Continued Sports Activity, Using a Pain-Monitoring Model, During Rehabilitation in Patients With Achilles Tendinopathy",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17307888/",
+      "source_type": "peer_reviewed_clinical_trial",
+      "organization_or_author": "Silbernagel, Thomee, Eriksson, and Karlsson",
+      "notes": "Used for pain-monitoring logic during activity and the principle that symptoms during and after loading guide progression."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "concept_cycling_is_equipment_mediated_load",
+      "name": "Equipment-mediated repetitive load",
+      "summary": "Cycling injury risk is shaped by training load and by how the rider contacts the bike: saddle, pedals/cleats, handlebars, reach, bar drop, crank/cadence choices, and surface.",
+      "backend_use": "Do not prescribe ride volume or intensity without also checking fit changes, contact-point symptoms, and terrain or indoor exposure.",
+      "evidence_refs": [
+        "src_dettori_nontraumatic_review",
+        "src_bike_fit_pain_survey",
+        "src_bike_fitting_survey"
+      ]
+    },
+    {
+      "id": "concept_overuse_hotspots",
+      "name": "Cycling overuse hotspots",
+      "summary": "Common non-traumatic complaint areas include knee, low back, neck/shoulder, hands/wrists, saddle/perineum, and Achilles/calf.",
+      "backend_use": "Screen these areas during onboarding, after block changes, after bike-fit changes, and after long indoor or climbing blocks.",
+      "evidence_refs": [
+        "src_clarsen_overuse_pro_cyclists",
+        "src_dettori_nontraumatic_review"
+      ]
+    },
+    {
+      "id": "concept_low_back_postural_endurance",
+      "name": "Low-back pain is often a posture-tolerance problem",
+      "summary": "Cyclists sustain trunk flexion and hip flexion for long periods; symptoms often worsen when ride duration, aero posture, bar drop, or fatigue exceeds spinal and hip support capacity.",
+      "backend_use": "Pair bike-position triage with trunk endurance, hip mobility, posterior-chain strength, and gradual duration progression.",
+      "evidence_refs": [
+        "src_low_back_systematic_review",
+        "src_clarsen_overuse_pro_cyclists"
+      ]
+    },
+    {
+      "id": "concept_knee_pain_multi_factor",
+      "name": "Knee pain requires load and fit triage",
+      "summary": "Cycling knee symptoms can reflect a mismatch among saddle height, saddle setback, cleat position, cadence, gearing, hill volume, and recent intensity or volume changes.",
+      "backend_use": "Knee-pain rules should reduce provoking exposure and trigger fit review instead of only adding generic knee exercises.",
+      "evidence_refs": [
+        "src_saddle_height_review",
+        "src_dettori_nontraumatic_review",
+        "src_bike_fit_pain_survey"
+      ]
+    },
+    {
+      "id": "concept_hand_numbness_is_contact_pressure",
+      "name": "Hand numbness is a contact-pressure warning",
+      "summary": "Median and ulnar nerve symptoms can be provoked by sustained handlebar pressure, wrist extension, vibration, reach, and poor weight distribution.",
+      "backend_use": "Any numbness, tingling, weakness, or loss of grip control should trigger fit/contact-point review and ride modification.",
+      "evidence_refs": [
+        "src_median_ulnar_review"
+      ]
+    },
+    {
+      "id": "concept_saddle_symptoms_need_early_action",
+      "name": "Saddle symptoms are not just tolerance",
+      "summary": "Perineal numbness, genital symptoms, saddle sores, or skin breakdown should not be normalized as normal cycling adaptation.",
+      "backend_use": "Escalate persistent numbness, skin breakdown, urinary/genital symptoms, or recurring saddle sores to medical or bike-fit review.",
+      "evidence_refs": [
+        "src_perineum_systematic_review",
+        "src_saddle_sores_scoping_review"
+      ]
+    },
+    {
+      "id": "concept_achilles_calf_load_and_cleat",
+      "name": "Achilles and calf symptoms combine load, ankle demand, and foot-pedal setup",
+      "summary": "Achilles/calf irritation can follow rapid increases in ride duration, intensity, climbing, sprinting, low-cadence torque, cleat changes, or excessive ankle motion.",
+      "backend_use": "Track recent exposure changes and foot-pedal setup before progressing hill repeats, standing climbing, or sprint work.",
+      "evidence_refs": [
+        "src_achilles_cyclists",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "concept_internal_external_load_pairing",
+      "name": "Load monitoring needs external and internal channels",
+      "summary": "Distance, duration, power, elevation, and interval counts describe external load; RPE, heart-rate response, sleep, mood, soreness, pain, and motivation describe internal response.",
+      "backend_use": "Use both sides before increasing training stress or attributing underperformance to fitness.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "concept_overtraining_vs_expected_fatigue",
+      "name": "Overtraining is more than being tired",
+      "summary": "Expected fatigue should recover with planned rest; persistent performance decline, mood disturbance, high perceived effort, poor sleep, recurrent illness, or loss of motivation suggests nonfunctional overreaching or overtraining risk.",
+      "backend_use": "Hold or regress training when fatigue and performance markers diverge from planned load for multiple sessions.",
+      "evidence_refs": [
+        "src_overtraining_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "concept_strength_is_support_not_random_hiit",
+      "name": "Strength work supports cycling load tolerance",
+      "summary": "Useful S&C for cyclists targets lower-body force capacity, hip/trunk endurance, posterior-chain support, single-leg control, shoulder/upper-back posture, and tissue resilience.",
+      "backend_use": "Prescribe progressive strength that respects key rides and avoids turning gym work into extra untracked high-intensity fatigue.",
+      "evidence_refs": [
+        "src_strength_training_cyclists_meta",
+        "src_strength_training_uci_cyclists",
+        "src_british_cycling_strength"
+      ]
+    },
+    {
+      "id": "concept_pain_response_drives_progression",
+      "name": "Pain response drives progression",
+      "summary": "A ride can be acceptable when symptoms are low, stable, and settle quickly; symptoms that worsen during the ride or remain worse the next day mean the dose or setup is too aggressive.",
+      "backend_use": "Use during-ride and 24-hour symptom response as plan gates for return-to-ride and overuse management.",
+      "evidence_refs": [
+        "src_pain_monitoring_achilles",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "concept_crash_risk_is_training_load",
+      "name": "Crash risk is part of load management",
+      "summary": "Fast descents, traffic, group riding, fatigue, technical surfaces, poor weather, and equipment defects increase risk even when metabolic load is low.",
+      "backend_use": "Include route, surface, visibility, handling readiness, and equipment checks in session readiness and progression logic.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_usa_cycling_pre_ride_check",
+        "src_cdc_bicycle_safety"
+      ]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "model_cycling_load_channels",
+      "name": "Cycling load channels",
+      "inputs": [
+        "weekly_ride_frequency",
+        "weekly_duration",
+        "longest_ride_duration",
+        "time_in_intensity_zones",
+        "interval_count",
+        "sprint_count",
+        "climbing_elevation",
+        "low_cadence_torque_time",
+        "indoor_trainer_time",
+        "surface_technicality",
+        "bike_fit_or_equipment_changes",
+        "crash_or_near_miss_events",
+        "next_day_symptom_response"
+      ],
+      "backend_use": "Store cycling load as multiple exposure channels because the same weekly hours can create very different tissue and safety risks.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_training_load_fatigue_monitoring",
+        "src_workload_models_female_cyclists"
+      ]
+    },
+    {
+      "id": "model_knee_pain_fit_map",
+      "name": "Knee pain fit and exposure map",
+      "body_region": "knee",
+      "triage_dimensions": [
+        "saddle_height",
+        "saddle_setback",
+        "cleat_fore_aft",
+        "cleat_rotation_or_float",
+        "stance_width",
+        "cadence",
+        "gear_selection",
+        "climbing_volume",
+        "recent_intensity_or_volume_spike"
+      ],
+      "backend_use": "When knee symptoms appear, reduce intensity and low-cadence torque while prompting fit and cleat review before adding more knee-loading work.",
+      "evidence_refs": [
+        "src_saddle_height_review",
+        "src_bike_fit_pain_survey"
+      ]
+    },
+    {
+      "id": "model_low_back_tolerance_triangle",
+      "name": "Low-back tolerance triangle",
+      "components": [
+        "bike_position_aggressiveness",
+        "hip_and_thoracic_mobility",
+        "trunk_and_hip_endurance",
+        "ride_duration_and_fatigue"
+      ],
+      "backend_use": "Low-back symptoms should trigger review of posture exposure and off-bike support capacity, not only stretching.",
+      "evidence_refs": [
+        "src_low_back_systematic_review"
+      ]
+    },
+    {
+      "id": "model_contact_point_symptom_map",
+      "name": "Contact-point symptom map",
+      "regions": [
+        "hands_wrists",
+        "neck_shoulders",
+        "saddle_perineum",
+        "feet"
+      ],
+      "backend_use": "Symptoms at contact points should be interpreted as signals about pressure distribution, reach, bar height, saddle choice, shoe/cleat setup, and tissue tolerance.",
+      "evidence_refs": [
+        "src_median_ulnar_review",
+        "src_perineum_systematic_review",
+        "src_bike_fitting_survey"
+      ]
+    },
+    {
+      "id": "model_bike_fit_change_risk_window",
+      "name": "Bike-fit change risk window",
+      "rule": "Treat saddle, cleat, crank, handlebar, shoe, pedal, or aero-position changes as new loading stimuli for at least two weeks.",
+      "backend_use": "Avoid pairing major fit changes with high-volume, high-intensity, long climbing, or race weeks.",
+      "evidence_refs": [
+        "src_bike_fit_pain_survey",
+        "src_saddle_height_review"
+      ]
+    },
+    {
+      "id": "model_pain_monitoring_gate",
+      "name": "Pain monitoring gate",
+      "rules": [
+        "Green: no pain or mild symptoms that do not increase during the ride and return to baseline by the next morning.",
+        "Yellow: symptoms increase during the ride, alter movement, or remain elevated the next day; reduce dose and review setup.",
+        "Red: sharp pain, neurological symptoms, swelling, traumatic injury, saddle numbness that persists, or symptoms that worsen across sessions; stop and seek qualified review."
+      ],
+      "backend_use": "Use as return-to-ride and plan-adjustment logic for overuse complaints.",
+      "evidence_refs": [
+        "src_pain_monitoring_achilles",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "model_strength_integration",
+      "name": "Strength integration model",
+      "phases": [
+        "foundation: technique, trunk, hip, mobility, low soreness",
+        "capacity: progressive lower-body strength and posterior-chain support",
+        "power: low-volume high-quality explosive work when appropriate",
+        "maintenance: lower volume during race or high-ride-load periods"
+      ],
+      "backend_use": "Tie gym loading to rider level and ride calendar so strength improves tolerance without compromising key rides.",
+      "evidence_refs": [
+        "src_strength_training_cyclists_meta",
+        "src_strength_training_uci_cyclists",
+        "src_british_cycling_strength"
+      ]
+    },
+    {
+      "id": "model_overtraining_warning_stack",
+      "name": "Overtraining warning stack",
+      "signals": [
+        "performance_drop_despite_effort",
+        "elevated_session_rpe_for_normal_work",
+        "poor_sleep",
+        "low_mood_or_irritability",
+        "loss_of_motivation",
+        "recurrent_illness",
+        "persistent_soreness",
+        "resting_heart_rate_or_hrv_change",
+        "appetite_or_weight_change"
+      ],
+      "backend_use": "A cluster of warning signs should pause progression even when planned training volume looks acceptable.",
+      "evidence_refs": [
+        "src_overtraining_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "model_crash_risk_gate",
+      "name": "Crash-risk gate",
+      "inputs": [
+        "helmet_and_visibility",
+        "brake_and_tire_status",
+        "route_traffic",
+        "weather",
+        "surface",
+        "descending_or_cornering_demand",
+        "group_riding_readiness",
+        "fatigue",
+        "light_conditions"
+      ],
+      "backend_use": "Regress route or skill demand before progressing speed, pack riding, descents, or technical terrain.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_usa_cycling_pre_ride_check",
+        "src_cdc_bicycle_safety"
+      ]
+    },
+    {
+      "id": "model_return_to_ride_ladder",
+      "name": "Return-to-ride ladder",
+      "steps": [
+        "medical_clearance_if_crash_red_flags_or_serious_symptoms",
+        "easy_flat_short_spin",
+        "increase_duration_before_intensity",
+        "add gentle terrain",
+        "add controlled tempo",
+        "add climbing_or_low_cadence_torque",
+        "add sprint_or_group_ride_exposure",
+        "return_to_event_specific_training"
+      ],
+      "backend_use": "Progress only when same-day and next-day symptom response stays green.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_pain_monitoring_achilles",
+        "src_road_cycling_systematic_review"
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "rule_knee_pain_immediate_adjustment",
+      "rule": "If knee pain appears or rises during a ride, shift to easier gears, increase cadence within comfort, avoid standing climbs and hard accelerations, and shorten the session if symptoms continue.",
+      "applies_to": [
+        "anterior_knee_pain",
+        "lateral_knee_pain",
+        "general_knee_discomfort"
+      ],
+      "backend_action": "Set next session to easy endurance or recovery, remove low-cadence torque work, and prompt saddle and cleat review.",
+      "evidence_refs": [
+        "src_saddle_height_review",
+        "src_dettori_nontraumatic_review"
+      ]
+    },
+    {
+      "id": "rule_low_back_ride_modification",
+      "rule": "If low-back discomfort builds with time in position, reduce aggressive aero or drop-bar exposure, add brief standing or posture breaks where safe, and cap duration before symptoms alter pedaling.",
+      "applies_to": [
+        "low_back_pain",
+        "aero_position_intolerance",
+        "long_ride_progression"
+      ],
+      "backend_action": "Progress duration conservatively and add trunk endurance, hip mobility, and fit review.",
+      "evidence_refs": [
+        "src_low_back_systematic_review"
+      ]
+    },
+    {
+      "id": "rule_hand_numbness_stop_pressure",
+      "rule": "Hand numbness, tingling, loss of grip control, or weakness is a stop-pressure signal, not a cue to push through.",
+      "applies_to": [
+        "ulnar_symptoms",
+        "median_nerve_symptoms",
+        "wrist_pain",
+        "hand_numbness"
+      ],
+      "backend_action": "Shorten the ride if symptoms persist, prompt reach/bar/hood/glove/contact review, and avoid long continuous trainer sessions in one hand position.",
+      "evidence_refs": [
+        "src_median_ulnar_review"
+      ]
+    },
+    {
+      "id": "rule_saddle_numbness_red_flag",
+      "rule": "Persistent perineal or genital numbness, urinary/genital symptoms, or saddle sores with skin breakdown require stopping the provoking exposure and seeking qualified review.",
+      "applies_to": [
+        "saddle_numbness",
+        "perineal_pressure",
+        "saddle_sores"
+      ],
+      "backend_action": "Do not progress ride duration; prompt saddle, short, chamois, hygiene, and bike-fit review with medical referral when symptoms persist.",
+      "evidence_refs": [
+        "src_perineum_systematic_review",
+        "src_saddle_sores_scoping_review"
+      ]
+    },
+    {
+      "id": "rule_achilles_calf_de_load",
+      "rule": "For Achilles or calf symptoms, remove sprinting, hard starts, steep climbs, and big-gear low-cadence work before reducing all cycling.",
+      "applies_to": [
+        "achilles_pain",
+        "calf_tightness",
+        "ankle_pain"
+      ],
+      "backend_action": "Use easy flat spinning and review cleat, saddle height, recent load increase, and off-bike calf loading.",
+      "evidence_refs": [
+        "src_achilles_cyclists",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "rule_fit_change_deload",
+      "rule": "After a meaningful fit or equipment change, reduce total load and intensity for several rides and monitor knee, Achilles, back, hand, and saddle response.",
+      "applies_to": [
+        "new_bike",
+        "new_saddle",
+        "cleat_change",
+        "shoe_change",
+        "handlebar_or_stem_change",
+        "aero_position_change"
+      ],
+      "backend_action": "Mark the change as a load spike risk and avoid long rides, races, or hard climbing immediately after the change.",
+      "evidence_refs": [
+        "src_bike_fit_pain_survey",
+        "src_bike_fitting_survey"
+      ]
+    },
+    {
+      "id": "rule_indoor_trainer_contact_breaks",
+      "rule": "Indoor trainer sessions should include planned posture and hand-position changes because fixed position, heat, and low coasting can raise contact-point and fatigue load.",
+      "applies_to": [
+        "indoor_cycling",
+        "hand_numbness",
+        "saddle_discomfort",
+        "low_back_pain"
+      ],
+      "backend_action": "Cap continuous indoor duration for beginners or symptomatic riders and include cooling, hydration, and position breaks.",
+      "evidence_refs": [
+        "src_training_load_fatigue_monitoring",
+        "src_median_ulnar_review",
+        "src_perineum_systematic_review"
+      ]
+    },
+    {
+      "id": "rule_crash_risk_pre_ride_gate",
+      "rule": "Do not start higher-speed or traffic-exposed rides without helmet, working brakes, inflated tires, secure wheels, functioning drivetrain, and visibility appropriate to conditions.",
+      "applies_to": [
+        "all_outdoor_rides",
+        "beginner_rides",
+        "group_rides",
+        "descending_sessions"
+      ],
+      "backend_action": "If the pre-ride gate fails, replace with indoor trainer, skills practice in safe area, or maintenance task.",
+      "evidence_refs": [
+        "src_usa_cycling_pre_ride_check",
+        "src_cdc_bicycle_safety"
+      ]
+    },
+    {
+      "id": "rule_beginner_no_fast_group_before_handling",
+      "rule": "Beginners should not be assigned fast group rides, technical descents, or high-traffic routes until braking, cornering, shoulder checking, signaling, and straight-line control are reliable.",
+      "applies_to": [
+        "beginner_cyclist",
+        "returning_rider",
+        "commuter",
+        "group_ride_readiness"
+      ],
+      "backend_action": "Prioritize traffic-free route selection and handling skill progressions before speed or pack exposure.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_cdc_bicycle_safety"
+      ]
+    },
+    {
+      "id": "rule_pain_next_day_controls_progression",
+      "rule": "If pain is worse the next morning, do not progress the next ride even if the previous session was completed.",
+      "applies_to": [
+        "return_to_ride",
+        "overuse_symptoms",
+        "tendon_symptoms",
+        "saddle_symptoms"
+      ],
+      "backend_action": "Repeat, reduce, or regress the prior dose and review fit or tissue-specific exposure.",
+      "evidence_refs": [
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "rule_no_stacking_hard_bike_and_heavy_gym",
+      "rule": "Avoid stacking hard intervals, long rides, hill repeats, and heavy lower-body strength in the same short recovery window unless the rider is trained for that density.",
+      "applies_to": [
+        "intermediate_cyclist",
+        "advanced_cyclist",
+        "strength_block",
+        "threshold_block",
+        "climbing_block"
+      ],
+      "backend_action": "Separate key bike sessions and heavy gym work, or reduce volume during build weeks.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_strength_training_uci_cyclists"
+      ]
+    },
+    {
+      "id": "rule_overtraining_hold",
+      "rule": "When performance drops while RPE rises across repeated sessions, hold intensity progression and schedule recovery before adding more fitness work.",
+      "applies_to": [
+        "fatigue",
+        "nonfunctional_overreaching_risk",
+        "overtraining_risk"
+      ],
+      "backend_action": "Reduce volume and intensity, assess sleep, fueling, stress, illness, and total sport load, then resume only when markers normalize.",
+      "evidence_refs": [
+        "src_overtraining_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "rule_return_after_crash_medical_clearance",
+      "rule": "After a crash with head impact, loss of consciousness, suspected fracture, persistent swelling, neurological symptoms, chest or abdominal pain, or inability to bear weight, do not assign return-to-ride until medical evaluation is complete.",
+      "applies_to": [
+        "crash_event",
+        "fall_event",
+        "head_injury_risk",
+        "fracture_risk"
+      ],
+      "backend_action": "Block training progression and provide emergency or medical referral messaging based on severity.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_cdc_bicycle_safety"
+      ]
+    },
+    {
+      "id": "rule_race_week_no_novel_fit",
+      "rule": "Avoid new saddles, shoes, cleats, aggressive bar positions, crank changes, or large fit changes close to an event.",
+      "applies_to": [
+        "race_week",
+        "event_taper",
+        "gran_fondo",
+        "triathlon",
+        "time_trial"
+      ],
+      "backend_action": "Keep equipment stable and use race week only for known setups unless a safety issue forces change.",
+      "evidence_refs": [
+        "src_bike_fit_pain_survey",
+        "src_saddle_height_review"
+      ]
+    },
+    {
+      "id": "rule_surface_and_weather_regression",
+      "rule": "Wet roads, loose gravel, technical MTB trails, darkness, heavy traffic, or high wind should reduce speed, descending, cornering, and group-riding demands.",
+      "applies_to": [
+        "outdoor_ride",
+        "safety_planning",
+        "beginner_progression",
+        "fatigued_rider"
+      ],
+      "backend_action": "Offer safer route, indoor alternative, or lower-skill session when environmental risk is high.",
+      "evidence_refs": [
+        "src_cdc_bicycle_safety",
+        "src_road_cycling_systematic_review"
+      ]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "demand_repetitive_knee_load_tolerance",
+      "quality": "Repetitive knee load tolerance",
+      "description": "Ability to tolerate thousands of flexion-extension cycles under changing torque, cadence, and climbing demands.",
+      "backend_implication": "Progress low-cadence torque, hill repeats, and threshold work after symptom-free base riding and fit stability.",
+      "evidence_refs": [
+        "src_saddle_height_review",
+        "src_dettori_nontraumatic_review"
+      ]
+    },
+    {
+      "id": "demand_trunk_endurance",
+      "quality": "Trunk endurance",
+      "description": "Sustained pelvic and spinal support while producing power from a flexed cycling posture.",
+      "backend_implication": "Include anti-extension, anti-rotation, hip-hinge, and breathing-control work; progress aero or long rides gradually.",
+      "evidence_refs": [
+        "src_low_back_systematic_review",
+        "src_british_cycling_strength"
+      ]
+    },
+    {
+      "id": "demand_hip_mobility_and_strength",
+      "quality": "Hip mobility and strength",
+      "description": "Hip flexion tolerance, hip extension strength, gluteal support, and single-leg control affect pelvic posture and knee tracking.",
+      "backend_implication": "Pair mobility with strength; avoid only stretching a rider who lacks hip control under fatigue.",
+      "evidence_refs": [
+        "src_low_back_systematic_review",
+        "src_strength_training_cyclists_meta"
+      ]
+    },
+    {
+      "id": "demand_posterior_chain_capacity",
+      "quality": "Posterior-chain capacity",
+      "description": "Glutes, hamstrings, spinal extensors, and calves support force production and posture during seated and standing efforts.",
+      "backend_implication": "Use progressive hinges, split squats, bridges, calf work, and deadlift patterns where appropriate.",
+      "evidence_refs": [
+        "src_strength_training_cyclists_meta",
+        "src_british_cycling_strength"
+      ]
+    },
+    {
+      "id": "demand_neck_shoulder_postural_support",
+      "quality": "Neck and shoulder postural support",
+      "description": "Upper-back, scapular, and neck endurance support head position and relaxed steering during long rides or aero positions.",
+      "backend_implication": "Add scapular endurance, thoracic mobility, relaxed grip cues, and reach/bar review when symptoms appear.",
+      "evidence_refs": [
+        "src_dettori_nontraumatic_review",
+        "src_bike_fitting_survey"
+      ]
+    },
+    {
+      "id": "demand_hand_wrist_pressure_tolerance",
+      "quality": "Hand and wrist pressure tolerance",
+      "description": "Cyclists must tolerate handlebar pressure and vibration without sustained nerve compression or excessive wrist extension.",
+      "backend_implication": "Program position changes, contact-point checks, grip relaxation, and symptom escalation rules.",
+      "evidence_refs": [
+        "src_median_ulnar_review"
+      ]
+    },
+    {
+      "id": "demand_saddle_contact_tolerance",
+      "quality": "Saddle contact tolerance",
+      "description": "Skin, soft tissue, and perineal structures must tolerate pressure, friction, heat, sweat, and duration.",
+      "backend_implication": "Progress saddle time gradually and monitor numbness, sores, chafing, and hygiene practices.",
+      "evidence_refs": [
+        "src_perineum_systematic_review",
+        "src_saddle_sores_scoping_review"
+      ]
+    },
+    {
+      "id": "demand_achilles_calf_capacity",
+      "quality": "Achilles and calf capacity",
+      "description": "Calf-Achilles complex handles repetitive ankle control, standing climbing, sprint starts, and shoe-pedal interface demands.",
+      "backend_implication": "Use progressive calf strength and avoid abrupt jumps in sprinting, hill work, or cleat changes.",
+      "evidence_refs": [
+        "src_achilles_cyclists"
+      ]
+    },
+    {
+      "id": "demand_aerobic_recovery_capacity",
+      "quality": "Aerobic recovery capacity",
+      "description": "Aerobic fitness supports repeated endurance rides and recovery between harder sessions.",
+      "backend_implication": "Beginners should build easy ride consistency before dense threshold, VO2, or sprint work.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "demand_high_torque_resilience",
+      "quality": "High-torque resilience",
+      "description": "Low-cadence climbing, big-gear intervals, starts, and headwind riding increase joint and tendon force demands.",
+      "backend_implication": "Track torque exposure separately from total duration, especially in knee and Achilles symptom history.",
+      "evidence_refs": [
+        "src_saddle_height_review",
+        "src_achilles_cyclists"
+      ]
+    },
+    {
+      "id": "demand_upper_body_control_for_mtb_gravel",
+      "quality": "Upper-body control for unstable surfaces",
+      "description": "MTB and gravel add grip, shoulder, trunk, and vibration tolerance beyond smooth-road metabolic load.",
+      "backend_implication": "Do not equate road hours to off-road readiness; include handling skill and upper-body/trunk preparation.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_british_cycling_strength"
+      ]
+    },
+    {
+      "id": "demand_thermoregulation_and_recovery",
+      "quality": "Thermoregulation and recovery response",
+      "description": "Heat, dehydration, poor sleep, and life stress can make the same workout produce a much higher internal load.",
+      "backend_implication": "Adjust sessions using RPE, heart rate drift, sleep, mood, and recovery markers, not only planned watts.",
+      "evidence_refs": [
+        "src_training_load_fatigue_monitoring",
+        "src_overtraining_consensus"
+      ]
+    },
+    {
+      "id": "demand_handling_under_fatigue",
+      "quality": "Handling under fatigue",
+      "description": "Safe braking, cornering, scanning, and decision-making must persist late in rides and after hard intervals.",
+      "backend_implication": "Reduce technical descents, group riding, or traffic exposure when fatigue is high.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_cdc_bicycle_safety"
+      ]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "risk_anterior_knee_pain",
+      "name": "Anterior knee pain",
+      "risk_triggers": [
+        "low_cadence_big_gear_work",
+        "rapid_climbing_volume_increase",
+        "saddle_height_or_setback_mismatch",
+        "cleat_position_change",
+        "too_much_threshold_or_tempo_density"
+      ],
+      "warning_signs": [
+        "front_of_knee_pain",
+        "pain_worse_with_climbs_or_big_gear",
+        "next_day_knee_irritability"
+      ],
+      "plan_response": "Reduce torque and intensity, review saddle and cleats, favor easy spinning, and reintroduce climbing gradually.",
+      "evidence_refs": [
+        "src_saddle_height_review",
+        "src_dettori_nontraumatic_review"
+      ]
+    },
+    {
+      "id": "risk_lateral_knee_or_itb_region",
+      "name": "Lateral knee or ITB-region pain",
+      "risk_triggers": [
+        "cleat_rotation_or_float_mismatch",
+        "stance_width_change",
+        "saddle_height_issue",
+        "rapid_mileage_increase",
+        "long_climbs"
+      ],
+      "warning_signs": [
+        "outside_knee_pain",
+        "pain_builds_with_duration",
+        "altered_pedaling"
+      ],
+      "plan_response": "Hold long duration and hard climbs, review cleat float/rotation and stance width, and resume with short easy rides.",
+      "evidence_refs": [
+        "src_dettori_nontraumatic_review",
+        "src_bike_fit_pain_survey"
+      ]
+    },
+    {
+      "id": "risk_low_back_pain",
+      "name": "Low-back pain",
+      "risk_triggers": [
+        "long_duration_in_flexed_posture",
+        "aggressive_bar_drop_or_aero_position",
+        "poor_trunk_endurance",
+        "hip_mobility_limit",
+        "rapid_long_ride_progression"
+      ],
+      "warning_signs": [
+        "back_pain_builds_late_ride",
+        "difficulty_holding_position",
+        "pain_with_aero_or_drops",
+        "symptoms_next_day"
+      ],
+      "plan_response": "Reduce position exposure, cap duration, add trunk/hip work, and review reach/bar drop/saddle setup.",
+      "evidence_refs": [
+        "src_low_back_systematic_review",
+        "src_clarsen_overuse_pro_cyclists"
+      ]
+    },
+    {
+      "id": "risk_neck_shoulder_pain",
+      "name": "Neck and shoulder pain",
+      "risk_triggers": [
+        "excessive_reach",
+        "low_handlebar_position",
+        "locked_elbows",
+        "death_grip",
+        "poor_upper_back_endurance",
+        "long_trainer_sessions"
+      ],
+      "warning_signs": [
+        "neck_tightness",
+        "shoulder_burning",
+        "head_position_fatigue",
+        "symptoms_linked_to_drops_or_aero"
+      ],
+      "plan_response": "Reduce aggressive position time, add upper-back/scapular endurance, prompt fit review, and vary hand positions.",
+      "evidence_refs": [
+        "src_dettori_nontraumatic_review",
+        "src_bike_fitting_survey"
+      ]
+    },
+    {
+      "id": "risk_hand_wrist_numbness",
+      "name": "Hand, wrist, median, or ulnar nerve symptoms",
+      "risk_triggers": [
+        "sustained_handlebar_pressure",
+        "wrist_extension",
+        "vibration",
+        "long_reach",
+        "too_much_weight_on_hands",
+        "poor_glove_or_bar_tape_support"
+      ],
+      "warning_signs": [
+        "numbness",
+        "tingling",
+        "weak_grip",
+        "loss_of_fine_control",
+        "symptoms_after_ride"
+      ],
+      "plan_response": "Stop persistent pressure, shorten rides, review cockpit fit, and refer if neurological signs persist.",
+      "evidence_refs": [
+        "src_median_ulnar_review"
+      ]
+    },
+    {
+      "id": "risk_saddle_perineal_numbness",
+      "name": "Saddle and perineal numbness",
+      "risk_triggers": [
+        "long_saddle_time",
+        "saddle_shape_mismatch",
+        "saddle_angle_issue",
+        "excessive_forward_pressure",
+        "aero_position",
+        "lack_of_pressure_relief"
+      ],
+      "warning_signs": [
+        "perineal_numbness",
+        "genital_numbness",
+        "urinary_or_genital_symptoms",
+        "symptoms_persist_after_ride"
+      ],
+      "plan_response": "Do not progress duration; review saddle design/tilt/position, add pressure relief, and refer if symptoms persist.",
+      "evidence_refs": [
+        "src_perineum_systematic_review"
+      ]
+    },
+    {
+      "id": "risk_saddle_sores_skin_breakdown",
+      "name": "Saddle sores and skin breakdown",
+      "risk_triggers": [
+        "sweat_and_friction",
+        "poor_chamois_hygiene",
+        "ill_fitting_shorts",
+        "saddle_mismatch",
+        "rapid_duration_increase",
+        "repeated_rides_without_recovery"
+      ],
+      "warning_signs": [
+        "painful_skin_lesion",
+        "worsening_chafing",
+        "swelling",
+        "drainage",
+        "skin_breakdown"
+      ],
+      "plan_response": "Reduce saddle time, improve hygiene/equipment, avoid riding on open lesions, and seek medical review for infection signs.",
+      "evidence_refs": [
+        "src_saddle_sores_scoping_review"
+      ]
+    },
+    {
+      "id": "risk_achilles_tendon_pain",
+      "name": "Achilles tendon pain",
+      "risk_triggers": [
+        "recent_duration_increase",
+        "recent_intensity_increase",
+        "standing_climbing",
+        "sprinting",
+        "cleat_or_shoe_change",
+        "excessive_ankle_motion"
+      ],
+      "warning_signs": [
+        "morning_tendon_stiffness",
+        "pain_worse_after_ride",
+        "pain_with_stairs_or_calf_raise",
+        "localized_tendon_tenderness"
+      ],
+      "plan_response": "Remove high-tendon-load exposures, use pain-monitoring, add progressive calf loading when appropriate, and review fit.",
+      "evidence_refs": [
+        "src_achilles_cyclists",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "risk_calf_cramping_or_strain",
+      "name": "Calf cramping or strain risk",
+      "risk_triggers": [
+        "hard_starts",
+        "steep_standing_climbs",
+        "dehydration_or_heat",
+        "fatigue",
+        "new_cleat_position",
+        "sudden_sprint_work"
+      ],
+      "warning_signs": [
+        "calf_tightness_builds",
+        "sharp_calf_pain",
+        "pedaling_compensation",
+        "cramping_repeats"
+      ],
+      "plan_response": "Reduce sprint and climbing work, check recovery and hydration, review foot-pedal position, and rebuild calf strength.",
+      "evidence_refs": [
+        "src_achilles_cyclists",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "risk_fit_change_spike",
+      "name": "Fit or equipment change spike",
+      "risk_triggers": [
+        "new_bike",
+        "new_shoes_or_cleats",
+        "new_saddle",
+        "stem_or_handlebar_change",
+        "aero_bar_addition",
+        "seatpost_or_crank_change"
+      ],
+      "warning_signs": [
+        "new_pain_after_change",
+        "one_sided_symptoms",
+        "numbness",
+        "loss_of_comfort",
+        "unexpected_fatigue"
+      ],
+      "plan_response": "Treat as new load, reduce training stress temporarily, and reverse or refine the change if symptoms persist.",
+      "evidence_refs": [
+        "src_bike_fit_pain_survey",
+        "src_bike_fitting_survey"
+      ]
+    },
+    {
+      "id": "risk_indoor_trainer_overuse",
+      "name": "Indoor trainer overuse",
+      "risk_triggers": [
+        "fixed_position",
+        "high_heat_load",
+        "no_coasting",
+        "long_blocks_without_posture_breaks",
+        "high_interval_density"
+      ],
+      "warning_signs": [
+        "saddle_pressure",
+        "hand_numbness",
+        "low_back_tightness",
+        "excessive_rpe",
+        "poor_recovery"
+      ],
+      "plan_response": "Use fans, hydration, position breaks, shorter intervals of continuous sitting, and conservative progression.",
+      "evidence_refs": [
+        "src_training_load_fatigue_monitoring",
+        "src_median_ulnar_review",
+        "src_perineum_systematic_review"
+      ]
+    },
+    {
+      "id": "risk_high_intensity_density",
+      "name": "High-intensity density overload",
+      "risk_triggers": [
+        "too_many_threshold_sessions",
+        "vo2_intervals_added_before_base",
+        "sprints_after_fatigue",
+        "stacked_group_rides",
+        "insufficient_recovery_days"
+      ],
+      "warning_signs": [
+        "rising_rpe",
+        "sleep_disruption",
+        "leg_heaviness",
+        "poor_power_output",
+        "mood_change"
+      ],
+      "plan_response": "Reduce intensity density, preserve easy rides, and progress hard sessions only after recovery markers normalize.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_overtraining_consensus"
+      ]
+    },
+    {
+      "id": "risk_long_ride_spike",
+      "name": "Long-ride duration spike",
+      "risk_triggers": [
+        "longest_ride_jump",
+        "new_gran_fondo_training",
+        "touring_day_stack",
+        "under_fueling",
+        "new_route_or_surface"
+      ],
+      "warning_signs": [
+        "late_ride_form_breakdown",
+        "saddle_sores",
+        "neck_or_back_pain",
+        "next_day_fatigue",
+        "knee_irritability"
+      ],
+      "plan_response": "Increase long ride gradually and monitor contact points, fueling, and next-day pain before adding intensity.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "risk_preseason_or_block_transition",
+      "name": "Preseason or block transition injury risk",
+      "risk_triggers": [
+        "return_after_break",
+        "preseason_volume_ramp",
+        "training_camp",
+        "new_coach_plan",
+        "discipline_switch"
+      ],
+      "warning_signs": [
+        "multiple_new_symptoms",
+        "rising_fatigue",
+        "missed_recovery",
+        "poor_power_response"
+      ],
+      "plan_response": "Use conservative ramps, record baseline tolerances, and avoid adding fit changes during the same window.",
+      "evidence_refs": [
+        "src_workload_models_female_cyclists",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "risk_overtraining_or_nonfunctional_overreaching",
+      "name": "Nonfunctional overreaching or overtraining risk",
+      "risk_triggers": [
+        "high_load_without_recovery",
+        "life_stress",
+        "poor_sleep",
+        "under_fueling",
+        "frequent_racing",
+        "too_much_middle_intensity"
+      ],
+      "warning_signs": [
+        "persistent_performance_decline",
+        "high_rpe_for_easy_work",
+        "low_motivation",
+        "irritability",
+        "recurrent_illness",
+        "poor_sleep"
+      ],
+      "plan_response": "Stop progression, reduce load, assess recovery factors, and resume only when performance and wellness recover.",
+      "evidence_refs": [
+        "src_overtraining_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "risk_crash_or_fall",
+      "name": "Crash or fall risk",
+      "risk_triggers": [
+        "poor_brakes_or_tires",
+        "unsafe_route",
+        "traffic",
+        "descending_speed",
+        "wet_or_loose_surface",
+        "fatigue",
+        "inexperienced_group_riding"
+      ],
+      "warning_signs": [
+        "near_misses",
+        "poor_corner_control",
+        "panic_braking",
+        "inability_to_hold_line",
+        "equipment_noise_or_failure"
+      ],
+      "plan_response": "Regress environment and skill demand, require pre-ride checks, and block return after serious crash red flags.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_usa_cycling_pre_ride_check",
+        "src_cdc_bicycle_safety"
+      ]
+    },
+    {
+      "id": "risk_beginner_saddle_neck_back_stack",
+      "name": "Beginner contact-point overload",
+      "risk_triggers": [
+        "too_long_too_soon",
+        "poor_bike_fit",
+        "lack_of_position_changes",
+        "new_shorts_or_saddle",
+        "indoor_trainer_first_block"
+      ],
+      "warning_signs": [
+        "saddle_pain",
+        "neck_tightness",
+        "hand_pressure",
+        "low_back_fatigue",
+        "reluctance_to_ride"
+      ],
+      "plan_response": "Keep rides short and frequent, build comfort before intensity, and review setup early.",
+      "evidence_refs": [
+        "src_dettori_nontraumatic_review",
+        "src_bike_fit_pain_survey"
+      ]
+    },
+    {
+      "id": "risk_aero_position_intolerance",
+      "name": "Aero-position intolerance",
+      "risk_triggers": [
+        "rapid_time_trial_position_adoption",
+        "triathlon_aero_bars",
+        "low_bar_drop",
+        "closed_hip_angle",
+        "limited_neck_or_trunk_endurance"
+      ],
+      "warning_signs": [
+        "neck_pain",
+        "low_back_pain",
+        "saddle_numbness",
+        "loss_of_power",
+        "unstable_handling"
+      ],
+      "plan_response": "Progress aero time gradually and separate position adaptation from hard intervals until tolerance is stable.",
+      "evidence_refs": [
+        "src_low_back_systematic_review",
+        "src_perineum_systematic_review"
+      ]
+    },
+    {
+      "id": "risk_post_crash_under_triage",
+      "name": "Under-triaged crash recovery",
+      "risk_triggers": [
+        "returning_after_fall_without_screen",
+        "head_impact",
+        "road_rash_infection",
+        "suspected_fracture",
+        "bike_damage"
+      ],
+      "warning_signs": [
+        "headache",
+        "dizziness",
+        "confusion",
+        "progressive_swelling",
+        "deformity",
+        "neurological_symptoms"
+      ],
+      "plan_response": "Require medical assessment for red flags and mechanical inspection before outdoor riding resumes.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_cdc_bicycle_safety",
+        "src_usa_cycling_pre_ride_check"
+      ]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "implication_beginner_progress_comfort_before_intensity",
+      "name": "Beginner comfort before intensity",
+      "instruction": "Build short, easy, repeatable rides that establish saddle, neck, hand, back, and knee tolerance before intervals, fast groups, or long climbs.",
+      "backend_use": "Beginner plans should include comfort checks after every ride and cap duration increases when contact-point symptoms appear.",
+      "evidence_refs": [
+        "src_dettori_nontraumatic_review",
+        "src_bike_fit_pain_survey"
+      ]
+    },
+    {
+      "id": "implication_knee_symptoms_reduce_torque_first",
+      "name": "Knee symptoms reduce torque first",
+      "instruction": "When knee symptoms are mild and non-traumatic, remove big-gear torque, steep climbing, and hard accelerations before eliminating all easy spinning.",
+      "backend_use": "Preserve low-risk aerobic activity if symptoms remain green and next-day response is normal.",
+      "evidence_refs": [
+        "src_saddle_height_review",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "implication_low_back_pair_fit_and_capacity",
+      "name": "Low-back plans pair fit and capacity",
+      "instruction": "Low-back mitigation should combine cockpit/posture review, hip mobility, trunk endurance, posterior-chain strength, and gradual duration exposure.",
+      "backend_use": "Avoid writing plans that prescribe only stretching or only bike-fit changes.",
+      "evidence_refs": [
+        "src_low_back_systematic_review"
+      ]
+    },
+    {
+      "id": "implication_hand_numbness_is_not_normal_adaptation",
+      "name": "Hand numbness is not normal adaptation",
+      "instruction": "Do not progress ride duration while neurological hand symptoms persist or worsen.",
+      "backend_use": "Trigger contact-point review and referral if numbness, weakness, or grip-control changes persist after rides.",
+      "evidence_refs": [
+        "src_median_ulnar_review"
+      ]
+    },
+    {
+      "id": "implication_saddle_time_progression",
+      "name": "Saddle time progression",
+      "instruction": "Progress total saddle time and longest ride separately from power-zone progression because skin and perineal tissues may be the limiting factor.",
+      "backend_use": "For saddle symptoms, reduce duration and add setup/hygiene checks before adding intensity.",
+      "evidence_refs": [
+        "src_perineum_systematic_review",
+        "src_saddle_sores_scoping_review"
+      ]
+    },
+    {
+      "id": "implication_achilles_exposure_order",
+      "name": "Achilles exposure order",
+      "instruction": "Reintroduce Achilles-loading exposures in order: easy flat spin, longer flat spin, gentle rolling terrain, seated climbs, controlled standing climbs, then sprints or steep climbs.",
+      "backend_use": "Use next-day tendon response as the gate between steps.",
+      "evidence_refs": [
+        "src_achilles_cyclists",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "implication_strength_minimum_effective_dose",
+      "name": "Minimum effective strength dose",
+      "instruction": "Use two weekly strength sessions in general preparation when possible, then reduce to maintenance during race-heavy or high-volume riding periods.",
+      "backend_use": "Avoid high-soreness gym work near key interval, race, or long-ride days.",
+      "evidence_refs": [
+        "src_strength_training_cyclists_meta",
+        "src_strength_training_uci_cyclists",
+        "src_british_cycling_strength"
+      ]
+    },
+    {
+      "id": "implication_strength_exercise_families",
+      "name": "Strength exercise families",
+      "instruction": "Prioritize squat or split-squat patterns, hip hinges, step-ups, calf raises, trunk anti-motion work, scapular/upper-back endurance, and mobility matched to position demands.",
+      "backend_use": "Map exercise selection to injury history and rider level instead of random circuits.",
+      "evidence_refs": [
+        "src_british_cycling_strength",
+        "src_strength_training_cyclists_meta"
+      ]
+    },
+    {
+      "id": "implication_track_load_spikes",
+      "name": "Track load spikes",
+      "instruction": "Record sudden changes in weekly hours, long-ride duration, climbing, sprint count, indoor trainer time, and fit setup as separate risk events.",
+      "backend_use": "Use load-change flags to adjust the next seven to fourteen days of training.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_workload_models_female_cyclists"
+      ]
+    },
+    {
+      "id": "implication_load_response_over_plan_completion",
+      "name": "Load response over plan completion",
+      "instruction": "Do not reward completing prescribed watts if the rider reports high pain, neurological symptoms, worsening fatigue, or poor next-day recovery.",
+      "backend_use": "Plan adherence should be interpreted alongside symptom and wellness response.",
+      "evidence_refs": [
+        "src_training_load_fatigue_monitoring",
+        "src_overtraining_consensus"
+      ]
+    },
+    {
+      "id": "implication_return_to_ride_increase_duration_before_intensity",
+      "name": "Return-to-ride increases duration before intensity",
+      "instruction": "After injury, illness, crash, or long break, rebuild easy flat duration before adding hills, low cadence, tempo, threshold, VO2, sprints, or group rides.",
+      "backend_use": "Return ladders should progress one stressor at a time.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "id": "implication_never_ignore_crash_safety",
+      "name": "Crash safety overrides fitness targets",
+      "instruction": "A planned high-value workout should be replaced when equipment, weather, light, traffic, or fatigue creates unacceptable crash risk.",
+      "backend_use": "Offer indoor, skills, recovery, or maintenance alternatives instead of forcing outdoor completion.",
+      "evidence_refs": [
+        "src_usa_cycling_pre_ride_check",
+        "src_cdc_bicycle_safety"
+      ]
+    },
+    {
+      "id": "implication_aero_adaptation_blocks",
+      "name": "Aero adaptation blocks",
+      "instruction": "Time-trial and triathlon positions need progressive exposure blocks because neck, shoulder, low-back, hip, saddle, and handling tolerance may lag aerobic fitness.",
+      "backend_use": "Separate position-tolerance sessions from maximal interval goals during early adaptation.",
+      "evidence_refs": [
+        "src_low_back_systematic_review",
+        "src_perineum_systematic_review"
+      ]
+    },
+    {
+      "id": "implication_multi_sport_total_load",
+      "name": "Multi-sport total load",
+      "instruction": "For triathletes or multi-sport users, cycling load decisions must consider run, gym, swim, work, sleep, and illness stress.",
+      "backend_use": "Do not increase cycling simply because cycling symptoms are low if total athlete load is high.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "implication_group_rides_are_intensity_and_safety_load",
+      "name": "Group rides are intensity and safety load",
+      "instruction": "Fast group rides should count as high-intensity, decision-making, handling, and crash-risk exposure, not only endurance mileage.",
+      "backend_use": "Avoid placing hard intervals immediately before or after uncontrolled group rides for non-advanced riders.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "id": "implication_new_bike_onboarding",
+      "name": "New-bike onboarding",
+      "instruction": "A new bike should begin with short comfort rides, gradual position exposure, and symptom logging before long rides or racing.",
+      "backend_use": "Create a new-equipment adaptation microcycle when the user reports a new bike or major component change.",
+      "evidence_refs": [
+        "src_bike_fit_pain_survey",
+        "src_bike_fitting_survey"
+      ]
+    },
+    {
+      "id": "implication_fatigue_changes_bike_handling",
+      "name": "Fatigue changes bike handling",
+      "instruction": "When fatigue is high, reduce technical descents, traffic exposure, wet-road cornering, and fast pack-riding even if the planned metabolic work is easy.",
+      "backend_use": "Readiness adjustments should include safety exposure, not only training-zone changes.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "id": "implication_referral_red_flags",
+      "name": "Medical referral red flags",
+      "instruction": "Escalate sharp traumatic pain, suspected fracture, head injury signs, neurological symptoms, persistent saddle numbness, infection signs, chest symptoms, and unexplained severe fatigue.",
+      "backend_use": "The backend should provide referral messaging and avoid substituting training modifications for medical evaluation.",
+      "evidence_refs": [
+        "src_cdc_bicycle_safety",
+        "src_saddle_sores_scoping_review",
+        "src_median_ulnar_review",
+        "src_overtraining_consensus"
+      ]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "sport_injury_load_rule",
+      "record_id": "cycling_knee_pain_reduce_torque_fit_review",
+      "name": "Cycling knee pain: reduce torque and review fit",
+      "trigger": "Knee pain during or after cycling, especially with climbing, low cadence, or recent fit changes.",
+      "action": "Reduce big-gear torque, hard starts, steep climbs, and interval density; prompt saddle height, saddle setback, cleat, cadence, and recent-load review.",
+      "evidence_refs": [
+        "src_saddle_height_review",
+        "src_dettori_nontraumatic_review"
+      ]
+    },
+    {
+      "record_type": "sport_injury_load_rule",
+      "record_id": "cycling_low_back_position_capacity_rule",
+      "name": "Cycling low back: position plus capacity",
+      "trigger": "Low-back symptoms linked to duration, aero posture, drops, or fatigue.",
+      "action": "Cap position exposure, review reach/bar drop/saddle setup, and add trunk endurance, hip mobility, and posterior-chain strength.",
+      "evidence_refs": [
+        "src_low_back_systematic_review"
+      ]
+    },
+    {
+      "record_type": "sport_injury_load_rule",
+      "record_id": "cycling_hand_numbness_contact_review",
+      "name": "Cycling hand numbness: contact-point review",
+      "trigger": "Hand numbness, tingling, weakness, or grip-control changes during or after riding.",
+      "action": "Stop sustained pressure, shorten rides, vary hand position, review reach/bar/hood/glove setup, and refer if neurological signs persist.",
+      "evidence_refs": [
+        "src_median_ulnar_review"
+      ]
+    },
+    {
+      "record_type": "sport_injury_load_rule",
+      "record_id": "cycling_saddle_numbness_red_flag",
+      "name": "Cycling saddle numbness: red flag",
+      "trigger": "Persistent perineal or genital numbness, urinary/genital symptoms, or worsening saddle sores.",
+      "action": "Stop progressing duration, prompt saddle/shorts/chamois/fit review, and seek qualified medical or fit assessment for persistent symptoms.",
+      "evidence_refs": [
+        "src_perineum_systematic_review",
+        "src_saddle_sores_scoping_review"
+      ]
+    },
+    {
+      "record_type": "sport_injury_load_rule",
+      "record_id": "cycling_achilles_de_load_rule",
+      "name": "Cycling Achilles: deload high tendon exposures",
+      "trigger": "Achilles or calf pain, morning stiffness, or symptoms after climbing/sprints.",
+      "action": "Remove sprints, steep climbs, hard starts, and big-gear work; use easy flat spinning and next-day pain gates.",
+      "evidence_refs": [
+        "src_achilles_cyclists",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "record_type": "sport_planning_rule",
+      "record_id": "cycling_fit_change_is_load_change",
+      "name": "Cycling fit change counts as load change",
+      "trigger": "New bike, saddle, shoes, cleats, cockpit, crank, or aero setup.",
+      "action": "Schedule short easy adaptation rides, avoid major intensity or volume spikes, and monitor new symptoms for two weeks.",
+      "evidence_refs": [
+        "src_bike_fit_pain_survey",
+        "src_bike_fitting_survey"
+      ]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "record_id": "cycling_strength_general_preparation",
+      "name": "Cycling strength: general preparation",
+      "trigger": "Base or general preparation phase with adequate recovery.",
+      "action": "Use progressive lower-body strength, posterior-chain work, trunk anti-motion, calf capacity, scapular endurance, and mobility; avoid excessive soreness.",
+      "evidence_refs": [
+        "src_strength_training_cyclists_meta",
+        "src_british_cycling_strength"
+      ]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "record_id": "cycling_strength_maintenance_race_phase",
+      "name": "Cycling strength: maintenance during high ride load",
+      "trigger": "Race phase, high-volume block, or frequent hard rides.",
+      "action": "Reduce gym volume while preserving strength stimulus; place heavy work away from key intervals and long rides.",
+      "evidence_refs": [
+        "src_strength_training_uci_cyclists",
+        "src_ioc_load_consensus"
+      ]
+    },
+    {
+      "record_type": "sport_readiness_rule",
+      "record_id": "cycling_pain_monitoring_next_day_gate",
+      "name": "Cycling pain monitoring: next-day gate",
+      "trigger": "Any overuse symptom during a return-to-ride or build block.",
+      "action": "Progress only if symptoms remain mild, do not increase during the ride, and return to baseline by the next morning.",
+      "evidence_refs": [
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "record_type": "sport_readiness_rule",
+      "record_id": "cycling_overtraining_warning_hold",
+      "name": "Cycling overtraining warning hold",
+      "trigger": "Performance drops while RPE, fatigue, poor sleep, mood disturbance, illness, or soreness persists.",
+      "action": "Hold progression, reduce load, check recovery and life-stress factors, and resume only after markers improve.",
+      "evidence_refs": [
+        "src_overtraining_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "record_type": "sport_load_monitoring_metric",
+      "record_id": "cycling_weekly_load_channels",
+      "name": "Cycling weekly load channels",
+      "fields": [
+        "ride_frequency",
+        "weekly_duration",
+        "longest_ride",
+        "time_in_zones",
+        "interval_count",
+        "sprint_count",
+        "climbing_elevation",
+        "low_cadence_time",
+        "indoor_trainer_time",
+        "surface_type",
+        "fit_changes",
+        "pain_next_day"
+      ],
+      "action": "Use these fields to detect non-obvious spikes and tissue-specific risks.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_training_load_fatigue_monitoring"
+      ]
+    },
+    {
+      "record_type": "sport_safety_rule",
+      "record_id": "cycling_pre_ride_equipment_gate",
+      "name": "Cycling pre-ride equipment gate",
+      "trigger": "Outdoor ride planned.",
+      "action": "Require helmet, brake check, tire pressure/condition, secure wheels, drivetrain check, lights/visibility when needed, and route risk review.",
+      "evidence_refs": [
+        "src_usa_cycling_pre_ride_check",
+        "src_cdc_bicycle_safety"
+      ]
+    },
+    {
+      "record_type": "sport_safety_rule",
+      "record_id": "cycling_crash_return_medical_screen",
+      "name": "Cycling crash return: medical and mechanical screen",
+      "trigger": "Crash, fall, head impact, suspected fracture, neurological symptoms, or damaged bike.",
+      "action": "Block normal training until medical red flags and bike mechanical safety are addressed.",
+      "evidence_refs": [
+        "src_road_cycling_systematic_review",
+        "src_cdc_bicycle_safety",
+        "src_usa_cycling_pre_ride_check"
+      ]
+    },
+    {
+      "record_type": "macro_plan_adjustment",
+      "record_id": "cycling_beginner_comfort_foundation",
+      "name": "Cycling beginner comfort foundation",
+      "trigger": "Beginner, returning rider, or rider with low saddle/handling tolerance.",
+      "action": "Use short easy rides, traffic-safe routes, basic handling, fit checks, and comfort monitoring before high-intensity or long endurance work.",
+      "evidence_refs": [
+        "src_dettori_nontraumatic_review",
+        "src_cdc_bicycle_safety"
+      ]
+    },
+    {
+      "record_type": "macro_plan_adjustment",
+      "record_id": "cycling_return_to_ride_ladder",
+      "name": "Cycling return-to-ride ladder",
+      "trigger": "Return after injury, illness, crash, or long layoff.",
+      "action": "Progress from short easy flat rides to duration, gentle terrain, tempo, climbing, sprinting, group riding, and event-specific work one step at a time.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_pain_monitoring_achilles"
+      ]
+    },
+    {
+      "record_type": "sport_training_rule",
+      "record_id": "cycling_indoor_trainer_contact_management",
+      "name": "Cycling indoor trainer contact management",
+      "trigger": "Indoor trainer sessions longer than short recovery duration or rider with hand/saddle/back symptoms.",
+      "action": "Add cooling, hydration, posture breaks, hand-position variation, and conservative continuous-sitting progression.",
+      "evidence_refs": [
+        "src_training_load_fatigue_monitoring",
+        "src_median_ulnar_review",
+        "src_perineum_systematic_review"
+      ]
+    },
+    {
+      "record_type": "sport_planning_rule",
+      "record_id": "cycling_group_ride_counts_as_hard_day",
+      "name": "Cycling group ride counts as hard day",
+      "trigger": "Fast, hilly, technical, or competitive group ride planned.",
+      "action": "Count as intensity plus handling and crash-risk exposure; avoid stacking with dense intervals or heavy lower-body gym work unless advanced and recovered.",
+      "evidence_refs": [
+        "src_ioc_load_consensus",
+        "src_road_cycling_systematic_review"
+      ]
+    },
+    {
+      "record_type": "sport_planning_rule",
+      "record_id": "cycling_aero_position_adaptation",
+      "name": "Cycling aero-position adaptation",
+      "trigger": "Time trial, triathlon, or aero-bar position introduced.",
+      "action": "Build aero time gradually, monitor neck/back/saddle symptoms, and avoid maximal sessions until position tolerance is stable.",
+      "evidence_refs": [
+        "src_low_back_systematic_review",
+        "src_perineum_systematic_review"
+      ]
+    }
+  ]
+}

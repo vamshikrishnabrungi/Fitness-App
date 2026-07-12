@@ -1,0 +1,6 @@
+{
+  "backend_validation": "passed",
+  "workout_count": 5,
+  "output_tokens": 8172,
+  "normalized_path": "backend/sport_research/cricket/test_outputs/cricket_blueprint_contract_output_validated_normalized.json"
+}

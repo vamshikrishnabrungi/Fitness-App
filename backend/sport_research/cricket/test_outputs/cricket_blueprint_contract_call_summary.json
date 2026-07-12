@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "started_at": "2026-06-20T06:46:58.931683",
+  "ended_at": "2026-06-20T06:48:30.347234",
+  "model": "claude-opus-4-8",
+  "stop_reason": "end_turn",
+  "usage": {
+    "input_tokens": 14010,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 8172,
+    "output_tokens_details": {
+      "thinking_tokens": 0
+    },
+    "service_tier": "standard",
+    "inference_geo": "global"
+  },
+  "input_path": "backend/sport_research/cricket/test_outputs/cricket_blueprint_contract_input.json",
+  "output_path": "backend/sport_research/cricket/test_outputs/cricket_blueprint_contract_output_raw.json",
+  "response_path": "backend/sport_research/cricket/test_outputs/cricket_blueprint_contract_response_full.json",
+  "output_chars": 23563
+}

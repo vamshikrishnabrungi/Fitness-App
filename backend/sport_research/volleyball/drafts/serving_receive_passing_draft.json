@@ -1,0 +1,1040 @@
+{
+  "metadata": {
+    "domain": "serving_receive_passing",
+    "sport": "volleyball",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready coaching knowledge for indoor six-player volleyball serving, serve receive, and passing, including serve-type progressions, court zones, targeting, risk management, receive systems, seam rules, platform mechanics, role responsibilities, assessment metrics, common errors, and level-specific teaching implications."
+  },
+  "source_refs": [
+    {
+      "title": "Official Volleyball Rules 2025-2028",
+      "url": "https://www.fivb.com/wp-content/uploads/2025/01/FIVB-Volleyball_Rules2025_2028-EN-v05.pdf",
+      "source_type": "official_rulebook",
+      "organization_or_author": "FIVB",
+      "notes": "Primary legal reference for service execution, service zone, rotation constraints, back-row/libero constraints, and legal playing contacts."
+    },
+    {
+      "title": "Official Volleyball Rules",
+      "url": "https://www.fivb.com/volleyball/the-game/official-volleyball-rules/",
+      "source_type": "official_rules_portal",
+      "organization_or_author": "FIVB",
+      "notes": "Confirms the 2025-2028 rules cycle as the current FIVB edition commissioned by the 39th FIVB World Congress."
+    },
+    {
+      "title": "Coaches Manual Level II",
+      "url": "https://www.fivb.com/wp-content/uploads/2024/03/Coaches_Manual_Level_II_EN.pdf",
+      "source_type": "official_coach_education_manual",
+      "organization_or_author": "FIVB",
+      "notes": "Used for volleyball physical characteristics, reception time pressure, low receive posture, kinetic-chain serving, ground-support versus airborne skills, and common stress areas."
+    },
+    {
+      "title": "Lesson Plans for Teachers and Coaches",
+      "url": "https://usavolleyball.org/resources-for-coaches/lesson-plans/",
+      "source_type": "national_federation_coach_education",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Supports gamelike, whole-skill, random practice design and progression through serving, forearm passing, and serve-receive combinations."
+    },
+    {
+      "title": "Junior High Lesson Plans",
+      "url": "https://usavolleyball.org/wp-content/uploads/2020/12/Junior-High-Lesson-Plans.pdf",
+      "source_type": "lesson_plan_pdf",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for beginner/intermediate progressions that combine serving, forearm passing, serve receive, scoring, and smaller-sided play."
+    },
+    {
+      "title": "You Win with Serve Reception, not Passing",
+      "url": "https://usavolleyball.org/resource/you-win-with-serve-reception-not-passing/",
+      "source_type": "national_federation_coach_article",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Emphasizes reading the server and ball before contact, over-net serve-receive specificity, and avoiding non-transfer wall or pair passing as the main receive stimulus."
+    },
+    {
+      "title": "Five Keys to Better Passing",
+      "url": "https://usavolleyball.org/resource/five-keys-to-better-passing/",
+      "source_type": "national_federation_coach_article",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for platform angle, serve-type recognition, early tracking, and holding the pass angle through contact."
+    },
+    {
+      "title": "Five Keys to a Wicked Jump Float Serve",
+      "url": "https://usavolleyball.org/resource/five-keys-to-a-wicked-jump-float-serve/",
+      "source_type": "national_federation_coach_article",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for jump-float contact quality, flat trajectory, depth deception, tactical variety, and error-rate management."
+    },
+    {
+      "title": "Top Ten Serving Secrets",
+      "url": "https://usavolleyball.org/resource/top-ten-serving-secrets/",
+      "source_type": "national_federation_coach_article",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Supports hard-flat serving, serving from varied depths behind the end line, practice feedback with serve speed, and the distinction between net errors and long errors."
+    },
+    {
+      "title": "How You Can Make a Huge Impact as a Libero",
+      "url": "https://usavolleyball.org/resource/how-you-can-make-a-huge-impact-as-a-libero/",
+      "source_type": "national_federation_role_article",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for libero serve-receive leadership, taking a larger passing area, helping outside hitters, and communicating tactical intentions."
+    },
+    {
+      "title": "Opponent Analysis and Scouting Reports",
+      "url": "https://usavolleyball.org/resource/opponent-analysis-and-scouting-reports/",
+      "source_type": "national_federation_scouting_article",
+      "organization_or_author": "USA Volleyball",
+      "notes": "Used for serving target plans, passer tendency scouting, serve type by opponent, seam vulnerability, and receive planning by rotation."
+    },
+    {
+      "title": "Young Athletes Mini Volleyball Handbook",
+      "url": "https://media.specialolympics.org/resources/community-building/young-athletes/Young-Athletes-Mini-Volleyball-Handbook.pdf",
+      "source_type": "youth_development_handbook",
+      "organization_or_author": "Special Olympics",
+      "notes": "Used for child-friendly underhand serve mechanics, early movement-to-ball tasks, and progressive distances or net heights."
+    },
+    {
+      "title": "Predicting Volleyball Serve-Reception",
+      "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.01694/full",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Paulo, Zaal, Fonseca, and Araujo",
+      "notes": "High-level jump-float serve-reception study; receiver initial position and movement, especially large backward displacement, were strong influences on pass type and reception efficacy."
+    },
+    {
+      "title": "Characteristics of Serve, Reception and Set That Determine the Setting Efficacy in Men's Volleyball",
+      "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2020.00222/full",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Jara Gonzalez-Silva, Fernandez-Echeverria, Conejero, Moreno, and collaborators",
+      "notes": "World-class men's volleyball analysis; reception efficacy and setting variables determined setting efficacy more than serve variables in the sampled matches."
+    },
+    {
+      "title": "Tactical Determinants of Setting Zone in Elite Men's Volleyball",
+      "url": "https://www.jssm.org/jssm-11-64.xml-abst",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Afonso, Esteves, Araujo, Thomas, and Mesquita",
+      "notes": "Shows serve depth, jump serve, reception zone, receiver, and low reception can push setters into poorer setting zones; supports deep, high-pressure serve targets and libero receive involvement."
+    },
+    {
+      "title": "Variables that Predict Serve Efficacy in Elite Men's Volleyball with Different Quality of Opposition Sets",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5873346/",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Valhondo, Fernandez-Echeverria, Gonzalez-Silva, Claver, and Moreno",
+      "notes": "Elite men's serving analysis; serve player, reception zone, reception type, and depending on opposition quality serve type or serve zone predicted serve efficacy."
+    },
+    {
+      "title": "The Effect of Jump Topspin Serve Speed on Reception Quality in Men's Volleyball",
+      "url": "https://www.physactiv.eu/wp-content/uploads/2024/06/2024_12217.pdf",
+      "source_type": "peer_reviewed_study",
+      "organization_or_author": "Petru and Vencurik",
+      "notes": "Professional men's match analysis found increasing jump-topspin serve speed was associated with lower reception quality, while faster serves also carried more service-error risk."
+    },
+    {
+      "title": "Normative Profiles for Serve Speed for the Training of the Serve and Reception in Volleyball",
+      "url": "https://thesportjournal.org/article/normative-profiles-for-serve-speed-for-the-training-of-the-serve-and-reception-in-volleyball/",
+      "source_type": "research_article",
+      "organization_or_author": "The Sport Journal",
+      "notes": "Provides serve-speed ranges and serve-type occurrence data useful for calibrating receive training and machine-fed serve speeds by serve type."
+    },
+    {
+      "title": "Whose Ball? Seam Responsibilities in Serve Receive and Defense",
+      "url": "https://coachingvb.com/whose-ball-seam-responsibilities/",
+      "source_type": "expert_coach_education_article",
+      "organization_or_author": "John Forman, Coaching Volleyball",
+      "notes": "Used only for practical seam-rule framing: teams need explicit, rehearsed seam ownership rules and realistic repetition under serve pressure."
+    },
+    {
+      "title": "Planning Effective Serve-Receive Formations for Lower Skill Level Teams",
+      "url": "https://carolinaregionvb.org/wp-content/uploads/2017/06/Cap-Article-May132012-Final.pdf",
+      "source_type": "coach_education_pdf",
+      "organization_or_author": "Carolina Region Volleyball / CAP article",
+      "notes": "Used for the principle that reducing from more passers to fewer passers should be earned by passing efficiency and team effectiveness, not by copying elite formations."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "serve_as_first_attack",
+      "concept": "Serving is the only closed start skill in indoor volleyball and should be treated as the first offensive action.",
+      "details": "A good serve is not merely in-bounds. It applies pressure by reducing the receiver's time, forcing movement, attacking a weak passer, stressing a seam, changing depth, or making the setter leave the ideal setting zone.",
+      "backend_tags": ["serve", "first_attack", "risk_reward"]
+    },
+    {
+      "id": "legal_service_constraints",
+      "concept": "The server must initiate play from the service zone and may not fault the end line or court before the service hit or jump takeoff.",
+      "details": "The legal constraint matters tactically because servers can use the full service-zone width and depth available behind the end line, including deeper starts for hard float or topspin serves when space allows.",
+      "backend_tags": ["rules", "service_zone", "tactics"]
+    },
+    {
+      "id": "serve_type_continuum",
+      "concept": "Underhand, standing float, jump float, and jump topspin serves sit on a progression of complexity, speed, trajectory, spin, and physical cost.",
+      "details": "Underhand serving is an entry skill for ball-over-net success. Standing float adds overhead contact, flat trajectory, and target control. Jump float adds higher contact and more pressure with lower complexity than jump topspin. Jump topspin adds approach, toss, jump, spike-like contact, higher velocity, and greater error/load cost.",
+      "backend_tags": ["serve_types", "progression"]
+    },
+    {
+      "id": "serve_zone_language",
+      "concept": "Zones 1 through 6 provide a common language for serving, receiving, rotation mapping, and scouting.",
+      "details": "Back-court zones 1, 6, and 5 are common serve endpoints; front-court short serves can be described by zones 2, 3, and 4 or by short right, short middle, and short left. Backend records should store both numeric zone and descriptive target.",
+      "backend_tags": ["zones", "scouting", "court_mapping"]
+    },
+    {
+      "id": "targeting_hierarchy",
+      "concept": "Serve targets should be selected from a hierarchy rather than by habit.",
+      "details": "Common target priorities are weak passer, overloaded outside hitter, passer with poor movement in a specific direction, seam between passers, short zone that disrupts approach, deep zone that increases setter distance, and rotation-specific traffic that makes the setter or hitter transition harder.",
+      "backend_tags": ["targeting", "scouting", "serve_plan"]
+    },
+    {
+      "id": "risk_reward_serving",
+      "concept": "Serve pressure must be balanced against service-error cost and match context.",
+      "details": "The backend should distinguish controlled pressure from reckless serving. A hard serve to a large tactical target may be appropriate when the server's error rate is acceptable; a lower-risk float or larger target may be better after repeated errors, late in a tight set, or when the opponent is already out of system against moderate pressure.",
+      "backend_tags": ["risk_reward", "serve_assessment"]
+    },
+    {
+      "id": "float_serve_pressure",
+      "concept": "Float serves pressure passers through late movement, low spin, flat trajectory, and depth deception.",
+      "details": "Standing and jump float serves should prioritize clean middle-of-ball contact, firm hand shape, low net clearance, repeatable toss, and the ability to hit different depths without obvious cues.",
+      "backend_tags": ["float_serve", "contact", "trajectory"]
+    },
+    {
+      "id": "jump_topspin_pressure",
+      "concept": "Jump topspin serves pressure passers through velocity, topspin drop, short flight time, and spike-like contact.",
+      "details": "Research in professional men's volleyball associates higher jump-topspin serve speed with lower reception quality, but this serve type also carries higher physical and service-error cost. It belongs later in the progression unless the athlete can control approach, toss, contact, and landing.",
+      "backend_tags": ["jump_topspin", "velocity", "advanced"]
+    },
+    {
+      "id": "serve_receive_as_k1",
+      "concept": "Serve receive is the first action of the side-out phase and determines offensive options.",
+      "details": "Pass quality shapes whether the setter can use middles, tempo, combination play, and full court. A merely playable pass may keep the rally alive; a positive or perfect pass expands first-ball attack choices.",
+      "backend_tags": ["serve_receive", "sideout", "offense"]
+    },
+    {
+      "id": "read_before_platform",
+      "concept": "Most serve-receive success begins before contact through reading server cues and ball flight.",
+      "details": "Passers should identify server type, start position, toss, contact, trajectory, spin or lack of spin, and likely landing depth. Technical platform work should be embedded in real over-net serve reads as early as possible.",
+      "backend_tags": ["perception", "serve_reading", "practice_design"]
+    },
+    {
+      "id": "platform_as_angle_tool",
+      "concept": "A passing platform redirects the incoming serve with a stable angle rather than swinging at the ball.",
+      "details": "Useful passing mechanics include balanced posture, arms connected before contact when time allows, a firm but not locked platform, shoulders and platform angled toward target, quiet contact, and body control after the ball leaves.",
+      "backend_tags": ["passing", "platform", "angle_control"]
+    },
+    {
+      "id": "footwork_creates_angle",
+      "concept": "Footwork helps the passer arrive in a body position that makes the desired platform angle easier.",
+      "details": "Shuffle, drop-step, crossover, split-step, and emergency lateral steps are means to create balance and angle. The goal is not to force every ball to the midline; the goal is to control a playable angle under time and trajectory constraints.",
+      "backend_tags": ["footwork", "movement", "angle_control"]
+    },
+    {
+      "id": "midline_and_outside_body_passing",
+      "concept": "Passers need both midline passing and outside-body angle passing.",
+      "details": "Beginner teaching can start with getting the body behind the ball, but higher-level serve receive includes balls taken outside the midline, especially against float movement, seams, and hard serves. The backend should not treat outside-body passing as automatically incorrect.",
+      "backend_tags": ["platform", "progression", "advanced_passing"]
+    },
+    {
+      "id": "float_vs_topspin_receive",
+      "concept": "Float and topspin serves demand different receive emphases.",
+      "details": "Float serves require early visual tracking, patient feet, small late adjustments, and platform stability against unpredictable movement. Topspin serves require depth awareness, stronger posture, earlier read of pace/drop, controlled rebound, and often more respect for speed.",
+      "backend_tags": ["serve_receive", "float_receive", "topspin_receive"]
+    },
+    {
+      "id": "receive_formations_are_personnel_tools",
+      "concept": "Receive formations are tools for personnel, rotation, and serve type, not fixed ideals.",
+      "details": "Five- and four-person receive can support beginners by reducing court per passer. Three-person receive is a common team default. Two-person receive becomes viable when a libero and another strong passer can cover larger areas without lowering team pass quality or attacking transition.",
+      "backend_tags": ["receive_system", "formation", "level_progression"]
+    },
+    {
+      "id": "seams_are_planned_before_the_serve",
+      "concept": "Seam ownership should be pre-defined and rehearsed before the serve, then communicated quickly during the play.",
+      "details": "Teams may use left-person owns, right-person owns, libero-priority, short/deep split, or movement-based seam rules. The key is consistency, role clarity, and practice against real serves into the seam.",
+      "backend_tags": ["seam_rules", "communication", "serve_receive"]
+    },
+    {
+      "id": "libero_receive_leadership",
+      "concept": "The libero is usually the serve-receive stabilizer and communication leader.",
+      "details": "A high-level libero can pass a larger area, steal balls from weaker passers, control free balls, call seam intentions, and help outside hitters preserve their attacking approach. Legal libero constraints still apply in attack and front-zone setting contexts.",
+      "backend_tags": ["libero", "role_responsibility", "receive_system"]
+    },
+    {
+      "id": "outside_hitter_dual_demand",
+      "concept": "Outside hitters commonly balance receive responsibility with immediate transition to attack.",
+      "details": "Serving plans often target outside hitters because passing can reduce their approach quality. Receive systems should decide how much court each outside takes based on passer quality, rotation, and offensive value.",
+      "backend_tags": ["outside_hitter", "role_responsibility", "transition"]
+    },
+    {
+      "id": "pass_quality_is_not_binary",
+      "concept": "Pass quality should be measured as graded offensive access, not simply good or bad.",
+      "details": "Useful grades include ace/error, overpass or direct opponent advantage, negative pass, playable out-of-system pass, positive pass with multiple options, and perfect pass with full offense. Team metrics should also link pass quality to sideout and first-ball kill percentage.",
+      "backend_tags": ["metrics", "assessment", "passing_quality"]
+    },
+    {
+      "id": "backward_movement_penalty",
+      "concept": "Large backward displacement before receive is a warning sign for reception quality.",
+      "details": "High-level serve-reception research on jump-float serves found receiver positioning and movement had major influence on pass type and efficacy. Starting too far forward or misreading depth can force late backward movement and reduce control.",
+      "backend_tags": ["research_evidence", "positioning", "movement"]
+    },
+    {
+      "id": "gamelike_transfer",
+      "concept": "Passing drills transfer best when they include over-net serves, real reading, variable trajectories, and a target linked to offense.",
+      "details": "Pair passing and wall passing can warm up contact shapes but should not be the main assessment of serve receive. Serve receive should connect to pass-set-hit, pass-set-attack decision, or sideout scoring as soon as athletes can manage it safely.",
+      "backend_tags": ["training_design", "motor_learning", "serve_receive"]
+    },
+    {
+      "id": "progressive_court_and_net_constraints",
+      "concept": "For youth and beginners, court size, ball type, net height, and serve distance should be adjusted to preserve rallies and real decisions.",
+      "details": "Reducing constraints can allow athletes to serve, receive, and play three contacts earlier. The progression should gradually restore full-court rules as skill and strength allow.",
+      "backend_tags": ["beginner", "youth", "constraints"]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "underhand_serve_model",
+      "model": "Underhand serve phase model",
+      "skill_level": "beginner",
+      "phases": ["stance and ball position", "small weight transfer", "pendulum arm swing", "low controlled toss or release", "contact below ball center", "follow-through toward target", "recover into defensive position"],
+      "coaching_cues": ["start close enough to succeed", "contact the ball in front of the hitting hip", "step and swing toward the target", "watch the contact point", "increase distance only after repeated in-bounds success"],
+      "common_errors": [
+        {
+          "error": "tossing too high or chasing the ball",
+          "correction": "use a small lift or stable held release, then hit from a repeatable contact point"
+        },
+        {
+          "error": "swinging across the body",
+          "correction": "align shoulders and step line with the intended target"
+        },
+        {
+          "error": "no weight transfer",
+          "correction": "rehearse step plus pendulum swing without a ball, then add serve-over-net reps"
+        }
+      ],
+      "assessment": ["serves_over_net_rate", "serves_in_bounds_rate", "target_half_accuracy", "repeatable_contact_score"]
+    },
+    {
+      "id": "standing_float_serve_model",
+      "model": "Standing float serve model",
+      "skill_level": "beginner_to_intermediate",
+      "phases": ["pre-serve target plan", "balanced stance", "consistent low toss in front of hitting shoulder", "firm flat hand", "middle-ball contact", "short direct arm action", "controlled body transfer", "defensive recovery"],
+      "coaching_cues": ["contact before routine complexity", "hit the middle of the ball", "keep the ball from spinning", "serve hard and flat to a safe window", "train short, deep, left, right, and seam targets"],
+      "constraints": ["low net clearance for pressure", "large target first", "smaller zone target after 80 percent in-bounds consistency", "track miss type as net, long, wide, or easy"]
+    },
+    {
+      "id": "jump_float_serve_model",
+      "model": "Jump float serve model",
+      "skill_level": "intermediate_to_advanced",
+      "phases": ["start position behind end line", "controlled approach", "two-hand or one-hand set-up toss", "vertical or slight forward jump", "high flat contact", "firm no-spin hit", "land safely after contact", "transition into defense"],
+      "coaching_cues": ["earn the jump float after standing float contact is stable", "keep toss low and repeatable", "contact high without adding spin", "use pace with a lower error rate than jump topspin", "vary depth without obvious toss changes"],
+      "risk_controls": ["do not add if standing float cannot be served hard and flat", "monitor landing quality", "use error-rate ceiling by training block and match role"]
+    },
+    {
+      "id": "jump_topspin_serve_model",
+      "model": "Jump topspin serve model",
+      "skill_level": "advanced",
+      "phases": ["serve target and risk decision", "approach rhythm", "high forward toss", "loaded arm swing", "jump and trunk rotation", "topspin contact above and behind ball", "wrist/hand over ball", "safe landing", "defensive transition"],
+      "coaching_cues": ["build from attack mechanics", "make toss height and location measurable", "prioritize controlled speed before maximum speed", "use radar only with in-bounds and target data", "avoid turning every miss into a slow easy serve"],
+      "assessment": ["serve_speed", "in_bounds_rate", "ace_rate", "opponent_negative_pass_rate", "net_error_rate", "long_error_rate", "landing_quality"]
+    },
+    {
+      "id": "serve_type_progression_model",
+      "model": "Serving progression ladder",
+      "levels": [
+        {
+          "level": "beginner",
+          "technical_goals": ["underhand serve over and in", "standing overhand contact intro", "serve from adapted distance", "understand legal service and rotation"],
+          "tactical_goals": ["serve to large court halves", "avoid net errors", "recover after serve"],
+          "readiness_to_progress": ["at least 7 of 10 in from adapted distance", "repeatable contact point", "can aim front/back half"]
+        },
+        {
+          "level": "intermediate",
+          "technical_goals": ["standing float as default", "hard-flat trajectory", "short/deep and zone targets", "jump float introduction"],
+          "tactical_goals": ["target weak passer", "serve seams", "change depth", "track errors by target"],
+          "readiness_to_progress": ["stable standing float under score pressure", "serve to three broad zones", "low net-error rate"]
+        },
+        {
+          "level": "advanced",
+          "technical_goals": ["jump float pace and depth deception", "jump topspin or hybrid option where appropriate", "serve speed and accuracy monitoring"],
+          "tactical_goals": ["rotation-specific serve plan", "risk bands by score", "serve away from elite libero", "force poor setting zones"],
+          "readiness_to_progress": ["serve plan improves opponent pass quality distribution", "error rate stays within team threshold", "athlete tolerates jump-serve load"]
+        }
+      ]
+    },
+    {
+      "id": "serve_target_decision_tree",
+      "model": "Serve target decision tree",
+      "inputs": ["score_state", "server_skill", "opponent_passer_stats", "opponent_rotation", "libero_location", "setter_start", "serve_type_available", "error_history", "court_space_behind_endline"],
+      "decision_order": [
+        "Choose acceptable risk band for score and server.",
+        "Remove targets that create unacceptable error risk for this server.",
+        "Prioritize weak passer, overloaded outside, or seam vulnerability.",
+        "If no weak passer is available, use depth or short target to move the setter or attacker.",
+        "If the opponent has an elite libero, serve away unless the plan intentionally baits movement.",
+        "After two easy passes, change speed, depth, or zone before changing to an untrained serve type."
+      ],
+      "outputs": ["target_zone", "target_depth", "target_passer_or_seam", "serve_type", "risk_band", "success_metric"]
+    },
+    {
+      "id": "forearm_passing_platform_model",
+      "model": "Forearm platform and posture model",
+      "components": ["eyes track server and ball", "balanced ready stance", "feet active before contact", "arms joined before contact when time allows", "flat forearm surface", "shoulders and platform angle to target", "quiet contact", "hold finish long enough to confirm direction"],
+      "coaching_use": "Use this model to distinguish contact-surface problems from reading, footwork, or tactical target problems.",
+      "common_errors": [
+        {
+          "error": "swinging arms at the serve",
+          "correction": "reduce arm swing, freeze platform angle through contact, and vary incoming speed gradually"
+        },
+        {
+          "error": "platform faces where the ball came from",
+          "correction": "train redirect angles from left and right lanes toward the setter target"
+        },
+        {
+          "error": "arms connect too late",
+          "correction": "start hands separated for movement but connect earlier once the serve path is confirmed"
+        }
+      ]
+    },
+    {
+      "id": "angle_control_model",
+      "model": "Pass angle control model",
+      "principles": ["the ball leaves in the direction of the platform angle plus force contribution", "lower body creates stable base", "shoulders and forearms shape target line", "less swing is required as serve speed increases", "height and distance to target must match setter system"],
+      "drill_constraints": ["serve from zone 1 to passer in zone 5", "serve from zone 5 to passer in zone 1", "short float requiring forward angle", "deep serve requiring controlled upward angle", "seam serve with assigned owner"]
+    },
+    {
+      "id": "receive_footwork_model",
+      "model": "Serve-receive movement model",
+      "footwork_patterns": [
+        {
+          "pattern": "split-step or active ready hop",
+          "use_case": "timing first movement as server contacts the ball"
+        },
+        {
+          "pattern": "shuffle",
+          "use_case": "small lateral adjustment while staying square enough to angle platform"
+        },
+        {
+          "pattern": "drop-step",
+          "use_case": "late read to deeper serve or topspin drop behind initial position"
+        },
+        {
+          "pattern": "crossover",
+          "use_case": "larger lateral movement while preserving enough time to re-balance"
+        },
+        {
+          "pattern": "forward step or run-through",
+          "use_case": "short serve, free ball, or serve landing in front of passers"
+        }
+      ],
+      "coaching_warning": "Footwork is successful only if it creates a controlled platform angle. Do not score the foot pattern separately from pass outcome and body control."
+    },
+    {
+      "id": "serve_reading_model",
+      "model": "Pre-contact and post-contact serve read",
+      "pre_contact_reads": ["server starting depth", "server lateral starting zone", "toss height", "toss drift", "approach speed", "arm speed", "contact point"],
+      "post_contact_reads": ["spin or no spin", "initial trajectory", "net clearance", "ball speed", "late float movement", "topspin drop", "short/deep landing projection"],
+      "coaching_use": "Build drills where passers call serve type or depth early, then score both read accuracy and pass quality."
+    },
+    {
+      "id": "float_receive_model",
+      "model": "Float-serve receive model",
+      "components": ["start in a posture that allows forward and lateral movement", "read no-spin flight", "make small late adjustments", "avoid over-running the ball", "hold stable platform angle", "pass with enough height for setter rhythm"],
+      "common_errors": [
+        {
+          "error": "early platform commitment before float movement",
+          "correction": "delay final platform lock until the ball path is clear while keeping feet active"
+        },
+        {
+          "error": "chasing the serve with hands",
+          "correction": "move the body first, then set the platform"
+        }
+      ]
+    },
+    {
+      "id": "topspin_receive_model",
+      "model": "Jump-topspin receive model",
+      "components": ["respect speed and drop", "avoid starting too shallow", "absorb pace with posture and quiet arms", "create safe pass height", "prioritize positive playable pass over perfect pass when serve speed is extreme"],
+      "common_errors": [
+        {
+          "error": "platform rebounds ball too tight or over net",
+          "correction": "soften angle, reduce arm lift, and pass with controlled height off the net"
+        },
+        {
+          "error": "late backward movement",
+          "correction": "adjust starting depth by server and train deep-serve reads"
+        }
+      ]
+    },
+    {
+      "id": "receive_formation_model",
+      "model": "Receive systems by passer count",
+      "systems": [
+        {
+          "system": "five_person_receive",
+          "best_for": ["new beginners", "PE", "very low serve speed"],
+          "advantages": ["small area per passer", "high participation"],
+          "limitations": ["many seams", "traffic to target", "harder to assign clear roles"]
+        },
+        {
+          "system": "four_person_receive",
+          "best_for": ["beginner teams moving toward specialization"],
+          "advantages": ["slightly clearer lanes", "still shares court load"],
+          "limitations": ["can create awkward front-row transition"]
+        },
+        {
+          "system": "three_person_receive",
+          "best_for": ["most school, club, and competitive teams as a default"],
+          "advantages": ["clear lanes", "can hide weaker passers", "keeps setter path clearer"],
+          "limitations": ["more court per passer", "outside hitters often pass and attack"]
+        },
+        {
+          "system": "two_person_receive",
+          "best_for": ["advanced teams with strong libero and second passer", "selected rotations or serve types"],
+          "advantages": ["frees one attacker", "reduces seams", "lets best passers own more court"],
+          "limitations": ["high physical and decision load", "requires elite range and communication"]
+        }
+      ],
+      "progression_rule": "Reduce passer count only when team pass quality and sideout metrics are equal or better with fewer passers."
+    },
+    {
+      "id": "seam_communication_model",
+      "model": "Seam ownership and call model",
+      "pre_serve_tasks": ["identify passers", "state seam rule", "libero declares green-light steals if used", "outside hitter confirms short/deep or line seam", "setter confirms target zone"],
+      "in_play_calls": ["mine", "you", "short", "deep", "help", "out"],
+      "ownership_options": [
+        {
+          "rule": "fixed_left_or_right_owns",
+          "use_case": "beginners and teams needing simple consistency"
+        },
+        {
+          "rule": "libero_priority",
+          "use_case": "libero is clearly the best passer and can cover extra area"
+        },
+        {
+          "rule": "short_deep_split",
+          "use_case": "one passer is better moving forward and another better taking deep seam"
+        },
+        {
+          "rule": "server_angle_rule",
+          "use_case": "advanced teams assign seam by serve origin and likely ball path"
+        }
+      ],
+      "coaching_warning": "Yelling talk is not a correction unless the team has a known seam rule. First fix ownership, then reinforce communication."
+    },
+    {
+      "id": "passing_quality_scale_model",
+      "model": "Pass quality grading model",
+      "scale": [
+        {
+          "grade": "0",
+          "label": "error_or_ace",
+          "definition": "Receiving team cannot make a legal second contact or gives immediate point."
+        },
+        {
+          "grade": "1",
+          "label": "poor_or_negative",
+          "definition": "Ball remains playable but offense is predictable, emergency, or far from target."
+        },
+        {
+          "grade": "2",
+          "label": "positive",
+          "definition": "Setter has at least two realistic attacking options, though not full offense."
+        },
+        {
+          "grade": "3",
+          "label": "perfect",
+          "definition": "Setter can run intended first-tempo and full offense from ideal or near-ideal target."
+        },
+        {
+          "grade": "OP",
+          "label": "overpass",
+          "definition": "Pass crosses too tight or over the net and gives opponent an attack or free scoring chance."
+        }
+      ],
+      "derived_metrics": ["average_passer_rating", "perfect_pass_rate", "positive_plus_perfect_rate", "error_rate", "overpass_rate", "sideout_rate_after_pass_grade", "first_ball_kill_rate"]
+    },
+    {
+      "id": "common_errors_corrections_model",
+      "model": "Serve and receive error-correction map",
+      "errors": [
+        {
+          "area": "serving",
+          "error": "high looping serve that is easy to pass",
+          "likely_causes": ["fear of error", "contact under ball only", "slow arm"],
+          "corrections": ["use larger target but keep flat trajectory", "train hard contact through a low window", "separate net-error reduction from easy-serve habit"]
+        },
+        {
+          "area": "serving",
+          "error": "repeated net errors",
+          "likely_causes": ["low contact", "late toss", "aiming too close to tape", "fatigue"],
+          "corrections": ["raise contact point", "serve through safe window above net", "move target deeper or central", "reduce complexity for the next rep"]
+        },
+        {
+          "area": "serve_receive",
+          "error": "late movement to deep serve",
+          "likely_causes": ["starting too shallow", "not reading toss/contact", "poor drop step"],
+          "corrections": ["adjust starting depth by server", "train deep read calls", "rehearse drop-step to balanced platform"]
+        },
+        {
+          "area": "serve_receive",
+          "error": "ball drops in seam",
+          "likely_causes": ["undefined ownership", "both passers waiting", "no pre-serve call"],
+          "corrections": ["assign seam rule", "score seam ownership in serve receive", "let libero or priority passer declare steal before serve"]
+        },
+        {
+          "area": "passing",
+          "error": "overpass",
+          "likely_causes": ["platform too vertical", "arm lift", "standing too close to net against pace"],
+          "corrections": ["angle platform off net", "absorb pace with posture", "start deeper against faster serves"]
+        },
+        {
+          "area": "passing",
+          "error": "pass misses target line to where ball came from",
+          "likely_causes": ["pair-passing habit", "not redirecting angle", "hips and shoulders not organized"],
+          "corrections": ["train over-net serve to setter target", "use redirect-angle reps from both sidelines", "score pass target not just contact"]
+        }
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "serve_error_ceiling_rule",
+      "rule": "Set a serve-error ceiling by level, score, and server role.",
+      "application": "Beginners may need a high make-rate target before tactics. Intermediate and advanced servers can accept more risk if their serves produce enough aces, negative passes, or lower sideout percentage. Late-set pressure should narrow the target or simplify the serve before it removes all pressure.",
+      "backend_fields": ["level", "score_state", "server_role", "allowed_error_rate", "target_size", "serve_type"]
+    },
+    {
+      "id": "net_errors_are_high_cost",
+      "rule": "A serve into the net is usually a poorer training and match error than a long aggressive miss.",
+      "application": "A net serve gives no read to receivers and no pressure to the opponent. In training, long errors can still help receivers learn out-ball reads, but repeated long errors still require target and contact correction.",
+      "backend_fields": ["miss_type", "training_feedback", "risk_adjustment"]
+    },
+    {
+      "id": "target_weakest_functional_passer",
+      "rule": "Serve the weakest functional passer in the current rotation, not simply the weakest athlete.",
+      "application": "A strong passer can become vulnerable when moving backward, receiving short, passing after an error, or transitioning to hit. A weaker passer may be hidden. Target decisions must use rotation and movement context.",
+      "backend_fields": ["rotation", "passer_id", "movement_direction", "recent_error", "transition_role"]
+    },
+    {
+      "id": "avoid_elite_libero_unless_baiting",
+      "rule": "Avoid serving the elite libero unless the serve plan intentionally exploits libero movement or bait.",
+      "application": "High-level liberos often stabilize large court areas. Serving away can expose outsides, opposites, or seams. If the libero overextends, short/deep or behind-libero targets may become available.",
+      "backend_fields": ["libero_quality", "serve_away_target", "bait_plan", "backup_target"]
+    },
+    {
+      "id": "serve_outside_to_reduce_attack",
+      "rule": "Serving an outside hitter can reduce their approach quality and first-ball attack readiness.",
+      "application": "This is most useful when the outside is both a primary passer and a primary attacker. The serve should make the hitter pass, move, or communicate through a seam before transitioning.",
+      "backend_fields": ["outside_hitter_role", "passing_load", "attack_value", "target_depth"]
+    },
+    {
+      "id": "serve_seams_with_defined_aim",
+      "rule": "Seam serving should target confusion or movement, not vague middle space.",
+      "application": "A good seam serve lands between ownership zones, moves late, or forces two passers to decide under time pressure. The server and staff should know which two passers are being stressed and why.",
+      "backend_fields": ["left_passer", "right_passer", "seam_type", "serve_origin", "expected_owner"]
+    },
+    {
+      "id": "short_deep_alternation_rule",
+      "rule": "Use short and deep serves to change passer starting posture and setter/hitter traffic.",
+      "application": "Short serves can pull front-row hitters away from approach lanes or make non-passers handle the ball. Deep serves can increase setter distance, force backward movement, or push the pass target off the net.",
+      "backend_fields": ["serve_depth", "target_role", "setter_traffic", "previous_serves"]
+    },
+    {
+      "id": "serve_zone_by_server_strength",
+      "rule": "Match target precision to server strength.",
+      "application": "Beginner servers target halves or thirds. Intermediate servers target zones and depth bands. Advanced servers target a player-zone-depth combination such as zone 1 deep on an outside's right shoulder.",
+      "backend_fields": ["server_level", "target_granularity", "accuracy_threshold"]
+    },
+    {
+      "id": "three_passer_default_rule",
+      "rule": "Use three-person receive as the default competitive teaching system once passers can cover larger lanes.",
+      "application": "Three passers usually give clear lanes while keeping setter and attacker transition manageable. Teams can start with four or five passers and move to three when metrics support it.",
+      "backend_fields": ["receive_system", "passer_count", "team_pass_rating", "sideout_rate"]
+    },
+    {
+      "id": "two_passer_earned_rule",
+      "rule": "Two-person receive is earned by data and personnel, not copied from elite teams.",
+      "application": "Use it when a libero and another passer can cover the court with equal or better pass quality and sideout percentage than the three-person pattern, and when freeing an attacker creates enough offensive value.",
+      "backend_fields": ["libero_range", "second_passer_range", "comparison_pass_rating", "offensive_gain"]
+    },
+    {
+      "id": "seam_rule_must_be_explicit",
+      "rule": "Every receive pattern needs a named seam rule before the serve.",
+      "application": "The rule can be left owns, right owns, libero owns, short/deep split, or server-angle based. The exact choice is less important than consistent rehearsal and player understanding.",
+      "backend_fields": ["seam_rule_type", "assigned_owner", "exception_rule", "communication_call"]
+    },
+    {
+      "id": "libero_green_light_rule",
+      "rule": "If the libero has green light to cross seams, that authority must be declared and limited.",
+      "application": "The libero can steal balls from weaker passers or shrink an outside hitter's lane, but teammates must know whether the libero owns all seam balls, only float serves, only short balls, or only a defined zone.",
+      "backend_fields": ["libero_authority", "serve_type", "zone_limit", "teammate_adjustment"]
+    },
+    {
+      "id": "positive_pass_over_perfect_pass_rule",
+      "rule": "Against elite pace, a positive controlled pass is often a better objective than forcing a perfect pass.",
+      "application": "Hard jump topspin serves can make perfect passing unrealistic. Passers should avoid overpasses and keep the ball in a playable setting corridor, preserving multiple attack options when possible.",
+      "backend_fields": ["serve_speed_band", "pass_goal", "target_area", "risk_of_overpass"]
+    },
+    {
+      "id": "receive_depth_adjustment_rule",
+      "rule": "Starting depth changes by serve type, server contact, and previous ball pattern.",
+      "application": "Passers generally respect harder or deeper serves with more depth and float-short servers with readiness to move forward. Starting too shallow against jump topspin or deep float can force damaging backward movement.",
+      "backend_fields": ["serve_type", "server_contact_height", "previous_depth", "passer_start_depth"]
+    },
+    {
+      "id": "scout_by_rotation_rule",
+      "rule": "Serving and receiving plans should be rotation-specific.",
+      "application": "The same opponent may have different passer lanes, setter paths, and hitter transition stress in each rotation. Record serve targets and receive patterns by rotation rather than as one generic plan.",
+      "backend_fields": ["opponent_rotation", "serve_target", "receive_pattern", "setter_path", "hitter_transition"]
+    },
+    {
+      "id": "practice_serve_receive_with_scoring",
+      "rule": "Serve-receive practice should be scored by the behavior the team wants in matches.",
+      "application": "Score pass quality, seam ownership, first-ball sideout, target hit, or consecutive positive passes. Do not rely on unscored pair passing as evidence that receive is improving.",
+      "backend_fields": ["drill_score", "pass_grade", "sideout_result", "seam_behavior"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "serve_overhead_power_chain",
+      "demand": "Serving uses a lower-body, trunk, shoulder, arm, and hand kinetic chain.",
+      "relevance": "Standing float requires ground-supported transfer; jump float and jump topspin add approach, takeoff, airborne control, and landing.",
+      "training_support": ["thoracic mobility", "trunk stiffness and rotation control", "shoulder range and strength", "single-leg landing quality", "serve-specific rhythm"]
+    },
+    {
+      "id": "jump_serve_load",
+      "demand": "Jump serving adds repeated jumping and landing load on top of overhead volume.",
+      "relevance": "Advanced serving sessions should count jump-serve attempts separately from standing serves, especially for athletes who also attack and block heavily.",
+      "training_support": ["landing mechanics", "calf and quadriceps capacity", "hip power", "progressive jump volume", "fatigue monitoring"]
+    },
+    {
+      "id": "serve_receive_time_pressure",
+      "demand": "Serve receive happens under severe time pressure.",
+      "relevance": "FIVB coaching material notes that elite men's jump-serve reception can require action in roughly 0.7 seconds, while research on jump-float reception highlights short ball-flight times and receiver movement constraints.",
+      "training_support": ["visual tracking", "first-step quickness", "reaction under realistic serves", "efficient platform organization"]
+    },
+    {
+      "id": "low_posture_and_mobility",
+      "demand": "Passing and reception require repeated low posture, hip and ankle mobility, and trunk stability.",
+      "relevance": "Low body position improves control but can fatigue legs and low back if volume and posture are not managed.",
+      "training_support": ["ankle dorsiflexion", "hip flexion tolerance", "isometric trunk control", "lateral lunge strength", "repeated low-position endurance"]
+    },
+    {
+      "id": "lateral_and_diagonal_movement",
+      "demand": "Passers repeatedly move laterally, diagonally, forward, and backward before contact.",
+      "relevance": "Reception quality can drop when passers must make large or late displacement, especially backward. Movement training should be tied to serve reads rather than isolated ladder patterns only.",
+      "training_support": ["shuffle mechanics", "drop-step control", "deceleration", "crossover-to-platform balance", "small-space agility"]
+    },
+    {
+      "id": "platform_stability",
+      "demand": "Passers need shoulder, elbow, wrist, and trunk stability to maintain platform shape under ball speed.",
+      "relevance": "Platform quality depends on controlling the whole body through contact, not arm tension alone.",
+      "training_support": ["scapular control", "forearm tolerance", "anti-rotation trunk work", "isometric shoulder endurance", "relaxed hand grip options"]
+    },
+    {
+      "id": "perceptual_cognitive_load",
+      "demand": "Serve receive combines visual perception, tactical memory, communication, and motor control.",
+      "relevance": "Passers must know the scouting plan, identify serve type, honor seam rules, call the ball, and still create a platform angle.",
+      "training_support": ["random serve sequences", "pre-serve call routines", "serve-type recognition", "rotational receive rehearsal"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "serving_shoulder_overuse",
+      "risk": "High serving volume can contribute to shoulder overload, especially with jump topspin or late high-effort sessions.",
+      "risk_factors": ["rapid volume increase", "poor trunk contribution", "fatigue-related arm-only serving", "high combined attack plus serve volume"],
+      "mitigations": ["track high-effort serves", "separate technique volume from maximal power volume", "maintain shoulder strength and mobility", "stop maximal serves when contact quality degrades"]
+    },
+    {
+      "id": "jump_serve_landing_risk",
+      "risk": "Jump serves add landing risk for ankles, knees, and low back.",
+      "risk_factors": ["landing on loose balls", "crowded serving lanes", "poor single-leg control", "serving while fatigued"],
+      "mitigations": ["clear landing space", "serve and shag protocols", "progress jump count", "coach knee/hip alignment and balanced landing"]
+    },
+    {
+      "id": "low_back_receive_stress",
+      "risk": "Repeated low serve-receive posture can stress the low back.",
+      "risk_factors": ["excessive lumbar flexion", "poor hip mobility", "long receive blocks without rest", "fatigue after jump load"],
+      "mitigations": ["train hip hinge and trunk control", "rotate high-volume passers", "use quality thresholds", "include mobility and strength support"]
+    },
+    {
+      "id": "knee_and_ankle_lateral_load",
+      "risk": "Late lateral or backward movement in receive can increase lower-limb stress.",
+      "risk_factors": ["slippery floor", "overstriding", "unstable stop before platform", "poor deceleration strength"],
+      "mitigations": ["footwear and floor checks", "progressive lateral deceleration", "serve-read positioning", "avoid excessive fatigue before receive training"]
+    },
+    {
+      "id": "finger_and_hand_risk_on_overhead_receive",
+      "risk": "Overhead serve receive can expose fingers and hands to high ball speed or awkward contact.",
+      "risk_factors": ["hard jump serve", "poor hand position", "late decision between hands and platform"],
+      "mitigations": ["teach when overhead receive is appropriate", "default to platform under higher pace", "strengthen hands progressively", "do not force overhead receive for all high balls"]
+    },
+    {
+      "id": "youth_progression_risk",
+      "risk": "Youth athletes can be overloaded if advanced serve types are added before strength, coordination, and consistency are ready.",
+      "risk_factors": ["adult court and ball before readiness", "early high-volume jump serving", "success defined only by aces"],
+      "mitigations": ["use adapted court constraints", "progress from underhand to standing float before high-volume jump serves", "score control and rallies", "monitor soreness and fatigue"]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "beginner_teaching_implications",
+      "level": "beginner",
+      "serving": ["start with underhand or adapted overhand from a distance that creates success", "move toward standing float contact as soon as strength and coordination allow", "serve to big targets before small zones", "teach legal service and rotation simply"],
+      "passing": ["teach forearm platform as redirecting the ball to a target", "use real over-net serves at controlled speed", "allow catch-pass progressions only as temporary constraints", "avoid treating pair passing as serve-receive mastery"],
+      "receive_system": ["use five or four passers if needed", "give one simple seam rule", "use smaller courts and lighter balls when appropriate"],
+      "metrics": ["serves over and in", "serve to half-court", "pass to playable target", "communication attempt", "rally contacts per game"]
+    },
+    {
+      "id": "intermediate_teaching_implications",
+      "level": "intermediate",
+      "serving": ["make standing float the default pressure serve", "introduce jump float after standing float contact is stable", "train zones 1, 5, 6 plus short targets", "track target accuracy and miss type"],
+      "passing": ["train float and topspin receive separately", "develop midline and outside-body platform angles", "teach shuffle, drop-step, crossover, and forward movement in serve context", "score pass quality with a 0-3 or similar scale"],
+      "receive_system": ["use three-person receive as a default when possible", "hide weaker passers with role-specific patterns", "define libero and outside hitter lane responsibilities"],
+      "metrics": ["passer rating", "positive pass percentage", "serve error rate", "opponent out-of-system rate", "sideout percentage after positive pass"]
+    },
+    {
+      "id": "advanced_teaching_implications",
+      "level": "advanced",
+      "serving": ["develop jump float pace and depth deception", "use jump topspin for athletes who can manage toss, speed, landing, and error rate", "build rotation-specific serving plans", "use video and radar only alongside target and outcome data"],
+      "passing": ["customize starting depth and lane by server", "train against scout-team serve types", "measure pass outcome by serve type and target", "practice high-pressure seams and late movement"],
+      "receive_system": ["use three-person, two-person, and rotation-specific variations", "give libero controlled green-light authority", "free key attackers when the pass data supports it"],
+      "metrics": ["ace-to-error ratio", "opponent sideout by server", "pass grade by serve type", "first-ball kill rate", "setter ideal-zone access", "rotation-specific pass efficiency"]
+    },
+    {
+      "id": "assessment_metrics",
+      "level": "all",
+      "serving_metrics": ["in_bounds_rate", "net_error_rate", "long_error_rate", "target_hit_rate", "ace_rate", "opponent_error_or_negative_pass_rate", "serve_speed_when_relevant", "serve_plus_minus"],
+      "passing_metrics": ["average_passer_rating", "perfect_pass_rate", "positive_pass_rate", "error_rate", "overpass_rate", "pass_quality_by_serve_type", "pass_quality_by_rotation", "sideout_rate_after_pass_grade"],
+      "communication_metrics": ["seam_ball_owned_rate", "pre_serve_call_completed", "libero_green_light_success_rate", "out_call_accuracy"],
+      "progression_rule": "Do not advance serve type or reduce passer count unless the new behavior improves match-transfer metrics, not just drill appearance."
+    },
+    {
+      "id": "practice_design_implications",
+      "level": "all",
+      "principles": ["use over-net serving early", "vary serve type, depth, and location", "connect receive to set and attack", "score pass quality and sideout", "include planned seam serves", "keep drills short enough to preserve reading quality"],
+      "bad_practice_traps": ["large volumes of wall passing as the main receive training", "blocked serves to one easy target only", "teaching serve routine before contact quality", "reducing serve pressure to eliminate all errors", "changing receive formation without measuring sideout impact"]
+    },
+    {
+      "id": "physical_preparation_implications",
+      "level": "intermediate_to_advanced",
+      "support_work": ["shoulder and trunk capacity for serving", "landing mechanics for jump serving", "hip and ankle mobility for low receive positions", "lateral deceleration and drop-step control", "visual-perceptual serve reading under fatigue"],
+      "load_controls": ["count jump serves separately", "avoid maximal serve volume after heavy attacking when shoulder quality drops", "rotate receive load during high-rep sessions", "monitor soreness in shoulder, low back, knees, and ankles"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_type": "volleyball_serving_progression",
+      "id": "serve_progression_beginner_underhand_to_float",
+      "title": "Beginner serve progression from underhand to standing float",
+      "level": "beginner",
+      "sequence": ["underhand from adapted distance", "underhand full distance", "standing overhand contact drill", "standing float to large target", "standing float to half-court", "standing float to zones"],
+      "entry_criteria": ["new player", "cannot consistently serve over full net", "limited overhead coordination"],
+      "exit_criteria": ["7 of 10 legal serves in bounds from regulation or adapted competition distance", "repeatable contact point", "can aim front or back half"],
+      "assessment_fields": ["serve_in_rate", "contact_consistency", "target_half_accuracy", "miss_type_distribution"]
+    },
+    {
+      "record_type": "volleyball_serving_progression",
+      "id": "serve_progression_intermediate_standing_float",
+      "title": "Intermediate standing float pressure progression",
+      "level": "intermediate",
+      "sequence": ["firm flat contact", "low-window serve", "zones 1-5-6", "short/deep targets", "seam targets", "serve under score pressure"],
+      "entry_criteria": ["basic overhand serve in bounds", "safe shoulder function", "understands zone language"],
+      "exit_criteria": ["80 percent in bounds in practice pressure sets", "hits called broad zone at least 50 percent", "keeps net errors below team threshold"],
+      "assessment_fields": ["target_zone_accuracy", "net_error_rate", "opponent_pass_rating_allowed", "serve_plus_minus"]
+    },
+    {
+      "record_type": "volleyball_serving_progression",
+      "id": "serve_progression_jump_float",
+      "title": "Jump float progression",
+      "level": "intermediate_to_advanced",
+      "sequence": ["approach rhythm without ball", "repeatable toss", "jump contact to large court", "flat no-spin trajectory", "depth deception", "rotation-specific targets"],
+      "entry_criteria": ["standing float is hard and flat", "safe landing mechanics", "can coordinate approach and toss"],
+      "exit_criteria": ["jump float error rate comparable to standing float for same target size", "can vary short and deep with similar toss", "passes opponent out of system more than standing float"],
+      "assessment_fields": ["jump_float_in_rate", "no_spin_contact_score", "target_depth_accuracy", "landing_quality", "opponent_negative_pass_rate"]
+    },
+    {
+      "record_type": "volleyball_serving_progression",
+      "id": "serve_progression_jump_topspin",
+      "title": "Advanced jump topspin progression",
+      "level": "advanced",
+      "sequence": ["attack arm-swing transfer", "approach and toss consistency", "controlled topspin over net", "speed development", "target bands", "match risk bands"],
+      "entry_criteria": ["mature overhead mechanics", "safe jump and landing", "can tolerate added jump volume", "coach can monitor error and load"],
+      "exit_criteria": ["serve speed and outcome justify error cost", "can keep ball in a planned deep or seam zone", "does not degrade shoulder or landing quality under fatigue"],
+      "assessment_fields": ["serve_speed", "in_bounds_rate", "ace_rate", "error_rate", "opponent_pass_quality", "jump_serve_volume"]
+    },
+    {
+      "record_type": "volleyball_serving_tactical_rule",
+      "id": "serve_target_hierarchy_rule",
+      "title": "Serve target hierarchy",
+      "decision_order": ["weak passer", "overloaded outside hitter", "seam between uncertain passers", "short ball to disrupt approach", "deep ball to force backward movement", "serve away from elite libero", "rotation-specific setter traffic"],
+      "required_inputs": ["opponent_rotation", "passer_quality", "server_skill", "score_state", "serve_type"],
+      "success_metrics": ["opponent_pass_rating_allowed", "opponent_out_of_system_rate", "ace_or_error_plus_minus", "sideout_rate_allowed"]
+    },
+    {
+      "record_type": "volleyball_serving_tactical_rule",
+      "id": "green_yellow_red_serving_bands",
+      "title": "Green/yellow/red serving risk bands",
+      "bands": [
+        {
+          "band": "green",
+          "definition": "Large target with controlled pressure and low error expectation",
+          "use_cases": ["after repeated service errors", "late tight score", "beginner competition"]
+        },
+        {
+          "band": "yellow",
+          "definition": "Tactical pressure target with normal trained serve",
+          "use_cases": ["default intermediate and advanced serving", "known weak passer", "planned seam"]
+        },
+        {
+          "band": "red",
+          "definition": "High-risk serve for ace or major disruption",
+          "use_cases": ["server has strong plus-minus", "opponent sideout is high unless pressured", "strategic run or comeback need"]
+        }
+      ],
+      "assessment_fields": ["band_called", "serve_result", "miss_type", "opponent_pass_grade"]
+    },
+    {
+      "record_type": "volleyball_passing_model",
+      "id": "passing_model_platform_angle",
+      "title": "Forearm platform angle model",
+      "level": "all",
+      "components": ["ready posture", "read serve", "move to balanced contact", "create platform angle", "quiet contact", "hold finish", "transition to next role"],
+      "coaching_cues": ["angle before swing", "platform to target", "legs and trunk support the angle", "read the serve before the ball crosses the net"],
+      "assessment_fields": ["pass_grade", "target_distance", "platform_stability", "movement_before_contact"]
+    },
+    {
+      "record_type": "volleyball_passing_model",
+      "id": "passing_model_float_vs_topspin",
+      "title": "Serve-type receive adjustments",
+      "serve_type_adjustments": [
+        {
+          "serve_type": "standing_float_or_jump_float",
+          "receive_keys": ["track no-spin movement", "make small late foot adjustments", "avoid early arm reach", "hold angle"]
+        },
+        {
+          "serve_type": "jump_topspin",
+          "receive_keys": ["respect speed and drop", "start at appropriate depth", "absorb pace", "avoid overpass", "prioritize positive playable pass"]
+        },
+        {
+          "serve_type": "short_serve",
+          "receive_keys": ["call early", "move forward through the ball", "pass high enough for setter", "protect hitter transition when possible"]
+        }
+      ],
+      "assessment_fields": ["pass_quality_by_serve_type", "late_movement_error", "overpass_rate", "short_serve_pickup_rate"]
+    },
+    {
+      "record_type": "volleyball_passing_model",
+      "id": "passing_common_error_corrections",
+      "title": "Common passing errors and corrections",
+      "errors": [
+        {
+          "error": "late to seam",
+          "correction": "install a named seam rule and run live seam serves"
+        },
+        {
+          "error": "overpass",
+          "correction": "angle platform off net and absorb speed with body posture"
+        },
+        {
+          "error": "shank wide from float",
+          "correction": "delay final platform angle and keep feet active through late movement"
+        },
+        {
+          "error": "pass straight back to server",
+          "correction": "train redirect angle to setter target using over-net serves"
+        },
+        {
+          "error": "arms swing at hard serve",
+          "correction": "quiet platform and smaller body-force contribution"
+        }
+      ]
+    },
+    {
+      "record_type": "volleyball_receive_system",
+      "id": "receive_system_five_person_beginner",
+      "title": "Five-person receive for beginners",
+      "level": "beginner",
+      "passer_count": 5,
+      "best_for": ["new players", "low serve speed", "participation-focused sessions"],
+      "rules": ["simple zone responsibility", "one call word", "setter or target clearly marked"],
+      "progression_trigger": "Move to four-person receive when players understand lanes and excessive seams or traffic reduce quality."
+    },
+    {
+      "record_type": "volleyball_receive_system",
+      "id": "receive_system_four_person_development",
+      "title": "Four-person receive for developing teams",
+      "level": "beginner_to_intermediate",
+      "passer_count": 4,
+      "best_for": ["teams learning specialization", "players not ready for three broad lanes"],
+      "rules": ["front/back and left/right seams defined", "setter path protected", "short serve owner named"],
+      "progression_trigger": "Move to three-person receive when pass rating and sideout rate improve with clearer lanes."
+    },
+    {
+      "record_type": "volleyball_receive_system",
+      "id": "receive_system_three_person_standard",
+      "title": "Three-person receive default",
+      "level": "intermediate_to_advanced",
+      "passer_count": 3,
+      "best_for": ["school and club teams", "5-1 or 6-2 systems", "clear lane assignments"],
+      "typical_passers": ["libero", "outside_hitter_1", "outside_hitter_2_or_defensive_specialist"],
+      "rules": ["each passer owns primary lane", "seams named pre-serve", "libero can have priority by rule", "outside transition route rehearsed"],
+      "assessment_fields": ["team_pass_rating", "sideout_rate", "outside_hitter_attack_readiness", "seam_ball_owned_rate"]
+    },
+    {
+      "record_type": "volleyball_receive_system",
+      "id": "receive_system_two_person_advanced",
+      "title": "Two-person receive with libero and strong passer",
+      "level": "advanced",
+      "passer_count": 2,
+      "best_for": ["elite libero range", "selected rotations", "freeing a high-value attacker", "opponent float serve patterns"],
+      "rules": ["large court lanes explicitly mapped", "short and deep seams named", "non-passing attacker transition route protected", "backup plan for hard topspin or short serves"],
+      "assessment_fields": ["two_person_pass_rating", "sideout_rate_vs_three_person", "libero_load", "attacker_freed_value"]
+    },
+    {
+      "record_type": "volleyball_seam_rule",
+      "id": "seam_rule_fixed_owner",
+      "title": "Fixed seam owner rule",
+      "level": "beginner_to_intermediate",
+      "rule_definition": "The same side owns seam balls unless a pre-serve exception is called.",
+      "use_when": ["players need simple clarity", "serve speeds are moderate", "team is still learning court geography"],
+      "implementation": ["coach names left-owns or right-owns", "serve seams repeatedly", "pause after drops to identify owner, not to blame communication only"],
+      "assessment_fields": ["seam_ball_owned_rate", "hesitation_errors", "communication_call_rate"]
+    },
+    {
+      "record_type": "volleyball_seam_rule",
+      "id": "seam_rule_libero_priority",
+      "title": "Libero priority seam rule",
+      "level": "intermediate_to_advanced",
+      "rule_definition": "The libero owns designated seam balls or has green light to cross into a teammate's lane under defined conditions.",
+      "use_when": ["libero is strongest passer", "outside hitter needs approach help", "opponent serves float seams"],
+      "implementation": ["declare zones where libero can steal", "outside adjusts starting width", "setter expects libero-targeted pass line"],
+      "assessment_fields": ["libero_steal_success_rate", "outside_freed_attack_rate", "seam_conflict_rate"]
+    },
+    {
+      "record_type": "volleyball_seam_rule",
+      "id": "seam_rule_short_deep_split",
+      "title": "Short/deep seam split",
+      "level": "intermediate_to_advanced",
+      "rule_definition": "One passer owns short seam balls and the other owns deep seam balls based on movement strengths and rotation demands.",
+      "use_when": ["one passer is better forward", "one passer is better deep", "server changes depth often"],
+      "implementation": ["name short owner and deep owner before serve", "train paired short-deep serve sequences", "adjust after server pattern changes"],
+      "assessment_fields": ["short_pickup_rate", "deep_pass_quality", "late_backward_errors"]
+    },
+    {
+      "record_type": "volleyball_assessment_metric",
+      "id": "serve_receive_quality_metric",
+      "title": "Serve-receive quality metric set",
+      "metric_fields": ["pass_grade_0_3", "overpass_flag", "serve_type", "serve_origin_zone", "serve_target_zone", "passer_role", "receive_rotation", "sideout_result", "first_ball_attack_quality"],
+      "reporting_views": ["by_passer", "by_rotation", "by_serve_type", "by_target_zone", "by_server"],
+      "coaching_use": "Identify whether the issue is a passer, a seam rule, a rotation pattern, a serve type, or an offensive conversion problem."
+    },
+    {
+      "record_type": "volleyball_assessment_metric",
+      "id": "serving_quality_metric",
+      "title": "Serving quality metric set",
+      "metric_fields": ["serve_type", "target_zone", "target_depth", "in_bounds", "miss_type", "ace", "opponent_pass_grade", "opponent_sideout", "serve_speed_optional", "risk_band"],
+      "reporting_views": ["by_server", "by_serve_type", "by_target", "by_score_state", "by_rotation"],
+      "coaching_use": "Separate servers who are merely consistent from servers who create point pressure, and identify when risk is no longer paying off."
+    },
+    {
+      "record_type": "volleyball_level_teaching_implication",
+      "id": "serving_receive_level_map",
+      "title": "Serving and receive level map",
+      "beginner": ["serve over and in from adapted distance", "forearm pass to target", "simple seam call", "five or four passers", "small-sided games"],
+      "intermediate": ["standing float to zones", "jump float introduction", "three-person receive", "pass quality grading", "serve target plans"],
+      "advanced": ["jump float and jump topspin choice", "rotation-specific targets", "two-person receive options", "libero green-light seam rules", "sideout and first-ball kill analytics"]
+    }
+  ]
+}

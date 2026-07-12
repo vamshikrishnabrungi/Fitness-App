@@ -58,6 +58,8 @@ const LOCATIONS: Location[] = [
   },
 ];
 
+const noWebFocus = { outlineStyle: 'none' } as any;
+
 export default function ExperienceScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -176,7 +178,7 @@ function LevelCard({
   return (
     <TouchableOpacity
       activeOpacity={0.86}
-      style={[styles.levelCard, selected && styles.levelCardSelected]}
+      style={[styles.levelCard, noWebFocus, selected && styles.levelCardSelected]}
       onPress={onPress}
     >
       <Text style={[styles.levelLabel, selected && styles.levelLabelSelected]}>{item.label}</Text>
@@ -199,15 +201,15 @@ function LocationRow({
   return (
     <TouchableOpacity
       activeOpacity={0.86}
-      style={[styles.locationRow, selected && styles.locationRowSelected]}
+      style={[styles.locationRow, noWebFocus, selected && styles.locationRowSelected]}
       onPress={onPress}
     >
       <View style={[styles.locationIcon, selected && styles.locationIconSelected]}>
         <Ionicons name={item.icon} size={20} color={selected ? colors.background : colors.textPrimary} />
       </View>
       <View style={styles.locationCopy}>
-        <Text style={styles.locationTitle}>{item.label}</Text>
-        <Text style={styles.locationDescription}>{item.description}</Text>
+        <Text style={[styles.locationTitle, selected && styles.locationTitleSelected]}>{item.label}</Text>
+        <Text style={[styles.locationDescription, selected && styles.locationDescriptionSelected]}>{item.description}</Text>
       </View>
       <View style={[styles.radio, selected && styles.radioSelected]}>
         {selected ? <View style={styles.radioDot} /> : null}
@@ -219,7 +221,7 @@ function LocationRow({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F6F4EF',
+    backgroundColor: colors.background,
   },
   progressWrap: {
     flexDirection: 'row',
@@ -233,7 +235,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 4,
     borderRadius: 2,
-    backgroundColor: 'rgba(17,17,17,0.08)',
+    backgroundColor: colors.separator,
   },
   progressFill: {
     width: '25%',
@@ -244,8 +246,8 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 15,
     lineHeight: 20,
-    fontWeight: '700',
-    color: '#8D8880',
+    fontWeight: '600',
+    color: colors.textTertiary,
   },
   scrollView: {
     flex: 1,
@@ -262,9 +264,9 @@ const styles = StyleSheet.create({
     paddingBottom: 22,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 16 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0,
     shadowRadius: 28,
-    elevation: 4,
+    elevation: 0,
   },
   coachRow: {
     flexDirection: 'row',
@@ -273,9 +275,9 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   coachMark: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: colors.textPrimary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -283,22 +285,22 @@ const styles = StyleSheet.create({
   eyebrow: {
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: '800',
-    letterSpacing: 0.8,
-    color: '#8D8880',
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    color: colors.textTertiary,
   },
   title: {
-    fontSize: 29,
-    lineHeight: 35,
-    fontWeight: '700',
+    fontSize: 27,
+    lineHeight: 33,
+    fontWeight: '600',
     color: colors.textPrimary,
-    letterSpacing: -0.2,
+    letterSpacing: 0,
     marginBottom: 12,
   },
   subtitle: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#756F67',
+    color: colors.textSecondary,
     marginBottom: 22,
   },
   sectionHeader: {
@@ -307,7 +309,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     lineHeight: 20,
-    fontWeight: '800',
+    fontWeight: '600',
     color: colors.textPrimary,
   },
   levelGrid: {
@@ -318,21 +320,21 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 72,
     borderRadius: 16,
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: 'transparent',
-    backgroundColor: '#F3F2EF',
+    backgroundColor: colors.surfaceSecondary,
     paddingHorizontal: 12,
     paddingVertical: 12,
     justifyContent: 'space-between',
   },
   levelCardSelected: {
-    backgroundColor: '#FBF7EF',
+    backgroundColor: colors.background,
     borderColor: colors.textPrimary,
   },
   levelLabel: {
     fontSize: 14,
     lineHeight: 18,
-    fontWeight: '800',
+    fontWeight: '600',
     color: colors.textPrimary,
   },
   levelLabelSelected: {
@@ -360,26 +362,26 @@ const styles = StyleSheet.create({
   },
   selectedNote: {
     borderRadius: 16,
-    backgroundColor: '#F8F6F2',
+    backgroundColor: colors.surfaceSecondary,
     padding: 14,
     marginTop: 14,
   },
   selectedNoteLabel: {
     fontSize: 12,
     lineHeight: 16,
-    fontWeight: '800',
+    fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 4,
   },
   selectedNoteText: {
     fontSize: 13,
     lineHeight: 19,
-    fontWeight: '600',
-    color: '#5F5A52',
+    fontWeight: '500',
+    color: colors.textSecondary,
   },
   divider: {
     height: 1,
-    backgroundColor: '#EEECE8',
+    backgroundColor: colors.separatorDark,
     marginVertical: 22,
   },
   locationList: {
@@ -388,9 +390,9 @@ const styles = StyleSheet.create({
   locationRow: {
     minHeight: 76,
     borderRadius: 18,
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: 'transparent',
-    backgroundColor: '#F3F2EF',
+    backgroundColor: colors.surfaceSecondary,
     paddingHorizontal: 14,
     paddingVertical: 12,
     flexDirection: 'row',
@@ -398,7 +400,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   locationRowSelected: {
-    backgroundColor: '#FBF7EF',
+    backgroundColor: colors.background,
     borderColor: colors.textPrimary,
   },
   locationIcon: {
@@ -416,16 +418,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   locationTitle: {
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 21,
-    fontWeight: '700',
+    fontWeight: '600',
     color: colors.textPrimary,
   },
   locationDescription: {
     fontSize: 12,
     lineHeight: 17,
-    color: '#756F67',
+    color: colors.textSecondary,
     marginTop: 3,
+  },
+  locationTitleSelected: {
+    color: colors.textPrimary,
+  },
+  locationDescriptionSelected: {
+    color: colors.textSecondary,
   },
   radio: {
     width: 22,
@@ -448,29 +456,29 @@ const styles = StyleSheet.create({
   },
   insight: {
     borderRadius: 16,
-    backgroundColor: '#F8F6F2',
+    backgroundColor: colors.surfaceSecondary,
     padding: 14,
     marginTop: 22,
   },
   insightLabel: {
     fontSize: 11,
     lineHeight: 15,
-    fontWeight: '800',
+    fontWeight: '700',
     letterSpacing: 0.6,
-    color: '#9A948B',
+    color: colors.textTertiary,
     textTransform: 'uppercase',
     marginBottom: 5,
   },
   insightText: {
     fontSize: 13,
     lineHeight: 19,
-    fontWeight: '600',
-    color: '#5F5A52',
+    fontWeight: '500',
+    color: colors.textSecondary,
   },
   bottom: {
     paddingHorizontal: 26,
     paddingTop: 18,
-    backgroundColor: '#F6F4EF',
+    backgroundColor: colors.background,
   },
   continueButton: {
     height: 62,
@@ -485,9 +493,9 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   continueText: {
-    fontSize: 18,
+    fontSize: 17,
     lineHeight: 23,
-    fontWeight: '800',
+    fontWeight: '700',
     color: colors.background,
   },
 });

@@ -1,0 +1,1771 @@
+{
+  "planning_rules": [
+    {
+      "id": "rule_training_age_beginner_to_intermediate",
+      "collection": "planning_rules",
+      "category": "progression_threshold",
+      "priority": 80,
+      "applies_to": [
+        "all_sports"
+      ],
+      "condition": {
+        "all": [
+          {
+            "field": "consistent_resistance_training_months",
+            "operator": ">=",
+            "value": 6
+          },
+          {
+            "field": "movement_quality",
+            "operator": "in",
+            "value": [
+              "acceptable",
+              "good"
+            ]
+          },
+          {
+            "field": "pain_status",
+            "operator": "==",
+            "value": "none_or_stable_low"
+          }
+        ]
+      },
+      "rule": "Move athlete from beginner loading options to intermediate progression options only after roughly 6 months of consistent resistance training plus stable technique.",
+      "recommended_action": [
+        "allow broader rep ranges",
+        "allow moderate intensity progression",
+        "allow greater exercise variation",
+        "keep progression one variable at a time"
+      ],
+      "blocked_action": [
+        "advanced contrast methods",
+        "complex Olympic lifts",
+        "high-intensity depth jumps",
+        "high-volume sprint exposure"
+      ],
+      "source_refs": [
+        "ACSM Progression Models in Resistance Training"
+      ],
+      "implementation_note": "Use training history and completion consistency, not only self-reported level."
+    },
+    {
+      "id": "rule_training_age_intermediate_to_advanced",
+      "collection": "planning_rules",
+      "category": "progression_threshold",
+      "priority": 75,
+      "applies_to": [
+        "all_sports"
+      ],
+      "condition": {
+        "all": [
+          {
+            "field": "consistent_resistance_training_years",
+            "operator": ">=",
+            "value": 2
+          },
+          {
+            "field": "recent_block_completion_rate",
+            "operator": ">=",
+            "value": 0.85
+          },
+          {
+            "field": "technique_stability",
+            "operator": "==",
+            "value": "stable"
+          },
+          {
+            "field": "readiness_trend",
+            "operator": "!=",
+            "value": "declining"
+          }
+        ]
+      },
+      "rule": "Unlock advanced strength planning only when the athlete has multi-year training history, stable technique, and can tolerate consistent loading without readiness decline.",
+      "recommended_action": [
+        "allow heavier periodized phases",
+        "allow higher specificity",
+        "allow selective advanced strength methods",
+        "monitor fatigue more tightly"
+      ],
+      "blocked_action": [
+        "advanced methods during congested competition blocks",
+        "advanced methods after layoff",
+        "advanced methods with unstable technique"
+      ],
+      "source_refs": [
+        "ACSM Progression Models in Resistance Training",
+        "NSCA periodization review"
+      ],
+      "implementation_note": "This is a conservative backend gate; no single universal strength number applies across all sports."
+    },
+    {
+      "id": "rule_unlock_low_level_plyometrics",
+      "collection": "planning_rules",
+      "category": "exercise_unlock",
+      "priority": 85,
+      "applies_to": [
+        "all_sports"
+      ],
+      "condition": {
+        "all": [
+          {
+            "field": "pain_status",
+            "operator": "in",
+            "value": [
+              "none",
+              "stable_low"
+            ]
+          },
+          {
+            "field": "landing_mechanics",
+            "operator": "in",
+            "value": [
+              "acceptable",
+              "good"
+            ]
+          },
+          {
+            "field": "single_leg_control",
+            "operator": "in",
+            "value": [
+              "acceptable",
+              "good"
+            ]
+          },
+          {
+            "field": "recent_high_impact_tolerance",
+            "operator": "!=",
+            "value": "poor"
+          }
+        ]
+      },
+      "rule": "Unlock low-level plyometrics when the athlete is pain-free or stable-low pain and can land, brace, and control basic positions.",
+      "recommended_action": [
+        "pogo hops",
+        "snap-downs",
+        "line hops",
+        "submaximal countermovement jumps",
+        "low contact volume"
+      ],
+      "blocked_action": [
+        "depth jumps",
+        "high hurdle hops",
+        "max-effort repeated bounds",
+        "fatigue-based plyometric circuits"
+      ],
+      "source_refs": [
+        "NSCA plyometric programming guidance",
+        "Plyometric exercise current concepts"
+      ],
+      "implementation_note": "Low-level plyos do not require the same strength gate as depth jumps."
+    },
+    {
+      "id": "rule_unlock_high_intensity_plyometrics",
+      "collection": "planning_rules",
+      "category": "exercise_unlock",
+      "priority": 90,
+      "applies_to": [
+        "jump_speed_power_sports",
+        "volleyball",
+        "basketball",
+        "soccer",
+        "combat_sports"
+      ],
+      "condition": {
+        "all": [
+          {
+            "field": "pain_status",
+            "operator": "==",
+            "value": "none"
+          },
+          {
+            "field": "landing_mechanics",
+            "operator": "==",
+            "value": "good"
+          },
+          {
+            "field": "training_level",
+            "operator": "in",
+            "value": [
+              "intermediate",
+              "advanced"
+            ]
+          },
+          {
+            "field": "lower_body_strength_capacity",
+            "operator": "in",
+            "value": [
+              "adequate",
+              "high"
+            ]
+          },
+          {
+            "field": "recent_jump_load_trend",
+            "operator": "!=",
+            "value": "high_and_declining_quality"
+          }
+        ]
+      },
+      "rule": "Reserve high-intensity reactive plyometrics for athletes with good mechanics, no pain, enough force capacity, and no current jump-load fatigue signal.",
+      "recommended_action": [
+        "depth-jump variants only when appropriate",
+        "low contact count",
+        "full rest between sets",
+        "do early in session before fatigue"
+      ],
+      "blocked_action": [
+        "depth jumps for beginners",
+        "depth jumps during tendon flare-up",
+        "extra reactive plyos in high jump-count weeks"
+      ],
+      "source_refs": [
+        "NSCA plyometric programming guidance",
+        "Allerheiligen plyometric program design"
+      ],
+      "implementation_note": "The often-cited 1.5x body-mass squat standard is best stored as a high-intensity depth-jump heuristic, not a universal plyometric rule."
+    },
+    {
+      "id": "rule_unlock_sprinting_max_velocity",
+      "collection": "planning_rules",
+      "category": "exercise_unlock",
+      "priority": 95,
+      "applies_to": [
+        "running_endurance",
+        "soccer",
+        "basketball",
+        "volleyball",
+        "combat_sports",
+        "cricket"
+      ],
+      "condition": {
+        "all": [
+          {
+            "field": "easy_running_tolerance",
+            "operator": "==",
+            "value": "stable"
+          },
+          {
+            "field": "gait_quality",
+            "operator": "==",
+            "value": "normal"
+          },
+          {
+            "field": "pain_24h_response",
+            "operator": "in",
+            "value": [
+              "none",
+              "returns_to_baseline"
+            ]
+          },
+          {
+            "field": "recent_layoff_weeks",
+            "operator": "<",
+            "value": 4
+          }
+        ]
+      },
+      "rule": "Unlock sprinting and max-velocity exposure only after easy running or submaximal running is tolerated with normal mechanics and stable 24-hour response.",
+      "recommended_action": [
+        "start with build-ups",
+        "start with submaximal accelerations",
+        "progress speed before volume",
+        "separate from heavy eccentric lower-body work"
+      ],
+      "blocked_action": [
+        "max velocity after 4+ week layoff without reconditioning",
+        "sprinting with altered gait",
+        "sprinting when symptoms worsen next day"
+      ],
+      "source_refs": [
+        "Ohio State Basic Return to Running Guideline",
+        "CU Return to Running Protocol",
+        "Sanford Return to Running Guidelines"
+      ],
+      "implementation_note": "Use symptom and gait gates because no universal max-speed numeric prerequisite exists."
+    },
+    {
+      "id": "rule_unlock_olympic_lift_derivatives",
+      "collection": "planning_rules",
+      "category": "exercise_unlock",
+      "priority": 70,
+      "applies_to": [
+        "power_sports",
+        "general_athletic_development",
+        "soccer",
+        "basketball",
+        "volleyball",
+        "combat_sports",
+        "cricket"
+      ],
+      "condition": {
+        "all": [
+          {
+            "field": "training_level",
+            "operator": "in",
+            "value": [
+              "intermediate",
+              "advanced"
+            ]
+          },
+          {
+            "field": "hinge_pattern",
+            "operator": "in",
+            "value": [
+              "acceptable",
+              "good"
+            ]
+          },
+          {
+            "field": "brace_quality",
+            "operator": "in",
+            "value": [
+              "acceptable",
+              "good"
+            ]
+          },
+          {
+            "field": "coach_supervision_or_video_feedback",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "rule": "Unlock low-complexity Olympic-lift derivatives before full clean/snatch variations.",
+      "recommended_action": [
+        "jump shrug",
+        "clean pull",
+        "hang high pull",
+        "mid-thigh pull",
+        "light technical derivatives"
+      ],
+      "blocked_action": [
+        "full snatch for unsupervised beginners",
+        "heavy catch variations with poor mobility",
+        "complex derivatives under fatigue"
+      ],
+      "source_refs": [
+        "NSCA Position Statement on Weightlifting",
+        "USA Weightlifting Level 1 course",
+        "Suchomel pulling derivatives"
+      ],
+      "implementation_note": "Full lifts require a higher technical gate than pulling derivatives."
+    },
+    {
+      "id": "rule_unlock_advanced_strength_methods",
+      "collection": "planning_rules",
+      "category": "exercise_unlock",
+      "priority": 70,
+      "applies_to": [
+        "all_sports"
+      ],
+      "condition": {
+        "all": [
+          {
+            "field": "training_level",
+            "operator": "==",
+            "value": "advanced"
+          },
+          {
+            "field": "recent_block_completion_rate",
+            "operator": ">=",
+            "value": 0.85
+          },
+          {
+            "field": "readiness_trend",
+            "operator": "in",
+            "value": [
+              "stable",
+              "improving"
+            ]
+          },
+          {
+            "field": "competition_density",
+            "operator": "in",
+            "value": [
+              "none",
+              "low",
+              "moderate"
+            ]
+          }
+        ]
+      },
+      "rule": "Advanced strength methods should only be used when simpler progressive overload is no longer sufficient and the athlete has enough recovery space.",
+      "recommended_action": [
+        "cluster sets",
+        "contrast training",
+        "heavy-light sequencing",
+        "velocity or RPE-guided top sets"
+      ],
+      "blocked_action": [
+        "advanced methods in match week",
+        "advanced methods during return-to-training",
+        "advanced methods when completion is poor"
+      ],
+      "source_refs": [
+        "ACSM Progression Models in Resistance Training",
+        "NSCA periodization review"
+      ],
+      "implementation_note": "Use as a planner upgrade, not a default method."
+    },
+    {
+      "id": "rule_hold_or_regress_pain_24h_response",
+      "collection": "planning_rules",
+      "category": "regression_rule",
+      "priority": 100,
+      "applies_to": [
+        "all_sports"
+      ],
+      "condition": {
+        "any": [
+          {
+            "field": "pain_quality",
+            "operator": "in",
+            "value": [
+              "sharp",
+              "worsening",
+              "joint_line",
+              "nerve_like"
+            ]
+          },
+          {
+            "field": "movement_compensation",
+            "operator": "==",
+            "value": true
+          },
+          {
+            "field": "pain_24h_response",
+            "operator": "==",
+            "value": "worse_or_not_baseline"
+          },
+          {
+            "field": "swelling_24h_response",
+            "operator": "==",
+            "value": "increased"
+          }
+        ]
+      },
+      "rule": "Do not progress. Reduce load, impact, range, or complexity until symptoms return to baseline.",
+      "recommended_action": [
+        "regress to previous tolerated tier",
+        "reduce volume by 30-50%",
+        "replace impact with low-impact conditioning",
+        "flag for clinical review if severe or persistent"
+      ],
+      "blocked_action": [
+        "new plyometrics",
+        "sprinting",
+        "heavy lower-body loading",
+        "high-volume sport conditioning"
+      ],
+      "source_refs": [
+        "Ohio State Basic Return to Running Guideline",
+        "Sanford Return to Running Guidelines",
+        "Silbernagel pain-monitoring model"
+      ],
+      "implementation_note": "This should override normal progression rules."
+    },
+    {
+      "id": "rule_hold_for_low_sleep",
+      "collection": "planning_rules",
+      "category": "readiness_adjustment",
+      "priority": 90,
+      "applies_to": [
+        "all_sports"
+      ],
+      "condition": {
+        "any": [
+          {
+            "field": "last_night_sleep_hours",
+            "operator": "<",
+            "value": 6
+          },
+          {
+            "field": "sleep_trend_3d",
+            "operator": "==",
+            "value": "poor"
+          },
+          {
+            "field": "subjective_readiness",
+            "operator": "<=",
+            "value": 4
+          }
+        ]
+      },
+      "rule": "Avoid adding new high-speed, high-impact, or high-skill/high-load stressors on low-sleep days.",
+      "recommended_action": [
+        "reduce volume by 20-40%",
+        "keep technical work submaximal",
+        "use mobility or recovery session",
+        "keep strength at maintenance intensity if needed"
+      ],
+      "blocked_action": [
+        "new sprint exposure",
+        "high-intensity plyometrics",
+        "technical Olympic lift progression",
+        "max testing"
+      ],
+      "source_refs": [
+        "Athlete sleep and injury-risk reviews",
+        "ACSM sports medicine sleep summary"
+      ],
+      "implementation_note": "Sleep threshold is an operational safety rule; combine with readiness and RPE when available."
+    },
+    {
+      "id": "rule_hold_for_high_rpe_or_poor_completion",
+      "collection": "planning_rules",
+      "category": "readiness_adjustment",
+      "priority": 85,
+      "applies_to": [
+        "all_sports"
+      ],
+      "condition": {
+        "any": [
+          {
+            "field": "session_rpe_previous",
+            "operator": ">=",
+            "value": 9
+          },
+          {
+            "field": "planned_session_completion_rate_7d",
+            "operator": "<",
+            "value": 0.7
+          },
+          {
+            "field": "rpe_trend_7d",
+            "operator": "==",
+            "value": "rising"
+          },
+          {
+            "field": "readiness_trend_7d",
+            "operator": "==",
+            "value": "declining"
+          }
+        ]
+      },
+      "rule": "Hold progression and repeat, reduce, or simplify the current tier when effort is excessive or completion is poor.",
+      "recommended_action": [
+        "repeat current week",
+        "reduce set volume",
+        "remove one high-intensity element",
+        "prioritize consistency before unlocking riskier work"
+      ],
+      "blocked_action": [
+        "progressive overload increase",
+        "new advanced exercise unlock",
+        "extra conditioning"
+      ],
+      "source_refs": [
+        "Session-RPE monitoring literature",
+        "ACSM Progression Models in Resistance Training"
+      ],
+      "implementation_note": "Completion gate is an SFTC operational heuristic, not a universal published cutoff."
+    },
+    {
+      "id": "rule_layoff_return_to_training",
+      "collection": "planning_rules",
+      "category": "return_to_training",
+      "priority": 95,
+      "applies_to": [
+        "all_sports"
+      ],
+      "condition": {
+        "any": [
+          {
+            "field": "recent_layoff_weeks",
+            "operator": ">=",
+            "value": 4
+          },
+          {
+            "field": "recent_injury_status",
+            "operator": "in",
+            "value": [
+              "returning",
+              "uncertain"
+            ]
+          },
+          {
+            "field": "detraining_flag",
+            "operator": "==",
+            "value": true
+          }
+        ]
+      },
+      "rule": "Downshift one or more training tiers after a meaningful layoff and rebuild exposure gradually before resuming prior speed, plyometric, or high-load work.",
+      "recommended_action": [
+        "use return-to-training template",
+        "reduce volume by 30-50% from previous peak",
+        "restore movement quality",
+        "progress impact every other day when returning to running"
+      ],
+      "blocked_action": [
+        "resume previous peak week",
+        "max velocity sprinting",
+        "high-intensity plyometrics",
+        "testing in week one"
+      ],
+      "source_refs": [
+        "Ohio State Basic Return to Running Guideline",
+        "Return-to-run clinical protocols"
+      ],
+      "implementation_note": "For strength sports, exact layoff thresholds are less standardized; use conservative tier downshift."
+    },
+    {
+      "id": "rule_monotony_red_flag",
+      "collection": "planning_rules",
+      "category": "fatigue_monitoring",
+      "priority": 80,
+      "applies_to": [
+        "all_sports_with_srpe_tracking"
+      ],
+      "condition": {
+        "all": [
+          {
+            "field": "training_monotony_7d",
+            "operator": ">",
+            "value": 2.0
+          },
+          {
+            "field": "readiness_trend_7d",
+            "operator": "==",
+            "value": "declining"
+          }
+        ]
+      },
+      "rule": "Insert a load-reduction or maintenance microcycle when monotony is high and readiness is worsening.",
+      "recommended_action": [
+        "increase day-to-day load variation",
+        "reduce total load",
+        "remove one hard session",
+        "recheck readiness before resuming progression"
+      ],
+      "blocked_action": [
+        "linear weekly load increase",
+        "additional conditioning",
+        "new high-impact work"
+      ],
+      "source_refs": [
+        "Volleyball load-monitoring literature",
+        "Session-RPE monitoring review"
+      ],
+      "implementation_note": "Use only when SFTC has reliable sRPE/load tracking."
+    }
+  ],
+  "sport_profiles": [
+    {
+      "id": "sport_profile_cricket",
+      "collection": "sport_profiles",
+      "sport": "cricket",
+      "role_variants": [
+        "fast_bowler",
+        "spin_bowler",
+        "batter",
+        "wicketkeeper",
+        "all_rounder"
+      ],
+      "planning_summary": "Role-specific sport with especially strict workload protection for fast bowlers. Bowling exposure, throwing load, fielding speed, trunk capacity, and shoulder health must be tracked separately.",
+      "key_physical_qualities": [
+        "lower_body_strength",
+        "rotational_power",
+        "anti_rotation",
+        "repeated_sprint_ability",
+        "shoulder_robustness",
+        "lumbo_pelvic_control"
+      ],
+      "realistic_weekly_frequency": {
+        "off_season": {
+          "gym": "2-4",
+          "sport_practice": "1-3"
+        },
+        "pre_season": {
+          "gym": "2-3",
+          "sport_practice": "3-5"
+        },
+        "in_season": {
+          "gym": "1-2",
+          "sport_practice": "2-4"
+        }
+      },
+      "common_injury_or_load_risks": [
+        "lumbar_bone_stress_fast_bowlers",
+        "shoulder_throwing_load",
+        "hamstring_load",
+        "adductor_load",
+        "role_asymmetry"
+      ],
+      "do_not_pair": [
+        "heavy_bowling_day + high_spinal_loading",
+        "high_bowling_week + extra_exhaustive_conditioning",
+        "heavy_lower_body_strength + next_day_high_volume_bowling"
+      ],
+      "progression_guardrails": [
+        "fast_bowler_load_caps_required_for_youth",
+        "increase_bowling_exposure_gradually",
+        "preserve_monthly_bowling_continuity",
+        "downgrade_gym_stress_after_high_bowling_load"
+      ],
+      "planning_rule_ids": [
+        "rule_layoff_return_to_training",
+        "rule_hold_or_regress_pain_24h_response",
+        "rule_unlock_sprinting_max_velocity"
+      ],
+      "source_refs": [
+        "Cricket Australia Junior Pace Bowling Guidelines",
+        "ECB Recreational Fast Bowling Guidance 2024",
+        "ASCA professional cricket skill-conditioning case study"
+      ]
+    },
+    {
+      "id": "sport_profile_volleyball",
+      "collection": "sport_profiles",
+      "sport": "volleyball",
+      "role_variants": [
+        "outside_hitter",
+        "middle_blocker",
+        "opposite",
+        "setter",
+        "libero"
+      ],
+      "planning_summary": "Jump load, landing exposure, overhead volume, and tendon health drive planning. In-season strength should maintain output while limiting soreness and unnecessary extra contacts.",
+      "key_physical_qualities": [
+        "jump_power",
+        "reactive_strength",
+        "landing_control",
+        "shoulder_robustness",
+        "trunk_stiffness",
+        "repeat_jump_ability"
+      ],
+      "realistic_weekly_frequency": {
+        "off_season": {
+          "gym": "2-4",
+          "sport_practice": "2-4"
+        },
+        "pre_season": {
+          "gym": "2-3",
+          "sport_practice": "4-6"
+        },
+        "in_season": {
+          "gym": "1-2",
+          "sport_practice": "3-4"
+        }
+      },
+      "common_injury_or_load_risks": [
+        "ankle_sprain",
+        "patellar_tendinopathy",
+        "shoulder_overuse",
+        "low_back_pain"
+      ],
+      "do_not_pair": [
+        "high_jump_count_practice + extra_lower_body_plyometrics",
+        "dense_match_week + depth_jumps",
+        "high_overhead_volume + fatiguing_shoulder_accessories"
+      ],
+      "progression_guardrails": [
+        "track_jump_count_and_jump_quality",
+        "reduce_jump_contacts_if_jump_height_declines",
+        "prioritize_landing_before_reactive_plyometrics",
+        "use_one_to_two_inseason_lifts"
+      ],
+      "planning_rule_ids": [
+        "rule_unlock_low_level_plyometrics",
+        "rule_unlock_high_intensity_plyometrics",
+        "rule_monotony_red_flag",
+        "rule_hold_or_regress_pain_24h_response"
+      ],
+      "source_refs": [
+        "USA Volleyball Strength and Conditioning in Volleyball",
+        "FIVB injury prevention guidance",
+        "Collegiate male volleyball load study"
+      ]
+    },
+    {
+      "id": "sport_profile_soccer",
+      "collection": "sport_profiles",
+      "sport": "soccer_football",
+      "role_variants": [
+        "goalkeeper",
+        "central_defender",
+        "fullback",
+        "midfielder",
+        "winger",
+        "forward"
+      ],
+      "planning_summary": "Use a match-centered microcycle. Heavier field and gym work belongs farther from match day; MD-2 and MD-1 should reduce fatigue. Starters and low-minute players need different post-match logic.",
+      "key_physical_qualities": [
+        "relative_strength",
+        "acceleration",
+        "max_velocity",
+        "change_of_direction",
+        "repeated_sprint_ability",
+        "hamstring_adductor_calf_robustness"
+      ],
+      "realistic_weekly_frequency": {
+        "off_season": {
+          "gym": "2-4",
+          "sport_practice": "2-4"
+        },
+        "pre_season": {
+          "gym": "2",
+          "sport_practice": "4-6"
+        },
+        "in_season": {
+          "gym": "1-2",
+          "sport_practice": "3-5 one-match week; 2-4 congested week"
+        }
+      },
+      "common_injury_or_load_risks": [
+        "hamstring_strain",
+        "adductor_groin_pain",
+        "ankle_sprain",
+        "acl_knee_load",
+        "fixture_congestion_fatigue"
+      ],
+      "do_not_pair": [
+        "max_speed_sprinting + heavy_eccentric_hamstring_work_when_fatigued",
+        "heavy_lower_body_strength + MD_minus_2_or_MD_minus_1",
+        "two_hard_conditioning_days + hard_strength_without_recovery"
+      ],
+      "progression_guardrails": [
+        "separate_one_match_week_and_two_match_week_templates",
+        "maintain_at_least_one_strength_touch_inseason",
+        "top_up_low_minute_players_after_match",
+        "recover_high_minute_players_after_match"
+      ],
+      "planning_rule_ids": [
+        "rule_unlock_sprinting_max_velocity",
+        "rule_hold_or_regress_pain_24h_response",
+        "rule_training_age_beginner_to_intermediate"
+      ],
+      "source_refs": [
+        "Silva et al. soccer strength review",
+        "Ammann et al. professional soccer microcycle study",
+        "Elite youth soccer microcycle study",
+        "UEFA Elite Club Injury Study"
+      ]
+    },
+    {
+      "id": "sport_profile_running_endurance",
+      "collection": "sport_profiles",
+      "sport": "running_endurance",
+      "role_variants": [
+        "5k_10k",
+        "middle_distance",
+        "half_marathon",
+        "marathon",
+        "general_endurance"
+      ],
+      "planning_summary": "Aerobic-dominant planning with careful quality placement, conservative run-volume progression, consistent strength support, and tapering by volume reduction before priority races.",
+      "key_physical_qualities": [
+        "aerobic_capacity",
+        "running_economy",
+        "threshold_power",
+        "tissue_durability",
+        "event_specific_speed",
+        "lower_leg_robustness"
+      ],
+      "realistic_weekly_frequency": {
+        "off_season": {
+          "gym": "2-3",
+          "sport_practice": "3-6 beginner/intermediate runs; 6-12+ advanced sessions"
+        },
+        "pre_season": {
+          "gym": "2",
+          "sport_practice": "4-7 non-elite runs; 10-14 elite sessions"
+        },
+        "in_season": {
+          "gym": "1-2",
+          "sport_practice": "race-dependent; mostly low-intensity volume"
+        }
+      },
+      "common_injury_or_load_risks": [
+        "bone_stress_injury",
+        "achilles_calf_overload",
+        "patellar_tendon_irritation",
+        "rapid_mileage_spike",
+        "low_energy_availability_or_sleep_deficit"
+      ],
+      "do_not_pair": [
+        "mileage_spike + new_speed_or_hill_work",
+        "heavy_lower_body_strength + next_day_key_run",
+        "two_quality_runs + hard_lower_body_lift_without_recovery"
+      ],
+      "progression_guardrails": [
+        "keep_most_volume_low_intensity",
+        "add_one_variable_at_a_time",
+        "use_symptom_led_return_to_run",
+        "taper_by_reducing_volume_not_eliminating_intensity"
+      ],
+      "planning_rule_ids": [
+        "rule_unlock_sprinting_max_velocity",
+        "rule_layoff_return_to_training",
+        "rule_hold_or_regress_pain_24h_response",
+        "rule_hold_for_low_sleep"
+      ],
+      "source_refs": [
+        "Haugen et al. world-class distance running review",
+        "Strength training in distance runners review",
+        "Endurance taper meta-analysis",
+        "Ohio State return-to-running guideline"
+      ]
+    },
+    {
+      "id": "sport_profile_basketball",
+      "collection": "sport_profiles",
+      "sport": "basketball",
+      "role_variants": [
+        "guard",
+        "wing",
+        "forward",
+        "center"
+      ],
+      "planning_summary": "Long season, travel, game congestion, jump exposure, ankle risk, and patellar tendon load shape planning. In-season lifting is usually one to two short total-body sessions.",
+      "key_physical_qualities": [
+        "relative_strength",
+        "vertical_power",
+        "horizontal_power",
+        "deceleration",
+        "change_of_direction",
+        "ankle_control",
+        "repeat_effort_capacity"
+      ],
+      "realistic_weekly_frequency": {
+        "off_season": {
+          "gym": "2-4",
+          "sport_practice": "2-4"
+        },
+        "pre_season": {
+          "gym": "2-3",
+          "sport_practice": "4-6"
+        },
+        "in_season": {
+          "gym": "1-2",
+          "sport_practice": "2-4 depending on game density"
+        }
+      },
+      "common_injury_or_load_risks": [
+        "ankle_sprain",
+        "chronic_ankle_instability",
+        "patellar_tendinopathy",
+        "knee_load",
+        "travel_fatigue"
+      ],
+      "do_not_pair": [
+        "high_jump_practice + extra_lower_body_plyometrics",
+        "heavy_squatting + back_to_back_games",
+        "hard_COD_conditioning + tendon_flare_up"
+      ],
+      "progression_guardrails": [
+        "protect_high_minute_players_from_extra_fatigue",
+        "use_top_up_work_for_low_minute_players",
+        "treat_ankle_history_and_tendon_pain_as_planning_modifiers",
+        "use_low_soreness_inseason_strength"
+      ],
+      "planning_rule_ids": [
+        "rule_unlock_low_level_plyometrics",
+        "rule_unlock_high_intensity_plyometrics",
+        "rule_hold_or_regress_pain_24h_response",
+        "rule_hold_for_low_sleep"
+      ],
+      "source_refs": [
+        "Human Kinetics in-season basketball training excerpt",
+        "Basketball load monitoring systematic review",
+        "FIBA patellar tendinopathy bulletin",
+        "Chronic ankle instability in basketball study"
+      ]
+    },
+    {
+      "id": "sport_profile_combat_sports",
+      "collection": "sport_profiles",
+      "sport": "combat_sports",
+      "role_variants": [
+        "striking",
+        "grappling",
+        "mixed_rules",
+        "wrestling",
+        "judo"
+      ],
+      "planning_summary": "Technical training stays central, while strength, conditioning, sparring, tapering, and weight management must be sequenced to avoid camp fatigue and unsafe dehydration-driven planning.",
+      "key_physical_qualities": [
+        "relative_strength",
+        "power",
+        "repeat_high_intensity_efforts",
+        "grip_or_clinch_strength",
+        "neck_trunk_robustness",
+        "technical_efficiency_under_fatigue"
+      ],
+      "realistic_weekly_frequency": {
+        "off_season": {
+          "gym": "2-4",
+          "sport_practice": "3-6"
+        },
+        "pre_season_or_camp": {
+          "gym": "2-3",
+          "sport_practice": "4-8"
+        },
+        "in_season_or_fight_phase": {
+          "gym": "1-2",
+          "sport_practice": "3-6"
+        }
+      },
+      "common_injury_or_load_risks": [
+        "rapid_weight_loss_dehydration",
+        "head_contact_trauma",
+        "shoulder_knee_overuse",
+        "camp_fatigue_from_hard_sparring"
+      ],
+      "do_not_pair": [
+        "hard_sparring + maximal_conditioning + heavy_lifting_same_24_48h",
+        "large_dehydration + high_intensity_training",
+        "bout_week + high_DOMS_strength_work"
+      ],
+      "progression_guardrails": [
+        "separate_body_mass_management_from_conditioning",
+        "use_taper_before_priority_competition",
+        "reduce_hard_sparring_near_bout",
+        "avoid_conditioning_as_late_stage_weight_cut_tool"
+      ],
+      "planning_rule_ids": [
+        "rule_hold_for_low_sleep",
+        "rule_hold_or_regress_pain_24h_response",
+        "rule_unlock_olympic_lift_derivatives",
+        "rule_unlock_advanced_strength_methods"
+      ],
+      "source_refs": [
+        "UWW Coach Education Programme",
+        "IJF Academy Level 2 Judo Coach",
+        "NCAA Wrestling Weight Management Program",
+        "ACSM weight-category sports consensus"
+      ]
+    }
+  ],
+  "macro_plan_templates": [
+    {
+      "id": "template_beginner_foundation_24w",
+      "collection": "macro_plan_templates",
+      "name": "Beginner Foundation 24 Weeks",
+      "applies_when": [
+        "new_user",
+        "poor_movement_quality",
+        "low_training_history",
+        "pain_or_low_readiness",
+        "returning_after_long_break"
+      ],
+      "macro_length_weeks": 24,
+      "phase_sequence": [
+        {
+          "phase": "foundation_rebuild",
+          "weeks": "1-4",
+          "primary_goals": [
+            "movement_quality",
+            "habit_formation",
+            "mobility",
+            "basic_aerobic_base"
+          ],
+          "gym_frequency": "2-3/week",
+          "sport_frequency": "1-3/week depending on sport and pain",
+          "progression_logic": "Only progress if completion is stable and pain returns to baseline within 24h.",
+          "deload_logic": "Week 4 reduce volume 20-30% if readiness declines; otherwise hold load."
+        },
+        {
+          "phase": "basic_strength_capacity",
+          "weeks": "5-12",
+          "primary_goals": [
+            "squat_hinge_lunge_push_pull_carry",
+            "trunk_control",
+            "low_impact_conditioning"
+          ],
+          "gym_frequency": "2-3/week",
+          "sport_frequency": "2-4/week",
+          "progression_logic": "Increase volume first, then intensity. Add low-level plyometrics only if movement gate passes.",
+          "deload_logic": "Every 4th week reduce volume or complexity."
+        },
+        {
+          "phase": "controlled_athletic_exposure",
+          "weeks": "13-20",
+          "primary_goals": [
+            "low_level_plyometrics",
+            "submaximal_acceleration",
+            "sport_specific_capacity"
+          ],
+          "gym_frequency": "2-3/week",
+          "sport_frequency": "2-5/week",
+          "progression_logic": "Progress impact and speed separately; do not increase both in same week.",
+          "deload_logic": "Use readiness-based deload."
+        },
+        {
+          "phase": "transition_to_intermediate",
+          "weeks": "21-24",
+          "primary_goals": [
+            "stable_training_rhythm",
+            "testing_baseline",
+            "block_readiness_assessment"
+          ],
+          "gym_frequency": "2-3/week",
+          "sport_frequency": "sport-dependent",
+          "progression_logic": "Move to intermediate only if training history, completion, pain, and movement gates pass.",
+          "deload_logic": "Week 24 testing or low-volume consolidation."
+        }
+      ],
+      "linked_planning_rule_ids": [
+        "rule_training_age_beginner_to_intermediate",
+        "rule_unlock_low_level_plyometrics",
+        "rule_hold_or_regress_pain_24h_response",
+        "rule_layoff_return_to_training"
+      ]
+    },
+    {
+      "id": "template_strength_base_24w",
+      "collection": "macro_plan_templates",
+      "name": "Strength Base 24 Weeks",
+      "applies_when": [
+        "athlete_needs_force_production",
+        "low_strength_base",
+        "off_season",
+        "general_preparation"
+      ],
+      "macro_length_weeks": 24,
+      "phase_sequence": [
+        {
+          "phase": "accumulation",
+          "weeks": "1-8",
+          "primary_goals": [
+            "work_capacity",
+            "hypertrophy_if_needed",
+            "movement_quality",
+            "tissue_capacity"
+          ],
+          "gym_frequency": "3-4/week off-season; 2-3/week if sport practice is high",
+          "sport_frequency": "sport-dependent low-to-moderate intensity",
+          "progression_logic": "Build volume gradually before pushing load.",
+          "deload_logic": "Deload week 4 or 8 based on readiness."
+        },
+        {
+          "phase": "max_strength_development",
+          "weeks": "9-16",
+          "primary_goals": [
+            "lower_body_strength",
+            "upper_body_strength",
+            "trunk_stiffness",
+            "posterior_chain_capacity"
+          ],
+          "gym_frequency": "3/week typical",
+          "sport_frequency": "moderate; keep high-intensity sport work controlled",
+          "progression_logic": "Increase intensity while trimming junk volume.",
+          "deload_logic": "Deload every 4th week or after high RPE trend."
+        },
+        {
+          "phase": "strength_to_power_bridge",
+          "weeks": "17-22",
+          "primary_goals": [
+            "rate_of_force_development",
+            "intro_power_derivatives",
+            "low_volume_plyometrics"
+          ],
+          "gym_frequency": "2-3/week",
+          "sport_frequency": "increases toward specific prep",
+          "progression_logic": "Add power only after strength and technique gates pass.",
+          "deload_logic": "Reduce volume, keep quality."
+        },
+        {
+          "phase": "consolidation_and_testing",
+          "weeks": "23-24",
+          "primary_goals": [
+            "benchmark_strength",
+            "movement_review",
+            "next_template_selection"
+          ],
+          "gym_frequency": "2/week",
+          "sport_frequency": "sport-dependent",
+          "progression_logic": "Test submaximal or technical benchmarks; avoid max testing if readiness poor.",
+          "deload_logic": "Low volume testing week."
+        }
+      ],
+      "linked_planning_rule_ids": [
+        "rule_training_age_intermediate_to_advanced",
+        "rule_unlock_advanced_strength_methods",
+        "rule_unlock_olympic_lift_derivatives",
+        "rule_hold_for_high_rpe_or_poor_completion"
+      ]
+    },
+    {
+      "id": "template_power_conversion_12w",
+      "collection": "macro_plan_templates",
+      "name": "Power Conversion 12 Weeks",
+      "applies_when": [
+        "strength_base_exists",
+        "sport_requires_jumping_sprinting_throwing_striking",
+        "pre_season"
+      ],
+      "macro_length_weeks": 12,
+      "phase_sequence": [
+        {
+          "phase": "power_skill_intro",
+          "weeks": "1-4",
+          "primary_goals": [
+            "low_volume_power",
+            "landing_quality",
+            "submaximal_speed",
+            "technical_lift_derivatives"
+          ],
+          "gym_frequency": "2-3/week",
+          "sport_frequency": "3-5/week",
+          "progression_logic": "Keep reps low and intent high; avoid fatigue circuits.",
+          "deload_logic": "Week 4 reduce contacts and accessory volume."
+        },
+        {
+          "phase": "high_quality_power",
+          "weeks": "5-8",
+          "primary_goals": [
+            "jump_power",
+            "sprint_acceleration",
+            "medicine_ball_or_striking_power",
+            "olympic_lift_derivatives"
+          ],
+          "gym_frequency": "2-3/week",
+          "sport_frequency": "4-6/week",
+          "progression_logic": "Progress intensity or complexity, not total fatigue.",
+          "deload_logic": "Reduce volume if jump/speed quality drops."
+        },
+        {
+          "phase": "sport_power_integration",
+          "weeks": "9-12",
+          "primary_goals": [
+            "sport_specific_power",
+            "freshness",
+            "competition_readiness"
+          ],
+          "gym_frequency": "1-2/week",
+          "sport_frequency": "sport-dependent high specificity",
+          "progression_logic": "Maintain output and reduce residual fatigue.",
+          "deload_logic": "Taper in final 7-14 days before priority event if applicable."
+        }
+      ],
+      "linked_planning_rule_ids": [
+        "rule_unlock_high_intensity_plyometrics",
+        "rule_unlock_sprinting_max_velocity",
+        "rule_unlock_olympic_lift_derivatives",
+        "rule_hold_for_low_sleep"
+      ]
+    },
+    {
+      "id": "template_speed_agility_16w",
+      "collection": "macro_plan_templates",
+      "name": "Speed and Agility 16 Weeks",
+      "applies_when": [
+        "field_sport",
+        "court_sport",
+        "needs_acceleration_deceleration_COD",
+        "adequate_tissue_tolerance"
+      ],
+      "macro_length_weeks": 16,
+      "phase_sequence": [
+        {
+          "phase": "mechanics_and_capacity",
+          "weeks": "1-4",
+          "primary_goals": [
+            "acceleration_mechanics",
+            "deceleration_mechanics",
+            "ankle_calf_capacity",
+            "adductor_hamstring_capacity"
+          ],
+          "gym_frequency": "2-3/week",
+          "sport_frequency": "2-4/week",
+          "progression_logic": "Start with submaximal exposures and controlled deceleration.",
+          "deload_logic": "Reduce sprint volume if soreness or mechanics worsen."
+        },
+        {
+          "phase": "acceleration_and_COD",
+          "weeks": "5-10",
+          "primary_goals": [
+            "acceleration",
+            "lateral_movement",
+            "planned_COD",
+            "reactive_progression"
+          ],
+          "gym_frequency": "2/week",
+          "sport_frequency": "3-5/week",
+          "progression_logic": "Increase intensity before volume; separate max-speed from heavy eccentric work.",
+          "deload_logic": "Every 4th week or readiness-triggered."
+        },
+        {
+          "phase": "max_velocity_and_reactive_agility",
+          "weeks": "11-14",
+          "primary_goals": [
+            "max_velocity_exposure",
+            "reactive_agility",
+            "sport_specific_speed"
+          ],
+          "gym_frequency": "1-2/week",
+          "sport_frequency": "4-6/week",
+          "progression_logic": "Use low-volume high-quality exposure; stop when quality drops.",
+          "deload_logic": "Reduce volume, maintain speed touches."
+        },
+        {
+          "phase": "competition_transfer",
+          "weeks": "15-16",
+          "primary_goals": [
+            "freshness",
+            "specificity",
+            "match_week_integration"
+          ],
+          "gym_frequency": "1-2/week",
+          "sport_frequency": "sport-dependent",
+          "progression_logic": "Move to competition-week logic if match exists.",
+          "deload_logic": "Taper volume in final week."
+        }
+      ],
+      "linked_planning_rule_ids": [
+        "rule_unlock_sprinting_max_velocity",
+        "rule_hold_or_regress_pain_24h_response",
+        "rule_monotony_red_flag"
+      ]
+    },
+    {
+      "id": "template_inseason_maintenance_24w",
+      "collection": "macro_plan_templates",
+      "name": "In-Season Maintenance 24 Weeks",
+      "applies_when": [
+        "active_competition_season",
+        "frequent_matches",
+        "performance_readiness_priority"
+      ],
+      "macro_length_weeks": 24,
+      "phase_sequence": [
+        {
+          "phase": "early_inseason_stabilization",
+          "weeks": "1-4",
+          "primary_goals": [
+            "preserve_strength",
+            "preserve_power",
+            "manage_soreness",
+            "adjust_to_match_load"
+          ],
+          "gym_frequency": "1-2/week",
+          "sport_frequency": "sport-dependent",
+          "progression_logic": "No aggressive overload; establish maintenance dose.",
+          "deload_logic": "Reduce gym volume after high match minutes."
+        },
+        {
+          "phase": "main_inseason_rotation",
+          "weeks": "5-20",
+          "primary_goals": [
+            "maintenance",
+            "readiness",
+            "injury_risk_reduction",
+            "top_up_low_minute_players"
+          ],
+          "gym_frequency": "1-2/week",
+          "sport_frequency": "sport-dependent",
+          "progression_logic": "Use match calendar first, gym second.",
+          "deload_logic": "Auto-deload during congested weeks."
+        },
+        {
+          "phase": "late_season_freshness",
+          "weeks": "21-24",
+          "primary_goals": [
+            "freshness",
+            "low_soreness_power",
+            "recovery",
+            "availability"
+          ],
+          "gym_frequency": "1/week or micro-dose",
+          "sport_frequency": "sport-dependent",
+          "progression_logic": "Maintain intensity touch, reduce volume.",
+          "deload_logic": "Use competition-week rules before key matches."
+        }
+      ],
+      "linked_planning_rule_ids": [
+        "rule_hold_for_low_sleep",
+        "rule_hold_for_high_rpe_or_poor_completion",
+        "rule_monotony_red_flag"
+      ]
+    },
+    {
+      "id": "template_return_to_training_8w",
+      "collection": "macro_plan_templates",
+      "name": "Return To Training 8 Weeks",
+      "applies_when": [
+        "pain_history",
+        "recent_injury",
+        "recent_layoff_4_plus_weeks",
+        "low_readiness"
+      ],
+      "macro_length_weeks": 8,
+      "phase_sequence": [
+        {
+          "phase": "re_entry",
+          "weeks": "1-2",
+          "primary_goals": [
+            "pain_monitoring",
+            "movement_quality",
+            "low_impact_capacity"
+          ],
+          "gym_frequency": "2/week",
+          "sport_frequency": "0-2 low intensity",
+          "progression_logic": "Progress only if 24-hour response is stable.",
+          "deload_logic": "No deload; stay conservative."
+        },
+        {
+          "phase": "capacity_restore",
+          "weeks": "3-6",
+          "primary_goals": [
+            "basic_strength",
+            "aerobic_base",
+            "gradual_impact",
+            "tissue_capacity"
+          ],
+          "gym_frequency": "2-3/week",
+          "sport_frequency": "1-3 progressive",
+          "progression_logic": "Increase only one variable per week: volume, intensity, impact, or complexity.",
+          "deload_logic": "Hold or regress immediately if pain response fails."
+        },
+        {
+          "phase": "reconditioning_bridge",
+          "weeks": "7-8",
+          "primary_goals": [
+            "submaximal_speed",
+            "low_level_plyometrics_if_cleared",
+            "sport_reintegration"
+          ],
+          "gym_frequency": "2/week",
+          "sport_frequency": "2-4 progressive",
+          "progression_logic": "Unlock normal template only after completion, pain, and readiness gates pass.",
+          "deload_logic": "Week 8 assessment and consolidation."
+        }
+      ],
+      "linked_planning_rule_ids": [
+        "rule_layoff_return_to_training",
+        "rule_hold_or_regress_pain_24h_response",
+        "rule_unlock_low_level_plyometrics",
+        "rule_unlock_sprinting_max_velocity"
+      ]
+    }
+  ],
+  "competition_week_rules": [
+    {
+      "id": "cw_rule_team_sports_md_minus_1",
+      "collection": "competition_week_rules",
+      "category": "match_day_minus_1",
+      "applies_to": [
+        "soccer",
+        "volleyball",
+        "basketball",
+        "cricket"
+      ],
+      "condition": {
+        "field": "hours_until_match",
+        "operator": "<=",
+        "value": 24
+      },
+      "rule": "Avoid high-volume lower-body strength, exhaustive conditioning, high-impact plyometric load, and novel exercises.",
+      "recommended_focus": [
+        "mobility",
+        "activation",
+        "technical_rehearsal",
+        "low_volume_neural_primer",
+        "recovery"
+      ],
+      "source_refs": [
+        "Professional soccer microcycle studies",
+        "USA Volleyball guidance",
+        "Human Kinetics basketball in-season guidance"
+      ]
+    },
+    {
+      "id": "cw_rule_soccer_one_match_week",
+      "collection": "competition_week_rules",
+      "category": "sport_specific_microcycle",
+      "applies_to": [
+        "soccer"
+      ],
+      "condition": {
+        "field": "matches_next_7d",
+        "operator": "==",
+        "value": 1
+      },
+      "structure": {
+        "MD_minus_3": [
+          "highest_or_near_highest_field_load",
+          "main_speed_or_power_stimulus",
+          "controlled_lift_if_used"
+        ],
+        "MD_minus_2": [
+          "reduced_volume",
+          "tactical_focus",
+          "no_exhaustive_strength"
+        ],
+        "MD_minus_1": [
+          "activation",
+          "brief_speed_primer",
+          "very_low_fatigue"
+        ],
+        "MD": [
+          "match_warm_up",
+          "readiness"
+        ],
+        "MD_plus_1_to_2": [
+          "recovery_for_starters",
+          "top_up_conditioning_for_low_minute_players"
+        ]
+      },
+      "blocked_actions": [
+        "heavy_lower_body_strength_MD_minus_2_or_1",
+        "large_eccentric_hamstring_load_close_to_match"
+      ],
+      "source_refs": [
+        "Ammann et al. professional soccer microcycle",
+        "Elite youth soccer microcycle study"
+      ]
+    },
+    {
+      "id": "cw_rule_cricket_match_week",
+      "collection": "competition_week_rules",
+      "category": "sport_specific_microcycle",
+      "applies_to": [
+        "cricket"
+      ],
+      "condition": {
+        "field": "match_within_days",
+        "operator": "<=",
+        "value": 3
+      },
+      "structure": {
+        "MD_minus_3": [
+          "main_strength_or_power_if_no_heavy_bowling",
+          "controlled_bowling_exposure",
+          "fielding_speed"
+        ],
+        "MD_minus_2": [
+          "skill_emphasis",
+          "moderate_neural_work",
+          "trim_volume_if_bowler_fatigued"
+        ],
+        "MD_minus_1": [
+          "mobility",
+          "activation",
+          "technical_rehearsal",
+          "no_hard_lower_body_fatigue"
+        ],
+        "MD": [
+          "role_specific_warm_up",
+          "hydration",
+          "match_readiness"
+        ],
+        "MD_plus_1_to_2": [
+          "recovery",
+          "back_soreness_check_for_bowlers",
+          "top_up_underloaded_players_only"
+        ]
+      },
+      "blocked_actions": [
+        "heavy_spinal_loading_after_high_bowling_load",
+        "extra_conditioning_for_overloaded_fast_bowler"
+      ],
+      "source_refs": [
+        "Cricket Australia Junior Pace Bowling Guidelines",
+        "ECB Recreational Fast Bowling Guidance"
+      ]
+    },
+    {
+      "id": "cw_rule_volleyball_match_week",
+      "collection": "competition_week_rules",
+      "category": "sport_specific_microcycle",
+      "applies_to": [
+        "volleyball"
+      ],
+      "condition": {
+        "field": "match_within_days",
+        "operator": "<=",
+        "value": 3
+      },
+      "structure": {
+        "MD_minus_3": [
+          "main_strength_or_power_touch",
+          "controlled_jump_exposure",
+          "serve_attack_quality"
+        ],
+        "MD_minus_2": [
+          "technical_rehearsal",
+          "moderate_intensity",
+          "trim_unnecessary_jump_volume"
+        ],
+        "MD_minus_1": [
+          "activation",
+          "mobility",
+          "light_neural_primer",
+          "low_contacts"
+        ],
+        "MD": [
+          "performance_warm_up",
+          "shoulder_ankle_prep"
+        ],
+        "MD_plus_1_to_2": [
+          "recovery",
+          "tendon_symptom_check",
+          "top_up_reserves_only"
+        ]
+      },
+      "blocked_actions": [
+        "extra_plyometrics_when_jump_count_high",
+        "depth_jumps_during_dense_match_week"
+      ],
+      "source_refs": [
+        "USA Volleyball S&C guidance",
+        "Collegiate volleyball load study",
+        "FIVB injury prevention"
+      ]
+    },
+    {
+      "id": "cw_rule_basketball_game_week",
+      "collection": "competition_week_rules",
+      "category": "sport_specific_microcycle",
+      "applies_to": [
+        "basketball"
+      ],
+      "condition": {
+        "field": "games_next_7d",
+        "operator": ">=",
+        "value": 1
+      },
+      "structure": {
+        "MD_minus_3": [
+          "primary_lift_if_schedule_allows",
+          "brief_power_touch",
+          "tactical_work"
+        ],
+        "MD_minus_2": [
+          "moderate_on_court_load",
+          "trim_accessories"
+        ],
+        "MD_minus_1": [
+          "activation",
+          "mobility",
+          "low_soreness_approach"
+        ],
+        "MD": [
+          "ankle_knee_hip_specific_prep",
+          "game_readiness"
+        ],
+        "MD_plus_1_to_2": [
+          "recovery_high_minute_players",
+          "compensation_conditioning_low_minute_players"
+        ]
+      },
+      "blocked_actions": [
+        "heavy_squat_or_high_DOMS_lift_before_back_to_back",
+        "extra_jump_volume_with_tendon_symptoms"
+      ],
+      "source_refs": [
+        "Human Kinetics basketball in-season guidance",
+        "FIBA medical bulletin",
+        "Basketball load monitoring review"
+      ]
+    },
+    {
+      "id": "cw_rule_endurance_race_taper",
+      "collection": "competition_week_rules",
+      "category": "race_taper",
+      "applies_to": [
+        "running_endurance"
+      ],
+      "condition": {
+        "field": "priority_race_within_days",
+        "operator": "<=",
+        "value": 21
+      },
+      "rule": "Reduce total volume substantially while maintaining intensity and most training frequency.",
+      "structure": {
+        "race_minus_21_to_8": [
+          "begin_volume_reduction_if_priority_event",
+          "maintain_quality",
+          "remove_nonessential_strength_soreness"
+        ],
+        "race_minus_7_to_3": [
+          "race_specific_rhythm",
+          "reduced_volume",
+          "short_quality_touch"
+        ],
+        "race_minus_2": [
+          "easy_run_or_rest",
+          "mobility",
+          "fueling_prep"
+        ],
+        "race_minus_1": [
+          "shakeout_if_tolerated",
+          "strides_if_normal",
+          "no_residual_fatigue"
+        ],
+        "race_day": [
+          "event_specific_warm_up",
+          "fueling",
+          "readiness"
+        ],
+        "post_race_24_48h": [
+          "rest_or_recovery_run",
+          "no_hard_strength",
+          "symptom_check"
+        ]
+      },
+      "volume_guidance": "Approximate 41-60% volume reduction for key taper when appropriate.",
+      "source_refs": [
+        "Endurance taper meta-analysis",
+        "Return-to-run clinical guidelines"
+      ]
+    },
+    {
+      "id": "cw_rule_combat_bout_week",
+      "collection": "competition_week_rules",
+      "category": "bout_week",
+      "applies_to": [
+        "combat_sports"
+      ],
+      "condition": {
+        "field": "priority_bout_within_days",
+        "operator": "<=",
+        "value": 7
+      },
+      "structure": {
+        "bout_minus_7_to_4": [
+          "last_hard_specific_stimulus_if_needed",
+          "reduced_strength_volume",
+          "technical_sharpness"
+        ],
+        "bout_minus_3": [
+          "brief_power_touch_if_tolerated",
+          "no_DOMS_work",
+          "body_mass_monitoring"
+        ],
+        "bout_minus_2": [
+          "technical_sharpness",
+          "reduced_volume",
+          "hydration_weight_strategy"
+        ],
+        "bout_minus_1": [
+          "weigh_in_if_applicable",
+          "mobility",
+          "activation",
+          "no_exhaustive_work"
+        ],
+        "bout_day": [
+          "warm_up",
+          "tactical_priming",
+          "rehydration_refueling_as_rules_permit"
+        ],
+        "post_bout_24_48h": [
+          "recovery",
+          "medical_check_if_head_contact",
+          "no_immediate_hard_sparring"
+        ]
+      },
+      "blocked_actions": [
+        "conditioning_to_force_weight_loss",
+        "hard_sparring_in_final_48h",
+        "large_dehydration_plus_high_intensity_training"
+      ],
+      "source_refs": [
+        "NCAA Wrestling Weight Management Program",
+        "ACSM Weight-Category Sports Consensus",
+        "IJF and UWW coach education"
+      ]
+    }
+  ]
+}

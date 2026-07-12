@@ -1,0 +1,1955 @@
+{
+  "metadata": {
+    "domain": "defending_pressing_tackling_duels",
+    "sport": "soccer",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready coaching, tactical, safety, physical-demand, and progression knowledge for soccer defending, pressing, tackling, and duel play across beginner, intermediate, and advanced levels."
+  },
+  "source_refs": [
+    {
+      "title": "Law 12 - Fouls and Misconduct",
+      "url": "https://www.theifab.com/laws/latest/fouls-and-misconduct/",
+      "source_type": "official_laws",
+      "organization_or_author": "The IFAB",
+      "notes": "Primary law source for direct free kick offences, careless/reckless/excessive-force challenges, dangerous play, impeding, holding, and serious foul play."
+    },
+    {
+      "title": "About The Laws: Philosophy and Spirit",
+      "url": "https://www.theifab.com/laws/latest/about-the-laws/",
+      "source_type": "official_laws_safety_guidance",
+      "organization_or_author": "The IFAB",
+      "notes": "Frames the Laws as balancing fairness, safety, welfare, and respect, including strong treatment of reckless or dangerous play."
+    },
+    {
+      "title": "Defending in 1v1: Orientating attackers away from goal",
+      "url": "https://www.fifatrainingcentre.com/en/practice/talent-coach-programme/deny-and-protect/defending-in-1v1-orientating-attackers-away-from-goal.php",
+      "source_type": "official_coaching_practice",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "1v1 defending practice emphasizing low side-on body shape, angled approach, timing, showing wide, and balanced deceleration."
+    },
+    {
+      "title": "Irene Paredes: Timing the tackle",
+      "url": "https://www.fifatrainingcentre.com/en/game/individual-qualities/world-class-skills/irene-paredes-timing-the-tackle.php",
+      "source_type": "official_technical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Elite example of reading when, why, and how to execute a tackle rather than treating tackling as only a physical action."
+    },
+    {
+      "title": "4v4 plus 4 small-sided game: Pressing and defensive shape",
+      "url": "https://www.fifatrainingcentre.com/en/practice/talent-coach-programme/press-and-regain/4v4-plus-4-small-sided-game-pressing-and-defensive-shape.php",
+      "source_type": "official_coaching_practice",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "High-press unit practice covering compact shape, front pressure, cover behind the press, communication, and denying central passes."
+    },
+    {
+      "title": "Preventing progression through central areas",
+      "url": "https://www.fifatrainingcentre.com/en/practice/talent-coach-programme/sessions/preventing-progression-through-central-areas.php",
+      "source_type": "official_coaching_session",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Session principles include forcing play wide, closing inside lanes, team-mate cover when one player presses, and aggressive transition-to-defend after losing the ball."
+    },
+    {
+      "title": "Controlling the game without the ball: The mid-block and compactness",
+      "url": "https://www.fifatrainingcentre.com/en/fwc2022/technical-and-tactical-analysis/controlling-the-game-without-the-ball--the-mid-block-and-compactness.php",
+      "source_type": "official_technical_report_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "FIFA World Cup 2022 analysis defining out-of-possession phases, mid-block organization, compactness dimensions, and press timing from a block."
+    },
+    {
+      "title": "Investigating the increased use of the high press",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fcwc/2025/team-analyses/increased-use-of-high-press-and-pressing-strategies.php",
+      "source_type": "official_technical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Analysis of high-press sustainability through high defensive line, compact team shape, and numbers committed in the attacking third."
+    },
+    {
+      "title": "How the USA's collective press unlocked France's shape",
+      "url": "https://www.fifatrainingcentre.com/en/game/tournaments/fu20wc/2025/how-the-usa-collective-press-unlocked-france-shape.php",
+      "source_type": "official_tournament_technical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "U-20 World Cup example of clear pressing roles, first-pass pressing trigger, compact mid-block adaptation, and cover behind engaged defenders."
+    },
+    {
+      "title": "What are the principles of football?",
+      "url": "https://learn.englandfootball.com/articles-and-resources/coaching/resources/2022/What-are-the-principles-of-football",
+      "source_type": "federation_coaching_resource",
+      "organization_or_author": "England Football Learning / The Football Association",
+      "notes": "Defines defending principles of delaying, compactness, cover and balance, pressing, and control/restraint for coaching application."
+    },
+    {
+      "title": "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal",
+      "url": "https://www.uefa.com/womenschampionsleague/news/0298-1d955bbdb595-15d51ce467ab-1000--women-s-champions-league-performance-insights-how-lyon-s-de/",
+      "source_type": "confederation_technical_observer_analysis",
+      "organization_or_author": "UEFA Technical Observer Jayne Ludlow",
+      "notes": "High-quality UEFA example of fullback 1v1 awareness, patient engagement, body position, wide cover, compactness, and unit support."
+    },
+    {
+      "title": "Training defensive high-press in soccer: physical and physiological responses to different small-sided games played by youth athletes",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/24748668.2023.2198298",
+      "source_type": "peer_reviewed_research",
+      "organization_or_author": "Abreu, Morales, Greco, and Praca",
+      "notes": "Study of U-20 players showing that high-press oriented small-sided game rules can raise physical and physiological demands."
+    },
+    {
+      "title": "High-Intensity Efforts in Elite Soccer Matches and Associated Movement Patterns, Technical Skills and Tactical Actions",
+      "url": "https://researchonline.ljmu.ac.uk/id/eprint/4143/3/High-Intensity%20Efforts%20in%20Elite%20Soccer%20Matches%20and%20Associated%20Movement%20Patterns%2C%20Technical%20Skills%20and%20Tactical%20Actions.%20Information%20for%20Position-Specific%20Training%20Drills..pdf",
+      "source_type": "peer_reviewed_research",
+      "organization_or_author": "Ade, Harley, and Bradley",
+      "notes": "Elite match analysis linking high-intensity efforts to out-of-possession actions such as closing down, tracking runners, recovery runs, turns, and position-specific drill design."
+    },
+    {
+      "title": "Is a compact organization important for defensive success in elite soccer? Analysis based on player tracking data",
+      "url": "https://journals.sagepub.com/doi/10.1177/17479541231172695",
+      "source_type": "peer_reviewed_research",
+      "organization_or_author": "Forcher, Forcher, Altmann, Jekauc, and Kempe",
+      "notes": "Bundesliga tracking-data study suggesting compactness around the ball is more directly tied to defensive success than whole-team compactness alone."
+    },
+    {
+      "title": "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review",
+      "url": "https://link.springer.com/article/10.1007/s40279-022-01753-5",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Aiello, Impellizzeri, Brown, Serner, and McCall",
+      "notes": "Systematic review of 64 studies and 56,740 injuries; duels, pressing, tackling, high-intensity running, cutting, and kicking are relevant inciting activities depending on injury type."
+    }
+  ],
+  "key_concepts": [
+    {
+      "concept_id": "defensive_stance_body_shape",
+      "name": "Defensive stance and body shape",
+      "summary": "A defender should approach at an angle, lower the center of mass, stay side-on enough to protect the preferred danger line, and keep feet active without crossing over. The stance is not static; it lets the defender delay, show one direction, react to the first touch, and tackle only when the ball is exposed.",
+      "coaching_cues": [
+        "Arrive quickly, then slow down early enough to be balanced.",
+        "Show the attacker away from goal or into support.",
+        "Keep hips open to the direction you want the attacker to travel.",
+        "Stay on the balls of the feet with short adjustment steps."
+      ],
+      "common_errors": [
+        {
+          "error": "Running straight at the ball carrier and getting beaten by the first touch.",
+          "correction": "Curve the approach and decelerate before contact distance."
+        },
+        {
+          "error": "Square stance that allows the attacker to choose either side.",
+          "correction": "Use a side-on shape that protects the most dangerous route first."
+        }
+      ],
+      "progression": {
+        "beginner": "Learn goal-side positioning, side-on stance, and delay without tackling.",
+        "intermediate": "Add angled pressure that forces wide or into a covering defender.",
+        "advanced": "Adjust body shape based on opponent footedness, field zone, cover, and transition risk."
+      },
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "concept_id": "approach_deceleration_set_position",
+      "name": "Approach, deceleration, and set position",
+      "summary": "The first defender closes space fast enough to remove time, then uses short controlled steps to avoid being unbalanced as the attacker receives or prepares to dribble.",
+      "coaching_cues": [
+        "Sprint while the ball travels.",
+        "Brake before the attacker can touch past you.",
+        "Set before engaging if the attacker has control.",
+        "Do not tackle while your weight is falling forward."
+      ],
+      "common_errors": [
+        {
+          "error": "Overrunning the attacker.",
+          "correction": "Teach a fast-slow approach: accelerate on the pass, chop steps at two to three meters, then jockey."
+        }
+      ],
+      "progression": {
+        "beginner": "Close the ball and stop at a safe distance.",
+        "intermediate": "Time the deceleration to the attacker's first touch.",
+        "advanced": "Use pressing speed to disguise the trap while staying ready for a bounce pass, disguise, or wall pass."
+      },
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal"
+      ]
+    },
+    {
+      "concept_id": "jockeying_and_delay",
+      "name": "Jockeying and delaying",
+      "summary": "Delay means slowing play and controlling direction so support can recover, passing lanes can close, and the attacker is denied their preferred next action. Jockeying is the movement skill that allows delay without diving in.",
+      "coaching_cues": [
+        "Protect the central lane first unless team tactics say otherwise.",
+        "Move with the attacker, not at the ball.",
+        "Wait for a heavy touch, poor body shape, or support before tackling.",
+        "Delay longer when isolated or outnumbered."
+      ],
+      "common_errors": [
+        {
+          "error": "Treating delay as passive retreat.",
+          "correction": "Give defenders an active objective: slow speed, block inside, and guide to a predictable area."
+        },
+        {
+          "error": "Diving in when the attacker still has close control.",
+          "correction": "Reward patience and successful forcing actions, not only ball wins."
+        }
+      ],
+      "progression": {
+        "beginner": "Delay for three to five seconds without attempting a tackle.",
+        "intermediate": "Delay while showing to a channel and using cover cues.",
+        "advanced": "Delay to set traps, bait a pass, or wait for a backward touch that triggers collective pressure."
+      },
+      "source_refs": [
+        "What are the principles of football?",
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "concept_id": "directional_defending",
+      "name": "Directional defending",
+      "summary": "Effective 1v1 defending is not just stopping the attacker; it is deciding where the attacker is allowed to go. Common objectives are forcing wide, forcing backward, forcing into pressure, or protecting against inside shots.",
+      "coaching_cues": [
+        "Know the field zone before choosing the force direction.",
+        "Show wide near the penalty area when inside access creates a shooting threat.",
+        "Show into team pressure when the covering structure is ready.",
+        "Avoid giving away the inside route when defending the box edge."
+      ],
+      "common_errors": [
+        {
+          "error": "Showing outside when no cover or touchline pressure exists.",
+          "correction": "Link the force direction to a covering player, touchline, or pressing trap."
+        }
+      ],
+      "progression": {
+        "beginner": "Force attackers away from goal in simple 1v1 lanes.",
+        "intermediate": "Use touchline, sideline, and covering defender as reference points.",
+        "advanced": "Change force direction based on opponent shape, support movements, score state, and team pressing plan."
+      },
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "Preventing progression through central areas"
+      ]
+    },
+    {
+      "concept_id": "intercepting_and_screening",
+      "name": "Intercepting and screening",
+      "summary": "Interception starts before the pass. Defenders scan ball, opponent, team-mates, and space; then adjust body position to block the pass, step in front, or screen central lanes while remaining able to recover.",
+      "coaching_cues": [
+        "See ball and opponent before the pass is played.",
+        "Stand on the line that matters, not just next to an opponent.",
+        "Curve the press to block the inside pass with the cover shadow.",
+        "Step in only when the pass speed, receiver body shape, and cover make the risk acceptable."
+      ],
+      "common_errors": [
+        {
+          "error": "Marking a player while leaving the pass lane open.",
+          "correction": "Coach defenders to protect the lane first, then tighten to the player as the ball travels."
+        }
+      ],
+      "progression": {
+        "beginner": "Recognize simple pass lanes and stand goal-side.",
+        "intermediate": "Use cover shadow and scanning to block two options at once.",
+        "advanced": "Bait passes into zones where team-mates can press, intercept, or counterpress."
+      },
+      "source_refs": [
+        "Preventing progression through central areas",
+        "4v4 plus 4 small-sided game: Pressing and defensive shape"
+      ]
+    },
+    {
+      "concept_id": "tackling_timing",
+      "name": "Tackling timing",
+      "summary": "A tackle is safest and most effective when the defender has delayed, stayed balanced, identified the exposed ball, and understands what happens if the tackle fails. Tackle timing depends on ball distance from the attacker's foot, support cover, angle, and legal force.",
+      "coaching_cues": [
+        "Do not tackle through the player.",
+        "Attack the ball when it separates from the attacker.",
+        "Use the near foot when poking or blocking from the side.",
+        "Recover immediately after a missed tackle."
+      ],
+      "common_errors": [
+        {
+          "error": "Tackling because of panic after being beaten.",
+          "correction": "Teach recovery angle first; only challenge if the ball is playable without endangering the opponent."
+        },
+        {
+          "error": "Sliding as a default tackle.",
+          "correction": "Use standing tackles, blocks, and jockeying as primary tools; reserve slide tackles for controlled advanced contexts."
+        }
+      ],
+      "progression": {
+        "beginner": "Learn poke and block tackles from controlled distances with no sliding.",
+        "intermediate": "Tackle from realistic approach angles after delay.",
+        "advanced": "Choose whether to tackle, shepherd, block, intercept, or foul-avoid based on game state and risk."
+      },
+      "source_refs": [
+        "Irene Paredes: Timing the tackle",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    },
+    {
+      "concept_id": "safe_challenge_behavior",
+      "name": "Safe challenge behavior",
+      "summary": "Legal defending requires control, care, and proportional force. The backend should distinguish fair contact, careless fouls, reckless challenges, excessive force, dangerous play, and cynical tactical fouls because they change training, match advice, and safety risk.",
+      "coaching_cues": [
+        "Challenge for the ball, not through the opponent.",
+        "Avoid lunging with locked legs or studs exposed.",
+        "Do not charge, push, trip, or hold to compensate for poor position.",
+        "In youth sessions, remove high-speed slide-tackle contests until technique and judgement are stable."
+      ],
+      "common_errors": [
+        {
+          "error": "Celebrating reckless ball wins in training.",
+          "correction": "Score actions as successful only when the defender wins or delays without dangerous contact."
+        },
+        {
+          "error": "Using arms to hold or block the runner after losing the duel.",
+          "correction": "Coach recovery sprint angle and communication instead of illegal restraint."
+        }
+      ],
+      "progression": {
+        "beginner": "No lunges, no slide tackles, no contact from behind; learn fair shoulder-to-shoulder contact only in controlled tasks.",
+        "intermediate": "Add controlled body contact, legal charging concepts, and referee-law consequences.",
+        "advanced": "Train high-speed duel judgement under pressure while enforcing safety, opponent welfare, and tactical discipline."
+      },
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "About The Laws: Philosophy and Spirit",
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "concept_id": "pressing_roles",
+      "name": "Pressing roles",
+      "summary": "A press needs more than the player nearest the ball. The first defender pressures, the second defender covers and blocks the next pass, the balancing players protect switches and central threats, and the back line manages depth behind the press.",
+      "coaching_cues": [
+        "Nearest player presses with a purpose.",
+        "Next players close the most dangerous passes.",
+        "Far-side players narrow enough to prevent central escape but stay aware of switches.",
+        "Back line steps with the press unless a runner or ball pressure demands dropping."
+      ],
+      "common_errors": [
+        {
+          "error": "One player presses while team-mates watch.",
+          "correction": "Freeze play and assign first, second, and third defender jobs before restarting."
+        }
+      ],
+      "progression": {
+        "beginner": "Learn first defender, cover defender, and balance defender in 2v2 and 3v3.",
+        "intermediate": "Press as a unit with compact distances and pass-lane coverage.",
+        "advanced": "Coordinate line heights, pressing traps, and role handoffs across formations."
+      },
+      "source_refs": [
+        "4v4 plus 4 small-sided game: Pressing and defensive shape",
+        "How the USA's collective press unlocked France's shape",
+        "What are the principles of football?"
+      ]
+    },
+    {
+      "concept_id": "pressing_triggers",
+      "name": "Pressing triggers",
+      "summary": "Pressing triggers are cues that make pressure more likely to succeed: a poor first touch, backward pass, slow square pass, pass to a touchline player, receiving with back to goal, isolated goalkeeper or center back, or immediate loss of possession with nearby support.",
+      "coaching_cues": [
+        "Press on the opponent's bad touch.",
+        "Press when the pass travels toward the sideline or backward.",
+        "Counterpress immediately after loss if numbers are close enough.",
+        "Hold shape if the trigger appears but cover is missing."
+      ],
+      "common_errors": [
+        {
+          "error": "Pressing every pass at the same speed.",
+          "correction": "Create trigger words and reward correct decisions to hold, show, or jump."
+        }
+      ],
+      "progression": {
+        "beginner": "Recognize bad touch and back-to-goal receiving cues.",
+        "intermediate": "Link trigger to nearest-cover-balance responsibilities.",
+        "advanced": "Manipulate the opponent into trigger zones, then jump collectively."
+      },
+      "source_refs": [
+        "What are the principles of football?",
+        "Preventing progression through central areas",
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "concept_id": "compactness",
+      "name": "Compactness",
+      "summary": "Compactness reduces usable space between and around defenders. Whole-team compactness matters for block organization, while ball-near compactness is especially important for closing the ball carrier and the next pass.",
+      "coaching_cues": [
+        "Shrink toward the ball without abandoning critical weak-side threats.",
+        "Keep distances close enough for cover, not so close that one pass beats multiple defenders.",
+        "Use team length and width as objective constraints in block sessions.",
+        "Compactness must fit the defensive phase: high press, mid-block, low block, counterpress, or recovery."
+      ],
+      "common_errors": [
+        {
+          "error": "Compressing the whole team so much that switches or balls in behind are easy.",
+          "correction": "Coach ball-near compactness plus weak-side balance and depth cover."
+        }
+      ],
+      "progression": {
+        "beginner": "Move closer to team-mates and protect the middle after losing the ball.",
+        "intermediate": "Shift as a unit and maintain compact distances between lines.",
+        "advanced": "Vary compactness to support high press, mid-block, low block, and game-state strategy."
+      },
+      "source_refs": [
+        "Controlling the game without the ball: The mid-block and compactness",
+        "Is a compact organization important for defensive success in elite soccer? Analysis based on player tracking data",
+        "What are the principles of football?"
+      ]
+    },
+    {
+      "concept_id": "cover_and_balance",
+      "name": "Cover and balance",
+      "summary": "When one defender presses, another must protect the space behind or beside them, while the rest of the unit balances dangerous central, weak-side, and depth threats. Cover and balance make pressure sustainable.",
+      "coaching_cues": [
+        "Cover should be close enough to help if the first defender is beaten.",
+        "Balance protects the next most dangerous option, not empty grass.",
+        "Do not let two defenders get attracted to the same ball carrier without covering the outlet.",
+        "Communicate who jumps, who covers, and who screens."
+      ],
+      "common_errors": [
+        {
+          "error": "Cover defender stands flat beside the first defender.",
+          "correction": "Create a diagonal angle that protects the inside lane and depth."
+        }
+      ],
+      "progression": {
+        "beginner": "Use 2v2 and 3v3 to learn first defender and cover defender.",
+        "intermediate": "Add far-side balance and communication in 4v4 to 7v7.",
+        "advanced": "Coordinate cover across a full unit while passing runners on and protecting the back line."
+      },
+      "source_refs": [
+        "What are the principles of football?",
+        "4v4 plus 4 small-sided game: Pressing and defensive shape",
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "concept_id": "back_line_coordination",
+      "name": "Back-line coordination",
+      "summary": "The back line must coordinate pressure, cover, depth, line height, body orientation, marking, offside awareness, and box protection. A high press normally needs a connected high line; a lower block needs compact distances and penalty-area duel readiness.",
+      "coaching_cues": [
+        "Move as the ball travels.",
+        "Step when the ball is under pressure; drop when pressure is absent and runners threaten depth.",
+        "Keep one covering defender when a center back or fullback jumps into a duel.",
+        "Defend crosses with ball pressure, body orientation, runner scanning, and second-ball readiness."
+      ],
+      "common_errors": [
+        {
+          "error": "Fullback jumps to press and center backs do not cover the channel.",
+          "correction": "Rehearse the chain reaction: jump, slide, cover, balance, communicate."
+        },
+        {
+          "error": "Back line stays high when there is no pressure on the passer.",
+          "correction": "Use ball pressure as the cue for stepping; absent pressure means protect depth."
+        }
+      ],
+      "progression": {
+        "beginner": "Learn goal-side, ball-side, and basic line movement.",
+        "intermediate": "Coordinate back four or back three against wide attacks and through balls.",
+        "advanced": "Link line height to high press, rest defense, goalkeeper sweeping, and opponent profile."
+      },
+      "source_refs": [
+        "Investigating the increased use of the high press",
+        "How the USA's collective press unlocked France's shape",
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "concept_id": "defensive_duels",
+      "name": "Defensive duels",
+      "summary": "Defensive duels include 1v1 ground duels, shoulder-to-shoulder contests, aerial duels, second-ball duels, loose-ball races, and box duels. Good duel play combines positioning, timing, strength, balance, restraint, and immediate next action.",
+      "coaching_cues": [
+        "Win position before contact.",
+        "Keep eyes on ball and opponent movement.",
+        "Use body to protect the legal path to the ball.",
+        "After the duel, secure the ball, clear, pass, or counterpress."
+      ],
+      "common_errors": [
+        {
+          "error": "Starting contact before establishing a legal playing position.",
+          "correction": "Teach footwork and line-to-ball positioning before adding contact."
+        },
+        {
+          "error": "Winning first contact but losing the second ball.",
+          "correction": "Pair duel drills with team-mate support and second-action scoring."
+        }
+      ],
+      "progression": {
+        "beginner": "Controlled 1v1s with minimal contact and clear rules.",
+        "intermediate": "Add shoulder pressure, aerial timing, and second-ball reactions.",
+        "advanced": "Train high-speed, multi-player duel chains in realistic zones with strict foul constraints."
+      },
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "concept_id": "transition_to_defend_counterpress",
+      "name": "Transition to defend and counterpressing",
+      "summary": "Immediately after losing possession, players need a shared decision: counterpress if close, connected, and able to block exits; delay and recover if stretched or outnumbered. Counterpressing is a tactical action, not a reflex chase.",
+      "coaching_cues": [
+        "Nearest player pressures the ball if the team is connected.",
+        "Second players close the easy forward and central passes.",
+        "If the first press is broken, recover goal-side and rebuild compactness.",
+        "Do not counterpress if it exposes a direct route to goal."
+      ],
+      "common_errors": [
+        {
+          "error": "All nearby players chase the ball and open central exit lanes.",
+          "correction": "Assign ball pressure, cover, and screen roles immediately after loss."
+        }
+      ],
+      "progression": {
+        "beginner": "React to loss with nearest pressure and recovery runs.",
+        "intermediate": "Use five-second counterpress games with clear exit-lane coverage.",
+        "advanced": "Counterpress based on rest-defense shape, opponent first touch, and support distances."
+      },
+      "source_refs": [
+        "Preventing progression through central areas",
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "concept_id": "control_and_restraint",
+      "name": "Control and restraint",
+      "summary": "Control and restraint mean knowing when not to press or tackle. A defender may hold position, delay, screen, or recover when immediate engagement would create a worse problem.",
+      "coaching_cues": [
+        "If outnumbered, protect the goal and delay.",
+        "If no cover exists, do not jump unless the ball is clearly loose.",
+        "Stay composed in the penalty area; block and shepherd before risky tackling.",
+        "Use the laws as a constraint: a dangerous win is not a successful defensive action."
+      ],
+      "common_errors": [
+        {
+          "error": "Mistaking aggression for good defending.",
+          "correction": "Score restraint, blocked routes, and forced backward passes as positive defensive outcomes."
+        }
+      ],
+      "progression": {
+        "beginner": "Learn when to hold position rather than tackle.",
+        "intermediate": "Make hold-or-press decisions in numbers-down games.",
+        "advanced": "Apply restraint based on opponent threat, foul risk, card risk, and tactical context."
+      },
+      "source_refs": [
+        "What are the principles of football?",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    },
+    {
+      "concept_id": "communication_and_role_clarity",
+      "name": "Communication and role clarity",
+      "summary": "Defending improves when players know who presses, who covers, who tracks, who screens, and who protects depth. Communication must be early, specific, and tied to the ball movement.",
+      "coaching_cues": [
+        "Name the role: press, cover, screen, drop, step, hold.",
+        "Communicate as the ball travels, not after the opponent receives.",
+        "Back-line players organize players in front because they see more of the field.",
+        "Use consistent vocabulary across individual, unit, and team defending."
+      ],
+      "common_errors": [
+        {
+          "error": "Generic shouting without tactical information.",
+          "correction": "Require short role-specific calls in defensive games."
+        }
+      ],
+      "progression": {
+        "beginner": "Use simple calls such as press, cover, and hold.",
+        "intermediate": "Add line and unit calls: step, drop, squeeze, switch, runner.",
+        "advanced": "Use pre-planned pressing calls and opponent-specific role adjustments."
+      },
+      "source_refs": [
+        "4v4 plus 4 small-sided game: Pressing and defensive shape",
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "concept_id": "common_error_correction_system",
+      "name": "Common errors and correction system",
+      "summary": "Defensive errors should be classified by decision, position, timing, technique, safety, and team connection so the backend can prescribe the right correction rather than generic defending drills.",
+      "coaching_cues": [
+        "If the defender is late, train anticipation and starting position.",
+        "If the defender is beaten easily, train approach angle and deceleration.",
+        "If the defender fouls, train restraint, body position, and legal challenge selection.",
+        "If the team is played through, train compactness, cover shadows, and unit shifting."
+      ],
+      "common_errors": [
+        {
+          "error": "Correcting every mistake with more intensity.",
+          "correction": "Match the correction to the actual error type: awareness, spacing, timing, technique, or safety."
+        }
+      ],
+      "progression": {
+        "beginner": "Fix stance, goal-side position, and not diving in.",
+        "intermediate": "Fix cover angle, pressing trigger recognition, and tackle timing.",
+        "advanced": "Fix role handoffs, line-height decisions, pressing traps, and duel-risk management."
+      },
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "What are the principles of football?",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    }
+  ],
+  "technical_models": [
+    {
+      "model_id": "football_defending_model_individual_chain",
+      "record_type_candidate": "football_defending_model",
+      "name": "Individual defending action chain",
+      "scope": "player",
+      "sequence": [
+        "scan ball-opponent-space-cover",
+        "recover goal-side or ball-side as required",
+        "close while ball travels",
+        "decelerate and set balanced",
+        "shape body to remove the priority route",
+        "delay and guide",
+        "intercept, block, tackle, shepherd, or recover",
+        "secure the next action after regaining or forcing play"
+      ],
+      "decision_inputs": [
+        "field_zone",
+        "attacker_speed",
+        "attacker_body_shape",
+        "ball_distance_from_attacker",
+        "cover_available",
+        "foul_card_risk",
+        "goal_threat"
+      ],
+      "coaching_outputs": [
+        "approach_angle",
+        "force_direction",
+        "engagement_distance",
+        "hold_or_tackle_decision",
+        "recovery_action"
+      ],
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "model_id": "football_tackling_model_safe_selection",
+      "record_type_candidate": "football_tackling_model",
+      "name": "Safe tackle selection model",
+      "scope": "player",
+      "tackle_options": [
+        {
+          "type": "poke_tackle",
+          "best_use": "Ball is slightly exposed and defender can reach without contacting through the opponent.",
+          "risk_control": "Use near foot, stay balanced, and recover if missed."
+        },
+        {
+          "type": "block_tackle",
+          "best_use": "Attacker has pushed the ball into contest range and defender can meet the ball with stable posture.",
+          "risk_control": "Keep studs down, ankle braced, and force directed at the ball."
+        },
+        {
+          "type": "shoulder_to_shoulder_challenge",
+          "best_use": "Both players are within playing distance and challenge is not a push, hold, or charge from an unsafe angle.",
+          "risk_control": "Maintain legal line to ball and avoid arms extended into opponent."
+        },
+        {
+          "type": "slide_tackle",
+          "best_use": "Advanced emergency or tactical action when the ball is playable and contact risk is controlled.",
+          "risk_control": "Avoid lunging, raised studs, excessive force, scissor motion, and challenges from behind."
+        }
+      ],
+      "do_not_tackle_when": [
+        "attacker has tight control and defender is off balance",
+        "challenge requires excessive force",
+        "cover is absent and missed tackle opens direct goal access",
+        "contact would endanger opponent safety",
+        "penalty-area risk is greater than the benefit"
+      ],
+      "source_refs": [
+        "Irene Paredes: Timing the tackle",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    },
+    {
+      "model_id": "football_duel_model_defensive",
+      "record_type_candidate": "football_duel_model",
+      "name": "Defensive duel model",
+      "scope": "player_and_unit",
+      "duel_types": [
+        "1v1 dribble duel",
+        "shoulder-to-shoulder running duel",
+        "loose-ball race",
+        "aerial duel",
+        "box-marking duel",
+        "second-ball duel",
+        "recovery duel after turnover"
+      ],
+      "success_criteria": [
+        "opponent delayed or forced away from danger",
+        "ball won legally",
+        "shot, cross, or central pass blocked",
+        "team-mate cover arrives",
+        "second ball secured",
+        "no reckless or excessive-force contact"
+      ],
+      "failure_flags": [
+        "wrong side of opponent",
+        "contact before playable distance",
+        "eyes only on ball and not opponent movement",
+        "body weight uncontrolled",
+        "arms used to hold or push",
+        "first contact won but second ball lost"
+      ],
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "model_id": "football_pressing_model_unit_shape",
+      "record_type_candidate": "football_pressing_rule",
+      "name": "Unit pressing shape model",
+      "scope": "unit",
+      "roles": [
+        {
+          "role": "first_defender",
+          "responsibility": "Pressure the ball carrier with angle and speed that removes the preferred escape."
+        },
+        {
+          "role": "second_defender",
+          "responsibility": "Cover the first defender and block the next forward or inside pass."
+        },
+        {
+          "role": "balancing_defenders",
+          "responsibility": "Protect central space, weak-side options, and depth while staying connected to the press."
+        },
+        {
+          "role": "back_line",
+          "responsibility": "Set line height, cover runners, and keep a spare or covering player when ball-side defenders jump."
+        }
+      ],
+      "activation_requirements": [
+        "clear pressing trigger",
+        "compact support distances",
+        "cover behind first press",
+        "communication before and during the press",
+        "transition plan after regain or bypass"
+      ],
+      "source_refs": [
+        "4v4 plus 4 small-sided game: Pressing and defensive shape",
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "model_id": "football_compactness_model_block",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "Compact block model",
+      "scope": "team",
+      "phases": [
+        "high_press",
+        "mid_press",
+        "low_press",
+        "high_block",
+        "mid_block",
+        "low_block",
+        "recovery",
+        "defensive_transition",
+        "counterpress"
+      ],
+      "principles": [
+        "protect central access first",
+        "reduce useful space between ball-near defenders",
+        "keep enough depth to defend balls in behind",
+        "shift as the ball travels",
+        "press when an error or planned trigger appears",
+        "balance compactness against weak-side and depth threats"
+      ],
+      "backend_measurements": [
+        "team_length",
+        "team_width",
+        "ball_near_subgroup_surface_area",
+        "distance_between_lines",
+        "number_of_defenders_behind_ball",
+        "time_to_pressure_after_trigger"
+      ],
+      "source_refs": [
+        "Controlling the game without the ball: The mid-block and compactness",
+        "Is a compact organization important for defensive success in elite soccer? Analysis based on player tracking data"
+      ]
+    },
+    {
+      "model_id": "football_back_line_coordination_model",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "Back-line coordination model",
+      "scope": "unit",
+      "line_decisions": [
+        {
+          "cue": "ball_under_pressure",
+          "preferred_action": "step_or_hold_compact_line"
+        },
+        {
+          "cue": "passer_has_time_and_forward_runner_exists",
+          "preferred_action": "drop_and_protect_depth"
+        },
+        {
+          "cue": "fullback_jumps_to_press",
+          "preferred_action": "near_center_back_slides_and_far_defenders_balance"
+        },
+        {
+          "cue": "center_back_steps_into_duel",
+          "preferred_action": "second_center_back_covers_as_plus_one"
+        },
+        {
+          "cue": "crossing_threat",
+          "preferred_action": "pressure_ball_scan_runners_defend_goal_side_and_second_ball"
+        }
+      ],
+      "source_refs": [
+        "Investigating the increased use of the high press",
+        "How the USA's collective press unlocked France's shape",
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "model_id": "football_interception_screening_model",
+      "record_type_candidate": "football_defending_model",
+      "name": "Interception and screening model",
+      "scope": "player_and_unit",
+      "sequence": [
+        "scan opponent shape before pass",
+        "identify priority lane",
+        "adjust body to see ball and opponent",
+        "screen with cover shadow while staying able to press",
+        "step in only when pass speed and cover make the action safe",
+        "transition forward after regain or recover if bypassed"
+      ],
+      "key_constraints": [
+        "do not vacate the central lane without cover",
+        "do not jump at a pass if a one-touch wall pass eliminates the unit",
+        "do not overcommit if opponent has third-player support behind the press"
+      ],
+      "source_refs": [
+        "Preventing progression through central areas",
+        "4v4 plus 4 small-sided game: Pressing and defensive shape"
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "rule_id": "football_pressing_rule_bad_touch",
+      "record_type_candidate": "football_pressing_rule",
+      "name": "Press on poor touch",
+      "condition": "Opponent's first touch separates from the body or points toward pressure.",
+      "action": "Nearest defender jumps to pressure while cover blocks the inside or forward pass.",
+      "avoid_if": "The nearest defender cannot arrive before the opponent can pass forward and no cover exists behind the press.",
+      "level": "beginner_to_advanced",
+      "source_refs": [
+        "What are the principles of football?"
+      ]
+    },
+    {
+      "rule_id": "football_pressing_rule_back_to_goal",
+      "record_type_candidate": "football_pressing_rule",
+      "name": "Press receiver facing own goal",
+      "condition": "Opponent receives with back to goal or closed body shape.",
+      "action": "Apply pressure from the back or side without fouling; team-mates block bounce passes and forward lanes.",
+      "avoid_if": "The defender must push through the opponent or the receiver has a clear one-touch support option unmarked.",
+      "level": "intermediate",
+      "source_refs": [
+        "Preventing progression through central areas"
+      ]
+    },
+    {
+      "rule_id": "football_pressing_rule_backward_or_square_pass",
+      "record_type_candidate": "football_pressing_rule",
+      "name": "Press on backward or slow square pass",
+      "condition": "Opponent plays a slow pass backward, square, or toward the touchline.",
+      "action": "Press while the ball travels and curve the run to remove the return pass or central outlet.",
+      "avoid_if": "The pass speed allows the receiver to play forward before pressure arrives.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "What are the principles of football",
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "rule_id": "football_pressing_rule_first_pass_to_fullback",
+      "record_type_candidate": "football_pressing_rule",
+      "name": "Trap first pass to fullback",
+      "condition": "Opponent build-up uses a predictable first pass from goalkeeper or center back to fullback.",
+      "action": "Allow the pass by design, then wide midfielder jumps, forward blocks return, midfield covers pivot, and fullback/back line protect depth.",
+      "avoid_if": "Wide midfielder is too deep or central midfield cannot cover the pivot.",
+      "level": "advanced",
+      "source_refs": [
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "rule_id": "football_pressing_rule_after_loss",
+      "record_type_candidate": "football_pressing_rule",
+      "name": "Counterpress only when connected",
+      "condition": "Team loses possession and at least two support players are close enough to pressure and block central exits.",
+      "action": "Nearest player pressures, nearest support screens forward lane, and other players lock onto immediate outlets.",
+      "avoid_if": "Team is stretched, opponent has a clean forward-facing receiver, or the first press exposes a direct route to goal.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "Preventing progression through central areas"
+      ]
+    },
+    {
+      "rule_id": "football_defensive_tactical_rule_pressure_cover_balance",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "Pressure-cover-balance chain",
+      "condition": "A defender leaves shape to pressure the ball.",
+      "action": "Second defender covers behind or inside; third defender balances central, weak-side, or depth threat.",
+      "avoid_if": "Two players pressure the same ball without covering the next pass.",
+      "level": "beginner_to_advanced",
+      "source_refs": [
+        "What are the principles of football?",
+        "4v4 plus 4 small-sided game: Pressing and defensive shape"
+      ]
+    },
+    {
+      "rule_id": "football_defensive_tactical_rule_protect_centre",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "Protect central progression first",
+      "condition": "Opponent attempts to progress through middle or half-space lanes.",
+      "action": "Compact the ball-near group, screen inside passes, and force the ball wide or backward.",
+      "avoid_if": "Weak-side or depth threat is unprotected and opponent can switch quickly.",
+      "level": "beginner_to_advanced",
+      "source_refs": [
+        "Preventing progression through central areas",
+        "Controlling the game without the ball: The mid-block and compactness"
+      ]
+    },
+    {
+      "rule_id": "football_defensive_tactical_rule_mid_block_press_timing",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "Press from mid-block on error or planned cue",
+      "condition": "Team is organized in a mid-block and opponent attempts central play, bad touch, or predictable wide pass.",
+      "action": "Keep block compact, then jump with nearest player while surrounding players close exits.",
+      "avoid_if": "The block has become stretched or the opponent has free depth runners.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "Controlling the game without the ball: The mid-block and compactness"
+      ]
+    },
+    {
+      "rule_id": "football_defensive_tactical_rule_high_press_line_height",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "High press requires connected line height",
+      "condition": "Team chooses to press high against build-up.",
+      "action": "Back line holds high enough to compress the pitch, midfield squeezes, and goalkeeper prepares to cover depth if team model allows.",
+      "avoid_if": "No pressure on the passer or defenders are slower than opponent depth runners with large space behind.",
+      "level": "advanced",
+      "source_refs": [
+        "Investigating the increased use of the high press"
+      ]
+    },
+    {
+      "rule_id": "football_defensive_tactical_rule_jump_slide_cover",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "Jump-slide-cover on wide pressure",
+      "condition": "Fullback or wide defender jumps to pressure an opponent outside.",
+      "action": "Nearest center back slides to cover channel, midfield screens cutback, far-side defenders narrow while tracking far-post threats.",
+      "avoid_if": "Center back cannot cover channel and no midfielder can protect central space.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "rule_id": "football_defensive_tactical_rule_plus_one_behind_engaged_duels",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "Keep plus-one cover behind engaged duel",
+      "condition": "Ball-side defender is fully engaged in a 1v1 or aerial duel near the defensive line.",
+      "action": "Another defender stays free enough to cover flicks, missed tackles, and balls in behind.",
+      "avoid_if": "The covering player gets dragged into the same duel and leaves central depth empty.",
+      "level": "advanced",
+      "source_refs": [
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "rule_id": "football_defensive_tactical_rule_penalty_area_restraint",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "Penalty-area restraint",
+      "condition": "Defender is in or near own penalty area and attacker is under partial control.",
+      "action": "Prioritize body position, shot blocking, shepherding, and delaying over risky tackling.",
+      "avoid_if": "Ball is clearly exposed and a controlled legal tackle prevents an immediate high-value shot.",
+      "level": "beginner_to_advanced",
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "What are the principles of football?"
+      ]
+    },
+    {
+      "rule_id": "football_defensive_tactical_rule_foul_risk_filter",
+      "record_type_candidate": "football_defensive_tactical_rule",
+      "name": "Foul-risk filter before challenge",
+      "condition": "A defender is about to challenge from side, behind, or at high speed.",
+      "action": "Challenge only if the ball is playable and force can be controlled; otherwise delay, recover, or block route.",
+      "avoid_if": "The action would be careless, reckless, excessive-force, dangerous, holding, pushing, or impeding with contact.",
+      "level": "beginner_to_advanced",
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "About The Laws: Philosophy and Spirit"
+      ]
+    }
+  ],
+  "physical_demands": [
+    {
+      "demand_id": "defensive_acceleration_deceleration",
+      "name": "Repeated acceleration and deceleration",
+      "summary": "Defending and pressing require fast closes, controlled braking, re-acceleration after opponent touches, and recovery runs. Deceleration quality is central to safe jockeying and avoiding overcommitment.",
+      "relevant_actions": [
+        "pressing trigger jump",
+        "closing down",
+        "recovery run",
+        "jockey to tackle",
+        "counterpress"
+      ],
+      "training_note": "Use short, repeated, angled acceleration-deceleration tasks with decision cues rather than straight-line conditioning only.",
+      "source_refs": [
+        "High-Intensity Efforts in Elite Soccer Matches and Associated Movement Patterns, Technical Skills and Tactical Actions"
+      ]
+    },
+    {
+      "demand_id": "lateral_shuffle_and_backpedal",
+      "name": "Lateral shuffle, retreat, and turning",
+      "summary": "Jockeying, delaying, and defending depth require lateral footwork, controlled retreating, hip turns, and 0-180 degree changes of direction while maintaining vision.",
+      "relevant_actions": [
+        "1v1 jockeying",
+        "showing wide",
+        "back-line drop",
+        "tracking runners",
+        "box defending"
+      ],
+      "training_note": "Progress from technical footwork to reactive 1v1s where the attacker controls the direction.",
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "High-Intensity Efforts in Elite Soccer Matches and Associated Movement Patterns, Technical Skills and Tactical Actions"
+      ]
+    },
+    {
+      "demand_id": "repeated_high_intensity_pressing",
+      "name": "Repeated high-intensity pressing efforts",
+      "summary": "High pressing increases the need for repeated sprints, quick recovery, and coordinated high work rates from forwards, midfielders, and wide players.",
+      "relevant_actions": [
+        "closing down goalkeeper or center back",
+        "pressing fullback trap",
+        "counterpress after loss",
+        "tracking after bypassed press"
+      ],
+      "training_note": "Manipulate rules, space, work-rest, and numbers in small-sided games to create high-press loads without exceeding weekly load targets.",
+      "source_refs": [
+        "Training defensive high-press in soccer: physical and physiological responses to different small-sided games played by youth athletes",
+        "4v4 plus 4 small-sided game: Pressing and defensive shape"
+      ]
+    },
+    {
+      "demand_id": "contact_strength_and_balance",
+      "name": "Contact strength and balance",
+      "summary": "Duels require trunk stiffness, hip strength, single-leg balance, and ability to absorb or apply legal contact without losing control.",
+      "relevant_actions": [
+        "shoulder-to-shoulder duel",
+        "box marking",
+        "aerial landing",
+        "shield-dispossess duel",
+        "second-ball contest"
+      ],
+      "training_note": "Teach body position and legal contact before increasing speed, fatigue, or competitive scoring.",
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "demand_id": "aerial_duel_jump_land",
+      "name": "Aerial duel jump and landing",
+      "summary": "Aerial defending combines timing, vertical power, contact tolerance, trunk control, landing mechanics, and second-ball reaction.",
+      "relevant_actions": [
+        "clearance header",
+        "defending crosses",
+        "goal kick duel",
+        "corner defending",
+        "second-ball recovery"
+      ],
+      "training_note": "Include jump-land mechanics, neck and trunk control, spatial awareness, and opponent-safety constraints.",
+      "source_refs": [
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "demand_id": "role_specific_defensive_load",
+      "name": "Role-specific defensive load",
+      "summary": "Center forwards often close down opponents, fullbacks and wide midfielders perform repeated wide recovery and pressing efforts, center backs perform more depth coverage and turning actions, and central midfielders cover large screening and duel volumes.",
+      "relevant_actions": [
+        "center forward arc press",
+        "fullback recovery sprint",
+        "center back turn and cover",
+        "central midfielder screen and tackle",
+        "wide midfielder repeated press"
+      ],
+      "training_note": "Condition defensive drills by role rather than applying one generic running prescription to all positions.",
+      "source_refs": [
+        "High-Intensity Efforts in Elite Soccer Matches and Associated Movement Patterns, Technical Skills and Tactical Actions"
+      ]
+    },
+    {
+      "demand_id": "cognitive_perceptual_defensive_load",
+      "name": "Cognitive and perceptual load",
+      "summary": "Defenders must scan the ball, opponent, team-mates, space, line height, referee risk, and transition options under time pressure.",
+      "relevant_actions": [
+        "hold-or-press decision",
+        "interception choice",
+        "passing on runners",
+        "penalty-area tackle restraint",
+        "pressing trigger recognition"
+      ],
+      "training_note": "Use representative games with perception-action coupling rather than only scripted cone patterns.",
+      "source_refs": [
+        "How the USA's collective press unlocked France's shape",
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "demand_id": "fatigue_effect_on_defensive_technique",
+      "name": "Fatigue effect on defensive technique",
+      "summary": "Fatigue can reduce braking quality, tackle timing, communication, and restraint, especially in repeated pressing or duel-heavy sessions.",
+      "relevant_actions": [
+        "late pressing efforts",
+        "mistimed tackles",
+        "poor deceleration",
+        "late recovery runs",
+        "loss of compactness"
+      ],
+      "training_note": "Add fatigue gradually and keep technical success, foul rate, and movement quality as constraints, not only heart-rate or GPS outputs.",
+      "source_refs": [
+        "Training defensive high-press in soccer: physical and physiological responses to different small-sided games played by youth athletes",
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "risk_id": "reckless_or_excessive_force_challenge",
+      "name": "Reckless or excessive-force challenge",
+      "mechanism": "High-speed lunge, studs-up challenge, scissor action, late contact, or tackle through the opponent rather than the ball.",
+      "why_it_matters": "The Laws distinguish careless, reckless, and excessive-force offences; dangerous challenges create player-welfare risk and disciplinary consequences.",
+      "mitigation": [
+        "Teach legal tackle selection before competition scoring.",
+        "Use foul-risk filters in drill constraints.",
+        "Remove players from contact tasks when technique deteriorates."
+      ],
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "About The Laws: Philosophy and Spirit"
+      ]
+    },
+    {
+      "risk_id": "acl_risk_pressing_tackling_cutting",
+      "name": "ACL risk in pressing, tackling, cutting, and landing",
+      "mechanism": "High-speed defensive actions can involve cutting, stopping, tackling, twisting, landing, or being tackled, all under reactive pressure.",
+      "why_it_matters": "Systematic review evidence identifies duels and pressing as common categories in ACL injury situations, while detailed activities include tackling and cutting.",
+      "mitigation": [
+        "Progress deceleration and change-of-direction mechanics.",
+        "Train hip-knee-ankle alignment under reactive conditions.",
+        "Limit fatigued high-speed duel volume for developing players."
+      ],
+      "source_refs": [
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "risk_id": "ankle_foot_duel_contact",
+      "name": "Ankle and foot risk in duels",
+      "mechanism": "Contact with another player, being kicked, landing on or around another foot, and unstable foot positions during loose-ball contests.",
+      "why_it_matters": "The injury systematic review found duels were the most common activity category for ankle and foot injuries across included studies.",
+      "mitigation": [
+        "Control opponent distance and contact intensity in early duel progressions.",
+        "Teach landing and bracing mechanics after aerial challenges.",
+        "Use clear rules against late kicks through the ball."
+      ],
+      "source_refs": [
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "risk_id": "hamstring_high_speed_lunge",
+      "name": "Hamstring and thigh risk in high-speed defensive actions",
+      "mechanism": "Sprinting, lunging, accelerating, and high-intensity running during presses, recovery runs, or last-ditch challenges.",
+      "why_it_matters": "Running and kicking were prominent inciting activities for thigh and hamstring injuries in the systematic review, and elite defensive work includes high-intensity efforts.",
+      "mitigation": [
+        "Maintain sprint exposure and eccentric hamstring strength in weekly planning.",
+        "Avoid sudden spikes in repeated high-speed pressing drills.",
+        "Coach defenders not to overstride into tackles."
+      ],
+      "source_refs": [
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review",
+        "High-Intensity Efforts in Elite Soccer Matches and Associated Movement Patterns, Technical Skills and Tactical Actions"
+      ]
+    },
+    {
+      "risk_id": "groin_adductor_cutting_and_duels",
+      "name": "Groin and adductor load in cutting and duel play",
+      "mechanism": "Wide defensive shuffles, lunges, tackles, cutting, kicking clearances, and body contact with hip abduction or external rotation.",
+      "why_it_matters": "Hip and groin injuries are associated with changing direction, kicking, high-intensity running, and duel situations in the injury literature.",
+      "mitigation": [
+        "Build adductor strength and tolerance progressively.",
+        "Monitor groin symptoms after duel-heavy or pressing-heavy sessions.",
+        "Use smaller ranges and slower speeds when reintroducing tackling."
+      ],
+      "source_refs": [
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "risk_id": "aerial_collision_and_head_contact",
+      "name": "Aerial collision and head-contact risk",
+      "mechanism": "Mistimed jumps, opponent contact, elbow use, head-to-head contact, or poor landing after contested headers.",
+      "why_it_matters": "Aerial duels are common defensive actions and must be trained with opponent safety, spatial awareness, and legal contact constraints.",
+      "mitigation": [
+        "Teach timing and body protection before contested heading volume.",
+        "Ban leading elbows and unsafe backing-in during training games.",
+        "Use graduated aerial exposure for youth players."
+      ],
+      "source_refs": [
+        "About The Laws: Philosophy and Spirit",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    },
+    {
+      "risk_id": "high_press_overload",
+      "name": "High-press overload",
+      "mechanism": "Excessive volume of repeated high-intensity pressing, counterpressing, acceleration, deceleration, and recovery runs without adequate recovery.",
+      "why_it_matters": "High-press game constraints can raise physical and physiological responses; poorly managed load can degrade decision-making and movement quality.",
+      "mitigation": [
+        "Use short bouts, planned rest, and role rotation.",
+        "Track repeated accelerations, decelerations, high-speed distance, and session RPE.",
+        "Stop or regress when foul rate and technical errors rise."
+      ],
+      "source_refs": [
+        "Training defensive high-press in soccer: physical and physiological responses to different small-sided games played by youth athletes"
+      ]
+    },
+    {
+      "risk_id": "recovery_tackle_from_wrong_side",
+      "name": "Recovery tackle from wrong side",
+      "mechanism": "A beaten defender reaches across or lunges from behind while chasing, often when emotional or fatigued.",
+      "why_it_matters": "These challenges are high foul and safety risk, especially near the penalty area or with speed differential.",
+      "mitigation": [
+        "Coach recovery angle to get goal-side rather than straight-line chasing.",
+        "Teach delay and shepherding as acceptable outcomes.",
+        "Penalize late contact in training even when the defender touches the ball."
+      ],
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "Irene Paredes: Timing the tackle"
+      ]
+    }
+  ],
+  "training_implications": [
+    {
+      "implication_id": "progression_beginner_intermediate_advanced",
+      "name": "Beginner-intermediate-advanced defensive progression",
+      "progression": {
+        "beginner": [
+          "Goal-side and ball-side positioning.",
+          "Low side-on stance and short adjustment steps.",
+          "Delay and jockey without tackling.",
+          "Force attacker away from goal in simple 1v1 lanes.",
+          "Basic pressure-cover-balance in 2v2 and 3v3.",
+          "Safe challenge rules: no lunging, no excessive force, no slide tackling as a default."
+        ],
+        "intermediate": [
+          "Timed approach and deceleration to the first touch.",
+          "Directional defending based on field zone and cover.",
+          "Standing tackle selection and interception from realistic pass cues.",
+          "Pressing triggers with nearest-cover-balance response.",
+          "Compact shifting in 4v4 to 8v8 games.",
+          "Back-line jump-slide-cover movements and box defending."
+        ],
+        "advanced": [
+          "Opponent-specific force direction and pressing traps.",
+          "High press, mid-block, low-block, and counterpress transitions.",
+          "Back-line coordination with high line, depth cover, goalkeeper support, and plus-one coverage.",
+          "High-speed duel decision-making with strict foul and safety constraints.",
+          "Role-specific defensive conditioning tied to match demands.",
+          "Data-informed compactness, pressure timing, and defensive outcome assessment."
+        ]
+      },
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "What are the principles of football?",
+        "Investigating the increased use of the high press"
+      ]
+    },
+    {
+      "implication_id": "coach_outcomes_beyond_ball_wins",
+      "name": "Score defending outcomes beyond ball wins",
+      "summary": "Training should reward delaying, forcing backward or wide, blocking central lanes, buying recovery time, and preventing high-value actions, not only tackles and steals.",
+      "application": [
+        "Award points for forced backward passes.",
+        "Award points for five-second delay when isolated.",
+        "Award points for compact block regains.",
+        "Subtract points for reckless contact or unnecessary fouls."
+      ],
+      "source_refs": [
+        "What are the principles of football?",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    },
+    {
+      "implication_id": "use_constraints_to_train_pressing",
+      "name": "Use constraints to train pressing",
+      "summary": "Rules, scoring, field shape, and restart design can increase pressing behavior and make the trigger-coordination link visible.",
+      "application": [
+        "Extra points for regains in the attacking or middle third.",
+        "Narrow channels to train central compactness.",
+        "Restart from goalkeeper to train build-up press roles.",
+        "Time-limited counterpress after possession loss."
+      ],
+      "source_refs": [
+        "4v4 plus 4 small-sided game: Pressing and defensive shape",
+        "Training defensive high-press in soccer: physical and physiological responses to different small-sided games played by youth athletes"
+      ]
+    },
+    {
+      "implication_id": "train_1v1_before_full_press",
+      "name": "Train individual defending before full-team pressing",
+      "summary": "A team press breaks when first defenders cannot arrive, decelerate, delay, or force predictably. Build from 1v1 technique to unit and team structures.",
+      "application": [
+        "1v1 channel: force wide and delay.",
+        "2v2: first defender plus cover.",
+        "3v3 or 4v4: add balance and transition after regain.",
+        "Phase play: connect midfield and back line."
+      ],
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "4v4 plus 4 small-sided game: Pressing and defensive shape"
+      ]
+    },
+    {
+      "implication_id": "connect_defensive_technique_to_laws",
+      "name": "Connect defensive technique to the Laws",
+      "summary": "Players should learn that challenge quality includes legality and opponent welfare. Backend sessions should include law constraints for safe challenge behavior.",
+      "application": [
+        "Teach careless, reckless, and excessive-force categories in age-appropriate terms.",
+        "Include referee consequences in scenario questions.",
+        "Make dangerous contact an automatic failed repetition.",
+        "Use video review to identify safe versus unsafe challenge mechanics."
+      ],
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "About The Laws: Philosophy and Spirit"
+      ]
+    },
+    {
+      "implication_id": "train_recovery_defending",
+      "name": "Train recovery defending",
+      "summary": "Recovery is not only running back. Players must choose recovery angle, communicate, delay from the wrong side if needed, and avoid panic fouls.",
+      "application": [
+        "Start defender half-beaten and teach curved recovery to goal-side.",
+        "Score shepherding to low-danger zones.",
+        "Use transition games where failed press requires immediate recovery.",
+        "Review wrong-side tackling as safety and tactical-risk issue."
+      ],
+      "source_refs": [
+        "Irene Paredes: Timing the tackle",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    },
+    {
+      "implication_id": "periodize_defensive_contact_and_high_press_load",
+      "name": "Periodize defensive contact and high-press load",
+      "summary": "Defensive sessions can create high neuromuscular, contact, and cognitive load. Plan duel volume, acceleration-deceleration volume, and high-speed exposure around matches.",
+      "application": [
+        "Use lower-contact technical days early in a microcycle or near matches.",
+        "Place high-intensity pressing and duel work where recovery is available.",
+        "Rotate roles in small-sided games to avoid overload in repeated pressing positions.",
+        "Track foul rate, soreness, and movement quality as fatigue signals."
+      ],
+      "source_refs": [
+        "Training defensive high-press in soccer: physical and physiological responses to different small-sided games played by youth athletes",
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "implication_id": "include_role_specific_defending",
+      "name": "Include role-specific defending",
+      "summary": "Forwards, midfielders, fullbacks, center backs, and wingers defend different spaces and actions. Generic defending sessions should be supplemented with role-specific scenarios.",
+      "application": [
+        "Center forward: arc press and block pivot access.",
+        "Winger: press fullback, recover to fullback support, defend far post.",
+        "Fullback: wide 1v1, cover inside runs, defend crosses.",
+        "Center back: manage depth, aerial duels, plus-one cover.",
+        "Defensive midfielder: screen, intercept, delay transition, cover fullback jumps."
+      ],
+      "source_refs": [
+        "High-Intensity Efforts in Elite Soccer Matches and Associated Movement Patterns, Technical Skills and Tactical Actions",
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "implication_id": "use_video_and_freeze_feedback",
+      "name": "Use video and freeze feedback for tactical timing",
+      "summary": "Many defensive errors are perceptual or timing errors. Video, freeze moments, and guided questions help players see why a press, tackle, or line movement was correct or wrong.",
+      "application": [
+        "Freeze when the pressing trigger appears.",
+        "Ask who is first defender, cover, and balance.",
+        "Ask whether ball pressure allows the back line to step.",
+        "Replay duels to classify safe versus unsafe challenge timing."
+      ],
+      "source_refs": [
+        "How the USA's collective press unlocked France's shape",
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "implication_id": "assess_compactness_with_context",
+      "name": "Assess compactness with context",
+      "summary": "Compactness metrics should not be treated as universally smaller-is-better. Ball-near compactness, line distances, opponent switch threat, and depth protection all matter.",
+      "application": [
+        "Track ball-near subgroup distance and central lane access.",
+        "Review whether compactness forced wide or backward play.",
+        "Review whether compactness exposed weak-side switches.",
+        "Use different targets for high press, mid-block, low block, and counterpress."
+      ],
+      "source_refs": [
+        "Controlling the game without the ball: The mid-block and compactness",
+        "Is a compact organization important for defensive success in elite soccer? Analysis based on player tracking data"
+      ]
+    },
+    {
+      "implication_id": "design_common_error_prescriptions",
+      "name": "Design common-error prescriptions",
+      "summary": "The backend should prescribe different interventions for overcommitting, poor body shape, late pressure, missed cover, reckless contact, low compactness, or failure to track runners.",
+      "application": [
+        "Overcommitment: fast-slow approach and delay games.",
+        "Poor body shape: side-on stance and force-direction channels.",
+        "Late pressure: starting position and trigger recognition.",
+        "Missed cover: 2v2 and 3v3 pressure-cover-balance games.",
+        "Reckless contact: safe challenge technique and law constraints.",
+        "Low compactness: unit shifting and ball-near subgroup games."
+      ],
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "What are the principles of football?",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    },
+    {
+      "implication_id": "build_from_drill_to_game_model",
+      "name": "Build from drill to game model",
+      "summary": "A defending curriculum should connect technique to tactical identity: individual stance supports 1v1 control, 1v1 control supports unit pressure, unit pressure supports the team's chosen high press, mid-block, low block, or transition plan.",
+      "application": [
+        "Map every defensive drill to a match phase.",
+        "Use the same vocabulary in isolated, small-sided, and phase-play sessions.",
+        "Progress from predetermined starts to live starts.",
+        "End with realistic decision-making where players can choose press, delay, tackle, intercept, or recover."
+      ],
+      "source_refs": [
+        "4v4 plus 4 small-sided game: Pressing and defensive shape",
+        "Controlling the game without the ball: The mid-block and compactness",
+        "Investigating the increased use of the high press"
+      ]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_id": "football_defending_model_1v1_stance_delay",
+      "record_type": "football_defending_model",
+      "name": "1v1 stance, delay, and force-direction model",
+      "scope": "player",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Model for close-down, deceleration, side-on stance, jockeying, delaying, and forcing away from danger.",
+      "inputs": [
+        "field_zone",
+        "attacker_speed",
+        "attacker_footedness",
+        "cover_available",
+        "goal_threat"
+      ],
+      "outputs": [
+        "approach_angle",
+        "body_shape",
+        "force_direction",
+        "hold_or_tackle_decision"
+      ],
+      "evaluation_signals": [
+        "forced_wide",
+        "delayed_for_support",
+        "blocked_inside_route",
+        "no_foul",
+        "ball_won_or_attack_slowed"
+      ],
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal"
+      ]
+    },
+    {
+      "record_id": "football_defending_model_interception_screening",
+      "record_type": "football_defending_model",
+      "name": "Interception and passing-lane screening model",
+      "scope": "player_and_unit",
+      "levels": [
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Model for scanning, cover-shadow use, central-lane protection, and risk-managed stepping in front of passes.",
+      "inputs": [
+        "ball_location",
+        "receiver_body_shape",
+        "pass_speed",
+        "cover_position",
+        "central_lane_threat"
+      ],
+      "outputs": [
+        "screening_position",
+        "interception_timing",
+        "hold_or_jump_decision"
+      ],
+      "evaluation_signals": [
+        "inside_pass_denied",
+        "pass_intercepted",
+        "opponent_forced_wide",
+        "unit_not_bypassed"
+      ],
+      "source_refs": [
+        "Preventing progression through central areas",
+        "4v4 plus 4 small-sided game: Pressing and defensive shape"
+      ]
+    },
+    {
+      "record_id": "football_tackling_model_safe_tackle_selection",
+      "record_type": "football_tackling_model",
+      "name": "Safe tackle selection and timing",
+      "scope": "player",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Model for choosing poke, block, shoulder challenge, shepherd, or slide tackle based on ball exposure, balance, cover, and law risk.",
+      "inputs": [
+        "ball_exposed",
+        "defender_balance",
+        "angle_to_ball",
+        "opponent_safety_risk",
+        "penalty_area_context"
+      ],
+      "outputs": [
+        "tackle_type",
+        "delay_instead",
+        "recover_instead",
+        "block_instead"
+      ],
+      "evaluation_signals": [
+        "ball_played_first",
+        "no_reckless_contact",
+        "no_excessive_force",
+        "controlled_follow_through",
+        "successful_next_action"
+      ],
+      "source_refs": [
+        "Irene Paredes: Timing the tackle",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    },
+    {
+      "record_id": "football_tackling_model_law_safety_filter",
+      "record_type": "football_tackling_model",
+      "name": "Law and safety filter for challenges",
+      "scope": "player_and_coach",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Classification layer for fair challenge, careless foul, reckless challenge, excessive-force challenge, dangerous play, holding, pushing, and impeding.",
+      "inputs": [
+        "contact_type",
+        "force_level",
+        "challenge_angle",
+        "ball_playability",
+        "opponent_safety"
+      ],
+      "outputs": [
+        "legal_challenge",
+        "careless_foul",
+        "reckless_yellow_card_risk",
+        "serious_foul_play_red_card_risk",
+        "training_regression_needed"
+      ],
+      "evaluation_signals": [
+        "opponent_not_endangered",
+        "challenge_with_precaution",
+        "no_lunge_or_exposed_studs",
+        "no_hold_or_push"
+      ],
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "About The Laws: Philosophy and Spirit"
+      ]
+    },
+    {
+      "record_id": "football_duel_model_ground_duels",
+      "record_type": "football_duel_model",
+      "name": "Ground defensive duel model",
+      "scope": "player",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Model for 1v1 ground duels, loose-ball races, shoulder-to-shoulder contests, recovery duels, and second actions.",
+      "inputs": [
+        "ball_distance",
+        "legal_position",
+        "opponent_momentum",
+        "cover_support",
+        "next_action_needed"
+      ],
+      "outputs": [
+        "delay",
+        "shield_path_to_ball",
+        "legal_contact",
+        "tackle",
+        "recover"
+      ],
+      "evaluation_signals": [
+        "position_won_before_contact",
+        "ball_or_route_controlled",
+        "second_ball_secured",
+        "no_holding_or_pushing"
+      ],
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "record_id": "football_duel_model_aerial_second_ball",
+      "record_type": "football_duel_model",
+      "name": "Aerial duel and second-ball model",
+      "scope": "player_and_unit",
+      "levels": [
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Model for timing aerial challenges, protecting opponent safety, landing under control, and organizing the second-ball response.",
+      "inputs": [
+        "ball_flight",
+        "opponent_position",
+        "jump_timing",
+        "landing_space",
+        "team_mate_second_ball_positions"
+      ],
+      "outputs": [
+        "attack_ball",
+        "delay_jump",
+        "screen_opponent_legally",
+        "clearance_direction",
+        "second_ball_press_or_secure"
+      ],
+      "evaluation_signals": [
+        "clean_aerial_contact",
+        "safe_landing",
+        "no_elbow_or_under-cut",
+        "second_ball_won_or_pressured"
+      ],
+      "source_refs": [
+        "About The Laws: Philosophy and Spirit",
+        "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review"
+      ]
+    },
+    {
+      "record_id": "football_pressing_rule_trigger_library",
+      "record_type": "football_pressing_rule",
+      "name": "Pressing trigger library",
+      "scope": "unit_and_team",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Reusable rule set for bad touch, back-to-goal receiver, backward pass, touchline pass, goalkeeper build-up pass, and immediate loss triggers.",
+      "inputs": [
+        "opponent_touch_quality",
+        "pass_direction",
+        "receiver_body_orientation",
+        "touchline_proximity",
+        "support_distance",
+        "team_compactness"
+      ],
+      "outputs": [
+        "press",
+        "delay",
+        "screen",
+        "hold_block",
+        "recover"
+      ],
+      "evaluation_signals": [
+        "coordinated_jump",
+        "central_exit_blocked",
+        "forced_turnover",
+        "forced_backward_play",
+        "press_not_bypassed_cleanly"
+      ],
+      "source_refs": [
+        "What are the principles of football?",
+        "How the USA's collective press unlocked France's shape",
+        "Preventing progression through central areas"
+      ]
+    },
+    {
+      "record_id": "football_pressing_rule_unit_shape",
+      "record_type": "football_pressing_rule",
+      "name": "Unit press-cover-balance rule",
+      "scope": "unit",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Rule ensuring every press has first defender pressure, second defender cover, balance protection, and back-line depth management.",
+      "inputs": [
+        "nearest_defender",
+        "cover_defender",
+        "balance_defenders",
+        "back_line_height",
+        "central_lane_status"
+      ],
+      "outputs": [
+        "first_defender_task",
+        "cover_task",
+        "balance_task",
+        "line_height_task"
+      ],
+      "evaluation_signals": [
+        "clear_roles",
+        "compact_shape",
+        "central_pass_denied",
+        "depth_covered",
+        "regain_or_forced_error"
+      ],
+      "source_refs": [
+        "4v4 plus 4 small-sided game: Pressing and defensive shape",
+        "What are the principles of football?"
+      ]
+    },
+    {
+      "record_id": "football_defensive_tactical_rule_compact_mid_block",
+      "record_type": "football_defensive_tactical_rule",
+      "name": "Compact mid-block and press timing",
+      "scope": "team",
+      "levels": [
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Rule for organizing in a compact mid-block, denying central play, and jumping on planned triggers or opponent errors.",
+      "inputs": [
+        "team_length",
+        "team_width",
+        "ball_zone",
+        "opponent_central_access",
+        "press_trigger"
+      ],
+      "outputs": [
+        "hold_block",
+        "shift",
+        "jump_press",
+        "force_wide",
+        "transition_after_regain"
+      ],
+      "evaluation_signals": [
+        "central_space_protected",
+        "opponent_forced_wide_or_back",
+        "ball_near_compactness",
+        "successful_press_after_trigger"
+      ],
+      "source_refs": [
+        "Controlling the game without the ball: The mid-block and compactness",
+        "Is a compact organization important for defensive success in elite soccer? Analysis based on player tracking data"
+      ]
+    },
+    {
+      "record_id": "football_defensive_tactical_rule_high_press_line_compactness",
+      "record_type": "football_defensive_tactical_rule",
+      "name": "High press line height and compactness",
+      "scope": "team",
+      "levels": [
+        "advanced"
+      ],
+      "summary": "Rule connecting high pressing to defensive line height, compact support distances, attacking-third numbers, and depth protection.",
+      "inputs": [
+        "pressing_phase",
+        "defensive_line_height",
+        "goalkeeper_start_position",
+        "opponent_depth_threat",
+        "ball_pressure"
+      ],
+      "outputs": [
+        "step_line",
+        "hold_line",
+        "drop_line",
+        "lock_on",
+        "protect_depth"
+      ],
+      "evaluation_signals": [
+        "compressed_pitch",
+        "opponent_options_reduced",
+        "through_ball_risk_managed",
+        "line_not_disconnected"
+      ],
+      "source_refs": [
+        "Investigating the increased use of the high press",
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "record_id": "football_defensive_tactical_rule_back_line_coordination",
+      "record_type": "football_defensive_tactical_rule",
+      "name": "Back-line jump-slide-cover coordination",
+      "scope": "unit",
+      "levels": [
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Rule for coordinating fullback jumps, center-back cover, plus-one depth cover, line stepping, dropping, and defending crosses.",
+      "inputs": [
+        "ball_pressure",
+        "wide_press",
+        "runner_depth",
+        "center_back_engaged",
+        "crossing_threat"
+      ],
+      "outputs": [
+        "jump",
+        "slide",
+        "cover",
+        "drop",
+        "step",
+        "defend_box"
+      ],
+      "evaluation_signals": [
+        "channel_covered",
+        "plus_one_available",
+        "runners_tracked",
+        "far_post_balanced",
+        "box_entries_reduced"
+      ],
+      "source_refs": [
+        "Women's Champions League Performance Insights: How Lyon's defensive discipline helped protect their winning advantage over Arsenal",
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "record_id": "football_defensive_tactical_rule_counterpress_or_recover",
+      "record_type": "football_defensive_tactical_rule",
+      "name": "Counterpress or recover decision",
+      "scope": "team",
+      "levels": [
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Rule for deciding after loss whether to counterpress, delay, screen, or recover into shape.",
+      "inputs": [
+        "players_near_ball",
+        "opponent_first_touch",
+        "central_exit_lanes",
+        "rest_defense_shape",
+        "distance_to_goal"
+      ],
+      "outputs": [
+        "counterpress",
+        "delay",
+        "screen_forward_pass",
+        "recover_goal_side",
+        "rebuild_block"
+      ],
+      "evaluation_signals": [
+        "immediate_pressure_when_connected",
+        "central_exit_denied",
+        "no_uncontrolled_chase",
+        "shape_recovered_if_bypassed"
+      ],
+      "source_refs": [
+        "Preventing progression through central areas",
+        "How the USA's collective press unlocked France's shape"
+      ]
+    },
+    {
+      "record_id": "football_defensive_tactical_rule_penalty_area_defending",
+      "record_type": "football_defensive_tactical_rule",
+      "name": "Penalty-area safe defending rule",
+      "scope": "player_and_unit",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Rule prioritizing position, body shape, shot blocking, delaying, and controlled legal challenges in and around the penalty area.",
+      "inputs": [
+        "penalty_area_location",
+        "attacker_control",
+        "shot_angle",
+        "support_cover",
+        "foul_risk"
+      ],
+      "outputs": [
+        "block",
+        "shepherd",
+        "delay",
+        "tackle_only_if_safe",
+        "avoid_contact"
+      ],
+      "evaluation_signals": [
+        "shot_angle_reduced",
+        "inside_route_blocked",
+        "no_unnecessary_penalty",
+        "cross_or_cutback_forced_under_pressure"
+      ],
+      "source_refs": [
+        "Law 12 - Fouls and Misconduct",
+        "Defending in 1v1: Orientating attackers away from goal"
+      ]
+    },
+    {
+      "record_id": "football_defending_model_common_errors_corrections",
+      "record_type": "football_defending_model",
+      "name": "Defending common errors and corrections",
+      "scope": "coach_backend",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "summary": "Diagnostic mapping from defensive errors to targeted corrections and drill types.",
+      "inputs": [
+        "error_type",
+        "field_zone",
+        "defensive_phase",
+        "player_level",
+        "safety_risk"
+      ],
+      "outputs": [
+        "technical_correction",
+        "tactical_correction",
+        "load_adjustment",
+        "law_safety_constraint",
+        "progression_or_regression"
+      ],
+      "evaluation_signals": [
+        "fewer_overruns",
+        "better_force_direction",
+        "improved_cover_angle",
+        "lower_foul_rate",
+        "more forced low-danger outcomes"
+      ],
+      "source_refs": [
+        "Defending in 1v1: Orientating attackers away from goal",
+        "What are the principles of football?",
+        "Law 12 - Fouls and Misconduct"
+      ]
+    }
+  ]
+}

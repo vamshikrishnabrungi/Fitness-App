@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "domain": "southpaw_orthodox_matchups_wave2",
+    "sport": "boxing",
+    "version": "draft_v2",
+    "research_goal": "Deepen orthodox/southpaw and stance-matchup knowledge for lead-foot position, rear-hand lanes, angles, defense, and level-gated teaching.",
+    "researched_on": "2026-06-21",
+    "agent_scope": "orthodox/southpaw matchup tactics"
+  },
+  "source_refs": [
+    {"title": "USA Boxing Grassroots Task Force Training Manual v.01", "url": "https://d36m266ykvepgv.cloudfront.net/uploads/media/lYivrDbNV6/o/usab-gtf-trainingmanual-v-01-1.pdf", "source_type": "coach_manual_pdf", "organization_or_author": "USA Boxing", "notes": "Used for stance and fundamental footwork."},
+    {"title": "Boxing Canada Instruction Beginners Reference Manual", "url": "https://boxingcanada.org/wp-content/uploads/2025/01/Instruction-Beginners-Reference-Manual-EN.pdf", "source_type": "coach_manual_pdf", "organization_or_author": "Boxing Canada", "notes": "Used for southpaw basics and beginner teaching corrections."},
+    {"title": "IBA Coach Regulations Manual", "url": "https://www.iba.sport/wp-content/uploads/2019/01/AIBA-Coach-Regulations-Manual_WEB_2019_01-1.pdf", "source_type": "coach_manual_pdf", "organization_or_author": "International Boxing Association", "notes": "Used for boxing stance and tactical development framing."},
+    {"title": "The 5 States of Range", "url": "https://www.myboxingcoach.com/boxing-tips-range-in-boxing/", "source_type": "boxing_coaching_article", "organization_or_author": "MyBoxingCoach", "notes": "Used for range and angle logic."},
+    {"title": "World Boxing Competition Rules", "url": "https://worldboxing.org/wp-content/uploads/2024/09/World-Boxing-Competition-Rules-Feb-2024-v3.99-ClEAN.pdf", "source_type": "official_rules_pdf", "organization_or_author": "World Boxing", "notes": "Used for competition and ring context."},
+    {"title": "Strength and Conditioning for Professional Boxing", "url": "https://shura.shu.ac.uk/11499/3/Ruddock%20strength%20conditioning%20professional%20boxing.pdf", "source_type": "sports_science_review_pdf", "organization_or_author": "Ruddock et al.", "notes": "Used for physical and fatigue demands that affect tactical execution."}
+  ],
+  "key_concepts": [
+    {"id": "open_stance_changes_lines", "summary": "Orthodox vs southpaw creates an open-stance matchup where rear hands and lead feet become central tactical variables."},
+    {"id": "lead_foot_battle_is_not_foot_stomping", "summary": "Outside lead-foot position can open lines, but it should be taught as positioning and angle, not careless stepping."},
+    {"id": "rear_hand_lane_is_primary", "summary": "Open-stance matchups often create clearer rear-hand lanes and different defensive responsibilities."},
+    {"id": "jab_lane_changes", "summary": "The lead-hand battle and lead shoulder position change jab path, parry, and entry decisions."},
+    {"id": "beginner_needs_simple_rules", "summary": "Beginners need stance recognition, safety, and simple outside-step awareness before complex traps."},
+    {"id": "fatigue_increases_clash_risk", "summary": "Foot clashes and balance errors rise when fatigue reduces stance discipline."}
+  ],
+  "technical_models": [
+    {"id": "boxing_stance_matchup_model", "types": ["closed_stance_orthodox_vs_orthodox", "closed_stance_southpaw_vs_southpaw", "open_stance_orthodox_vs_southpaw"]},
+    {"id": "boxing_open_stance_lead_foot_model", "variables": ["inside_foot", "outside_foot", "neutral_foot", "foot_clash_risk", "angle_after_step"]},
+    {"id": "boxing_open_stance_rear_hand_model", "variables": ["rear_hand_lane", "lead_hand_obstruction", "head_position", "exit_side"]},
+    {"id": "boxing_open_stance_jab_model", "variables": ["lead_hand_battle", "jab_to_chest", "jab_to_head", "parry_lane", "step_jab"]},
+    {"id": "boxing_open_stance_defense_model", "actions": ["lead_hand_control", "outside_step", "rear_hand_guard", "pivot_out", "catch_or_parry_rear_hand"]},
+    {"id": "boxing_open_stance_progression_model", "levels": ["recognize_stance", "find_safe_lead_foot", "jab_and_exit", "rear_hand_lane", "counter_and_angle", "opponent_specific_plan"]}
+  ],
+  "tactical_rules": [
+    {"id": "stance_rule_recognize_first", "rule": "First teach the user to identify orthodox, southpaw, closed stance, and open stance."},
+    {"id": "stance_rule_outside_foot_basic", "rule": "Teach outside lead-foot position as a simple angle concept before building traps."},
+    {"id": "stance_rule_rear_hand_awareness", "rule": "In open stance, rear-hand defense and rear-hand attack both become higher priority."},
+    {"id": "stance_rule_do_not_cross_feet", "rule": "Do not let users chase outside foot by crossing feet or reaching."},
+    {"id": "stance_rule_jab_changes", "rule": "Open stance can make jab lanes different; use jab to chest/body or hand-fight when head jab is blocked."},
+    {"id": "stance_rule_exit_after_rear_hand", "rule": "Open-stance rear-hand attacks should include an exit or angle because return fire is available."},
+    {"id": "stance_rule_beginner_no_complex_traps", "rule": "Beginners should not receive complex southpaw trap sequences until basic footwork is stable."},
+    {"id": "stance_rule_fatigue_simplifies", "rule": "When tired, simplify to stance recognition, jab, guard, and exit rather than elaborate angle chains."}
+  ],
+  "physical_demands": [
+    {"id": "stance_matchup_hip_control", "quality": "Hip and trunk control to step outside without losing punch mechanics."},
+    {"id": "stance_matchup_reactive_footwork", "quality": "Short reactive steps and pivots to win or recover foot position."},
+    {"id": "stance_matchup_visual_processing", "quality": "Recognize stance, lead-foot relation, and rear-hand threat quickly."},
+    {"id": "stance_matchup_shoulder_guard", "quality": "Guard endurance against rear-hand lane threats."},
+    {"id": "stance_matchup_adductor_abductor", "quality": "Lateral hip and groin capacity for angle changes."}
+  ],
+  "injury_or_load_risks": [
+    {"id": "stance_matchup_risk_foot_clash", "risk": "Open-stance lead-foot battles can create foot clashes, stumbles, or ankle irritation."},
+    {"id": "stance_matchup_risk_knee_twist", "risk": "Reaching for outside foot without hip turn can stress the knee."},
+    {"id": "stance_matchup_risk_rear_hand_contact", "risk": "Unprepared users can be hit by rear hands from unfamiliar angles."},
+    {"id": "stance_matchup_risk_overthinking", "risk": "Beginners may freeze if given too many stance-matchup rules."},
+    {"id": "stance_matchup_risk_fatigue_balance", "risk": "Fatigue increases crossing feet and stance loss."}
+  ],
+  "training_implications": [
+    {"id": "stance_matchup_teach_beginner", "summary": "Beginner: identify stance, maintain base, avoid crossing feet, jab and exit."},
+    {"id": "stance_matchup_teach_intermediate", "summary": "Intermediate: outside foot, rear-hand lane, lead-hand battle, pivot exit, simple counters."},
+    {"id": "stance_matchup_teach_advanced", "summary": "Advanced: opponent-specific stance traps, feints, counters, and score-state adjustments."},
+    {"id": "stance_matchup_retrieval_tags", "summary": "Store stance_matchup, lead_foot_relation, rear_hand_lane, and foot_clash_risk as retrieval tags."},
+    {"id": "stance_matchup_assessment", "summary": "Assess stance recognition, foot discipline, rear-hand defense, and exit quality."}
+  ],
+  "backend_records_to_create": [
+    {"collection": "sport_training_rules", "id": "boxing_stance_matchup_model"},
+    {"collection": "sport_training_rules", "id": "boxing_open_stance_lead_foot_model"},
+    {"collection": "sport_training_rules", "id": "boxing_open_stance_rear_hand_model"},
+    {"collection": "sport_training_rules", "id": "boxing_open_stance_defense_model"},
+    {"collection": "sport_teaching_progressions", "id": "boxing_teach_orthodox_southpaw_matchup"},
+    {"collection": "sport_skill_assessments", "id": "boxing_assess_stance_matchup_iq"},
+    {"collection": "planning_rules", "id": "boxing_rule_open_stance_foot_clash_load"}
+  ]
+}
+

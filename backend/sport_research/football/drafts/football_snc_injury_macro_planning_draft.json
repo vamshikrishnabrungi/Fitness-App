@@ -1,0 +1,1483 @@
+{
+  "metadata": {
+    "domain": "football_snc_injury_macro_planning",
+    "sport": "soccer",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready football strength-and-conditioning, injury-risk, load-management, return-to-play, readiness, and macro-planning rules for soccer players across beginner, intermediate, and advanced levels, with explicit position-specific, match-week, congested-fixture, and youth maturation implications."
+  },
+  "source_refs": [
+    {
+      "id": "src_fifa_injury_prevention",
+      "title": "Injury Prevention",
+      "url": "https://inside.fifa.com/health-and-medical/injury-prevention",
+      "source_type": "official_medical_resource",
+      "organization_or_author": "FIFA",
+      "notes": "Official FIFA health resource for football injury prevention, including the FIFA 11+ family of warm-up and neuromuscular preparation programmes."
+    },
+    {
+      "id": "src_fifa_concussion",
+      "title": "Suspect and Protect",
+      "url": "https://inside.fifa.com/campaigns/concussion",
+      "source_type": "official_medical_campaign",
+      "organization_or_author": "FIFA",
+      "notes": "Official FIFA concussion campaign used for the rule that suspected concussion is a medical removal-and-assessment event, not a training-load adjustment problem."
+    },
+    {
+      "id": "src_fifa_fwc2022_positions",
+      "title": "Part 2: Distances Positions Covered",
+      "url": "https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/what-distances-did-various-positions-cover.php",
+      "source_type": "official_physical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "World Cup physical analysis used for position-specific total distance, high-intensity running, and sprint-distance context."
+    },
+    {
+      "id": "src_fifa_fwc2022_context",
+      "title": "How did team physical demands change in relation to various contexts?",
+      "url": "https://www.fifatrainingcentre.com/en/fwc2022/physical-analysis/how-do-team-demands-change-in-relation-to-various-contexts.php",
+      "source_type": "official_physical_analysis",
+      "organization_or_author": "FIFA Training Centre",
+      "notes": "Used for interpreting match running through possession, formation, scoreline, opponent, match stage, and fatigue rather than raw totals alone."
+    },
+    {
+      "id": "src_uefa_euro2024_physical",
+      "title": "UEFA EURO 2024 Technical Report, Part Two: Physical Analysis",
+      "url": "https://editorial.uefa.com/resources/0293-1c5d4009fd90-095f184556d6-1000/euro2024_part_2_physical_analysis_.pdf",
+      "source_type": "official_tournament_physical_report",
+      "organization_or_author": "UEFA",
+      "notes": "Official tournament physical report used for elite match-demand, high-intensity, sprint, and contextual physical-performance references."
+    },
+    {
+      "id": "src_hsr_sprinting_review",
+      "title": "High-Speed Running and Sprinting in Professional Adult Soccer",
+      "url": "https://www.frontiersin.org/journals/sports-and-active-living/articles/10.3389/fspor.2022.893585/full",
+      "source_type": "peer_reviewed_narrative_review",
+      "organization_or_author": "Frontiers in Sports and Active Living authors",
+      "notes": "Used for practical high-speed running and sprinting exposure concepts, including monitoring, thresholds, and programming implications."
+    },
+    {
+      "id": "src_accel_decel_review",
+      "title": "High-Intensity Acceleration and Deceleration Demands in Elite Team Sports Competitive Match Play: A Systematic Review and Meta-Analysis of Observational Studies",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6851047/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Harper, Carling, and Kiely",
+      "notes": "Used for treating acceleration and deceleration as distinct mechanical loads rather than only speed-distance outputs."
+    },
+    {
+      "id": "src_bradley_high_intensity",
+      "title": "High-Intensity Activity Profiles of Elite Soccer Players at Different Performance Levels",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19918194/",
+      "source_type": "peer_reviewed_match_demand_study",
+      "organization_or_author": "Bradley, Sheldon, Wooster, Olsen, Boanas, and Krustrup",
+      "notes": "Used for role-specific high-intensity activity patterns in elite soccer."
+    },
+    {
+      "id": "src_injury_inciting_activities",
+      "title": "Injury-Inciting Activities in Male and Female Football Players: A Systematic Review",
+      "url": "https://link.springer.com/article/10.1007/s40279-022-01753-5",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Aiello, Impellizzeri, Brown, Serner, and McCall",
+      "notes": "Used for linking injuries to football actions such as duels, pressing, tackling, sprinting, cutting, kicking, and landing."
+    },
+    {
+      "id": "src_fifa11_systematic",
+      "title": "The FIFA 11+ Injury Prevention Program for Soccer Players: A Systematic Review",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29209504/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Sadigursky and colleagues",
+      "notes": "Used for evidence that structured neuromuscular warm-ups can reduce soccer injury risk when performed consistently."
+    },
+    {
+      "id": "src_lauersen_injury_prevention",
+      "title": "The Effectiveness of Exercise Interventions to Prevent Sports Injuries: A Systematic Review and Meta-Analysis of Randomised Controlled Trials",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24100287/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Lauersen, Bertelsen, and Andersen",
+      "notes": "Used for the broader injury-prevention value of strength training and multi-component exercise interventions."
+    },
+    {
+      "id": "src_nordic_hamstring_meta",
+      "title": "Including the Nordic Hamstring Exercise in Injury Prevention Programmes Halves the Rate of Hamstring Injuries: A Systematic Review and Meta-Analysis of 8459 Athletes",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30808663/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "van Dyk, Behan, and Whiteley",
+      "notes": "Used for eccentric hamstring prevention programming and hamstring resilience record candidates."
+    },
+    {
+      "id": "src_ekstrand_hamstring",
+      "title": "Hamstring Injury Rates Have Increased During Recent Seasons and Now Constitute 24% of All Injuries in Men's Professional Football",
+      "url": "https://bjsm.bmj.com/content/57/5/292",
+      "source_type": "peer_reviewed_injury_surveillance",
+      "organization_or_author": "Ekstrand, Bengtsson, Walden, Davison, Khan, and Hagglund",
+      "notes": "Used for hamstring injury burden in professional men's football and the need for proactive high-speed and hamstring-capacity management."
+    },
+    {
+      "id": "src_run_fast_hamstring",
+      "title": "If You Want to Prevent Hamstring Injuries in Soccer, Run Fast: A Narrative Review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8349493/",
+      "source_type": "peer_reviewed_narrative_review",
+      "organization_or_author": "Morin and colleagues",
+      "notes": "Used for the concept that appropriately progressed sprint exposure is part of hamstring preparation, not merely a risk to avoid."
+    },
+    {
+      "id": "src_sprint_volume_velocity",
+      "title": "The Influence of Weekly Sprint Volume and Maximal Velocity Exposures on Eccentric Hamstring Strength in Professional Football Players",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9414047/",
+      "source_type": "peer_reviewed_training_monitoring_study",
+      "organization_or_author": "Professional football training-monitoring researchers",
+      "notes": "Used for weekly sprint exposure and maximal-velocity exposure as monitoring variables relevant to hamstring strength and readiness."
+    },
+    {
+      "id": "src_copenhagen_adduction",
+      "title": "The Adductor Strengthening Programme Prevents Groin Problems Among Male Football Players: A Cluster-Randomised Controlled Trial",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29891614/",
+      "source_type": "peer_reviewed_randomized_trial",
+      "organization_or_author": "Haroy and colleagues",
+      "notes": "Used for adductor and groin durability programming, especially Copenhagen adduction progressions."
+    },
+    {
+      "id": "src_doha_groin",
+      "title": "Doha Agreement Meeting on Terminology and Definitions in Groin Pain in Athletes",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4484366/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Weir, Brukner, Delahunt, Ekstrand, Griffin, Khan, Lovell, Meyers, Muschaweck, Orchard, Paajanen, Philippon, Reboul, Robinson, Schache, Schilders, Serner, Silvers, Thorborg, Tyler, Verrall, de Vos, Vuckovic, and Holmich",
+      "notes": "Used for groin-pain classification awareness and the need to separate adductor-related, iliopsoas-related, inguinal-related, pubic-related, and hip-related presentations."
+    },
+    {
+      "id": "src_acl_aspetar",
+      "title": "Aspetar Clinical Practice Guideline on Rehabilitation After Anterior Cruciate Ligament Reconstruction",
+      "url": "https://bjsm.bmj.com/content/57/9/500",
+      "source_type": "peer_reviewed_clinical_practice_guideline",
+      "organization_or_author": "Aspetar Orthopaedic and Sports Medicine Hospital guideline group",
+      "notes": "Used for criteria-based ACL rehabilitation, return-to-running, strength, hop, movement-quality, and return-to-sport decision concepts."
+    },
+    {
+      "id": "src_return_to_sport_consensus",
+      "title": "2016 Consensus Statement on Return to Sport from the First World Congress in Sports Physical Therapy",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27226389/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Ardern and consensus group",
+      "notes": "Used for the return-to-participation, return-to-sport, and return-to-performance continuum."
+    },
+    {
+      "id": "src_hamstring_rtp_rehab",
+      "title": "Rehabilitation and Return to Sport After Hamstring Strain Injury",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6189266/",
+      "source_type": "peer_reviewed_clinical_review",
+      "organization_or_author": "Hickey, Timmins, Maniar, Rio, and colleagues",
+      "notes": "Used for hamstring rehabilitation progressions, eccentric strength, running exposure, and criteria-based return-to-sport reasoning."
+    },
+    {
+      "id": "src_hamstring_match_running",
+      "title": "Return to Match Running Performance After a Hamstring Injury in Elite Football: Return Safely, but Return High",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8883270/",
+      "source_type": "peer_reviewed_return_to_performance_study",
+      "organization_or_author": "Elite football return-to-performance researchers",
+      "notes": "Used for the need to restore match-like high-speed and sprint running before full return to performance."
+    },
+    {
+      "id": "src_fixture_congestion_review",
+      "title": "Effects of Fixture Congestion on Injury in Professional Male Soccer: A Systematic Review and Meta-Analysis",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9758680/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Professional soccer fixture-congestion researchers",
+      "notes": "Used for injury-risk concerns and planning changes when recovery time between matches is short."
+    },
+    {
+      "id": "src_workload_injury_review",
+      "title": "Workload and Non-Contact Injury Incidence in Elite Football Players Competing in European Leagues: A Systematic Review and Meta-Analysis",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9602492/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Elite football workload researchers",
+      "notes": "Used for relationships between workload variables, non-contact injury risk, and limitations of simple load metrics."
+    },
+    {
+      "id": "src_congested_microcycle",
+      "title": "Characterizing Microcycles Workload When Combining Two Days Between Games and Travel Distances in Professional Soccer Players",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11474999/",
+      "source_type": "peer_reviewed_training_load_study",
+      "organization_or_author": "Professional soccer training-load researchers",
+      "notes": "Used for congested-microcycle planning, especially short turnarounds and travel context."
+    },
+    {
+      "id": "src_ioc_youth_development",
+      "title": "International Olympic Committee Consensus Statement on Youth Athletic Development",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26084524/",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "Bergeron and IOC consensus group",
+      "notes": "Used for youth growth, maturation, long-term development, diversified preparation, and protection from adult-like loading too early."
+    },
+    {
+      "id": "src_ioc_elite_youth",
+      "title": "International Olympic Committee Consensus Statement on Recommendations and Regulations for Sport Events with Elite Youth Athletes",
+      "url": "https://bjsm.bmj.com/content/58/17/946",
+      "source_type": "peer_reviewed_consensus_statement",
+      "organization_or_author": "IOC consensus group",
+      "notes": "Used for youth athlete welfare, growth and maturation monitoring, event congestion, and workload safeguards."
+    },
+    {
+      "id": "src_rsa_aerobic_review",
+      "title": "Assessment of Aerobic Fitness and Repeated Sprint Ability in Elite Male Soccer Players: A Systematic Review and Meta-Analysis",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40220211/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Elite soccer fitness assessment researchers",
+      "notes": "Used for aerobic fitness and repeated-sprint ability assessment categories and their relevance to soccer repeatability."
+    },
+    {
+      "id": "src_strength_rsa",
+      "title": "Effects of Strength Training on Repeated Sprint Ability in Team Sports Players: A Systematic Review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11313415/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Team-sport strength and repeated-sprint researchers",
+      "notes": "Used for strength training as a contributor to repeated sprint ability rather than conditioning through running alone."
+    },
+    {
+      "id": "src_unilateral_cod_acl",
+      "title": "Can Unilateral Strength Training Optimize Change of Direction Performance and Reduce Anterior Cruciate Ligament Injury Risk in Multidirectional Sports?",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12115484/",
+      "source_type": "peer_reviewed_review",
+      "organization_or_author": "Unilateral strength and multidirectional sport researchers",
+      "notes": "Used for unilateral strength, change of direction, hip-knee-ankle control, and ACL risk-reduction programming concepts."
+    },
+    {
+      "id": "src_achilles_loading",
+      "title": "Conservative Management of Achilles Tendinopathy: A Systematic Review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7249277/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Achilles tendinopathy rehabilitation researchers",
+      "notes": "Used for calf and Achilles loading progressions, tendon capacity, and avoiding abrupt plyometric or sprint-load spikes."
+    },
+    {
+      "id": "src_ankle_proprioception",
+      "title": "Proprioceptive Training Methods as a Tool for the Prevention of Injuries in Female Soccer Players: A Systematic Review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11061981/",
+      "source_type": "peer_reviewed_systematic_review",
+      "organization_or_author": "Soccer proprioception and injury-prevention researchers",
+      "notes": "Used for ankle balance, proprioception, landing control, and lower-limb injury-prevention support."
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "football_snc_is_match_action_preparation",
+      "concept": "Football S&C is preparation for match actions, not generic fitness.",
+      "details": "The plan should build the ability to accelerate, sprint upright, brake, turn, duel, repeat high-intensity efforts, and stay technically effective late in the match. Running volume, gym work, and recovery all need to map back to football roles and tactical situations.",
+      "backend_use": "Use football action tags when selecting conditioning, strength, plyometric, and mobility content.",
+      "level_implications": {
+        "beginner": "Build broad movement literacy, safe landing, low-volume sprint mechanics, and consistent neuromuscular warm-up habits.",
+        "intermediate": "Progress to role-aware speed, deceleration, repeated-sprint, and unilateral strength blocks.",
+        "advanced": "Use individual match data, sprint exposure, readiness signals, and tactical role demands to tune weekly loading."
+      },
+      "source_ids": ["src_fifa_fwc2022_positions", "src_fifa_fwc2022_context", "src_hsr_sprinting_review"]
+    },
+    {
+      "id": "physical_demands_are_contextual",
+      "concept": "Raw distance is not enough to describe soccer load.",
+      "details": "Match demands change with position, formation, possession state, scoreline, tactical style, opponent level, substitute status, and fatigue. Backend rules should avoid assuming that more total distance means a better or harder football session.",
+      "backend_use": "Pair workload metrics with role, phase, style, match status, and training objective.",
+      "level_implications": {
+        "beginner": "Use simple session categories such as skill, small-sided game, speed, strength, and match.",
+        "intermediate": "Track high-intensity running, accelerations, decelerations, minutes played, and session RPE.",
+        "advanced": "Use individualized speed thresholds and position-specific reference ranges where monitoring exists."
+      },
+      "source_ids": ["src_fifa_fwc2022_context", "src_uefa_euro2024_physical", "src_bradley_high_intensity"]
+    },
+    {
+      "id": "speed_exposure_is_a_capacity",
+      "concept": "Max-velocity exposure should be built progressively instead of avoided.",
+      "details": "Hamstring risk rises when players sprint underprepared, but never sprinting leaves them unprepared for wide transition runs, pressing, recovery runs, and through-ball chases. Plans should create regular, controlled exposures to high-speed and near-maximal sprinting when the player is healthy.",
+      "backend_use": "Create weekly sprint exposure and max-velocity microdose rules with readiness gates.",
+      "position_notes": {
+        "wide_roles": "Fullbacks, wingbacks, wingers, and wide forwards need frequent exposure to open-field sprints.",
+        "center_backs": "Even with lower total high-intensity volume, they need sprint reserve for emergency recovery runs.",
+        "goalkeepers": "Need fewer long sprints but still need short accelerations and occasional recovery runs in sweeper actions."
+      },
+      "source_ids": ["src_hsr_sprinting_review", "src_run_fast_hamstring", "src_sprint_volume_velocity", "src_ekstrand_hamstring"]
+    },
+    {
+      "id": "braking_load_is_separate_from_running_load",
+      "concept": "Deceleration is a high-cost load that can hide inside small-sided games.",
+      "details": "High numbers of hard stops, defensive presses, counterpressing actions, and tight-space turns can produce major eccentric load even when sprint distance is low. A session can be mechanically heavy without looking hard by distance alone.",
+      "backend_use": "Track and classify deceleration, COD, pressing, and small-sided-game density separately from running distance.",
+      "match_week_note": "Avoid high volumes of unaccustomed braking and cutting close to match day, especially MD-2 and MD-1.",
+      "source_ids": ["src_accel_decel_review", "src_injury_inciting_activities", "src_fifa_fwc2022_context"]
+    },
+    {
+      "id": "cod_is_a_skill_and_capacity",
+      "concept": "Change of direction combines perception, braking, body orientation, and re-acceleration.",
+      "details": "COD training should not be only ladder drills or cone shuttles. Football COD includes reading an opponent, lowering the center of mass, controlling hip-knee-ankle alignment, redirecting force, and executing the next technical action.",
+      "backend_use": "Link COD exercises to 1v1 defending, dribbling, pressing, and transition drills.",
+      "level_implications": {
+        "beginner": "Teach low-speed cuts, landing positions, and braking mechanics before fatigue.",
+        "intermediate": "Add planned and reactive COD with the ball and opponent cues.",
+        "advanced": "Progress to high-speed entry, opponent deception, and match-realistic re-acceleration."
+      },
+      "source_ids": ["src_unilateral_cod_acl", "src_accel_decel_review", "src_injury_inciting_activities"]
+    },
+    {
+      "id": "rsa_depends_on_speed_strength_and_aerobic_recovery",
+      "concept": "Repeated sprint ability is not just more sprints.",
+      "details": "Repeated sprint ability depends on max sprint capacity, acceleration strength, aerobic recovery between efforts, phosphocreatine recovery, technical economy, and tactical pacing. Conditioning should mix speed development, high-intensity intervals, small-sided games, and aerobic base work.",
+      "backend_use": "Separate speed-quality sessions from repeated-sprint conditioning sessions.",
+      "source_ids": ["src_rsa_aerobic_review", "src_strength_rsa", "src_hsr_sprinting_review"]
+    },
+    {
+      "id": "strength_is_multiplanar_and_unilateral",
+      "concept": "Soccer strength needs single-leg, lateral, rotational, and trunk components.",
+      "details": "Football actions are rarely symmetrical. Sprinting, cutting, tackling, shielding, shooting, landing, and pressing require unilateral force production, pelvis control, trunk stiffness, adductor-abductor coordination, and eccentric braking strength.",
+      "backend_use": "Prefer soccer-specific strength buckets over a generic lower-body day.",
+      "source_ids": ["src_lauersen_injury_prevention", "src_unilateral_cod_acl", "src_strength_rsa"]
+    },
+    {
+      "id": "injury_prevention_requires_consistency",
+      "concept": "Prevention work is a repeated habit, not a one-off drill.",
+      "details": "FIFA 11+, Nordic hamstring work, adductor strengthening, calf loading, landing control, and balance work are most useful when integrated consistently and progressed around the match calendar.",
+      "backend_use": "Create low-friction warm-up and microdose records that can appear repeatedly in plans.",
+      "source_ids": ["src_fifa_injury_prevention", "src_fifa11_systematic", "src_nordic_hamstring_meta", "src_copenhagen_adduction"]
+    },
+    {
+      "id": "tissue_capacity_is_specific",
+      "concept": "Hamstring, adductor, calf-Achilles, knee, ankle, hip, and trunk risks require different signals.",
+      "details": "A player can tolerate aerobic running yet still be underprepared for sprinting, adductor squeeze loads, calf stiffness, deep cutting, or contact landings. Readiness logic should not reduce all injury risk to one fatigue score.",
+      "backend_use": "Use body-region flags and exposure-specific readiness rules.",
+      "source_ids": ["src_nordic_hamstring_meta", "src_copenhagen_adduction", "src_achilles_loading", "src_ankle_proprioception"]
+    },
+    {
+      "id": "match_week_is_quality_preservation",
+      "concept": "Match-week planning should protect match quality while maintaining key capacities.",
+      "details": "The goal is not to remove all training stress before a match, but to place heavy neuromuscular, strength, speed, and tactical load far enough from match day that players can perform. Closer to match day, keep volume lower, maintain sharpness, and avoid novel soreness.",
+      "backend_use": "Generate MD-minus rules for strength, sprinting, COD, conditioning, recovery, and activation.",
+      "source_ids": ["src_fifa_fwc2022_context", "src_workload_injury_review", "src_hsr_sprinting_review"]
+    },
+    {
+      "id": "congested_fixtures_shift_goal_to_availability",
+      "concept": "Congested periods prioritize availability, recovery, and microdosing.",
+      "details": "When matches are separated by two to four days, the plan should reduce heavy eccentric volume, limit extensive conditioning for starters, top up non-starters, maintain speed with tiny exposures when safe, and use rotation/readiness rules.",
+      "backend_use": "Create separate congested-fixture macros instead of applying normal week templates.",
+      "source_ids": ["src_fixture_congestion_review", "src_congested_microcycle", "src_workload_injury_review"]
+    },
+    {
+      "id": "rtp_is_a_continuum",
+      "concept": "Return-to-play should progress from participation to sport to performance.",
+      "details": "A player who is cleared to train is not automatically ready for full match performance. Backend rules should distinguish return to running, return to team training, return to limited minutes, and return to full match demands.",
+      "backend_use": "Create RTP records with phase gates, exposures, and minutes progression.",
+      "source_ids": ["src_return_to_sport_consensus", "src_hamstring_rtp_rehab", "src_hamstring_match_running", "src_acl_aspetar"]
+    },
+    {
+      "id": "youth_maturation_changes_risk",
+      "concept": "Youth players need growth and maturation safeguards.",
+      "details": "Rapid growth can temporarily reduce coordination, alter limb leverage, increase tendon and apophyseal sensitivity, and change tolerance to sprinting, jumping, cutting, and contact. Youth programming should account for biological maturity, not only chronological age.",
+      "backend_use": "Add youth growth-spurt readiness flags and avoid adult-like congested loading for developing players.",
+      "source_ids": ["src_ioc_youth_development", "src_ioc_elite_youth"]
+    },
+    {
+      "id": "non_starters_need_top_up_load",
+      "concept": "Match exposure is not equal across the squad.",
+      "details": "A substitute who plays 10 minutes and a starter who plays 95 minutes should not receive the same post-match prescription. Non-starters often need controlled top-up conditioning and speed exposure, while starters need recovery and tissue-status checks.",
+      "backend_use": "Use minutes played, position, and sprint exposure to adjust M+1 and M+2 plans.",
+      "source_ids": ["src_workload_injury_review", "src_congested_microcycle", "src_fifa_fwc2022_context"]
+    },
+    {
+      "id": "medical_red_flags_override_training",
+      "concept": "Some events require medical removal or referral, not modified training.",
+      "details": "Suspected concussion, acute severe pain, inability to run normally, marked swelling, neurological symptoms, and rapid worsening symptoms should stop football training decisions and trigger clinical assessment.",
+      "backend_use": "Create hard-stop readiness rules before generating modified sessions.",
+      "source_ids": ["src_fifa_concussion", "src_return_to_sport_consensus", "src_acl_aspetar"]
+    }
+  ],
+  "technical_models": [
+    {
+      "model_id": "football_action_capacity_model",
+      "name": "Football action capacity model",
+      "summary": "Organize S&C around the match actions a player must repeatedly express: accelerate, sprint, brake, turn, jump, land, duel, pass or shoot under fatigue, and recover between efforts.",
+      "inputs": ["position", "role", "training_age", "match_minutes", "current injury flags", "weekly sprint exposure", "weekly braking/COD exposure", "fixture density"],
+      "outputs": ["speed priority", "braking priority", "strength priority", "conditioning priority", "tissue-capacity priority", "recovery priority"],
+      "position_notes": {
+        "center_back": "Lower average high-speed volume does not remove the need for sprint reserve and aerial landing capacity.",
+        "fullback_wingback": "High priority for repeated overlaps, recovery runs, accelerations, and eccentric calf-hamstring capacity.",
+        "central_midfielder": "High priority for aerobic repeatability, accelerations, decelerations, and trunk-pelvis stiffness.",
+        "winger_forward": "High priority for max velocity, acceleration, adductor/hamstring resilience, and repeated explosive actions.",
+        "goalkeeper": "High priority for lateral power, short acceleration, landing, trunk stiffness, shoulder robustness, and recovery from dives."
+      },
+      "source_ids": ["src_fifa_fwc2022_positions", "src_bradley_high_intensity", "src_injury_inciting_activities"]
+    },
+    {
+      "model_id": "acceleration_model",
+      "name": "Acceleration and first-step sprinting",
+      "summary": "Acceleration in football requires horizontal force, trunk angle control, sharp first steps, foot placement under the center of mass, and the ability to accelerate from varied starting postures after perception or technical cues.",
+      "programming_examples": ["10 m starts", "falling starts", "split-stance starts", "pressing starts on pass cue", "ball-chase accelerations", "resisted accelerations if technique is stable"],
+      "level_progression": {
+        "beginner": "Teach posture, arm action, and short accelerations with full rest.",
+        "intermediate": "Add varied starts, ball cues, and short resisted or uphill accelerations.",
+        "advanced": "Add reactive starts, duel context, tactical cues, and repeated acceleration clusters with sufficient quality."
+      },
+      "match_week_rule": "Place highest-quality acceleration work early or midweek in a one-match week; use only low-volume sharpness doses at MD-2 or MD-1.",
+      "source_ids": ["src_hsr_sprinting_review", "src_accel_decel_review"]
+    },
+    {
+      "model_id": "max_velocity_exposure_model",
+      "name": "Max-velocity exposure",
+      "summary": "Healthy players need planned exposure to upright sprinting and high-speed running so hamstrings, calves, and neuromuscular coordination are prepared for match-speed demands.",
+      "programming_examples": ["flying 20s", "progressive 40-60 m runs", "curved runs", "transition sprints", "through-ball chases", "wide-channel sprint exposures"],
+      "readiness_gates": ["no acute hamstring or calf pain", "no worsening soreness from prior speed day", "adequate warm-up", "volume progressed gradually", "avoid maximal exposure during high fatigue"],
+      "match_week_rule": "Use a small exposure early-to-midweek if the player did not hit meaningful sprint speed in the match; avoid novel max-speed volume the day before a match.",
+      "source_ids": ["src_hsr_sprinting_review", "src_run_fast_hamstring", "src_sprint_volume_velocity", "src_hamstring_match_running"]
+    },
+    {
+      "model_id": "deceleration_braking_model",
+      "name": "Deceleration and braking capacity",
+      "summary": "Deceleration is an eccentric and coordination-heavy skill that requires hip, knee, ankle, calf, trunk, and foot control. It should be taught progressively before high-density pressing, shuttles, and reactive COD work.",
+      "programming_examples": ["snap-downs", "landing sticks", "run-and-stick stops", "2-step brakes", "5-10-5 progressions", "press-and-recover games with controlled density"],
+      "level_progression": {
+        "beginner": "Static landings, low-speed stops, and body-position coaching.",
+        "intermediate": "Linear-to-lateral braking, sharper angles, and moderate-density shuttles.",
+        "advanced": "Reactive braking from match speeds, opponent cues, and tactical pressing scenarios."
+      },
+      "source_ids": ["src_accel_decel_review", "src_unilateral_cod_acl", "src_ankle_proprioception"]
+    },
+    {
+      "model_id": "cod_reactive_agility_model",
+      "name": "Change of direction and reactive agility",
+      "summary": "COD should progress from planned movement mechanics to reactive opponent-led decisions, using the ball and tactical constraints once landing, braking, and trunk control are reliable.",
+      "programming_examples": ["planned 45-degree cuts", "planned 90-degree cuts", "defensive shuffle-to-sprint", "mirror drills", "1v1 channel games", "pressing trigger agility"],
+      "risk_controls": ["limit fatigue while teaching mechanics", "watch knee valgus and trunk collapse", "progress entry speed before adding large volume", "avoid sharp COD if groin, knee, ankle, or Achilles symptoms are active"],
+      "source_ids": ["src_unilateral_cod_acl", "src_injury_inciting_activities", "src_acl_aspetar"]
+    },
+    {
+      "model_id": "rsa_aerobic_model",
+      "name": "Repeated sprint and high-intensity running model",
+      "summary": "Repeated sprint ability depends on sprint quality, acceleration strength, aerobic recovery, high-intensity running tolerance, and tactical pacing. It should not be developed only with exhaustive shuttles.",
+      "methods": ["speed development", "small-sided games", "tempo runs", "high-intensity intervals", "repeated sprint sets", "position-specific transition runs"],
+      "programming_note": "Separate pure speed quality days from repeated sprint conditioning days when possible, because the desired adaptations and fatigue cost differ.",
+      "source_ids": ["src_rsa_aerobic_review", "src_strength_rsa", "src_bradley_high_intensity"]
+    },
+    {
+      "model_id": "unilateral_strength_model",
+      "name": "Unilateral strength and pelvis control",
+      "summary": "Football strength should include split-squat, single-leg hinge, step-down, lateral lunge, Copenhagen, calf, and anti-rotation patterns to support sprinting, cutting, kicking, shielding, and landing.",
+      "progression": {
+        "beginner": "Bodyweight control and slow eccentrics.",
+        "intermediate": "External load, range, and lateral-plane work.",
+        "advanced": "Heavy unilateral strength, high-velocity intent, integrated plyometrics, and position-specific force angles."
+      },
+      "source_ids": ["src_lauersen_injury_prevention", "src_unilateral_cod_acl", "src_strength_rsa"]
+    },
+    {
+      "model_id": "hamstring_resilience_model",
+      "name": "Hamstring resilience model",
+      "summary": "Hamstring preparation should combine progressive high-speed running, eccentric knee-flexor strength, hip-extension strength, lumbopelvic control, fatigue management, and return-to-sprint criteria after injury.",
+      "programming_examples": ["Nordic hamstring exercise", "slider curls", "Romanian deadlifts", "hip thrust variations", "sprint exposures", "progressive return-to-sprint drills"],
+      "match_week_rule": "Heavy eccentric hamstring work is best placed far enough from match day to avoid soreness; near match day, use low-volume activation or isometrics when appropriate.",
+      "source_ids": ["src_nordic_hamstring_meta", "src_ekstrand_hamstring", "src_run_fast_hamstring", "src_hamstring_rtp_rehab"]
+    },
+    {
+      "model_id": "adductor_groin_durability_model",
+      "name": "Adductor and groin durability model",
+      "summary": "Groin durability requires adductor strength, controlled kicking and cutting exposure, hip range, trunk-pelvis control, and symptom-aware progressions. Copenhagen adduction is a central but not exclusive tool.",
+      "programming_examples": ["adductor isometrics", "short-lever Copenhagen", "long-lever Copenhagen", "lateral lunge", "controlled crossing and shooting volume", "progressive cutting"],
+      "risk_controls": ["avoid sudden increases in shooting or crossing volume", "reduce lateral COD if adductor pain increases", "distinguish adductor-related symptoms from hip, iliopsoas, inguinal, or pubic symptoms"],
+      "source_ids": ["src_copenhagen_adduction", "src_doha_groin", "src_injury_inciting_activities"]
+    },
+    {
+      "model_id": "calf_achilles_capacity_model",
+      "name": "Calf and Achilles capacity model",
+      "summary": "Calf and Achilles preparation should build soleus and gastrocnemius strength, tendon load tolerance, ankle stiffness, pogo capacity, sprint tolerance, and progressive plyometric exposure.",
+      "programming_examples": ["bent-knee calf raises", "straight-knee calf raises", "isometric calf holds", "pogos", "skips", "progressive sprinting", "graded change of direction"],
+      "readiness_gates": ["morning tendon stiffness trend", "pain during warm-up", "pain response after session", "calf soreness after sprinting", "single-leg calf raise tolerance"],
+      "source_ids": ["src_achilles_loading", "src_hsr_sprinting_review", "src_ankle_proprioception"]
+    },
+    {
+      "model_id": "ankle_knee_hip_control_model",
+      "name": "Ankle-knee-hip control model",
+      "summary": "Lower-limb control should connect foot/ankle proprioception, knee alignment, hip control, pelvis stability, and trunk position during cuts, landings, tackles, and repeated technical actions.",
+      "programming_examples": ["single-leg balance", "hop-and-stick", "lateral bounds", "drop landing", "step-down", "anti-valgus strength", "hip abduction and external rotation work"],
+      "source_ids": ["src_ankle_proprioception", "src_acl_aspetar", "src_unilateral_cod_acl", "src_fifa11_systematic"]
+    },
+    {
+      "model_id": "trunk_stiffness_transfer_model",
+      "name": "Trunk stiffness and force transfer",
+      "summary": "Trunk stiffness helps transfer force during sprinting, duels, shielding, shooting, change of direction, and landing. It should include anti-extension, anti-rotation, lateral chain, and dynamic bracing rather than only sit-ups.",
+      "programming_examples": ["dead bug progressions", "side plank variations", "Pallof press", "loaded carries", "anti-rotation chop/lift", "medicine-ball bracing drills"],
+      "position_notes": {
+        "defenders": "Need trunk stiffness for duels, aerial contests, and tackles.",
+        "midfielders": "Need repeated bracing while scanning, receiving, and changing direction under contact.",
+        "attackers": "Need trunk control during sprinting, cutting, shooting, and riding challenges.",
+        "goalkeepers": "Need trunk stiffness for diving, landing, and rapid recovery to set position."
+      },
+      "source_ids": ["src_unilateral_cod_acl", "src_injury_inciting_activities", "src_lauersen_injury_prevention"]
+    },
+    {
+      "model_id": "match_week_microcycle_model",
+      "name": "Standard one-match microcycle model",
+      "summary": "For a seven-day week with one match, use post-match recovery, then place the main neuromuscular, strength, speed, tactical, and conditioning work early or midweek, then taper volume while keeping sharpness.",
+      "template": {
+        "M_plus_1": "Recovery for starters; controlled top-up for non-starters based on minutes and exposure.",
+        "MD_minus_4_or_3": "Main strength, speed exposure, high-intensity running, or larger tactical load depending on team calendar.",
+        "MD_minus_2": "Moderate tactical speed and set-piece work; reduce volume and avoid novel eccentric soreness.",
+        "MD_minus_1": "Activation, mobility, rehearsal, short accelerations, and low-volume technical/tactical clarity.",
+        "match_day": "Warm-up, performance, and post-match cooldown/recovery logging."
+      },
+      "source_ids": ["src_workload_injury_review", "src_hsr_sprinting_review", "src_fifa_fwc2022_context"]
+    },
+    {
+      "model_id": "congested_fixture_model",
+      "name": "Congested fixture model",
+      "summary": "When there are two matches in a week or two to four days between matches, reduce heavy training volume for likely starters, maintain capacity with microdoses, top up non-starters, and use readiness plus rotation decisions.",
+      "template": {
+        "starters": "Recovery, tissue checks, tactical rehearsal, short activation, and medical/readiness decisions.",
+        "non_starters": "Controlled top-up running, strength, and speed work if freshness and schedule allow.",
+        "returning_players": "Do not use congested fixtures as the first full exposure to match demands after injury."
+      },
+      "source_ids": ["src_fixture_congestion_review", "src_congested_microcycle", "src_workload_injury_review"]
+    },
+    {
+      "model_id": "return_to_run_rtp_model",
+      "name": "Return-to-run and return-to-play continuum",
+      "summary": "Progress from symptom-controlled mobility and strength to linear running, high-speed running, sprinting, cutting, football drills, non-contact team training, contact/team training, limited match minutes, and full performance.",
+      "phase_gates": ["pain and swelling controlled", "strength benchmark appropriate to injury", "movement quality acceptable", "linear running tolerated", "high-speed and sprint exposure restored where relevant", "COD and contact tolerated", "coach and medical sign-off"],
+      "source_ids": ["src_return_to_sport_consensus", "src_acl_aspetar", "src_hamstring_rtp_rehab", "src_hamstring_match_running"]
+    },
+    {
+      "model_id": "youth_growth_maturation_model",
+      "name": "Youth growth and maturation model",
+      "summary": "Youth planning should adjust load around rapid growth, coordination changes, school stress, tournament congestion, sleep, nutrition, and chronological versus biological age.",
+      "risk_flags": ["rapid height change", "new heel, knee, hip, or groin pain", "loss of coordination", "large training jump", "adult-like fixture congestion", "early specialization pressure"],
+      "programming_response": "Lower peak intensity and volume when symptoms or rapid growth flags appear, preserve movement skill, and progress strength with excellent technique.",
+      "source_ids": ["src_ioc_youth_development", "src_ioc_elite_youth"]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "rule_id": "high_press_requires_accel_decel_capacity",
+      "situation": "High press, counterpress, or repeated front-foot defending",
+      "rule": "A team that presses high needs players prepared for repeated accelerations, hard decelerations, re-accelerations, and short recovery windows.",
+      "training_implication": "Do not prescribe high-density pressing games on heavy legs without considering deceleration and adductor/calf load; use fewer reps or larger rests when readiness is low.",
+      "position_specific_notes": {
+        "forwards": "Need repeated curved accelerations and braking to screen passing lanes.",
+        "midfielders": "Need second-wave pressure, cover, and re-press capacity.",
+        "defenders": "Need connected line height and recovery sprint reserve behind the press."
+      },
+      "source_ids": ["src_accel_decel_review", "src_injury_inciting_activities", "src_fifa_fwc2022_context"]
+    },
+    {
+      "rule_id": "wide_channel_transition_requires_speed_reserve",
+      "situation": "Overlaps, underlaps, recovery runs, counterattacks, and balls into channels",
+      "rule": "Wide players need regular max-velocity and high-speed running exposure because their decisive actions often occur over larger spaces.",
+      "training_implication": "Fullbacks, wingbacks, wingers, and wide forwards should not rely only on small-sided games for speed preparation.",
+      "source_ids": ["src_fifa_fwc2022_positions", "src_hsr_sprinting_review", "src_run_fast_hamstring"]
+    },
+    {
+      "rule_id": "central_midfield_requires_repeatability",
+      "situation": "Central midfield roles in possession, out of possession, and transition",
+      "rule": "Central midfielders need high repeatability across accelerations, decelerations, support angles, pressing support, and technical actions under fatigue.",
+      "training_implication": "Blend aerobic base, high-intensity intervals, small-sided games, trunk stiffness, and unilateral strength rather than only sprint work.",
+      "source_ids": ["src_bradley_high_intensity", "src_rsa_aerobic_review", "src_fifa_fwc2022_positions"]
+    },
+    {
+      "rule_id": "center_backs_need_low_frequency_high_consequence_speed",
+      "situation": "High defensive line, defending through balls, covering wide channels",
+      "rule": "Center backs may record lower sprint volume than wide roles, but their sprints are often high consequence and must be trained.",
+      "training_implication": "Include occasional recovery-run and opening-up sprint work, plus hamstring, calf, trunk, landing, and duel capacity.",
+      "source_ids": ["src_fifa_fwc2022_positions", "src_hsr_sprinting_review", "src_ekstrand_hamstring"]
+    },
+    {
+      "rule_id": "counterattack_sessions_are_hamstring_and_calf_sessions",
+      "situation": "Fast break, transition attack, direct play, and repeated runs in behind",
+      "rule": "Counterattack training can create meaningful high-speed and sprint load even if the session is tactical.",
+      "training_implication": "Count transition games and run-in-behind patterns toward weekly speed exposure and hamstring/calf load.",
+      "source_ids": ["src_hsr_sprinting_review", "src_sprint_volume_velocity", "src_fifa_fwc2022_context"]
+    },
+    {
+      "rule_id": "tight_space_games_can_be_adductor_and_knee_heavy",
+      "situation": "Small-sided games, rondos with pressing, 1v1 channels, and tight possession games",
+      "rule": "Tight-space training often increases accelerations, decelerations, lateral pushes, and cutting even when total distance and sprint distance are modest.",
+      "training_implication": "Use lower duration or longer rest if adductor, ankle, knee, or Achilles symptoms are present.",
+      "source_ids": ["src_accel_decel_review", "src_copenhagen_adduction", "src_unilateral_cod_acl"]
+    },
+    {
+      "rule_id": "set_piece_sessions_have_jump_contact_and_landing_load",
+      "situation": "Corners, free kicks, aerial duels, and goalkeeper claiming practice",
+      "rule": "Set-piece practice is not purely tactical; it can accumulate jumping, contact, neck/trunk bracing, and landing load.",
+      "training_implication": "Manage volume for players with ankle, knee, Achilles, groin, or back issues, and avoid large new aerial-contact volume late in the week.",
+      "source_ids": ["src_injury_inciting_activities", "src_ankle_proprioception", "src_achilles_loading"]
+    },
+    {
+      "rule_id": "non_starter_top_up_is_role_specific",
+      "situation": "Post-match training for substitutes and unused players",
+      "rule": "Non-starters should receive controlled top-up work based on what they missed: speed, high-intensity running, accelerations/decelerations, or technical/tactical minutes.",
+      "training_implication": "Do not prescribe the same top-up to a winger who missed sprint exposure and a central midfielder who needs aerobic repeatability.",
+      "source_ids": ["src_congested_microcycle", "src_workload_injury_review", "src_fifa_fwc2022_positions"]
+    },
+    {
+      "rule_id": "returning_players_need_tactical_exposure_before_full_matches",
+      "situation": "Player returning from injury to team training",
+      "rule": "RTP should include the football situations that create the player's position-specific loads, not only generic running clearance.",
+      "training_implication": "A returning winger needs sprint-in-behind and braking exposure; a midfielder needs repeat decel and contact support actions; a center back needs recovery sprints, jumps, and duels.",
+      "source_ids": ["src_return_to_sport_consensus", "src_hamstring_match_running", "src_acl_aspetar"]
+    }
+  ],
+  "physical_demands": [
+    {
+      "demand_id": "acceleration_first_10m",
+      "demand": "Acceleration and first 10 m speed",
+      "why_it_matters": "Most football sprints begin from low speed or a tactical cue, and early acceleration often decides pressing, loose-ball races, first touches, and 1v1 separation.",
+      "role_emphasis": ["all outfield roles", "goalkeeper short set-and-go actions"],
+      "assessment_or_monitoring": ["5 m or 10 m split", "first-step quality", "session acceleration counts where tracking exists", "RPE after acceleration clusters"],
+      "level_implications": {
+        "beginner": "Use short distances, full rest, and simple technique cues.",
+        "intermediate": "Add varied starting postures and ball or opponent cues.",
+        "advanced": "Use position-specific starts, resisted options, and tactical triggers without excessive volume."
+      },
+      "source_ids": ["src_hsr_sprinting_review", "src_accel_decel_review"]
+    },
+    {
+      "demand_id": "max_velocity_high_speed_exposure",
+      "demand": "Max velocity and high-speed running exposure",
+      "why_it_matters": "Open-field runs, channel runs, recovery runs, and runs in behind require players to tolerate high-speed mechanics and hamstring/calf loads.",
+      "role_emphasis": ["fullback_wingback", "winger_wide_forward", "striker_center_forward", "center_back in high-line systems"],
+      "assessment_or_monitoring": ["peak speed relative to known max", "sprint distance", "high-speed distance", "number of near-max exposures", "hamstring and calf symptom response"],
+      "level_implications": {
+        "beginner": "Use progressive strides and relaxed mechanics before true max speed.",
+        "intermediate": "Add controlled sprint exposures weekly when healthy.",
+        "advanced": "Use individual speed thresholds and match-data gaps to decide exposure."
+      },
+      "source_ids": ["src_hsr_sprinting_review", "src_run_fast_hamstring", "src_sprint_volume_velocity"]
+    },
+    {
+      "demand_id": "deceleration_braking",
+      "demand": "Deceleration and braking",
+      "why_it_matters": "Pressing, defending, dribbling, and transition actions require players to stop or slow sharply without losing alignment or control.",
+      "role_emphasis": ["central_midfielder", "defensive_midfielder", "fullback_wingback", "winger_wide_forward", "attacking_midfielder"],
+      "assessment_or_monitoring": ["deceleration counts", "landing quality", "stop distance", "knee and trunk control", "delayed soreness after small-sided games"],
+      "level_implications": {
+        "beginner": "Teach low-speed stops, soft knees, and trunk control.",
+        "intermediate": "Add faster entries and lateral stops.",
+        "advanced": "Use reactive, tactical, and opponent-led braking."
+      },
+      "source_ids": ["src_accel_decel_review", "src_unilateral_cod_acl"]
+    },
+    {
+      "demand_id": "change_of_direction_reactive_agility",
+      "demand": "Change of direction and reactive agility",
+      "why_it_matters": "Football COD occurs in response to opponents, passes, dribbles, pressing cues, and loose balls, and it stresses adductors, knees, ankles, hips, and trunk control.",
+      "role_emphasis": ["all outfield roles", "goalkeeper lateral set movements"],
+      "assessment_or_monitoring": ["planned COD test", "reactive agility quality", "knee valgus or trunk collapse observations", "adductor and ankle response"],
+      "level_implications": {
+        "beginner": "Planned cuts before reactive cuts.",
+        "intermediate": "Ball and defender cues.",
+        "advanced": "High-speed entry and position-specific deception."
+      },
+      "source_ids": ["src_unilateral_cod_acl", "src_injury_inciting_activities", "src_ankle_proprioception"]
+    },
+    {
+      "demand_id": "repeated_sprint_ability",
+      "demand": "Repeated sprint ability",
+      "why_it_matters": "Players must repeat explosive efforts with incomplete recovery during pressing, transitions, counterattacks, and recovery defending.",
+      "role_emphasis": ["forwards", "wide roles", "box-to-box midfielders", "pressing teams"],
+      "assessment_or_monitoring": ["repeated sprint test", "sprint decrement", "RPE", "heart-rate recovery where available", "late-game high-intensity output"],
+      "level_implications": {
+        "beginner": "Build running tolerance and basic speed first.",
+        "intermediate": "Add repeated sprint sets with full technical quality.",
+        "advanced": "Use tactical repeated-sprint scenarios and role-specific work-rest ratios."
+      },
+      "source_ids": ["src_rsa_aerobic_review", "src_strength_rsa"]
+    },
+    {
+      "demand_id": "aerobic_base_recovery",
+      "demand": "Aerobic base and between-effort recovery",
+      "why_it_matters": "Aerobic fitness supports repeated high-intensity efforts, technical concentration, recovery between sprints, and tolerance of dense training weeks.",
+      "role_emphasis": ["central_midfielder", "defensive_midfielder", "fullback_wingback", "pressing forwards"],
+      "assessment_or_monitoring": ["Yo-Yo intermittent recovery style tests", "submax heart-rate response", "session RPE", "ability to recover between high-intensity bouts"],
+      "level_implications": {
+        "beginner": "Use games, tempo intervals, and general running exposure.",
+        "intermediate": "Use mixed aerobic intervals and small-sided games.",
+        "advanced": "Individualize high-intensity intervals by role, season phase, and match minutes."
+      },
+      "source_ids": ["src_rsa_aerobic_review", "src_bradley_high_intensity", "src_fifa_fwc2022_positions"]
+    },
+    {
+      "demand_id": "high_intensity_running",
+      "demand": "High-intensity running",
+      "why_it_matters": "High-intensity running bridges aerobic work and sprinting and is common in support runs, pressing, recovery, and transition play.",
+      "role_emphasis": ["wide roles", "central midfielders", "forwards", "high-pressing teams"],
+      "assessment_or_monitoring": ["high-intensity distance", "individual threshold distance", "number of repeated high-intensity bouts", "late-match drop-off"],
+      "level_implications": {
+        "beginner": "Use simple interval games and avoid large spikes.",
+        "intermediate": "Progress intervals and football-specific running patterns.",
+        "advanced": "Use role-specific speed zones and tactical constraints."
+      },
+      "source_ids": ["src_fifa_fwc2022_positions", "src_uefa_euro2024_physical", "src_bradley_high_intensity"]
+    },
+    {
+      "demand_id": "unilateral_lower_body_strength",
+      "demand": "Unilateral lower-body strength",
+      "why_it_matters": "Single-leg strength supports sprinting, cutting, jumping, shooting, shielding, and deceleration while reducing asymmetry and control issues.",
+      "role_emphasis": ["all roles"],
+      "assessment_or_monitoring": ["single-leg squat quality", "split-squat load", "single-leg hop quality", "side-to-side strength difference", "pain response"],
+      "level_implications": {
+        "beginner": "Control bodyweight and tempo.",
+        "intermediate": "Add load and range of motion.",
+        "advanced": "Use heavy, high-velocity, and lateral-plane progressions."
+      },
+      "source_ids": ["src_lauersen_injury_prevention", "src_unilateral_cod_acl", "src_strength_rsa"]
+    },
+    {
+      "demand_id": "eccentric_hamstring_capacity",
+      "demand": "Eccentric hamstring capacity",
+      "why_it_matters": "Hamstrings face high loads during sprinting and late swing-phase control, with high burden in football injury surveillance.",
+      "role_emphasis": ["wide roles", "forwards", "center_backs in high-line systems", "returning players"],
+      "assessment_or_monitoring": ["Nordic strength if available", "sprint tolerance", "pain on high-speed running", "history of hamstring injury"],
+      "level_implications": {
+        "beginner": "Use low-volume bridge, slider, and hinge progressions.",
+        "intermediate": "Add Nordic hamstring progressions and sprint exposure.",
+        "advanced": "Use eccentric strength, sprint mechanics, and individualized sprint exposure based on match data."
+      },
+      "source_ids": ["src_nordic_hamstring_meta", "src_ekstrand_hamstring", "src_run_fast_hamstring"]
+    },
+    {
+      "demand_id": "adductor_groin_capacity",
+      "demand": "Adductor and groin capacity",
+      "why_it_matters": "Cutting, lateral pushing, tackling, kicking, shooting, and crossing load the adductors and groin complex.",
+      "role_emphasis": ["fullback_wingback", "winger_wide_forward", "attacking_midfielder", "striker_center_forward", "defensive roles with tackling"],
+      "assessment_or_monitoring": ["adductor squeeze pain", "adductor strength if available", "Copenhagen progression tolerance", "kicking and cutting response"],
+      "level_implications": {
+        "beginner": "Use adductor isometrics and controlled lateral movement.",
+        "intermediate": "Progress Copenhagen variations and lateral strength.",
+        "advanced": "Integrate heavy lateral work, kicking volume management, and high-speed COD exposure."
+      },
+      "source_ids": ["src_copenhagen_adduction", "src_doha_groin"]
+    },
+    {
+      "demand_id": "calf_achilles_ankle_stiffness",
+      "demand": "Calf, Achilles, and ankle stiffness capacity",
+      "why_it_matters": "Repeated accelerations, sprinting, jumping, landings, and changes of direction demand calf strength and Achilles tendon load tolerance.",
+      "role_emphasis": ["wide roles", "forwards", "midfielders", "goalkeepers", "players returning from calf or Achilles symptoms"],
+      "assessment_or_monitoring": ["single-leg calf raise endurance", "morning stiffness", "pogo tolerance", "sprint response", "jump/landing pain"],
+      "level_implications": {
+        "beginner": "Build calf strength and balance before high plyometric volume.",
+        "intermediate": "Add pogos, skips, and sprint progression.",
+        "advanced": "Use high-stiffness plyometrics and max-speed exposure with symptom gates."
+      },
+      "source_ids": ["src_achilles_loading", "src_ankle_proprioception", "src_hsr_sprinting_review"]
+    },
+    {
+      "demand_id": "ankle_knee_hip_control",
+      "demand": "Ankle, knee, and hip control",
+      "why_it_matters": "Landing, cutting, tackling, and reactive agility require coordinated lower-limb alignment and trunk control, especially under fatigue.",
+      "role_emphasis": ["all roles", "female and adolescent players as a high-priority education group"],
+      "assessment_or_monitoring": ["single-leg landing quality", "hop-and-stick quality", "knee valgus observation", "balance errors", "pain/swelling response"],
+      "level_implications": {
+        "beginner": "Master landing and balance patterns.",
+        "intermediate": "Add loaded unilateral and lateral tasks.",
+        "advanced": "Integrate high-speed reactive COD and contact scenarios."
+      },
+      "source_ids": ["src_acl_aspetar", "src_unilateral_cod_acl", "src_ankle_proprioception", "src_fifa11_systematic"]
+    },
+    {
+      "demand_id": "trunk_stiffness_and_bracing",
+      "demand": "Trunk stiffness and bracing",
+      "why_it_matters": "Trunk control supports sprint mechanics, duels, shooting, shielding, tackling, cutting, and goalkeeper dives.",
+      "role_emphasis": ["defenders", "midfielders", "forwards", "goalkeepers"],
+      "assessment_or_monitoring": ["anti-rotation control", "side plank quality", "pelvis control during single-leg tasks", "loss of posture during COD"],
+      "level_implications": {
+        "beginner": "Basic bracing and anti-extension.",
+        "intermediate": "Anti-rotation, carries, and lateral-chain strength.",
+        "advanced": "Reactive trunk stiffness during contact, sprinting, and striking."
+      },
+      "source_ids": ["src_unilateral_cod_acl", "src_lauersen_injury_prevention"]
+    },
+    {
+      "demand_id": "contact_aerial_landing_load",
+      "demand": "Contact, aerial, and landing load",
+      "why_it_matters": "Headers, set pieces, tackles, blocks, goalkeeper claims, and duels create contact and landing demands that standard running load does not capture.",
+      "role_emphasis": ["center_back", "striker_center_forward", "defensive_midfielder", "goalkeeper"],
+      "assessment_or_monitoring": ["aerial duel count", "landing quality", "ankle/knee symptoms", "neck/trunk soreness", "contact-related symptoms"],
+      "level_implications": {
+        "beginner": "Teach landing mechanics and safe body positions.",
+        "intermediate": "Add controlled aerial duels and contact preparation.",
+        "advanced": "Integrate set-piece, contested landing, and tactical duel load with recovery planning."
+      },
+      "source_ids": ["src_injury_inciting_activities", "src_ankle_proprioception", "src_fifa_concussion"]
+    },
+    {
+      "demand_id": "goalkeeper_explosive_lateral_demand",
+      "demand": "Goalkeeper explosive lateral, dive, and recovery demand",
+      "why_it_matters": "Goalkeepers require explosive lateral power, repeated set positions, diving and landing tolerance, short recovery movements, and upper-limb/trunk robustness.",
+      "role_emphasis": ["goalkeeper"],
+      "assessment_or_monitoring": ["set-position repeatability", "lateral push-off quality", "landing and shoulder symptoms", "short sprint and recovery quality"],
+      "level_implications": {
+        "beginner": "Teach set position, landing, and low-height diving safely.",
+        "intermediate": "Add lateral power, plyometrics, and repeated save sequences.",
+        "advanced": "Integrate explosive goalkeeper actions with distribution, crosses, and congested match recovery."
+      },
+      "source_ids": ["src_injury_inciting_activities", "src_lauersen_injury_prevention"]
+    },
+    {
+      "demand_id": "youth_growth_coordination_capacity",
+      "demand": "Youth growth, coordination, and maturation capacity",
+      "why_it_matters": "Youth athletes can temporarily lose coordination and tissue tolerance during rapid growth, increasing risk during sprinting, cutting, jumping, and congested tournaments.",
+      "role_emphasis": ["youth players in all positions"],
+      "assessment_or_monitoring": ["height tracking", "new heel/knee/hip/groin pain", "coordination changes", "sleep and school stress", "tournament minutes"],
+      "level_implications": {
+        "beginner": "Keep movement skill broad and avoid adult volumes.",
+        "intermediate": "Progress strength and speed while watching growth-spurt flags.",
+        "advanced": "Individualize by biological maturity, not only team age group."
+      },
+      "source_ids": ["src_ioc_youth_development", "src_ioc_elite_youth"]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "risk_id": "hamstring_underexposed_or_spiked_sprint_load",
+      "risk": "Hamstring risk from sprint underexposure or sudden high-speed spike",
+      "signals": ["recent lack of sprinting", "sudden high-speed match load", "posterior thigh tightness", "previous hamstring injury", "fatigue after congested fixtures"],
+      "adjustment_rule": "Avoid both sudden maximal sprint spikes and long periods with no high-speed exposure; use graded sprint exposure when pain-free and medically cleared.",
+      "avoid": ["new maximal sprint volume on MD-1", "repeated high-speed running while posterior thigh pain is escalating", "clearing RTP based only on jogging tolerance"],
+      "source_ids": ["src_ekstrand_hamstring", "src_run_fast_hamstring", "src_sprint_volume_velocity", "src_hamstring_rtp_rehab"]
+    },
+    {
+      "risk_id": "adductor_groin_overload",
+      "risk": "Adductor and groin overload",
+      "signals": ["pain on adductor squeeze", "pain during cutting", "pain after shooting or crossing volume", "reduced lateral push-off", "history of groin problems"],
+      "adjustment_rule": "Reduce lateral COD, aggressive kicking volume, and high-load Copenhagen work during symptom flares; keep tolerable isometrics and progressive strengthening.",
+      "avoid": ["unmonitored increase in shooting/crossing volume", "fatigued lateral shuttles with groin pain", "ignoring hip-related or inguinal-related symptoms"],
+      "source_ids": ["src_copenhagen_adduction", "src_doha_groin", "src_injury_inciting_activities"]
+    },
+    {
+      "risk_id": "knee_acl_cut_landing_control",
+      "risk": "Knee and ACL risk during cutting, landing, deceleration, and contact perturbations",
+      "signals": ["knee valgus collapse", "poor trunk control", "asymmetrical landing", "swelling", "giving-way sensation", "post-ACL history"],
+      "adjustment_rule": "Prioritize movement-quality gates, strength symmetry, hop quality, progressive COD, and medical criteria before full training or matches.",
+      "avoid": ["fatigued reactive cutting before basic landing control", "returning to full contact after swelling or instability", "using time since injury as the only RTP criterion"],
+      "source_ids": ["src_acl_aspetar", "src_unilateral_cod_acl", "src_fifa11_systematic"]
+    },
+    {
+      "risk_id": "ankle_sprain_and_poor_proprioception",
+      "risk": "Ankle sprain risk and poor proprioception",
+      "signals": ["recent ankle sprain", "balance errors", "pain on cutting", "reduced hop-and-stick control", "taping or bracing dependence"],
+      "adjustment_rule": "Use balance, proprioception, calf strength, hop-control, and progressive COD before open reactive play.",
+      "avoid": ["early return to chaotic small-sided games without landing control", "sharp COD with swelling or instability", "ignoring repeated ankle rolls"],
+      "source_ids": ["src_ankle_proprioception", "src_injury_inciting_activities"]
+    },
+    {
+      "risk_id": "calf_achilles_tendon_spike",
+      "risk": "Calf strain or Achilles tendon overload from sprint, plyometric, or surface-load spikes",
+      "signals": ["morning Achilles stiffness", "calf tightness after sprinting", "pain during pogos", "pain that worsens after session", "recent increase in hard-ground running"],
+      "adjustment_rule": "Reduce plyometric and max-speed volume during symptom escalation; keep tolerable isometrics or heavy-slow resistance under clinical guidance and progress tendon load gradually.",
+      "avoid": ["sudden pogo or sprint volume increases", "max-velocity work when tendon pain worsens during warm-up", "dense calf loading before matches"],
+      "source_ids": ["src_achilles_loading", "src_hsr_sprinting_review"]
+    },
+    {
+      "risk_id": "deceleration_dom_soreness_and_tissue_load",
+      "risk": "Excessive eccentric soreness from deceleration and COD load",
+      "signals": ["heavy legs after small-sided games", "quadriceps/adductor/calf soreness", "drop in cutting quality", "high deceleration count where tracking exists"],
+      "adjustment_rule": "Move dense deceleration work away from match day; reduce shuttle density and tight-space game duration when soreness or fixture congestion is high.",
+      "avoid": ["large COD volume at MD-1", "new aggressive braking drills during tournament weeks", "conditioning only through maximal shuttles"],
+      "source_ids": ["src_accel_decel_review", "src_congested_microcycle"]
+    },
+    {
+      "risk_id": "training_load_spike_low_chronic_load",
+      "risk": "Injury risk from workload spikes or low chronic preparation",
+      "signals": ["return from break", "recent illness", "low training history", "sudden jump in match minutes", "large change in running/COD/sprint load"],
+      "adjustment_rule": "Progress load gradually and use the player's recent exposure history before assigning full football conditioning or match minutes.",
+      "avoid": ["full match demand after a quiet training block", "large top-up session after long inactivity", "rapidly stacking speed, COD, and match minutes"],
+      "source_ids": ["src_workload_injury_review", "src_fixture_congestion_review"]
+    },
+    {
+      "risk_id": "congested_fixture_fatigue",
+      "risk": "Accumulated fatigue during congested fixtures",
+      "signals": ["less than 4 days between matches", "starter minutes above 75-90", "travel", "sleep disruption", "wellness drop", "soreness", "reduced sprint output"],
+      "adjustment_rule": "Prioritize recovery, tactical clarity, activation, and rotation; use non-starter top-ups rather than loading the whole squad equally.",
+      "avoid": ["normal heavy gym week between matches", "large high-intensity top-up for starters", "first RTP match as full minutes during congestion"],
+      "source_ids": ["src_fixture_congestion_review", "src_congested_microcycle"]
+    },
+    {
+      "risk_id": "return_to_play_false_clearance",
+      "risk": "Returning to football before match-specific exposure is restored",
+      "signals": ["can jog but has not sprinted", "can train non-contact but not cut/contact", "strength deficit", "fear or confidence issue", "position-specific load not restored"],
+      "adjustment_rule": "Use phase-based RTP gates and progress from running to football-specific exposure to controlled minutes before full performance.",
+      "avoid": ["full match based on pain-free jogging", "clearing a winger without sprint-in-behind exposure", "clearing a center back without jumps, duels, and recovery sprint exposure"],
+      "source_ids": ["src_return_to_sport_consensus", "src_hamstring_match_running", "src_acl_aspetar"]
+    },
+    {
+      "risk_id": "beginner_overconditioning",
+      "risk": "Beginner overconditioning and poor movement quality under fatigue",
+      "signals": ["technical breakdown during shuttles", "loss of landing control", "excessive soreness", "poor running mechanics", "low training age"],
+      "adjustment_rule": "Use short quality blocks, movement education, games, and gradual conditioning; do not use exhaustive fitness tests as the main development method.",
+      "avoid": ["maximal repeated sprint sessions without speed foundation", "large plyometric volumes", "fatigue-first COD drills"],
+      "source_ids": ["src_ioc_youth_development", "src_lauersen_injury_prevention"]
+    },
+    {
+      "risk_id": "youth_growth_spurt_load_sensitivity",
+      "risk": "Youth growth and maturation load sensitivity",
+      "signals": ["rapid height increase", "new heel, knee, hip, groin, or back pain", "coordination regression", "training with older age groups", "tournament congestion"],
+      "adjustment_rule": "Reduce peak intensity or volume when growth-pain flags appear; prioritize movement quality, strength technique, sleep, and medical referral if symptoms persist.",
+      "avoid": ["adult-style congested match load", "punishing loss of coordination during growth", "ignoring apophyseal pain"],
+      "source_ids": ["src_ioc_youth_development", "src_ioc_elite_youth"]
+    },
+    {
+      "risk_id": "female_and_adolescent_knee_control_priority",
+      "risk": "Higher-priority knee-control education for female and adolescent players",
+      "signals": ["poor landing mechanics", "knee valgus", "low strength training history", "rapid growth", "fatigue-related collapse"],
+      "adjustment_rule": "Make neuromuscular warm-ups, landing control, hip-trunk strength, and progressive COD a default part of training rather than an optional add-on.",
+      "avoid": ["high-fatigue cutting without mechanics", "skipping warm-up prevention work", "return to full play after swelling or instability"],
+      "source_ids": ["src_fifa11_systematic", "src_acl_aspetar", "src_unilateral_cod_acl"]
+    },
+    {
+      "risk_id": "goalkeeper_landing_and_upper_limb_load",
+      "risk": "Goalkeeper landing, shoulder, wrist, trunk, and hip load",
+      "signals": ["repeated diving volume", "shoulder/wrist soreness", "hip/groin pain after lateral push-offs", "landing fear", "reduced set-position speed"],
+      "adjustment_rule": "Manage dive volume, landing progressions, lateral power, trunk bracing, and recovery during congested weeks.",
+      "avoid": ["large new dive volume after layoff", "hard-ground repeated dives late in match week", "ignoring upper-limb pain after saves"],
+      "source_ids": ["src_injury_inciting_activities", "src_lauersen_injury_prevention"]
+    },
+    {
+      "risk_id": "head_impact_concussion_red_flag",
+      "risk": "Head impact and suspected concussion",
+      "signals": ["head impact", "confusion", "dizziness", "headache", "visual disturbance", "memory issue", "loss of consciousness", "unusual behavior"],
+      "adjustment_rule": "Remove from football activity and follow medical assessment and graduated return protocols; do not treat symptoms as ordinary fatigue.",
+      "avoid": ["same-day return after suspected concussion", "conditioning test to prove readiness", "masking symptoms to continue training"],
+      "source_ids": ["src_fifa_concussion", "src_return_to_sport_consensus"]
+    },
+    {
+      "risk_id": "low_energy_sleep_and_recovery_deficit",
+      "risk": "Recovery deficit from poor sleep, travel, low energy intake, or school/work stress",
+      "signals": ["poor sleep", "travel disruption", "low appetite or energy", "unusual fatigue", "mood change", "poor session RPE recovery"],
+      "adjustment_rule": "Lower non-essential volume, prioritize nutrition/sleep/recovery, and avoid adding new neuromuscular stress when recovery capacity is low.",
+      "avoid": ["punitive extra conditioning", "maximal tests on poor recovery", "heavy eccentric work after travel and sleep loss"],
+      "source_ids": ["src_ioc_elite_youth", "src_workload_injury_review", "src_congested_microcycle"]
+    },
+    {
+      "risk_id": "surface_footwear_weather_change",
+      "risk": "Surface, footwear, and weather changes altering tissue load",
+      "signals": ["change from grass to turf or hard ground", "new boots", "slippery surface", "calf/Achilles soreness", "ankle instability"],
+      "adjustment_rule": "Reduce novel sprint, plyometric, and COD volume when surface or footwear changes substantially, especially for calf, Achilles, ankle, and groin-sensitive players.",
+      "avoid": ["new boots plus high-volume sprint/COD session", "hard-ground plyometrics after calf symptoms", "ignoring slipping during high-speed cuts"],
+      "source_ids": ["src_achilles_loading", "src_ankle_proprioception", "src_workload_injury_review"]
+    }
+  ],
+  "training_implications": [
+    {
+      "implication_id": "level_based_snc_progression",
+      "type": "level_progression",
+      "rule": "Progress football S&C from movement quality and exposure literacy to role-specific capacity and then individualized monitoring.",
+      "beginner": "FIFA 11+ style warm-up habits, landing and balance, low-volume acceleration, basic strength, aerobic games, and simple recovery habits.",
+      "intermediate": "Role-aware speed, HIR, COD, unilateral strength, hamstring/adductor/calf durability, and match-week load placement.",
+      "advanced": "Individualized thresholds, sprint exposure targets, GPS/RPE/wellness integration, injury-history rules, rotation, and RTP phase gates.",
+      "source_ids": ["src_fifa11_systematic", "src_lauersen_injury_prevention", "src_hsr_sprinting_review"]
+    },
+    {
+      "implication_id": "match_week_md_minus_strength",
+      "type": "match_week_rule",
+      "rule": "Place the heaviest lower-body strength and eccentric work far enough from match day to avoid soreness and neuromuscular fatigue.",
+      "match_week_rules": {
+        "MD_minus_4_or_3": "Best window for heavier strength if the prior match recovery is adequate.",
+        "MD_minus_2": "Use moderate or reduced-volume strength, mostly activation, power, or low-soreness work.",
+        "MD_minus_1": "Avoid heavy lower-body eccentric strength; use activation and mobility only.",
+        "M_plus_1": "Starters recover; non-starters may do top-up strength if not near the next match."
+      },
+      "congested_fixture_adjustment": "Use maintenance microdoses or skip heavy strength for likely starters; preserve small upper-body/core or low-soreness isometrics if needed.",
+      "source_ids": ["src_fixture_congestion_review", "src_congested_microcycle", "src_nordic_hamstring_meta"]
+    },
+    {
+      "implication_id": "match_week_speed_exposure",
+      "type": "match_week_rule",
+      "rule": "Healthy players should keep some speed exposure in the week, but dose it according to match exposure, readiness, and days to the next match.",
+      "match_week_rules": {
+        "MD_minus_4_or_3": "Quality sprint or high-speed exposure window if needed.",
+        "MD_minus_2": "Low-volume accelerations or fast strides if fresh.",
+        "MD_minus_1": "Very small activation only; no new max-speed volume.",
+        "M_plus_1_or_2": "Use match data to decide if non-starters need top-up high-speed exposure."
+      },
+      "congested_fixture_adjustment": "For starters, only tiny speed touches if freshness allows; for non-starters, controlled top-up may be needed.",
+      "source_ids": ["src_hsr_sprinting_review", "src_sprint_volume_velocity", "src_hamstring_match_running"]
+    },
+    {
+      "implication_id": "match_week_deceleration_cod",
+      "type": "match_week_rule",
+      "rule": "High-density deceleration and COD work should usually be earlier than MD-2 in a standard week and reduced during congestion.",
+      "match_week_rules": {
+        "MD_minus_4_or_3": "Main COD, pressing, and tight-space load window.",
+        "MD_minus_2": "Reduced volume; tactical clarity without large fatigue.",
+        "MD_minus_1": "Minimal sharpness and rehearsed patterns only.",
+        "M_plus_1": "Check soreness from match decelerations before adding shuttles or small-sided games."
+      },
+      "congested_fixture_adjustment": "Avoid large shuttle or tight-space games for starters; use tactical walk-through, activation, and low-volume technical speed.",
+      "source_ids": ["src_accel_decel_review", "src_congested_microcycle"]
+    },
+    {
+      "implication_id": "position_specific_strength_priorities",
+      "type": "position_specific_rule",
+      "rule": "Strength priorities should reflect football role demands rather than one generic soccer template.",
+      "position_specific_notes": {
+        "center_back": "Trunk stiffness, landing/aerial capacity, hamstring sprint reserve, adductor strength, and contact robustness.",
+        "fullback_wingback": "Repeated acceleration, max-speed exposure, calf/Achilles capacity, hamstring resilience, and unilateral lateral strength.",
+        "defensive_midfielder": "Deceleration, trunk stiffness, adductor strength, hip control, and repeatability for duels and cover.",
+        "central_midfielder": "Aerobic base, repeated accelerations/decelerations, unilateral strength, and pelvis/trunk control.",
+        "attacking_midfielder": "COD, acceleration, trunk stiffness under contact, adductor/kicking volume tolerance.",
+        "winger_wide_forward": "Max velocity, repeated sprint ability, adductor and hamstring resilience, calf stiffness, and braking after dribbles.",
+        "striker_center_forward": "Acceleration, sprint-in-behind exposure, hamstring/adductor capacity, trunk bracing, and aerial/contact landing.",
+        "goalkeeper": "Lateral power, dive landing, trunk stiffness, short acceleration, shoulder/wrist robustness, and hip/groin control."
+      },
+      "source_ids": ["src_fifa_fwc2022_positions", "src_bradley_high_intensity", "src_injury_inciting_activities"]
+    },
+    {
+      "implication_id": "injury_history_modifies_exercise_selection",
+      "type": "readiness_adjustment",
+      "rule": "Previous injury changes the default exercise selection, volume, and progression gates.",
+      "adjustments": {
+        "hamstring_history": "Require graded sprint exposure and eccentric hamstring progression before repeated max-speed work.",
+        "groin_history": "Control adductor, cutting, and kicking volume; progress Copenhagen and lateral strength carefully.",
+        "acl_history": "Use criteria-based strength, hop, landing, COD, and contact progressions before full play.",
+        "ankle_history": "Use balance, calf strength, landing, and bracing/taping decisions before chaotic play.",
+        "achilles_history": "Monitor morning stiffness and pain response; progress plyometrics and sprinting gradually."
+      },
+      "source_ids": ["src_hamstring_rtp_rehab", "src_copenhagen_adduction", "src_acl_aspetar", "src_achilles_loading"]
+    },
+    {
+      "implication_id": "congested_fixture_squad_split",
+      "type": "congested_fixture_rule",
+      "rule": "Split the squad into starters, partial-minute players, and non-starters after each match.",
+      "starter_plan": "Recovery, mobility, wellness check, medical flags, tactical rehearsal, and low-volume activation.",
+      "partial_minutes_plan": "Individual top-up based on missed running, sprint, or COD exposure and next-match likelihood.",
+      "non_starter_plan": "Controlled top-up running, strength, and speed exposure, but avoid making the top-up harder than match load.",
+      "source_ids": ["src_congested_microcycle", "src_fixture_congestion_review", "src_workload_injury_review"]
+    },
+    {
+      "implication_id": "youth_training_rule",
+      "type": "youth_maturation_rule",
+      "rule": "Youth football S&C should protect long-term development while building strength, movement skill, and football-specific speed gradually.",
+      "beginner": "Use fun movement variety, balance, landing, basic strength, small accelerations, and no adult-style conditioning punishment.",
+      "intermediate": "Monitor growth and pain; progress sprinting, COD, and strength with technique gates.",
+      "advanced": "Individualize by maturity, school load, tournament congestion, and injury history; do not use professional adult microcycles blindly.",
+      "source_ids": ["src_ioc_youth_development", "src_ioc_elite_youth"]
+    },
+    {
+      "implication_id": "rtp_running_progression",
+      "type": "return_to_play_rule",
+      "rule": "Return-to-run should progress from walk-jog to continuous running, tempo, high-intensity running, sprinting, COD, football drills, and match minutes.",
+      "phase_gates": ["symptoms stable", "strength and range acceptable", "running gait normal", "no adverse next-day response", "football-specific exposure tolerated"],
+      "position_specific_notes": {
+        "wide_roles": "Need open-field sprinting before full match return.",
+        "midfielders": "Need repeat deceleration and support-run tolerance.",
+        "defenders": "Need recovery sprints, jumps, tackles, and duel exposure.",
+        "goalkeepers": "Need dive, landing, lateral push-off, and distribution tolerance."
+      },
+      "source_ids": ["src_return_to_sport_consensus", "src_hamstring_match_running", "src_acl_aspetar"]
+    },
+    {
+      "implication_id": "conditioning_selection_by_goal",
+      "type": "programming_rule",
+      "rule": "Select conditioning by adaptation goal: aerobic base, high-intensity running, repeated sprint ability, speed quality, or tactical density.",
+      "examples": {
+        "aerobic_base": "Extensive tempo, longer intervals, or larger-sided games.",
+        "high_intensity_running": "Intervals or transition games with controlled rest.",
+        "repeated_sprint": "Short sprint clusters with incomplete but planned recovery.",
+        "speed_quality": "Low-volume high-rest sprinting.",
+        "tactical_density": "Small-sided games with constraints and monitored mechanical load."
+      },
+      "source_ids": ["src_rsa_aerobic_review", "src_strength_rsa", "src_fifa_fwc2022_context"]
+    },
+    {
+      "implication_id": "avoid_random_fitness_testing",
+      "type": "programming_guardrail",
+      "rule": "Do not use maximal fitness testing or exhaustive conditioning as a default response to poor match performance.",
+      "rationale": "Poor performance may reflect tactical role, technical execution, fatigue, recovery, confidence, or match context. Fitness tests should have a clear purpose and be placed away from important matches.",
+      "source_ids": ["src_fifa_fwc2022_context", "src_workload_injury_review"]
+    },
+    {
+      "implication_id": "readiness_traffic_light",
+      "type": "readiness_adjustment",
+      "rule": "Use a traffic-light readiness system before high-risk football loads.",
+      "green": "No red flags, normal soreness, good sleep/recovery, no escalating pain; planned training can proceed.",
+      "amber": "Elevated soreness, low sleep, minor symptoms, recent load jump, or congestion; reduce volume, intensity, COD, sprint, or eccentric work.",
+      "red": "Acute injury, suspected concussion, swelling, instability, severe pain, neurological symptoms, or worsening tendon/muscle pain; stop and refer to medical assessment.",
+      "source_ids": ["src_fifa_concussion", "src_return_to_sport_consensus", "src_workload_injury_review"]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "record_id": "football_physical_demand_acceleration_first_10m",
+      "record_type": "football_physical_demand",
+      "name": "Acceleration and first 10 m demand",
+      "summary": "Short acceleration capacity for pressing, first touches, loose balls, and separation.",
+      "applies_to": ["all_outfield", "goalkeeper_short_actions"],
+      "level_implications": {
+        "beginner": "Technique, posture, and low-volume starts.",
+        "intermediate": "Varied starts and ball cues.",
+        "advanced": "Reactive, tactical, and position-specific starts."
+      },
+      "position_notes": ["forwards and pressers need repeated starts", "goalkeepers need short set-and-go bursts"],
+      "source_ids": ["src_hsr_sprinting_review", "src_accel_decel_review"]
+    },
+    {
+      "record_id": "football_physical_demand_max_velocity_high_speed",
+      "record_type": "football_physical_demand",
+      "name": "Max velocity and high-speed exposure",
+      "summary": "Planned high-speed and near-max sprint exposure for match readiness and hamstring/calf preparation.",
+      "applies_to": ["wide_roles", "forwards", "center_backs_high_line", "returning_players"],
+      "level_implications": {
+        "beginner": "Relaxed strides and progressive mechanics.",
+        "intermediate": "Weekly controlled sprint exposure when healthy.",
+        "advanced": "Individualized thresholds and exposure based on match data."
+      },
+      "match_week_rule": "Dose early-to-midweek in normal weeks; use small activation only close to match day.",
+      "source_ids": ["src_hsr_sprinting_review", "src_run_fast_hamstring", "src_sprint_volume_velocity"]
+    },
+    {
+      "record_id": "football_physical_demand_deceleration_cod",
+      "record_type": "football_physical_demand",
+      "name": "Deceleration and change-of-direction load",
+      "summary": "Mechanical load from braking, cutting, pressing, dribbling, and tight-space football.",
+      "applies_to": ["all_outfield", "goalkeeper_lateral_actions"],
+      "level_implications": {
+        "beginner": "Low-speed braking and landing control.",
+        "intermediate": "Faster planned COD and lateral strength.",
+        "advanced": "Reactive COD and match-speed pressing/cutting."
+      },
+      "match_week_rule": "Avoid large novel COD volume at MD-2 or MD-1.",
+      "source_ids": ["src_accel_decel_review", "src_unilateral_cod_acl"]
+    },
+    {
+      "record_id": "football_physical_demand_repeated_sprint_ability",
+      "record_type": "football_physical_demand",
+      "name": "Repeated sprint ability",
+      "summary": "Capacity to reproduce explosive efforts with incomplete recovery.",
+      "applies_to": ["pressing_forwards", "wide_roles", "box_to_box_midfielders", "transition_heavy_teams"],
+      "level_implications": {
+        "beginner": "Develop general running tolerance and basic speed.",
+        "intermediate": "Add repeated sprint sets with quality control.",
+        "advanced": "Use role-specific work-rest and tactical repeated-sprint scenarios."
+      },
+      "source_ids": ["src_rsa_aerobic_review", "src_strength_rsa"]
+    },
+    {
+      "record_id": "football_physical_demand_aerobic_base_high_intensity",
+      "record_type": "football_physical_demand",
+      "name": "Aerobic base and high-intensity running",
+      "summary": "Aerobic and high-intensity running capacity supporting repeatability, recovery, and late-game output.",
+      "applies_to": ["central_midfielders", "wide_roles", "pressing_forwards", "all_outfield"],
+      "level_implications": {
+        "beginner": "Games and simple intervals.",
+        "intermediate": "Intervals, larger games, and session RPE.",
+        "advanced": "Individualized role-specific running and tactical conditioning."
+      },
+      "source_ids": ["src_rsa_aerobic_review", "src_bradley_high_intensity", "src_fifa_fwc2022_positions"]
+    },
+    {
+      "record_id": "football_physical_demand_unilateral_strength",
+      "record_type": "football_physical_demand",
+      "name": "Unilateral lower-body strength",
+      "summary": "Single-leg strength for sprinting, cutting, shooting, landing, and duels.",
+      "applies_to": ["all_roles"],
+      "level_implications": {
+        "beginner": "Bodyweight control and slow eccentrics.",
+        "intermediate": "Loaded split squats, hinges, lateral lunges, step-downs.",
+        "advanced": "Heavy and high-velocity unilateral strength plus plyometric transfer."
+      },
+      "source_ids": ["src_lauersen_injury_prevention", "src_unilateral_cod_acl"]
+    },
+    {
+      "record_id": "football_physical_demand_hamstring_resilience",
+      "record_type": "football_physical_demand",
+      "name": "Hamstring resilience",
+      "summary": "Eccentric hamstring strength plus progressive sprint exposure and lumbopelvic control.",
+      "applies_to": ["wide_roles", "forwards", "center_backs_high_line", "players_with_hamstring_history"],
+      "level_implications": {
+        "beginner": "Bridge, slider, hinge basics.",
+        "intermediate": "Nordic progressions and controlled sprinting.",
+        "advanced": "Integrated eccentric strength, sprint exposure, and return-to-sprint monitoring."
+      },
+      "source_ids": ["src_nordic_hamstring_meta", "src_ekstrand_hamstring", "src_run_fast_hamstring"]
+    },
+    {
+      "record_id": "football_physical_demand_adductor_groin_durability",
+      "record_type": "football_physical_demand",
+      "name": "Adductor and groin durability",
+      "summary": "Adductor strength, hip control, cutting tolerance, and kicking-volume management.",
+      "applies_to": ["wide_roles", "attackers", "midfielders", "tackling_roles"],
+      "level_implications": {
+        "beginner": "Adductor isometrics and controlled lateral movement.",
+        "intermediate": "Short-to-long lever Copenhagen and lateral strength.",
+        "advanced": "High-speed COD, kicking volume tolerance, and integrated lateral power."
+      },
+      "source_ids": ["src_copenhagen_adduction", "src_doha_groin"]
+    },
+    {
+      "record_id": "football_physical_demand_calf_achilles_capacity",
+      "record_type": "football_physical_demand",
+      "name": "Calf and Achilles capacity",
+      "summary": "Calf strength, tendon load tolerance, ankle stiffness, and graded plyometric/sprint exposure.",
+      "applies_to": ["all_outfield", "goalkeepers", "players_with_calf_or_achilles_history"],
+      "level_implications": {
+        "beginner": "Calf strength and balance.",
+        "intermediate": "Pogos, skips, and sprint progression.",
+        "advanced": "High-stiffness plyometrics and max-speed exposure with symptom gates."
+      },
+      "source_ids": ["src_achilles_loading", "src_ankle_proprioception"]
+    },
+    {
+      "record_id": "football_physical_demand_ankle_knee_hip_control",
+      "record_type": "football_physical_demand",
+      "name": "Ankle, knee, and hip control",
+      "summary": "Lower-limb alignment and control during landing, cutting, tackling, and reactive football actions.",
+      "applies_to": ["all_roles", "youth_players", "female_players", "players_returning_from_lower_limb_injury"],
+      "level_implications": {
+        "beginner": "Balance and landing mechanics.",
+        "intermediate": "Loaded single-leg and lateral movement.",
+        "advanced": "Reactive COD, contact perturbation, and match-specific landing."
+      },
+      "source_ids": ["src_acl_aspetar", "src_unilateral_cod_acl", "src_ankle_proprioception"]
+    },
+    {
+      "record_id": "football_physical_demand_trunk_stiffness",
+      "record_type": "football_physical_demand",
+      "name": "Trunk stiffness and bracing",
+      "summary": "Anti-extension, anti-rotation, lateral-chain, and bracing capacity for sprinting, duels, shooting, COD, and goalkeeping.",
+      "applies_to": ["all_roles"],
+      "level_implications": {
+        "beginner": "Basic bracing patterns.",
+        "intermediate": "Anti-rotation, side-chain, and carries.",
+        "advanced": "Reactive bracing under contact and speed."
+      },
+      "source_ids": ["src_unilateral_cod_acl", "src_lauersen_injury_prevention"]
+    },
+    {
+      "record_id": "football_injury_risk_rule_hamstring_sprint_load",
+      "record_type": "football_injury_risk_rule",
+      "name": "Hamstring sprint-load risk rule",
+      "trigger_conditions": ["posterior thigh pain", "recent hamstring injury", "no recent sprint exposure", "sudden high-speed load spike", "fatigue after congestion"],
+      "recommended_adjustment": "Reduce max sprint volume during symptoms; rebuild graded sprint exposure and eccentric hamstring capacity before full sprint or match load.",
+      "hard_stop_conditions": ["acute sharp posterior thigh pain", "altered running gait", "pain increasing during sprint progression"],
+      "source_ids": ["src_ekstrand_hamstring", "src_run_fast_hamstring", "src_hamstring_rtp_rehab"]
+    },
+    {
+      "record_id": "football_injury_risk_rule_groin_adductor",
+      "record_type": "football_injury_risk_rule",
+      "name": "Groin and adductor risk rule",
+      "trigger_conditions": ["adductor squeeze pain", "pain with kicking", "pain with cutting", "recent kicking or crossing spike", "groin history"],
+      "recommended_adjustment": "Limit aggressive COD and kicking; use tolerable adductor isometrics and progressive Copenhagen/lateral strength.",
+      "hard_stop_conditions": ["worsening groin pain", "limp", "pain preventing change of direction", "unclear hip or inguinal symptoms needing clinical review"],
+      "source_ids": ["src_copenhagen_adduction", "src_doha_groin"]
+    },
+    {
+      "record_id": "football_injury_risk_rule_knee_acl_control",
+      "record_type": "football_injury_risk_rule",
+      "name": "Knee and ACL control risk rule",
+      "trigger_conditions": ["knee swelling", "giving way", "valgus collapse", "post-ACL status", "poor landing or hop control"],
+      "recommended_adjustment": "Require clinical review for swelling/instability; otherwise regress to strength, landing, and planned COD before reactive football.",
+      "hard_stop_conditions": ["acute swelling", "instability", "locking", "unable to cut or land without pain"],
+      "source_ids": ["src_acl_aspetar", "src_unilateral_cod_acl", "src_fifa11_systematic"]
+    },
+    {
+      "record_id": "football_injury_risk_rule_ankle_sprain",
+      "record_type": "football_injury_risk_rule",
+      "name": "Ankle sprain and proprioception risk rule",
+      "trigger_conditions": ["recent ankle sprain", "swelling", "balance deficit", "pain with cutting", "recurrent rolling"],
+      "recommended_adjustment": "Use balance, calf strength, hop-control, taping/bracing if medically recommended, and progressive COD before open play.",
+      "hard_stop_conditions": ["cannot hop", "significant swelling", "instability", "painful walking or running"],
+      "source_ids": ["src_ankle_proprioception", "src_injury_inciting_activities"]
+    },
+    {
+      "record_id": "football_injury_risk_rule_calf_achilles",
+      "record_type": "football_injury_risk_rule",
+      "name": "Calf and Achilles tendon risk rule",
+      "trigger_conditions": ["morning Achilles stiffness", "calf pain after sprinting", "pain with pogos", "recent plyometric or surface spike"],
+      "recommended_adjustment": "Reduce sprint, plyometric, and hard-surface volume; maintain tolerable calf isometrics or heavy-slow resistance under clinical guidance.",
+      "hard_stop_conditions": ["sudden calf pop", "marked Achilles pain", "worsening pain during warm-up", "unable to push off"],
+      "source_ids": ["src_achilles_loading", "src_hsr_sprinting_review"]
+    },
+    {
+      "record_id": "football_injury_risk_rule_concussion",
+      "record_type": "football_injury_risk_rule",
+      "name": "Suspected concussion hard-stop rule",
+      "trigger_conditions": ["head impact with symptoms", "confusion", "dizziness", "headache", "vision issue", "memory issue", "loss of consciousness"],
+      "recommended_adjustment": "Remove from football activity and refer for medical assessment and graduated return guidance.",
+      "hard_stop_conditions": ["any suspected concussion symptom after head impact"],
+      "source_ids": ["src_fifa_concussion", "src_return_to_sport_consensus"]
+    },
+    {
+      "record_id": "football_injury_risk_rule_youth_growth_maturation",
+      "record_type": "football_injury_risk_rule",
+      "name": "Youth growth and maturation risk rule",
+      "trigger_conditions": ["rapid height change", "new heel/knee/hip/groin pain", "coordination drop", "adult-like match congestion", "training age mismatch"],
+      "recommended_adjustment": "Reduce high-impact and high-intensity volume, preserve movement quality, avoid punishment conditioning, and seek clinical review if pain persists.",
+      "hard_stop_conditions": ["persistent growth-related pain", "limp", "pain that worsens with training", "inability to perform basic movement"],
+      "source_ids": ["src_ioc_youth_development", "src_ioc_elite_youth"]
+    },
+    {
+      "record_id": "football_macro_planning_rule_standard_one_match_week",
+      "record_type": "football_macro_planning_rule",
+      "name": "Standard one-match week structure",
+      "summary": "Use recovery after the match, main load early or midweek, then taper volume while preserving tactical sharpness.",
+      "rules": {
+        "M_plus_1": "Recovery for starters; individualized top-up for non-starters.",
+        "MD_minus_4_or_3": "Main strength, speed, HIR, COD, or tactical-load window depending on recovery.",
+        "MD_minus_2": "Moderate tactical and reduced neuromuscular load.",
+        "MD_minus_1": "Activation, set pieces, low-volume accelerations, and clarity.",
+        "MD": "Warm-up, match, and post-match exposure log."
+      },
+      "source_ids": ["src_workload_injury_review", "src_hsr_sprinting_review", "src_fifa_fwc2022_context"]
+    },
+    {
+      "record_id": "football_macro_planning_rule_md_minus_exercise_placement",
+      "record_type": "football_macro_planning_rule",
+      "name": "Match-day-minus exercise placement",
+      "summary": "Place high-soreness strength, dense COD, and demanding conditioning away from match day; use low-volume activation near match day.",
+      "rules": {
+        "heavy_strength": "Prefer MD-4 or MD-3 in normal weeks.",
+        "max_velocity": "Use small controlled exposure early or midweek; avoid new volume on MD-1.",
+        "deceleration_cod": "Main load earlier than MD-2 unless volume is very low.",
+        "conditioning": "Match the method to adaptation and calendar.",
+        "activation": "Use MD-1 for mobility, low-volume speed touches, and tactical rehearsal."
+      },
+      "source_ids": ["src_accel_decel_review", "src_fixture_congestion_review", "src_congested_microcycle"]
+    },
+    {
+      "record_id": "football_macro_planning_rule_congested_fixture",
+      "record_type": "football_macro_planning_rule",
+      "name": "Congested fixture adjustment",
+      "summary": "When fixtures are close together, prioritize availability and performance with recovery, microdoses, squad splitting, and medical/readiness checks.",
+      "rules": {
+        "starters": "Recovery, tactical clarity, mobility, short activation, and symptom checks.",
+        "partial_minutes": "Top-up only the missed qualities that matter for the player's role.",
+        "non_starters": "Controlled conditioning and strength if next-match role allows.",
+        "returning_players": "Avoid first full match exposure during congested windows when possible."
+      },
+      "source_ids": ["src_fixture_congestion_review", "src_congested_microcycle", "src_workload_injury_review"]
+    },
+    {
+      "record_id": "football_macro_planning_rule_preseason_speed_ramp",
+      "record_type": "football_macro_planning_rule",
+      "name": "Preseason speed and tissue-capacity ramp",
+      "summary": "Preseason should rebuild sprint, HIR, COD, strength, and tissue capacity gradually before full match density.",
+      "rules": {
+        "week_1": "Movement quality, aerobic re-entry, low-volume accelerations, basic strength, and injury-history screening.",
+        "week_2_to_3": "Progress high-speed exposure, COD, unilateral strength, and small-sided density.",
+        "week_4_plus": "Increase match-specific exposure and tactical fitness while avoiding abrupt spikes."
+      },
+      "source_ids": ["src_workload_injury_review", "src_hsr_sprinting_review", "src_lauersen_injury_prevention"]
+    },
+    {
+      "record_id": "football_return_to_play_rule_general_continuum",
+      "record_type": "football_return_to_play_rule",
+      "name": "General return-to-play continuum",
+      "summary": "Progress from return to participation to return to sport and then return to performance.",
+      "phase_gates": ["pain and swelling controlled", "strength and range restored enough for phase", "running gait normal", "position-specific running restored", "COD/contact/technical load tolerated", "limited minutes tolerated", "full performance restored"],
+      "source_ids": ["src_return_to_sport_consensus", "src_acl_aspetar"]
+    },
+    {
+      "record_id": "football_return_to_play_rule_return_to_run",
+      "record_type": "football_return_to_play_rule",
+      "name": "Return-to-run progression",
+      "summary": "Progress linear running before high-intensity, sprinting, COD, and football-specific actions.",
+      "phases": ["walk-jog", "continuous easy run", "tempo intervals", "high-intensity running", "controlled sprint", "COD and football drills", "team training", "limited match minutes"],
+      "readiness_checks": ["no next-day symptom spike", "normal gait", "strength appropriate to injury", "medical clearance when required"],
+      "source_ids": ["src_return_to_sport_consensus", "src_hamstring_rtp_rehab", "src_acl_aspetar"]
+    },
+    {
+      "record_id": "football_return_to_play_rule_hamstring",
+      "record_type": "football_return_to_play_rule",
+      "name": "Hamstring RTP rule",
+      "summary": "Hamstring RTP should restore sprint mechanics, eccentric strength, high-speed exposure, and position-specific match running before full return.",
+      "phase_gates": ["pain-free progressive running", "eccentric strength progression tolerated", "controlled sprint exposure", "near-match-speed exposure", "position-specific actions", "limited minutes"],
+      "position_notes": ["wide players and forwards need open-field sprint exposure", "center backs need recovery sprint exposure", "midfielders need repeat acceleration/deceleration exposure"],
+      "source_ids": ["src_hamstring_rtp_rehab", "src_hamstring_match_running", "src_run_fast_hamstring"]
+    },
+    {
+      "record_id": "football_return_to_play_rule_groin_adductor",
+      "record_type": "football_return_to_play_rule",
+      "name": "Groin and adductor RTP rule",
+      "summary": "Groin RTP should restore adductor strength, cutting, lateral push-off, kicking, and position-specific football volume.",
+      "phase_gates": ["adductor squeeze tolerated", "linear running tolerated", "lateral movement tolerated", "Copenhagen or adductor strength progression tolerated", "kicking/crossing/shooting volume restored", "reactive COD tolerated"],
+      "source_ids": ["src_copenhagen_adduction", "src_doha_groin"]
+    },
+    {
+      "record_id": "football_return_to_play_rule_acl_knee",
+      "record_type": "football_return_to_play_rule",
+      "name": "ACL and major knee RTP rule",
+      "summary": "Knee RTP should be criteria based and include strength, hop, landing, COD, psychological readiness, football contact, and minutes progression.",
+      "phase_gates": ["swelling controlled", "strength symmetry appropriate to phase", "landing and hop quality", "planned COD", "reactive COD", "contact/team training", "limited minutes", "full match exposure"],
+      "source_ids": ["src_acl_aspetar", "src_return_to_sport_consensus", "src_unilateral_cod_acl"]
+    },
+    {
+      "record_id": "football_return_to_play_rule_ankle_calf_achilles",
+      "record_type": "football_return_to_play_rule",
+      "name": "Ankle, calf, and Achilles RTP rule",
+      "summary": "Ankle/calf/Achilles RTP should restore calf strength, balance, hop capacity, tendon response, sprinting, and COD before full play.",
+      "phase_gates": ["walking pain controlled", "calf raise and balance tolerated", "hopping tolerated", "linear running tolerated", "sprinting tolerated", "COD and landing tolerated", "football training and match minutes tolerated"],
+      "source_ids": ["src_achilles_loading", "src_ankle_proprioception", "src_hsr_sprinting_review"]
+    },
+    {
+      "record_id": "football_readiness_adjustment_rule_traffic_light",
+      "record_type": "football_readiness_adjustment_rule",
+      "name": "Football readiness traffic light",
+      "summary": "Classify readiness before high-risk sessions as green, amber, or red.",
+      "green": "Normal soreness, no escalating pain, good recovery, no red flags; proceed as planned.",
+      "amber": "Low sleep, high soreness, minor symptoms, recent load spike, or congestion; reduce load, intensity, or risky elements.",
+      "red": "Acute injury, suspected concussion, swelling, instability, severe pain, neurological symptoms, or worsening tendon/muscle symptoms; stop and refer.",
+      "source_ids": ["src_fifa_concussion", "src_return_to_sport_consensus", "src_workload_injury_review"]
+    },
+    {
+      "record_id": "football_readiness_adjustment_rule_minutes_exposure",
+      "record_type": "football_readiness_adjustment_rule",
+      "name": "Match minutes and exposure adjustment",
+      "summary": "Adjust next-session load based on minutes, position, and actual exposure rather than squad-wide assumptions.",
+      "rules": {
+        "starter_high_minutes": "Prioritize recovery and tissue check before extra load.",
+        "partial_minutes": "Top up only missing qualities if next-match schedule allows.",
+        "unused_sub": "Use role-specific top-up running, speed, strength, and tactical work.",
+        "returning_player": "Limit minutes progression and monitor next-day response."
+      },
+      "source_ids": ["src_congested_microcycle", "src_workload_injury_review"]
+    },
+    {
+      "record_id": "football_readiness_adjustment_rule_low_chronic_load",
+      "record_type": "football_readiness_adjustment_rule",
+      "name": "Low chronic load and return-from-break adjustment",
+      "summary": "Players returning from break, illness, or low exposure need gradual progression before match-like speed, COD, and minutes.",
+      "rules": {
+        "first_week_back": "Limit maximal sprint/COD and build movement quality.",
+        "second_week_back": "Increase high-speed, strength, and tactical density if symptoms and soreness allow.",
+        "before_full_match": "Confirm exposure to position-specific speed, braking, and conditioning."
+      },
+      "source_ids": ["src_workload_injury_review", "src_hsr_sprinting_review"]
+    },
+    {
+      "record_id": "football_readiness_adjustment_rule_body_region_symptom",
+      "record_type": "football_readiness_adjustment_rule",
+      "name": "Body-region symptom adjustment",
+      "summary": "Modify session content based on the body region that is symptomatic.",
+      "rules": {
+        "hamstring": "Reduce max sprinting and long high-speed runs; keep tolerable isometrics/strength and graded running under guidance.",
+        "groin": "Reduce lateral cutting and kicking volume; use tolerable adductor isometrics.",
+        "knee": "Reduce jumping, deep cutting, and contact if swelling or instability exists; refer if acute.",
+        "ankle": "Reduce chaotic COD and jumping; emphasize balance and controlled hop progressions.",
+        "calf_achilles": "Reduce sprinting, plyometrics, and hard-surface volume; monitor morning response."
+      },
+      "source_ids": ["src_hamstring_rtp_rehab", "src_copenhagen_adduction", "src_acl_aspetar", "src_achilles_loading", "src_ankle_proprioception"]
+    },
+    {
+      "record_id": "football_readiness_adjustment_rule_youth_growth_spurt",
+      "record_type": "football_readiness_adjustment_rule",
+      "name": "Youth growth-spurt adjustment",
+      "summary": "If rapid growth, coordination drop, or new growth-related pain is present, lower peak load and protect movement quality.",
+      "rules": {
+        "load_response": "Reduce high-impact, sprint, and COD volume temporarily.",
+        "training_focus": "Keep strength technique, mobility, balance, and low-symptom football skill.",
+        "medical_flag": "Persistent heel, knee, hip, groin, or back pain should prompt clinical review."
+      },
+      "source_ids": ["src_ioc_youth_development", "src_ioc_elite_youth"]
+    },
+    {
+      "record_id": "football_readiness_adjustment_rule_surface_footwear_change",
+      "record_type": "football_readiness_adjustment_rule",
+      "name": "Surface and footwear change adjustment",
+      "summary": "Reduce novel sprint, COD, and plyometric load when surface or footwear changes substantially.",
+      "rules": {
+        "harder_surface": "Watch calf, Achilles, shin, and foot response.",
+        "slippery_surface": "Reduce maximal COD and open chaotic play if slipping is common.",
+        "new_boots": "Avoid pairing new boots with high-volume sprint/COD sessions."
+      },
+      "source_ids": ["src_achilles_loading", "src_ankle_proprioception"]
+    }
+  ]
+}

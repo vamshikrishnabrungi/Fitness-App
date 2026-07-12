@@ -1,0 +1,1839 @@
+{
+  "metadata": {
+    "sport": "tennis",
+    "discipline": "singles",
+    "draft_focus": "tactics_match_iq_deep",
+    "created_at": "2026-06-22",
+    "scope": [
+      "scoring pressure",
+      "serve plus-one",
+      "return plus-one",
+      "crosscourt and down-the-line rules",
+      "depth, height, spin, and pace",
+      "offensive-neutral-defensive phases",
+      "rally tolerance",
+      "short-ball attack",
+      "passing and lob choices",
+      "opponent scouting",
+      "lefty/righty matchup logic",
+      "surface and weather tactical effects",
+      "tiebreak, break point, and game point patterns",
+      "competition-week tactical sharpening",
+      "level-based tactical teaching",
+      "tactical physical demands",
+      "load risks",
+      "backend records"
+    ],
+    "notes": "Research draft for backend conversion. Items summarize source-backed tactical principles and avoid long copied source prose.",
+    "domain": "tactics_match_iq_deep",
+    "version": "draft_v1",
+    "research_goal": "Create backend-ready tennis singles tactics and match-IQ knowledge covering scoring pressure, serve plus-one, return plus-one, rally patterns, surface/weather tactical effects, opponent scouting, score-state decisions, competition-week sharpening, tactical physical demands, load risks, and backend records."
+  },
+  "source_refs": [
+    {
+      "id": "src_itf_rules_portal",
+      "title": "ITF Rules and Regulations",
+      "organization": "International Tennis Federation",
+      "type": "official_rules",
+      "url": "https://www.itftennis.com/en/about-us/governance/rules-and-regulations/",
+      "used_for": [
+        "scoring format",
+        "tie-break context",
+        "match-rule grounding"
+      ],
+      "source_type": "official_rules"
+    },
+    {
+      "id": "src_itf_play_stay",
+      "title": "ITF Tennis Play and Stay",
+      "organization": "International Tennis Federation",
+      "type": "official_development_model",
+      "url": "https://www.itftennis.com/en/growing-the-game/itf-tennis-play-and-stay/",
+      "used_for": [
+        "beginner progression",
+        "modified courts and balls",
+        "tactical teaching through play"
+      ],
+      "source_type": "official_development_model"
+    },
+    {
+      "id": "src_itf_coaching",
+      "title": "ITF Coaching",
+      "organization": "International Tennis Federation",
+      "type": "coaching_education",
+      "url": "https://www.itftennis.com/en/growing-the-game/coaching/",
+      "used_for": [
+        "coaching education context",
+        "tactical skill development"
+      ],
+      "source_type": "coaching_education"
+    },
+    {
+      "id": "src_usta_adm",
+      "title": "American Development Model",
+      "organization": "United States Tennis Association",
+      "type": "official_development_model",
+      "url": "https://www.usta.com/en/home/play/american-development-model.html",
+      "used_for": [
+        "level-based teaching",
+        "age and stage progression",
+        "training-to-competition balance"
+      ],
+      "source_type": "official_development_model"
+    },
+    {
+      "id": "src_usta_player_development",
+      "title": "Understanding and Influencing the Road to Success",
+      "organization": "United States Tennis Association Player Development",
+      "type": "coaching_education",
+      "url": "https://www.playerdevelopment.usta.com/About-USTA/Player-Development/understanding_and_influencing_the_road_to_success/",
+      "used_for": [
+        "long-term player development",
+        "practice quality",
+        "competition planning"
+      ],
+      "source_type": "coaching_education"
+    },
+    {
+      "id": "src_usta_five_controls",
+      "title": "Technique: The Five Controls of the Ball",
+      "organization": "United States Tennis Association Player Development",
+      "type": "coaching_education",
+      "url": "https://www.playerdevelopment.usta.com/Improve-Your-Game/Sport-Science/114389_Technique_The_Five_Controls_of_the_Ball/",
+      "used_for": [
+        "direction",
+        "depth",
+        "height",
+        "spin",
+        "speed"
+      ],
+      "source_type": "coaching_education"
+    },
+    {
+      "id": "src_ta_fundamentals",
+      "title": "Technical and Tactical Fundamentals",
+      "organization": "Tennis Australia",
+      "type": "coaching_education",
+      "url": "https://www.tennis.com.au/learn/wp-content/uploads/2012/08/2.-Technical-and-Tactical-Fundamentals.pdf",
+      "used_for": [
+        "technical-tactical integration",
+        "court-position principles",
+        "progressive tactical learning"
+      ],
+      "source_type": "coaching_education"
+    },
+    {
+      "id": "src_lta_rules_scoring",
+      "title": "Rules and Scoring",
+      "organization": "Lawn Tennis Association",
+      "type": "official_rules_explainer",
+      "url": "https://www.lta.org.uk/play/rules-and-scoring/",
+      "used_for": [
+        "game scoring",
+        "tie-break basics",
+        "competition scoring language"
+      ],
+      "source_type": "official_rules_explainer"
+    },
+    {
+      "id": "src_plos_first_strike",
+      "title": "Match analysis and probability of winning a point in elite men's singles tennis",
+      "authors": "Cui et al.",
+      "type": "peer_reviewed_match_analysis",
+      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0286076",
+      "used_for": [
+        "serve-return point-start importance",
+        "rally length effects",
+        "short-point probability patterns"
+      ],
+      "source_type": "peer_reviewed_match_analysis"
+    },
+    {
+      "id": "src_matchplay_intensity_review",
+      "title": "Activity profile and physiological demands of tennis match play",
+      "authors": "Kovacs",
+      "type": "peer_reviewed_review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2653872/",
+      "used_for": [
+        "work-rest rhythm",
+        "short repeated efforts",
+        "surface-sensitive demands"
+      ],
+      "source_type": "peer_reviewed_review"
+    },
+    {
+      "id": "src_mdpi_surface_women",
+      "title": "Influence of Court Surface on Performance in Women's Singles Tennis",
+      "authors": "Cui et al.",
+      "type": "peer_reviewed_match_analysis",
+      "url": "https://www.mdpi.com/1660-4601/19/13/7955",
+      "used_for": [
+        "surface effects",
+        "serve and return differences",
+        "rally construction by surface"
+      ],
+      "source_type": "peer_reviewed_match_analysis"
+    },
+    {
+      "id": "src_grass_strategy",
+      "title": "Investigating the Most Important Aspect of Elite Grass Court Tennis",
+      "authors": "Fitzpatrick et al.",
+      "type": "peer_reviewed_match_analysis",
+      "url": "https://shura.shu.ac.uk/28141/11/Fitzpatrick-InvestigatingMostImportant%28VoR%29.pdf",
+      "used_for": [
+        "grass-court first-strike emphasis",
+        "serve and return priority",
+        "short rally patterns"
+      ],
+      "source_type": "peer_reviewed_match_analysis"
+    },
+    {
+      "id": "src_junior_demands_review",
+      "title": "The Demands of Training and Match-Play in Elite and Highly Trained Junior Tennis Players: A Systematic Review",
+      "authors": "Fleming et al.",
+      "type": "peer_reviewed_systematic_review",
+      "url": "https://e-space.mmu.ac.uk/630650/1/The%20demands%20of%20training%20and%20match-play%20on%20elite%20and%20highly%20trained%20junior%20tennis%20players%20-%20A%20systematic%20review.pdf",
+      "used_for": [
+        "junior match demands",
+        "training load",
+        "age-appropriate tactical conditioning"
+      ],
+      "source_type": "peer_reviewed_systematic_review"
+    },
+    {
+      "id": "src_injury_epidemiology",
+      "title": "Injuries in Tennis Players: A Systematic Review",
+      "authors": "Pluim et al.",
+      "type": "peer_reviewed_systematic_review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5825333/",
+      "used_for": [
+        "common injury regions",
+        "upper-limb and lower-limb risks",
+        "load-management flags"
+      ],
+      "source_type": "peer_reviewed_systematic_review"
+    },
+    {
+      "id": "src_serve_kinetic_chain",
+      "title": "The Tennis Serve: A Review of Biomechanics and Injury Risk",
+      "type": "peer_reviewed_review",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13095676/",
+      "used_for": [
+        "serve-load risk",
+        "shoulder and trunk demands",
+        "kinetic-chain implications"
+      ],
+      "source_type": "peer_reviewed_review"
+    },
+    {
+      "id": "src_itf_left_handedness",
+      "title": "Left-handedness in professional and junior tennis",
+      "organization": "ITF Coaching Review",
+      "type": "coaching_research_review",
+      "url": "https://itfcoachingreview.com/index.php/journal/article/view/108",
+      "used_for": [
+        "lefty matchup logic",
+        "serve-return adaptation",
+        "practice exposure"
+      ],
+      "source_type": "coaching_research_review"
+    },
+    {
+      "id": "src_usta_summer_conditions",
+      "title": "Competing in Summer Conditions",
+      "organization": "United States Tennis Association Player Development",
+      "type": "coaching_education",
+      "url": "https://www.playerdevelopment.usta.com/competing-in-summer-conditions/",
+      "used_for": [
+        "heat competition planning",
+        "hydration and recovery",
+        "weather-adjusted tactics"
+      ],
+      "source_type": "coaching_education"
+    }
+  ],
+  "key_concepts": [
+    {
+      "id": "kc_scoring_pressure_changes_risk",
+      "concept": "Score state changes acceptable tactical risk.",
+      "application": "At deuce, break point, game point, set point, and tie-break mini-swings, the player should choose patterns that match their highest-reliability scoring route rather than chasing novelty.",
+      "source_refs": [
+        "src_itf_rules_portal",
+        "src_lta_rules_scoring",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "kc_first_four_shots",
+      "concept": "Singles is heavily shaped by the serve, return, and next two balls.",
+      "application": "Backend tactics should separate serve plus-one and return plus-one records from generic rally records.",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_grass_strategy"
+      ]
+    },
+    {
+      "id": "kc_plus_one_unit",
+      "concept": "The plus-one is a planned second ball, not an improvised stroke.",
+      "application": "Serve location, return target, recovery, and expected next contact should be stored as one tactical unit.",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "kc_rally_tolerance_before_variety",
+      "concept": "Rally tolerance is the base layer for tactical freedom.",
+      "application": "Players who cannot sustain crosscourt depth should not be assigned high-frequency direction changes or low-margin attacks.",
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_adm",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "kc_ball_controls",
+      "concept": "Direction, depth, height, spin, and speed are the tactical controls of every shot.",
+      "application": "Skill and tactic records should store which control is primary for the situation.",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "kc_phase_based_decisions",
+      "concept": "Shot choice depends on whether the player is offensive, neutral, or defensive.",
+      "application": "The same ball location can call for different targets depending on balance, court position, opponent position, and contact height.",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "kc_high_percentage_geometry",
+      "concept": "Crosscourt patterns usually provide more court length and recovery time than early down-the-line changes.",
+      "application": "The down-the-line change should be gated by contact quality, balance, ball height, and opponent court position.",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "kc_depth_as_neutralizer",
+      "concept": "Depth protects neutral and defensive states.",
+      "application": "A high, deep ball is a valid tactical reset when under pressure, especially on slower or higher-bouncing surfaces.",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_mdpi_surface_women"
+      ]
+    },
+    {
+      "id": "kc_spin_as_margin_and_time",
+      "concept": "Spin can create net clearance, control depth, change bounce, and buy recovery time.",
+      "application": "Topspin-heavy patterns should be paired with shoulder, trunk, forearm, and fatigue monitoring.",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "kc_short_ball_obligation",
+      "concept": "Short balls create an obligation to improve court position or end the opponent's time.",
+      "application": "A short-ball attack record should include approach direction, recovery to volley position, and pass/lob expectation.",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "kc_pass_lob_choice",
+      "concept": "Against a net player, the choice is not only winner attempt; pass, body ball, dipper, and lob are all pressure tools.",
+      "application": "Passing/lob records should store opponent net distance, player balance, contact height, and available court.",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "kc_surface_changes_pattern_value",
+      "concept": "Surface modifies bounce, movement, point length, and the value of first-strike tennis.",
+      "application": "Clay, hard, and grass should alter tactical emphasis, movement dose, and load flags.",
+      "source_refs": [
+        "src_mdpi_surface_women",
+        "src_grass_strategy",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "kc_weather_changes_margin",
+      "concept": "Heat, wind, sun, humidity, and cold alter both tactics and physical tolerance.",
+      "application": "Competition-day plans should adjust target size, rally length expectations, hydration breaks, and serve intent.",
+      "source_refs": [
+        "src_usta_summer_conditions",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "kc_lefty_righty_exposure",
+      "concept": "Lefty-righty matchups create unusual serve and rally angles for many players.",
+      "application": "Practice plans should include exposure to lefty patterns or lefty-simulated targets before relevant matches.",
+      "source_refs": [
+        "src_itf_left_handedness"
+      ]
+    },
+    {
+      "id": "kc_opponent_specificity",
+      "concept": "Advanced tactics are opponent-specific constraints, not generic preferences.",
+      "application": "The plan should rank opponent weakness, movement pattern, preferred contact height, second-serve vulnerability, and pressure response.",
+      "source_refs": [
+        "src_usta_player_development",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "kc_competition_week_sharpening",
+      "concept": "Competition week should sharpen existing tactical patterns rather than add new high-complexity choices.",
+      "application": "The backend should reduce novelty and load while preserving serve-return, plus-one, and pressure-point rehearsals.",
+      "source_refs": [
+        "src_usta_adm",
+        "src_usta_player_development",
+        "src_junior_demands_review"
+      ]
+    }
+  ],
+  "technical_models": [
+    {
+      "id": "tm_five_ball_controls",
+      "name": "Five Ball Controls",
+      "model": "Every tactical shot can be described by direction, depth, height, spin, and speed. One or two controls should dominate the coaching cue for a given drill.",
+      "backend_fields": [
+        "primary_control",
+        "secondary_control",
+        "target_zone",
+        "success_metric"
+      ],
+      "source_refs": [
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tm_serve_plus_one_map",
+      "name": "Serve Plus-One Map",
+      "model": "Serve location predicts common return corridors; the server prepares the next ball based on likely return height, direction, and depth.",
+      "backend_fields": [
+        "serve_location",
+        "serve_spin",
+        "expected_return_zone",
+        "plus_one_target",
+        "recovery_position"
+      ],
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_grass_strategy"
+      ]
+    },
+    {
+      "id": "tm_return_plus_one_map",
+      "name": "Return Plus-One Map",
+      "model": "Return quality is judged by whether it neutralizes or pressures the server's plus-one, then prepares the receiver's next court position.",
+      "backend_fields": [
+        "return_depth",
+        "return_direction",
+        "return_height",
+        "server_plus_one_denial",
+        "receiver_next_target"
+      ],
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tm_phase_classifier",
+      "name": "Offensive-Neutral-Defensive Classifier",
+      "model": "Classify the player state from balance, time, contact height, court position, opponent position, and ball quality before selecting target risk.",
+      "backend_fields": [
+        "phase",
+        "balance",
+        "contact_height",
+        "court_position",
+        "opponent_position",
+        "recommended_risk"
+      ],
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "tm_crosscourt_tolerance_ladder",
+      "name": "Crosscourt Tolerance Ladder",
+      "model": "Progress from cooperative crosscourt depth, to neutral pressure, to height/spin variation, to direction change only after stable contact and recovery.",
+      "backend_fields": [
+        "rally_count_target",
+        "depth_zone",
+        "height_window",
+        "error_budget",
+        "progression_gate"
+      ],
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_adm",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tm_down_line_gate",
+      "name": "Down-The-Line Gate",
+      "model": "Change direction down the line when the player is balanced, contact is in front, the ball is not too low or too stretched, and the opponent is exposed.",
+      "backend_fields": [
+        "balance_gate",
+        "contact_gate",
+        "ball_height_gate",
+        "opponent_gap",
+        "recovery_cost"
+      ],
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tm_depth_height_reset",
+      "name": "Depth-Height Reset",
+      "model": "When defensive, prioritize net clearance, depth, and recovery time over pace or line targets.",
+      "backend_fields": [
+        "defensive_trigger",
+        "net_clearance_target",
+        "depth_zone",
+        "recovery_route",
+        "surface_modifier"
+      ],
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_mdpi_surface_women"
+      ]
+    },
+    {
+      "id": "tm_short_ball_attack",
+      "name": "Short-Ball Attack",
+      "model": "Short-ball decisions are built from ball height, player movement direction, opponent position, and whether the attack should finish, approach, or force a weak pass.",
+      "backend_fields": [
+        "short_ball_height",
+        "inside_court_distance",
+        "attack_target",
+        "approach_followup",
+        "net_read"
+      ],
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "tm_pass_lob_selection",
+      "name": "Pass-Lob Selection",
+      "model": "Select dip, pass, body ball, or lob based on net player's closing distance, reach, court coverage, and the hitter's contact height.",
+      "backend_fields": [
+        "net_player_distance",
+        "available_angle",
+        "contact_height",
+        "preferred_option",
+        "miss_location"
+      ],
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tm_matchup_scouting",
+      "name": "Opponent Scouting Grid",
+      "model": "Build a match plan from serve patterns, return depth, wing tolerance, preferred rally length, movement weakness, pressure response, and surface comfort.",
+      "backend_fields": [
+        "opponent_strengths",
+        "opponent_targets",
+        "serve_tendencies",
+        "return_tendencies",
+        "movement_constraints",
+        "pressure_patterns"
+      ],
+      "source_refs": [
+        "src_usta_player_development",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tm_lefty_righty_map",
+      "name": "Lefty-Righty Angle Map",
+      "model": "Lefty serve and rally patterns should be rehearsed as angle-specific constraints, especially wide serves and crosscourt forehand/backhand exchanges.",
+      "backend_fields": [
+        "server_handedness",
+        "receiver_handedness",
+        "ad_court_serve_threat",
+        "crosscourt_exchange",
+        "practice_exposure"
+      ],
+      "source_refs": [
+        "src_itf_left_handedness"
+      ]
+    },
+    {
+      "id": "tm_score_state_menu",
+      "name": "Score-State Tactical Menu",
+      "model": "Preselect a small number of reliable patterns for 0-30, 30-30, deuce, break point, game point, and tie-break score states.",
+      "backend_fields": [
+        "score_state",
+        "serve_pattern",
+        "return_pattern",
+        "rally_pattern",
+        "risk_cap"
+      ],
+      "source_refs": [
+        "src_itf_rules_portal",
+        "src_lta_rules_scoring",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "tm_surface_weather_modifier",
+      "name": "Surface and Weather Modifier",
+      "model": "Modify targets, rally length tolerance, approach frequency, movement plan, and load by court surface and weather.",
+      "backend_fields": [
+        "surface",
+        "weather",
+        "bounce_profile",
+        "movement_load",
+        "target_margin",
+        "pattern_priority"
+      ],
+      "source_refs": [
+        "src_mdpi_surface_women",
+        "src_grass_strategy",
+        "src_usta_summer_conditions"
+      ]
+    }
+  ],
+  "tactical_rules": [
+    {
+      "id": "tr_second_serve_pressure",
+      "situation": "Returning second serve",
+      "rule": "Step inside only if contact quality and timing remain stable; otherwise use a deeper neutral return that denies the server's first aggressive plus-one.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_first_serve_body_pressure",
+      "situation": "Serving under pressure",
+      "rule": "Use a high-percentage body or heavy target when the line serve has become low percentage; the goal is a predictable return and playable plus-one.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_serve_kinetic_chain"
+      ]
+    },
+    {
+      "id": "tr_serve_wide_open_court",
+      "situation": "Serve plus-one after wide serve",
+      "rule": "Recover expecting a crosscourt or middle return, then attack the open court only if balance and spacing allow; otherwise build with heavy depth.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_grass_strategy"
+      ]
+    },
+    {
+      "id": "tr_serve_t_target_jam",
+      "situation": "Serve plus-one after T or body serve",
+      "rule": "Expect a shorter or central return more often than a clean angled return, then use the plus-one to take time or change court geometry.",
+      "level": "advanced",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_grass_strategy"
+      ]
+    },
+    {
+      "id": "tr_plus_one_to_weaker_wing",
+      "situation": "Server gets neutral plus-one",
+      "rule": "If the return does not expose open court, direct the plus-one to the opponent's lower-tolerance wing with depth before attempting a winner.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_usta_player_development"
+      ]
+    },
+    {
+      "id": "tr_return_deep_middle",
+      "situation": "Fast first-serve return",
+      "rule": "Deep middle is a valid neutralizing target because it reduces angle and asks the server to create width from a less comfortable plus-one.",
+      "level": "beginner_to_intermediate",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "tr_return_crosscourt_default",
+      "situation": "Return under moderate pressure",
+      "rule": "Use crosscourt or deep-middle return targets before down-the-line attempts unless scouting identifies a major weakness and the ball is readable.",
+      "level": "intermediate",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "tr_return_plus_one_hold_position",
+      "situation": "Receiver makes a solid neutral return",
+      "rule": "Do not over-recover blindly; hold a position that covers the server's likely plus-one from the return target.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "tr_crosscourt_until_advantage",
+      "situation": "Neutral baseline rally",
+      "rule": "Stay crosscourt with depth and shape until a short ball, weak contact, opponent imbalance, or clear open-court gap appears.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_crosscourt_height_on_clay",
+      "situation": "Clay or high-bounce rally",
+      "rule": "Use heavier height and spin to push the opponent back, then change direction only after creating space or a high contact advantage.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_mdpi_surface_women",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tr_down_line_requires_recovery_plan",
+      "situation": "Changing direction down the line",
+      "rule": "Only change down the line when there is a recovery plan for the opponent's crosscourt reply; line changes expose the diagonal counter.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tr_low_ball_do_not_redirect",
+      "situation": "Low or late neutral ball",
+      "rule": "Avoid aggressive down-the-line redirection from low, late, or stretched contact; lift crosscourt or deep middle to reset.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_depth_before_angle",
+      "situation": "Neutral construction",
+      "rule": "Create depth before angle when the opponent is balanced; angle without depth can give the opponent time and court.",
+      "level": "beginner_to_intermediate",
+      "source_refs": [
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tr_height_for_time",
+      "situation": "Defending wide or late",
+      "rule": "Increase height and spin to buy recovery time rather than hitting flat pace from a compromised base.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "tr_pace_only_with_position",
+      "situation": "Attempting to accelerate",
+      "rule": "Add pace only when contact is in the strike zone and court position is stable; otherwise prioritize spin, height, and depth.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "tr_offensive_phase_take_time",
+      "situation": "Offensive baseline phase",
+      "rule": "When inside the baseline with high contact, reduce the opponent's time through earlier contact, flatter trajectory, or open-court target.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "tr_neutral_phase_build_quality",
+      "situation": "Neutral baseline phase",
+      "rule": "Build with repeatable depth, shape, and target discipline; the aim is to earn a shorter ball rather than force a low-percentage finish.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tr_defensive_phase_reset",
+      "situation": "Defensive baseline phase",
+      "rule": "Use height, depth, and central targets to recover court position before trying to counterattack.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_rally_tolerance_threshold",
+      "situation": "Player misses before pattern develops",
+      "rule": "Set rally-length goals before tactical variety; a player who cannot make a target number of quality neutral balls should simplify pattern options.",
+      "level": "beginner_to_intermediate",
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_adm"
+      ]
+    },
+    {
+      "id": "tr_short_ball_height_decision",
+      "situation": "Attacking a short ball",
+      "rule": "High short balls can be driven or angled; low short balls usually need spin, slice, depth, or approach placement instead of raw power.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_short_ball_approach_direction",
+      "situation": "Short ball approach",
+      "rule": "Approach to the side that limits the opponent's best pass or targets the weaker wing; avoid opening the opponent's favorite angle.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_usta_player_development"
+      ]
+    },
+    {
+      "id": "tr_inside_out_forehand",
+      "situation": "Player receives a short or central forehand",
+      "rule": "Inside-out is high value when it targets a weaker backhand and preserves recovery; inside-in requires a stronger balance and recovery read.",
+      "level": "advanced",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_pass_low_dipper",
+      "situation": "Opponent approaching net",
+      "rule": "When the passer is balanced but the lane is covered, use a low dipping ball to force a difficult first volley rather than forcing a line winner.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_lob_when_net_closes",
+      "situation": "Opponent tight to net",
+      "rule": "Use topspin or defensive lob when the opponent closes hard and the passer has contact height or enough time to lift safely.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_body_pass_when_stretched",
+      "situation": "Stretched passing shot",
+      "rule": "Aim at the body or feet when stretched and low; this can reduce the volleyer's options with less sideline risk.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_scout_serve_tendencies",
+      "situation": "Opponent scouting",
+      "rule": "Track serve location by score and side; pressure patterns often matter more than overall serve percentage.",
+      "level": "advanced",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_usta_player_development"
+      ]
+    },
+    {
+      "id": "tr_scout_return_position",
+      "situation": "Opponent scouting",
+      "rule": "Record return position and return target because these determine whether wide, body, or T serves create useful plus-one balls.",
+      "level": "advanced",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_scout_contact_height",
+      "situation": "Opponent scouting",
+      "rule": "Identify whether the opponent dislikes high shoulder balls, low skidding balls, or pace; then choose height, spin, and slice accordingly.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_mdpi_surface_women"
+      ]
+    },
+    {
+      "id": "tr_scout_movement_weakness",
+      "situation": "Opponent scouting",
+      "rule": "Separate lateral weakness from forward-backward weakness; short-ball plans are useful only if the opponent struggles moving forward or passing.",
+      "level": "advanced",
+      "source_refs": [
+        "src_matchplay_intensity_review",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "tr_lefty_ad_wide_awareness",
+      "situation": "Right-handed player returning lefty serve",
+      "rule": "Prepare for the lefty's ad-court wide serve angle and rehearse return targets that prevent the server's forehand plus-one.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_itf_left_handedness",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "tr_lefty_forehand_crosscourt",
+      "situation": "Righty versus lefty baseline rally",
+      "rule": "Expect crosscourt forehand-to-backhand patterns to reverse normal comfort zones; pre-plan when to hold, redirect, or use height.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_itf_left_handedness",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tr_clay_patience",
+      "situation": "Clay-court match",
+      "rule": "Increase rally tolerance, height, and depth while still protecting serve-return patterns; clay should not remove first-strike planning.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_mdpi_surface_women",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "tr_grass_first_strike",
+      "situation": "Grass-court match",
+      "rule": "Prioritize serve accuracy, return compactness, lower contact preparation, and first volley/plus-one decisions because rallies are often compressed.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_grass_strategy",
+        "src_mdpi_surface_women"
+      ]
+    },
+    {
+      "id": "tr_hard_court_balance",
+      "situation": "Hard-court match",
+      "rule": "Blend first-strike patterns with sustainable movement; monitor repeated braking and recovery because hard courts can raise impact load.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_mdpi_surface_women",
+        "src_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "tr_wind_margin",
+      "situation": "Windy conditions",
+      "rule": "Increase target margin, height discipline, footwork adjustment, and spin control; avoid low-margin line changes unless balance and ball read are clear.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_summer_conditions",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tr_heat_rally_selection",
+      "situation": "Hot or humid match",
+      "rule": "Use high-percentage first-strike patterns and between-point routines to reduce avoidable long-rally tax without forcing reckless winners.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_summer_conditions",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "tr_sun_toss_adjust",
+      "situation": "Serving into sun",
+      "rule": "Shift serve target and toss management toward reliable locations; tactical intent should not require a serve action the player cannot repeat in glare.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_summer_conditions",
+        "src_serve_kinetic_chain"
+      ]
+    },
+    {
+      "id": "tr_break_point_server",
+      "situation": "Serving break point",
+      "rule": "Use one preselected serve plus-one pattern that the player trusts, then accept a neutral rally rather than double-fault or forcing a low-percentage first ball.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "tr_break_point_returner",
+      "situation": "Returning break point",
+      "rule": "Make the server play a second decision: prioritize return depth or body pressure over winner attempts unless the serve is clearly attackable.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "tr_game_point_close",
+      "situation": "Serving game point",
+      "rule": "Close with a pattern that starts the point on the player's best serve-return advantage; avoid introducing a target not used earlier in the game.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_usta_player_development"
+      ]
+    },
+    {
+      "id": "tr_tiebreak_minibreak",
+      "situation": "Tie-break after gaining mini-break",
+      "rule": "Protect the lead with repeatable serve/return patterns and deep rally targets; do not donate the next point with unnecessary directional risk.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_itf_rules_portal",
+        "src_lta_rules_scoring"
+      ]
+    },
+    {
+      "id": "tr_tiebreak_return_start",
+      "situation": "Tie-break return point",
+      "rule": "Return target should deny the server's favorite plus-one first; an early tie-break miss on a speculative return has high strategic cost.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "tr_comp_week_no_new_patterns",
+      "situation": "Competition week",
+      "rule": "Sharpen two to four established serve-return and rally patterns; do not install new tactical families when match freshness and confidence matter.",
+      "level": "all_levels",
+      "source_refs": [
+        "src_usta_adm",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "tr_comp_week_pressure_reps",
+      "situation": "Competition week tactical practice",
+      "rule": "Use short pressure sets, tie-break starts, and break-point rehearsals to test decision quality without excessive volume.",
+      "level": "intermediate_to_advanced",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "tr_beginner_one_pattern",
+      "situation": "Beginner tactical teaching",
+      "rule": "Teach one target pattern at a time, usually crosscourt or deep middle, with modified balls or courts as needed.",
+      "level": "beginner",
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_adm"
+      ]
+    },
+    {
+      "id": "tr_intermediate_two_patterns",
+      "situation": "Intermediate tactical teaching",
+      "rule": "Progress to two-pattern choice: hold crosscourt or attack short ball, then add controlled down-the-line decisions after consistency stabilizes.",
+      "level": "intermediate",
+      "source_refs": [
+        "src_usta_adm",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "tr_advanced_opponent_plan",
+      "situation": "Advanced tactical teaching",
+      "rule": "Build match plans around opponent-specific pressure routes and test them with score constraints and surface-specific movement.",
+      "level": "advanced",
+      "source_refs": [
+        "src_usta_player_development",
+        "src_ta_fundamentals"
+      ]
+    }
+  ],
+  "physical_demands": [
+    {
+      "id": "pd_first_step_after_serve",
+      "demand": "Serve plus-one requires immediate landing recovery, split timing, and explosive first step.",
+      "tactical_link": "A serve pattern fails if the server cannot recover into the expected plus-one court position.",
+      "source_refs": [
+        "src_serve_kinetic_chain",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "pd_return_reaction",
+      "demand": "Return plus-one requires fast perception, compact swing adaptation, and rapid recovery from a short preparation window.",
+      "tactical_link": "Grass, fast hard courts, and big servers increase the cost of long return swings.",
+      "source_refs": [
+        "src_grass_strategy",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "pd_crosscourt_repetition",
+      "demand": "Crosscourt tolerance depends on repeated lateral loading, trunk rotation, and recovery footwork over many neutral contacts.",
+      "tactical_link": "Rally-tolerance drills should track ball quality and movement quality, not only number of balls made.",
+      "source_refs": [
+        "src_matchplay_intensity_review",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "pd_change_direction_braking",
+      "demand": "Down-the-line changes and open-court attacks require braking, re-acceleration, and recovery to cover the diagonal counter.",
+      "tactical_link": "Directional tactics should be paired with deceleration capacity.",
+      "source_refs": [
+        "src_matchplay_intensity_review",
+        "src_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "pd_defensive_reset_capacity",
+      "demand": "Defensive phase requires wide-ball deceleration, sliding or lunging depending on surface, and enough aerobic recovery to repeat efforts.",
+      "tactical_link": "A defensive reset is only useful if the player can recover before the next shot.",
+      "source_refs": [
+        "src_matchplay_intensity_review",
+        "src_mdpi_surface_women"
+      ]
+    },
+    {
+      "id": "pd_short_ball_transition",
+      "demand": "Short-ball attack requires forward acceleration, controlled hitting while moving, braking near contact, and possible net transition.",
+      "tactical_link": "Attacking short balls increases forward-backward load and should be practiced with recovery after the attack.",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "pd_lob_overhead_exchange",
+      "demand": "Passing and lob sequences load shoulder, trunk, backpedal movement, overhead preparation, and recovery reactions.",
+      "tactical_link": "Lob-heavy plans should account for opponent overhead and the player's own shoulder/back response if forced to defend lobs.",
+      "source_refs": [
+        "src_injury_epidemiology",
+        "src_serve_kinetic_chain"
+      ]
+    },
+    {
+      "id": "pd_surface_movement",
+      "demand": "Clay increases sliding and longer movement exchanges; grass compresses reaction time and lower-bounce setup; hard courts increase repeated braking impact.",
+      "tactical_link": "Surface changes should alter movement preparation and tactical drill density.",
+      "source_refs": [
+        "src_mdpi_surface_women",
+        "src_grass_strategy",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "pd_pressure_point_arousal",
+      "demand": "Pressure points require repeatable routines, breathing control, and decision simplicity under increased arousal.",
+      "tactical_link": "The physical routine supports tactical execution by stabilizing timing before serve or return.",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_usta_player_development"
+      ]
+    },
+    {
+      "id": "pd_heat_fatigue",
+      "demand": "Heat and humidity increase fatigue cost and can reduce movement quality, decision clarity, and serve/return precision.",
+      "tactical_link": "Hot-weather tactics should include between-point pacing and lower-error patterns.",
+      "source_refs": [
+        "src_usta_summer_conditions",
+        "src_matchplay_intensity_review"
+      ]
+    }
+  ],
+  "injury_or_load_risks": [
+    {
+      "id": "lr_high_intent_serving",
+      "risk": "High-intent serve volume increases shoulder, elbow, trunk, and lumbar load.",
+      "tactical_trigger": "Repeated serve plus-one sessions, tiebreak serving rehearsals, or extra serve buckets after matches.",
+      "planning_flag": "Track high-intent serve count and next-day shoulder, elbow, and back response.",
+      "source_refs": [
+        "src_serve_kinetic_chain",
+        "src_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "lr_return_repetition_forearm",
+      "risk": "High return volumes against pace can increase wrist, forearm, elbow, and shoulder demand.",
+      "tactical_trigger": "Return-plus-one blocks against heavy serves or machine-fed high-speed returns.",
+      "planning_flag": "Cap high-speed return reps for players with wrist or elbow symptoms.",
+      "source_refs": [
+        "src_injury_epidemiology",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "lr_heavy_topspin_overuse",
+      "risk": "Large volumes of heavy topspin and high racket speed can increase upper-limb and trunk fatigue.",
+      "tactical_trigger": "Clay-court high-spin crosscourt tolerance sessions.",
+      "planning_flag": "Balance spin-load sessions with recovery and technical efficiency checks.",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "lr_down_line_deceleration",
+      "risk": "Aggressive direction changes increase braking and recovery stress.",
+      "tactical_trigger": "Down-the-line attack drills with live diagonal counters.",
+      "planning_flag": "Monitor knee, ankle, hip, groin, and Achilles response after direction-change sessions.",
+      "source_refs": [
+        "src_matchplay_intensity_review",
+        "src_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "lr_short_ball_transition_volume",
+      "risk": "Repeated short-ball attacks add forward sprint, braking, lunge, and net-transition load.",
+      "tactical_trigger": "Approach-shot and pass-lob live drills.",
+      "planning_flag": "Count forward-transition reps and pair with calf, knee, and hip readiness.",
+      "source_refs": [
+        "src_matchplay_intensity_review",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "lr_clay_sliding_spikes",
+      "risk": "Rapid increase in clay sliding exposure can stress adductors, hip, knee, ankle, and groin.",
+      "tactical_trigger": "Clay defensive-reset and high-tolerance rally blocks.",
+      "planning_flag": "Progress sliding exposure before heavy match simulation.",
+      "source_refs": [
+        "src_mdpi_surface_women",
+        "src_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "lr_hard_court_impact",
+      "risk": "Hard-court sessions can accumulate braking and impact load in lower limbs and back.",
+      "tactical_trigger": "Repeated wide-ball recovery, pressure tie-breaks, and long live sets.",
+      "planning_flag": "Use session duration, change-of-direction density, and next-day lower-limb response.",
+      "source_refs": [
+        "src_matchplay_intensity_review",
+        "src_injury_epidemiology"
+      ]
+    },
+    {
+      "id": "lr_grass_low_bounce",
+      "risk": "Low-bounce surfaces can raise reaction and low-positioning demand, increasing slips or low-back/hamstring stress if unprepared.",
+      "tactical_trigger": "Grass return and first-strike training without surface adaptation.",
+      "planning_flag": "Build compact return, low-contact, and footing exposure before match intensity.",
+      "source_refs": [
+        "src_grass_strategy",
+        "src_mdpi_surface_women"
+      ]
+    },
+    {
+      "id": "lr_pressure_rehearsal_overdose",
+      "risk": "Pressure-point games can silently raise intensity even when volume looks low.",
+      "tactical_trigger": "Repeated break-point, game-point, and tie-break sets.",
+      "planning_flag": "Track high-arousal points and avoid stacking them after high serve or movement load.",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "lr_heat_load",
+      "risk": "Hot and humid conditions increase physiological strain and can reduce decision quality.",
+      "tactical_trigger": "Long tactical sessions or matches in summer conditions.",
+      "planning_flag": "Use hydration, rest, cooling, and conservative volume rules.",
+      "source_refs": [
+        "src_usta_summer_conditions",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "lr_comp_week_novelty",
+      "risk": "Adding new tactical patterns in competition week can raise cognitive load and disrupt confidence.",
+      "tactical_trigger": "Late-week installation of new serve targets, return positions, or direction-change rules.",
+      "planning_flag": "Restrict competition week to rehearsed patterns and small target adjustments.",
+      "source_refs": [
+        "src_usta_adm",
+        "src_usta_player_development"
+      ]
+    },
+    {
+      "id": "lr_junior_mismatch",
+      "risk": "Adult-style tactical volume can exceed junior physical and cognitive readiness.",
+      "tactical_trigger": "Long full-court pattern blocks before rally tolerance and movement quality are stable.",
+      "planning_flag": "Use modified-ball progressions, shorter constraints, and recovery checks.",
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_adm",
+        "src_junior_demands_review"
+      ]
+    }
+  ],
+  "training_implications": [
+    {
+      "id": "ti_train_patterns_before_choices",
+      "implication": "Teach one reliable pattern before adding tactical branching.",
+      "implementation": "For beginners, use modified courts and balls to create crosscourt or deep-middle success before asking for down-the-line changes.",
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_adm"
+      ]
+    },
+    {
+      "id": "ti_score_constraints",
+      "implication": "Tactical drills should include score constraints.",
+      "implementation": "Use 30-30 starts, break-point starts, and tie-break points so players connect decision quality to scoring pressure.",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_usta_player_development"
+      ]
+    },
+    {
+      "id": "ti_serve_return_pairs",
+      "implication": "Serve and return should be trained as paired tactical systems.",
+      "implementation": "For every serve plus-one block, include a return-plus-one block that denies or exploits the same pattern.",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_grass_strategy"
+      ]
+    },
+    {
+      "id": "ti_chart_plus_one",
+      "implication": "Track plus-one outcome, not only first-serve percentage or return in-play rate.",
+      "implementation": "Record whether the first ball after serve or return produced offensive, neutral, or defensive state.",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "ti_rally_quality_metrics",
+      "implication": "Rally tolerance should be measured by quality zones.",
+      "implementation": "Score rallies by depth, height, and recovery quality instead of raw rally count alone.",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_itf_play_stay"
+      ]
+    },
+    {
+      "id": "ti_direction_change_gate_testing",
+      "implication": "Direction-change drills need gate criteria.",
+      "implementation": "Only award down-the-line attempts when contact is balanced, in front, and above the minimum height threshold.",
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "ti_surface_blocks",
+      "implication": "Surface-specific blocks should alter targets and movement dose.",
+      "implementation": "Clay blocks emphasize height, depth, patience, and sliding progression; grass blocks emphasize serve-return, low contact, and first-strike compactness.",
+      "source_refs": [
+        "src_mdpi_surface_women",
+        "src_grass_strategy"
+      ]
+    },
+    {
+      "id": "ti_weather_rehearsal",
+      "implication": "Weather adaptation should be rehearsed before competition.",
+      "implementation": "Use wind-margin targets, sun-side serving adjustments, and heat pacing routines in practice rather than only discussing them before the match.",
+      "source_refs": [
+        "src_usta_summer_conditions",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "ti_lefty_exposure",
+      "implication": "Players need deliberate exposure to lefty patterns.",
+      "implementation": "Include lefty serve simulations, reversed crosscourt lanes, and ad-court return patterns when a lefty opponent is likely.",
+      "source_refs": [
+        "src_itf_left_handedness"
+      ]
+    },
+    {
+      "id": "ti_scouting_form",
+      "implication": "Opponent scouting should be structured, not anecdotal.",
+      "implementation": "Create a pre-match form covering serve by side and score, second-serve target, return position, preferred wing, weak movement direction, and pressure pattern.",
+      "source_refs": [
+        "src_usta_player_development",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "ti_short_ball_plus_net",
+      "implication": "Short-ball attack training should include the next shot.",
+      "implementation": "After the short-ball attack, require players to recover to volley or passing coverage rather than ending the drill at the approach contact.",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "ti_pass_lob_randomization",
+      "implication": "Pass and lob choices should be trained with live net-player reads.",
+      "implementation": "Randomize net-player distance and coverage so players learn body, feet, lane, and lob decisions.",
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "ti_comp_week_pattern_menu",
+      "implication": "Competition week should produce a short written pattern menu.",
+      "implementation": "List first serve pattern, second serve pattern, safe return pattern, pressure rally pattern, and emergency reset pattern.",
+      "source_refs": [
+        "src_usta_player_development",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "ti_pressure_without_volume",
+      "implication": "Pressure can be trained without excessive volume.",
+      "implementation": "Use short sets, sudden-death deuce, and tie-break starts with clear rest rather than long fatigue-heavy play every session.",
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "ti_level_gates",
+      "implication": "Tactical progression should be gated by level.",
+      "implementation": "Beginner: rally success and safe targets. Intermediate: serve/return reliability and two-pattern decisions. Advanced: opponent-specific and score-specific planning.",
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_adm",
+        "src_usta_player_development"
+      ]
+    },
+    {
+      "id": "ti_load_channel_tagging",
+      "implication": "Every tactical drill should carry load-channel tags.",
+      "implementation": "Tag serve count, high-intent serve count, heavy topspin volume, wide-ball count, forward-transition count, and pressure-point intensity.",
+      "source_refs": [
+        "src_injury_epidemiology",
+        "src_serve_kinetic_chain",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "ti_pain_adjusted_tactics",
+      "implication": "Tactical plans should adapt to pain flags.",
+      "implementation": "Elbow or shoulder symptoms reduce serve and high-spin volume; back symptoms reduce high-intent serving and extreme rotation; lower-limb symptoms reduce wide-ball and transition density.",
+      "source_refs": [
+        "src_injury_epidemiology",
+        "src_serve_kinetic_chain"
+      ]
+    },
+    {
+      "id": "ti_backend_assessments",
+      "implication": "Assessment should test decision quality under realistic constraints.",
+      "implementation": "Assess serve plus-one execution, return plus-one denial, crosscourt tolerance, direction-change timing, short-ball conversion, and pressure-point pattern adherence.",
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    }
+  ],
+  "backend_records_to_create": [
+    {
+      "id": "br_score_state_tactical_menu",
+      "record_type": "tactical_rule",
+      "slug": "tennis_singles_score_state_tactical_menu",
+      "purpose": "Store reliable serve, return, and rally choices for high-leverage score states.",
+      "fields_to_store": [
+        "score_state",
+        "pattern_options",
+        "risk_cap",
+        "level",
+        "source_refs"
+      ],
+      "source_refs": [
+        "src_itf_rules_portal",
+        "src_lta_rules_scoring"
+      ]
+    },
+    {
+      "id": "br_serve_plus_one_pattern",
+      "record_type": "tactical_pattern",
+      "slug": "tennis_singles_serve_plus_one_pattern",
+      "purpose": "Model serve location, expected return, plus-one target, recovery, and load risk.",
+      "fields_to_store": [
+        "serve_location",
+        "serve_spin",
+        "expected_return_zone",
+        "plus_one_target",
+        "load_flags",
+        "source_refs"
+      ],
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_grass_strategy"
+      ]
+    },
+    {
+      "id": "br_return_plus_one_pattern",
+      "record_type": "tactical_pattern",
+      "slug": "tennis_singles_return_plus_one_pattern",
+      "purpose": "Model return target, depth, server plus-one denial, receiver recovery, and next-ball target.",
+      "fields_to_store": [
+        "serve_type",
+        "return_target",
+        "return_depth",
+        "receiver_recovery",
+        "next_ball_goal",
+        "source_refs"
+      ],
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "br_crosscourt_tolerance",
+      "record_type": "assessment",
+      "slug": "tennis_singles_crosscourt_tolerance_assessment",
+      "purpose": "Assess repeatable crosscourt depth, shape, and recovery before adding advanced direction changes.",
+      "fields_to_store": [
+        "wing",
+        "rally_count_target",
+        "depth_zone",
+        "height_window",
+        "recovery_quality",
+        "progression_gate"
+      ],
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "br_down_line_decision_gate",
+      "record_type": "decision_rule",
+      "slug": "tennis_singles_down_the_line_decision_gate",
+      "purpose": "Gate down-the-line changes by contact, balance, ball height, opponent gap, and recovery cost.",
+      "fields_to_store": [
+        "contact_gate",
+        "balance_gate",
+        "ball_height_gate",
+        "opponent_position",
+        "recovery_route"
+      ],
+      "source_refs": [
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "br_ball_control_skill_tags",
+      "record_type": "taxonomy",
+      "slug": "tennis_ball_control_tactical_tags",
+      "purpose": "Standardize tactical tags for direction, depth, height, spin, and speed.",
+      "fields_to_store": [
+        "control",
+        "tactical_use",
+        "measurement_hint",
+        "level",
+        "source_refs"
+      ],
+      "source_refs": [
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "br_phase_classifier",
+      "record_type": "decision_model",
+      "slug": "tennis_singles_offensive_neutral_defensive_classifier",
+      "purpose": "Classify point phase before recommending target risk.",
+      "fields_to_store": [
+        "phase",
+        "court_position",
+        "balance",
+        "contact_height",
+        "opponent_position",
+        "recommended_decision"
+      ],
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "br_short_ball_attack",
+      "record_type": "tactical_pattern",
+      "slug": "tennis_singles_short_ball_attack",
+      "purpose": "Store short-ball attack choices by ball height, court position, opponent gap, and net follow-up.",
+      "fields_to_store": [
+        "ball_height",
+        "inside_court_distance",
+        "target",
+        "approach_followup",
+        "load_flags"
+      ],
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "br_pass_lob_selector",
+      "record_type": "decision_model",
+      "slug": "tennis_singles_pass_lob_selector",
+      "purpose": "Choose pass, body ball, dipper, or lob against a net player.",
+      "fields_to_store": [
+        "net_player_distance",
+        "contact_height",
+        "available_angle",
+        "player_balance",
+        "recommended_option"
+      ],
+      "source_refs": [
+        "src_ta_fundamentals",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "br_opponent_scouting",
+      "record_type": "match_prep_form",
+      "slug": "tennis_singles_opponent_scouting_grid",
+      "purpose": "Capture opponent strengths, weaknesses, serve/return tendencies, movement issues, and pressure patterns.",
+      "fields_to_store": [
+        "serve_by_side",
+        "return_position",
+        "wing_tolerance",
+        "movement_weakness",
+        "pressure_response",
+        "plan_priorities"
+      ],
+      "source_refs": [
+        "src_usta_player_development",
+        "src_ta_fundamentals"
+      ]
+    },
+    {
+      "id": "br_lefty_righty_matchup",
+      "record_type": "matchup_rule",
+      "slug": "tennis_singles_lefty_righty_matchup_logic",
+      "purpose": "Store handedness-specific serve, return, and rally adjustments.",
+      "fields_to_store": [
+        "player_handedness",
+        "opponent_handedness",
+        "serve_threats",
+        "return_adjustments",
+        "rally_targets",
+        "practice_exposure"
+      ],
+      "source_refs": [
+        "src_itf_left_handedness"
+      ]
+    },
+    {
+      "id": "br_surface_tactical_modifier",
+      "record_type": "planning_modifier",
+      "slug": "tennis_surface_tactical_modifier",
+      "purpose": "Modify tactical patterns, movement dose, and load risk for clay, hard, and grass.",
+      "fields_to_store": [
+        "surface",
+        "bounce_profile",
+        "rally_length_bias",
+        "movement_load",
+        "pattern_priority",
+        "risk_flags"
+      ],
+      "source_refs": [
+        "src_mdpi_surface_women",
+        "src_grass_strategy",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "br_weather_tactical_modifier",
+      "record_type": "planning_modifier",
+      "slug": "tennis_weather_tactical_modifier",
+      "purpose": "Adjust tactics and volume for heat, humidity, wind, sun, and cold.",
+      "fields_to_store": [
+        "weather_condition",
+        "target_adjustment",
+        "serve_adjustment",
+        "rally_adjustment",
+        "recovery_rule",
+        "source_refs"
+      ],
+      "source_refs": [
+        "src_usta_summer_conditions",
+        "src_usta_five_controls"
+      ]
+    },
+    {
+      "id": "br_tiebreak_pattern",
+      "record_type": "tactical_pattern",
+      "slug": "tennis_singles_tiebreak_pattern",
+      "purpose": "Store tie-break serving, returning, mini-break, and pattern-protection logic.",
+      "fields_to_store": [
+        "tie_break_score",
+        "serve_option",
+        "return_option",
+        "risk_cap",
+        "reset_routine"
+      ],
+      "source_refs": [
+        "src_itf_rules_portal",
+        "src_lta_rules_scoring"
+      ]
+    },
+    {
+      "id": "br_break_point_pattern",
+      "record_type": "tactical_pattern",
+      "slug": "tennis_singles_break_point_pattern",
+      "purpose": "Store server and returner decisions for break point.",
+      "fields_to_store": [
+        "role",
+        "serve_or_return_choice",
+        "plus_one_goal",
+        "acceptable_neutral_target",
+        "risk_cap"
+      ],
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_plos_first_strike"
+      ]
+    },
+    {
+      "id": "br_game_point_pattern",
+      "record_type": "tactical_pattern",
+      "slug": "tennis_singles_game_point_pattern",
+      "purpose": "Store reliable closing patterns that avoid late-game novelty.",
+      "fields_to_store": [
+        "role",
+        "preferred_pattern",
+        "fallback_pattern",
+        "avoid_list",
+        "routine"
+      ],
+      "source_refs": [
+        "src_lta_rules_scoring",
+        "src_usta_player_development"
+      ]
+    },
+    {
+      "id": "br_competition_week_tactical_sharpening",
+      "record_type": "planning_rule",
+      "slug": "tennis_competition_week_tactical_sharpening",
+      "purpose": "Limit new tactics while rehearsing serve-return, plus-one, and pressure choices.",
+      "fields_to_store": [
+        "days_before_match",
+        "allowed_patterns",
+        "blocked_novelty",
+        "volume_cap",
+        "pressure_reps"
+      ],
+      "source_refs": [
+        "src_usta_adm",
+        "src_junior_demands_review"
+      ]
+    },
+    {
+      "id": "br_level_based_tactical_teaching",
+      "record_type": "teaching_progression",
+      "slug": "tennis_level_based_tactical_teaching",
+      "purpose": "Progress tactical complexity from beginner to intermediate to advanced.",
+      "fields_to_store": [
+        "level",
+        "allowed_patterns",
+        "skill_gates",
+        "assessment_signals",
+        "hold_back_rules"
+      ],
+      "source_refs": [
+        "src_itf_play_stay",
+        "src_usta_adm"
+      ]
+    },
+    {
+      "id": "br_tactical_load_channels",
+      "record_type": "load_model",
+      "slug": "tennis_tactical_load_channels",
+      "purpose": "Map tactical drill types to serve, upper-limb, trunk, movement, and pressure load channels.",
+      "fields_to_store": [
+        "drill_type",
+        "serve_count",
+        "wide_ball_count",
+        "transition_count",
+        "topspin_volume",
+        "pressure_intensity"
+      ],
+      "source_refs": [
+        "src_injury_epidemiology",
+        "src_serve_kinetic_chain",
+        "src_matchplay_intensity_review"
+      ]
+    },
+    {
+      "id": "br_tactical_pain_gate",
+      "record_type": "planning_rule",
+      "slug": "tennis_tactical_pain_gate",
+      "purpose": "Modify tactical assignments when shoulder, elbow, wrist, back, hip, knee, ankle, calf, or Achilles symptoms are present.",
+      "fields_to_store": [
+        "pain_region",
+        "blocked_patterns",
+        "reduced_patterns",
+        "safe_alternatives",
+        "monitoring_response"
+      ],
+      "source_refs": [
+        "src_injury_epidemiology",
+        "src_serve_kinetic_chain"
+      ]
+    },
+    {
+      "id": "br_tactical_assessment_suite",
+      "record_type": "assessment_suite",
+      "slug": "tennis_singles_tactical_assessment_suite",
+      "purpose": "Assess match IQ through plus-one, rally phase, direction-change, short-ball, pass/lob, and pressure scenarios.",
+      "fields_to_store": [
+        "assessment_name",
+        "scenario",
+        "success_metric",
+        "level",
+        "load_flag",
+        "source_refs"
+      ],
+      "source_refs": [
+        "src_plos_first_strike",
+        "src_usta_five_controls",
+        "src_ta_fundamentals"
+      ]
+    }
+  ]
+}
