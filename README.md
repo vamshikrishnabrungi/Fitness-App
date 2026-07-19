@@ -64,6 +64,21 @@ with:
 Note they resolve paths via `Path(__file__).resolve().parents[1]`, so they expect
 to sit in `backend/`, and they need the (gitignored) source books to re-run.
 
+## Operating the knowledge base
+
+Browse and edit the knowledge collections with **MongoDB Compass** (or `mongosh`),
+pointed at `MONGO_URL` — in production, over an SSH tunnel. There is deliberately
+no CRUD API for this: Compass already does querying, editing and indexing better
+than a hand-rolled admin endpoint would.
+
+The one HTTP diagnostic is `GET /api/library/summary`, which returns a document
+count per collection — useful for answering "did the knowledge base actually
+load?" without database access. It requires an admin account.
+
+Grant admin directly; there is no admin UI:
+
+    db.users.updateOne({ email: 'you@example.com' }, { $set: { is_admin: true } })
+
 ## Environment
 
 Backend `backend/.env` values:

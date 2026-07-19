@@ -456,12 +456,24 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         raise HTTPException(status_code=401, detail='Invalid token')
 
 
+async def require_admin(current_user: dict = Depends(get_current_user)) -> dict:
+    """Gate operator-only routes.
+
+    There is no admin UI by design — grant the flag directly, e.g.
+        db.users.updateOne({email: 'you@example.com'}, {$set: {is_admin: true}})
+    """
+    if not current_user.get('is_admin'):
+        raise HTTPException(status_code=403, detail='Admin access required')
+    return current_user
+
+
 def user_response(user: dict) -> dict:
     return {
         'id': user['id'],
         'email': user['email'],
         'name': user['name'],
         'profile': user.get('profile', {}),
+        'is_admin': bool(user.get('is_admin', False)),
         'created_at': user.get('created_at')
     }
 
@@ -1981,8 +1993,10 @@ async def workout_generation_status(current_user: dict = Depends(get_current_use
 
 
 # -------------------- KNOWLEDGE LIBRARY --------------------
+# Operator diagnostics only. Browsing and editing the knowledge base is done
+# with MongoDB Compass / mongosh, which does it better than a hand-rolled API.
 @api_router.get('/library/summary')
-async def library_summary(current_user: dict = Depends(get_current_user)):
+async def library_summary(current_user: dict = Depends(require_admin)):
     collections = [
         'exercise_library',
         'primary_exercise_library',
@@ -2014,256 +2028,6 @@ async def library_summary(current_user: dict = Depends(get_current_user)):
     for collection_name in collections:
         summary[collection_name] = await db[collection_name].count_documents({})
     return summary
-
-
-@api_router.get('/library/exercises')
-async def list_library_exercises(
-    category: Optional[str] = None,
-    sport: Optional[str] = None,
-    equipment: Optional[str] = None,
-    difficulty: Optional[str] = None,
-    movement: Optional[str] = None,
-    current_user: dict = Depends(get_current_user),
-):
-    query: Dict[str, Any] = {}
-    if category:
-        query['category'] = category
-    if sport:
-        query['sport_tags'] = sport
-    if equipment:
-        query['equipment'] = equipment
-    if difficulty:
-        query['difficulty'] = difficulty
-    if movement:
-        query['movement_patterns'] = movement
-    docs = await db.exercise_library.find(query).sort('name', 1).to_list(300)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/primary-exercises')
-async def list_primary_exercises(
-    category: Optional[str] = None,
-    equipment: Optional[str] = None,
-    level: Optional[str] = None,
-    pattern: Optional[str] = None,
-    current_user: dict = Depends(get_current_user),
-):
-    query: Dict[str, Any] = {}
-    if category:
-        query['category'] = category
-    if equipment:
-        query['equipment'] = equipment
-    if level:
-        query['default_user_level'] = level
-    if pattern:
-        query['patterns'] = pattern
-    docs = await db.primary_exercise_library.find(query).sort('name', 1).to_list(500)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/exercise-variations')
-async def list_exercise_variations(
-    base_exercise: Optional[str] = None,
-    equipment: Optional[str] = None,
-    level: Optional[str] = None,
-    variation_type: Optional[str] = None,
-    current_user: dict = Depends(get_current_user),
-):
-    query: Dict[str, Any] = {}
-    if base_exercise:
-        query['base_exercise'] = base_exercise
-    if equipment:
-        query['equipment'] = equipment
-    if level:
-        query['default_user_level'] = level
-    if variation_type:
-        query['variation_type'] = variation_type
-    docs = await db.exercise_variation_library.find(query).sort('name', 1).to_list(500)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/exercise-progressions')
-async def list_exercise_progressions(base_exercise: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'base_exercise': base_exercise} if base_exercise else {}
-    docs = await db.exercise_progression_graph.find(query).sort([('base_exercise', 1), ('from_exercise_name', 1)]).to_list(500)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/sports')
-async def list_library_sports(sport: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'sport': sport} if sport else {}
-    docs = await db.sport_profiles.find(query).sort('sport', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/sport-roles')
-async def list_library_sport_roles(sport: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'sport': sport} if sport else {}
-    docs = await db.sport_roles.find(query).sort([('sport', 1), ('role', 1)]).to_list(200)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/sport-training-rules')
-async def list_library_sport_training_rules(sport: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'sport': sport} if sport else {}
-    docs = await db.sport_training_rules.find(query).sort([('sport', 1), ('id', 1)]).to_list(300)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/sport-teaching-progressions')
-async def list_library_sport_teaching_progressions(
-    sport: Optional[str] = None,
-    domain: Optional[str] = None,
-    level: Optional[str] = None,
-    role: Optional[str] = None,
-    current_user: dict = Depends(get_current_user),
-):
-    query: Dict[str, Any] = {}
-    if sport:
-        query['sport'] = sport
-    if domain:
-        query['domain'] = domain
-    if level:
-        query['level'] = level
-    if role:
-        query['role_tags'] = role
-    docs = await db.sport_teaching_progressions.find(query).sort([('sport', 1), ('domain', 1), ('level', 1)]).to_list(300)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/sport-skill-assessments')
-async def list_library_sport_skill_assessments(
-    sport: Optional[str] = None,
-    domain: Optional[str] = None,
-    current_user: dict = Depends(get_current_user),
-):
-    query: Dict[str, Any] = {}
-    if sport:
-        query['sport'] = sport
-    if domain:
-        query['domain'] = domain
-    docs = await db.sport_skill_assessments.find(query).sort([('sport', 1), ('domain', 1)]).to_list(200)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/sport-level-transition-rules')
-async def list_library_sport_level_transition_rules(
-    sport: Optional[str] = None,
-    from_level: Optional[str] = None,
-    to_level: Optional[str] = None,
-    role: Optional[str] = None,
-    current_user: dict = Depends(get_current_user),
-):
-    query: Dict[str, Any] = {}
-    if sport:
-        query['sport'] = sport
-    if from_level:
-        query['from_level'] = from_level
-    if to_level:
-        query['to_level'] = to_level
-    if role:
-        query['applies_to'] = role
-    docs = await db.sport_level_transition_rules.find(query).sort([('sport', 1), ('from_level', 1), ('to_level', 1)]).to_list(200)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/movement-patterns')
-async def list_library_movement_patterns(current_user: dict = Depends(get_current_user)):
-    docs = await db.movement_patterns.find({}).sort('pattern', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/physical-qualities')
-async def list_library_physical_qualities(group: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'group': group} if group else {}
-    docs = await db.physical_qualities.find(query).sort([('group', 1), ('quality', 1)]).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/workout-templates')
-async def list_library_workout_templates(
-    category: Optional[str] = None,
-    sport: Optional[str] = None,
-    level: Optional[str] = None,
-    current_user: dict = Depends(get_current_user),
-):
-    query: Dict[str, Any] = {}
-    if category:
-        query['category'] = category
-    if sport:
-        query['sport_tags'] = sport
-    if level:
-        query['level'] = level
-    docs = await db.workout_templates.find(query).sort('title', 1).to_list(200)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/injury-modifications')
-async def list_library_injury_modifications(body_area: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'body_area': body_area} if body_area else {}
-    docs = await db.injury_modifications.find(query).sort('body_area', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/progression-rules')
-async def list_library_progression_rules(rule_type: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'rule_type': rule_type} if rule_type else {}
-    docs = await db.progression_rules.find(query).sort('id', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/readiness-rules')
-async def list_library_readiness_rules(category: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'category': category} if category else {}
-    docs = await db.readiness_rules.find(query).sort('id', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/benchmark-tests')
-async def list_library_benchmark_tests(sport: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'sport_tags': sport} if sport else {}
-    docs = await db.benchmark_tests.find(query).sort('test_name', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/equipment')
-async def list_library_equipment(setting: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'setting': setting} if setting else {}
-    docs = await db.equipment_library.find(query).sort('name', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/sources')
-async def list_library_sources(current_user: dict = Depends(get_current_user)):
-    docs = await db.knowledge_sources.find({}).sort('title', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/source-registry')
-async def list_library_source_registry(current_user: dict = Depends(get_current_user)):
-    docs = await db.source_registry.find({}).sort([('evidence_rank', -1), ('id', 1)]).to_list(200)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/nutrition-guidelines')
-async def list_library_nutrition_guidelines(goal: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'goal_tags': goal} if goal else {}
-    docs = await db.nutrition_guidelines.find(query).sort('id', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/running-workouts')
-async def list_library_running_workouts(level: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'suitable_user_level': level} if level else {}
-    docs = await db.running_workouts.find(query).sort('id', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.get('/library/running-plan-rules')
-async def list_library_running_plan_rules(rule_type: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    query = {'rule_type': rule_type} if rule_type else {}
-    docs = await db.running_plan_rules.find(query).sort('id', 1).to_list(100)
-    return [clean_doc(doc) for doc in docs]
 
 
 # -------------------- MACRO PLAN --------------------
