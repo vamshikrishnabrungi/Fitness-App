@@ -46,7 +46,6 @@ from backend.helpers import (
     _terra_competition_current,
     _terra_vault_catalog,
     _terra_placeholder_training_plans,
-    _terra_feed_post_response,
     _terra_training_plan_response,
     _terra_plan_weeks,
 )
@@ -440,99 +439,6 @@ async def _geo_leaderboard(field: str, period: str) -> List[Dict[str, Any]]:
         })
     rows.sort(key=lambda row: (row['total_distance'], row['active_members'], row['total_runs']), reverse=True)
     return [{**row, 'rank': index + 1} for index, row in enumerate(rows)]
-
-
-def _terra_competition_current() -> Dict[str, Any]:
-    now = datetime.utcnow()
-    return {
-        'name': 'Terra Weekly Frontier',
-        'prize': 'Top run clubs earn the city distance crown.',
-        'description': 'Run, reflect, and keep the streak alive to lift your club on the city leaderboard.',
-        'days_remaining': max(1, 7 - now.weekday()),
-    }
-
-
-def _terra_vault_catalog(stats: Dict[str, Any]) -> List[Dict[str, Any]]:
-    level = int(stats.get('level') or 1)
-    territory = float(stats.get('total_territory') or 0.0)
-
-    catalog = [
-        {'id': 'vault-ember', 'type': 'territory_color', 'name': 'Ember Trail', 'value': '#FF7A45', 'unlock_level': 1},
-        {'id': 'vault-aqua', 'type': 'territory_color', 'name': 'Aqua Drift', 'value': '#2D9CDB', 'unlock_level': 2},
-        {'id': 'vault-badge', 'type': 'badge', 'name': 'Loop Hunter', 'value': '🔁', 'unlock_level': 2},
-        {'id': 'vault-flame', 'type': 'badge', 'name': 'Frontier Flame', 'value': '🔥', 'unlock_level': 3},
-        {'id': 'vault-crown', 'type': 'badge', 'name': 'Trail Crown', 'value': '👑', 'unlock_level': 4},
-        {'id': 'vault-aurora', 'type': 'territory_color', 'name': 'Aurora Line', 'value': '#52D273', 'unlock_level': 4},
-        {'id': 'vault-titan', 'type': 'badge', 'name': 'Titan Crest', 'value': '🏔️', 'unlock_level': 5},
-        {'id': 'vault-legend', 'type': 'badge', 'name': 'Legend Mark', 'value': '⭐', 'unlock_level': 6},
-    ]
-
-    unlocked_by_territory = 1 + int(territory // 0.5)
-    unlocked_threshold = max(level, unlocked_by_territory)
-    return [
-        {
-            **item,
-            'unlocked': unlocked_threshold >= item['unlock_level'],
-        }
-        for item in catalog
-    ]
-
-
-def _terra_placeholder_training_plans(current_user: dict) -> List[Dict[str, Any]]:
-    return [
-        {
-            'id': f'starter-{current_user["id"]}-5k',
-            'goal': '5K',
-            'fitness_level': 'beginner',
-            'total_weeks': 6,
-            'current_week': 1,
-            'completed_sessions': [],
-            'created_at': datetime.utcnow(),
-            'updated_at': datetime.utcnow(),
-            'is_seeded': True,
-        },
-        {
-            'id': f'starter-{current_user["id"]}-tempo',
-            'goal': '10K',
-            'fitness_level': 'intermediate',
-            'total_weeks': 8,
-            'current_week': 2,
-            'completed_sessions': ['week1-session1'],
-            'created_at': datetime.utcnow(),
-            'updated_at': datetime.utcnow(),
-            'is_seeded': True,
-        },
-    ]
-
-
-
-
-def _terra_feed_post_response(post: Dict[str, Any]) -> Dict[str, Any]:
-    cleaned = clean_doc(dict(post))
-    cleaned['username'] = cleaned.get('username') or cleaned.get('author_name') or 'Runner'
-    cleaned['content'] = str(cleaned.get('content') or '').strip()
-    cleaned['likes'] = [str(user_id) for user_id in cleaned.get('likes', []) if str(user_id).strip()]
-    cleaned['comments'] = cleaned.get('comments') or []
-    run = cleaned.get('run')
-    if isinstance(run, dict):
-        cleaned['run'] = {
-            'distance': _terra_run_distance_km(run),
-            'duration': _terra_run_duration_seconds(run),
-            'territory_captured': _terra_run_territory_km2(run),
-        }
-    else:
-        cleaned['run'] = None
-    return cleaned
-
-
-def _terra_training_plan_response(plan: Dict[str, Any]) -> Dict[str, Any]:
-    cleaned = clean_doc(dict(plan))
-    cleaned['goal'] = cleaned.get('goal') or cleaned.get('title') or 'Goal'
-    cleaned['fitness_level'] = cleaned.get('fitness_level') or 'intermediate'
-    cleaned['total_weeks'] = _to_non_negative_int(cleaned.get('total_weeks'), 8) or 8
-    cleaned['current_week'] = max(1, _to_non_negative_int(cleaned.get('current_week'), 1))
-    cleaned['completed_sessions'] = [str(session) for session in cleaned.get('completed_sessions', []) if str(session).strip()]
-    return cleaned
 
 
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
@@ -4077,30 +3983,6 @@ async def terra_leaderboard_friends(current_user: dict = Depends(get_current_use
 @api_router.get('/terra/competition/current')
 async def terra_competition_current(current_user: dict = Depends(get_current_user)):
     return _terra_competition_current()
-
-
-def _terra_plan_weeks(goal: str, fitness_level: str, override: Optional[int] = None) -> int:
-    if override is not None and override > 0:
-        return override
-
-    goal_lower = goal.lower()
-    if 'marathon' in goal_lower:
-        weeks = 16
-    elif 'half' in goal_lower:
-        weeks = 10
-    elif '10k' in goal_lower or '10 k' in goal_lower:
-        weeks = 8
-    elif '5k' in goal_lower or '5 k' in goal_lower:
-        weeks = 6
-    else:
-        weeks = 8
-
-    fitness_lower = fitness_level.lower()
-    if fitness_lower == 'beginner':
-        weeks += 2
-    elif fitness_lower == 'advanced':
-        weeks = max(4, weeks - 1)
-    return max(4, weeks)
 
 
 @api_router.get('/terra/training-plans')
