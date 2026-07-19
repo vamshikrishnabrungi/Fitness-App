@@ -4,10 +4,10 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -65,6 +65,19 @@ const fmtDate = (v?: string | null) => {
   return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 };
 
+// Frame the map around the whole route, with padding so the line isn't flush to the edge.
+const regionFor = (pts: { latitude: number; longitude: number }[]) => {
+  const lats = pts.map((p) => p.latitude), lngs = pts.map((p) => p.longitude);
+  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
+  return {
+    latitude: (minLat + maxLat) / 2,
+    longitude: (minLng + maxLng) / 2,
+    latitudeDelta: Math.max(0.004, (maxLat - minLat) * 1.8),
+    longitudeDelta: Math.max(0.004, (maxLng - minLng) * 1.8),
+  };
+};
+
 export default function RunDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -73,8 +86,6 @@ export default function RunDetailScreen() {
   const [run, setRun] = useState<RunDetail | null>(null);
   const [reflection, setReflection] = useState<Reflection | null>(null);
   const [loading, setLoading] = useState(true);
-  const [sharing, setSharing] = useState(false);
-  const [shareText, setShareText] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -94,18 +105,6 @@ export default function RunDetailScreen() {
     };
     load();
   }, [id]);
-
-  const handleShareToFeed = async () => {
-    if (!shareText.trim() || !run) return;
-    setSharing(true);
-    try {
-      await api.post('/terra/feed', { content: shareText.trim(), run_id: id });
-      setSharing(false);
-      router.back();
-    } catch {
-      setSharing(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -128,6 +127,7 @@ export default function RunDetailScreen() {
   }
 
   const calories = Math.round(run.distance * 60);
+  const route = run.gps_path ?? [];
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -157,6 +157,36 @@ export default function RunDetailScreen() {
             </View>
           )}
         </LinearGradient>
+
+        {/* Route map — static Strava-style trace of where you actually ran */}
+        {route.length > 1 ? (
+          <View style={styles.mapCard}>
+            <MapView
+              style={styles.map}
+              initialRegion={regionFor(route)}
+              scrollEnabled={false}
+              zoomEnabled={false}
+              pitchEnabled={false}
+              rotateEnabled={false}
+              showsPointsOfInterest={false}
+              showsCompass={false}
+              toolbarEnabled={false}
+            >
+              <Polyline coordinates={route} strokeColor={colors.brand} strokeWidth={5} lineCap="round" lineJoin="round" />
+              <Marker coordinate={route[0]} anchor={{ x: 0.5, y: 0.5 }}>
+                <View style={StyleSheet.flatten([styles.pin, styles.pinStart])} />
+              </Marker>
+              <Marker coordinate={route[route.length - 1]} anchor={{ x: 0.5, y: 0.5 }}>
+                <View style={StyleSheet.flatten([styles.pin, styles.pinEnd])} />
+              </Marker>
+            </MapView>
+          </View>
+        ) : (
+          <GlassCard style={styles.noRouteCard}>
+            <Ionicons name="map-outline" size={22} color={colors.textTertiary} />
+            <Text style={styles.noRouteText}>No route recorded for this run</Text>
+          </GlassCard>
+        )}
 
         {/* Key metrics */}
         <View style={styles.metricsGrid}>
@@ -227,34 +257,6 @@ export default function RunDetailScreen() {
           </View>
         </GlassCard>
 
-        {/* Share to feed */}
-        <GlassCard style={styles.shareCard}>
-          <Text style={styles.shareHeading}>Share to Feed</Text>
-          <TextInput
-            style={styles.shareInputRow}
-            placeholder="Write something about this run…"
-            placeholderTextColor={colors.textTertiary}
-            value={shareText}
-            onChangeText={setShareText}
-            multiline
-          />
-          <View style={styles.shareBtnRow}>
-            {['Just crushed it! 💪', `${run.distance.toFixed(1)}km done! 🏃`, 'New territory captured 🗺️'].map((t) => (
-              <TouchableOpacity key={t} style={styles.shareChip} onPress={() => setShareText(t)}>
-                <Text style={styles.shareChipText}>{t}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <TouchableOpacity
-            style={[styles.sharePostBtn, (!shareText.trim() || sharing) && { opacity: 0.4 }]}
-            onPress={handleShareToFeed}
-            disabled={!shareText.trim() || sharing}
-          >
-            {sharing
-              ? <ActivityIndicator size="small" color={colors.background} />
-              : <><Ionicons name="send" size={16} color={colors.background} /><Text style={styles.sharePostBtnText}>Post to Feed</Text></>}
-          </TouchableOpacity>
-        </GlassCard>
       </ScrollView>
     </View>
   );
@@ -313,13 +315,12 @@ const styles = StyleSheet.create({
   routeRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   routeText: { ...typography.body, color: colors.textSecondary },
 
-  // Share
-  shareCard: { padding: spacing.lg, gap: spacing.md },
-  shareHeading: { ...typography.h4, color: colors.textPrimary },
-  shareInputRow: { backgroundColor: colors.surface, borderRadius: borderRadius.md, padding: spacing.md, minHeight: 60, ...typography.body, color: colors.textPrimary },
-  shareBtnRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  shareChip: { backgroundColor: colors.surface, paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: borderRadius.full, borderWidth: 1, borderColor: colors.border },
-  shareChipText: { ...typography.caption, color: colors.textSecondary },
-  sharePostBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm, backgroundColor: colors.textPrimary, paddingVertical: spacing.md, borderRadius: borderRadius.full },
-  sharePostBtnText: { color: colors.background, fontWeight: '700', fontSize: 14 },
+  // Route map
+  mapCard: { borderRadius: borderRadius.xl, overflow: 'hidden', borderWidth: 1, borderColor: colors.separator },
+  map: { width: '100%', height: 240 },
+  pin: { width: 14, height: 14, borderRadius: 7, borderWidth: 2.5, borderColor: '#fff' },
+  pinStart: { backgroundColor: '#16A34A' },
+  pinEnd: { backgroundColor: colors.brand },
+  noRouteCard: { padding: spacing.lg, alignItems: 'center', gap: spacing.sm },
+  noRouteText: { ...typography.caption, color: colors.textTertiary },
 });

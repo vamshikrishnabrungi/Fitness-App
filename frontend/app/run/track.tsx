@@ -133,6 +133,7 @@ export default function TrackRunScreen() {
 
   const [showSummary, setShowSummary] = useState(false);
   const [runSummary, setRunSummary] = useState<CompletedRun | null>(null);
+  const [captured, setCaptured] = useState<{ flipped_names: string[]; captured_count: number; influence_gained: number; km2: number } | null>(null);
   const [showReflection, setShowReflection] = useState(false);
   const [feeling, setFeeling] = useState('good');
   const [reflectionNotes, setReflectionNotes] = useState('');
@@ -315,6 +316,7 @@ export default function TrackRunScreen() {
         path_points: pathToSend.length,
         sync_status: 'synced',
       };
+      setCaptured(response.territory ?? null);
       setRunSummary(completed);
       setShowSummary(true);
     } catch {
@@ -556,11 +558,28 @@ export default function TrackRunScreen() {
                 <Text style={styles.summaryStatLbl}>pace</Text>
               </View>
             </View>
-            <View style={styles.xpEarned}>
-              <Text style={styles.xpEarnedLabel}>TERRITORY CAPTURED</Text>
-              <Text style={styles.xpEarnedValue}>{runSummary?.territory_captured.toFixed(4) ?? '0.0000'}</Text>
-              {runSummary?.is_loop && <Text style={styles.loopBonus}>🔄 LOOP TERRITORY BOOST</Text>}
-            </View>
+            {captured && captured.flipped_names.length > 0 ? (
+              <View style={styles.captureBanner}>
+                <Text style={styles.captureEmoji}>🎉</Text>
+                <Text style={styles.captureTitle}>
+                  {captured.captured_count === 1 ? 'ROAD CAPTURED!' : `${captured.captured_count} ROADS CAPTURED!`}
+                </Text>
+                <Text style={styles.captureNames}>{captured.flipped_names.join('  ·  ')}</Text>
+                <View style={styles.captureRewards}>
+                  <View style={styles.crw}><Text style={styles.crwV}>+{captured.influence_gained}</Text><Text style={styles.crwL}>influence</Text></View>
+                  <View style={styles.crwDiv} />
+                  <View style={styles.crw}><Text style={styles.crwV}>{captured.km2.toFixed(2)}</Text><Text style={styles.crwL}>km² held</Text></View>
+                </View>
+              </View>
+            ) : (
+              <View style={styles.xpEarned}>
+                <Text style={styles.xpEarnedLabel}>TERRITORY CAPTURED</Text>
+                <Text style={styles.xpEarnedValue}>{runSummary?.territory_captured.toFixed(4) ?? '0.0000'}</Text>
+                {captured && captured.influence_gained > 0
+                  ? <Text style={styles.loopBonus}>+{captured.influence_gained} influence on your roads</Text>
+                  : runSummary?.is_loop && <Text style={styles.loopBonus}>🔄 LOOP TERRITORY BOOST</Text>}
+              </View>
+            )}
             <View style={styles.summaryMetaRow}>
               <Ionicons name="map-outline" size={16} color="rgba(255,255,255,0.7)" />
               <Text style={styles.summaryMetaText}>
@@ -688,6 +707,15 @@ const styles = StyleSheet.create({
   xpEarnedLabel: { ...typography.caption, color: 'rgba(255,255,255,0.6)', letterSpacing: 2 },
   xpEarnedValue: { fontSize: 48, fontWeight: '900', color: 'white' },
   loopBonus: { ...typography.caption, color: 'rgba(255,255,255,0.8)', marginTop: 4 },
+  captureBanner: { alignItems: 'center', width: '100%', backgroundColor: 'rgba(255,90,40,0.14)', borderWidth: 1, borderColor: 'rgba(255,122,24,0.4)', borderRadius: borderRadius.lg, paddingVertical: spacing.lg, paddingHorizontal: spacing.lg, marginBottom: spacing.lg },
+  captureEmoji: { fontSize: 34 },
+  captureTitle: { fontSize: 18, fontWeight: '900', letterSpacing: 0.5, color: '#FF7A18', marginTop: 6 },
+  captureNames: { ...typography.bodySemibold, color: '#FFFFFF', textAlign: 'center', marginTop: 4 },
+  captureRewards: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg, marginTop: spacing.md },
+  crw: { alignItems: 'center' },
+  crwV: { fontSize: 22, fontWeight: '900', color: '#FFFFFF' },
+  crwL: { ...typography.caption, color: 'rgba(255,255,255,0.6)', marginTop: 1 },
+  crwDiv: { width: 1, height: 30, backgroundColor: 'rgba(255,255,255,0.2)' },
   summaryMetaRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.md },
   summaryMetaText: { ...typography.caption, color: 'rgba(255,255,255,0.7)' },
   skipBtn: { marginTop: spacing.md, padding: spacing.sm },
