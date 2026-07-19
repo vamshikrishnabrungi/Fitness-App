@@ -52,8 +52,17 @@ This is idempotent (safe to re-run) and:
    Semantic retrieval degrades gracefully to keyword matching if `fastembed` is absent
    or `EXERCISE_EMBEDDINGS_ENABLED=false`.
 
-The exercise/sport knowledge itself is produced separately by the `backend/ingest_*.py`
-pipeline.
+The exercise/sport knowledge itself was produced separately by a one-shot
+`backend/ingest_*.py` pipeline (19 scripts) that read source books into MongoDB.
+Those scripts have already run and are not part of the app, so they were removed
+from the tree to keep `backend/` navigable. They remain in git history — recover
+with:
+
+    git show a103d69:backend/ingest_<name>.py > backend/ingest_<name>.py
+    git show a103d69 --stat -- backend/ingest_    # list all 19
+
+Note they resolve paths via `Path(__file__).resolve().parents[1]`, so they expect
+to sit in `backend/`, and they need the (gitignored) source books to re-run.
 
 ## Environment
 
