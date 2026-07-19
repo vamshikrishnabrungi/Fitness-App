@@ -61,6 +61,20 @@ def test_day_streak():
     assert server._current_day_streak({d(0), d(2), d(3)}) == 1       # gap after today breaks it
 
 
+def test_program_base_date():
+    from datetime import datetime, timedelta
+    now = datetime(2026, 7, 13, 10, 0, 0)  # a Monday
+    # future start date is honored
+    assert server._program_base_date('2026-07-20', now).date() == datetime(2026, 7, 20).date()
+    # today is honored
+    assert server._program_base_date('2026-07-13', now).date() == now.date()
+    # past date falls back to today
+    assert server._program_base_date('2026-07-01', now) == now
+    # empty / garbage falls back to today
+    assert server._program_base_date(None, now) == now
+    assert server._program_base_date('not-a-date', now) == now
+
+
 def test_quota_disabled_when_zero():
     old_db, old_quota = server.db, server.WORKOUT_AI_DAILY_QUOTA
     try:

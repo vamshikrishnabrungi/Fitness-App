@@ -7,7 +7,7 @@ from slowapi.errors import RateLimitExceeded
 from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Any, Dict, List, Optional
 from datetime import datetime, timedelta
-from collections import Counter
+from math import cos, radians
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 import uuid
@@ -19,6 +19,7 @@ import asyncio
 from pathlib import Path
 from dotenv import load_dotenv
 import httpx
+from backend import territory
 from backend.helpers import (
     clean_doc,
     _parse_iso_datetime,
@@ -73,8 +74,6 @@ from backend.models import (
     DailyCoachAnalysis,
     Meal,
     MealCreate,
-    QuickLog,
-    QuickLogCreate,
     SleepNoteCreate,
     SleepSessionCreate,
     MoodCreate,
@@ -111,6 +110,8 @@ MEAL_AI_MODEL = os.environ.get('MEAL_AI_MODEL', 'openai/gpt-4o-mini')
 WORKOUT_AI_MODEL = os.environ.get('WORKOUT_AI_MODEL', 'claude-opus-4-8')
 # Per-user rolling-24h cap on AI workout generations (cost guard). Set to 0 to disable.
 WORKOUT_AI_DAILY_QUOTA = int(os.environ.get('WORKOUT_AI_DAILY_QUOTA', '25') or 25)
+# Global kill-switch for AI workout generation (saves tokens/credits when paused).
+WORKOUT_GENERATION_ENABLED = (os.environ.get('WORKOUT_GENERATION_ENABLED', 'true') or 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
 OPENROUTER_SITE_URL = os.environ.get('OPENROUTER_SITE_URL', 'http://localhost')
 OPENROUTER_APP_NAME = os.environ.get('OPENROUTER_APP_NAME', 'Runlete')
 
@@ -160,6 +161,13 @@ security = HTTPBearer()
 async def startup_database() -> None:
     await ensure_database_schema(db)
     logger.info('MongoDB schema ready: %s', DB_NAME)
+    # Pre-warm the exercise-embedding model in the background so the first workout
+    # generation doesn't pay the one-time model download/load (tens of seconds).
+    import threading
+    from backend import embeddings as _embeddings
+    if _embeddings.embeddings_enabled():
+        threading.Thread(target=_embeddings.embeddings_available, daemon=True).start()
+        logger.info('Embedding model pre-warm started in background')
 
 # -------------------- HELPERS --------------------
 
@@ -327,6 +335,11 @@ def _user_city(user: Dict[str, Any]) -> str:
     return 'Your City'
 
 
+def _user_country(user: Dict[str, Any]) -> str:
+    profile = user.get('profile') or {}
+    return str(profile.get('country') or '').strip()
+
+
 async def _run_club_member_docs(member_ids: List[str]) -> List[Dict[str, Any]]:
     users = await db.users.find({'id': {'$in': member_ids}}).to_list(200)
     by_id = {user['id']: user for user in users}
@@ -387,6 +400,45 @@ async def _run_club_member_leaderboard(club: Dict[str, Any], period: str = 'week
             'total_runs': len(runs),
         })
     rows.sort(key=lambda row: (row['total_distance'], row['total_runs'], row['total_territory']), reverse=True)
+    return [{**row, 'rank': index + 1} for index, row in enumerate(rows)]
+
+
+async def _geo_leaderboard(field: str, period: str) -> List[Dict[str, Any]]:
+    """Aggregate run distance by a geographic field ('city' or 'country') across all clubs, ranked."""
+    clubs = await db.run_clubs.find({}).to_list(2000)
+    groups: Dict[str, Dict[str, Any]] = {}
+    for club in clubs:
+        key = str(club.get(field) or '').strip()
+        if not key:
+            continue
+        group = groups.setdefault(key.title(), {'members': set(), 'clubs': 0})
+        group['clubs'] += 1
+        for member_id in club.get('member_ids', []):
+            group['members'].add(str(member_id))
+
+    period_start = _run_period_start(period)
+    rows = []
+    for key, group in groups.items():
+        users = await _run_club_member_docs(list(group['members']))
+        total_distance = 0.0
+        total_runs = 0
+        active_members = 0
+        for user in users:
+            runs = [run for run in await _terra_user_run_docs(user['id']) if _run_in_period(run, period_start)]
+            distance = sum(_terra_run_distance_km(run) for run in runs)
+            total_distance += distance
+            total_runs += len(runs)
+            if distance > 0:
+                active_members += 1
+        rows.append({
+            field: key,
+            'total_distance': round(total_distance, 1),
+            'clubs': group['clubs'],
+            'members': len(group['members']),
+            'active_members': active_members,
+            'total_runs': total_runs,
+        })
+    rows.sort(key=lambda row: (row['total_distance'], row['active_members'], row['total_runs']), reverse=True)
     return [{**row, 'rank': index + 1} for index, row in enumerate(rows)]
 
 
@@ -453,55 +505,6 @@ def _terra_placeholder_training_plans(current_user: dict) -> List[Dict[str, Any]
     ]
 
 
-async def _terra_ensure_seed_feed_posts() -> None:
-    existing = await db.terra_feed_posts.find({}).to_list(10)
-    if len(existing) >= 3:
-        return
-
-    now = datetime.utcnow()
-    seed_posts = [
-        {
-            'id': 'terra-seed-1',
-            'user_id': 'system-1',
-            'username': 'Trail Nova',
-            'content': 'Logged a clean loop at sunrise. The frontier feels wide open today.',
-            'likes': ['system-2'],
-            'comments': [{'id': 'seed-comment-1', 'username': 'Runner Atlas', 'content': 'Strong start.'}],
-            'run': {'distance': 6.2, 'duration': 1860, 'territory_captured': 0.032},
-            'created_at': now - timedelta(hours=5),
-            'updated_at': now - timedelta(hours=5),
-            'is_seeded': True,
-        },
-        {
-            'id': 'terra-seed-2',
-            'user_id': 'system-2',
-            'username': 'Runner Atlas',
-            'content': 'Kept the streak alive with a recovery jog and a full cooldown.',
-            'likes': ['system-1', 'system-3'],
-            'comments': [],
-            'run': {'distance': 4.1, 'duration': 1440, 'territory_captured': 0.019},
-            'created_at': now - timedelta(hours=9),
-            'updated_at': now - timedelta(hours=9),
-            'is_seeded': True,
-        },
-        {
-            'id': 'terra-seed-3',
-            'user_id': 'system-3',
-            'username': 'Mira Ridge',
-            'content': 'Race week starts with discipline: one hard session, one recovery day, no noise.',
-            'likes': [],
-            'comments': [{'id': 'seed-comment-2', 'username': 'Trail Nova', 'content': 'Good mindset.'}],
-            'created_at': now - timedelta(days=1, hours=2),
-            'updated_at': now - timedelta(days=1, hours=2),
-            'is_seeded': True,
-        },
-    ]
-
-    existing_ids = {str(post.get('id')) for post in existing}
-    for post in seed_posts:
-        if post['id'] in existing_ids:
-            continue
-        await db.terra_feed_posts.insert_one(post)
 
 
 def _terra_feed_post_response(post: Dict[str, Any]) -> Dict[str, Any]:
@@ -918,8 +921,25 @@ def _next_scheduled_date_for_day(day_name: str, base: datetime, used_dates: set[
     return scheduled
 
 
-async def _create_ai_training_program(current_user: dict, profile: Dict[str, Any]) -> Dict[str, Any]:
+def _program_base_date(start_date: Optional[str], now: datetime) -> datetime:
+    """Scheduling anchor: the chosen start date if it's today or later, otherwise today."""
+    if start_date:
+        try:
+            parsed = datetime.strptime(start_date, '%Y-%m-%d')
+            if parsed.date() >= now.date():
+                return parsed
+        except (ValueError, TypeError):
+            pass
+    return now
+
+
+async def _create_ai_training_program(
+    current_user: dict,
+    profile: Dict[str, Any],
+    start_date: Optional[str] = None,
+) -> Dict[str, Any]:
     now = datetime.utcnow()
+    base_date = _program_base_date(start_date or profile.get('start_date'), now)
     user_id = current_user['id']
     macro_plan = await ensure_user_macro_plan(db, user_id=user_id, profile=profile)
     profile_for_retrieval = {**profile, 'user_id': user_id}
@@ -970,6 +990,7 @@ async def _create_ai_training_program(current_user: dict, profile: Dict[str, Any
         'macro_plan_id': macro_plan.get('id'),
         'macro_plan_template_id': macro_plan.get('template_id'),
         'generation': {
+            'start_date': base_date.strftime('%Y-%m-%d'),
             'fallback_used': generation.get('fallback_used', False),
             'model': WORKOUT_AI_MODEL,
             'max_weeks': generation.get('max_weeks'),
@@ -1030,7 +1051,12 @@ async def _create_ai_training_program(current_user: dict, profile: Dict[str, Any
     week_one = generated_program.weeks[0] if generated_program.weeks else None
     for index, session in enumerate((week_one.workouts if week_one else []) or []):
         session_doc = _attach_exercise_refs_to_session(session.model_dump(), knowledge_context)
-        scheduled_date = _next_scheduled_date_for_day(session.day, now, used_dates)
+        # Anchor the program to the chosen start date: first session lands on it, rest follow the AI's day pattern.
+        if index == 0:
+            scheduled_date = base_date.strftime('%Y-%m-%d')
+            used_dates.add(scheduled_date)
+        else:
+            scheduled_date = _next_scheduled_date_for_day(session.day, base_date, used_dates)
         injury_notes = session_doc.get('injury_modifications') or []
         sport_transfer = session_doc.get('sport_transfer') or []
         description_parts = [
@@ -1339,6 +1365,8 @@ async def _maybe_generate_next_block(current_user: dict) -> None:
     """Auto-trigger after a workout completes: if the current week is fully completed and the next
     week does not exist yet, generate the next block. Failure-isolated (never breaks completion) and
     concurrency-safe via an atomic claim on the program (prevents double-generation)."""
+    if not WORKOUT_GENERATION_ENABLED:
+        return
     try:
         user_id = current_user['id']
         program = await db.training_programs.find_one(
@@ -1379,18 +1407,6 @@ async def _maybe_generate_next_block(current_user: dict) -> None:
         logger.warning("Auto next-block trigger skipped/failed: %s", exc)
 
 
-def _date_window(date_str: Optional[str] = None) -> tuple[str, datetime, datetime]:
-    if date_str:
-        try:
-            day = datetime.strptime(date_str, '%Y-%m-%d')
-        except ValueError:
-            raise HTTPException(status_code=400, detail='date must be YYYY-MM-DD')
-    else:
-        day = datetime.utcnow()
-    normalized = day.strftime('%Y-%m-%d')
-    start = datetime(day.year, day.month, day.day)
-    end = start + timedelta(days=1)
-    return normalized, start, end
 
 
 def _sum_float(docs: List[Dict[str, Any]], *keys: str) -> float:
@@ -1445,114 +1461,10 @@ def _snapshot_data_quality(snapshot: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-async def _build_daily_snapshot(current_user: dict, date: Optional[str] = None) -> Dict[str, Any]:
-    date_str, start, end = _date_window(date)
-    user_id = current_user['id']
-
-    athlete_profile = await db.athlete_profiles.find_one({'user_id': user_id})
-    active_program = await db.training_programs.find_one({'user_id': user_id, 'status': 'active'}, sort=[('created_at', -1)])
-    scheduled_workouts = await db.workouts.find({
-        'user_id': user_id,
-        '$or': [
-            {'scheduled_date': date_str},
-            {'completed_at': {'$gte': start, '$lt': end}},
-        ],
-    }).sort('session_number', 1).to_list(50)
-    workout_sessions = await db.workout_sessions.find({'user_id': user_id, 'date': date_str}).sort('created_at', -1).to_list(50)
-    exercise_results = await db.exercise_results.find({'user_id': user_id, 'date': date_str}).sort('created_at', -1).to_list(200)
-    all_run_docs = await _terra_user_run_docs(user_id)
-    runs = [doc for doc in all_run_docs if str(doc.get('date') or '').startswith(date_str)]
-    meals = await db.meals.find({'user_id': user_id, 'date': date_str}).sort('created_at', 1).to_list(50)
-    sleep_sessions = await db.sleep_sessions.find({'user_id': user_id, **_sleep_session_date_filter(date_str, start, end)}).sort('created_at', -1).to_list(20)
-    quick_logs = await db.quick_logs.find({'user_id': user_id, 'date': date_str}).sort('created_at', -1).to_list(20)
-    moods = await db.moods.find({'user_id': user_id, 'date': date_str}).sort('timestamp', -1).to_list(50)
-    health_metrics = await db.health_metrics.find({'user_id': user_id, 'date': date_str}).sort('created_at', -1).to_list(50)
-    injuries = await db.injury_logs.find({
-        'user_id': user_id,
-        '$or': [
-            {'is_active': True},
-            {'logged_at': {'$gte': start, '$lt': end}},
-        ],
-    }).sort('logged_at', -1).to_list(50)
-
-    sleep_metrics = [_sleep_session_metrics(session) for session in sleep_sessions]
-    avg_sleep_hours = None
-    avg_sleep_score = None
-    if sleep_metrics:
-        avg_sleep_hours = round(sum(item['duration_hours'] for item in sleep_metrics) / len(sleep_metrics), 2)
-        avg_sleep_score = round(sum(item['sleep_score'] for item in sleep_metrics) / len(sleep_metrics), 1)
-
-    totals = DailySnapshotTotals(
-        scheduled_workouts=len(scheduled_workouts),
-        completed_workouts=len([workout for workout in scheduled_workouts if workout.get('completed')]),
-        workout_sessions=len(workout_sessions),
-        exercise_results=len(exercise_results),
-        run_count=len(runs),
-        run_distance_km=_sum_float(runs, 'distance_km', 'distance'),
-        run_duration_sec=_sum_int(runs, 'duration_sec', 'duration'),
-        territory_km2=_sum_float(runs, 'territory_km2', 'territory_captured'),
-        meals_logged=len(meals),
-        calories=_sum_int(meals, 'calories'),
-        protein=_sum_float(meals, 'protein'),
-        carbs=_sum_float(meals, 'carbs'),
-        fat=_sum_float(meals, 'fat'),
-        fiber=_sum_float(meals, 'fiber'),
-        sleep_hours=avg_sleep_hours,
-        sleep_score=avg_sleep_score,
-    )
-
-    latest_quick_log = quick_logs[0] if quick_logs else {}
-    snapshot_doc = DailyActivitySnapshot(
-        user_id=user_id,
-        date=date_str,
-        profile=clean_doc(athlete_profile).get('raw_profile', current_user.get('profile') or {}) if athlete_profile else current_user.get('profile') or {},
-        active_program=clean_doc(active_program) if active_program else None,
-        scheduled_workouts=[clean_doc(doc) for doc in scheduled_workouts],
-        workout_sessions=[clean_doc(doc) for doc in workout_sessions],
-        exercise_results=[clean_doc(doc) for doc in exercise_results],
-        runs=[_terra_run_response(doc) for doc in runs],
-        meals=[clean_doc(doc) for doc in meals],
-        sleep_sessions=[_sleep_session_response(doc) for doc in sleep_sessions],
-        quick_logs=[clean_doc(doc) for doc in quick_logs],
-        moods=[clean_doc(doc) for doc in moods],
-        injuries=[clean_doc(doc) for doc in injuries],
-        health_metrics=[clean_doc(doc) for doc in health_metrics],
-        totals=totals,
-        readiness_inputs={
-            'energy': latest_quick_log.get('energy'),
-            'stress': latest_quick_log.get('stress'),
-            'mood': latest_quick_log.get('mood'),
-            'sleep_quality': latest_quick_log.get('sleep_quality'),
-            'soreness_regions': latest_quick_log.get('soreness_regions') or [],
-            'active_pain_areas': [doc.get('body_area') for doc in injuries if doc.get('is_active')],
-        },
-    ).model_dump()
-    snapshot_doc['data_quality'] = _snapshot_data_quality(snapshot_doc)
-    return clean_doc(snapshot_doc)
 
 
-async def _save_daily_snapshot(snapshot: Dict[str, Any]) -> Dict[str, Any]:
-    now = datetime.utcnow()
-    snapshot = dict(snapshot)
-    snapshot['updated_at'] = now
-    await db.daily_snapshots.update_one(
-        {'user_id': snapshot['user_id'], 'date': snapshot['date']},
-        {
-            '$set': snapshot,
-            '$setOnInsert': {'created_at': now},
-        },
-        upsert=True,
-    )
-    saved = await db.daily_snapshots.find_one({'user_id': snapshot['user_id'], 'date': snapshot['date']})
-    return clean_doc(saved)
 
 
-def _schema_response() -> Dict[str, Any]:
-    return {
-        'program_generation_output': ProgramGenerationOutput.model_json_schema(),
-        'daily_activity_snapshot': DailyActivitySnapshot.model_json_schema(),
-        'daily_coach_analysis': DailyCoachAnalysis.model_json_schema(),
-    }
 
 
 def _compact_snapshot_for_ai(snapshot: Dict[str, Any]) -> Dict[str, Any]:
@@ -1787,14 +1699,6 @@ async def _save_daily_analysis(
     return clean_doc(saved)
 
 
-async def _generate_daily_analysis(current_user: dict, date: Optional[str] = None) -> Dict[str, Any]:
-    snapshot = await _save_daily_snapshot(await _build_daily_snapshot(current_user, date))
-    analysis = await _ai_daily_coach_analysis(snapshot)
-    source = 'ai'
-    if analysis is None:
-        analysis = _daily_coach_fallback(snapshot)
-        source = 'rules_engine_v1'
-    return await _save_daily_analysis(current_user, snapshot, analysis, source)
 
 
 
@@ -2136,51 +2040,38 @@ async def upsert_athlete_profile(payload: AthleteProfileUpsert, current_user: di
     return response
 
 
+async def _generate_full_week_background(current_user: dict, profile: Dict[str, Any], start_date: Optional[str]) -> None:
+    """Background: generate the athlete's first week after onboarding. Failure-isolated (never crashes the request)."""
+    if not WORKOUT_GENERATION_ENABLED:
+        return
+    try:
+        await _create_ai_training_program(current_user, profile, start_date=start_date)
+    except Exception as exc:
+        logger.warning('Background full-week generation failed user=%s: %s', current_user.get('id'), exc)
+
+
 @api_router.post('/onboarding/complete')
-async def complete_onboarding(payload: OnboardingComplete, current_user: dict = Depends(get_current_user)):
+async def complete_onboarding(payload: OnboardingComplete, background_tasks: BackgroundTasks, current_user: dict = Depends(get_current_user)):
     profile = payload.profile
     if profile.onboarding_completed_at is None:
         profile.onboarding_completed_at = datetime.utcnow()
     profile_doc = await _upsert_athlete_profile(current_user, profile)
     response = {'athlete_profile': profile_doc, 'onboarding_completed': True}
-    if payload.generate_program:
-        response.update(await _create_ai_training_program(current_user, profile_doc.get('raw_profile') or {}))
+    if payload.generate_program and WORKOUT_GENERATION_ENABLED:
+        raw_profile = profile_doc.get('raw_profile') or {}
+        start_date = raw_profile.get('start_date')
+        # Generate the program in the background so onboarding returns immediately; the app polls for it.
+        background_tasks.add_task(_generate_full_week_background, current_user, raw_profile, start_date)
+        response['program_generating'] = True
+    else:
+        response['program_generating'] = False
+        response['generation_paused'] = not WORKOUT_GENERATION_ENABLED
     return response
 
 
-@api_router.get('/coach/schemas')
-async def coach_ai_schemas(current_user: dict = Depends(get_current_user)):
-    return _schema_response()
-
-
-@api_router.get('/coach/daily-snapshot')
-async def get_daily_snapshot(date: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    return await _build_daily_snapshot(current_user, date)
-
-
-@api_router.post('/coach/daily-snapshot')
-async def save_daily_snapshot(date: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    snapshot = await _build_daily_snapshot(current_user, date)
-    return await _save_daily_snapshot(snapshot)
-
-
-@api_router.get('/coach/daily-analysis')
-async def get_daily_analysis(
-    date: Optional[str] = None,
-    refresh: bool = False,
-    current_user: dict = Depends(get_current_user),
-):
-    date_str, _, _ = _date_window(date)
-    if not refresh:
-        existing = await db.coach_daily_analyses.find_one({'user_id': current_user['id'], 'date': date_str})
-        if existing:
-            return clean_doc(existing)
-    return await _generate_daily_analysis(current_user, date_str)
-
-
-@api_router.post('/coach/daily-analysis')
-async def create_daily_analysis(date: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    return await _generate_daily_analysis(current_user, date)
+@api_router.get('/workouts/generation-status')
+async def workout_generation_status(current_user: dict = Depends(get_current_user)):
+    return {'paused': not WORKOUT_GENERATION_ENABLED}
 
 
 # -------------------- KNOWLEDGE LIBRARY --------------------
@@ -2529,6 +2420,8 @@ async def generate_weekly_plan(request: Request, payload: Optional[Dict[str, Any
 
     Previously this enqueued an ARQ job to a worker that is not run locally; generation now happens
     inline (matching /onboarding/complete) so the plan actually materializes."""
+    if not WORKOUT_GENERATION_ENABLED:
+        raise HTTPException(status_code=503, detail='Workout generation is paused.')
     await _enforce_ai_generation_quota(current_user['id'])
     profile = _profile_from_payload(payload, current_user)
     profile_doc = await _upsert_athlete_profile(current_user, profile)
@@ -2541,6 +2434,8 @@ async def generate_next_block(request: Request, current_user: dict = Depends(get
     """Manually generate the next block for the active program, progressing from the last week.
 
     The same logic also runs automatically in the background when a week is fully completed."""
+    if not WORKOUT_GENERATION_ENABLED:
+        raise HTTPException(status_code=503, detail='Workout generation is paused.')
     await _enforce_ai_generation_quota(current_user['id'])
     profile_doc = await db.athlete_profiles.find_one({'user_id': current_user['id']})
     profile = (profile_doc or {}).get('raw_profile') or current_user.get('profile') or {}
@@ -3523,71 +3418,6 @@ async def resolve_injury(injury_id: str, current_user: dict = Depends(get_curren
     return {'message': 'Injury marked as resolved'}
 
 
-@api_router.post('/log/quick')
-async def create_quick_log(payload: QuickLogCreate, current_user: dict = Depends(get_current_user)):
-    energy = payload.energy or 'moderate'
-    stress = payload.stress or 'moderate'
-    log = QuickLog(
-        user_id=current_user['id'],
-        date=datetime.utcnow().strftime('%Y-%m-%d'),
-        mood=payload.mood,
-        energy=energy,
-        stress=stress,
-        sleep_quality=payload.sleep_quality,
-        soreness_regions=payload.soreness_regions,
-        note=payload.note,
-    )
-    await db.quick_logs.insert_one(log.model_dump())
-    return clean_doc(log.model_dump())
-
-
-@api_router.get('/log/quick/today')
-async def get_quick_log_today(current_user: dict = Depends(get_current_user)):
-    today = datetime.utcnow().strftime('%Y-%m-%d')
-    log = await db.quick_logs.find_one({'user_id': current_user['id'], 'date': today})
-    return clean_doc(log) if log else None
-
-
-@api_router.get('/log/quick')
-async def list_quick_logs(year: Optional[int] = None, current_user: dict = Depends(get_current_user)):
-    query = {'user_id': current_user['id']}
-    docs = await db.quick_logs.find(query).sort('date', -1).to_list(200)
-    if year is not None:
-        docs = [doc for doc in docs if str(doc.get('date', '')).startswith(str(year))]
-    return [clean_doc(doc) for doc in docs]
-
-
-@api_router.post('/ai/coach/chat')
-async def ai_coach_chat(payload: Dict[str, Any], current_user: dict = Depends(get_current_user)):
-    message = str(payload.get('message') or '').strip()
-    if not message:
-        raise HTTPException(status_code=400, detail='message is required')
-
-    now = datetime.utcnow()
-    start_date = (now - timedelta(days=7)).strftime('%Y-%m-%d')
-    quick_logs = await db.quick_logs.find({
-        'user_id': current_user['id'],
-        'date': {'$gte': start_date, '$lte': now.strftime('%Y-%m-%d')},
-    }).sort('date', -1).to_list(100)
-    mood_counts = Counter(str(log.get('mood') or '').strip() for log in quick_logs if log.get('mood'))
-    top_mood = mood_counts.most_common(1)[0][0] if mood_counts else None
-
-    lowered = message.lower()
-    if any(term in lowered for term in ('sleep', 'recover', 'recovery', 'rest')):
-        reply = 'Keep recovery simple: protect sleep, reduce intensity for a day if needed, and choose one calming routine you can repeat.'
-    elif any(term in lowered for term in ('anxious', 'anxiety', 'stress', 'nervous', 'race')):
-        reply = 'Treat nerves as useful energy. Narrow your attention to one controllable cue, one simple action, and one reminder that your preparation already counts.'
-    elif any(term in lowered for term in ('plan', 'week', 'training', 'workout')):
-        reply = 'Keep your training week balanced: one priority session, one supportive session, one recovery-focused day, and avoid stacking hard efforts without a clear reason.'
-    else:
-        reply = 'Progress usually comes from repeatable basics. Keep the next step small enough to execute even on a low-motivation day.'
-
-    parts = [reply]
-    if top_mood:
-        parts.append(f"Your recent mood has leaned {top_mood} — factor that into how hard you push this week.")
-    return {'response': ' '.join(parts)}
-
-
 @api_router.post('/mood')
 async def create_mood(payload: MoodCreate, current_user: dict = Depends(get_current_user)):
     mood = MoodEntry(
@@ -3620,11 +3450,15 @@ async def create_run_club(payload: RunClubCreate, current_user: dict = Depends(g
     if not city:
         raise HTTPException(status_code=400, detail='City is required')
 
+    country = (payload.country or _user_country(current_user) or '').strip() or None
+    emoji = (payload.emoji or '🏃').strip()[:4] or '🏃'
     now = datetime.utcnow()
     club = {
         'id': str(uuid.uuid4()),
         'name': name,
         'city': city,
+        'country': country,
+        'emoji': emoji,
         'description': payload.description.strip() if payload.description else None,
         'is_public': payload.is_public,
         'owner_id': current_user['id'],
@@ -3640,19 +3474,13 @@ async def create_run_club(payload: RunClubCreate, current_user: dict = Depends(g
         'status': 'active',
         'joined_at': now
     })
+    await _emit_activity(current_user, 'club_created', club=club)
     return await _run_club_response(club, current_user)
 
 
 @api_router.get('/terra/clubs/my')
 async def my_run_clubs(current_user: dict = Depends(get_current_user)):
     docs = await db.run_clubs.find({'member_ids': current_user['id']}).sort('created_at', -1).to_list(100)
-    return [await _run_club_response(doc, current_user) for doc in docs]
-
-
-@api_router.get('/terra/clubs/city')
-async def city_run_clubs(city: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    city_name = (city or _user_city(current_user)).strip()
-    docs = await db.run_clubs.find({'city': {'$regex': f'^{city_name}$', '$options': 'i'}}).sort('created_at', -1).to_list(100)
     return [await _run_club_response(doc, current_user) for doc in docs]
 
 
@@ -3693,6 +3521,7 @@ async def join_run_club(club_id: str, current_user: dict = Depends(get_current_u
             'status': 'active',
             'joined_at': datetime.utcnow()
         })
+        await _emit_activity(current_user, 'member_joined', club=club)
     return await _run_club_response(club, current_user)
 
 
@@ -3808,6 +3637,257 @@ async def run_club_city_leaderboard(city: Optional[str] = None, period: str = 'w
     return [{**row, 'rank': index + 1} for index, row in enumerate(rows)]
 
 
+async def _user_active_club_ids(user_id: str) -> List[str]:
+    clubs = await db.run_clubs.find({'member_ids': user_id}, {'id': 1}).to_list(100)
+    return [c['id'] for c in clubs]
+
+
+async def _emit_activity(actor: dict, event_type: str, *, distance_km: float = 0.0,
+                         territory_km2: float = 0.0, club: Optional[dict] = None,
+                         target: Optional[str] = None) -> None:
+    """Record a club activity event, visible to members of the actor's clubs. Failure-isolated."""
+    try:
+        club_ids = await _user_active_club_ids(actor['id'])
+        if club and club.get('id') and club['id'] not in club_ids:
+            club_ids = club_ids + [club['id']]
+        await db.club_activity_events.insert_one({
+            'id': str(uuid.uuid4()),
+            'type': event_type,
+            'user_id': actor['id'],
+            'actor_name': actor.get('name') or (actor.get('email') or 'Runner').split('@')[0],
+            'club_ids': club_ids,
+            'club_id': club.get('id') if club else None,
+            'club_name': club.get('name') if club else None,
+            'club_emoji': club.get('emoji') if club else None,
+            'target': target,
+            'distance_km': round(float(distance_km or 0), 2),
+            'territory_km2': round(float(territory_km2 or 0), 4),
+            'created_at': datetime.utcnow(),
+        })
+    except Exception as exc:
+        logger.warning('emit_activity failed: %s', exc)
+
+
+@api_router.get('/terra/activity')
+async def club_activity_feed(limit: int = 40, current_user: dict = Depends(get_current_user)):
+    """Auto-generated activity from the user's clubs (runs, joins, new clubs)."""
+    my_clubs = await _user_active_club_ids(current_user['id'])
+    conditions: List[Dict[str, Any]] = [{'user_id': current_user['id']}]
+    if my_clubs:
+        conditions.append({'club_ids': {'$in': my_clubs}})
+    events = await db.club_activity_events.find({'$or': conditions}).sort('created_at', -1).limit(limit).to_list(limit)
+    return [{
+        'id': e['id'],
+        'type': e['type'],
+        'actor_name': e.get('actor_name') or 'Runner',
+        'is_me': e.get('user_id') == current_user['id'],
+        'club_name': e.get('club_name'),
+        'club_emoji': e.get('club_emoji'),
+        'target': e.get('target'),
+        'distance_km': e.get('distance_km', 0),
+        'territory_km2': e.get('territory_km2', 0),
+        'created_at': e['created_at'].isoformat() if e.get('created_at') else None,
+    } for e in events]
+
+
+# -------------------- TERRITORY (the game) --------------------
+def _corridor_bbox(corridor: dict) -> tuple:
+    lats, lngs = [], []
+    for s in corridor.get('segments') or []:
+        for p in s:
+            lats.append(p[0]); lngs.append(p[1])
+    if not lats:
+        for p in corridor.get('geometry') or []:
+            lats.append(p[0]); lngs.append(p[1])
+    return (min(lats), min(lngs), max(lats), max(lngs)) if lats else (0, 0, 0, 0)
+
+
+def _bbox_overlap(a: tuple, b: tuple, pad: float = 0.0) -> bool:
+    return not (a[2] + pad < b[0] or b[2] + pad < a[0] or a[3] + pad < b[1] or b[3] + pad < a[1])
+
+
+def _corridor_state(rows: List[dict], user_club_id: Optional[str], now: datetime) -> dict:
+    """Ownership + status of a corridor from the player's club view."""
+    contribs = [{'club_id': r['club_id'], 'meters': r['meters'], 'ts': r['ts']} for r in rows if r.get('club_id')]
+    by_club = territory.influence_by_club(contribs, now)
+    owner = max(by_club, key=by_club.get) if by_club else None
+    your = by_club.get(user_club_id, 0.0) if user_club_id else 0.0
+    rival = max((v for k, v in by_club.items() if k != user_club_id), default=0.0)
+    you_own = owner is not None and owner == user_club_id
+    status = territory.corridor_status(your, rival, you_own)
+    return {
+        'owner_club_id': owner,
+        'your_influence': round(your, 1),
+        'rival_influence': round(rival, 1),
+        'status': status,
+        'meters_to_flip': round(territory.meters_to_flip(your, rival)) if not you_own else 0,
+    }
+
+
+async def _apply_run_to_territory(current_user: dict, path: List[dict]) -> List[dict]:
+    """Match a finished run to corridors, add club influence, emit capture events on ownership flips."""
+    trace = [(float(p['latitude']), float(p['longitude'])) for p in (path or [])
+             if p.get('latitude') is not None and p.get('longitude') is not None]
+    if len(trace) < 2:
+        return []
+    club_ids = await _user_active_club_ids(current_user['id'])
+    club_id = club_ids[0] if club_ids else None
+    if not club_id:
+        return []  # no club → no club territory (yet)
+    club = await db.run_clubs.find_one({'id': club_id})
+    now = datetime.utcnow()
+    lats = [p[0] for p in trace]; lngs = [p[1] for p in trace]
+    trace_bb = (min(lats), min(lngs), max(lats), max(lngs))
+    corridors = await db.corridors.find({}).to_list(1000)
+    captured = []
+    for c in corridors:
+        if not _bbox_overlap(trace_bb, _corridor_bbox(c), pad=0.004):  # ~440 m pad
+            continue
+        meters = territory.match_trace_to_segments(trace, c.get('segments') or [])
+        total_m = sum(meters.values())
+        if total_m < 25:  # ignore trivial brush-bys
+            continue
+        rows_before = await db.corridor_influence.find({'corridor_id': c['id']}).to_list(5000)
+        before = _corridor_state(rows_before, club_id, now)['owner_club_id']
+        await db.corridor_influence.insert_one({
+            'corridor_id': c['id'], 'user_id': current_user['id'], 'club_id': club_id,
+            'meters': round(total_m, 1), 'ts': now,
+        })
+        after = _corridor_state(rows_before + [{'club_id': club_id, 'meters': total_m, 'ts': now}], club_id, now)['owner_club_id']
+        captured.append({'corridor_id': c['id'], 'name': c['name'], 'meters': round(total_m, 1), 'flipped': after != before and after == club_id})
+        if after == club_id and after != before:
+            await _emit_activity(current_user, 'territory_captured', club=club, target=c['name'])
+    return captured
+
+
+@api_router.get('/territory/corridors')
+async def list_corridors(city: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+    """Corridors with per-club status — powers the City / Corridor map views."""
+    city_name = (city or _user_city(current_user) or 'Hyderabad').strip()
+    corridors = await db.corridors.find({'city': {'$regex': f'^{city_name}$', '$options': 'i'}}).to_list(500)
+    club_ids = await _user_active_club_ids(current_user['id'])
+    my_club = club_ids[0] if club_ids else None
+    now = datetime.utcnow()
+    club_names = {c['id']: c for c in await db.run_clubs.find({}, {'id': 1, 'name': 1, 'emoji': 1}).to_list(1000)}
+    out = []
+    for c in corridors:
+        rows = await db.corridor_influence.find({'corridor_id': c['id']}).to_list(5000)
+        st = _corridor_state(rows, my_club, now)
+        owner = club_names.get(st['owner_club_id'])
+        out.append({
+            'id': c['id'], 'name': c['name'], 'value': c.get('value', 3), 'length_km': c.get('length_km'),
+            'segment_count': c.get('segment_count'), 'geometry': c.get('geometry'),
+            'status': st['status'], 'owner_club_id': st['owner_club_id'],
+            'owner_name': owner.get('name') if owner else None, 'owner_emoji': owner.get('emoji') if owner else None,
+            'your_influence': st['your_influence'], 'rival_influence': st['rival_influence'],
+            'meters_to_flip': st['meters_to_flip'],
+        })
+    # Highest value first, then closest to flipping.
+    out.sort(key=lambda x: (-x['value'], x['meters_to_flip']))
+    return out
+
+
+@api_router.get('/territory/corridors/{corridor_id}')
+async def corridor_detail(corridor_id: str, current_user: dict = Depends(get_current_user)):
+    corridor = await db.corridors.find_one({'id': corridor_id})
+    if not corridor:
+        raise HTTPException(status_code=404, detail='Corridor not found')
+    club_ids = await _user_active_club_ids(current_user['id'])
+    my_club = club_ids[0] if club_ids else None
+    now = datetime.utcnow()
+    rows = await db.corridor_influence.find({'corridor_id': corridor_id}).to_list(5000)
+    st = _corridor_state(rows, my_club, now)
+    # lead runner = top user by decayed influence
+    user_inf: Dict[str, float] = {}
+    for r in rows:
+        w = territory.freshness_weight(r['ts'], now)
+        if w > 0:
+            user_inf[r['user_id']] = user_inf.get(r['user_id'], 0.0) + r['meters'] * w
+    lead = sorted(user_inf.items(), key=lambda kv: kv[1], reverse=True)[:3]
+    users = {u['id']: u for u in await db.users.find({'id': {'$in': [uid for uid, _ in lead]}}).to_list(50)}
+    owner = await db.run_clubs.find_one({'id': st['owner_club_id']}) if st['owner_club_id'] else None
+    reward_influence = int(corridor.get('value', 3) * 4 + round(st['meters_to_flip'] / 100))
+    return {
+        'id': corridor['id'], 'name': corridor['name'], 'value': corridor.get('value', 3),
+        'length_km': corridor.get('length_km'), 'segment_count': corridor.get('segment_count'),
+        'geometry': corridor.get('geometry'),
+        'status': st['status'], 'owner_name': owner.get('name') if owner else None,
+        'owner_emoji': owner.get('emoji') if owner else None,
+        'your_influence': st['your_influence'], 'rival_influence': st['rival_influence'],
+        'need_km': round(st['meters_to_flip'] / 1000, 2),
+        'reward': {'influence': reward_influence, 'segments': corridor.get('segment_count')},
+        'lead_runners': [{'name': users.get(uid, {}).get('name', 'Runner'), 'km': round(v / 1000, 1)} for uid, v in lead],
+    }
+
+
+@api_router.get('/territory/mission')
+async def daily_mission(city: Optional[str] = None, current_user: dict = Depends(get_current_user)):
+    """Personalized daily mission — the single highest-priority corridor to run today."""
+    city_name = (city or _user_city(current_user) or 'Hyderabad').strip()
+    corridors = await db.corridors.find({'city': {'$regex': f'^{city_name}$', '$options': 'i'}}).to_list(500)
+    club_ids = await _user_active_club_ids(current_user['id'])
+    my_club = club_ids[0] if club_ids else None
+    now = datetime.utcnow()
+    best = None
+    best_score = -1.0
+    for c in corridors:
+        rows = await db.corridor_influence.find({'corridor_id': c['id']}).to_list(5000)
+        st = _corridor_state(rows, my_club, now)
+        status, value, need = st['status'], c.get('value', 3), st['meters_to_flip']
+        if status == 'under_attack':
+            mtype, score = 'Defend', value * 12 + 25
+        elif status == 'easy_capture':
+            mtype, score = 'Capture', value * 10 + 18 - need / 300
+        elif status == 'contested':
+            mtype, score = 'Capture', value * 8 + 8 - need / 300
+        elif status == 'neutral' and value >= 4:
+            mtype, score = 'Claim', value * 7
+        elif status == 'enemy_stronghold' and value >= 5:
+            mtype, score = 'Attack', value * 5 - need / 300
+        else:
+            continue
+        if score > best_score:
+            best_score, best = score, (c, st, mtype)
+    if not best:
+        return {'mission': None}
+    c, st, mtype = best
+    owner = await db.run_clubs.find_one({'id': st['owner_club_id']}) if st['owner_club_id'] else None
+    return {'mission': {
+        'type': mtype, 'corridor_id': c['id'], 'name': c['name'], 'value': c.get('value', 3),
+        'status': st['status'], 'need_km': round(st['meters_to_flip'] / 1000, 2),
+        'owner_name': owner.get('name') if owner else None,
+        'owner_emoji': owner.get('emoji') if owner else None,
+        'reward_influence': int(c.get('value', 3) * 4 + round(st['meters_to_flip'] / 100)),
+    }}
+
+
+@api_router.get('/terra/clubs/cities')
+async def run_club_cities(current_user: dict = Depends(get_current_user)):
+    """Distinct cities that have clubs (with counts) — powers the city picker."""
+    clubs = await db.run_clubs.find({}, {'city': 1, 'country': 1}).to_list(2000)
+    by_city: Dict[str, Dict[str, Any]] = {}
+    for club in clubs:
+        city = str(club.get('city') or '').strip()
+        if not city:
+            continue
+        key = city.title()
+        entry = by_city.setdefault(key, {'city': key, 'country': (str(club.get('country') or '').strip().title() or None), 'club_count': 0})
+        entry['club_count'] += 1
+    return sorted(by_city.values(), key=lambda item: (-item['club_count'], item['city']))
+
+
+@api_router.get('/terra/leaderboard/cities')
+async def city_vs_city_leaderboard(period: str = 'week', current_user: dict = Depends(get_current_user)):
+    """City vs city: total distance aggregated across every club in each city, ranked."""
+    return await _geo_leaderboard('city', period)
+
+
+@api_router.get('/terra/leaderboard/countries')
+async def country_vs_country_leaderboard(period: str = 'week', current_user: dict = Depends(get_current_user)):
+    """Country vs country: total distance aggregated across every club in each country, ranked."""
+    return await _geo_leaderboard('country', period)
+
+
 @api_router.get('/terra/stats')
 async def terra_stats(current_user: dict = Depends(get_current_user)):
     return await _terra_stats_bundle(current_user)
@@ -3833,7 +3913,8 @@ async def terra_runs(current_user: dict = Depends(get_current_user)):
 
 @api_router.post('/terra/runs')
 async def create_terra_run(payload: TerraRunCreate, current_user: dict = Depends(get_current_user)):
-    path = _terra_normalize_path(payload.gps_path)
+    # payload.gps_path is a list of TerraGpsPoint models; normalize expects dicts.
+    path = _terra_normalize_path([pt.model_dump() for pt in payload.gps_path])
     now = datetime.utcnow()
     start_dt = _parse_iso_datetime(payload.start_time)
     end_dt = _parse_iso_datetime(payload.end_time)
@@ -3895,7 +3976,22 @@ async def create_terra_run(payload: TerraRunCreate, current_user: dict = Depends
         'updated_at': now,
     }
     await db.terra_runs.insert_one(run_doc)
-    return _terra_run_response(run_doc)
+    await _emit_activity(current_user, 'run_completed', distance_km=distance_km, territory_km2=territory_captured)
+    captures: List[dict] = []
+    try:
+        captures = await _apply_run_to_territory(current_user, path)
+    except Exception as exc:
+        logger.warning('territory apply failed: %s', exc)
+    resp = _terra_run_response(run_doc)
+    flipped = [c for c in captures if c.get('flipped')]
+    resp['territory'] = {
+        'corridors': captures,
+        'flipped_names': [c['name'] for c in flipped],
+        'captured_count': len(flipped),
+        'influence_gained': round(sum(c.get('meters', 0) for c in captures)),
+        'km2': round(territory_captured, 4),
+    }
+    return resp
 
 
 @api_router.get('/terra/reflections/{run_id}')
@@ -3937,91 +4033,6 @@ async def create_terra_reflection(payload: TerraReflectionCreate, current_user: 
     else:
         await db.terra_reflections.insert_one(reflection)
     return clean_doc(reflection)
-
-
-@api_router.get('/terra/feed')
-async def get_terra_feed(current_user: dict = Depends(get_current_user)):
-    await _terra_ensure_seed_feed_posts()
-    docs = await db.terra_feed_posts.find({}).sort('created_at', -1).to_list(200)
-    return [_terra_feed_post_response(doc) for doc in docs]
-
-
-@api_router.post('/terra/feed')
-async def create_terra_feed_post(payload: TerraFeedCreate, current_user: dict = Depends(get_current_user)):
-    content = payload.content.strip()
-    if not content:
-        raise HTTPException(status_code=400, detail='content is required')
-
-    now = datetime.utcnow()
-    run_payload = None
-    if payload.run_id:
-        run_doc = await db.terra_runs.find_one({'id': payload.run_id, 'user_id': current_user['id']})
-        if not run_doc:
-            run_doc = await db.runs.find_one({'id': payload.run_id, 'user_id': current_user['id']})
-        if run_doc:
-            run_payload = {
-                'distance': _terra_run_distance_km(run_doc),
-                'duration': _terra_run_duration_seconds(run_doc),
-                'territory_captured': _terra_run_territory_km2(run_doc),
-            }
-
-    post = {
-        'id': str(uuid.uuid4()),
-        'user_id': current_user['id'],
-        'username': current_user.get('name') or current_user.get('email', 'Runner'),
-        'content': content,
-        'likes': [],
-        'comments': [],
-        'run': run_payload,
-        'created_at': now,
-        'updated_at': now,
-    }
-    await db.terra_feed_posts.insert_one(post)
-    return _terra_feed_post_response(post)
-
-
-@api_router.post('/terra/feed/{post_id}/like')
-async def like_terra_feed_post(post_id: str, current_user: dict = Depends(get_current_user)):
-    post = await db.terra_feed_posts.find_one({'id': post_id})
-    if not post:
-        raise HTTPException(status_code=404, detail='Post not found')
-
-    likes = [str(user_id) for user_id in post.get('likes', []) if str(user_id).strip()]
-    user_id = current_user['id']
-    if user_id in likes:
-        likes = [like for like in likes if like != user_id]
-    else:
-        likes.append(user_id)
-
-    updated = {'likes': likes, 'updated_at': datetime.utcnow()}
-    await db.terra_feed_posts.update_one({'id': post_id}, {'$set': updated})
-    post.update(updated)
-    return _terra_feed_post_response(post)
-
-
-@api_router.post('/terra/feed/{post_id}/comments')
-async def add_terra_feed_comment(post_id: str, payload: dict, current_user: dict = Depends(get_current_user)):
-    content = str(payload.get('content', '')).strip()
-    if not content:
-        raise HTTPException(status_code=400, detail='content is required')
-
-    post = await db.terra_feed_posts.find_one({'id': post_id})
-    if not post:
-        raise HTTPException(status_code=404, detail='Post not found')
-
-    comment = {
-        'id': str(uuid.uuid4()),
-        'user_id': current_user['id'],
-        'username': current_user.get('name') or current_user.get('email', 'Runner'),
-        'content': content,
-        'created_at': datetime.utcnow().isoformat(),
-    }
-    await db.terra_feed_posts.update_one(
-        {'id': post_id},
-        {'$push': {'comments': comment}, '$set': {'updated_at': datetime.utcnow()}},
-    )
-    post = await db.terra_feed_posts.find_one({'id': post_id})
-    return _terra_feed_post_response(post)
 
 
 @api_router.get('/terra/leaderboard/global')

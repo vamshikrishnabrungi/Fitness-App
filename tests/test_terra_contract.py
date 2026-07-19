@@ -247,39 +247,6 @@ def test_terra_run_creation_and_reflection_contract(monkeypatch):
     assert reflection_response.status_code == 200
 
 
-def test_terra_feed_and_leaderboard_contract(monkeypatch):
-    require_routes(
-        ('GET', '/terra/feed'),
-        ('POST', '/terra/feed'),
-        ('POST', '/terra/feed/{post_id}/like'),
-        ('GET', '/terra/leaderboard/global'),
-        ('GET', '/terra/leaderboard/friends'),
-    )
-
-    client, _ = make_client(monkeypatch)
-
-    feed_response = client.get('/api/terra/feed')
-    assert feed_response.status_code == 200
-    feed = feed_response.json()
-    assert isinstance(feed, list)
-
-    post_response = client.post('/api/terra/feed', json={'content': 'Easy recovery loop today.'})
-    assert post_response.status_code == 200
-    post = post_response.json()
-    assert isinstance(post['id'], str)
-    assert post['content'] == 'Easy recovery loop today.'
-    assert 'likes' in post
-    assert 'comments' in post
-
-    like_response = client.post(f"/api/terra/feed/{post['id']}/like")
-    assert like_response.status_code == 200
-
-    global_response = client.get('/api/terra/leaderboard/global')
-    friends_response = client.get('/api/terra/leaderboard/friends')
-    assert global_response.status_code == 200
-    assert friends_response.status_code == 200
-    assert isinstance(global_response.json(), list)
-    assert isinstance(friends_response.json(), list)
 
 
 def test_terra_plans_competition_and_vault_contract(monkeypatch):
