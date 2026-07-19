@@ -87,6 +87,9 @@ COLLECTIONS: List[str] = [
     'terra_training_plans',
     'lessons',
     'ai_generation_log',
+    'club_activity_events',
+    'corridors',
+    'corridor_influence',
 ]
 
 
@@ -471,6 +474,22 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
     'lessons': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('sport', ASCENDING), ('category', ASCENDING)]},
+    ],
+    'corridors': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('city', ASCENDING)]},
+    ],
+    'corridor_influence': [
+        {'keys': [('corridor_id', ASCENDING), ('ts', DESCENDING)]},
+        {'keys': [('user_id', ASCENDING)]},
+        # TTL: influence outside the 30-day window is dead weight — purge after 35 days.
+        {'keys': [('ts', ASCENDING)], 'kwargs': {'expireAfterSeconds': 3024000}},
+    ],
+    'club_activity_events': [
+        {'keys': [('club_ids', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        # TTL: activity events auto-expire after 30 days.
+        {'keys': [('created_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 2592000}},
     ],
     'ai_generation_log': [
         {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},

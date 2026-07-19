@@ -49,6 +49,8 @@ class UserProfile(BaseModel):
     session_duration_min: Optional[int] = None
     preferred_training_time: Optional[str] = None
     schedule_constraints: Optional[str] = None
+    start_date: Optional[str] = None  # 'YYYY-MM-DD' — day the program should begin
+    weekly_goal_km: Optional[float] = None  # user's weekly running distance goal
     fitness_assessment: Dict[str, Any] = {}
 
     # Health, recovery, and constraints
@@ -519,6 +521,8 @@ class TerraTrainingPlanCreate(BaseModel):
 class RunClubCreate(BaseModel):
     name: str
     city: str
+    country: Optional[str] = None
+    emoji: Optional[str] = None
     description: Optional[str] = None
     is_public: bool = True
 
