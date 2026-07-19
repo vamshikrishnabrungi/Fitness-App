@@ -1,6 +1,17 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { api } from '../utils/api';
+import { api, ApiError } from '../utils/api';
+
+// The user profile is cached next to the token so a launch that can't reach the
+// API still renders the real account instead of an empty placeholder.
+const CACHED_USER_KEY = 'auth_user';
+
+const persistSession = async (token: string, user: unknown) => {
+  await AsyncStorage.multiSet([
+    ['auth_token', token],
+    [CACHED_USER_KEY, JSON.stringify(user)],
+  ]);
+};
 
 interface User {
   id: string;
@@ -56,7 +67,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       password,
     });
     
-    await AsyncStorage.setItem('auth_token', response.access_token);
+    await persistSession(response.access_token, response.user);
     set({ user: response.user, token: response.access_token, isAuthenticated: true });
   },
 
@@ -66,7 +77,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       code,
     });
     
-    await AsyncStorage.setItem('auth_token', response.access_token);
+    await persistSession(response.access_token, response.user);
     set({ user: response.user, token: response.access_token, isAuthenticated: true });
   },
 
@@ -79,26 +90,41 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       profile,
     });
     
-    await AsyncStorage.setItem('auth_token', response.access_token);
+    await persistSession(response.access_token, response.user);
     await AsyncStorage.setItem('needs_onboarding', 'true');
     set({ user: response.user, token: response.access_token, isAuthenticated: true });
   },
 
   logout: async () => {
-    await AsyncStorage.removeItem('auth_token');
+    await AsyncStorage.multiRemove(['auth_token', CACHED_USER_KEY]);
     set({ user: null, token: null, isAuthenticated: false });
   },
 
   loadAuth: async () => {
+    const token = await AsyncStorage.getItem('auth_token');
+    if (!token) {
+      set({ isLoading: false });
+      return;
+    }
     try {
-      const token = await AsyncStorage.getItem('auth_token');
-      if (token) {
-        const user = await api.get<User>('/auth/me');
-        set({ user, token, isAuthenticated: true, isLoading: false });
-      } else {
-        set({ isLoading: false });
-      }
+      const user = await api.get<User>('/auth/me');
+      await AsyncStorage.setItem(CACHED_USER_KEY, JSON.stringify(user));
+      set({ user, token, isAuthenticated: true, isLoading: false });
     } catch (error) {
+      // Only discard the session when the server actually rejected the token.
+      // A network failure (backend down, no signal, changed IP) must NOT log the
+      // user out — that previously wiped a perfectly valid session on every
+      // launch that couldn't reach the API.
+      if (error instanceof ApiError && !error.isAuthError) {
+        const cached = await AsyncStorage.getItem(CACHED_USER_KEY);
+        set({
+          user: cached ? JSON.parse(cached) : null,
+          token,
+          isAuthenticated: true,
+          isLoading: false,
+        });
+        return;
+      }
       await AsyncStorage.removeItem('auth_token');
       set({ user: null, token: null, isAuthenticated: false, isLoading: false });
     }
@@ -110,6 +136,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   updateProfile: async (data: Partial<User>) => {
     const response = await api.put<User>('/auth/profile', data);
+    await AsyncStorage.setItem(CACHED_USER_KEY, JSON.stringify(response));
     set({ user: response });
   },
 }));
