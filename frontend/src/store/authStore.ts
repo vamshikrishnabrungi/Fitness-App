@@ -16,7 +16,9 @@ interface User {
     weight?: number;
     height?: number;
     age?: number;
+    city?: string;
     country?: string;
+    weekly_goal_km?: number;
     date_of_birth?: string;
     marketing_opt_in?: boolean;
   };

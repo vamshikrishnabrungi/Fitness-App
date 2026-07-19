@@ -16,7 +16,6 @@ import { GlassCard } from '../../src/components/GlassCard';
 import { Badge } from '../../src/components/Badge';
 import { CircularProgress } from '../../src/components/CircularProgress';
 import { StrainCard } from '../../src/components/StrainCard';
-import { MorningCheckInModal } from '../../src/components/MorningCheckInModal';
 import { useAuthStore } from '../../src/store/authStore';
 import { api } from '../../src/utils/api';
 import { colors, typography, spacing, borderRadius } from '../../src/utils/theme';
@@ -83,37 +82,17 @@ export default function HomeScreen() {
   const [nutrition, setNutrition] = useState<NutritionData | null>(null);
   const [runStats, setRunStats] = useState<any>(null);
   const [goals, setGoals] = useState<any[]>([]);
-  const [, setQuickLog] = useState<any>(null);
   const [strain, setStrain] = useState<StrainData | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [showMorningModal, setShowMorningModal] = useState(true); // TODO: Change back to false for production
-
-  const handleMorningCheckInComplete = (data: any) => {
-    setShowMorningModal(false);
-    const moodMap: Record<number, string> = {
-      0: 'very_low',
-      1: 'low',
-      2: 'neutral',
-      3: 'good',
-      4: 'great',
-    };
-    const payload = {
-      mood: moodMap[data.mood] || 'neutral',
-      sleep_quality: data.sleepQuality || 3,
-    };
-    api.post('/log/quick', payload).catch(() => { });
-    setQuickLog({ ...payload, logged: true, lastLogTime: new Date().toISOString() });
-  };
 
   const fetchData = async () => {
     try {
-      const [workoutRes, loadRes, nutritionRes, statsRes, goalsRes, quickLogRes, strainRes, lessonsRes] = await Promise.all([
+      const [workoutRes, loadRes, nutritionRes, statsRes, goalsRes, strainRes, lessonsRes] = await Promise.all([
         api.get<Workout>('/workouts/today').catch(() => null),
         api.get<TrainingLoadData>('/training-load').catch(() => null),
         api.get<NutritionData>('/meals/daily-summary').catch(() => null),
         api.get<any>('/runs/stats').catch(() => null),
         api.get<any[]>('/goals').catch(() => []),
-        api.get<any>('/log/quick/today').catch(() => null),
         api.get<StrainData>('/health/strain').catch(() => null),
         api.get<Lesson[]>('/lessons').catch(() => []),
       ]);
@@ -123,7 +102,6 @@ export default function HomeScreen() {
       if (nutritionRes) setNutrition(nutritionRes);
       if (statsRes) setRunStats(statsRes);
       if (goalsRes) setGoals(goalsRes);
-      setQuickLog(quickLogRes);
       setStrain(strainRes);
       setLessons(lessonsRes || []);
     } catch (error) {
@@ -526,13 +504,6 @@ export default function HomeScreen() {
 
         <View style={{ height: 40 }} />
       </ScrollView>
-
-      {/* Morning Check-in Modal */}
-      <MorningCheckInModal
-        visible={showMorningModal}
-        onClose={() => setShowMorningModal(false)}
-        onComplete={handleMorningCheckInComplete}
-      />
     </View>
   );
 }

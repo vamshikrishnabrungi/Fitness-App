@@ -114,6 +114,7 @@ export default function TrainScreen() {
   const [loading, setLoading] = useState(true);
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [query, setQuery] = useState('');
+  const [generationPaused, setGenerationPaused] = useState(false);
   const initials = useMemo(() => {
     const source = user?.name?.trim() || user?.email?.split('@')[0] || 'Athlete';
     const parts = source.split(/\s+/).filter(Boolean);
@@ -130,8 +131,12 @@ export default function TrainScreen() {
   const fetchWorkouts = async () => {
     try {
       setLoading(true);
-      const res = await api.get<Workout[]>('/workouts');
+      const [res, status] = await Promise.all([
+        api.get<Workout[]>('/workouts'),
+        api.get<{ paused: boolean }>('/workouts/generation-status').catch(() => ({ paused: false })),
+      ]);
       setWorkouts(res || []);
+      setGenerationPaused(!!status?.paused);
     } catch (error) {
       console.error('Error fetching workouts:', error);
       setWorkouts([]);
@@ -234,6 +239,16 @@ export default function TrainScreen() {
           />
         </View>
 
+        {generationPaused && (
+          <View style={styles.pausedBanner}>
+            <Ionicons name="pause-circle" size={22} color={colors.brand} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.pausedTitle}>Workout creation is paused</Text>
+              <Text style={styles.pausedSub}>AI plan generation is turned off for now. Your existing workouts still show here.</Text>
+            </View>
+          </View>
+        )}
+
         {filteredWorkouts.length > 0 && (
           <View style={styles.planHeader}>
             <Text style={styles.planEyebrow}>Your Plan</Text>
@@ -246,7 +261,7 @@ export default function TrainScreen() {
         {filteredWorkouts.length === 0 ? (
           <View style={styles.emptyState}>
             <Text style={styles.emptyTitle}>No workouts yet</Text>
-            <Text style={styles.emptySubtitle}>Generate a plan to see workouts here.</Text>
+            <Text style={styles.emptySubtitle}>{generationPaused ? 'Workout creation is paused right now.' : 'Generate a plan to see workouts here.'}</Text>
           </View>
         ) : (
           <>
@@ -594,5 +609,27 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     fontSize: 13,
     color: '#6B7280',
+  },
+  pausedBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    backgroundColor: colors.brandSoft,
+    borderRadius: 16,
+    padding: spacing.lg,
+    marginHorizontal: spacing.page,
+    marginBottom: spacing.lg,
+  },
+  pausedTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: colors.textPrimary,
+    letterSpacing: -0.2,
+  },
+  pausedSub: {
+    fontSize: 12.5,
+    color: colors.textSecondary,
+    marginTop: 2,
+    lineHeight: 18,
   },
 });

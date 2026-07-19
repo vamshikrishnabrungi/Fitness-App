@@ -73,6 +73,7 @@ interface OnboardingState {
   sessionDurationMin: number;
   preferredTrainingTime: string;
   scheduleConstraints: string;
+  startDate: string;
   currentInjuries: { area: string; note: string }[];
   painAreas: string[];
   medicalNotes: string;
@@ -92,7 +93,7 @@ interface OnboardingState {
   setPrimaryGoal: (goal: string) => void;
   setBodyProfile: (data: Partial<Pick<OnboardingState, 'gender' | 'dateOfBirth' | 'heightCm' | 'weightKg' | 'targetWeightKg' | 'country' | 'city'>>) => void;
   setSportContext: (data: Partial<Pick<OnboardingState, 'sportDetails' | 'competitionLevel' | 'seasonPhase'>>) => void;
-  setSchedule: (data: Partial<Pick<OnboardingState, 'trainingDaysPerWeek' | 'preferredTrainingDays' | 'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints'>>) => void;
+  setSchedule: (data: Partial<Pick<OnboardingState, 'trainingDaysPerWeek' | 'preferredTrainingDays' | 'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'startDate'>>) => void;
   setHealthContext: (data: Partial<Pick<OnboardingState, 'currentInjuries' | 'painAreas' | 'medicalNotes' | 'sleepAvgHours' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'>>) => void;
   reset: () => void;
   getOnboardingData: () => OnboardingData;
@@ -103,7 +104,7 @@ const initialState: Pick<
   'goals' | 'experience' | 'location' | 'equipment' | 'fitnessAssessment' | 'sports' | 'selectedGoals' |
   'primaryGoal' | 'gender' | 'dateOfBirth' | 'heightCm' | 'weightKg' | 'targetWeightKg' | 'country' | 'city' |
   'sportDetails' | 'competitionLevel' | 'seasonPhase' | 'trainingDaysPerWeek' | 'preferredTrainingDays' |
-  'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'currentInjuries' | 'painAreas' |
+  'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'startDate' | 'currentInjuries' | 'painAreas' |
   'medicalNotes' | 'sleepAvgHours' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'
 > = {
   goals: [],
@@ -135,6 +136,7 @@ const initialState: Pick<
   sessionDurationMin: 45,
   preferredTrainingTime: 'evening',
   scheduleConstraints: '',
+  startDate: '',
   currentInjuries: [],
   painAreas: [],
   medicalNotes: '',
@@ -202,6 +204,7 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
       session_duration_min: state.sessionDurationMin,
       preferred_training_time: state.preferredTrainingTime,
       schedule_constraints: state.scheduleConstraints,
+      start_date: state.startDate || new Date().toISOString().slice(0, 10),
       current_injuries: state.currentInjuries,
       pain_areas: state.painAreas,
       medical_notes: state.medicalNotes,

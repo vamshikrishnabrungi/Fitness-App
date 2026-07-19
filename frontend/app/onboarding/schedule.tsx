@@ -16,11 +16,15 @@ import { useOnboardingStore } from '../../src/store/onboardingStore';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const DURATIONS = [30, 45, 60, 75];
-const TIMES = ['morning', 'afternoon', 'evening', 'flexible'];
-const LEVELS = ['recreational', 'school', 'college', 'club', 'state', 'pro'];
-const PHASES = ['off_season', 'pre_season', 'in_season', 'general'];
 
-const label = (value: string) => value.replaceAll('_', ' ');
+// Local-date ISO (avoids UTC off-by-one near midnight).
+const toISO = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const START_OPTIONS = Array.from({ length: 7 }, (_, i) => {
+  const d = new Date();
+  d.setDate(d.getDate() + i);
+  const label = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  return { iso: toISO(d), label };
+});
 
 export default function ScheduleScreen() {
   const router = useRouter();
@@ -29,10 +33,8 @@ export default function ScheduleScreen() {
   const [trainingDaysPerWeek, setTrainingDaysPerWeek] = useState(store.trainingDaysPerWeek);
   const [preferredTrainingDays, setPreferredTrainingDays] = useState<string[]>(store.preferredTrainingDays);
   const [sessionDurationMin, setSessionDurationMin] = useState(store.sessionDurationMin);
-  const [preferredTrainingTime, setPreferredTrainingTime] = useState(store.preferredTrainingTime);
   const [scheduleConstraints, setScheduleConstraints] = useState(store.scheduleConstraints);
-  const [competitionLevel, setCompetitionLevel] = useState(store.competitionLevel);
-  const [seasonPhase, setSeasonPhase] = useState(store.seasonPhase);
+  const [startDate, setStartDate] = useState(store.startDate || START_OPTIONS[0].iso);
 
   const toggleDay = (day: string) => {
     setPreferredTrainingDays(current =>
@@ -45,13 +47,8 @@ export default function ScheduleScreen() {
       trainingDaysPerWeek,
       preferredTrainingDays,
       sessionDurationMin,
-      preferredTrainingTime,
       scheduleConstraints,
-    });
-    store.setSportContext({
-      competitionLevel,
-      seasonPhase,
-      sportDetails: store.sports.map(sport => ({ sport })),
+      startDate,
     });
     router.push('/onboarding/equipment');
   };
@@ -89,35 +86,10 @@ export default function ScheduleScreen() {
             ))}
           </View>
 
-          <CoachSection title="Training time" style={styles.sectionGap} />
+          <CoachSection title="Start date" style={styles.sectionGap} />
           <View style={coachLayout.chipGrid}>
-            {TIMES.map(time => (
-              <CoachChip key={time} label={label(time)} selected={preferredTrainingTime === time} onPress={() => setPreferredTrainingTime(time)} />
-            ))}
-          </View>
-
-          <CoachNote text="This helps the coach avoid impossible weeks and place harder sessions where they make sense." />
-        </CoachCard>
-
-        <View style={styles.cardGap} />
-
-        <CoachCard
-          icon="trophy"
-          eyebrow="SPORT SEASON"
-          title="Where are you in your season?"
-          subtitle="This helps balance performance work, recovery, and match or competition demands."
-        >
-          <CoachSection title="Sport context" />
-          <View style={coachLayout.chipGrid}>
-            {LEVELS.map(level => (
-              <CoachChip key={level} label={label(level)} selected={competitionLevel === level} onPress={() => setCompetitionLevel(level)} />
-            ))}
-          </View>
-
-          <CoachSection title="Season phase" style={styles.sectionGap} />
-          <View style={coachLayout.chipGrid}>
-            {PHASES.map(phase => (
-              <CoachChip key={phase} label={label(phase)} selected={seasonPhase === phase} onPress={() => setSeasonPhase(phase)} />
+            {START_OPTIONS.map(option => (
+              <CoachChip key={option.iso} label={option.label} selected={startDate === option.iso} onPress={() => setStartDate(option.iso)} />
             ))}
           </View>
 
@@ -128,6 +100,8 @@ export default function ScheduleScreen() {
             placeholder="Travel, school hours, match days, work shifts..."
             multiline
           />
+
+          <CoachNote text="This helps the coach avoid impossible weeks and place harder sessions where they make sense." />
         </CoachCard>
       </ScrollView>
       <CoachBottom bottomInset={insets.bottom} onPress={handleNext} />
@@ -136,9 +110,6 @@ export default function ScheduleScreen() {
 }
 
 const styles = StyleSheet.create({
-  cardGap: {
-    height: 18,
-  },
   sectionGap: {
     marginTop: 28,
   },

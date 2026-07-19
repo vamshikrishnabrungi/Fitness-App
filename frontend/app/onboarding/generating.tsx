@@ -33,11 +33,26 @@ export default function GeneratingScreen() {
       try {
         const onboardingData = getOnboardingData();
         await updateProfile({ profile: onboardingData as any });
-        await api.post('/onboarding/complete', {
+        // Kicks off generation in the background (unless generation is paused) and returns immediately.
+        const res = await api.post<{ program_generating?: boolean }>('/onboarding/complete', {
           profile: onboardingData,
           generate_program: true,
         });
         await AsyncStorage.removeItem('needs_onboarding');
+
+        // Only wait if generation actually started. Poll until the program is ready (cap ~2 min, then land anyway).
+        if (res?.program_generating) {
+          const deadline = Date.now() + 120000;
+          while (Date.now() < deadline) {
+            await new Promise(resolve => setTimeout(resolve, 2500));
+            try {
+              await api.get('/programs/active'); // 200 once ready; throws on 404 while still building
+              break;
+            } catch {
+              // not ready yet — keep waiting
+            }
+          }
+        }
         reset();
         router.replace('/(tabs)');
       } catch (err: any) {
@@ -56,7 +71,7 @@ export default function GeneratingScreen() {
 
     Animated.timing(progress, {
       toValue: 100,
-      duration: 12000,
+      duration: 40000,
       useNativeDriver: false,
     }).start();
 
