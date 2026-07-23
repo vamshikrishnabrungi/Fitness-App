@@ -3,7 +3,6 @@ import * as Location from 'expo-location';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
-  Dimensions,
   Modal,
   StyleSheet,
   Text,
@@ -15,13 +14,15 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import MapView, { Polyline } from 'react-native-maps';
 import { Button } from '../../src/components/Button';
 import { api } from '../../src/utils/api';
 import { colors, typography, spacing, borderRadius } from '../../src/utils/theme';
 
-const { width, height } = Dimensions.get('window');
 const RUN_HISTORY_KEY = 'terra_run_history_v1';
 const TERRITORY_MIN_KM = 2.5; // a run claims its roads once it reaches this distance
+const DEFAULT_REGION = { latitude: 17.42, longitude: 78.47, latitudeDelta: 0.01, longitudeDelta: 0.01 };
+type LatLng = { latitude: number; longitude: number };
 
 interface GPSPoint {
   latitude: number;
@@ -126,6 +127,8 @@ export default function TrackRunScreen() {
   const [territory, setTerritory] = useState(0);
   const [isLoop, setIsLoop] = useState(false);
   const [currentSpeed, setCurrentSpeed] = useState(0);
+  const [routeCoords, setRouteCoords] = useState<LatLng[]>([]); // live polyline, drives the map
+  const [region, setRegion] = useState(DEFAULT_REGION);
 
   const gpsPath = useRef<GPSPoint[]>([]);
   const startTime = useRef<Date | null>(null);
@@ -150,9 +153,10 @@ export default function TrackRunScreen() {
       setPermissionDenied(true);
       return;
     }
-    // Pre-warm GPS lock
+    // Pre-warm GPS lock and centre the map on the current position.
     try {
-      await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+      const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+      setRegion({ latitude: loc.coords.latitude, longitude: loc.coords.longitude, latitudeDelta: 0.006, longitudeDelta: 0.006 });
       setGpsReady(true);
     } catch {
       setGpsReady(true); // proceed anyway
@@ -174,6 +178,7 @@ export default function TrackRunScreen() {
     setCalories(0);
     setTerritory(0);
     setIsLoop(false);
+    setRouteCoords([]);
     setScreen('running');
 
     // Start timer
@@ -199,11 +204,13 @@ export default function TrackRunScreen() {
           setCurrentSpeed(loc.coords.speed * 3.6); // m/s → km/h
         }
 
+        const coord = { latitude: point.latitude, longitude: point.longitude };
         const path = gpsPath.current;
         if (path.length > 0) {
           const d = haversineKm(path[path.length - 1], point);
           if (d > 0.002) { // filter GPS jitter < 2m
             gpsPath.current = [...path, point];
+            setRouteCoords((prev) => [...prev, coord]); // extend the live map line
             setDistance((prev) => {
               const next = prev + d;
               setCalories(next * 60);
@@ -219,6 +226,7 @@ export default function TrackRunScreen() {
           }
         } else {
           gpsPath.current = [point];
+          setRouteCoords([coord]);
         }
       }
     );
@@ -405,84 +413,54 @@ export default function TrackRunScreen() {
   // ─── Active / Paused run screen ───────────────────────────────────────────
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#1a1a2e', '#16213e', '#0f3460']} style={StyleSheet.absoluteFill} />
-
-      {/* Grid */}
-      <View style={StyleSheet.absoluteFill} pointerEvents="none">
-        {[...Array(20)].map((_, i) => (
-          <View key={`v${i}`} style={[styles.gridLine, { left: i * (width / 20) }]} />
-        ))}
-        {[...Array(20)].map((_, i) => (
-          <View key={`h${i}`} style={[styles.gridLine, { top: i * (height / 20), width: '100%', height: 1 }]} />
-        ))}
-      </View>
-
-      {/* Path dots */}
-      {gpsPath.current.length > 1 && (() => {
-        const pts = gpsPath.current;
-        const lats = pts.map((p) => p.latitude);
-        const lons = pts.map((p) => p.longitude);
-        const minLat = Math.min(...lats), maxLat = Math.max(...lats);
-        const minLon = Math.min(...lons), maxLon = Math.max(...lons);
-        const latRange = maxLat - minLat || 0.0001;
-        const lonRange = maxLon - minLon || 0.0001;
-        const padX = 60, padY = 160;
-        const mapW = width - padX * 2, mapH = height * 0.45;
-
-        return (
-          <View style={StyleSheet.absoluteFill} pointerEvents="none">
-            {pts.slice(-80).map((p, i, arr) => {
-              const x = padX + ((p.longitude - minLon) / lonRange) * mapW;
-              const y = height * 0.25 + (1 - (p.latitude - minLat) / latRange) * mapH;
-              return (
-                <View
-                  key={i}
-                  style={[styles.pathDot, { left: x - 4, top: y - 4, opacity: 0.3 + (i / arr.length) * 0.7 }]}
-                />
-              );
-            })}
-          </View>
-        );
-      })()}
-
-      {/* Pulse */}
-      {screen === 'running' && (
-        <View style={styles.pulseContainer} pointerEvents="none">
-          <View style={[styles.pulseRing, styles.pulseOuter]} />
-          <View style={[styles.pulseRing, styles.pulseInner]} />
-          <View style={styles.pulseDot} />
-        </View>
-      )}
+      {/* Live GPS map — follows you and traces the path as you run */}
+      <MapView
+        style={StyleSheet.absoluteFill}
+        initialRegion={region}
+        showsUserLocation
+        followsUserLocation={screen === 'running'}
+        showsMyLocationButton={false}
+        showsCompass={false}
+        showsPointsOfInterest={false}
+        toolbarEnabled={false}
+      >
+        {routeCoords.length > 1 && (
+          <Polyline coordinates={routeCoords} strokeColor={colors.brand} strokeWidth={6} lineCap="round" lineJoin="round" />
+        )}
+      </MapView>
 
       {/* Loop badge */}
       {isLoop && (
-        <View style={styles.loopBadge}>
+        <View style={[styles.loopBadge, { top: insets.top + 66 }]}>
           <Ionicons name="git-compare" size={14} color={colors.textPrimary} />
-          <Text style={styles.loopText}>LOOP DETECTED · TERRITORY BOOST</Text>
+          <Text style={styles.loopText}>LOOP DETECTED</Text>
         </View>
       )}
 
-      {/* Header */}
-      <View style={[styles.runHeader, { paddingTop: insets.top + spacing.sm }]}>
-        <TouchableOpacity onPress={() => { pauseRun(); router.back(); }} style={styles.closeButton}>
-          <Ionicons name="close" size={24} color="white" />
+      {/* Top header overlay */}
+      <View style={[styles.runHeaderOverlay, { paddingTop: insets.top + spacing.sm }]}>
+        <TouchableOpacity onPress={() => { pauseRun(); router.back(); }} style={styles.mapIconBtn}>
+          <Ionicons name="close" size={22} color={colors.textPrimary} />
         </TouchableOpacity>
-        <View style={styles.statusBadge}>
-          <View style={[styles.statusDot, { backgroundColor: screen === 'running' ? colors.statusSuccess : colors.textPrimary }]} />
-          <Text style={styles.statusText}>{screen === 'running' ? 'TRACKING' : 'PAUSED'}</Text>
+        <View style={styles.statusBadgeLight}>
+          <View style={[styles.statusDot, { backgroundColor: screen === 'running' ? colors.statusSuccess : '#E0A21F' }]} />
+          <Text style={styles.statusTextDark}>{screen === 'running' ? 'TRACKING' : 'PAUSED'}</Text>
         </View>
-        <View style={styles.xpBadge}>
-          <Text style={styles.xpLabel}>CLAIMED km</Text>
-          <Text style={styles.xpValue}>{territory.toFixed(1)}</Text>
-        </View>
+        <View style={{ width: 44 }} />
       </View>
 
-      {/* Main stats */}
-      <View style={styles.mainStats}>
-        <Text style={styles.metaLabel}>DISTANCE</Text>
-        <Text style={styles.distanceValue}>
-          {distance.toFixed(2)}<Text style={styles.distanceUnit}> km</Text>
-        </Text>
+      {/* Bottom sheet — stats + controls over the map */}
+      <View style={[styles.bottomSheet, { paddingBottom: insets.bottom + 20 }]}>
+        <View style={styles.distRow}>
+          <View>
+            <Text style={styles.metaLabel}>DISTANCE</Text>
+            <Text style={styles.distanceValue}>{distance.toFixed(2)}<Text style={styles.distanceUnit}> km</Text></Text>
+          </View>
+          <View style={styles.claimBadge}>
+            <Text style={styles.claimBadgeLbl}>{territory > 0 ? 'CLAIMED' : `${TERRITORY_MIN_KM - distance > 0 ? (TERRITORY_MIN_KM - distance).toFixed(1) : 0} km TO CLAIM`}</Text>
+            <Text style={styles.claimBadgeVal}>{territory > 0 ? `${territory.toFixed(1)} km road` : 'no road yet'}</Text>
+          </View>
+        </View>
         <View style={styles.secondaryStats}>
           <View style={styles.statBlock}>
             <Text style={styles.metaLabel}>TIME</Text>
@@ -498,16 +476,8 @@ export default function TrackRunScreen() {
             <Text style={styles.metaLabel}>km/h</Text>
             <Text style={[styles.statValue, { color: colors.accentTeal }]}>{currentSpeed.toFixed(1)}</Text>
           </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statBlock}>
-            <Text style={styles.metaLabel}>CLAIMED</Text>
-            <Text style={[styles.statValue, { color: colors.textPrimary }]}>{territory.toFixed(1)}</Text>
-          </View>
         </View>
-      </View>
-
-      {/* Controls */}
-      <View style={[styles.controls, { paddingBottom: insets.bottom + 40 }]}>
+        <View style={styles.controlsRow}>
         {screen === 'running' ? (
           <TouchableOpacity style={styles.pauseButton} onPress={pauseRun}>
             <Ionicons name="pause" size={36} color="white" />
@@ -523,6 +493,7 @@ export default function TrackRunScreen() {
             </TouchableOpacity>
           </View>
         )}
+        </View>
       </View>
 
       {/* Summary Modal */}
@@ -643,41 +614,37 @@ const styles = StyleSheet.create({
   bigStartButton: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.textPrimary, paddingHorizontal: spacing.xxxl, paddingVertical: spacing.lg, borderRadius: borderRadius.full },
   bigStartText: { color: colors.background, fontSize: 18, fontWeight: '800', letterSpacing: 2 },
   // Grid / path
-  gridLine: { position: 'absolute', width: 1, height: '100%', backgroundColor: 'rgba(255,255,255,0.03)' },
-  pathDot: { position: 'absolute', width: 8, height: 8, borderRadius: 4, backgroundColor: colors.textPrimary },
   // Pulse
-  pulseContainer: { position: 'absolute', top: height * 0.35, left: width / 2 - 40, width: 80, height: 80, alignItems: 'center', justifyContent: 'center' },
-  pulseRing: { position: 'absolute', borderWidth: 2, borderColor: colors.textPrimary, borderRadius: 100 },
-  pulseOuter: { width: 80, height: 80, opacity: 0.3 },
-  pulseInner: { width: 50, height: 50, opacity: 0.6 },
-  pulseDot: { width: 16, height: 16, borderRadius: 8, backgroundColor: colors.textPrimary },
   loopBadge: { position: 'absolute', top: 110, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)', paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: borderRadius.full, gap: spacing.xs },
   loopText: { color: colors.textPrimary, fontSize: 11, fontWeight: '700', letterSpacing: 1 },
   closeButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.1)', justifyContent: 'center', alignItems: 'center' },
   // Run header
-  runHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: spacing.lg, paddingBottom: spacing.md },
-  statusBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(0,0,0,0.5)', paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: borderRadius.full },
   statusDot: { width: 8, height: 8, borderRadius: 4 },
-  statusText: { color: 'white', fontSize: 11, fontWeight: '700', letterSpacing: 1 },
-  xpBadge: { alignItems: 'flex-end', backgroundColor: 'rgba(255,107,107,0.25)', paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: borderRadius.md },
-  xpLabel: { color: 'rgba(255,255,255,0.6)', fontSize: 9, fontWeight: '700', letterSpacing: 1 },
-  xpValue: { color: colors.textPrimary, fontSize: 16, fontWeight: '800' },
   // Main stats
-  mainStats: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   metaLabel: { color: 'rgba(255,255,255,0.5)', fontSize: 11, fontWeight: '700', letterSpacing: 2, marginBottom: 4 },
-  distanceValue: { color: 'white', fontSize: 76, fontWeight: '800', letterSpacing: -2 },
-  distanceUnit: { fontSize: 24, color: colors.textPrimary, fontWeight: '600' },
-  secondaryStats: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.xl, backgroundColor: 'rgba(255,255,255,0.08)', paddingVertical: spacing.lg, paddingHorizontal: spacing.xl, borderRadius: borderRadius.xl, gap: spacing.lg },
+  distanceValue: { color: 'white', fontSize: 48, fontWeight: '800', letterSpacing: -1.5 },
+  distanceUnit: { fontSize: 20, color: colors.textPrimary, fontWeight: '600' },
+  secondaryStats: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.md, backgroundColor: 'rgba(255,255,255,0.08)', paddingVertical: spacing.md, paddingHorizontal: spacing.lg, borderRadius: borderRadius.xl, gap: spacing.lg, justifyContent: 'center' },
   statBlock: { alignItems: 'center', minWidth: 52 },
   statValue: { color: 'white', fontSize: 18, fontWeight: '700' },
   statDivider: { width: 1, height: 28, backgroundColor: 'rgba(255,255,255,0.15)' },
   // Controls
-  controls: { alignItems: 'center', justifyContent: 'flex-end', height: 160 },
   pauseButton: { width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.15)', borderWidth: 3, borderColor: 'white', justifyContent: 'center', alignItems: 'center' },
   pausedControls: { flexDirection: 'row', alignItems: 'center', gap: spacing.xl },
   resumeButton: { width: 80, height: 80, borderRadius: 40, backgroundColor: colors.textPrimary, justifyContent: 'center', alignItems: 'center' },
   finishButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#ff3b30', paddingHorizontal: spacing.xl, paddingVertical: spacing.md, borderRadius: borderRadius.full, gap: spacing.sm },
   finishText: { color: 'white', fontWeight: '700', letterSpacing: 1 },
+  // Map overlays
+  runHeaderOverlay: { position: 'absolute', top: 0, left: 0, right: 0, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: spacing.lg, paddingBottom: spacing.md },
+  mapIconBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 6, shadowOffset: { width: 0, height: 2 }, elevation: 4 },
+  statusBadgeLight: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: '#fff', paddingHorizontal: spacing.md, paddingVertical: 8, borderRadius: borderRadius.full, shadowColor: '#000', shadowOpacity: 0.12, shadowRadius: 5, shadowOffset: { width: 0, height: 2 }, elevation: 3 },
+  statusTextDark: { color: colors.textPrimary, fontSize: 11, fontWeight: '800', letterSpacing: 1 },
+  bottomSheet: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(18,18,28,0.94)', borderTopLeftRadius: 26, borderTopRightRadius: 26, paddingTop: spacing.lg, paddingHorizontal: spacing.lg },
+  distRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
+  claimBadge: { alignItems: 'flex-end', backgroundColor: 'rgba(255,90,40,0.22)', paddingHorizontal: spacing.md, paddingVertical: 8, borderRadius: borderRadius.md },
+  claimBadgeLbl: { color: colors.brand2, fontSize: 9.5, fontWeight: '800', letterSpacing: 0.8 },
+  claimBadgeVal: { color: '#fff', fontSize: 14, fontWeight: '800', marginTop: 2 },
+  controlsRow: { alignItems: 'center', justifyContent: 'center', paddingTop: spacing.lg },
   // Modals
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignItems: 'center', padding: spacing.lg },
   summaryCard: { width: '100%', borderRadius: borderRadius.xl, padding: spacing.xl, alignItems: 'center' },
