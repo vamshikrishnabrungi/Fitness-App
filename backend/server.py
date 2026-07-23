@@ -113,6 +113,14 @@ WORKOUT_AI_DAILY_QUOTA = int(os.environ.get('WORKOUT_AI_DAILY_QUOTA', '25') or 2
 WORKOUT_GENERATION_ENABLED = (os.environ.get('WORKOUT_GENERATION_ENABLED', 'true') or 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
 OPENROUTER_SITE_URL = os.environ.get('OPENROUTER_SITE_URL', 'http://localhost')
 OPENROUTER_APP_NAME = os.environ.get('OPENROUTER_APP_NAME', 'Runlete')
+# Email / OTP. When host + user + pass are all set, OTP codes are emailed;
+# otherwise they fall back to the server log (dev).
+SMTP_HOST = os.environ.get('SMTP_HOST') or ''
+SMTP_PORT = int(os.environ.get('SMTP_PORT', '465') or 465)
+SMTP_SECURE = (os.environ.get('SMTP_SECURE', 'true') or 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
+SMTP_USER = os.environ.get('INFO_EMAIL_USER') or ''
+SMTP_PASS = os.environ.get('INFO_EMAIL_PASS') or ''
+SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'Runlete')
 
 # -------------------- APP --------------------
 # Optional error monitoring. Inert unless SENTRY_DSN is set AND sentry-sdk is installed.
@@ -1620,6 +1628,45 @@ async def _save_daily_analysis(
 
 
 
+def _smtp_configured() -> bool:
+    return bool(SMTP_HOST and SMTP_USER and SMTP_PASS)
+
+
+def _send_otp_email_sync(to_email: str, code: str) -> None:
+    """Blocking SMTP send. Call via asyncio.to_thread so it never stalls the loop."""
+    import smtplib
+    from email.message import EmailMessage
+    from email.utils import formataddr
+
+    msg = EmailMessage()
+    msg['Subject'] = 'Your Runlete verification code'
+    msg['From'] = formataddr((SMTP_FROM_NAME, SMTP_USER))
+    msg['To'] = to_email
+    msg.set_content(
+        f"Your Runlete verification code is {code}.\n\n"
+        "It expires in 10 minutes. If you didn't request this, ignore this email."
+    )
+    msg.add_alternative(
+        f"""<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:420px">
+          <h2 style="margin:0 0 8px">Verify your email</h2>
+          <p style="color:#555;margin:0 0 16px">Enter this code in Runlete:</p>
+          <div style="font-size:34px;font-weight:800;letter-spacing:6px">{code}</div>
+          <p style="color:#999;font-size:13px;margin-top:16px">Expires in 10 minutes.
+          If you didn't request this, you can ignore this email.</p>
+        </div>""",
+        subtype='html',
+    )
+    if SMTP_SECURE:
+        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=15) as server:
+            server.login(SMTP_USER, SMTP_PASS)
+            server.send_message(msg)
+    else:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=15) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASS)
+            server.send_message(msg)
+
+
 async def create_and_store_otp(email: str) -> str:
     code = f"{uuid.uuid4().int % 1000000:06d}"
     await db.otps.insert_one({
@@ -1628,7 +1675,16 @@ async def create_and_store_otp(email: str) -> str:
         'created_at': datetime.utcnow(),
         'expires_at': datetime.utcnow() + timedelta(minutes=10),
     })
-    logger.info(f"OTP for {email}: {code}")
+    if _smtp_configured():
+        try:
+            await asyncio.to_thread(_send_otp_email_sync, email, code)
+            logger.info("OTP emailed to %s", email)
+        except Exception as exc:
+            # Don't 500 the request — but surface it. In dev, log the code so login still works.
+            logger.error("Failed to email OTP to %s: %s", email, exc)
+            logger.info("OTP for %s: %s (email failed, dev fallback)", email, code)
+    else:
+        logger.info("OTP for %s: %s (SMTP not configured — dev fallback)", email, code)
     return code
 
 

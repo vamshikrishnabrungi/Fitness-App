@@ -208,7 +208,7 @@ export default function LoginScreen() {
               {/* Code/Password Step */}
               <Text style={styles.title}>
                 {authMethod === 'otp'
-                  ? 'Enter the 8-digit code sent to your email.'
+                  ? 'Enter the 6-digit code sent to your email.'
                   : 'Sign in with your password.'
                 }
               </Text>
@@ -225,7 +225,7 @@ export default function LoginScreen() {
                   <View style={styles.inputContainer}>
                     <TextInput
                       style={styles.input}
-                      placeholder="8-digit code*"
+                      placeholder="6-digit code*"
                       placeholderTextColor="#999999"
                       value={code}
                       onChangeText={setCode}
