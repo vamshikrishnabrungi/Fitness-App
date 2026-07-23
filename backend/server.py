@@ -3520,13 +3520,12 @@ async def create_terra_run(payload: TerraRunCreate, current_user: dict = Depends
     if duration_seconds <= 0 and start_dt and not end_dt:
         duration_seconds = max(1, int(round((now - start_dt).total_seconds())))
 
+    # Distance is exactly what the GPS trace covered — never fabricated. A
+    # stationary "run" is 0 km, not an invented minimum.
     distance_km = 0.0
     for index in range(1, len(path)):
         distance_km += _terra_haversine_km(path[index - 1], path[index])
     distance_km = round(distance_km, 3)
-
-    if distance_km <= 0 and duration_seconds > 0:
-        distance_km = round(max(0.25, duration_seconds / 900.0), 3)
 
     is_loop = False
     if len(path) >= 4:

@@ -283,10 +283,20 @@ export default function TrackRunScreen() {
     const endTime = new Date();
     const path = gpsPath.current;
 
-    const pathToSend = (path.length >= 2 ? path : [
-      { latitude: 0, longitude: 0, timestamp: startTime.current || new Date() },
-      { latitude: 0.001, longitude: 0.001, timestamp: endTime },
-    ]).map((p) => ({
+    // Don't save a run that never moved — no fabricated path, no phantom distance.
+    if (path.length < 2 || distance < 0.05) {
+      Alert.alert(
+        'No route recorded',
+        "You haven't moved enough to save a run yet. Start moving to trace a route.",
+        [
+          { text: 'Keep Going', onPress: resumeRun, style: 'cancel' },
+          { text: 'Discard', style: 'destructive', onPress: () => router.back() },
+        ]
+      );
+      return;
+    }
+
+    const pathToSend = path.map((p) => ({
       latitude: p.latitude,
       longitude: p.longitude,
       timestamp: p.timestamp instanceof Date ? p.timestamp.toISOString() : p.timestamp,
