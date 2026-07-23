@@ -355,7 +355,9 @@ def test_terra_merged_run_sources_deduplicate_by_id(monkeypatch):
     assert stats['total_runs'] == 2
     assert stats['total_distance'] == 14.0
     assert stats['xp'] == 230
-    assert stats['total_territory'] == 0.6
+    # Territory is now claimed road km: both runs (9.0 + 5.0) exceed the 2.5km
+    # threshold, so they claim their full distance. Stored box values are ignored.
+    assert stats['total_territory'] == 14.0
 
     runs_response = client.get('/api/terra/runs')
     assert runs_response.status_code == 200

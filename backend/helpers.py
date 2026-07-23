@@ -217,12 +217,21 @@ def _terra_run_duration_seconds(run: Dict[str, Any]) -> int:
     return 0
 
 
+# A run claims territory only once it covers at least this distance. Below it the
+# run still counts toward distance and leaderboards, but claims no roads.
+TERRITORY_MIN_KM = 2.5
+
+
 def _terra_run_territory_km2(run: Dict[str, Any]) -> float:
-    if run.get('territory_captured') is not None:
-        return _to_non_negative_float(run.get('territory_captured'), 0.0)
-    if run.get('territory_km2') is not None:
-        return _to_non_negative_float(run.get('territory_km2'), 0.0)
-    return 0.0
+    """Kilometres of road this run claims.
+
+    Territory is now the actual road you ran, not a bounding-box area: a run
+    claims its full distance once it reaches TERRITORY_MIN_KM, and nothing below
+    that. Derived from distance so old runs (which stored a box value) and new
+    runs behave identically with no migration.
+    """
+    distance = _terra_run_distance_km(run)
+    return round(distance, 4) if distance >= TERRITORY_MIN_KM else 0.0
 
 
 def _terra_run_xp(run: Dict[str, Any]) -> int:

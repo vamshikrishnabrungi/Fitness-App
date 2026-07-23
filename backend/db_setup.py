@@ -88,8 +88,6 @@ COLLECTIONS: List[str] = [
     'lessons',
     'ai_generation_log',
     'club_activity_events',
-    'corridors',
-    'corridor_influence',
 ]
 
 
@@ -474,16 +472,6 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
     'lessons': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('sport', ASCENDING), ('category', ASCENDING)]},
-    ],
-    'corridors': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('city', ASCENDING)]},
-    ],
-    'corridor_influence': [
-        {'keys': [('corridor_id', ASCENDING), ('ts', DESCENDING)]},
-        {'keys': [('user_id', ASCENDING)]},
-        # TTL: influence outside the 30-day window is dead weight — purge after 35 days.
-        {'keys': [('ts', ASCENDING)], 'kwargs': {'expireAfterSeconds': 3024000}},
     ],
     'club_activity_events': [
         {'keys': [('club_ids', ASCENDING), ('created_at', DESCENDING)]},

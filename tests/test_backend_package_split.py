@@ -60,6 +60,12 @@ def test_terra_run_response_normalizes_legacy_fields():
 
     assert normalized['distance'] == 7.2
     assert normalized['duration'] == 1800
-    assert normalized['territory_captured'] == 0.3
+    # Territory now derives from distance (>= 2.5km claims the run's road km),
+    # so the stored box value 0.3 is ignored in favour of the distance.
+    assert normalized['territory_captured'] == 7.2
     assert normalized['xp_earned'] == 90
     assert normalized['is_loop'] is True
+
+    # A run below the threshold claims no territory.
+    short = helpers._terra_run_response({'id': 'r2', 'distance_km': '1.2', 'duration_sec': '300'})
+    assert short['territory_captured'] == 0.0

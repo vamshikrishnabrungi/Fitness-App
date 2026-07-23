@@ -7,7 +7,6 @@ from slowapi.errors import RateLimitExceeded
 from motor.motor_asyncio import AsyncIOMotorClient
 from typing import Any, Dict, List, Optional
 from datetime import datetime, timedelta
-from math import cos, radians
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 import uuid
@@ -19,7 +18,6 @@ import asyncio
 from pathlib import Path
 from dotenv import load_dotenv
 import httpx
-from backend import territory
 from backend.helpers import (
     clean_doc,
     _parse_iso_datetime,
@@ -40,6 +38,7 @@ from backend.helpers import (
     _terra_run_distance_km,
     _terra_run_duration_seconds,
     _terra_run_territory_km2,
+    TERRITORY_MIN_KM,
     _terra_run_xp,
     _terra_run_response,
     _terra_run_history_runs,
@@ -3417,174 +3416,38 @@ async def club_activity_feed(limit: int = 40, current_user: dict = Depends(get_c
 
 
 # -------------------- TERRITORY (the game) --------------------
-def _corridor_bbox(corridor: dict) -> tuple:
-    lats, lngs = [], []
-    for s in corridor.get('segments') or []:
-        for p in s:
-            lats.append(p[0]); lngs.append(p[1])
-    if not lats:
-        for p in corridor.get('geometry') or []:
-            lats.append(p[0]); lngs.append(p[1])
-    return (min(lats), min(lngs), max(lats), max(lngs)) if lats else (0, 0, 0, 0)
-
-
-def _bbox_overlap(a: tuple, b: tuple, pad: float = 0.0) -> bool:
-    return not (a[2] + pad < b[0] or b[2] + pad < a[0] or a[3] + pad < b[1] or b[3] + pad < a[1])
-
-
-def _corridor_state(rows: List[dict], user_club_id: Optional[str], now: datetime) -> dict:
-    """Ownership + status of a corridor from the player's club view."""
-    contribs = [{'club_id': r['club_id'], 'meters': r['meters'], 'ts': r['ts']} for r in rows if r.get('club_id')]
-    by_club = territory.influence_by_club(contribs, now)
-    owner = max(by_club, key=by_club.get) if by_club else None
-    your = by_club.get(user_club_id, 0.0) if user_club_id else 0.0
-    rival = max((v for k, v in by_club.items() if k != user_club_id), default=0.0)
-    you_own = owner is not None and owner == user_club_id
-    status = territory.corridor_status(your, rival, you_own)
-    return {
-        'owner_club_id': owner,
-        'your_influence': round(your, 1),
-        'rival_influence': round(rival, 1),
-        'status': status,
-        'meters_to_flip': round(territory.meters_to_flip(your, rival)) if not you_own else 0,
-    }
-
-
-async def _apply_run_to_territory(current_user: dict, path: List[dict]) -> List[dict]:
-    """Match a finished run to corridors, add club influence, emit capture events on ownership flips."""
-    trace = [(float(p['latitude']), float(p['longitude'])) for p in (path or [])
-             if p.get('latitude') is not None and p.get('longitude') is not None]
-    if len(trace) < 2:
-        return []
-    club_ids = await _user_active_club_ids(current_user['id'])
-    club_id = club_ids[0] if club_ids else None
-    if not club_id:
-        return []  # no club → no club territory (yet)
-    club = await db.run_clubs.find_one({'id': club_id})
-    now = datetime.utcnow()
-    lats = [p[0] for p in trace]; lngs = [p[1] for p in trace]
-    trace_bb = (min(lats), min(lngs), max(lats), max(lngs))
-    corridors = await db.corridors.find({}).to_list(1000)
-    captured = []
-    for c in corridors:
-        if not _bbox_overlap(trace_bb, _corridor_bbox(c), pad=0.004):  # ~440 m pad
+@api_router.get('/territory/mine')
+async def my_territory(current_user: dict = Depends(get_current_user)):
+    """Roads this user has claimed: every run that reached TERRITORY_MIN_KM,
+    returned as its actual GPS path for drawing on the map."""
+    runs = await _terra_user_run_docs(current_user['id'])
+    roads: List[dict] = []
+    total_km = 0.0
+    for r in runs:
+        dist = _terra_run_distance_km(r)
+        if dist < TERRITORY_MIN_KM:
             continue
-        meters = territory.match_trace_to_segments(trace, c.get('segments') or [])
-        total_m = sum(meters.values())
-        if total_m < 25:  # ignore trivial brush-bys
+        coords = [
+            [p['latitude'], p['longitude']]
+            for p in (r.get('gps_path') or [])
+            if isinstance(p, dict) and p.get('latitude') is not None and p.get('longitude') is not None
+        ]
+        if len(coords) < 2:
             continue
-        rows_before = await db.corridor_influence.find({'corridor_id': c['id']}).to_list(5000)
-        before = _corridor_state(rows_before, club_id, now)['owner_club_id']
-        await db.corridor_influence.insert_one({
-            'corridor_id': c['id'], 'user_id': current_user['id'], 'club_id': club_id,
-            'meters': round(total_m, 1), 'ts': now,
+        total_km += dist
+        created = r.get('created_at')
+        roads.append({
+            'id': str(r.get('id')),
+            'path': coords,
+            'distance_km': round(dist, 2),
+            'date': r.get('date') or (created.strftime('%Y-%m-%d') if hasattr(created, 'strftime') else None),
         })
-        after = _corridor_state(rows_before + [{'club_id': club_id, 'meters': total_m, 'ts': now}], club_id, now)['owner_club_id']
-        captured.append({'corridor_id': c['id'], 'name': c['name'], 'meters': round(total_m, 1), 'flipped': after != before and after == club_id})
-        if after == club_id and after != before:
-            await _emit_activity(current_user, 'territory_captured', club=club, target=c['name'])
-    return captured
-
-
-@api_router.get('/territory/corridors')
-async def list_corridors(city: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    """Corridors with per-club status — powers the City / Corridor map views."""
-    city_name = (city or _user_city(current_user) or 'Hyderabad').strip()
-    corridors = await db.corridors.find({'city': {'$regex': f'^{city_name}$', '$options': 'i'}}).to_list(500)
-    club_ids = await _user_active_club_ids(current_user['id'])
-    my_club = club_ids[0] if club_ids else None
-    now = datetime.utcnow()
-    club_names = {c['id']: c for c in await db.run_clubs.find({}, {'id': 1, 'name': 1, 'emoji': 1}).to_list(1000)}
-    out = []
-    for c in corridors:
-        rows = await db.corridor_influence.find({'corridor_id': c['id']}).to_list(5000)
-        st = _corridor_state(rows, my_club, now)
-        owner = club_names.get(st['owner_club_id'])
-        out.append({
-            'id': c['id'], 'name': c['name'], 'value': c.get('value', 3), 'length_km': c.get('length_km'),
-            'segment_count': c.get('segment_count'), 'geometry': c.get('geometry'),
-            'status': st['status'], 'owner_club_id': st['owner_club_id'],
-            'owner_name': owner.get('name') if owner else None, 'owner_emoji': owner.get('emoji') if owner else None,
-            'your_influence': st['your_influence'], 'rival_influence': st['rival_influence'],
-            'meters_to_flip': st['meters_to_flip'],
-        })
-    # Highest value first, then closest to flipping.
-    out.sort(key=lambda x: (-x['value'], x['meters_to_flip']))
-    return out
-
-
-@api_router.get('/territory/corridors/{corridor_id}')
-async def corridor_detail(corridor_id: str, current_user: dict = Depends(get_current_user)):
-    corridor = await db.corridors.find_one({'id': corridor_id})
-    if not corridor:
-        raise HTTPException(status_code=404, detail='Corridor not found')
-    club_ids = await _user_active_club_ids(current_user['id'])
-    my_club = club_ids[0] if club_ids else None
-    now = datetime.utcnow()
-    rows = await db.corridor_influence.find({'corridor_id': corridor_id}).to_list(5000)
-    st = _corridor_state(rows, my_club, now)
-    # lead runner = top user by decayed influence
-    user_inf: Dict[str, float] = {}
-    for r in rows:
-        w = territory.freshness_weight(r['ts'], now)
-        if w > 0:
-            user_inf[r['user_id']] = user_inf.get(r['user_id'], 0.0) + r['meters'] * w
-    lead = sorted(user_inf.items(), key=lambda kv: kv[1], reverse=True)[:3]
-    users = {u['id']: u for u in await db.users.find({'id': {'$in': [uid for uid, _ in lead]}}).to_list(50)}
-    owner = await db.run_clubs.find_one({'id': st['owner_club_id']}) if st['owner_club_id'] else None
-    reward_influence = int(corridor.get('value', 3) * 4 + round(st['meters_to_flip'] / 100))
     return {
-        'id': corridor['id'], 'name': corridor['name'], 'value': corridor.get('value', 3),
-        'length_km': corridor.get('length_km'), 'segment_count': corridor.get('segment_count'),
-        'geometry': corridor.get('geometry'),
-        'status': st['status'], 'owner_name': owner.get('name') if owner else None,
-        'owner_emoji': owner.get('emoji') if owner else None,
-        'your_influence': st['your_influence'], 'rival_influence': st['rival_influence'],
-        'need_km': round(st['meters_to_flip'] / 1000, 2),
-        'reward': {'influence': reward_influence, 'segments': corridor.get('segment_count')},
-        'lead_runners': [{'name': users.get(uid, {}).get('name', 'Runner'), 'km': round(v / 1000, 1)} for uid, v in lead],
+        'claimed_km': round(total_km, 2),
+        'road_count': len(roads),
+        'threshold_km': TERRITORY_MIN_KM,
+        'roads': roads,
     }
-
-
-@api_router.get('/territory/mission')
-async def daily_mission(city: Optional[str] = None, current_user: dict = Depends(get_current_user)):
-    """Personalized daily mission — the single highest-priority corridor to run today."""
-    city_name = (city or _user_city(current_user) or 'Hyderabad').strip()
-    corridors = await db.corridors.find({'city': {'$regex': f'^{city_name}$', '$options': 'i'}}).to_list(500)
-    club_ids = await _user_active_club_ids(current_user['id'])
-    my_club = club_ids[0] if club_ids else None
-    now = datetime.utcnow()
-    best = None
-    best_score = -1.0
-    for c in corridors:
-        rows = await db.corridor_influence.find({'corridor_id': c['id']}).to_list(5000)
-        st = _corridor_state(rows, my_club, now)
-        status, value, need = st['status'], c.get('value', 3), st['meters_to_flip']
-        if status == 'under_attack':
-            mtype, score = 'Defend', value * 12 + 25
-        elif status == 'easy_capture':
-            mtype, score = 'Capture', value * 10 + 18 - need / 300
-        elif status == 'contested':
-            mtype, score = 'Capture', value * 8 + 8 - need / 300
-        elif status == 'neutral' and value >= 4:
-            mtype, score = 'Claim', value * 7
-        elif status == 'enemy_stronghold' and value >= 5:
-            mtype, score = 'Attack', value * 5 - need / 300
-        else:
-            continue
-        if score > best_score:
-            best_score, best = score, (c, st, mtype)
-    if not best:
-        return {'mission': None}
-    c, st, mtype = best
-    owner = await db.run_clubs.find_one({'id': st['owner_club_id']}) if st['owner_club_id'] else None
-    return {'mission': {
-        'type': mtype, 'corridor_id': c['id'], 'name': c['name'], 'value': c.get('value', 3),
-        'status': st['status'], 'need_km': round(st['meters_to_flip'] / 1000, 2),
-        'owner_name': owner.get('name') if owner else None,
-        'owner_emoji': owner.get('emoji') if owner else None,
-        'reward_influence': int(c.get('value', 3) * 4 + round(st['meters_to_flip'] / 100)),
-    }}
 
 
 @api_router.get('/terra/clubs/cities')
@@ -3669,20 +3532,11 @@ async def create_terra_run(payload: TerraRunCreate, current_user: dict = Depends
     if len(path) >= 4:
         is_loop = _terra_haversine_km(path[0], path[-1]) <= 0.1
 
-    territory_captured = 0.0
-    if path:
-        latitudes = [point['latitude'] for point in path]
-        longitudes = [point['longitude'] for point in path]
-        lat_span = max(latitudes) - min(latitudes)
-        lon_span = max(longitudes) - min(longitudes)
-        width_km = lat_span * 111.0
-        avg_latitude = sum(latitudes) / len(latitudes)
-        height_km = lon_span * 111.0 * cos(radians(avg_latitude))
-        base_area = abs(width_km * height_km)
-        if is_loop and base_area > 0:
-            territory_captured = round(max(0.001, base_area * 0.35), 4)
-        else:
-            territory_captured = round(max(0.001 if distance_km > 0 else 0.0, distance_km * 0.01), 4)
+    # Territory is the actual road you ran, claimed once the run reaches the
+    # threshold. No bounding boxes: below 2.5 km the run still counts toward
+    # distance and leaderboards but claims nothing.
+    claimed = distance_km >= TERRITORY_MIN_KM
+    territory_captured = round(distance_km, 4) if claimed else 0.0
 
     run_doc = {
         'id': str(uuid.uuid4()),
@@ -3697,25 +3551,18 @@ async def create_terra_run(payload: TerraRunCreate, current_user: dict = Depends
         'duration_sec': duration_seconds,
         'territory_captured': territory_captured,
         'territory_km2': territory_captured,
+        'claimed_territory': claimed,
         'is_loop': is_loop,
         'created_at': now,
         'updated_at': now,
     }
     await db.terra_runs.insert_one(run_doc)
     await _emit_activity(current_user, 'run_completed', distance_km=distance_km, territory_km2=territory_captured)
-    captures: List[dict] = []
-    try:
-        captures = await _apply_run_to_territory(current_user, path)
-    except Exception as exc:
-        logger.warning('territory apply failed: %s', exc)
     resp = _terra_run_response(run_doc)
-    flipped = [c for c in captures if c.get('flipped')]
     resp['territory'] = {
-        'corridors': captures,
-        'flipped_names': [c['name'] for c in flipped],
-        'captured_count': len(flipped),
-        'influence_gained': round(sum(c.get('meters', 0) for c in captures)),
-        'km2': round(territory_captured, 4),
+        'claimed': claimed,
+        'road_km': territory_captured,
+        'threshold_km': TERRITORY_MIN_KM,
     }
     return resp
 
