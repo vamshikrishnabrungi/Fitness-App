@@ -194,7 +194,7 @@ export default function RunDetailScreen() {
             { icon: 'time-outline', label: 'Duration', value: fmtDuration(run.duration), color: colors.accentBlue },
             { icon: 'speedometer-outline', label: 'Avg Pace', value: fmtPace(run.distance, run.duration), color: colors.accentTeal },
             { icon: 'flame-outline', label: 'Calories', value: `${calories} cal`, color: '#E74C3C' },
-            { icon: 'map-outline', label: 'Territory', value: `${run.territory_captured.toFixed(4)} km²`, color: colors.statusSuccess },
+            { icon: 'map-outline', label: 'Roads held', value: `${run.territory_captured.toFixed(2)} km`, color: colors.statusSuccess },
           ].map((m) => (
             <GlassCard key={m.label} style={styles.metricCard}>
               <Ionicons name={m.icon as any} size={22} color={m.color} />
@@ -212,8 +212,9 @@ export default function RunDetailScreen() {
               <Text style={styles.xpValue}>{run.distance.toFixed(2)} km</Text>
             </View>
             <View style={styles.xpBreakdown}>
-              <Text style={styles.xpBreakdownText}>Territory: {run.territory_captured.toFixed(4)} km²</Text>
-              {run.is_loop && <Text style={[styles.xpBreakdownText, { color: colors.textPrimary }]}>Loop territory boost</Text>}
+              <Text style={styles.xpBreakdownText}>
+                {run.territory_captured > 0 ? `Claimed ${run.territory_captured.toFixed(2)} km of road` : 'No territory (run 2.5 km+)'}
+              </Text>
             </View>
           </View>
         </GlassCard>

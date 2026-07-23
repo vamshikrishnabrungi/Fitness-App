@@ -550,8 +550,8 @@ export default function TerraRunScreen() {
                                   <Text style={styles.runMetricLbl}>time</Text>
                                 </View>
                                 <View style={styles.runMetric}>
-                                  <Text style={[styles.runMetricVal, { color: colors.textPrimary }]}>{run.territory_captured.toFixed(3)}</Text>
-                                  <Text style={styles.runMetricLbl}>km²</Text>
+                                  <Text style={[styles.runMetricVal, { color: colors.textPrimary }]}>{run.territory_captured.toFixed(1)}</Text>
+                                  <Text style={styles.runMetricLbl}>km road</Text>
                                 </View>
                               </View>
                             </GlassCard>
@@ -653,7 +653,7 @@ export default function TerraRunScreen() {
                     </View>
                     <View style={StyleSheet.flatten([styles.hChip, styles.hChipTeal])}>
                       <Text style={StyleSheet.flatten([styles.hChipVal, styles.hChipValTeal])}>{periodStats.terr.toFixed(2)}</Text>
-                      <Text style={styles.hChipLbl}>km² captured</Text>
+                      <Text style={styles.hChipLbl}>km roads</Text>
                     </View>
                   </View>
 
@@ -671,7 +671,7 @@ export default function TerraRunScreen() {
                         <Text style={styles.weekPct}>{weekPct}%</Text>
                       </View>
                       <View style={styles.weekTrack}><View style={[styles.weekFill, { width: `${Math.max(3, weekPct)}%` }]} /></View>
-                      {todayTerritory > 0 && <Text style={styles.terrNext}>+{todayTerritory.toFixed(2)} km² captured today</Text>}
+                      {todayTerritory > 0 && <Text style={styles.terrNext}>+{todayTerritory.toFixed(1)} km of roads claimed today</Text>}
                     </View>
                   )}
 
@@ -679,7 +679,7 @@ export default function TerraRunScreen() {
                   {statPeriod === 'all' && (
                     <View style={styles.goalBlock}>
                       <View style={styles.terrTrack}><View style={[styles.terrFill, { width: `${Math.max(3, terrPct)}%` }]} /></View>
-                      <Text style={styles.terrNext}>{(terrMilestone - totalTerritory).toFixed(2)} km² to your next {terrMilestone} km²</Text>
+                      <Text style={styles.terrNext}>{(terrMilestone - totalTerritory).toFixed(1)} km to your next {terrMilestone} km of roads</Text>
                     </View>
                   )}
                 </GlassCard>
@@ -776,7 +776,7 @@ export default function TerraRunScreen() {
                     <View style={styles.fcStatsRow}>
                       <Text style={styles.fcStat}>{selectedClub.average_distance_per_member.toFixed(1)} km/member</Text>
                       <Text style={styles.fcDot}>·</Text>
-                      <Text style={styles.fcStat}>{selectedClub.total_territory.toFixed(2)} km² held</Text>
+                      <Text style={styles.fcStat}>{selectedClub.total_territory.toFixed(1)} km roads held</Text>
                     </View>
                     {clubMembers.length > 0 && (
                       <View style={styles.fcMembers}>
@@ -952,7 +952,7 @@ export default function TerraRunScreen() {
                     } else if (e.type === 'run_completed') {
                       icon = 'footsteps';
                       tint = colors.brand;
-                      text = `${who} ran ${e.distance_km.toFixed(1)} km` + (e.territory_km2 > 0 ? ` · captured ${e.territory_km2.toFixed(2)} km²` : '');
+                      text = `${who} ran ${e.distance_km.toFixed(1)} km` + (e.territory_km2 > 0 ? ` · claimed ${e.territory_km2.toFixed(1)} km of roads` : '');
                     } else if (e.type === 'member_joined') {
                       icon = 'person-add';
                       tint = colors.accentTeal;

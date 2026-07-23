@@ -21,6 +21,7 @@ import { colors, typography, spacing, borderRadius } from '../../src/utils/theme
 
 const { width, height } = Dimensions.get('window');
 const RUN_HISTORY_KEY = 'terra_run_history_v1';
+const TERRITORY_MIN_KM = 2.5; // a run claims its roads once it reaches this distance
 
 interface GPSPoint {
   latitude: number;
@@ -133,7 +134,7 @@ export default function TrackRunScreen() {
 
   const [showSummary, setShowSummary] = useState(false);
   const [runSummary, setRunSummary] = useState<CompletedRun | null>(null);
-  const [captured, setCaptured] = useState<{ flipped_names: string[]; captured_count: number; influence_gained: number; km2: number } | null>(null);
+  const [captured, setCaptured] = useState<{ claimed: boolean; road_km: number; threshold_km: number } | null>(null);
   const [showReflection, setShowReflection] = useState(false);
   const [feeling, setFeeling] = useState('good');
   const [reflectionNotes, setReflectionNotes] = useState('');
@@ -211,21 +212,10 @@ export default function TrackRunScreen() {
                 const loopDist = haversineKm(gpsPath.current[0], point);
                 setIsLoop(loopDist < 0.1 && next > 0.5);
               }
+              // Territory = claimed road km once the run passes the threshold (matches the server).
+              setTerritory(next >= TERRITORY_MIN_KM ? next : 0);
               return next;
             });
-
-            // Territory estimate
-            if (gpsPath.current.length > 4) {
-              const lats = gpsPath.current.map((p) => p.latitude);
-              const lons = gpsPath.current.map((p) => p.longitude);
-              const latDelta = Math.max(...lats) - Math.min(...lats);
-              const lonDelta = Math.max(...lons) - Math.min(...lons);
-              const R = 6371;
-              const latKm = latDelta * (Math.PI / 180) * R;
-              const lonKm = lonDelta * (Math.PI / 180) * R * Math.cos(lats[0] * (Math.PI / 180));
-              const bbox = latKm * lonKm;
-              setTerritory(isLoop ? bbox * 0.35 : bbox * 0.01);
-            }
           }
         } else {
           gpsPath.current = [point];
@@ -391,9 +381,9 @@ export default function TrackRunScreen() {
           </Text>
           <View style={styles.readyTips}>
             {[
-              { icon: 'map-outline', text: 'Capture territory by running loops' },
+              { icon: 'map-outline', text: 'Run 2.5 km+ to claim the roads you cover' },
               { icon: 'people-outline', text: 'Your kilometers count for your club' },
-              { icon: 'repeat-outline', text: 'Loops capture more territory' },
+              { icon: 'ribbon-outline', text: 'Claimed roads become your territory' },
             ].map((tip) => (
               <View key={tip.text} style={styles.tipRow}>
                 <Ionicons name={tip.icon as any} size={18} color={colors.textPrimary} />
@@ -482,8 +472,8 @@ export default function TrackRunScreen() {
           <Text style={styles.statusText}>{screen === 'running' ? 'TRACKING' : 'PAUSED'}</Text>
         </View>
         <View style={styles.xpBadge}>
-          <Text style={styles.xpLabel}>AREA</Text>
-          <Text style={styles.xpValue}>{territory.toFixed(3)}</Text>
+          <Text style={styles.xpLabel}>CLAIMED km</Text>
+          <Text style={styles.xpValue}>{territory.toFixed(1)}</Text>
         </View>
       </View>
 
@@ -510,8 +500,8 @@ export default function TrackRunScreen() {
           </View>
           <View style={styles.statDivider} />
           <View style={styles.statBlock}>
-            <Text style={styles.metaLabel}>TERR.</Text>
-            <Text style={[styles.statValue, { color: colors.textPrimary }]}>{territory.toFixed(3)}</Text>
+            <Text style={styles.metaLabel}>CLAIMED</Text>
+            <Text style={[styles.statValue, { color: colors.textPrimary }]}>{territory.toFixed(1)}</Text>
           </View>
         </View>
       </View>
@@ -558,32 +548,26 @@ export default function TrackRunScreen() {
                 <Text style={styles.summaryStatLbl}>pace</Text>
               </View>
             </View>
-            {captured && captured.flipped_names.length > 0 ? (
+            {captured?.claimed ? (
               <View style={styles.captureBanner}>
                 <Text style={styles.captureEmoji}>🎉</Text>
-                <Text style={styles.captureTitle}>
-                  {captured.captured_count === 1 ? 'ROAD CAPTURED!' : `${captured.captured_count} ROADS CAPTURED!`}
-                </Text>
-                <Text style={styles.captureNames}>{captured.flipped_names.join('  ·  ')}</Text>
+                <Text style={styles.captureTitle}>ROAD CLAIMED!</Text>
+                <Text style={styles.captureNames}>This route is now your territory</Text>
                 <View style={styles.captureRewards}>
-                  <View style={styles.crw}><Text style={styles.crwV}>+{captured.influence_gained}</Text><Text style={styles.crwL}>influence</Text></View>
-                  <View style={styles.crwDiv} />
-                  <View style={styles.crw}><Text style={styles.crwV}>{captured.km2.toFixed(2)}</Text><Text style={styles.crwL}>km² held</Text></View>
+                  <View style={styles.crw}><Text style={styles.crwV}>{captured.road_km.toFixed(2)}</Text><Text style={styles.crwL}>km of road</Text></View>
                 </View>
               </View>
             ) : (
               <View style={styles.xpEarned}>
-                <Text style={styles.xpEarnedLabel}>TERRITORY CAPTURED</Text>
-                <Text style={styles.xpEarnedValue}>{runSummary?.territory_captured.toFixed(4) ?? '0.0000'}</Text>
-                {captured && captured.influence_gained > 0
-                  ? <Text style={styles.loopBonus}>+{captured.influence_gained} influence on your roads</Text>
-                  : runSummary?.is_loop && <Text style={styles.loopBonus}>🔄 LOOP TERRITORY BOOST</Text>}
+                <Text style={styles.xpEarnedLabel}>NO TERRITORY YET</Text>
+                <Text style={styles.xpEarnedValue}>{(runSummary?.distance_km ?? 0).toFixed(2)} km</Text>
+                <Text style={styles.loopBonus}>Run {captured?.threshold_km ?? TERRITORY_MIN_KM} km+ to claim the road</Text>
               </View>
             )}
             <View style={styles.summaryMetaRow}>
               <Ionicons name="map-outline" size={16} color="rgba(255,255,255,0.7)" />
               <Text style={styles.summaryMetaText}>
-                {runSummary?.territory_captured.toFixed(4)} km² territory · {runSummary?.calories} cal
+                {(runSummary?.territory_captured ?? 0).toFixed(2)} km of roads · {runSummary?.calories} cal
               </Text>
             </View>
             <Button
@@ -715,7 +699,6 @@ const styles = StyleSheet.create({
   crw: { alignItems: 'center' },
   crwV: { fontSize: 22, fontWeight: '900', color: '#FFFFFF' },
   crwL: { ...typography.caption, color: 'rgba(255,255,255,0.6)', marginTop: 1 },
-  crwDiv: { width: 1, height: 30, backgroundColor: 'rgba(255,255,255,0.2)' },
   summaryMetaRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.md },
   summaryMetaText: { ...typography.caption, color: 'rgba(255,255,255,0.7)' },
   skipBtn: { marginTop: spacing.md, padding: spacing.sm },
