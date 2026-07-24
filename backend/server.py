@@ -120,6 +120,9 @@ SMTP_SECURE = (os.environ.get('SMTP_SECURE', 'true') or 'true').strip().lower() 
 SMTP_USER = os.environ.get('INFO_EMAIL_USER') or ''
 SMTP_PASS = os.environ.get('INFO_EMAIL_PASS') or ''
 SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'Runlete')
+# Serializes the brief IPv4-forcing during SMTP connects (see _send_otp_email_sync).
+import threading as _threading
+_smtp_lock = _threading.Lock()
 
 # -------------------- APP --------------------
 # Optional error monitoring. Inert unless SENTRY_DSN is set AND sentry-sdk is installed.
@@ -1655,15 +1658,31 @@ def _send_otp_email_sync(to_email: str, code: str) -> None:
         </div>""",
         subtype='html',
     )
-    if SMTP_SECURE:
-        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=15) as server:
-            server.login(SMTP_USER, SMTP_PASS)
-            server.send_message(msg)
-    else:
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=15) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASS)
-            server.send_message(msg)
+    # Force IPv4. Cloud hosts (Render) often have no IPv6 route, and
+    # smtp.hostinger.com publishes an AAAA record, so a default connect picks
+    # IPv6 and fails with [Errno 101] Network is unreachable. The getaddrinfo
+    # override is global, so it's held under a lock (OTP sends are infrequent).
+    import socket
+    real_getaddrinfo = socket.getaddrinfo
+
+    def _ipv4_first(host, port, *args, **kwargs):
+        results = real_getaddrinfo(host, port, *args, **kwargs)
+        return [r for r in results if r[0] == socket.AF_INET] or results
+
+    with _smtp_lock:
+        socket.getaddrinfo = _ipv4_first
+        try:
+            if SMTP_SECURE:
+                with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=20) as server:
+                    server.login(SMTP_USER, SMTP_PASS)
+                    server.send_message(msg)
+            else:
+                with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as server:
+                    server.starttls()
+                    server.login(SMTP_USER, SMTP_PASS)
+                    server.send_message(msg)
+        finally:
+            socket.getaddrinfo = real_getaddrinfo
 
 
 async def create_and_store_otp(email: str) -> str:
