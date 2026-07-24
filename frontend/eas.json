@@ -14,13 +14,13 @@
         "simulator": true
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://api.runlete.com"
+        "EXPO_PUBLIC_BACKEND_URL": "https://runlete-api.onrender.com"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://api.runlete.com"
+        "EXPO_PUBLIC_BACKEND_URL": "https://runlete-api.onrender.com"
       }
     }
   },
