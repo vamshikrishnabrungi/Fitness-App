@@ -27,7 +27,6 @@ export default function HealthScreen() {
   const store = useOnboardingStore();
   const [painAreas, setPainAreas] = useState<string[]>(store.painAreas);
   const [medicalNotes, setMedicalNotes] = useState(store.medicalNotes);
-  const [sleepAvgHours, setSleepAvgHours] = useState(store.sleepAvgHours);
   const [stressLevel, setStressLevel] = useState(store.stressLevel);
   const [dietPreference, setDietPreference] = useState(store.dietPreference || 'balanced');
   const [nutritionGoal, setNutritionGoal] = useState(store.nutritionGoal || 'performance');
@@ -43,7 +42,6 @@ export default function HealthScreen() {
       painAreas,
       currentInjuries: painAreas.map(area => ({ area, note: medicalNotes })),
       medicalNotes,
-      sleepAvgHours,
       stressLevel,
       dietPreference,
       nutritionGoal,
@@ -87,16 +85,7 @@ export default function HealthScreen() {
           title="How are you recovering?"
           subtitle="Sleep, stress, and nutrition help scale daily intensity and recovery recommendations."
         >
-          <CoachSection title="Recovery baseline" />
-          <CoachField
-            label="Average sleep"
-            value={sleepAvgHours}
-            onChangeText={setSleepAvgHours}
-            placeholder="Hours per night"
-            keyboardType="decimal-pad"
-          />
-
-          <CoachSection title="Stress level" style={styles.sectionGap} />
+          <CoachSection title="Stress level" />
           <View style={coachLayout.chipGrid}>
             {STRESS_LEVELS.map(level => (
               <CoachChip key={level} label={level} selected={stressLevel === level} onPress={() => setStressLevel(level)} />

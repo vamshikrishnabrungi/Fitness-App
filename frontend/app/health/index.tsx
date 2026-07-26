@@ -173,15 +173,6 @@ export default function HealthHubScreen() {
                             onLearnMore={() => router.push('/education/recovery')}
                         />
                         <VitalCard
-                            icon="moon"
-                            iconColor="#3B82F6"
-                            label="Sleep"
-                            value={healthSummary?.sleep?.value}
-                            unit="hrs"
-                            state={getTimeAgo(healthSummary?.sleep?.last_updated)}
-                            onLearnMore={() => router.push('/education/sleep')}
-                        />
-                        <VitalCard
                             icon="body"
                             iconColor="#F59E0B"
                             label="Weight"

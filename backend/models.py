@@ -58,7 +58,6 @@ class UserProfile(BaseModel):
     injury_history: List[Dict[str, Any]] = []
     pain_areas: List[str] = []
     medical_notes: Optional[str] = None
-    sleep_avg_hours: Optional[float] = None
     stress_level: Optional[str] = None
     recovery_score_baseline: Optional[float] = None
 

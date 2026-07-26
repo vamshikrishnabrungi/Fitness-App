@@ -42,7 +42,6 @@ interface OnboardingData {
   current_injuries: { area: string; note: string }[];
   pain_areas: string[];
   medical_notes: string;
-  sleep_avg_hours: number | null;
   stress_level: string;
   diet_preference: string;
   dietary_restrictions: string[];
@@ -77,7 +76,6 @@ interface OnboardingState {
   currentInjuries: { area: string; note: string }[];
   painAreas: string[];
   medicalNotes: string;
-  sleepAvgHours: string;
   stressLevel: string;
   dietPreference: string;
   dietaryRestrictions: string[];
@@ -94,7 +92,7 @@ interface OnboardingState {
   setBodyProfile: (data: Partial<Pick<OnboardingState, 'gender' | 'dateOfBirth' | 'heightCm' | 'weightKg' | 'targetWeightKg' | 'country' | 'city'>>) => void;
   setSportContext: (data: Partial<Pick<OnboardingState, 'sportDetails' | 'competitionLevel' | 'seasonPhase'>>) => void;
   setSchedule: (data: Partial<Pick<OnboardingState, 'trainingDaysPerWeek' | 'preferredTrainingDays' | 'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'startDate'>>) => void;
-  setHealthContext: (data: Partial<Pick<OnboardingState, 'currentInjuries' | 'painAreas' | 'medicalNotes' | 'sleepAvgHours' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'>>) => void;
+  setHealthContext: (data: Partial<Pick<OnboardingState, 'currentInjuries' | 'painAreas' | 'medicalNotes' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'>>) => void;
   reset: () => void;
   getOnboardingData: () => OnboardingData;
 }
@@ -105,7 +103,7 @@ const initialState: Pick<
   'primaryGoal' | 'gender' | 'dateOfBirth' | 'heightCm' | 'weightKg' | 'targetWeightKg' | 'country' | 'city' |
   'sportDetails' | 'competitionLevel' | 'seasonPhase' | 'trainingDaysPerWeek' | 'preferredTrainingDays' |
   'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'startDate' | 'currentInjuries' | 'painAreas' |
-  'medicalNotes' | 'sleepAvgHours' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'
+  'medicalNotes' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'
 > = {
   goals: [],
   experience: '',
@@ -140,7 +138,6 @@ const initialState: Pick<
   currentInjuries: [],
   painAreas: [],
   medicalNotes: '',
-  sleepAvgHours: '',
   stressLevel: 'moderate',
   dietPreference: '',
   dietaryRestrictions: [],
@@ -208,7 +205,6 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
       current_injuries: state.currentInjuries,
       pain_areas: state.painAreas,
       medical_notes: state.medicalNotes,
-      sleep_avg_hours: toNumber(state.sleepAvgHours),
       stress_level: state.stressLevel,
       diet_preference: state.dietPreference,
       dietary_restrictions: state.dietaryRestrictions,

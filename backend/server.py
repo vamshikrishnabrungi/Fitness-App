@@ -564,7 +564,6 @@ async def _upsert_athlete_profile(current_user: dict, profile: UserProfile) -> D
             'medical_notes': profile.medical_notes,
         },
         'recovery_baseline': {
-            'sleep_avg_hours': profile.sleep_avg_hours,
             'stress_level': profile.stress_level,
             'recovery_score_baseline': profile.recovery_score_baseline,
         },
