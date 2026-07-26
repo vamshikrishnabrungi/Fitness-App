@@ -123,6 +123,12 @@ SMTP_FROM_NAME = os.environ.get('SMTP_FROM_NAME', 'Runlete')
 # Serializes the brief IPv4-forcing during SMTP connects (see _send_otp_email_sync).
 import threading as _threading
 _smtp_lock = _threading.Lock()
+# Resend (HTTPS email API) — preferred over SMTP because cloud hosts can't block
+# port 443, and it handles deliverability. When RESEND_API_KEY is set it wins.
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY') or ''
+# Sender. Use "onboarding@resend.dev" for a quick test to your own inbox before
+# the domain verifies; switch to your verified address for real users.
+RESEND_FROM = os.environ.get('RESEND_FROM') or (f'{SMTP_FROM_NAME} <{SMTP_USER}>' if SMTP_USER else 'onboarding@resend.dev')
 
 # -------------------- APP --------------------
 # Optional error monitoring. Inert unless SENTRY_DSN is set AND sentry-sdk is installed.
@@ -1685,6 +1691,40 @@ def _send_otp_email_sync(to_email: str, code: str) -> None:
             socket.getaddrinfo = real_getaddrinfo
 
 
+def _otp_email_bodies(code: str) -> tuple:
+    text = (
+        f"Your Runlete verification code is {code}.\n\n"
+        "It expires in 10 minutes. If you didn't request this, ignore this email."
+    )
+    html = (
+        f'<div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:420px">'
+        f'<h2 style="margin:0 0 8px">Verify your email</h2>'
+        f'<p style="color:#555;margin:0 0 16px">Enter this code in Runlete:</p>'
+        f'<div style="font-size:34px;font-weight:800;letter-spacing:6px">{code}</div>'
+        f'<p style="color:#999;font-size:13px;margin-top:16px">Expires in 10 minutes. '
+        f"If you didn't request this, you can ignore this email.</p></div>"
+    )
+    return text, html
+
+
+async def _send_otp_via_resend(to_email: str, code: str) -> None:
+    """Send the OTP through Resend's HTTPS API (port 443 — unblockable by hosts)."""
+    text, html = _otp_email_bodies(code)
+    async with httpx.AsyncClient(timeout=15) as client:
+        resp = await client.post(
+            'https://api.resend.com/emails',
+            headers={'Authorization': f'Bearer {RESEND_API_KEY}'},
+            json={
+                'from': RESEND_FROM,
+                'to': [to_email],
+                'subject': 'Your Runlete verification code',
+                'text': text,
+                'html': html,
+            },
+        )
+        resp.raise_for_status()
+
+
 async def create_and_store_otp(email: str) -> str:
     code = f"{uuid.uuid4().int % 1000000:06d}"
     await db.otps.insert_one({
@@ -1693,16 +1733,25 @@ async def create_and_store_otp(email: str) -> str:
         'created_at': datetime.utcnow(),
         'expires_at': datetime.utcnow() + timedelta(minutes=10),
     })
+    # Prefer Resend (HTTPS) → fall back to SMTP → last resort log the code (dev).
+    if RESEND_API_KEY:
+        try:
+            await _send_otp_via_resend(email, code)
+            logger.info("OTP emailed (Resend) to %s", email)
+            return code
+        except Exception as exc:
+            detail = getattr(getattr(exc, 'response', None), 'text', '') or str(exc)
+            logger.error("Resend send failed for %s: %s", email, detail[:300])
+            # fall through to SMTP / log
     if _smtp_configured():
         try:
             await asyncio.to_thread(_send_otp_email_sync, email, code)
             logger.info("OTP emailed to %s", email)
         except Exception as exc:
-            # Don't 500 the request — but surface it. In dev, log the code so login still works.
             logger.error("Failed to email OTP to %s: %s", email, exc)
             logger.info("OTP for %s: %s (email failed, dev fallback)", email, code)
     else:
-        logger.info("OTP for %s: %s (SMTP not configured — dev fallback)", email, code)
+        logger.info("OTP for %s: %s (email not configured — dev fallback)", email, code)
     return code
 
 
