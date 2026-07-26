@@ -87,6 +87,7 @@ COLLECTIONS: List[str] = [
     'lessons',
     'ai_generation_log',
     'club_activity_events',
+    'sport_library_progress',
 ]
 
 
@@ -467,6 +468,10 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
     'lessons': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('sport', ASCENDING), ('category', ASCENDING)]},
+    ],
+    'sport_library_progress': [
+        {'keys': [('user_id', ASCENDING), ('unit_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('sport', ASCENDING)]},
     ],
     'club_activity_events': [
         {'keys': [('club_ids', ASCENDING), ('created_at', DESCENDING)]},

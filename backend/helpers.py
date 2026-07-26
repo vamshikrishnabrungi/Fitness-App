@@ -58,99 +58,6 @@ def _to_non_negative_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
-def _sleep_quality_label(score: Optional[float]) -> str:
-    if score is None:
-        return 'unknown'
-    if score >= 85:
-        return 'excellent'
-    if score >= 70:
-        return 'good'
-    if score >= 55:
-        return 'fair'
-    return 'poor'
-
-
-def _sleep_status_from_score(score: Optional[float]) -> str:
-    if score is None:
-        return 'moderate'
-    if score < 40:
-        return 'low'
-    if score < 70:
-        return 'moderate'
-    return 'high'
-
-
-def _sleep_efficiency_value(value: Any) -> Optional[float]:
-    if value is None:
-        return None
-    try:
-        efficiency = float(value)
-    except (TypeError, ValueError):
-        return None
-    if efficiency > 1.5:
-        efficiency = efficiency / 100.0
-    return max(0.0, min(1.0, efficiency))
-
-
-def _sleep_session_duration_hours(session: Dict[str, Any]) -> float:
-    start = _parse_iso_datetime(session.get('start_time'))
-    end = _parse_iso_datetime(session.get('end_time'))
-    if start and end and end >= start:
-        return round((end - start).total_seconds() / 3600.0, 2)
-    return _to_non_negative_float(session.get('duration_hours'), 0.0)
-
-
-def _sleep_session_metrics(session: Dict[str, Any]) -> Dict[str, Any]:
-    duration_hours = _sleep_session_duration_hours(session)
-    deep_sleep_hours = _to_non_negative_float(session.get('deep_sleep_hours'), 0.0)
-    rem_sleep_hours = _to_non_negative_float(session.get('rem_sleep_hours'), 0.0)
-    efficiency = _sleep_efficiency_value(session.get('efficiency'))
-    if efficiency is None and duration_hours > 0:
-        efficiency = min(1.0, duration_hours / 8.0)
-
-    sleep_quality = session.get('sleep_quality')
-    try:
-        sleep_quality_int = int(sleep_quality) if sleep_quality is not None else None
-    except (TypeError, ValueError):
-        sleep_quality_int = None
-
-    duration_component = min(40.0, (duration_hours / 8.0) * 40.0) if duration_hours > 0 else 0.0
-    efficiency_component = (efficiency * 30.0) if efficiency is not None else (15.0 if duration_hours > 0 else 0.0)
-    stage_ratio = 0.0
-    if duration_hours > 0:
-        stage_ratio = min(1.0, (deep_sleep_hours + rem_sleep_hours) / max(duration_hours, 0.1))
-    stage_component = stage_ratio * 20.0
-    quality_component = (sleep_quality_int * 10.0) if sleep_quality_int is not None else 0.0
-
-    score = round(min(100.0, duration_component + efficiency_component + stage_component + quality_component))
-    sleep_debt_hours = round(max(0.0, 8.0 - duration_hours), 1) if duration_hours > 0 else 0.0
-
-    timestamp = _parse_iso_datetime(session.get('created_at')) or _parse_iso_datetime(session.get('start_time'))
-    date_value = str(session.get('date') or (timestamp.strftime('%Y-%m-%d') if timestamp else datetime.utcnow().strftime('%Y-%m-%d')))
-
-    return {
-        'date': date_value,
-        'duration_hours': duration_hours,
-        'deep_sleep_hours': deep_sleep_hours,
-        'rem_sleep_hours': rem_sleep_hours,
-        'efficiency': efficiency,
-        'sleep_score': score,
-        'sleep_quality': sleep_quality_int,
-        'sleep_quality_label': _sleep_quality_label(score),
-        'status': _sleep_status_from_score(score),
-        'sleep_debt_hours': sleep_debt_hours,
-        'deep_ratio': round((deep_sleep_hours / duration_hours), 2) if duration_hours > 0 else 0.0,
-        'rem_ratio': round((rem_sleep_hours / duration_hours), 2) if duration_hours > 0 else 0.0,
-    }
-
-
-def _sleep_session_response(session: Dict[str, Any]) -> Dict[str, Any]:
-    cleaned = clean_doc(dict(session))
-    cleaned.update(_sleep_session_metrics(cleaned))
-    cleaned.setdefault('quality_label', cleaned.get('sleep_quality_label', 'unknown'))
-    return cleaned
-
-
 def _terra_level_from_xp(xp: float) -> int:
     if xp <= 0:
         return 1
@@ -326,24 +233,6 @@ def _terra_placeholder_training_plans(current_user: dict) -> List[Dict[str, Any]
             'is_seeded': True,
         },
     ]
-
-
-def _terra_feed_post_response(post: Dict[str, Any]) -> Dict[str, Any]:
-    cleaned = clean_doc(dict(post))
-    cleaned['username'] = cleaned.get('username') or cleaned.get('author_name') or 'Runner'
-    cleaned['content'] = str(cleaned.get('content') or '').strip()
-    cleaned['likes'] = [str(user_id) for user_id in cleaned.get('likes', []) if str(user_id).strip()]
-    cleaned['comments'] = cleaned.get('comments') or []
-    run = cleaned.get('run')
-    if isinstance(run, dict):
-        cleaned['run'] = {
-            'distance': _terra_run_distance_km(run),
-            'duration': _terra_run_duration_seconds(run),
-            'territory_captured': _terra_run_territory_km2(run),
-        }
-    else:
-        cleaned['run'] = None
-    return cleaned
 
 
 def _terra_training_plan_response(plan: Dict[str, Any]) -> Dict[str, Any]:

@@ -42,6 +42,7 @@ from backend.helpers import (
     _terra_training_plan_response,
     _terra_plan_weeks,
 )
+from backend import sport_library
 from backend.db_setup import ensure_database_schema
 from backend.ai_workout_service import generate_ai_training_program
 from backend.knowledge_retrieval import build_workout_knowledge_context, compact_context_for_ai
@@ -2670,6 +2671,91 @@ async def program_summary(current_user: dict = Depends(get_current_user)):
         progress_completed=completed_count,
         progress_total=total_count
     ).model_dump()
+
+
+# -------------------- SPORT LIBRARY --------------------
+@api_router.get('/sport-library')
+async def sport_library_index(current_user: dict = Depends(get_current_user)):
+    """The user's sports (onboarding names) plus everything we support."""
+    profile = current_user.get('profile') or {}
+    mine = [s for s in (profile.get('sports') or []) if s in sport_library.ONBOARDING_TO_KB]
+    return {
+        'my_sports': mine or ['Running'],
+        'all_sports': sorted(sport_library.ONBOARDING_TO_KB.keys()),
+    }
+
+
+@api_router.get('/sport-library/{sport_name}')
+async def sport_library_sections(sport_name: str, current_user: dict = Depends(get_current_user)):
+    kb_key = sport_library.ONBOARDING_TO_KB.get(sport_name)
+    if not kb_key:
+        raise HTTPException(status_code=404, detail='Unknown sport')
+
+    sections = sport_library.sections_for(kb_key)
+    drill_section = sport_library.kb_section_id(kb_key)
+    units_by_section: Dict[str, List[dict]] = {s['id']: [] for s in sections}
+
+    drills = await db.sport_teaching_progressions.find({'sport': kb_key}).sort([('domain', 1), ('level', 1)]).to_list(500)
+    for doc in drills:
+        units_by_section[drill_section].append(sport_library.drill_unit_summary(doc))
+    assessments = await db.sport_skill_assessments.find({'sport': kb_key}).sort('domain', 1).to_list(200)
+    for doc in assessments:
+        units_by_section['progression'].append(sport_library.progression_unit_summary(doc))
+
+    done_ids = {
+        d['unit_id'] for d in await db.sport_library_progress.find(
+            {'user_id': current_user['id'], 'sport': kb_key}, {'unit_id': 1}
+        ).to_list(2000)
+    }
+    for units in units_by_section.values():
+        for u in units:
+            u['done'] = u['id'] in done_ids
+
+    return {
+        'sport': sport_name,
+        'sections': [
+            {**s, 'units': units_by_section[s['id']],
+             'count': len(units_by_section[s['id']]),
+             'done': sum(1 for u in units_by_section[s['id']] if u['done'])}
+            for s in sections
+        ],
+    }
+
+
+@api_router.get('/sport-library/{sport_name}/unit/{unit_id}')
+async def sport_library_unit(sport_name: str, unit_id: str, current_user: dict = Depends(get_current_user)):
+    kb_key = sport_library.ONBOARDING_TO_KB.get(sport_name)
+    if not kb_key:
+        raise HTTPException(status_code=404, detail='Unknown sport')
+    doc = await db.sport_teaching_progressions.find_one({'id': unit_id, 'sport': kb_key})
+    if doc:
+        unit = sport_library.drill_unit_detail(doc)
+    else:
+        doc = await db.sport_skill_assessments.find_one({'id': unit_id, 'sport': kb_key})
+        if not doc:
+            raise HTTPException(status_code=404, detail='Unit not found')
+        unit = sport_library.progression_unit_detail(doc)
+    done = await db.sport_library_progress.find_one({'user_id': current_user['id'], 'unit_id': unit_id})
+    unit['done'] = bool(done)
+    return unit
+
+
+@api_router.post('/sport-library/progress')
+async def sport_library_mark_done(payload: Dict[str, Any], current_user: dict = Depends(get_current_user)):
+    unit_id = str(payload.get('unit_id') or '').strip()
+    sport_name = str(payload.get('sport') or '').strip()
+    kb_key = sport_library.ONBOARDING_TO_KB.get(sport_name)
+    if not unit_id or not kb_key:
+        raise HTTPException(status_code=400, detail='unit_id and sport are required')
+    if payload.get('done') is False:
+        await db.sport_library_progress.delete_one({'user_id': current_user['id'], 'unit_id': unit_id})
+        return {'done': False}
+    await db.sport_library_progress.update_one(
+        {'user_id': current_user['id'], 'unit_id': unit_id},
+        {'$set': {'user_id': current_user['id'], 'unit_id': unit_id, 'sport': kb_key, 'done_at': datetime.utcnow()}},
+        upsert=True,
+    )
+    return {'done': True}
 
 
 @api_router.get('/lessons')
