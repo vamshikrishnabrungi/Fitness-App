@@ -71,7 +71,6 @@ COLLECTIONS: List[str] = [
     'running_plan_rules',
     'meals',
     'nutrition_targets',
-    'sleep_sessions',
     'health_metrics',
     'injuries',
     'injury_logs',
@@ -405,10 +404,6 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
     ],
     'nutrition_targets': [
         {'keys': [('user_id', ASCENDING), ('effective_from', DESCENDING)]},
-    ],
-    'sleep_sessions': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},
     ],
     'health_metrics': [
         {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},

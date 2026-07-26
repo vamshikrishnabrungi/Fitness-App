@@ -145,7 +145,6 @@ export default function HomeScreen() {
   const defaultGoals = [
     { id: 'default-weight', type: 'weight', current: 78, target: 75, unit: 'kg' },
     { id: 'default-workout', type: 'workout', current: 3, target: 5, unit: 'days/week' },
-    { id: 'default-sleep', type: 'sleep', current: 7, target: 8, unit: 'hours' },
     { id: 'default-water', type: 'water', current: 2, target: 3, unit: 'liters' },
   ];
   const goalsToDisplay = goals.length > 0 ? goals.slice(0, 4) : defaultGoals;
@@ -153,7 +152,6 @@ export default function HomeScreen() {
   const goalConfig: Record<string, { icon: string; bg: string; color: string; label: string }> = {
     weight: { icon: 'bar-chart-outline', bg: colors.goalWeight, color: colors.accentOrange, label: 'Weight' },
     workout: { icon: 'flame-outline', bg: colors.goalWorkout, color: colors.statusWarning, label: 'Workout' },
-    sleep: { icon: 'moon-outline', bg: colors.goalSleep, color: colors.accentBlue, label: 'Sleep' },
     water: { icon: 'water-outline', bg: colors.goalWater, color: colors.accentTeal, label: 'Water' },
   };
 
@@ -303,13 +301,8 @@ export default function HomeScreen() {
             {goalsToDisplay.map((goal, index) => {
               const config = goalConfig[goal.type] || goalConfig.weight;
               return (
-                <TouchableOpacity
+                <View
                   key={goal.id || index}
-                  onPress={() => {
-                    if (goal.type === 'sleep') {
-                      router.push('/sleep');
-                    }
-                  }}
                   style={[
                     styles.goalRow,
                     index < goalsToDisplay.length - 1 && styles.goalSeparator,
@@ -329,12 +322,12 @@ export default function HomeScreen() {
                     <Text style={styles.goalValue}>
                       {goal.current !== undefined
                         ? `${goal.current} / ${goal.target} ${goal.unit}`
-                        : goal.type === 'sleep' ? 'Set Up Sleep Goal' : `Goal: ${goal.target} ${goal.unit}`
+                        : `Goal: ${goal.target} ${goal.unit}`
                       }
                     </Text>
                   </View>
                   <Ionicons name="add-circle-outline" size={24} color={colors.textTertiary} />
-                </TouchableOpacity>
+                </View>
               );
             })}
           </GlassCard>

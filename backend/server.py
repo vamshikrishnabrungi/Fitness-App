@@ -25,12 +25,6 @@ from backend.helpers import (
     _optional_float,
     _to_non_negative_int,
     _to_non_negative_float,
-    _sleep_quality_label,
-    _sleep_status_from_score,
-    _sleep_efficiency_value,
-    _sleep_session_duration_hours,
-    _sleep_session_metrics,
-    _sleep_session_response,
     _terra_level_from_xp,
     _terra_referral_code,
     _terra_haversine_km,
@@ -72,15 +66,12 @@ from backend.models import (
     DailyCoachAnalysis,
     Meal,
     MealCreate,
-    SleepNoteCreate,
-    SleepSessionCreate,
     MoodCreate,
     MoodEntry,
     InjuryLog,
     InjuryLogCreate,
     BenchmarkCreate,
     StrainSummary,
-    RecoverySummary,
     BiologySummary,
     ProgramSummary,
     Lesson,
@@ -1366,17 +1357,6 @@ def _first_present(doc: Dict[str, Any], *keys: str) -> Any:
     return None
 
 
-def _sleep_session_date_filter(date_str: str, start: datetime, end: datetime) -> Dict[str, Any]:
-    return {
-        '$or': [
-            {'date': date_str},
-            {'start_time': {'$regex': f'^{date_str}'}},
-            {'end_time': {'$regex': f'^{date_str}'}},
-            {'created_at': {'$gte': start, '$lt': end}},
-        ]
-    }
-
-
 def _snapshot_data_quality(snapshot: Dict[str, Any]) -> Dict[str, Any]:
     sections = {
         'profile': bool(snapshot.get('profile')),
@@ -1762,83 +1742,6 @@ async def verify_latest_otp(email: str, code: str) -> bool:
     if otp.get('expires_at') and otp['expires_at'] < datetime.utcnow():
         return False
     return otp.get('code') == code
-
-
-async def _sleep_user_summary(user_id: str) -> Dict[str, Any]:
-    sessions = await db.sleep_sessions.find({'user_id': user_id}).sort('created_at', -1).to_list(200)
-    quick_logs = await db.quick_logs.find({'user_id': user_id}).sort('date', -1).to_list(14)
-
-    if sessions:
-        session_metrics = [_sleep_session_metrics(session) for session in sessions]
-        avg_score = round(sum(item['sleep_score'] for item in session_metrics) / len(session_metrics), 1)
-        avg_duration = round(sum(item['duration_hours'] for item in session_metrics) / len(session_metrics), 1)
-        avg_deep_sleep = round(sum(item['deep_sleep_hours'] for item in session_metrics) / len(session_metrics), 1)
-        avg_rem_sleep = round(sum(item['rem_sleep_hours'] for item in session_metrics) / len(session_metrics), 1)
-        sleep_debt_hours = round(sum(item['sleep_debt_hours'] for item in session_metrics), 1)
-        latest_session = _sleep_session_response(sessions[0])
-
-        recent_scores = [item['sleep_score'] for item in session_metrics[:3]]
-        previous_scores = [item['sleep_score'] for item in session_metrics[3:6]]
-        if len(recent_scores) >= 2 and len(previous_scores) >= 2:
-            recent_avg = sum(recent_scores) / len(recent_scores)
-            previous_avg = sum(previous_scores) / len(previous_scores)
-            if recent_avg - previous_avg > 3:
-                trend = 'up'
-            elif previous_avg - recent_avg > 3:
-                trend = 'down'
-            else:
-                trend = 'stable'
-        else:
-            trend = 'stable'
-
-        return {
-            'avg_score': avg_score,
-            'avg_duration': avg_duration,
-            'avg_deep_sleep': avg_deep_sleep,
-            'avg_rem_sleep': avg_rem_sleep,
-            'total_sessions': len(session_metrics),
-            'sleep_debt': {'total_debt_hours': sleep_debt_hours},
-            'latest_session': latest_session,
-            'latest_score': session_metrics[0]['sleep_score'],
-            'latest_duration': session_metrics[0]['duration_hours'],
-            'latest_quality_label': session_metrics[0]['sleep_quality_label'],
-            'trend': trend,
-            'last_updated': latest_session.get('created_at') or latest_session.get('updated_at') or latest_session.get('date'),
-        }
-
-    if quick_logs:
-        avg_score = round(sum(float(log.get('sleep_quality', 0)) * 20.0 for log in quick_logs) / len(quick_logs), 1)
-        latest_log = clean_doc(dict(quick_logs[0]))
-        latest_score = float(latest_log.get('sleep_quality', 0)) * 20.0
-        return {
-            'avg_score': avg_score,
-            'avg_duration': 0.0,
-            'avg_deep_sleep': 0.0,
-            'avg_rem_sleep': 0.0,
-            'total_sessions': 0,
-            'sleep_debt': {'total_debt_hours': 0.0},
-            'latest_session': None,
-            'latest_score': latest_score,
-            'latest_duration': 0.0,
-            'latest_quality_label': _sleep_quality_label(latest_score),
-            'trend': 'stable',
-            'last_updated': latest_log.get('created_at') or latest_log.get('date'),
-        }
-
-    return {
-        'avg_score': 0.0,
-        'avg_duration': 0.0,
-        'avg_deep_sleep': 0.0,
-        'avg_rem_sleep': 0.0,
-        'total_sessions': 0,
-        'sleep_debt': {'total_debt_hours': 0.0},
-        'latest_session': None,
-        'latest_score': None,
-        'latest_duration': None,
-        'latest_quality_label': 'unknown',
-        'trend': 'stable',
-        'last_updated': None,
-    }
 
 
 def _manual_meal_result(payload: "MealCreate") -> Dict[str, Any]:
@@ -2976,99 +2879,6 @@ async def daily_summary_compat(date: Optional[str] = None, current_user: dict = 
 
 
 # -------------------- COMPATIBILITY SHIMS --------------------
-@api_router.post('/sleep/notes')
-async def save_sleep_note(payload: SleepNoteCreate, current_user: dict = Depends(get_current_user)):
-    now = datetime.utcnow()
-    note = {
-        'id': str(uuid.uuid4()),
-        'user_id': current_user['id'],
-        'date': now.strftime('%Y-%m-%d'),
-        'mood': payload.mood or 'relaxed',
-        'activities': _normalize_tags(payload.activities),
-        'note': payload.note,
-        'created_at': now,
-        'updated_at': now,
-    }
-    existing = await db.sleep_notes.find_one({'user_id': current_user['id'], 'date': note['date']})
-    if existing:
-        note['id'] = existing['id']
-        note['created_at'] = existing.get('created_at', now)
-        await db.sleep_notes.update_one(
-            {'id': existing['id'], 'user_id': current_user['id']},
-            {'$set': note},
-            upsert=True,
-        )
-    else:
-        await db.sleep_notes.insert_one(note)
-    return clean_doc(note)
-
-
-@api_router.post('/sleep/sessions')
-async def create_sleep_session(payload: SleepSessionCreate, current_user: dict = Depends(get_current_user)):
-    now = datetime.utcnow()
-    session = {
-        'id': str(uuid.uuid4()),
-        'user_id': current_user['id'],
-        'start_time': payload.start_time,
-        'end_time': payload.end_time,
-        'alarm_time': payload.alarm_time,
-        'pre_sleep_mood': payload.pre_sleep_mood,
-        'pre_sleep_activities': _normalize_tags(payload.pre_sleep_activities),
-        'note': payload.note,
-        'duration_hours': payload.duration_hours,
-        'deep_sleep_hours': payload.deep_sleep_hours,
-        'rem_sleep_hours': payload.rem_sleep_hours,
-        'efficiency': payload.efficiency,
-        'sleep_quality': payload.sleep_quality,
-        'source': payload.source or 'sleep_tracker',
-        'created_at': now,
-        'updated_at': now,
-    }
-    session.update(_sleep_session_metrics(session))
-
-    lookup: Dict[str, Any] = {'user_id': current_user['id']}
-    if payload.start_time:
-        lookup['start_time'] = payload.start_time
-    if payload.end_time:
-        lookup['end_time'] = payload.end_time
-    if payload.alarm_time:
-        lookup['alarm_time'] = payload.alarm_time
-
-    existing = await db.sleep_sessions.find_one(lookup)
-    if existing:
-        session['id'] = existing['id']
-        session['created_at'] = existing.get('created_at', now)
-        await db.sleep_sessions.update_one(
-            {'id': existing['id'], 'user_id': current_user['id']},
-            {'$set': session},
-            upsert=True,
-        )
-    else:
-        await db.sleep_sessions.insert_one(session)
-    return clean_doc(session)
-
-
-@api_router.get('/sleep/sessions')
-async def list_sleep_sessions(current_user: dict = Depends(get_current_user)):
-    docs = await db.sleep_sessions.find({'user_id': current_user['id']}).sort('created_at', -1).to_list(100)
-    return [_sleep_session_response(d) for d in docs]
-
-
-@api_router.get('/sleep/stats')
-async def sleep_stats(current_user: dict = Depends(get_current_user)):
-    summary = await _sleep_user_summary(current_user['id'])
-    return {
-        'avg_score': summary['avg_score'],
-        'avg_duration': summary['avg_duration'],
-        'avg_deep_sleep': summary['avg_deep_sleep'],
-        'avg_rem_sleep': summary['avg_rem_sleep'],
-        'total_sessions': summary['total_sessions'],
-        'sleep_debt': summary['sleep_debt'],
-        'trend': summary['trend'],
-        'latest_session': summary['latest_session'],
-    }
-
-
 # -------------------- HEALTH + LOGS --------------------
 @api_router.post('/health/metrics')
 async def log_health_metric(payload: Dict[str, Any], current_user: dict = Depends(get_current_user)):
@@ -3080,16 +2890,9 @@ async def log_health_metric(payload: Dict[str, Any], current_user: dict = Depend
 
 @api_router.get('/health/summary')
 async def health_summary(current_user: dict = Depends(get_current_user)):
-    sleep_summary = await _sleep_user_summary(current_user['id'])
-    # very simple summary
     return {
         'resting_hr': {'value': None, 'trend': 'stable', 'last_updated': None},
         'hrv': {'value': None, 'trend': 'stable', 'last_updated': None},
-        'sleep': {
-            'value': sleep_summary['avg_duration'] or None,
-            'trend': sleep_summary['trend'],
-            'last_updated': sleep_summary['last_updated'],
-        },
         'weight': {'value': None, 'trend': 'stable', 'last_updated': None},
     }
 
@@ -3125,44 +2928,6 @@ async def strain_summary(current_user: dict = Depends(get_current_user)):
         status=status,
         weeklyAvg=weekly_avg,
         history=history
-    ).model_dump()
-
-
-@api_router.get('/health/recovery')
-async def recovery_summary(current_user: dict = Depends(get_current_user)):
-    today = datetime.utcnow().strftime('%Y-%m-%d')
-    log = await db.quick_logs.find_one({'user_id': current_user['id'], 'date': today})
-    sleep_quality = log.get('sleep_quality') if log else None
-    sleep_summary = await _sleep_user_summary(current_user['id'])
-
-    score_from_quick_log = int(sleep_quality * 20) if sleep_quality is not None else None
-    score_from_sleep = int(sleep_summary['avg_score']) if sleep_summary['total_sessions'] else None
-    if score_from_quick_log is not None and score_from_sleep is not None:
-        score = round((score_from_quick_log + score_from_sleep) / 2)
-    else:
-        score = score_from_sleep if score_from_sleep is not None else score_from_quick_log
-
-    if score is None:
-        status = 'moderate'
-    elif score < 40:
-        status = 'low'
-    elif score < 70:
-        status = 'moderate'
-    else:
-        status = 'high'
-
-    return RecoverySummary(
-        score=score,
-        status=status,
-        sleep={
-            'value': (
-                sleep_summary['latest_duration'] if sleep_summary['total_sessions']
-                else None
-            ),
-            'quality': sleep_summary['latest_quality_label'],
-        },
-        hrv={'value': None, 'unit': 'ms', 'trend': 'stable'},
-        rhr={'value': None, 'unit': 'bpm', 'trend': 'stable'},
     ).model_dump()
 
 

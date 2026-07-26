@@ -18,17 +18,9 @@ import { colors, typography, spacing, borderRadius } from '../../src/utils/theme
 
 const { width } = Dimensions.get('window');
 
-type AnalyticsType = 'sleep' | 'workout' | 'food';
+type AnalyticsType = 'workout' | 'food';
 
 interface AnalyticsData {
-    sleep: {
-        avgScore: number;
-        avgDuration: number;
-        avgDeep: number;
-        avgRem: number;
-        totalSessions: number;
-        sleepDebt: number;
-    } | null;
     workout: {
         totalWorkouts: number;
         totalDuration: number;
@@ -47,7 +39,6 @@ interface AnalyticsData {
 }
 
 const ANALYTICS_OPTIONS: { id: AnalyticsType; label: string; icon: string; color: string }[] = [
-    { id: 'sleep', label: 'Sleep', icon: 'moon-outline', color: '#6366F1' },
     { id: 'workout', label: 'Workout', icon: 'fitness-outline', color: '#F59E0B' },
     { id: 'food', label: 'Food', icon: 'restaurant-outline', color: '#10B981' },
 ];
@@ -57,11 +48,10 @@ export default function AnalyticsScreen() {
     const router = useRouter();
 
     // State
-    const [selectedType, setSelectedType] = useState<AnalyticsType>('sleep');
+    const [selectedType, setSelectedType] = useState<AnalyticsType>('workout');
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [loading, setLoading] = useState(true);
     const [analytics, setAnalytics] = useState<AnalyticsData>({
-        sleep: null,
         workout: null,
         food: null,
     });
@@ -71,21 +61,10 @@ export default function AnalyticsScreen() {
         setLoading(true);
         try {
             // Fetch all analytics in parallel
-            const [sleepRes, workoutsRes, nutritionRes] = await Promise.all([
-                api.get('/sleep/stats').catch(() => null),
+            const [workoutsRes, nutritionRes] = await Promise.all([
                 api.get('/workouts').catch(() => []),
                 api.get('/daily-summary').catch(() => null),
             ]);
-
-            // Process sleep data
-            const sleepData = sleepRes ? {
-                avgScore: (sleepRes as any).avg_score || 0,
-                avgDuration: (sleepRes as any).avg_duration || 0,
-                avgDeep: (sleepRes as any).avg_deep_sleep || 0,
-                avgRem: (sleepRes as any).avg_rem_sleep || 0,
-                totalSessions: (sleepRes as any).total_sessions || 0,
-                sleepDebt: (sleepRes as any).sleep_debt?.total_debt_hours || 0,
-            } : null;
 
             // Process workout data
             const workouts = workoutsRes as any[] || [];
@@ -111,7 +90,6 @@ export default function AnalyticsScreen() {
             } : null;
 
             setAnalytics({
-                sleep: sleepData,
                 workout: workoutData,
                 food: foodData,
             });
@@ -154,56 +132,6 @@ export default function AnalyticsScreen() {
                     <View style={[styles.progressFill, { width: `${percent}%`, backgroundColor: color }]} />
                 </View>
             </View>
-        );
-    };
-
-    // Render sleep analytics
-    const renderSleepAnalytics = () => {
-        const data = analytics.sleep;
-        if (!data) {
-            return (
-                <View style={styles.emptyState}>
-                    <Text style={styles.emptyIcon}>😴</Text>
-                    <Text style={styles.emptyText}>No sleep data yet</Text>
-                    <Text style={styles.emptySubtext}>Start tracking your sleep to see analytics</Text>
-                </View>
-            );
-        }
-
-        return (
-            <>
-                {/* Score Card */}
-                <GlassCard style={styles.mainCard}>
-                    <View style={styles.scoreContainer}>
-                        <View style={styles.scoreCircle}>
-                            <Text style={styles.scoreValue}>{data.avgScore}</Text>
-                            <Text style={styles.scoreLabel}>Avg Score</Text>
-                        </View>
-                    </View>
-                    <View style={styles.scoreStats}>
-                        <View style={styles.scoreStat}>
-                            <Text style={styles.scoreStatValue}>{data.avgDuration.toFixed(1)}h</Text>
-                            <Text style={styles.scoreStatLabel}>Avg Duration</Text>
-                        </View>
-                        <View style={styles.scoreStat}>
-                            <Text style={styles.scoreStatValue}>{data.totalSessions}</Text>
-                            <Text style={styles.scoreStatLabel}>Sessions</Text>
-                        </View>
-                        <View style={styles.scoreStat}>
-                            <Text style={styles.scoreStatValue}>{data.sleepDebt.toFixed(1)}h</Text>
-                            <Text style={styles.scoreStatLabel}>Sleep Debt</Text>
-                        </View>
-                    </View>
-                </GlassCard>
-
-                {/* Sleep Stages */}
-                <GlassCard style={styles.sectionCard}>
-                    <Text style={styles.sectionTitle}>Sleep Stages</Text>
-                    {renderProgressBar('Deep Sleep', data.avgDeep, 25, '#6366F1')}
-                    {renderProgressBar('REM Sleep', data.avgRem, 25, '#8B5CF6')}
-                    {renderProgressBar('Light Sleep', 100 - data.avgDeep - data.avgRem, 60, '#A78BFA')}
-                </GlassCard>
-            </>
         );
     };
 
@@ -318,7 +246,6 @@ export default function AnalyticsScreen() {
                     <ActivityIndicator size="large" color={colors.accentOrange} style={{ marginTop: 60 }} />
                 ) : (
                     <>
-                        {selectedType === 'sleep' && renderSleepAnalytics()}
                         {selectedType === 'workout' && renderWorkoutAnalytics()}
                         {selectedType === 'food' && renderFoodAnalytics()}
                     </>
@@ -448,42 +375,6 @@ const styles = StyleSheet.create({
         marginBottom: spacing.md,
         alignItems: 'center',
         paddingVertical: spacing.xl,
-    },
-    scoreContainer: {
-        marginBottom: spacing.lg,
-    },
-    scoreCircle: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        backgroundColor: '#6366F1',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    scoreValue: {
-        fontSize: 40,
-        fontWeight: '700',
-        color: '#FFFFFF',
-    },
-    scoreLabel: {
-        fontSize: 12,
-        color: 'rgba(255,255,255,0.8)',
-    },
-    scoreStats: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '100%',
-    },
-    scoreStat: {
-        alignItems: 'center',
-    },
-    scoreStatValue: {
-        ...typography.h4,
-        color: colors.textPrimary,
-    },
-    scoreStatLabel: {
-        ...typography.caption,
-        color: colors.textSecondary,
     },
     // Calories
     caloriesContainer: {

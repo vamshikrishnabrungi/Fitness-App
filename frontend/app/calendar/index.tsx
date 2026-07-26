@@ -24,7 +24,6 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
 interface DayLog {
     meals: any[];
     workouts: any[];
-    sleepSessions: any[];
     moods: any[];
     water: number;
 }
@@ -49,10 +48,9 @@ export default function CalendarScreen() {
             const dateStr = date.toISOString().split('T')[0];
 
             // Fetch all data in parallel
-            const [mealsRes, workoutsRes, sleepRes, moodsRes] = await Promise.all([
+            const [mealsRes, workoutsRes, moodsRes] = await Promise.all([
                 api.get(`/daily-summary?date=${dateStr}`).catch(() => ({ meals: [] })),
                 api.get('/workouts').catch(() => []),
-                api.get('/sleep/sessions').catch(() => []),
                 api.get('/mood').catch(() => []),
             ]);
 
@@ -68,7 +66,6 @@ export default function CalendarScreen() {
             setDayLogs({
                 meals: (mealsRes as any)?.meals || [],
                 workouts: filterByDate(workoutsRes as any[] || []),
-                sleepSessions: filterByDate(sleepRes as any[] || []),
                 moods: filterByDate(moodsRes as any[] || [], 'timestamp'),
                 water: (mealsRes as any)?.water_intake || 0,
             });
@@ -274,28 +271,6 @@ export default function CalendarScreen() {
                                 </View>
                             ))}
 
-                            {/* Sleep */}
-                            {renderLogSection('Sleep', 'moon-outline', dayLogs.sleepSessions, (sleep) => (
-                                <View style={styles.sleepItem}>
-                                    <View style={styles.sleepInfo}>
-                                        <Text style={styles.sleepScore}>
-                                            {sleep.pre_sleep_mood || 'Tracked sleep'}
-                                        </Text>
-                                        <Text style={styles.sleepMeta}>
-                                            {sleep.alarm_time || 'No alarm'} • {sleep.pre_sleep_activities?.length || 0} activities
-                                        </Text>
-                                    </View>
-                                    <Text style={styles.sleepDuration}>
-                                        {(sleep.duration_hours != null
-                                            ? sleep.duration_hours
-                                            : sleep.start_time && sleep.end_time
-                                                ? (new Date(sleep.end_time).getTime() - new Date(sleep.start_time).getTime()) / (1000 * 60 * 60)
-                                                : 0
-                                        ).toFixed(1)}h
-                                    </Text>
-                                </View>
-                            ))}
-
                             {/* Moods */}
                             {renderLogSection('Moods', 'happy-outline', dayLogs.moods, (mood) => (
                                 <View style={styles.moodItem}>
@@ -318,7 +293,6 @@ export default function CalendarScreen() {
                             {/* Empty state */}
                             {dayLogs.meals.length === 0 &&
                                 dayLogs.workouts.length === 0 &&
-                                dayLogs.sleepSessions.length === 0 &&
                                 dayLogs.moods.length === 0 &&
                                 dayLogs.water === 0 && (
                                     <View style={styles.emptyState}>
@@ -494,30 +468,6 @@ const styles = StyleSheet.create({
     workoutDuration: {
         ...typography.body,
         color: colors.textSecondary,
-    },
-    // Sleep styles
-    sleepItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    sleepInfo: {
-        flex: 1,
-        paddingRight: spacing.sm,
-    },
-    sleepScore: {
-        ...typography.body,
-        color: colors.textPrimary,
-    },
-    sleepMeta: {
-        ...typography.caption,
-        color: colors.textSecondary,
-        marginTop: 2,
-    },
-    sleepDuration: {
-        ...typography.body,
-        fontWeight: '600',
-        color: colors.accentBlue,
     },
     // Mood styles
     moodItem: {
