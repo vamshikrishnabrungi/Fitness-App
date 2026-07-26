@@ -7,11 +7,11 @@ import { colors, spacing } from '../../src/utils/theme';
 import { useOnboardingStore } from '../../src/store/onboardingStore';
 
 const SPORTS = [
-  'Badminton', 'Basketball', 'Boxing', 'Climbing',
-  'Cricket', 'Cycling', 'Football', 'Golf',
-  'Hockey', 'Horse Riding', 'Hyrox', 'MMA',
-  'Pilates', 'Rugby', 'Running', 'Swimming',
-  'Table Tennis', 'Tennis', 'Volleyball', 'Yoga',
+  'Badminton', 'Basketball', 'Boxing', 'Cricket',
+  'Cycling', 'Football', 'Golf', 'Hockey',
+  'Horse Riding', 'Hyrox', 'MMA', 'Rugby',
+  'Running', 'Swimming', 'Table Tennis', 'Tennis',
+  'Volleyball',
 ];
 
 const noWebFocus = { outlineStyle: 'none' } as any;
