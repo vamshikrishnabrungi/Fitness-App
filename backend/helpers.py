@@ -121,6 +121,8 @@ def _terra_run_duration_seconds(run: Dict[str, Any]) -> int:
         return _to_non_negative_int(run.get('duration'), 0)
     if run.get('duration_sec') is not None:
         return _to_non_negative_int(run.get('duration_sec'), 0)
+    if run.get('elapsed_time_sec') is not None:
+        return _to_non_negative_int(run.get('elapsed_time_sec'), 0)
     return 0
 
 
@@ -137,6 +139,10 @@ def _terra_run_territory_km2(run: Dict[str, Any]) -> float:
     that. Derived from distance so old runs (which stored a box value) and new
     runs behave identically with no migration.
     """
+    # Canonical activities distinguish recorded distance from verified,
+    # map-matched street ownership. Never fall back to distance for these docs.
+    if run.get('territory_status') is not None:
+        return _to_non_negative_float(run.get('territory_captured'), 0.0)
     distance = _terra_run_distance_km(run)
     return round(distance, 4) if distance >= TERRITORY_MIN_KM else 0.0
 

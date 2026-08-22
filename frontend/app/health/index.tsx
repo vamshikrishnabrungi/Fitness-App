@@ -15,24 +15,25 @@ import { api } from '../../src/utils/api';
 import { colors, spacing } from '../../src/utils/theme';
 
 interface HealthSummary {
-    resting_hr?: { value: number | null; trend?: string; last_updated?: string };
-    hrv?: { value: number | null; trend?: string; last_updated?: string };
-    sleep?: { value: number | null; trend?: string; last_updated?: string };
-    weight?: { value: number | null; trend?: string; last_updated?: string };
+    readiness?: number | null;
+    sleep_minutes?: number | null;
+    stress?: number | null;
+    open_pain_reports: number;
+    connected_metrics?: Record<string, {value:number;unit:string;measured_at:string;provider:string}>;
 }
 
 interface InjuryLog {
     id: string;
-    body_area: string;
-    severity: 'low' | 'medium' | 'high';
-    pain_scale: number;
-    restrictions: string[];
-    notes?: string;
-    logged_at: string;
+    region_code: string;
+    severity: number;
+    action: string;
+    status: string;
+    reported_at: string;
 }
 
 
 interface DataSource {
+    provider: string;
     name: string;
     connected: boolean;
     icon: string;
@@ -40,8 +41,8 @@ interface DataSource {
 }
 
 const DATA_SOURCES: DataSource[] = [
-    { name: 'Apple Health', connected: true, icon: 'heart-circle', color: '#FF2D55' },
-    { name: 'Garmin', connected: false, icon: 'watch', color: '#007CC3' },
+    { provider: 'apple_health', name: 'Apple Health', connected: false, icon: 'heart-circle', color: '#FF2D55' },
+    { provider: 'health_connect', name: 'Health Connect', connected: false, icon: 'fitness', color: '#4285F4' },
 ];
 
 export default function HealthHubScreen() {
@@ -51,6 +52,7 @@ export default function HealthHubScreen() {
     const [loading, setLoading] = useState(true);
     const [healthSummary, setHealthSummary] = useState<HealthSummary | null>(null);
     const [injuries, setInjuries] = useState<InjuryLog[]>([]);
+    const [connections, setConnections] = useState<string[]>([]);
 
     useEffect(() => {
         fetchData();
@@ -65,12 +67,14 @@ export default function HealthHubScreen() {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [summaryRes, injuriesRes] = await Promise.all([
+            const [summaryRes, injuriesRes, connectionRes] = await Promise.all([
                 api.get<HealthSummary>('/health/summary').catch(() => null),
-                api.get<InjuryLog[]>('/health/injuries?active=true').catch(() => []),
+                api.get<InjuryLog[]>('/health/pain-reports').catch(() => []),
+                api.get<{items:{provider:string;status:string}[]}>('/imports/connections').catch(() => ({items:[]})),
             ]);
             setHealthSummary(summaryRes);
             setInjuries(injuriesRes || []);
+            setConnections(connectionRes.items.filter(item => item.status === 'active').map(item => item.provider));
         } catch (error) {
             console.error('Error fetching health data:', error);
         } finally {
@@ -84,29 +88,16 @@ export default function HealthHubScreen() {
 
     const handleResolveInjury = async (id: string) => {
         try {
-            await api.put(`/health/injuries/${id}/resolve`);
+            await api.put(`/health/pain-reports/${id}/resolve`);
             fetchData();
         } catch {
             Alert.alert('Error', 'Failed to resolve injury');
         }
     };
 
-    const getTimeAgo = (timestamp?: string) => {
-        if (!timestamp) return 'No data';
-        const now = new Date();
-        const past = new Date(timestamp);
-        const diffMs = now.getTime() - past.getTime();
-        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-        if (diffHours < 1) return 'Just now';
-        if (diffHours === 1) return '1h ago';
-        if (diffHours < 24) return `${diffHours}h ago`;
-        const diffDays = Math.floor(diffHours / 24);
-        return `${diffDays}d ago`;
-    };
-
-    const getSeverityColor = (severity: string) => {
-        if (severity === 'high') return '#DC2626';
-        if (severity === 'medium') return '#D97706';
+    const getSeverityColor = (severity: number) => {
+        if (severity >= 8) return '#DC2626';
+        if (severity >= 5) return '#D97706';
         return '#16A34A';
     };
 
@@ -158,27 +149,27 @@ export default function HealthHubScreen() {
                             icon="heart"
                             iconColor="#DC2626"
                             label="Resting HR"
-                            value={healthSummary?.resting_hr?.value}
+                            value={healthSummary?.connected_metrics?.resting_hr_bpm?.value}
                             unit="bpm"
-                            state={getTimeAgo(healthSummary?.resting_hr?.last_updated)}
+                            state={healthSummary?.connected_metrics?.resting_hr_bpm ? 'Connected health' : 'Waiting for sync'}
                             onLearnMore={() => router.push('/education/recovery')}
                         />
                         <VitalCard
                             icon="pulse"
                             iconColor="#8B5CF6"
-                            label="HRV"
-                            value={healthSummary?.hrv?.value}
-                            unit="ms"
-                            state={getTimeAgo(healthSummary?.hrv?.last_updated)}
+                            label="Sleep"
+                            value={healthSummary?.sleep_minutes ? Math.round(healthSummary.sleep_minutes / 6) / 10 : null}
+                            unit="h"
+                            state="Latest check-in"
                             onLearnMore={() => router.push('/education/recovery')}
                         />
                         <VitalCard
                             icon="body"
                             iconColor="#F59E0B"
-                            label="Weight"
-                            value={healthSummary?.weight?.value}
-                            unit="kg"
-                            state={getTimeAgo(healthSummary?.weight?.last_updated)}
+                            label="HRV"
+                            value={healthSummary?.connected_metrics?.hrv_rmssd_ms?.value}
+                            unit="ms"
+                            state={healthSummary?.connected_metrics?.hrv_rmssd_ms ? 'Connected health' : 'Waiting for sync'}
                             onLearnMore={() => router.push('/education/biology')}
                         />
                     </View>
@@ -204,29 +195,20 @@ export default function HealthHubScreen() {
                                 <View style={styles.injuryHeader}>
                                     <View style={styles.injuryTitle}>
                                         <View style={[styles.severityDot, { backgroundColor: getSeverityColor(injury.severity) }]} />
-                                        <Text style={styles.injuryArea}>{injury.body_area}</Text>
+                                        <Text style={styles.injuryArea}>{injury.region_code.replaceAll('_', ' ')}</Text>
                                     </View>
                                     <View style={[styles.severityBadge, { backgroundColor: getSeverityColor(injury.severity) + '15' }]}>
                                         <Text style={[styles.severityText, { color: getSeverityColor(injury.severity) }]}>
-                                            {injury.severity.charAt(0).toUpperCase() + injury.severity.slice(1)}
+                                            {injury.severity}/10
                                         </Text>
                                     </View>
                                 </View>
                                 <View style={styles.injuryDetails}>
-                                    <Text style={styles.painScale}>Pain: {injury.pain_scale}/10</Text>
+                                    <Text style={styles.painScale}>{injury.action.replaceAll('_', ' ')}</Text>
                                     <Text style={styles.injuryDate}>
-                                        {new Date(injury.logged_at).toLocaleDateString()}
+                                        {new Date(injury.reported_at).toLocaleDateString()}
                                     </Text>
                                 </View>
-                                {injury.restrictions.length > 0 && (
-                                    <View style={styles.restrictionsRow}>
-                                        {injury.restrictions.map((restriction, i) => (
-                                            <View key={i} style={styles.restrictionChip}>
-                                                <Text style={styles.restrictionText}>{restriction}</Text>
-                                            </View>
-                                        ))}
-                                    </View>
-                                )}
                                 <TouchableOpacity
                                     style={styles.resolveButton}
                                     onPress={() => handleResolveInjury(injury.id)}
@@ -241,22 +223,23 @@ export default function HealthHubScreen() {
                 {/* E. Data Sources */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Data Sources</Text>
-                    {DATA_SOURCES.map((source, i) => (
-                        <TouchableOpacity key={i} style={styles.sourceCard}>
+                    {DATA_SOURCES.map((source) => {
+                        const connected = connections.includes(source.provider);
+                        return <TouchableOpacity key={source.provider} style={styles.sourceCard} onPress={() => !connected && Alert.alert('Production build required', `${source.name} sync requires native health permissions and explicit connected-health consent.`)}>
                             <Ionicons name={source.icon as any} size={28} color={source.color} />
                             <View style={styles.sourceInfo}>
                                 <Text style={styles.sourceName}>{source.name}</Text>
-                                <Text style={[styles.sourceStatus, { color: source.connected ? '#16A34A' : colors.textSecondary }]}>
-                                    {source.connected ? 'Connected' : 'Not connected'}
+                                <Text style={[styles.sourceStatus, { color: connected ? '#16A34A' : colors.textSecondary }]}>
+                                    {connected ? 'Connected' : 'Not connected'}
                                 </Text>
                             </View>
                             <Ionicons
-                                name={source.connected ? 'checkmark-circle' : 'add-circle-outline'}
+                                name={connected ? 'checkmark-circle' : 'add-circle-outline'}
                                 size={22}
-                                color={source.connected ? '#16A34A' : colors.textSecondary}
+                                color={connected ? '#16A34A' : colors.textSecondary}
                             />
                         </TouchableOpacity>
-                    ))}
+                    })}
                 </View>
 
                 <View style={{ height: 100 }} />

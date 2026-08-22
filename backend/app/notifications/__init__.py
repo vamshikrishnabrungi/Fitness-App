@@ -1,0 +1,2 @@
+"""Transactional notifications only."""
+

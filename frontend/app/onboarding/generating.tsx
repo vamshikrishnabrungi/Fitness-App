@@ -6,24 +6,22 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../../src/utils/theme';
 import { useOnboardingStore } from '../../src/store/onboardingStore';
-import { useAuthStore } from '../../src/store/authStore';
 import { api } from '../../src/utils/api';
 import { coachColors } from '../../src/components/onboarding/CoachOnboarding';
 
 const LOADING_MESSAGES = [
-  'Reading your goals',
-  'Setting your starting load',
-  'Matching exercises to your access',
-  'Balancing sport and strength work',
-  'Checking recovery limits',
-  'Building your first week',
+  'Saving your goals',
+  'Saving your sport profile',
+  'Recording your equipment access',
+  'Checking your schedule',
+  'Applying privacy defaults',
+  'Finishing your athlete profile',
 ];
 
 export default function GeneratingScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { getOnboardingData, reset } = useOnboardingStore();
-  const { updateProfile } = useAuthStore();
   const [messageIndex, setMessageIndex] = useState(0);
   const [progress] = useState(new Animated.Value(0));
   const [error, setError] = useState<string | null>(null);
@@ -32,27 +30,26 @@ export default function GeneratingScreen() {
     const generatePlan = async () => {
       try {
         const onboardingData = getOnboardingData();
-        await updateProfile({ profile: onboardingData as any });
-        // Kicks off generation in the background (unless generation is paused) and returns immediately.
-        const res = await api.post<{ program_generating?: boolean }>('/onboarding/complete', {
-          profile: onboardingData,
-          generate_program: true,
+        const dayIndex: Record<string,number> = {monday:0,tuesday:1,wednesday:2,thursday:3,friday:4,saturday:5,sunday:6};
+        const sports: { sport: string; role?: string }[] = onboardingData.sport_details.length
+          ? onboardingData.sport_details
+          : onboardingData.sports.map(sport => ({ sport }));
+        await api.put('/onboarding', {
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+          country_code: onboardingData.country?.length === 2 ? onboardingData.country.toUpperCase() : null,
+          height_cm: onboardingData.height_cm,
+          weight_kg: onboardingData.weight_kg,
+          competition_level: onboardingData.competition_level || 'recreational',
+          training_age_years: onboardingData.experience === 'advanced' ? 5 : onboardingData.experience === 'intermediate' ? 2 : 0,
+          maximum_session_minutes: onboardingData.session_duration_min,
+          sports: sports.map((item,index)=>({sport_code:item.sport.toLowerCase(),role_code:item.role?.toLowerCase().replace(/\s+/g,'_')||null,event_code:null,discipline_code:null,format_code:null,weight_class_code:null,is_primary:index===0,weekly_external_minutes:0,sessions_per_week:0})),
+          availability: (onboardingData.preferred_training_days.length ? onboardingData.preferred_training_days : ['Monday','Wednesday','Friday'].slice(0,onboardingData.training_days_per_week || 3)).map((day,index)=>({weekday:dayIndex[day.toLowerCase()] ?? index % 7,start_minute:onboardingData.preferred_training_time==='morning'?420:1080,duration_minutes:onboardingData.session_duration_min})),
+          equipment_codes: onboardingData.equipment,
+          environments: [onboardingData.training_location || 'home'],
+          goal: {goal_type:onboardingData.primary_goal || 'general_fitness',target_date:null,target_value:null,target_unit:null},
         });
+        await api.post('/training/plans', { weeks: 4, starts_on: null });
         await AsyncStorage.removeItem('needs_onboarding');
-
-        // Only wait if generation actually started. Poll until the program is ready (cap ~2 min, then land anyway).
-        if (res?.program_generating) {
-          const deadline = Date.now() + 120000;
-          while (Date.now() < deadline) {
-            await new Promise(resolve => setTimeout(resolve, 2500));
-            try {
-              await api.get('/programs/active'); // 200 once ready; throws on 404 while still building
-              break;
-            } catch {
-              // not ready yet — keep waiting
-            }
-          }
-        }
         reset();
         router.replace('/(tabs)');
       } catch (err: any) {
@@ -77,7 +74,7 @@ export default function GeneratingScreen() {
 
     generatePlan();
     return () => clearInterval(messageInterval);
-  }, [getOnboardingData, progress, reset, router, updateProfile]);
+  }, [getOnboardingData, progress, reset, router]);
 
   const progressWidth = progress.interpolate({
     inputRange: [0, 100],
@@ -90,9 +87,9 @@ export default function GeneratingScreen() {
         <View style={styles.mark}>
           <Ionicons name="flash" size={24} color={colors.background} />
         </View>
-        <Text style={styles.eyebrow}>COACH IS BUILDING</Text>
-        <Text style={styles.title}>Creating your first training week.</Text>
-        <Text style={styles.subtitle}>Your profile is being translated into workouts, recovery limits, and daily guidance.</Text>
+        <Text style={styles.eyebrow}>SETTING UP RUNLETE</Text>
+        <Text style={styles.title}>Saving your athlete profile.</Text>
+        <Text style={styles.subtitle}>Your goals, schedule, equipment, and sport context are being checked before training becomes available.</Text>
 
         <View style={styles.progressTrack}>
           <Animated.View style={[styles.progressFill, { width: progressWidth }]} />

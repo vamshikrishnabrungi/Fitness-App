@@ -12,8 +12,6 @@ import {
   Pressable,
   TouchableWithoutFeedback,
   TextInput,
-  KeyboardAvoidingView,
-  Platform,
   Image
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -21,6 +19,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system/legacy';
+import * as Crypto from 'expo-crypto';
 import { GlassCard } from '../../src/components/GlassCard';
 import { Badge } from '../../src/components/Badge';
 import { ProgressBar } from '../../src/components/ProgressBar';
@@ -92,7 +91,6 @@ export default function NutritionScreen() {
 
   // Mood Popup State
   const [moodPopupVisible, setMoodPopupVisible] = useState(false);
-  const [loggedMealId, setLoggedMealId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     fetchDailySummary(selectedDate);
@@ -111,8 +109,31 @@ export default function NutritionScreen() {
     setLoading(true);
     try {
       const dateStr = date.toISOString().split('T')[0];
-      const data = await api.get<DailySummary>(`/meals/daily-summary?date=${dateStr}`);
-      setSummary(data);
+      const data = await api.get<any>(`/nutrition/daily-summary?date=${dateStr}`);
+      setSummary({
+        total_calories: data.calories_kcal,
+        total_protein: data.protein_g,
+        total_carbs: data.carbohydrate_g,
+        total_fat: data.fat_g,
+        total_fiber: data.fibre_g,
+        calorie_goal: 0,
+        protein_goal: 0,
+        carbs_goal: 0,
+        fat_goal: 0,
+        fiber_goal: 0,
+        meals: (data.meals || []).map((meal: any) => ({
+          id: meal.id,
+          meal_type: meal.meal_type.charAt(0).toUpperCase() + meal.meal_type.slice(1),
+          name: meal.name,
+          calories: meal.calories_kcal,
+          protein: meal.protein_g,
+          carbs: meal.carbohydrate_g,
+          fat: meal.fat_g,
+          fiber: meal.fibre_g,
+          date: meal.eaten_at,
+          ai_analyzed: Boolean(meal.analysis_id),
+        })),
+      });
     } catch (error) {
       console.error('Error fetching nutrition:', error);
     } finally {
@@ -134,10 +155,6 @@ export default function NutritionScreen() {
     if (newDate <= new Date()) {
       setSelectedDate(newDate);
     }
-  };
-
-  const goToToday = () => {
-    setSelectedDate(new Date());
   };
 
   // Calendar helper functions
@@ -334,13 +351,23 @@ export default function NutritionScreen() {
     console.log('[nutrition-image] analyze request', { base64Length: base64.length });
     setAnalyzing(true);
     try {
-      // Call with save=false to review first
-      const response = await api.post('/meals/analyze?save=false', {
-        meal_type: activeMealType,
-        image_base64: base64,
-      });
-
-      setAnalyzedData({ ...(response as any), image_base64: base64 });
+      const hash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, base64);
+      const upload = await api.post<{image_id:string;upload_url:string}>('/nutrition/food-images/uploads', {content_type:'image/jpeg',retain:false});
+      const blob = await (await fetch(`data:image/jpeg;base64,${base64}`)).blob();
+      const result = await fetch(upload.upload_url,{method:'PUT',headers:{'Content-Type':'image/jpeg'},body:blob});
+      if(!result.ok) throw new Error('Image upload failed');
+      const queued = await api.post<{id:string}>('/nutrition/food-analyses', {image_id:upload.image_id,source_object_hash:hash});
+      let completed:any=null;
+      for(let attempt=0;attempt<15;attempt+=1){
+        await new Promise(resolve=>setTimeout(resolve,2000));
+        const current=await api.get<any>(`/nutrition/food-analyses/${queued.id}`);
+        if(current.status==='complete'){completed=current;break;}
+        if(current.status==='failed') throw new Error('The image could not be analyzed. Try a clearer photo.');
+      }
+      if(!completed) throw new Error('Analysis is taking longer than expected. Check again shortly.');
+      const candidates=completed.result?.candidates||[];
+      const total=(key:string)=>candidates.reduce((sum:number,item:any)=>sum+Number(item[key]?.likely||0),0);
+      setAnalyzedData({analysis_id:queued.id,name:candidates.map((item:any)=>item.name).join(', ')||'Meal',calories:total('calories'),protein:total('protein'),carbs:total('carbohydrate'),fat:total('fat'),fiber:total('fibre'),foods_identified:candidates,status:'estimated',ai_analyzed:true});
       setReviewModalVisible(true);
     } catch (error: any) {
       Alert.alert('Error', error.message || 'Failed to analyze meal');
@@ -357,17 +384,17 @@ export default function NutritionScreen() {
         return Number.isFinite(parsed) ? parsed : 0;
       };
       // Save the confirmed data
-      const mealResult = await api.post<{ id?: string }>('/meals/analyze', {
-        meal_type: activeMealType,
+      await api.post<{ id?: string }>('/nutrition/meals', {
+        analysis_id: analyzedData.analysis_id ?? null,
+        eaten_at: new Date().toISOString(),
+        meal_type: (activeMealType || 'Snack').toLowerCase(),
         name: analyzedData.name,
-        calories: Math.round(numericValue(analyzedData.calories)),
-        protein: numericValue(analyzedData.protein),
-        carbs: numericValue(analyzedData.carbs),
-        fat: numericValue(analyzedData.fat),
-        fiber: numericValue(analyzedData.fiber),
-        foods_identified: analyzedData.foods_identified || [],
-        status: analyzedData.status,
-        ai_analyzed: Boolean(analyzedData.ai_analyzed),
+        calories_kcal: Math.round(numericValue(analyzedData.calories)),
+        protein_g: numericValue(analyzedData.protein),
+        carbohydrate_g: numericValue(analyzedData.carbs),
+        fat_g: numericValue(analyzedData.fat),
+        fibre_g: numericValue(analyzedData.fiber),
+        items: analyzedData.foods_identified || [],
       });
 
       setReviewModalVisible(false);
@@ -375,7 +402,6 @@ export default function NutritionScreen() {
       await fetchDailySummary(selectedDate);
 
       // Show mood popup after meal logging
-      setLoggedMealId(mealResult?.id);
       setMoodPopupVisible(true);
     } catch (err: any) {
       Alert.alert('Error', err?.message || 'Failed to save meal');
@@ -386,26 +412,20 @@ export default function NutritionScreen() {
 
   const handleMoodSelect = async (moodValue: number) => {
     try {
-      const moodEmojis: Record<number, string> = { 1: '😢', 2: '😔', 3: '😐', 4: '😊', 5: '😄' };
-      await api.post('/mood', {
-        mood_value: moodValue,
-        mood_emoji: moodEmojis[moodValue],
-        activities: ['Cooking'],
-        trigger: 'meal',
-        trigger_id: loggedMealId,
+      await api.put('/health/check-ins/daily', {
+        local_date: new Date().toISOString().slice(0, 10),
+        mood: moodValue,
       });
       Alert.alert('Thanks!', 'Your mood has been logged 🎉');
-    } catch (error) {
+    } catch {
       console.log('Mood logging failed');
     } finally {
       setMoodPopupVisible(false);
-      setLoggedMealId(undefined);
     }
   };
 
   const closeMoodPopup = () => {
     setMoodPopupVisible(false);
-    setLoggedMealId(undefined);
   };
 
   const handleManualEntry = () => {
@@ -508,14 +528,16 @@ export default function NutritionScreen() {
             </View>
             <View style={styles.calorieInfo}>
               <Text style={styles.calorieGoal}>
-                Goal: {summary?.calorie_goal || 2000} kcal
+                {summary?.calorie_goal ? `Goal: ${summary.calorie_goal} kcal` : 'No calorie target set'}
               </Text>
               <ProgressBar
-                progress={(summary?.total_calories || 0) / (summary?.calorie_goal || 2000) * 100}
+                progress={summary?.calorie_goal ? (summary.total_calories / summary.calorie_goal) * 100 : 0}
                 style={styles.calorieProgress}
               />
               <Text style={styles.calorieRemaining}>
-                {Math.max(0, (summary?.calorie_goal || 2000) - (summary?.total_calories || 0))} kcal remaining
+                {summary?.calorie_goal
+                  ? `${Math.max(0, summary.calorie_goal - summary.total_calories)} kcal remaining`
+                  : 'Add a nutrition target when goal settings are available'}
               </Text>
             </View>
           </View>
@@ -526,7 +548,7 @@ export default function NutritionScreen() {
               <Text style={styles.macroValue}>{summary?.total_protein || 0}g</Text>
               <Text style={styles.macroLabel}>Protein</Text>
               <ProgressBar
-                progress={(summary?.total_protein || 0) / (summary?.protein_goal || 150) * 100}
+                progress={summary?.protein_goal ? (summary.total_protein / summary.protein_goal) * 100 : 0}
                 height={4}
                 style={styles.macroProgress}
               />
@@ -535,7 +557,7 @@ export default function NutritionScreen() {
               <Text style={styles.macroValue}>{summary?.total_carbs || 0}g</Text>
               <Text style={styles.macroLabel}>Carbs</Text>
               <ProgressBar
-                progress={(summary?.total_carbs || 0) / (summary?.carbs_goal || 250) * 100}
+                progress={summary?.carbs_goal ? (summary.total_carbs / summary.carbs_goal) * 100 : 0}
                 height={4}
                 style={styles.macroProgress}
               />
@@ -544,7 +566,7 @@ export default function NutritionScreen() {
               <Text style={styles.macroValue}>{summary?.total_fat || 0}g</Text>
               <Text style={styles.macroLabel}>Fat</Text>
               <ProgressBar
-                progress={(summary?.total_fat || 0) / (summary?.fat_goal || 65) * 100}
+                progress={summary?.fat_goal ? (summary.total_fat / summary.fat_goal) * 100 : 0}
                 height={4}
                 style={styles.macroProgress}
               />

@@ -35,6 +35,7 @@ export default function LoginScreen() {
   // Form fields
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
+  const [challengeId, setChallengeId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState('India');
@@ -64,7 +65,8 @@ export default function LoginScreen() {
       setError('');
       setLoading(true);
       try {
-        await api.post('/auth/request-otp', { email });
+        const result = await api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'login' });
+        setChallengeId(result.challenge_id);
         setStep('code');
         setResendTimer(30);
       } catch (err: any) {
@@ -85,7 +87,7 @@ export default function LoginScreen() {
       setError('');
       setLoading(true);
       try {
-        await loginWithOtp(email, code);
+        await loginWithOtp(challengeId, email, code);
         router.replace('/(tabs)');
       } catch (err: any) {
         setError(err.message || 'Invalid code');
@@ -113,7 +115,7 @@ export default function LoginScreen() {
   const handleResendCode = () => {
     if (resendTimer === 0) {
       setResendTimer(30);
-      api.post('/auth/request-otp', { email }).catch(() => {});
+      api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'login' }).then(result => setChallengeId(result.challenge_id)).catch(() => {});
     }
   };
 

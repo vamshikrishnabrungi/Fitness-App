@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
@@ -78,6 +79,28 @@ COLLECTIONS: List[str] = [
     'moods',
     'daily_snapshots',
     'coach_daily_analyses',
+    'activities',
+    'activity_outbox',
+    'activity_import_jobs',
+    'activity_upload_sessions',
+    'activity_upload_chunks',
+    'activity_insights',
+    'integration_connections',
+    'privacy_settings',
+    'account_deletion_requests',
+    'routes',
+    'segments',
+    'segment_efforts',
+    'street_edges',
+    'territory_ownership',
+    'goals',
+    'challenges',
+    'challenge_entries',
+    'races',
+    'race_entries',
+    'leaderboard_snapshots',
+    'live_location_sessions',
+    'safety_reports',
     'terra_runs',
     'run_clubs',
     'run_club_memberships',
@@ -435,6 +458,112 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
         {'keys': [('user_id', ASCENDING), ('date', DESCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('snapshot_id', ASCENDING)]},
     ],
+    'activities': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('started_at', DESCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('idempotency_key', ASCENDING)], 'kwargs': {'unique': True, 'sparse': True}},
+        {'keys': [('status', ASCENDING), ('processing_status', ASCENDING)]},
+        {'keys': [('leaderboard_eligible', ASCENDING), ('started_at', DESCENDING)]},
+        {'keys': [('route_geojson', GEOSPHERE)], 'kwargs': {'sparse': True}},
+    ],
+    'activity_outbox': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('available_at', ASCENDING)]},
+        {'keys': [('activity_id', ASCENDING), ('event_type', ASCENDING)], 'kwargs': {'unique': True}},
+    ],
+    'activity_import_jobs': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('deduplication_key', ASCENDING)], 'kwargs': {'unique': True, 'sparse': True}},
+        {'keys': [('status', ASCENDING), ('created_at', ASCENDING)]},
+    ],
+    'activity_upload_sessions': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('idempotency_key', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('updated_at', ASCENDING)]},
+    ],
+    'activity_upload_chunks': [
+        {'keys': [('upload_id', ASCENDING), ('sequence', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('created_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 2_592_000}},
+    ],
+    'activity_insights': [
+        {'keys': [('activity_id', ASCENDING), ('user_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+    ],
+    'integration_connections': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('provider', ASCENDING)], 'kwargs': {'unique': True}},
+    ],
+    'privacy_settings': [
+        {'keys': [('user_id', ASCENDING)], 'kwargs': {'unique': True}},
+    ],
+    'account_deletion_requests': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('status', ASCENDING)]},
+        {'keys': [('execute_after', ASCENDING), ('status', ASCENDING)]},
+    ],
+    'routes': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('visibility', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('geometry', GEOSPHERE)], 'kwargs': {'sparse': True}},
+    ],
+    'segments': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('popularity', DESCENDING)]},
+        {'keys': [('geometry', GEOSPHERE)], 'kwargs': {'sparse': True}},
+    ],
+    'segment_efforts': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('segment_id', ASCENDING), ('elapsed_time_sec', ASCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('segment_id', ASCENDING), ('started_at', DESCENDING)]},
+        {'keys': [('activity_id', ASCENDING), ('segment_id', ASCENDING)], 'kwargs': {'unique': True}},
+    ],
+    'street_edges': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('geometry', GEOSPHERE)]},
+    ],
+    'territory_ownership': [
+        {'keys': [('street_edge_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('updated_at', DESCENDING)]},
+        {'keys': [('club_id', ASCENDING), ('updated_at', DESCENDING)]},
+    ],
+    'goals': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('status', ASCENDING), ('period_end', ASCENDING)]},
+    ],
+    'challenges': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('starts_at', ASCENDING), ('ends_at', ASCENDING)]},
+        {'keys': [('club_ids', ASCENDING)]},
+    ],
+    'challenge_entries': [
+        {'keys': [('challenge_id', ASCENDING), ('user_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('challenge_id', ASCENDING), ('score', DESCENDING)]},
+    ],
+    'races': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('starts_at', ASCENDING)]},
+        {'keys': [('route_id', ASCENDING), ('starts_at', DESCENDING)]},
+    ],
+    'race_entries': [
+        {'keys': [('race_id', ASCENDING), ('user_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('race_id', ASCENDING), ('result_elapsed_time_sec', ASCENDING)]},
+    ],
+    'leaderboard_snapshots': [
+        {'keys': [('scope_type', ASCENDING), ('scope_id', ASCENDING), ('period', ASCENDING), ('generated_at', DESCENDING)]},
+        {'keys': [('expires_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 0}},
+    ],
+    'live_location_sessions': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('share_token_hash', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('expires_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 0}},
+    ],
+    'safety_reports': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('created_at', ASCENDING)]},
+        {'keys': [('reporter_user_id', ASCENDING), ('created_at', DESCENDING)]},
+    ],
     'terra_runs': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},
@@ -533,4 +662,15 @@ async def ensure_database_schema(db: Any) -> None:
             kwargs = index.get('kwargs', {})
             await collection.create_index(keys, **kwargs)
 
-    await seed_planning_collections(db)
+    # The legacy Mongo planning seed is intentionally opt-in. Runlete's workout
+    # knowledge and deterministic planner are being rebuilt directly in
+    # PostgreSQL; automatically reseeding this prototype content would make
+    # Mongo authoritative again after a cleanup or restart.
+    legacy_seed_enabled = (
+        os.environ.get('LEGACY_MONGO_PLANNING_SEED_ENABLED', 'false')
+        .strip()
+        .lower()
+        in {'1', 'true', 'yes', 'on'}
+    )
+    if legacy_seed_enabled:
+        await seed_planning_collections(db)

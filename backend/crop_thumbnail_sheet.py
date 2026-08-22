@@ -13,7 +13,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSET_DIR = ROOT / "frontend" / "assets" / "images" / "exercise-thumbnails"
-REVIEW_NOTES = ROOT / "backend" / "thumbnail_generation" / "review_notes.json"
+REVIEW_NOTES = ROOT / "Research materials" / "legacy" / "thumbnail generation" / "review_notes.json"
 
 
 def load_json(path: Path) -> Any:
@@ -61,7 +61,7 @@ def append_review_note(batch_label: str, source: Path, items: List[Dict[str, str
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", required=True, help="Generated contact sheet PNG path")
-    parser.add_argument("--batch-file", default=str(ROOT / "backend" / "thumbnail_generation" / "priority_batches.json"))
+    parser.add_argument("--batch-file", default=str(ROOT / "Research materials" / "legacy" / "thumbnail generation" / "priority_batches.json"))
     parser.add_argument("--batch-index", type=int, required=True, help="Zero-based index in priority_batches.json")
     parser.add_argument("--label", default="")
     parser.add_argument("--review-status", default="needs_review", choices=["draft_ok", "needs_review", "rejected"])

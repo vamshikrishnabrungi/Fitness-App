@@ -8,8 +8,8 @@ from typing import Any, Dict, Iterable, List
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DRAFT_DIR = PROJECT_ROOT / "backend" / "data" / "exercise_research_drafts"
-NORMALIZED_DIR = PROJECT_ROOT / "backend" / "data" / "exercise_research_drafts" / "normalized"
+DRAFT_DIR = PROJECT_ROOT / "Research materials" / "legacy" / "exercise research drafts"
+NORMALIZED_DIR = DRAFT_DIR / "normalized"
 
 
 PATTERN_MAP: Dict[str, List[str]] = {
@@ -514,7 +514,7 @@ def normalize_file(path: Path) -> Path:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Normalize draft exercise research JSON into canonical taxonomy terms.")
-    parser.add_argument("paths", nargs="*", help="Draft JSON paths. Defaults to backend/data/exercise_research_drafts/*_draft.json.")
+    parser.add_argument("paths", nargs="*", help="Draft JSON paths. Defaults to Research materials/legacy/exercise research drafts/*_draft.json.")
     return parser.parse_args()
 
 

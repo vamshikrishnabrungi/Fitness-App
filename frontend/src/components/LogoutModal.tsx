@@ -8,7 +8,6 @@ import {
     Modal,
     Pressable,
 } from 'react-native';
-import { colors, typography, spacing, borderRadius } from '../utils/theme';
 
 interface LogoutModalProps {
     visible: boolean;

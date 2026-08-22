@@ -1,146 +1,106 @@
-# SFTC Fitness App
+# Runlete
 
-Monorepo with an Expo frontend and a FastAPI backend.
+Runlete is a subscription athlete platform with an Expo mobile app, modular
+FastAPI backend, PostgreSQL/PostGIS authority, GCP event processing and a
+separate operational Admin Studio.
 
-## Layout
+The current release includes identity/privacy, run recording and imports,
+activity analytics, routes, segments, heatmaps, safety, nutrition, health,
+clubs, territory, challenges, races, leaderboards, notifications and
+moderation. User posts, comments, kudos, follows, chat and messaging are not
+part of the product.
 
-- `frontend/`: Expo Router app
-- `backend/`: FastAPI API and MongoDB persistence
-- `tests/`: Python smoke tests and helper checks
+Training knowledge/content is being completed separately. Deterministic
+training generation remains disabled by default.
 
-## Prerequisites
+## Repository
 
-- Node.js 20+
-- Python 3.11+
-- MongoDB running locally or reachable through `MONGO_URL`
+- `backend/app/` — authoritative modular FastAPI runtime.
+- `backend/alembic/` — frozen PostgreSQL/PostGIS baseline.
+- `frontend/` — Expo Router mobile/web client.
+- `admin/` — operational Admin Studio.
+- `infra/terraform/` — GCP OpenTofu infrastructure.
+- `tests/production/` — production-domain test suite.
+- `docs/RUNNING_PLATFORM.md` — running/competition architecture and rollout.
 
-## Setup
+Files directly under legacy `backend/` that reference MongoDB or the old AI
+planner are archive/audit inputs only. They are not copied into the production
+image and are not runtime authority. They remain temporarily because training
+content is being handled in a separate task.
 
-Backend:
+## Local setup
+
+Requirements: Python 3.12+, Node 20+, Docker and OpenTofu.
 
 ```bash
-cd backend
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements-runtime.txt
+pip install -r backend/requirements-runtime.txt pytest
+
+docker compose up -d postgis redis pubsub storage
+alembic upgrade head
+uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Frontend:
+Start the mobile client:
 
 ```bash
 cd frontend
 npm install
-```
-
-## Seed data (run once on a fresh database)
-
-`ensure_database_schema` creates the (empty) collections automatically at startup, but the
-decision-layer protocols, macro-plan templates, and semantic embeddings must be loaded once.
-From the repo root, with the backend venv active:
-
-```bash
-python -m backend.seed_all
-```
-
-This is idempotent (safe to re-run) and:
-
-1. creates all collections + indexes,
-2. seeds `training_protocols` (evidence-based rehab/loading/testing protocols),
-3. seeds the research-backed `macro_plan_templates`,
-4. builds exercise embeddings for semantic retrieval — this needs `fastembed`
-   (already in `requirements-runtime.txt`; the first run downloads a ~130MB model).
-   Semantic retrieval degrades gracefully to keyword matching if `fastembed` is absent
-   or `EXERCISE_EMBEDDINGS_ENABLED=false`.
-
-The exercise/sport knowledge itself was produced separately by a one-shot
-`backend/ingest_*.py` pipeline (19 scripts) that read source books into MongoDB.
-Those scripts have already run and are not part of the app, so they were removed
-from the tree to keep `backend/` navigable. They remain in git history — recover
-with:
-
-    git show a103d69:backend/ingest_<name>.py > backend/ingest_<name>.py
-    git show a103d69 --stat -- backend/ingest_    # list all 19
-
-Note they resolve paths via `Path(__file__).resolve().parents[1]`, so they expect
-to sit in `backend/`, and they need the (gitignored) source books to re-run.
-
-## Operating the knowledge base
-
-Browse and edit the knowledge collections with **MongoDB Compass** (or `mongosh`),
-pointed at `MONGO_URL` — in production, over an SSH tunnel. There is deliberately
-no CRUD API for this: Compass already does querying, editing and indexing better
-than a hand-rolled admin endpoint would.
-
-The one HTTP diagnostic is `GET /api/library/summary`, which returns a document
-count per collection — useful for answering "did the knowledge base actually
-load?" without database access. It requires an admin account.
-
-Grant admin directly; there is no admin UI:
-
-    db.users.updateOne({ email: 'you@example.com' }, { $set: { is_admin: true } })
-
-## Environment
-
-Backend `backend/.env` values:
-
-- `MONGO_URL`, `DB_NAME`
-- `JWT_SECRET`
-- `ANTHROPIC_API_KEY` — workout/coach generation
-- `OPENROUTER_API_KEY` — meal analysis
-- `WORKOUT_AI_MODEL` (default `claude-haiku-4-5-20251001`), `MEAL_AI_MODEL`
-
-Optional workout-engine knobs (sensible defaults if unset):
-
-- `WORKOUT_AI_MAX_TOKENS`, `WORKOUT_AI_MAX_ATTEMPTS`, `WORKOUT_AI_CONTINUATION_ATTEMPTS`
-- `WORKOUT_AI_VALIDATION_MODE` (`tiered` | `strict` | `off`), `WORKOUT_AI_MAX_SESSION_MIN`
-- `MACRO_AI_TUNING` (default on), `MACRO_AI_MODEL`
-- `EXERCISE_EMBEDDINGS_ENABLED` (default on), `EMBEDDING_MODEL`
-
-Frontend `frontend/.env` values:
-
-- `EXPO_PUBLIC_BACKEND_URL` — must point at the machine's LAN IP (e.g.
-  `http://192.168.x.x:8001`) for a phone to reach the backend; `localhost` only works on the
-  host machine's web build.
-
-## Run
-
-Backend (bind to `0.0.0.0` so phones on the LAN can reach it):
-
-```bash
-cd backend
-uvicorn backend.server:app --reload --host 0.0.0.0 --port 8001
-```
-
-Frontend:
-
-```bash
-cd frontend
 npm run start
 ```
 
-## Checks
-
-Frontend:
+Start the Admin Studio:
 
 ```bash
+cd admin
+npm install
+npm run dev
+```
+
+The optional local Valhalla service downloads a large regional OSM package:
+
+```bash
+docker compose --profile geo up -d valhalla
+```
+
+## Configuration
+
+Backend variables are documented in `backend/.env.example`. Local defaults use
+PostGIS, Redis, the Pub/Sub emulator and the Cloud Storage emulator. Production
+uses Cloud SQL, Memorystore, Pub/Sub, Cloud Storage, Cloud KMS, Secret Manager,
+the OpenAI Responses API and regional Valhalla pools.
+
+Frontend variables are documented in `frontend/.env.example`. A mobile Mapbox
+public token is required to render native maps. Raw GPS and territory never fall
+back to client-calculated ownership when Mapbox is unavailable.
+
+## Validation
+
+```bash
+python -m pytest -q tests/production
+
+python - <<'PY'
+import json
+from backend.app.main import app
+with open('openapi.json', 'w') as output:
+    json.dump(app.openapi(), output, indent=2)
+    output.write('\n')
+PY
+
 cd frontend
+npm run generate:api
 npm run typecheck
 npm run lint
-npm run check
+npx expo export --platform web
+
+cd ../admin
+npm run build
+
+cd ../infra/terraform
+tofu validate
 ```
 
-Backend:
-
-```bash
-cd backend
-python3 -m py_compile server.py
-pytest
-```
-
-## Notes
-
-The app is still in prototype form. The largest remaining gaps are the journal, Terra, and
-advanced coach flows. The workout-generation engine is documented inline; briefly: rules pick a
-macro template (AI tunes it) → two-stage retrieval feeds exercises + protocols + the athlete's
-tested baselines → the AI writes each week's structure → a tiered validator repairs/scores it →
-weekly feedback (RPE/pain/completion/strength trends) drives the next block.
+See [deployment](DEPLOY.md) and
+[running platform](docs/RUNNING_PLATFORM.md) for GCP activation, OSM/Valhalla
+and external credential gates.

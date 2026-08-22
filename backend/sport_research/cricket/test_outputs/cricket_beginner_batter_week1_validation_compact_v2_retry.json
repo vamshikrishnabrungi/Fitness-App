@@ -1,7 +1,0 @@
-{
-  "raw_chars": 28830,
-  "raw_preview": "{\n  \"title\": \"Cricket Re-Entry Block: Movement Quality & Knee-Safe Capacity\",\n  \"goal\": \"Sport Performance\",\n  \"sports\": [\"Cricket\"],\n  \"duration_weeks\": 1,\n  \"athlete_analysis\": {\n    \"profile_summary\": \"21yo recreational top-order batsman, beginner lifter returning to structured training. Lean muscle goal, mild right knee discomfort after long runs, 6.5h sleep, Sunday matches.\",\n    \"primary_constraints\": [\n      \"Mild right knee discomfort after long running\",\n      \"Beginner lifter: techniqu",
-  "raw_tail": " decompression to feel loose for match day.\",\n              \"sets\": 1,\n              \"reps\": null,\n              \"duration\": \"30s\",\n              \"rest\": \"none\",\n              \"load_guidance\": \"bodyweight, easy lean\",\n              \"tempo\": \"static\",\n              \"coaching_notes\": [\"Relax fully, no strain.\"],\n              \"substitutions\": [\"Doorway pec stretch\"]\n            },\n            {\n              \"name\": \"Lateral Leg Swing\",\n              \"purpose\": \"Finish with relaxed hip mobility ah",
-  "json_valid": false,
-  "json_error": "Unterminated string starting at: line 670 column 26 (char 28794)"
-}

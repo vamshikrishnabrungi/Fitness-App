@@ -10,7 +10,7 @@ from backend.normalize_exercise_research_drafts import normalize_record
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DRAFT_DIR = PROJECT_ROOT / "backend" / "data" / "exercise_research_drafts"
+DRAFT_DIR = PROJECT_ROOT / "Research materials" / "legacy" / "exercise research drafts"
 NORMALIZED_DIR = DRAFT_DIR / "normalized"
 OUTPUT_PATH = DRAFT_DIR / "merged_general_gym_exercises.json"
 

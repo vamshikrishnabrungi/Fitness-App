@@ -1,0 +1,12 @@
+import { useEffect, useState } from 'react';
+import { RefreshCw, Search } from 'lucide-react';
+import { grantRole, revokeRole, roleUsers, type RoleUser } from '../lib/api';
+
+const roles=['content_editor','content_publisher','moderator','platform_admin'];
+export function Roles(){
+  const [items,setItems]=useState<RoleUser[]>([]),[query,setQuery]=useState(''),[error,setError]=useState(''),[working,setWorking]=useState('');
+  const load=(value=query)=>{setError('');return roleUsers(value).then(result=>setItems(result.items)).catch(reason=>setError(reason instanceof Error?reason.message:'Could not load users.'))};
+  useEffect(()=>{void load('')},[]);
+  const toggle=async(user:RoleUser,role:string)=>{const key=`${user.id}-${role}`;setWorking(key);setError('');try{if(user.roles.includes(role))await revokeRole(user.id,role);else await grantRole(user.id,role);await load()}catch(reason){setError(reason instanceof Error?reason.message:'Role change failed.')}finally{setWorking('')}};
+  return <><header className="topbar"><div><span className="eyebrow">ACCESS / ADMINISTRATION</span><h1>Administrative roles</h1><p>Editors author drafts; publishers activate immutable releases; every grant and revocation is audited.</p></div><button className="secondary" onClick={()=>void load()}><RefreshCw size={16}/>Refresh</button></header>{error&&<div className="notice">{error}</div>}<section className="panel"><div className="toolbar"><div className="search"><Search size={15}/><input value={query} onChange={event=>setQuery(event.target.value)} onKeyDown={event=>event.key==='Enter'&&void load(query)} placeholder="Search name or verified email"/></div><button className="secondary" onClick={()=>void load(query)}>Search</button></div><table><thead><tr><th>USER</th><th>STATUS</th><th>CONTENT EDITOR</th><th>CONTENT PUBLISHER</th><th>MODERATOR</th><th>PLATFORM ADMIN</th></tr></thead><tbody>{items.map(user=><tr key={user.id}><td><strong>{user.display_name}</strong><code>{user.email}</code></td><td><span className={`status ${user.status==='active'?'ready':'draft'}`}>{user.status}</span></td>{roles.map(role=><td key={role}><button className={user.roles.includes(role)?'primary':'secondary'} disabled={working===`${user.id}-${role}`} onClick={()=>void toggle(user,role)}>{user.roles.includes(role)?'Granted':'Grant'}</button></td>)}</tr>)}{!items.length&&<tr><td colSpan={6} className="table-empty">No matching verified users.</td></tr>}</tbody></table></section></>;
+}

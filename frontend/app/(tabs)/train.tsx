@@ -112,6 +112,7 @@ export default function TrainScreen() {
   const { user } = useAuthStore();
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [query, setQuery] = useState('');
   const [generationPaused, setGenerationPaused] = useState(false);
@@ -131,12 +132,20 @@ export default function TrainScreen() {
   const fetchWorkouts = async () => {
     try {
       setLoading(true);
-      const [res, status] = await Promise.all([
-        api.get<Workout[]>('/workouts'),
-        api.get<{ paused: boolean }>('/workouts/generation-status').catch(() => ({ paused: false })),
-      ]);
-      setWorkouts(res || []);
-      setGenerationPaused(!!status?.paused);
+      const sessions = await api.get<any[]>('/training/history');
+      const res: Workout[] = (sessions || []).map((session) => ({
+        id: session.id,
+        title: session.purpose,
+        category: session.session_type,
+        duration: session.estimated_minutes,
+        difficulty: session.status,
+        exercises: session.items || [],
+        completed: session.status === 'completed',
+        scheduled_date: session.scheduled_for?.slice(0, 10),
+        description: session.explanation,
+      }));
+      setWorkouts(res);
+      setGenerationPaused(false);
     } catch (error) {
       console.error('Error fetching workouts:', error);
       setWorkouts([]);
@@ -149,6 +158,18 @@ export default function TrainScreen() {
     setRefreshing(true);
     await fetchWorkouts();
     setRefreshing(false);
+  };
+
+  const generatePlan = async () => {
+    try {
+      setGenerating(true);
+      await api.post('/training/plans', { weeks: 4, starts_on: null });
+      await fetchWorkouts();
+    } catch (error) {
+      console.error('Error generating training plan:', error);
+    } finally {
+      setGenerating(false);
+    }
   };
 
   const filteredWorkouts = useMemo(() => {
@@ -262,6 +283,11 @@ export default function TrainScreen() {
           <View style={styles.emptyState}>
             <Text style={styles.emptyTitle}>No workouts yet</Text>
             <Text style={styles.emptySubtitle}>{generationPaused ? 'Workout creation is paused right now.' : 'Generate a plan to see workouts here.'}</Text>
+            {!generationPaused && (
+              <TouchableOpacity style={styles.generateButton} onPress={generatePlan} disabled={generating}>
+                {generating ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.generateButtonText}>Generate 4-week plan</Text>}
+              </TouchableOpacity>
+            )}
           </View>
         ) : (
           <>
@@ -471,6 +497,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#7A746D',
     lineHeight: 20,
+  },
+  generateButton: {
+    marginTop: 18,
+    minHeight: 50,
+    borderRadius: 16,
+    paddingHorizontal: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.textPrimary,
+  },
+  generateButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700',
   },
   // Sections
   section: {

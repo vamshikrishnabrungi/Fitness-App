@@ -22,6 +22,8 @@ interface WorkoutFeedbackModalProps {
   workoutId: string;
   workoutTitle: string;
   initialCompletionPercentage?: number;
+  expectedVersion?: number;
+  estimatedMinutes?: number;
   mainExercises?: { name: string; exercise_id?: string | null }[];
 }
 
@@ -32,6 +34,8 @@ export const WorkoutFeedbackModal: React.FC<WorkoutFeedbackModalProps> = ({
   workoutId,
   workoutTitle,
   initialCompletionPercentage = 100,
+  expectedVersion = 1,
+  estimatedMinutes = 60,
   mainExercises = [],
 }) => {
   const insets = useSafeAreaInsets();
@@ -74,18 +78,17 @@ export const WorkoutFeedbackModal: React.FC<WorkoutFeedbackModalProps> = ({
           };
         })
         .filter((p) => p.weight_kg !== null || p.reps !== null);
-      await api.post(`/workouts/${workoutId}/feedback`, {
-        workout_id: workoutId,
-        intensity_rating: intensity,
-        completion_percentage: completion,
+      await api.post(`/training/sessions/${workoutId}/complete`, {
+        duration_minutes: estimatedMinutes,
+        session_rpe: intensity,
+        completion_ratio: completion / 100,
+        pain_flag: painScore > 0,
+        expected_version: expectedVersion,
         difficulty_feedback: difficulty,
         energy_level: energy,
-        pain_score: painScore,
-        rpe: intensity,
         notes: notes || null,
         performed_exercises: performed,
       });
-      await api.post(`/workouts/${workoutId}/complete`);
       onSubmitted?.();
       if (!onSubmitted) onClose();
     } catch (error) {

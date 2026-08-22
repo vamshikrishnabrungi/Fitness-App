@@ -97,7 +97,7 @@ export default function BenchmarksScreen() {
       if (int(visaA) !== undefined) body.visa_a = int(visaA);
       if (notes.trim()) body.notes = notes.trim();
 
-      await api.post('/athlete/benchmarks', body);
+      await api.post('/athletes/me/assessments', body);
       Alert.alert('Baselines saved', 'Your next plan will prescribe loads from your real numbers.', [
         { text: 'Done', onPress: () => router.back() },
       ]);

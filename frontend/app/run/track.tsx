@@ -14,12 +14,28 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import MapView, { Polyline } from 'react-native-maps';
 import { Button } from '../../src/components/Button';
+import { LiveRunMap } from '../../src/components/LiveRunMap';
 import { api } from '../../src/utils/api';
 import { colors, typography, spacing, borderRadius } from '../../src/utils/theme';
+import {
+  appendLocations,
+  clearActiveRun,
+  completeResumableRunUpload,
+  createRunSession,
+  finishRunSession,
+  loadActiveRun,
+  loadPendingRuns,
+  pauseRunSession,
+  PersistedRunSession,
+  queuePendingRun,
+  removePendingRun,
+  requestRunPermissions,
+  resumeRunSession,
+  startLocationTask,
+} from '../../src/services/runRecorder';
 
-const RUN_HISTORY_KEY = 'terra_run_history_v1';
+const RUN_HISTORY_KEY = 'runlete_run_history_v2';
 const TERRITORY_MIN_KM = 2.5; // a run claims its roads once it reaches this distance
 const DEFAULT_REGION = { latitude: 17.42, longitude: 78.47, latitudeDelta: 0.01, longitudeDelta: 0.01 };
 type LatLng = { latitude: number; longitude: number };
@@ -27,9 +43,12 @@ type LatLng = { latitude: number; longitude: number };
 interface GPSPoint {
   latitude: number;
   longitude: number;
-  timestamp: Date;
+  timestamp: string;
   altitude?: number;
   speed?: number;
+  accuracy?: number;
+  smoothed_latitude?: number;
+  smoothed_longitude?: number;
 }
 
 interface CompletedRun {
@@ -104,7 +123,7 @@ const formatPace = (distKm: number, durationSec: number) => {
   return `${m}'${s.toString().padStart(2, '0')}"`;
 };
 
-type ScreenState = 'permission' | 'ready' | 'running' | 'paused';
+type ScreenState = 'permission' | 'ready' | 'running' | 'paused' | 'finishing';
 
 const FEELINGS = [
   { key: 'great', emoji: '✓', label: 'Great' },
@@ -120,20 +139,18 @@ export default function TrackRunScreen() {
   const [screen, setScreen] = useState<ScreenState>('ready');
   const [gpsReady, setGpsReady] = useState(false);
   const [permissionDenied, setPermissionDenied] = useState(false);
+  const [defaultVisibility, setDefaultVisibility] = useState<'public' | 'club' | 'private'>('private');
 
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
-  const [calories, setCalories] = useState(0);
-  const [territory, setTerritory] = useState(0);
   const [isLoop, setIsLoop] = useState(false);
+  const [isAutoPaused, setIsAutoPaused] = useState(false);
   const [currentSpeed, setCurrentSpeed] = useState(0);
   const [routeCoords, setRouteCoords] = useState<LatLng[]>([]); // live polyline, drives the map
   const [region, setRegion] = useState(DEFAULT_REGION);
 
-  const gpsPath = useRef<GPSPoint[]>([]);
-  const startTime = useRef<Date | null>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const locationSub = useRef<Location.LocationSubscription | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const foregroundLocationSub = useRef<Location.LocationSubscription | null>(null);
 
   const [showSummary, setShowSummary] = useState(false);
   const [runSummary, setRunSummary] = useState<CompletedRun | null>(null);
@@ -143,154 +160,177 @@ export default function TrackRunScreen() {
   const [reflectionNotes, setReflectionNotes] = useState('');
 
   useEffect(() => {
-    requestPermission();
-    return () => stopTracking();
+    void initializeRecorder();
+    pollRef.current = setInterval(() => {
+      void loadActiveRun().then((session) => {
+        if (session) applySession(session);
+      });
+    }, 1_000);
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+      foregroundLocationSub.current?.remove();
+      pollRef.current = null;
+      foregroundLocationSub.current = null;
+      // Do not stop the native location task here. Navigating away must not
+      // destroy an active run; the persisted session is restored on return.
+    };
+    // initializeRecorder/applySession are intentionally mount-only lifecycle work.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const requestPermission = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
+  const initializeRecorder = async () => {
+    try {
+      const privacy = await api.get<{ default_activity_visibility: 'public' | 'club' | 'private' }>('/privacy');
+      setDefaultVisibility(privacy.default_activity_visibility);
+    } catch {
+      // Offline and signed-out starts remain private until the server confirms policy.
+      setDefaultVisibility('private');
+    }
+    const permissions = await requestRunPermissions();
+    if (!permissions.foreground) {
       setPermissionDenied(true);
       return;
     }
-    // Pre-warm GPS lock and centre the map on the current position.
     try {
       const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
       setRegion({ latitude: loc.coords.latitude, longitude: loc.coords.longitude, latitudeDelta: 0.006, longitudeDelta: 0.006 });
       setGpsReady(true);
     } catch {
-      setGpsReady(true); // proceed anyway
+      setGpsReady(true);
     }
-  };
 
-  const stopTracking = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    if (locationSub.current) locationSub.current.remove();
-    timerRef.current = null;
-    locationSub.current = null;
-  };
-
-  const startRun = async () => {
-    startTime.current = new Date();
-    gpsPath.current = [];
-    setDuration(0);
-    setDistance(0);
-    setCalories(0);
-    setTerritory(0);
-    setIsLoop(false);
-    setRouteCoords([]);
-    setScreen('running');
-
-    // Start timer
-    timerRef.current = setInterval(() => setDuration((d) => d + 1), 1000);
-
-    // Start GPS watch
-    locationSub.current = await Location.watchPositionAsync(
-      {
-        accuracy: Location.Accuracy.BestForNavigation,
-        timeInterval: 2000,
-        distanceInterval: 5,
-      },
-      (loc) => {
-        const point: GPSPoint = {
-          latitude: loc.coords.latitude,
-          longitude: loc.coords.longitude,
-          timestamp: new Date(loc.timestamp),
-          altitude: loc.coords.altitude ?? undefined,
-          speed: loc.coords.speed ?? undefined,
-        };
-
-        if (loc.coords.speed != null && loc.coords.speed > 0) {
-          setCurrentSpeed(loc.coords.speed * 3.6); // m/s → km/h
-        }
-
-        const coord = { latitude: point.latitude, longitude: point.longitude };
-        const path = gpsPath.current;
-        if (path.length > 0) {
-          const d = haversineKm(path[path.length - 1], point);
-          if (d > 0.002) { // filter GPS jitter < 2m
-            gpsPath.current = [...path, point];
-            setRouteCoords((prev) => [...prev, coord]); // extend the live map line
-            setDistance((prev) => {
-              const next = prev + d;
-              setCalories(next * 60);
-              // Loop detection
-              if (gpsPath.current.length >= 8) {
-                const loopDist = haversineKm(gpsPath.current[0], point);
-                setIsLoop(loopDist < 0.1 && next > 0.5);
-              }
-              // Territory = claimed road km once the run passes the threshold (matches the server).
-              setTerritory(next >= TERRITORY_MIN_KM ? next : 0);
-              return next;
-            });
-          }
-        } else {
-          gpsPath.current = [point];
-          setRouteCoords([coord]);
-        }
+    const existing = await loadActiveRun();
+    if (existing) {
+      applySession(existing);
+      setScreen(existing.state === 'recording' ? 'running' : 'paused');
+      if (existing.state === 'recording') {
+        const backgroundStarted = await startLocationTask();
+        if (!backgroundStarted) await startForegroundWatch();
       }
+    }
+    void syncPendingRuns();
+  };
+
+  const applySession = (session: PersistedRunSession) => {
+    const points = session.points as GPSPoint[];
+
+    let totalDistance = 0;
+    const accepted: GPSPoint[] = [];
+    for (const point of points) {
+      const previous = accepted[accepted.length - 1];
+      if (!previous) {
+        accepted.push(point);
+        continue;
+      }
+      const segmentKm = haversineKm(
+        { ...previous, latitude: previous.smoothed_latitude ?? previous.latitude, longitude: previous.smoothed_longitude ?? previous.longitude },
+        { ...point, latitude: point.smoothed_latitude ?? point.latitude, longitude: point.smoothed_longitude ?? point.longitude },
+      );
+      const deltaSec = Math.max(
+        0,
+        (new Date(point.timestamp).getTime() - new Date(previous.timestamp).getTime()) / 1000,
+      );
+      if (deltaSec > 0 && segmentKm / deltaSec > 0.0125) continue;
+      accepted.push(point);
+      if (segmentKm >= 0.002) totalDistance += segmentKm;
+    }
+
+    const endMs = session.state === 'finishing' ? new Date(session.updatedAt).getTime() : Date.now();
+    let pausedSeconds = session.pausedDurationSec;
+    const activePause = session.manualPausedAt || session.autoPausedAt;
+    if (activePause) {
+      pausedSeconds += Math.max(0, Math.round((endMs - new Date(activePause).getTime()) / 1000));
+    }
+    const movingSeconds = Math.max(
+      0,
+      Math.round((endMs - new Date(session.startedAt).getTime()) / 1000) - pausedSeconds,
+    );
+
+    setDuration(movingSeconds);
+    setDistance(totalDistance);
+    setRouteCoords(accepted.map((point) => ({ latitude: point.smoothed_latitude ?? point.latitude, longitude: point.smoothed_longitude ?? point.longitude })));
+    const speed = accepted[accepted.length - 1]?.speed;
+    setCurrentSpeed(speed != null && speed > 0 ? speed * 3.6 : 0);
+    setIsAutoPaused(Boolean(session.autoPausedAt));
+    setIsLoop(
+      accepted.length >= 8 &&
+      totalDistance > 0.5 &&
+      haversineKm(accepted[0], accepted[accepted.length - 1]) < 0.1,
     );
   };
 
-  const pauseRun = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    if (locationSub.current) locationSub.current.remove();
-    timerRef.current = null;
-    locationSub.current = null;
+  const startForegroundWatch = async () => {
+    foregroundLocationSub.current?.remove();
+    foregroundLocationSub.current = await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.BestForNavigation,
+        timeInterval: 2_000,
+        distanceInterval: 3,
+      },
+      (location) => {
+        void appendLocations([location]).then(async () => {
+          const session = await loadActiveRun();
+          if (session) applySession(session);
+        });
+      },
+    );
+  };
+
+  const startRun = async () => {
+    await createRunSession(true, defaultVisibility);
+    setDuration(0);
+    setDistance(0);
+    setIsLoop(false);
+    setIsAutoPaused(false);
+    setRouteCoords([]);
+    setScreen('running');
+    const backgroundStarted = await startLocationTask();
+    if (!backgroundStarted) await startForegroundWatch();
+  };
+
+  const pauseRun = async () => {
+    foregroundLocationSub.current?.remove();
+    foregroundLocationSub.current = null;
+    const session = await pauseRunSession();
+    if (session) applySession(session);
     setScreen('paused');
   };
 
   const resumeRun = async () => {
+    const session = await resumeRunSession();
+    if (session) applySession(session);
     setScreen('running');
-    timerRef.current = setInterval(() => setDuration((d) => d + 1), 1000);
-    locationSub.current = await Location.watchPositionAsync(
-      { accuracy: Location.Accuracy.BestForNavigation, timeInterval: 2000, distanceInterval: 5 },
-      (loc) => {
-        const point: GPSPoint = {
-          latitude: loc.coords.latitude,
-          longitude: loc.coords.longitude,
-          timestamp: new Date(loc.timestamp),
-          altitude: loc.coords.altitude ?? undefined,
-          speed: loc.coords.speed ?? undefined,
-        };
-        const path = gpsPath.current;
-        if (path.length > 0) {
-          const d = haversineKm(path[path.length - 1], point);
-          if (d > 0.002) {
-            gpsPath.current = [...path, point];
-            setDistance((prev) => {
-              const next = prev + d;
-              setCalories(next * 60);
-              return next;
-            });
-          }
-        } else {
-          gpsPath.current = [point];
-        }
-      }
-    );
+    const backgroundStarted = await startLocationTask();
+    if (!backgroundStarted) await startForegroundWatch();
   };
 
-  const handleFinish = () => {
-    pauseRun();
-    Alert.alert('Finish Run?', 'Save your run and capture territory?', [
-      { text: 'Keep Going', onPress: resumeRun, style: 'cancel' },
-      { text: 'End & Save', style: 'destructive', onPress: saveRun },
+  const handleFinish = async () => {
+    await pauseRun();
+    Alert.alert('Finish Run?', 'Save this run for processing?', [
+      { text: 'Keep Going', onPress: () => void resumeRun(), style: 'cancel' },
+      { text: 'End & Save', style: 'destructive', onPress: () => void saveRun() },
     ]);
   };
 
   const saveRun = async () => {
     const endTime = new Date();
-    const path = gpsPath.current;
+    const session = await finishRunSession();
+    if (!session) return;
+    applySession(session);
+    setScreen('finishing');
+    const path = session.points;
 
-    // Don't save a run that never moved — no fabricated path, no phantom distance.
     if (path.length < 2 || distance < 0.05) {
       Alert.alert(
         'No route recorded',
         "You haven't moved enough to save a run yet. Start moving to trace a route.",
         [
-          { text: 'Keep Going', onPress: resumeRun, style: 'cancel' },
-          { text: 'Discard', style: 'destructive', onPress: () => router.back() },
+          { text: 'Keep Going', onPress: () => void resumeRun(), style: 'cancel' },
+          {
+            text: 'Discard',
+            style: 'destructive',
+            onPress: () => void clearActiveRun().then(() => router.back()),
+          },
         ]
       );
       return;
@@ -299,51 +339,73 @@ export default function TrackRunScreen() {
     const pathToSend = path.map((p) => ({
       latitude: p.latitude,
       longitude: p.longitude,
-      timestamp: p.timestamp instanceof Date ? p.timestamp.toISOString() : p.timestamp,
+      timestamp: p.timestamp,
       altitude: p.altitude,
       speed: p.speed,
+      accuracy: p.accuracy,
+      smoothed_latitude: p.smoothed_latitude,
+      smoothed_longitude: p.smoothed_longitude,
     }));
 
     try {
-      const response = await api.post<any>('/terra/runs', {
-        gps_path: pathToSend,
-        start_time: startTime.current?.toISOString(),
-        end_time: endTime.toISOString(),
-      });
+      const response = await completeResumableRunUpload(session, endTime.toISOString(), distance * 1000);
 
       const completed: CompletedRun = {
         id: String(response.id),
-        distance_km: Number(response.distance ?? distance),
-        duration_sec: Number(response.duration ?? duration),
-        territory_captured: Number(response.territory_captured ?? territory),
+        distance_km: Number(response.distance_km ?? response.distance ?? distance),
+        duration_sec: Number(response.moving_time_sec ?? response.duration ?? duration),
+        territory_captured: Number(response.territory_captured ?? 0),
         is_loop: Boolean(response.is_loop),
-        pace: formatPace(Number(response.distance ?? distance), Number(response.duration ?? duration)),
-        calories: Math.round(calories),
-        started_at: String(response.start_time ?? startTime.current?.toISOString()),
-        ended_at: String(response.end_time ?? endTime.toISOString()),
+        pace: formatPace(
+          Number(response.distance_km ?? response.distance ?? distance),
+          Number(response.moving_time_sec ?? response.duration ?? duration),
+        ),
+        calories: Number(response.calories_kcal ?? 0),
+        started_at: String(response.started_at ?? response.start_time ?? session.startedAt),
+        ended_at: String(response.ended_at ?? response.end_time ?? endTime.toISOString()),
         path_points: pathToSend.length,
         sync_status: 'synced',
       };
-      setCaptured(response.territory ?? null);
+      setCaptured({
+        claimed: Number(response.territory_captured ?? 0) > 0,
+        road_km: Number(response.territory_captured ?? 0),
+        threshold_km: TERRITORY_MIN_KM,
+      });
+      await clearActiveRun();
       setRunSummary(completed);
       setShowSummary(true);
     } catch {
       const completed: CompletedRun = {
-        id: `run-${Date.now()}`,
+        id: session.id,
         distance_km: distance,
         duration_sec: duration,
-        territory_captured: territory,
+        territory_captured: 0,
         is_loop: isLoop,
         pace: formatPace(distance, duration),
-        calories: Math.round(calories),
-        started_at: startTime.current?.toISOString() ?? new Date().toISOString(),
+        calories: 0,
+        started_at: session.startedAt,
         ended_at: endTime.toISOString(),
         path_points: path.length,
         sync_status: 'local_only',
       };
+      await queuePendingRun(session, endTime.toISOString());
       await appendRunHistory(completed);
+      await clearActiveRun();
       setRunSummary(completed);
       setShowSummary(true);
+    }
+  };
+
+  const syncPendingRuns = async () => {
+    const pendingRuns = await loadPendingRuns();
+    for (const pending of pendingRuns) {
+      try {
+        await completeResumableRunUpload(pending.session, pending.endedAt);
+        await removePendingRun(pending.session.id);
+        await updateRunHistory(pending.session.id, { sync_status: 'synced' });
+      } catch {
+        break;
+      }
     }
   };
 
@@ -351,7 +413,7 @@ export default function TrackRunScreen() {
     if (runSummary?.id) {
       try {
         if (runSummary.sync_status === 'synced') {
-          await api.post('/terra/reflections', { run_id: runSummary.id, feeling, notes: reflectionNotes });
+          await api.put(`/activities/${runSummary.id}/feedback`, { feeling, notes: reflectionNotes });
         } else {
           await updateRunHistory(runSummary.id, { feeling, notes: reflectionNotes });
         }
@@ -370,7 +432,7 @@ export default function TrackRunScreen() {
         <Ionicons name="location-outline" size={64} color={colors.textTertiary} />
         <Text style={styles.permTitle}>Location Access Required</Text>
         <Text style={styles.permSubtitle}>
-          Terra Run needs your location to track distance, territory, and pace.
+          Runlete needs your location to track distance, territory, and pace.
         </Text>
         <TouchableOpacity style={styles.permButton} onPress={() => router.back()}>
           <Text style={styles.permButtonText}>Go Back</Text>
@@ -424,20 +486,7 @@ export default function TrackRunScreen() {
   return (
     <View style={styles.container}>
       {/* Live GPS map — follows you and traces the path as you run */}
-      <MapView
-        style={StyleSheet.absoluteFill}
-        initialRegion={region}
-        showsUserLocation
-        followsUserLocation={screen === 'running'}
-        showsMyLocationButton={false}
-        showsCompass={false}
-        showsPointsOfInterest={false}
-        toolbarEnabled={false}
-      >
-        {routeCoords.length > 1 && (
-          <Polyline coordinates={routeCoords} strokeColor={colors.brand} strokeWidth={6} lineCap="round" lineJoin="round" />
-        )}
-      </MapView>
+      <LiveRunMap initialRegion={region} points={routeCoords} following={screen === 'running'} />
 
       {/* Loop badge */}
       {isLoop && (
@@ -449,12 +498,14 @@ export default function TrackRunScreen() {
 
       {/* Top header overlay */}
       <View style={[styles.runHeaderOverlay, { paddingTop: insets.top + spacing.sm }]}>
-        <TouchableOpacity onPress={() => { pauseRun(); router.back(); }} style={styles.mapIconBtn}>
+        <TouchableOpacity onPress={() => { void pauseRun(); router.back(); }} style={styles.mapIconBtn}>
           <Ionicons name="close" size={22} color={colors.textPrimary} />
         </TouchableOpacity>
         <View style={styles.statusBadgeLight}>
-          <View style={[styles.statusDot, { backgroundColor: screen === 'running' ? colors.statusSuccess : '#E0A21F' }]} />
-          <Text style={styles.statusTextDark}>{screen === 'running' ? 'TRACKING' : 'PAUSED'}</Text>
+          <View style={[styles.statusDot, { backgroundColor: screen === 'running' && !isAutoPaused ? colors.statusSuccess : '#E0A21F' }]} />
+          <Text style={styles.statusTextDark}>
+            {screen === 'running' ? (isAutoPaused ? 'AUTO-PAUSED' : 'TRACKING') : 'PAUSED'}
+          </Text>
         </View>
         <View style={{ width: 44 }} />
       </View>
@@ -467,8 +518,12 @@ export default function TrackRunScreen() {
             <Text style={styles.distanceValue}>{distance.toFixed(2)}<Text style={styles.distanceUnit}> km</Text></Text>
           </View>
           <View style={styles.claimBadge}>
-            <Text style={styles.claimBadgeLbl}>{territory > 0 ? 'CLAIMED' : `${TERRITORY_MIN_KM - distance > 0 ? (TERRITORY_MIN_KM - distance).toFixed(1) : 0} km TO CLAIM`}</Text>
-            <Text style={styles.claimBadgeVal}>{territory > 0 ? `${territory.toFixed(1)} km road` : 'no road yet'}</Text>
+            <Text style={styles.claimBadgeLbl}>
+              {distance >= TERRITORY_MIN_KM
+                ? 'ELIGIBLE FOR MATCHING'
+                : `${Math.max(0, TERRITORY_MIN_KM - distance).toFixed(1)} km TO QUALIFY`}
+            </Text>
+            <Text style={styles.claimBadgeVal}>roads verify after save</Text>
           </View>
         </View>
         <View style={styles.secondaryStats}>
@@ -513,7 +568,7 @@ export default function TrackRunScreen() {
             <Ionicons name="checkmark-circle" size={56} color="white" />
             <Text style={styles.summaryTitle}>Run Complete!</Text>
             <Text style={styles.summarySync}>
-              {runSummary?.sync_status === 'synced' ? '✓ Saved to Terra' : '⚡ Saved locally'}
+              {runSummary?.sync_status === 'synced' ? '✓ Saved to Runlete' : '⚡ Saved locally'}
             </Text>
             <View style={styles.summaryRow}>
               <View style={styles.summaryStat}>
@@ -542,7 +597,11 @@ export default function TrackRunScreen() {
               <View style={styles.xpEarned}>
                 <Text style={styles.xpEarnedLabel}>NO TERRITORY YET</Text>
                 <Text style={styles.xpEarnedValue}>{(runSummary?.distance_km ?? 0).toFixed(2)} km</Text>
-                <Text style={styles.loopBonus}>Run {captured?.threshold_km ?? TERRITORY_MIN_KM} km+ to claim the road</Text>
+                <Text style={styles.loopBonus}>
+                  {(runSummary?.distance_km ?? 0) >= (captured?.threshold_km ?? TERRITORY_MIN_KM)
+                    ? 'Road matching is pending verification'
+                    : `Run ${captured?.threshold_km ?? TERRITORY_MIN_KM} km+ to qualify for road matching`}
+                </Text>
               </View>
             )}
             <View style={styles.summaryMetaRow}>

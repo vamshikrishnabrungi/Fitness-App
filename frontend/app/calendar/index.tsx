@@ -49,22 +49,27 @@ export default function CalendarScreen() {
 
             // Fetch all data in parallel
             const [mealsRes, workoutsRes, moodsRes] = await Promise.all([
-                api.get(`/daily-summary?date=${dateStr}`).catch(() => ({ meals: [] })),
-                api.get('/workouts').catch(() => []),
-                api.get('/mood').catch(() => []),
+                api.get(`/nutrition/daily-summary?date=${dateStr}`).catch(() => ({ meals: [] })),
+                api.get('/training/history').catch(() => []),
+                Promise.resolve([]),
             ]);
 
             // Filter by date
             const filterByDate = (items: any[], dateField: string = 'created_at') => {
                 return items.filter((item: any) => {
-                    const source = item[dateField] || item.timestamp || item.start_time || item.created_at;
+                    const source = item[dateField] || item.scheduled_for || item.eaten_at || item.timestamp || item.started_at || item.created_at;
+                    if (!source) return false;
                     const itemDate = new Date(source);
                     return itemDate.toISOString().split('T')[0] === dateStr;
                 });
             };
 
             setDayLogs({
-                meals: (mealsRes as any)?.meals || [],
+                meals: ((mealsRes as any)?.meals || []).map((meal: any) => ({
+                    ...meal,
+                    calories: meal.calories_kcal,
+                    meal_type: meal.meal_type?.charAt(0).toUpperCase() + meal.meal_type?.slice(1),
+                })),
                 workouts: filterByDate(workoutsRes as any[] || []),
                 moods: filterByDate(moodsRes as any[] || [], 'timestamp'),
                 water: (mealsRes as any)?.water_intake || 0,

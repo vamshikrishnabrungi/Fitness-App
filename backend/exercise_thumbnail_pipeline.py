@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ENV_PATH = ROOT / "backend" / ".env"
 ASSET_DIR = ROOT / "frontend" / "assets" / "images" / "exercise-thumbnails"
 DATA_DIR = ROOT / "frontend" / "src" / "data"
-OUT_DIR = ROOT / "backend" / "thumbnail_generation"
+OUT_DIR = ROOT / "Research materials" / "legacy" / "thumbnail generation"
 
 COLLECTION_PRIORITY = [
     ("workouts", "active_workout", 0),

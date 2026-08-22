@@ -33,6 +33,7 @@ export default function RegisterScreen() {
   // Form fields
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
+  const [challengeId, setChallengeId] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
@@ -79,7 +80,8 @@ export default function RegisterScreen() {
       setError('');
       setLoading(true);
       try {
-        await api.post('/auth/request-otp', { email });
+        const result = await api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'register' });
+        setChallengeId(result.challenge_id);
         setStep('details');
         setResendTimer(30);
       } catch (err: any) {
@@ -125,7 +127,7 @@ export default function RegisterScreen() {
         day && month && year
           ? `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
           : undefined;
-      await register(email, password, `${firstName} ${lastName}`, code, {
+      await register(email, password, `${firstName} ${lastName}`, code, challengeId, {
         country: selectedCountry,
         date_of_birth: dob,
         marketing_opt_in: agreeToEmails,
@@ -141,7 +143,7 @@ export default function RegisterScreen() {
   const handleResendCode = () => {
     if (resendTimer === 0) {
       setResendTimer(30);
-      api.post('/auth/request-otp', { email }).catch(() => {});
+      api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'register' }).then(result => setChallengeId(result.challenge_id)).catch(() => {});
     }
   };
 

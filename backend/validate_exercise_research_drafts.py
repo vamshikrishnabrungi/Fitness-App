@@ -7,8 +7,8 @@ from typing import Any, Dict, Iterable, List
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SCHEMA_PATH = PROJECT_ROOT / "backend" / "data" / "exercise_schema" / "general_gym_exercise_taxonomy_v1.json"
-DRAFT_DIR = PROJECT_ROOT / "backend" / "data" / "exercise_research_drafts"
+SCHEMA_PATH = PROJECT_ROOT / "Research materials" / "legacy" / "exercise schema" / "general_gym_exercise_taxonomy_v1.json"
+DRAFT_DIR = PROJECT_ROOT / "Research materials" / "legacy" / "exercise research drafts"
 
 
 REQUIRED_FIELDS = [
@@ -182,7 +182,7 @@ def validate(paths: Iterable[str]) -> int:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate draft exercise research JSON files before catalog merge.")
-    parser.add_argument("paths", nargs="*", help="Optional explicit draft JSON paths. Defaults to backend/data/exercise_research_drafts/*_draft.json.")
+    parser.add_argument("paths", nargs="*", help="Optional explicit draft JSON paths. Defaults to Research materials/legacy/exercise research drafts/*_draft.json.")
     return parser.parse_args()
 
 

@@ -1,0 +1,72 @@
+name: Deploy Runlete to GCP
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options: [staging, production]
+        required: true
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: deploy-${{ inputs.environment }}
+  cancel-in-progress: false
+jobs:
+  build-and-release:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Submit immutable images
+        run: |
+          gcloud builds submit \
+            --project "$GCP_PROJECT_ID" \
+            --config cloudbuild.yaml \
+            --service-account "projects/${GCP_PROJECT_ID}/serviceAccounts/${GCP_DEPLOY_SERVICE_ACCOUNT}" \
+            --substitutions COMMIT_SHA="$GITHUB_SHA",_REGION="$GCP_REGION",_REPOSITORY="runlete-${{ inputs.environment }}"
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCP_DEPLOY_SERVICE_ACCOUNT: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
+          GCP_REGION: europe-west1
+      - name: Export Terraform-owned service definitions
+        run: |
+          mkdir -p deploy/rendered
+          for component in api worker admin; do
+            gcloud run services describe "runlete-${ENVIRONMENT}-${component}" \
+              --project "$GCP_PROJECT_ID" \
+              --region "$GCP_REGION" \
+              --format=export > "deploy/rendered/${component}.yaml"
+          done
+          sed -i -E '0,/image: .*/s//image: api/' deploy/rendered/api.yaml
+          sed -i -E '0,/image: .*/s//image: worker/' deploy/rendered/worker.yaml
+          sed -i -E '0,/image: .*/s//image: admin/' deploy/rendered/admin.yaml
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCP_REGION: europe-west1
+          ENVIRONMENT: ${{ inputs.environment }}
+      - name: Run database migration job
+        run: |
+          API_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/runlete-${ENVIRONMENT}/api:${GITHUB_SHA}"
+          gcloud run jobs update "runlete-${ENVIRONMENT}-migrate" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --image "$API_IMAGE"
+          gcloud run jobs execute "runlete-${ENVIRONMENT}-migrate" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --wait
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCP_REGION: europe-west1
+          ENVIRONMENT: ${{ inputs.environment }}
+      - name: Create Cloud Deploy releases
+        run: |
+          API_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/runlete-${ENVIRONMENT}/api:${GITHUB_SHA}"
+          ADMIN_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/runlete-${ENVIRONMENT}/admin:${GITHUB_SHA}"
+          gcloud deploy releases create "api-${GITHUB_RUN_ID}" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --delivery-pipeline "runlete-${ENVIRONMENT}-api" --images "api=${API_IMAGE}"
+          gcloud deploy releases create "worker-${GITHUB_RUN_ID}" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --delivery-pipeline "runlete-${ENVIRONMENT}-worker" --images "worker=${API_IMAGE}"
+          gcloud deploy releases create "admin-${GITHUB_RUN_ID}" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --delivery-pipeline "runlete-${ENVIRONMENT}-admin" --images "admin=${ADMIN_IMAGE}"
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCP_REGION: europe-west1
+          ENVIRONMENT: ${{ inputs.environment }}

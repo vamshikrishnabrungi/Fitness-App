@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
@@ -15,13 +14,9 @@ import { Button } from '../../src/components/Button';
 import { LogoutModal } from '../../src/components/LogoutModal';
 import { useAuthStore } from '../../src/store/authStore';
 import { api } from '../../src/utils/api';
-import { colors, typography, spacing, borderRadius } from '../../src/utils/theme';
+import { colors, typography, spacing } from '../../src/utils/theme';
 
-interface ProfileStats {
-  workouts: number;
-  streak_days: number;
-  hours: number;
-}
+interface ProfileStats { activities: number; distance_km: number; moving_minutes: number }
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -78,17 +73,17 @@ export default function ProfileScreen() {
         <GlassCard style={styles.statsCard}>
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{stats?.workouts ?? 0}</Text>
-              <Text style={styles.statLabel}>Workouts</Text>
+              <Text style={styles.statValue}>{stats?.activities ?? 0}</Text>
+              <Text style={styles.statLabel}>Activities</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{stats?.streak_days ?? 0}</Text>
-              <Text style={styles.statLabel}>Day Streak</Text>
+              <Text style={styles.statValue}>{Number(stats?.distance_km || 0).toFixed(1)}</Text>
+              <Text style={styles.statLabel}>Kilometres</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{stats?.hours ?? 0}</Text>
+              <Text style={styles.statValue}>{(Number(stats?.moving_minutes || 0) / 60).toFixed(1)}</Text>
               <Text style={styles.statLabel}>Hours</Text>
             </View>
           </View>

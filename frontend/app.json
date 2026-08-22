@@ -31,7 +31,10 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Allow Runlete to use your location to track runs, distance, and territory.",
-          "locationWhenInUsePermission": "Allow Runlete to use your location to track runs, distance, and territory."
+          "locationWhenInUsePermission": "Allow Runlete to use your location to track runs, distance, and territory.",
+          "isIosBackgroundLocationEnabled": true,
+          "isAndroidBackgroundLocationEnabled": true,
+          "isAndroidForegroundServiceEnabled": true
         }
       ],
       [
@@ -52,7 +55,9 @@
       ],
       "expo-font",
       "expo-web-browser",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "@rnmapbox/maps",
+      "expo-notifications"
     ],
     "experiments": {
       "typedRoutes": true

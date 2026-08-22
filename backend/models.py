@@ -490,12 +490,16 @@ class TerraGpsPoint(BaseModel):
     timestamp: Optional[str] = None
     altitude: Optional[float] = None
     speed: Optional[float] = None
+    accuracy: Optional[float] = None
+    heart_rate: Optional[int] = None
+    cadence: Optional[float] = None
 
 
 class TerraRunCreate(BaseModel):
     gps_path: List[TerraGpsPoint] = Field(default_factory=list)
     start_time: Optional[str] = None
     end_time: Optional[str] = None
+    paused_duration_sec: int = Field(default=0, ge=0)
 
 
 class TerraReflectionCreate(BaseModel):

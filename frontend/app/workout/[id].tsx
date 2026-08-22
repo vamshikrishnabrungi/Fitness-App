@@ -81,6 +81,7 @@ interface Workout {
     week_theme?: string;
   };
   session_plan?: SessionPlan;
+  version?: number;
 }
 
 interface SectionBlock {
@@ -140,9 +141,17 @@ export default function WorkoutDetailScreen() {
   const fetchWorkout = useCallback(async () => {
     try {
       setLoading(true);
-      const workouts = await api.get<Workout[]>('/workouts');
-      const foundWorkout = workouts.find((item) => item.id === id);
-      setWorkout(foundWorkout || null);
+      const session = await api.get<any>(`/training/sessions/${id}`);
+      const exercises: Exercise[] = (session.items || []).map((item: any) => ({
+        name: item.method_name,
+        exercise_id: item.method_id,
+        sets: item.prescription?.sets,
+        reps: item.prescription?.repetitions ? String(item.prescription.repetitions) : undefined,
+        duration: item.prescription?.duration_minutes ? `${item.prescription.duration_minutes} min` : undefined,
+        rest: item.prescription?.recovery_seconds ? `${item.prescription.recovery_seconds}s` : undefined,
+        substitutions: item.alternatives || [],
+      }));
+      setWorkout({id:session.id,title:session.purpose,category:session.session_type,duration:session.estimated_minutes,difficulty:session.status,completed:session.status==='completed',scheduled_date:session.scheduled_for?.slice(0,10),description:session.explanation,exercises,version:session.version,session_plan:{title:session.purpose,category:session.session_type,duration_min:session.estimated_minutes,why_this_session:session.explanation,main_work:exercises}});
     } catch (error) {
       console.error('Error fetching workout:', error);
       setWorkout(null);
@@ -357,6 +366,8 @@ export default function WorkoutDetailScreen() {
         workoutId={workout.id}
         workoutTitle={workout.title}
         initialCompletionPercentage={completionPercent}
+        expectedVersion={workout.version}
+        estimatedMinutes={workout.duration}
         mainExercises={(((workout as any)?.session_plan?.main_work as any[]) || [])
           .map((ex) => ({ name: ex?.name as string, exercise_id: (ex?.exercise_id ?? ex?.knowledge_ref?.exercise_id ?? null) as string | null }))
           .filter((ex) => !!ex.name)}

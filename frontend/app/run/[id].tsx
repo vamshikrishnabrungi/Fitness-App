@@ -7,30 +7,67 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import MapView, { Marker, Polyline } from 'react-native-maps';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlassCard } from '../../src/components/GlassCard';
+import { RunRouteMap } from '../../src/components/RunRouteMap';
 import { api } from '../../src/utils/api';
 import { borderRadius, colors, spacing, typography } from '../../src/utils/theme';
 
 interface RunDetail {
   id: string;
-  distance: number;
-  duration: number;
-  territory_captured: number;
-  is_loop: boolean;
-  start_time?: string | null;
-  end_time?: string | null;
-  created_at?: string;
-  gps_path?: { latitude: number; longitude: number }[];
+  source: string;
+  status: string;
+  visibility: string;
+  title?: string | null;
+  distance_m?: number | null;
+  moving_seconds?: number | null;
+  elapsed_seconds?: number | null;
+  paused_seconds?: number | null;
+  average_pace_s_per_km?: number | null;
+  elevation_gain_m?: number | null;
+  calories_kcal?: number | null;
+  average_hr?: number | null;
+  average_cadence?: number | null;
+  roads_verified_m: number;
+  attributed_club_id?: string | null;
+  processing_message?: string | null;
+  rejection_code?: string | null;
+  started_at: string;
+  ended_at?: string | null;
+  route: { latitude: number; longitude: number }[];
+  splits?: {
+    sequence: number;
+    distance_m: number;
+    elapsed_seconds: number;
+    pace_s_per_km?: number | null;
+  }[];
+  best_efforts?: {
+    distance_code: string;
+    distance_m: number;
+    elapsed_seconds: number;
+    is_personal_record: boolean;
+  }[];
+  quality?: {
+    gps_score: number;
+    competition_eligible: boolean;
+    territory_eligible: boolean;
+    reasons: string[];
+  } | null;
 }
 
 interface Reflection {
   feeling?: string;
   notes?: string;
+}
+
+interface ActivityInsight {
+  summary: string;
+  recommendation: string;
+  effort: number;
+  generated_by: string;
 }
 
 const feelingEmoji: Record<string, string> = {
@@ -65,19 +102,6 @@ const fmtDate = (v?: string | null) => {
   return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 };
 
-// Frame the map around the whole route, with padding so the line isn't flush to the edge.
-const regionFor = (pts: { latitude: number; longitude: number }[]) => {
-  const lats = pts.map((p) => p.latitude), lngs = pts.map((p) => p.longitude);
-  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
-  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
-  return {
-    latitude: (minLat + maxLat) / 2,
-    longitude: (minLng + maxLng) / 2,
-    latitudeDelta: Math.max(0.004, (maxLat - minLat) * 1.8),
-    longitudeDelta: Math.max(0.004, (maxLng - minLng) * 1.8),
-  };
-};
-
 export default function RunDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -85,18 +109,29 @@ export default function RunDetailScreen() {
 
   const [run, setRun] = useState<RunDetail | null>(null);
   const [reflection, setReflection] = useState<Reflection | null>(null);
+  const [insight, setInsight] = useState<ActivityInsight | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
     const load = async () => {
       try {
-        const [runsRes, reflectionRes] = await Promise.all([
-          api.get<RunDetail[]>('/terra/runs').catch(() => []),
-          api.get<Reflection>(`/terra/reflections/${id}`).catch(() => null),
+        const [activityRes, reflectionRes, insightRes] = await Promise.all([
+          api.get<RunDetail>(`/activities/${id}`).catch(() => null),
+          Promise.resolve(null),
+          Promise.resolve(null),
         ]);
-        const found = (runsRes ?? []).find((r) => String(r.id) === String(id));
-        setRun(found ?? null);
+        if (cancelled) return;
+        setRun(activityRes);
         setReflection(reflectionRes);
+        setInsight(insightRes);
+        if (
+          activityRes &&
+          ['uploaded', 'processing', 'provisional'].includes(activityRes.status)
+        ) {
+          timer = setTimeout(load, 5000);
+        }
       } catch {
         // ignore
       } finally {
@@ -104,6 +139,10 @@ export default function RunDetailScreen() {
       }
     };
     load();
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
   }, [id]);
 
   if (loading) {
@@ -126,8 +165,13 @@ export default function RunDetailScreen() {
     );
   }
 
-  const calories = Math.round(run.distance * 60);
-  const route = run.gps_path ?? [];
+  const distanceKm = Number(run.distance_m ?? 0) / 1000;
+  const movingTime = Number(run.moving_seconds ?? 0);
+  const elapsedTime = Number(run.elapsed_seconds ?? 0);
+  const calories = Number(run.calories_kcal ?? 0);
+  const route = run.route ?? [];
+  const startedAt = run.started_at;
+  const endedAt = run.ended_at ?? run.started_at;
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -136,50 +180,27 @@ export default function RunDetailScreen() {
         <TouchableOpacity style={styles.headerBack} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{fmtDate(run.end_time ?? run.created_at)}</Text>
+        <Text style={styles.headerTitle}>{fmtDate(endedAt)}</Text>
         <View style={{ width: 44 }} />
       </View>
 
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 40 }]} showsVerticalScrollIndicator={false}>
         {/* Hero */}
         <LinearGradient
-          colors={run.is_loop ? [colors.textPrimary, '#2B2B2B'] : [colors.accentBlue, '#5B8DEF']}
+          colors={[colors.accentBlue, '#5B8DEF']}
           style={styles.hero}
         >
           <View style={styles.heroIcon}>
-            <Ionicons name={run.is_loop ? 'git-compare-outline' : 'trending-up-outline'} size={28} color="white" />
+            <Ionicons name="trending-up-outline" size={28} color="white" />
           </View>
-          <Text style={styles.heroDistance}>{run.distance.toFixed(2)}<Text style={styles.heroUnit}> km</Text></Text>
-          <Text style={styles.heroTime}>{fmtDateTime(run.start_time ?? run.created_at)}</Text>
-          {run.is_loop && (
-            <View style={styles.loopBadge}>
-              <Text style={styles.loopBadgeText}>🔄 Loop Run · Territory Boost</Text>
-            </View>
-          )}
+          <Text style={styles.heroDistance}>{distanceKm.toFixed(2)}<Text style={styles.heroUnit}> km</Text></Text>
+          <Text style={styles.heroTime}>{fmtDateTime(startedAt)}</Text>
         </LinearGradient>
 
         {/* Route map — static Strava-style trace of where you actually ran */}
         {route.length > 1 ? (
           <View style={styles.mapCard}>
-            <MapView
-              style={styles.map}
-              initialRegion={regionFor(route)}
-              scrollEnabled={false}
-              zoomEnabled={false}
-              pitchEnabled={false}
-              rotateEnabled={false}
-              showsPointsOfInterest={false}
-              showsCompass={false}
-              toolbarEnabled={false}
-            >
-              <Polyline coordinates={route} strokeColor={colors.brand} strokeWidth={5} lineCap="round" lineJoin="round" />
-              <Marker coordinate={route[0]} anchor={{ x: 0.5, y: 0.5 }}>
-                <View style={StyleSheet.flatten([styles.pin, styles.pinStart])} />
-              </Marker>
-              <Marker coordinate={route[route.length - 1]} anchor={{ x: 0.5, y: 0.5 }}>
-                <View style={StyleSheet.flatten([styles.pin, styles.pinEnd])} />
-              </Marker>
-            </MapView>
+            <RunRouteMap points={route} />
           </View>
         ) : (
           <GlassCard style={styles.noRouteCard}>
@@ -191,10 +212,18 @@ export default function RunDetailScreen() {
         {/* Key metrics */}
         <View style={styles.metricsGrid}>
           {[
-            { icon: 'time-outline', label: 'Duration', value: fmtDuration(run.duration), color: colors.accentBlue },
-            { icon: 'speedometer-outline', label: 'Avg Pace', value: fmtPace(run.distance, run.duration), color: colors.accentTeal },
+            { icon: 'time-outline', label: 'Moving Time', value: fmtDuration(movingTime), color: colors.accentBlue },
+            { icon: 'hourglass-outline', label: 'Elapsed Time', value: fmtDuration(elapsedTime), color: '#7C3AED' },
+            { icon: 'speedometer-outline', label: 'Avg Pace', value: fmtPace(distanceKm, movingTime), color: colors.accentTeal },
+            {
+              icon: 'analytics-outline',
+              label: 'Heart rate',
+              value: run.average_hr ? `${run.average_hr} bpm` : '--',
+              color: colors.accentGreen,
+            },
             { icon: 'flame-outline', label: 'Calories', value: `${calories} cal`, color: '#E74C3C' },
-            { icon: 'map-outline', label: 'Roads held', value: `${run.territory_captured.toFixed(2)} km`, color: colors.statusSuccess },
+            { icon: 'trending-up-outline', label: 'Elevation', value: `${Number(run.elevation_gain_m ?? 0).toFixed(0)} m`, color: '#D97706' },
+            { icon: 'map-outline', label: 'Roads verified', value: `${(run.roads_verified_m / 1000).toFixed(2)} km`, color: colors.statusSuccess },
           ].map((m) => (
             <GlassCard key={m.label} style={styles.metricCard}>
               <Ionicons name={m.icon as any} size={22} color={m.color} />
@@ -209,15 +238,64 @@ export default function RunDetailScreen() {
           <View style={styles.xpRow}>
             <View>
               <Text style={styles.xpLabel}>CLUB CONTRIBUTION</Text>
-              <Text style={styles.xpValue}>{run.distance.toFixed(2)} km</Text>
+              <Text style={styles.xpValue}>{distanceKm.toFixed(2)} km</Text>
             </View>
             <View style={styles.xpBreakdown}>
               <Text style={styles.xpBreakdownText}>
-                {run.territory_captured > 0 ? `Claimed ${run.territory_captured.toFixed(2)} km of road` : 'No territory (run 2.5 km+)'}
+                {run.roads_verified_m > 0
+                  ? `Matched ${(run.roads_verified_m / 1000).toFixed(2)} km to verified OSM roads`
+                  : ['uploaded', 'processing', 'provisional'].includes(run.status)
+                    ? 'Road verification is processing'
+                    : run.quality?.reasons.includes('map_matching_unavailable_or_failed')
+                      ? 'Territory maps are unavailable or GPS matching failed'
+                      : 'No qualifying road traversal'}
               </Text>
+              {!!run.attributed_club_id && (
+                <Text style={styles.xpBreakdownText}>Credited once to your primary club</Text>
+              )}
             </View>
           </View>
         </GlassCard>
+
+        {run.splits && run.splits.length > 0 ? (
+          <GlassCard style={styles.routeCard}>
+            <Text style={styles.routeHeading}>Kilometre Splits</Text>
+            {run.splits.map((split) => (
+              <View key={split.sequence} style={styles.analysisRow}>
+                <Text style={styles.analysisLabel}>KM {split.sequence}</Text>
+                <Text style={styles.analysisValue}>
+                  {fmtDuration(split.elapsed_seconds)} · {split.pace_s_per_km ? fmtPace(1, split.pace_s_per_km) : '--'}
+                </Text>
+              </View>
+            ))}
+          </GlassCard>
+        ) : null}
+
+        {run.best_efforts && run.best_efforts.length > 0 ? (
+          <GlassCard style={styles.routeCard}>
+            <Text style={styles.routeHeading}>Best Efforts</Text>
+            {run.best_efforts.map((effort) => (
+              <View key={effort.distance_code} style={styles.analysisRow}>
+                <Text style={styles.analysisLabel}>{effort.distance_code.replace('_', ' ').toUpperCase()}{effort.is_personal_record ? ' · PR' : ''}</Text>
+                <Text style={styles.analysisValue}>{fmtDuration(effort.elapsed_seconds)}</Text>
+              </View>
+            ))}
+          </GlassCard>
+        ) : null}
+
+        {insight ? (
+          <GlassCard style={styles.insightCard}>
+            <View style={styles.insightHeader}>
+              <Ionicons name="sparkles-outline" size={20} color={colors.accentBlue} />
+              <Text style={styles.routeHeading}>Runlete Insight</Text>
+            </View>
+            <Text style={styles.insightText}>{insight.summary}</Text>
+            <Text style={styles.insightRecommendation}>{insight.recommendation}</Text>
+            <Text style={styles.insightMeta}>
+              Effort {insight.effort.toFixed(0)} · private to you
+            </Text>
+          </GlassCard>
+        ) : null}
 
         {/* Reflection */}
         {reflection?.feeling ? (
@@ -239,23 +317,31 @@ export default function RunDetailScreen() {
           <View style={styles.routeRow}>
             <Ionicons name="location-outline" size={16} color={colors.textSecondary} />
             <Text style={styles.routeText}>
-              {run.gps_path && run.gps_path.length > 0
-                ? `${run.gps_path.length} GPS points recorded`
+              {route.length > 0
+                ? `${route.length} accepted GPS points`
                 : 'No GPS data available'}
             </Text>
           </View>
           <View style={styles.routeRow}>
             <Ionicons name="time-outline" size={16} color={colors.textSecondary} />
             <Text style={styles.routeText}>
-              {run.start_time ? `Started: ${new Date(run.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Start time unknown'}
+              {startedAt ? `Started: ${new Date(startedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'Start time unknown'}
             </Text>
           </View>
           <View style={styles.routeRow}>
             <Ionicons name="flag-outline" size={16} color={colors.textSecondary} />
             <Text style={styles.routeText}>
-              {run.end_time ? `Finished: ${new Date(run.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'End time unknown'}
+              {endedAt ? `Finished: ${new Date(endedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : 'End time unknown'}
             </Text>
           </View>
+          {run.quality ? (
+            <View style={styles.routeRow}>
+              <Ionicons name="shield-checkmark-outline" size={16} color={colors.textSecondary} />
+              <Text style={styles.routeText}>
+                GPS quality: {Math.round(run.quality.gps_score * 100)}% · {run.quality.competition_eligible ? 'competition eligible' : 'not competitive'}
+              </Text>
+            </View>
+          ) : null}
         </GlassCard>
 
       </ScrollView>
@@ -315,6 +401,14 @@ const styles = StyleSheet.create({
   routeHeading: { ...typography.h4, color: colors.textPrimary },
   routeRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   routeText: { ...typography.body, color: colors.textSecondary },
+  analysisRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.xs, borderBottomWidth: 1, borderBottomColor: colors.separator },
+  analysisLabel: { ...typography.caption, color: colors.textSecondary, fontWeight: '700' },
+  analysisValue: { ...typography.body, color: colors.textPrimary, fontWeight: '600' },
+  insightCard: { padding: spacing.lg, gap: spacing.sm, borderWidth: 1, borderColor: 'rgba(59,130,246,0.25)' },
+  insightHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  insightText: { ...typography.body, color: colors.textPrimary, lineHeight: 22 },
+  insightRecommendation: { ...typography.body, color: colors.textSecondary, lineHeight: 22 },
+  insightMeta: { ...typography.caption, color: colors.textTertiary },
 
   // Route map
   mapCard: { borderRadius: borderRadius.xl, overflow: 'hidden', borderWidth: 1, borderColor: colors.separator },

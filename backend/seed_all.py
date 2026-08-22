@@ -41,6 +41,19 @@ async def _ensure_schema(url: str, name: str) -> None:
 
 
 def main() -> None:
+    legacy_seed_enabled = (
+        os.environ.get("LEGACY_MONGO_PLANNING_SEED_ENABLED", "false")
+        .strip()
+        .lower()
+        in {"1", "true", "yes", "on"}
+    )
+    if not legacy_seed_enabled:
+        print(
+            "Legacy Mongo workout seeding is disabled. "
+            "Runlete workout knowledge is being rebuilt in PostgreSQL."
+        )
+        return
+
     url, name = _env()
     print(f"Bootstrapping {name} @ {url}")
 

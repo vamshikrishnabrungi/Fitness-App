@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://runlete.com/schemas/exercise-reference-template-v1.json",
+  "title": "Runlete four-week exercise-reference template",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "template_code",
+    "content_version",
+    "status",
+    "phase",
+    "category_code",
+    "name",
+    "athlete_level",
+    "duration_weeks",
+    "purpose",
+    "source_template_ids",
+    "applicable_scenarios",
+    "method_options",
+    "selection_policy",
+    "selection_rules",
+    "weeks",
+    "exercise_progression_policy",
+    "week_4_policy",
+    "mandatory_stops",
+    "ai_use",
+    "prompt_reference_text"
+  ],
+  "properties": {
+    "template_code": {"type": "string", "pattern": "^P[1-9]-[A-Z0-9-]+-(BEGINNER|INTERMEDIATE|ADVANCED)-4W$"},
+    "content_version": {"type": "integer", "minimum": 1},
+    "status": {"const": "research_derived_candidate"},
+    "phase": {"type": "integer", "minimum": 1, "maximum": 9},
+    "category_code": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+    "name": {"type": "string", "minLength": 3},
+    "athlete_level": {"enum": ["beginner", "intermediate", "advanced"]},
+    "duration_weeks": {"const": 4},
+    "purpose": {"type": "string", "minLength": 20},
+    "source_template_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "applicable_scenarios": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "method_options": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/method"}},
+    "selection_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy", "required_primary_count", "supporting_methods_are_candidates", "mode_required", "cross_training_requires_opt_in", "unresolved_behavior"],
+      "properties": {
+        "strategy": {"enum": ["quality_methods", "single_modality"]},
+        "required_primary_count": {"const": 1},
+        "supporting_methods_are_candidates": {"type": "boolean"},
+        "mode_required": {"type": "boolean"},
+        "cross_training_requires_opt_in": {"type": "boolean"},
+        "unresolved_behavior": {"const": "fail_closed"}
+      }
+    },
+    "selection_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["use", "avoid", "session_order", "dose_application"],
+      "properties": {
+        "use": {"type": "string", "minLength": 20},
+        "avoid": {"type": "string", "minLength": 20},
+        "session_order": {"type": "string", "minLength": 20},
+        "dose_application": {"type": "string", "minLength": 20}
+      }
+    },
+    "weeks": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/week"}
+    },
+    "exercise_progression_policy": {"type": "string", "minLength": 20},
+    "week_4_policy": {"type": "string", "minLength": 20},
+    "mandatory_stops": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string"}},
+    "ai_use": {"type": "string", "minLength": 20},
+    "prompt_reference_text": {"type": "string", "minLength": 100}
+  },
+  "$defs": {
+    "method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method_code", "block_role", "applicable_modes", "implementation_note"],
+      "properties": {
+        "method_code": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "block_role": {"enum": ["preparation", "primary_reference", "supporting_reference"]},
+        "applicable_modes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_]+$"}},
+        "implementation_note": {"type": "string"}
+      }
+    },
+    "prescription": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sets_or_series", "repetitions_distance_or_duration", "intensity", "recovery"],
+      "properties": {
+        "sets_or_series": {"type": ["integer", "string"]},
+        "repetitions_distance_or_duration": {"type": "string", "minLength": 1},
+        "intensity": {"type": "string", "minLength": 1},
+        "recovery": {"type": "string", "minLength": 1}
+      }
+    },
+    "week": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["week", "intent", "sessions_per_week", "prescription_per_primary_method", "progression_condition", "regression_condition"],
+      "properties": {
+        "week": {"type": "integer", "minimum": 1, "maximum": 4},
+        "intent": {"type": "string", "minLength": 3},
+        "sessions_per_week": {"type": ["integer", "string"]},
+        "prescription_per_primary_method": {"$ref": "#/$defs/prescription"},
+        "progression_condition": {"type": "string", "minLength": 20},
+        "regression_condition": {"type": "string", "minLength": 20}
+      }
+    }
+  }
+}

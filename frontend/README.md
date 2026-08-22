@@ -1,50 +1,57 @@
-# Welcome to your Expo app 👋
+# Runlete mobile application
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Expo Router app for recording/processing runs, activities, verified territory,
+clubs, leaderboards, challenges, races, achievements, notifications, governance,
+and moderation appeals.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Local setup
 
 ```bash
-npm run reset-project
+npm install
+cp .env.example .env
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+The native map and background recorder require a development build; Expo Go
+cannot exercise all native behavior:
 
-## Learn more
+```bash
+npx expo run:ios
+npx expo run:android
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Required build/runtime variables:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```text
+EXPO_PUBLIC_BACKEND_URL=https://api.runlete.example
+EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN=pk...
+RNMAPBOX_MAPS_DOWNLOAD_TOKEN=sk...
+```
 
-## Join the community
+The public Mapbox token is intentionally embedded in the mobile app and must be
+restricted to Runlete's bundle/application IDs. The secret SDK download token is
+for dependency/build-time access only and belongs in EAS/CI secrets.
 
-Join our community of developers creating universal apps.
+Production push requires APNs and FCM credentials configured for the EAS project.
+Apple Health and Health Connect synchronization also require native entitlements,
+user consent and a signed development/release build; the app never reports either
+source as connected until the SQL integration connection is active.
+Do not place APNs keys, service-account JSON, backend secrets, or AWS credentials
+in `EXPO_PUBLIC_*` variables.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Generated contracts and checks
+
+The source API contract is the backend `openapi.json`; do not create a second
+handwritten backend model set:
+
+```bash
+npm run generate:api
+npm run typecheck
+npm run lint
+npx expo export --platform web
+```
+
+Native release acceptance must also cover weak GPS, urban drift, backgrounding,
+termination recovery, airplane mode, upload interruption, privacy zones,
+Mapbox MVT interaction, dynamic text, and screen readers on physical iOS and
+Android devices.

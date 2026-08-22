@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { Stack, useRouter, useSegments, useRootNavigationState } from 'expo-router';
+import '../src/services/runRecorder';
 import { StatusBar } from 'expo-status-bar';
 import { useAuthStore } from '../src/store/authStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { colors } from '../src/utils/theme';
+import { registerCompetitionNotifications } from '../src/services/notifications';
 
 export default function RootLayout() {
   const { isAuthenticated, isLoading, loadAuth } = useAuthStore();
@@ -41,6 +43,13 @@ export default function RootLayout() {
     };
     run();
   }, [isAuthenticated, isLoading, navState?.key, router, segments]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    registerCompetitionNotifications().catch(() => {
+      // Notification registration is optional and must never block app startup.
+    });
+  }, [isAuthenticated]);
 
   if (isLoading) {
     return (

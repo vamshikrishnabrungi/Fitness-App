@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     View,
     Text,
@@ -25,8 +25,6 @@ interface AnalyticsData {
         totalWorkouts: number;
         totalDuration: number;
         avgDuration: number;
-        caloriesBurned: number;
-        streak: number;
     } | null;
     food: {
         avgCalories: number;
@@ -62,31 +60,29 @@ export default function AnalyticsScreen() {
         try {
             // Fetch all analytics in parallel
             const [workoutsRes, nutritionRes] = await Promise.all([
-                api.get('/workouts').catch(() => []),
-                api.get('/daily-summary').catch(() => null),
+                api.get('/training/history').catch(() => []),
+                api.get('/nutrition/daily-summary').catch(() => null),
             ]);
 
             // Process workout data
-            const workouts = workoutsRes as any[] || [];
+            const workouts = ((workoutsRes as any[]) || []).filter((workout: any) => workout.status === 'complete');
             const workoutData = {
                 totalWorkouts: workouts.length,
-                totalDuration: workouts.reduce((sum: number, w: any) => sum + (w.duration || 0), 0),
+                totalDuration: workouts.reduce((sum: number, w: any) => sum + Number(w.estimated_minutes || 0), 0),
                 avgDuration: workouts.length > 0
-                    ? Math.round(workouts.reduce((sum: number, w: any) => sum + (w.duration || 0), 0) / workouts.length)
+                    ? Math.round(workouts.reduce((sum: number, w: any) => sum + Number(w.estimated_minutes || 0), 0) / workouts.length)
                     : 0,
-                caloriesBurned: workouts.reduce((sum: number, w: any) => sum + (w.calories_burned || 0), 0),
-                streak: 0, // Could calculate from dates
             };
 
             // Process food data
             const nutrition = nutritionRes as any;
             const foodData = nutrition ? {
-                avgCalories: nutrition.total_calories || 0,
-                avgProtein: nutrition.total_protein || 0,
-                avgCarbs: nutrition.total_carbs || 0,
-                avgFat: nutrition.total_fat || 0,
-                avgFiber: nutrition.total_fiber || 0,
-                daysLogged: 1, // Today
+                avgCalories: nutrition.calories_kcal || 0,
+                avgProtein: nutrition.protein_g || 0,
+                avgCarbs: nutrition.carbohydrate_g || 0,
+                avgFat: nutrition.fat_g || 0,
+                avgFiber: nutrition.fibre_g || 0,
+                daysLogged: nutrition.meals?.length ? 1 : 0,
             } : null;
 
             setAnalytics({
@@ -119,22 +115,6 @@ export default function AnalyticsScreen() {
         </View>
     );
 
-    // Render progress bar
-    const renderProgressBar = (label: string, value: number, max: number, color: string) => {
-        const percent = Math.min((value / max) * 100, 100);
-        return (
-            <View style={styles.progressItem}>
-                <View style={styles.progressHeader}>
-                    <Text style={styles.progressLabel}>{label}</Text>
-                    <Text style={styles.progressValue}>{value.toFixed(1)} / {max}</Text>
-                </View>
-                <View style={styles.progressBar}>
-                    <View style={[styles.progressFill, { width: `${percent}%`, backgroundColor: color }]} />
-                </View>
-            </View>
-        );
-    };
-
     // Render workout analytics
     const renderWorkoutAnalytics = () => {
         const data = analytics.workout;
@@ -155,19 +135,8 @@ export default function AnalyticsScreen() {
                     {renderStatCard('Total Workouts', data.totalWorkouts, '', '#F59E0B')}
                     {renderStatCard('Total Time', data.totalDuration, ' min', '#F59E0B')}
                     {renderStatCard('Avg Duration', data.avgDuration, ' min')}
-                    {renderStatCard('Calories Burned', data.caloriesBurned, ' cal')}
+                    {renderStatCard('Completed Sessions', data.totalWorkouts)}
                 </View>
-
-                {/* Streak Card */}
-                <GlassCard style={styles.sectionCard}>
-                    <View style={styles.streakContainer}>
-                        <Text style={styles.streakEmoji}>🔥</Text>
-                        <View>
-                            <Text style={styles.streakValue}>{data.streak} Day Streak</Text>
-                            <Text style={styles.streakLabel}>Keep it going!</Text>
-                        </View>
-                    </View>
-                </GlassCard>
             </>
         );
     };
@@ -198,10 +167,7 @@ export default function AnalyticsScreen() {
                 {/* Macros */}
                 <GlassCard style={styles.sectionCard}>
                     <Text style={styles.sectionTitle}>Macronutrients</Text>
-                    {renderProgressBar('Protein', data.avgProtein, 150, '#10B981')}
-                    {renderProgressBar('Carbs', data.avgCarbs, 250, '#3B82F6')}
-                    {renderProgressBar('Fat', data.avgFat, 65, '#F59E0B')}
-                    {renderProgressBar('Fiber', data.avgFiber, 30, '#8B5CF6')}
+                    <Text style={styles.sectionTitle}>Confirmed totals for today</Text>
                 </GlassCard>
 
                 {/* Stats Grid */}

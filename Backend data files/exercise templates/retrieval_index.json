@@ -1,0 +1,1336 @@
+{
+  "schema_version": "1.0.0",
+  "records": [
+    {
+      "category_code": "maximum_strength",
+      "athlete_level": "beginner",
+      "template_code": "P1-MAXIMUM-STRENGTH-BEGINNER-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-MAX-FOUNDATION",
+        "P1-MAX-DEVELOPMENT",
+        "P1-MAX-MAINTENANCE"
+      ]
+    },
+    {
+      "category_code": "maximum_strength",
+      "athlete_level": "intermediate",
+      "template_code": "P1-MAXIMUM-STRENGTH-INTERMEDIATE-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-MAX-FOUNDATION",
+        "P1-MAX-DEVELOPMENT",
+        "P1-MAX-MAINTENANCE"
+      ]
+    },
+    {
+      "category_code": "maximum_strength",
+      "athlete_level": "advanced",
+      "template_code": "P1-MAXIMUM-STRENGTH-ADVANCED-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-MAX-FOUNDATION",
+        "P1-MAX-DEVELOPMENT",
+        "P1-MAX-MAINTENANCE"
+      ]
+    },
+    {
+      "category_code": "yielding_isometric_force",
+      "athlete_level": "beginner",
+      "template_code": "P1-YIELDING-ISOMETRIC-FORCE-BEGINNER-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-ISO-YIELD-CAPACITY"
+      ]
+    },
+    {
+      "category_code": "yielding_isometric_force",
+      "athlete_level": "intermediate",
+      "template_code": "P1-YIELDING-ISOMETRIC-FORCE-INTERMEDIATE-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-ISO-YIELD-CAPACITY"
+      ]
+    },
+    {
+      "category_code": "yielding_isometric_force",
+      "athlete_level": "advanced",
+      "template_code": "P1-YIELDING-ISOMETRIC-FORCE-ADVANCED-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-ISO-YIELD-CAPACITY"
+      ]
+    },
+    {
+      "category_code": "overcoming_isometric_force",
+      "athlete_level": "intermediate",
+      "template_code": "P1-OVERCOMING-ISOMETRIC-FORCE-INTERMEDIATE-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-ISO-OVERCOMING-MAX",
+        "P1-ISO-RAPID-INTENT"
+      ]
+    },
+    {
+      "category_code": "overcoming_isometric_force",
+      "athlete_level": "advanced",
+      "template_code": "P1-OVERCOMING-ISOMETRIC-FORCE-ADVANCED-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-ISO-OVERCOMING-MAX",
+        "P1-ISO-RAPID-INTENT"
+      ]
+    },
+    {
+      "category_code": "eccentric_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P1-ECCENTRIC-CAPACITY-BEGINNER-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-ECC-INTRO",
+        "P1-ECC-DEVELOPMENT",
+        "P1-ECC-MAINTENANCE"
+      ]
+    },
+    {
+      "category_code": "eccentric_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P1-ECCENTRIC-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-ECC-INTRO",
+        "P1-ECC-DEVELOPMENT",
+        "P1-ECC-MAINTENANCE"
+      ]
+    },
+    {
+      "category_code": "eccentric_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P1-ECCENTRIC-CAPACITY-ADVANCED-4W",
+      "file": "phase_01_exercise_templates.json",
+      "phase": 1,
+      "source_template_ids": [
+        "P1-ECC-INTRO",
+        "P1-ECC-DEVELOPMENT",
+        "P1-ECC-MAINTENANCE"
+      ]
+    },
+    {
+      "category_code": "explosive_strength",
+      "athlete_level": "beginner",
+      "template_code": "P2-EXPLOSIVE-STRENGTH-BEGINNER-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T01",
+        "P2-T02"
+      ]
+    },
+    {
+      "category_code": "explosive_strength",
+      "athlete_level": "intermediate",
+      "template_code": "P2-EXPLOSIVE-STRENGTH-INTERMEDIATE-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T01",
+        "P2-T02"
+      ]
+    },
+    {
+      "category_code": "explosive_strength",
+      "athlete_level": "advanced",
+      "template_code": "P2-EXPLOSIVE-STRENGTH-ADVANCED-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T01",
+        "P2-T02"
+      ]
+    },
+    {
+      "category_code": "vertical_power",
+      "athlete_level": "beginner",
+      "template_code": "P2-VERTICAL-POWER-BEGINNER-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T03"
+      ]
+    },
+    {
+      "category_code": "vertical_power",
+      "athlete_level": "intermediate",
+      "template_code": "P2-VERTICAL-POWER-INTERMEDIATE-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T03"
+      ]
+    },
+    {
+      "category_code": "vertical_power",
+      "athlete_level": "advanced",
+      "template_code": "P2-VERTICAL-POWER-ADVANCED-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T03"
+      ]
+    },
+    {
+      "category_code": "horizontal_power",
+      "athlete_level": "beginner",
+      "template_code": "P2-HORIZONTAL-POWER-BEGINNER-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T04"
+      ]
+    },
+    {
+      "category_code": "horizontal_power",
+      "athlete_level": "intermediate",
+      "template_code": "P2-HORIZONTAL-POWER-INTERMEDIATE-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T04"
+      ]
+    },
+    {
+      "category_code": "horizontal_power",
+      "athlete_level": "advanced",
+      "template_code": "P2-HORIZONTAL-POWER-ADVANCED-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T04"
+      ]
+    },
+    {
+      "category_code": "lateral_power",
+      "athlete_level": "advanced",
+      "template_code": "P2-LATERAL-POWER-ADVANCED-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T05"
+      ]
+    },
+    {
+      "category_code": "rotational_power",
+      "athlete_level": "intermediate",
+      "template_code": "P2-ROTATIONAL-POWER-INTERMEDIATE-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T06"
+      ]
+    },
+    {
+      "category_code": "rotational_power",
+      "athlete_level": "advanced",
+      "template_code": "P2-ROTATIONAL-POWER-ADVANCED-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T06"
+      ]
+    },
+    {
+      "category_code": "upper_body_power",
+      "athlete_level": "beginner",
+      "template_code": "P2-UPPER-BODY-POWER-BEGINNER-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T07"
+      ]
+    },
+    {
+      "category_code": "upper_body_power",
+      "athlete_level": "intermediate",
+      "template_code": "P2-UPPER-BODY-POWER-INTERMEDIATE-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T07"
+      ]
+    },
+    {
+      "category_code": "upper_body_power",
+      "athlete_level": "advanced",
+      "template_code": "P2-UPPER-BODY-POWER-ADVANCED-4W",
+      "file": "phase_02_exercise_templates.json",
+      "phase": 2,
+      "source_template_ids": [
+        "P2-T07"
+      ]
+    },
+    {
+      "category_code": "landing_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P3-LANDING-CAPACITY-BEGINNER-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T01",
+        "P3-T02",
+        "P3-T03",
+        "P3-T04"
+      ]
+    },
+    {
+      "category_code": "landing_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P3-LANDING-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T01",
+        "P3-T02",
+        "P3-T03",
+        "P3-T04"
+      ]
+    },
+    {
+      "category_code": "landing_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P3-LANDING-CAPACITY-ADVANCED-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T01",
+        "P3-T02",
+        "P3-T03",
+        "P3-T04"
+      ]
+    },
+    {
+      "category_code": "extensive_plyometrics",
+      "athlete_level": "beginner",
+      "template_code": "P3-EXTENSIVE-PLYOMETRICS-BEGINNER-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T05",
+        "P3-T06"
+      ]
+    },
+    {
+      "category_code": "extensive_plyometrics",
+      "athlete_level": "intermediate",
+      "template_code": "P3-EXTENSIVE-PLYOMETRICS-INTERMEDIATE-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T05",
+        "P3-T06"
+      ]
+    },
+    {
+      "category_code": "extensive_plyometrics",
+      "athlete_level": "advanced",
+      "template_code": "P3-EXTENSIVE-PLYOMETRICS-ADVANCED-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T05",
+        "P3-T06"
+      ]
+    },
+    {
+      "category_code": "reactive_elastic_strength",
+      "athlete_level": "beginner",
+      "template_code": "P3-REACTIVE-ELASTIC-STRENGTH-BEGINNER-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T07",
+        "P3-T10"
+      ]
+    },
+    {
+      "category_code": "reactive_elastic_strength",
+      "athlete_level": "intermediate",
+      "template_code": "P3-REACTIVE-ELASTIC-STRENGTH-INTERMEDIATE-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T07",
+        "P3-T10"
+      ]
+    },
+    {
+      "category_code": "reactive_elastic_strength",
+      "athlete_level": "advanced",
+      "template_code": "P3-REACTIVE-ELASTIC-STRENGTH-ADVANCED-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T07",
+        "P3-T10"
+      ]
+    },
+    {
+      "category_code": "horizontal_bounding",
+      "athlete_level": "beginner",
+      "template_code": "P3-HORIZONTAL-BOUNDING-BEGINNER-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T08"
+      ]
+    },
+    {
+      "category_code": "horizontal_bounding",
+      "athlete_level": "intermediate",
+      "template_code": "P3-HORIZONTAL-BOUNDING-INTERMEDIATE-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T08"
+      ]
+    },
+    {
+      "category_code": "horizontal_bounding",
+      "athlete_level": "advanced",
+      "template_code": "P3-HORIZONTAL-BOUNDING-ADVANCED-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T08"
+      ]
+    },
+    {
+      "category_code": "lateral_elastic_strength",
+      "athlete_level": "beginner",
+      "template_code": "P3-LATERAL-ELASTIC-STRENGTH-BEGINNER-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T09"
+      ]
+    },
+    {
+      "category_code": "lateral_elastic_strength",
+      "athlete_level": "intermediate",
+      "template_code": "P3-LATERAL-ELASTIC-STRENGTH-INTERMEDIATE-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T09"
+      ]
+    },
+    {
+      "category_code": "lateral_elastic_strength",
+      "athlete_level": "advanced",
+      "template_code": "P3-LATERAL-ELASTIC-STRENGTH-ADVANCED-4W",
+      "file": "phase_03_exercise_templates.json",
+      "phase": 3,
+      "source_template_ids": [
+        "P3-T09"
+      ]
+    },
+    {
+      "category_code": "acceleration",
+      "athlete_level": "beginner",
+      "template_code": "P4-ACCELERATION-BEGINNER-4W",
+      "file": "phase_04_exercise_templates.json",
+      "phase": 4,
+      "source_template_ids": [
+        "P4-T01",
+        "P4-T02",
+        "P4-T03",
+        "P4-T04",
+        "P4-T05"
+      ]
+    },
+    {
+      "category_code": "acceleration",
+      "athlete_level": "intermediate",
+      "template_code": "P4-ACCELERATION-INTERMEDIATE-4W",
+      "file": "phase_04_exercise_templates.json",
+      "phase": 4,
+      "source_template_ids": [
+        "P4-T01",
+        "P4-T02",
+        "P4-T03",
+        "P4-T04",
+        "P4-T05"
+      ]
+    },
+    {
+      "category_code": "acceleration",
+      "athlete_level": "advanced",
+      "template_code": "P4-ACCELERATION-ADVANCED-4W",
+      "file": "phase_04_exercise_templates.json",
+      "phase": 4,
+      "source_template_ids": [
+        "P4-T01",
+        "P4-T02",
+        "P4-T03",
+        "P4-T04",
+        "P4-T05"
+      ]
+    },
+    {
+      "category_code": "maximum_velocity",
+      "athlete_level": "beginner",
+      "template_code": "P4-MAXIMUM-VELOCITY-BEGINNER-4W",
+      "file": "phase_04_exercise_templates.json",
+      "phase": 4,
+      "source_template_ids": [
+        "P4-T06",
+        "P4-T07"
+      ]
+    },
+    {
+      "category_code": "maximum_velocity",
+      "athlete_level": "intermediate",
+      "template_code": "P4-MAXIMUM-VELOCITY-INTERMEDIATE-4W",
+      "file": "phase_04_exercise_templates.json",
+      "phase": 4,
+      "source_template_ids": [
+        "P4-T06",
+        "P4-T07"
+      ]
+    },
+    {
+      "category_code": "maximum_velocity",
+      "athlete_level": "advanced",
+      "template_code": "P4-MAXIMUM-VELOCITY-ADVANCED-4W",
+      "file": "phase_04_exercise_templates.json",
+      "phase": 4,
+      "source_template_ids": [
+        "P4-T06",
+        "P4-T07"
+      ]
+    },
+    {
+      "category_code": "speed_endurance",
+      "athlete_level": "intermediate",
+      "template_code": "P4-SPEED-ENDURANCE-INTERMEDIATE-4W",
+      "file": "phase_04_exercise_templates.json",
+      "phase": 4,
+      "source_template_ids": [
+        "P4-T09",
+        "P4-T10"
+      ]
+    },
+    {
+      "category_code": "speed_endurance",
+      "athlete_level": "advanced",
+      "template_code": "P4-SPEED-ENDURANCE-ADVANCED-4W",
+      "file": "phase_04_exercise_templates.json",
+      "phase": 4,
+      "source_template_ids": [
+        "P4-T09",
+        "P4-T10"
+      ]
+    },
+    {
+      "category_code": "deceleration",
+      "athlete_level": "beginner",
+      "template_code": "P5-DECELERATION-BEGINNER-4W",
+      "file": "phase_05_exercise_templates.json",
+      "phase": 5,
+      "source_template_ids": [
+        "P5-T01",
+        "P5-T02",
+        "P5-T03",
+        "P5-T04"
+      ]
+    },
+    {
+      "category_code": "deceleration",
+      "athlete_level": "intermediate",
+      "template_code": "P5-DECELERATION-INTERMEDIATE-4W",
+      "file": "phase_05_exercise_templates.json",
+      "phase": 5,
+      "source_template_ids": [
+        "P5-T01",
+        "P5-T02",
+        "P5-T03",
+        "P5-T04"
+      ]
+    },
+    {
+      "category_code": "deceleration",
+      "athlete_level": "advanced",
+      "template_code": "P5-DECELERATION-ADVANCED-4W",
+      "file": "phase_05_exercise_templates.json",
+      "phase": 5,
+      "source_template_ids": [
+        "P5-T01",
+        "P5-T02",
+        "P5-T03",
+        "P5-T04"
+      ]
+    },
+    {
+      "category_code": "planned_change_of_direction",
+      "athlete_level": "beginner",
+      "template_code": "P5-PLANNED-CHANGE-OF-DIRECTION-BEGINNER-4W",
+      "file": "phase_05_exercise_templates.json",
+      "phase": 5,
+      "source_template_ids": [
+        "P5-T05",
+        "P5-T06",
+        "P5-T07",
+        "P5-T08"
+      ]
+    },
+    {
+      "category_code": "planned_change_of_direction",
+      "athlete_level": "intermediate",
+      "template_code": "P5-PLANNED-CHANGE-OF-DIRECTION-INTERMEDIATE-4W",
+      "file": "phase_05_exercise_templates.json",
+      "phase": 5,
+      "source_template_ids": [
+        "P5-T05",
+        "P5-T06",
+        "P5-T07",
+        "P5-T08"
+      ]
+    },
+    {
+      "category_code": "planned_change_of_direction",
+      "athlete_level": "advanced",
+      "template_code": "P5-PLANNED-CHANGE-OF-DIRECTION-ADVANCED-4W",
+      "file": "phase_05_exercise_templates.json",
+      "phase": 5,
+      "source_template_ids": [
+        "P5-T05",
+        "P5-T06",
+        "P5-T07",
+        "P5-T08"
+      ]
+    },
+    {
+      "category_code": "reactive_agility",
+      "athlete_level": "beginner",
+      "template_code": "P5-REACTIVE-AGILITY-BEGINNER-4W",
+      "file": "phase_05_exercise_templates.json",
+      "phase": 5,
+      "source_template_ids": [
+        "P5-T09",
+        "P5-T10",
+        "P5-T11"
+      ]
+    },
+    {
+      "category_code": "reactive_agility",
+      "athlete_level": "intermediate",
+      "template_code": "P5-REACTIVE-AGILITY-INTERMEDIATE-4W",
+      "file": "phase_05_exercise_templates.json",
+      "phase": 5,
+      "source_template_ids": [
+        "P5-T09",
+        "P5-T10",
+        "P5-T11"
+      ]
+    },
+    {
+      "category_code": "reactive_agility",
+      "athlete_level": "advanced",
+      "template_code": "P5-REACTIVE-AGILITY-ADVANCED-4W",
+      "file": "phase_05_exercise_templates.json",
+      "phase": 5,
+      "source_template_ids": [
+        "P5-T09",
+        "P5-T10",
+        "P5-T11"
+      ]
+    },
+    {
+      "category_code": "aerobic_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P6-AEROBIC-CAPACITY-BEGINNER-4W",
+      "file": "phase_06_exercise_templates.json",
+      "phase": 6,
+      "source_template_ids": [
+        "P6-T01",
+        "P6-T02",
+        "P6-T03",
+        "P6-T04"
+      ]
+    },
+    {
+      "category_code": "aerobic_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P6-AEROBIC-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_06_exercise_templates.json",
+      "phase": 6,
+      "source_template_ids": [
+        "P6-T01",
+        "P6-T02",
+        "P6-T03",
+        "P6-T04"
+      ]
+    },
+    {
+      "category_code": "aerobic_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P6-AEROBIC-CAPACITY-ADVANCED-4W",
+      "file": "phase_06_exercise_templates.json",
+      "phase": 6,
+      "source_template_ids": [
+        "P6-T01",
+        "P6-T02",
+        "P6-T03",
+        "P6-T04"
+      ]
+    },
+    {
+      "category_code": "threshold_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P6-THRESHOLD-CAPACITY-BEGINNER-4W",
+      "file": "phase_06_exercise_templates.json",
+      "phase": 6,
+      "source_template_ids": [
+        "P6-T06",
+        "P6-T07",
+        "P6-T08",
+        "P6-T12",
+        "P6-T13"
+      ]
+    },
+    {
+      "category_code": "threshold_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P6-THRESHOLD-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_06_exercise_templates.json",
+      "phase": 6,
+      "source_template_ids": [
+        "P6-T06",
+        "P6-T07",
+        "P6-T08",
+        "P6-T12",
+        "P6-T13"
+      ]
+    },
+    {
+      "category_code": "threshold_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P6-THRESHOLD-CAPACITY-ADVANCED-4W",
+      "file": "phase_06_exercise_templates.json",
+      "phase": 6,
+      "source_template_ids": [
+        "P6-T06",
+        "P6-T07",
+        "P6-T08",
+        "P6-T12",
+        "P6-T13"
+      ]
+    },
+    {
+      "category_code": "high_intensity_aerobic_power",
+      "athlete_level": "beginner",
+      "template_code": "P6-HIGH-INTENSITY-AEROBIC-POWER-BEGINNER-4W",
+      "file": "phase_06_exercise_templates.json",
+      "phase": 6,
+      "source_template_ids": [
+        "P6-T09",
+        "P6-T10",
+        "P6-T11"
+      ]
+    },
+    {
+      "category_code": "high_intensity_aerobic_power",
+      "athlete_level": "intermediate",
+      "template_code": "P6-HIGH-INTENSITY-AEROBIC-POWER-INTERMEDIATE-4W",
+      "file": "phase_06_exercise_templates.json",
+      "phase": 6,
+      "source_template_ids": [
+        "P6-T09",
+        "P6-T10",
+        "P6-T11"
+      ]
+    },
+    {
+      "category_code": "high_intensity_aerobic_power",
+      "athlete_level": "advanced",
+      "template_code": "P6-HIGH-INTENSITY-AEROBIC-POWER-ADVANCED-4W",
+      "file": "phase_06_exercise_templates.json",
+      "phase": 6,
+      "source_template_ids": [
+        "P6-T09",
+        "P6-T10",
+        "P6-T11"
+      ]
+    },
+    {
+      "category_code": "anaerobic_power",
+      "athlete_level": "beginner",
+      "template_code": "P7-ANAEROBIC-POWER-BEGINNER-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T01",
+        "P7-T02",
+        "P7-T03"
+      ]
+    },
+    {
+      "category_code": "anaerobic_power",
+      "athlete_level": "intermediate",
+      "template_code": "P7-ANAEROBIC-POWER-INTERMEDIATE-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T01",
+        "P7-T02",
+        "P7-T03"
+      ]
+    },
+    {
+      "category_code": "anaerobic_power",
+      "athlete_level": "advanced",
+      "template_code": "P7-ANAEROBIC-POWER-ADVANCED-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T01",
+        "P7-T02",
+        "P7-T03"
+      ]
+    },
+    {
+      "category_code": "anaerobic_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P7-ANAEROBIC-CAPACITY-BEGINNER-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T04",
+        "P7-T05",
+        "P7-T06",
+        "P7-T07",
+        "P7-T08"
+      ]
+    },
+    {
+      "category_code": "anaerobic_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P7-ANAEROBIC-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T04",
+        "P7-T05",
+        "P7-T06",
+        "P7-T07",
+        "P7-T08"
+      ]
+    },
+    {
+      "category_code": "anaerobic_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P7-ANAEROBIC-CAPACITY-ADVANCED-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T04",
+        "P7-T05",
+        "P7-T06",
+        "P7-T07",
+        "P7-T08"
+      ]
+    },
+    {
+      "category_code": "repeated_sprint_ability",
+      "athlete_level": "beginner",
+      "template_code": "P7-REPEATED-SPRINT-ABILITY-BEGINNER-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T09",
+        "P7-T10",
+        "P7-T11",
+        "P7-T12"
+      ]
+    },
+    {
+      "category_code": "repeated_sprint_ability",
+      "athlete_level": "intermediate",
+      "template_code": "P7-REPEATED-SPRINT-ABILITY-INTERMEDIATE-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T09",
+        "P7-T10",
+        "P7-T11",
+        "P7-T12"
+      ]
+    },
+    {
+      "category_code": "repeated_sprint_ability",
+      "athlete_level": "advanced",
+      "template_code": "P7-REPEATED-SPRINT-ABILITY-ADVANCED-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T09",
+        "P7-T10",
+        "P7-T11",
+        "P7-T12"
+      ]
+    },
+    {
+      "category_code": "repeated_high_intensity_ability",
+      "athlete_level": "beginner",
+      "template_code": "P7-REPEATED-HIGH-INTENSITY-ABILITY-BEGINNER-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T13",
+        "P7-T14",
+        "P7-T15"
+      ]
+    },
+    {
+      "category_code": "repeated_high_intensity_ability",
+      "athlete_level": "intermediate",
+      "template_code": "P7-REPEATED-HIGH-INTENSITY-ABILITY-INTERMEDIATE-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T13",
+        "P7-T14",
+        "P7-T15"
+      ]
+    },
+    {
+      "category_code": "repeated_high_intensity_ability",
+      "athlete_level": "advanced",
+      "template_code": "P7-REPEATED-HIGH-INTENSITY-ABILITY-ADVANCED-4W",
+      "file": "phase_07_exercise_templates.json",
+      "phase": 7,
+      "source_template_ids": [
+        "P7-T13",
+        "P7-T14",
+        "P7-T15"
+      ]
+    },
+    {
+      "category_code": "local_muscular_endurance",
+      "athlete_level": "beginner",
+      "template_code": "P8-LOCAL-MUSCULAR-ENDURANCE-BEGINNER-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T01",
+        "P8-T02",
+        "P8-T03",
+        "P8-T04"
+      ]
+    },
+    {
+      "category_code": "local_muscular_endurance",
+      "athlete_level": "intermediate",
+      "template_code": "P8-LOCAL-MUSCULAR-ENDURANCE-INTERMEDIATE-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T01",
+        "P8-T02",
+        "P8-T03",
+        "P8-T04"
+      ]
+    },
+    {
+      "category_code": "local_muscular_endurance",
+      "athlete_level": "advanced",
+      "template_code": "P8-LOCAL-MUSCULAR-ENDURANCE-ADVANCED-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T01",
+        "P8-T02",
+        "P8-T03",
+        "P8-T04"
+      ]
+    },
+    {
+      "category_code": "calf_soleus_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P8-CALF-SOLEUS-CAPACITY-BEGINNER-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T05",
+        "P8-T06",
+        "P8-T07",
+        "P8-T08"
+      ]
+    },
+    {
+      "category_code": "calf_soleus_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P8-CALF-SOLEUS-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T05",
+        "P8-T06",
+        "P8-T07",
+        "P8-T08"
+      ]
+    },
+    {
+      "category_code": "calf_soleus_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P8-CALF-SOLEUS-CAPACITY-ADVANCED-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T05",
+        "P8-T06",
+        "P8-T07",
+        "P8-T08"
+      ]
+    },
+    {
+      "category_code": "hamstring_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P8-HAMSTRING-CAPACITY-BEGINNER-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T09",
+        "P8-T10",
+        "P8-T11"
+      ]
+    },
+    {
+      "category_code": "hamstring_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P8-HAMSTRING-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T09",
+        "P8-T10",
+        "P8-T11"
+      ]
+    },
+    {
+      "category_code": "hamstring_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P8-HAMSTRING-CAPACITY-ADVANCED-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T09",
+        "P8-T10",
+        "P8-T11"
+      ]
+    },
+    {
+      "category_code": "adductor_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P8-ADDUCTOR-CAPACITY-BEGINNER-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T12",
+        "P8-T13"
+      ]
+    },
+    {
+      "category_code": "adductor_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P8-ADDUCTOR-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T12",
+        "P8-T13"
+      ]
+    },
+    {
+      "category_code": "adductor_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P8-ADDUCTOR-CAPACITY-ADVANCED-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T12",
+        "P8-T13"
+      ]
+    },
+    {
+      "category_code": "shoulder_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P8-SHOULDER-CAPACITY-BEGINNER-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T14",
+        "P8-T15"
+      ]
+    },
+    {
+      "category_code": "shoulder_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P8-SHOULDER-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T14",
+        "P8-T15"
+      ]
+    },
+    {
+      "category_code": "shoulder_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P8-SHOULDER-CAPACITY-ADVANCED-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T14",
+        "P8-T15"
+      ]
+    },
+    {
+      "category_code": "trunk_force_transfer",
+      "athlete_level": "beginner",
+      "template_code": "P8-TRUNK-FORCE-TRANSFER-BEGINNER-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T16",
+        "P8-T17"
+      ]
+    },
+    {
+      "category_code": "trunk_force_transfer",
+      "athlete_level": "intermediate",
+      "template_code": "P8-TRUNK-FORCE-TRANSFER-INTERMEDIATE-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T16",
+        "P8-T17"
+      ]
+    },
+    {
+      "category_code": "trunk_force_transfer",
+      "athlete_level": "advanced",
+      "template_code": "P8-TRUNK-FORCE-TRANSFER-ADVANCED-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T16",
+        "P8-T17"
+      ]
+    },
+    {
+      "category_code": "neck_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P8-NECK-CAPACITY-BEGINNER-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T18"
+      ]
+    },
+    {
+      "category_code": "neck_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P8-NECK-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T18"
+      ]
+    },
+    {
+      "category_code": "neck_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P8-NECK-CAPACITY-ADVANCED-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T18"
+      ]
+    },
+    {
+      "category_code": "grip_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P8-GRIP-CAPACITY-BEGINNER-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T17"
+      ]
+    },
+    {
+      "category_code": "grip_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P8-GRIP-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T17"
+      ]
+    },
+    {
+      "category_code": "grip_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P8-GRIP-CAPACITY-ADVANCED-4W",
+      "file": "phase_08_exercise_templates.json",
+      "phase": 8,
+      "source_template_ids": [
+        "P8-T17"
+      ]
+    },
+    {
+      "category_code": "performance_preparation",
+      "athlete_level": "beginner",
+      "template_code": "P9-PERFORMANCE-PREPARATION-BEGINNER-4W",
+      "file": "phase_09_exercise_templates.json",
+      "phase": 9,
+      "source_template_ids": [
+        "P9-T01",
+        "P9-T02",
+        "P9-T03",
+        "P9-T04",
+        "P9-T05",
+        "P9-T06",
+        "P9-T07",
+        "P9-T08",
+        "P9-T09",
+        "P9-T10"
+      ]
+    },
+    {
+      "category_code": "performance_preparation",
+      "athlete_level": "intermediate",
+      "template_code": "P9-PERFORMANCE-PREPARATION-INTERMEDIATE-4W",
+      "file": "phase_09_exercise_templates.json",
+      "phase": 9,
+      "source_template_ids": [
+        "P9-T01",
+        "P9-T02",
+        "P9-T03",
+        "P9-T04",
+        "P9-T05",
+        "P9-T06",
+        "P9-T07",
+        "P9-T08",
+        "P9-T09",
+        "P9-T10"
+      ]
+    },
+    {
+      "category_code": "performance_preparation",
+      "athlete_level": "advanced",
+      "template_code": "P9-PERFORMANCE-PREPARATION-ADVANCED-4W",
+      "file": "phase_09_exercise_templates.json",
+      "phase": 9,
+      "source_template_ids": [
+        "P9-T01",
+        "P9-T02",
+        "P9-T03",
+        "P9-T04",
+        "P9-T05",
+        "P9-T06",
+        "P9-T07",
+        "P9-T08",
+        "P9-T09",
+        "P9-T10"
+      ]
+    },
+    {
+      "category_code": "mobility_range_capacity",
+      "athlete_level": "beginner",
+      "template_code": "P9-MOBILITY-RANGE-CAPACITY-BEGINNER-4W",
+      "file": "phase_09_exercise_templates.json",
+      "phase": 9,
+      "source_template_ids": [
+        "P9-T11",
+        "P9-T12",
+        "P9-T13"
+      ]
+    },
+    {
+      "category_code": "mobility_range_capacity",
+      "athlete_level": "intermediate",
+      "template_code": "P9-MOBILITY-RANGE-CAPACITY-INTERMEDIATE-4W",
+      "file": "phase_09_exercise_templates.json",
+      "phase": 9,
+      "source_template_ids": [
+        "P9-T11",
+        "P9-T12",
+        "P9-T13"
+      ]
+    },
+    {
+      "category_code": "mobility_range_capacity",
+      "athlete_level": "advanced",
+      "template_code": "P9-MOBILITY-RANGE-CAPACITY-ADVANCED-4W",
+      "file": "phase_09_exercise_templates.json",
+      "phase": 9,
+      "source_template_ids": [
+        "P9-T11",
+        "P9-T12",
+        "P9-T13"
+      ]
+    },
+    {
+      "category_code": "recovery_management",
+      "athlete_level": "beginner",
+      "template_code": "P9-RECOVERY-MANAGEMENT-BEGINNER-4W",
+      "file": "phase_09_exercise_templates.json",
+      "phase": 9,
+      "source_template_ids": [
+        "P9-T14",
+        "P9-T15",
+        "P9-T16",
+        "P9-T17",
+        "P9-T18"
+      ]
+    },
+    {
+      "category_code": "recovery_management",
+      "athlete_level": "intermediate",
+      "template_code": "P9-RECOVERY-MANAGEMENT-INTERMEDIATE-4W",
+      "file": "phase_09_exercise_templates.json",
+      "phase": 9,
+      "source_template_ids": [
+        "P9-T14",
+        "P9-T15",
+        "P9-T16",
+        "P9-T17",
+        "P9-T18"
+      ]
+    },
+    {
+      "category_code": "recovery_management",
+      "athlete_level": "advanced",
+      "template_code": "P9-RECOVERY-MANAGEMENT-ADVANCED-4W",
+      "file": "phase_09_exercise_templates.json",
+      "phase": 9,
+      "source_template_ids": [
+        "P9-T14",
+        "P9-T15",
+        "P9-T16",
+        "P9-T17",
+        "P9-T18"
+      ]
+    }
+  ]
+}
