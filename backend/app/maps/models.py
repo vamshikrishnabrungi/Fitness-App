@@ -5,7 +5,7 @@ from typing import Any
 from uuid import UUID
 
 from geoalchemy2 import Geometry
-from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Index, Integer, Numeric, String, Text, UniqueConstraint, text
+from sqlalchemy import BigInteger, Boolean, Date, DateTime, ForeignKey, Index, Integer, Numeric, String, Text, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -56,9 +56,9 @@ class StreetEdge(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     region_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), ForeignKey("activity.osm_regions.id"), nullable=False, index=True)
     graph_version_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), ForeignKey("activity.osm_graph_versions.id"), nullable=False)
     edge_key: Mapped[str] = mapped_column(String(180), nullable=False)
-    osm_way_id: Mapped[int] = mapped_column(nullable=False, index=True)
-    from_node_id: Mapped[int] = mapped_column(nullable=False)
-    to_node_id: Mapped[int] = mapped_column(nullable=False)
+    osm_way_id: Mapped[int] = mapped_column(BigInteger, nullable=False, index=True)
+    from_node_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    to_node_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
     name: Mapped[str | None] = mapped_column(String(240))
     highway_class: Mapped[str] = mapped_column(String(40), nullable=False)
     surface: Mapped[str | None] = mapped_column(String(40))

@@ -48,6 +48,24 @@ plus a separate Admin Studio. Run clubs = the "competition" domain.
   matched traversals and drives the real engine. Verified claim → defend → takeover →
   decay → expire at both athlete and club level with correct decay math.
 
+### 2026-08-23 (cont. 2) — Real map stack (OSM ingestion) end-to-end
+- Reality: this pod has NO Docker/Valhalla; Valhalla (C++ tile builder) cannot be stood
+  up here. OSM ingestion (osmium/shapely/PostGIS) IS pure-python and runs here.
+- **Fixed a real schema bug (F8):** `StreetEdge.osm_way_id/from_node_id/to_node_id` were
+  `INTEGER` (int32); real OSM node IDs are 64-bit and overflow. Widened to `BigInteger` in
+  `maps/models.py` + new migration `20260823_07_street_edge_bigint.py` (applied).
+- Ingested REAL OpenStreetMap Monaco (`/tmp/monaco.osm.pbf`, 674 KB) via the production
+  pipeline → **5,794 street_edges**, graph activated (`backend/dev_ingest_osm.py`).
+- Built `backend/dev_run_on_real_streets.py`: a dev PostGIS proximity map-matcher (stands in
+  for Valhalla) that snaps a real GPS trace to ingested edges, then drives the REAL
+  `project_activity_territory`. A simulated run along "Boulevard du Jardin Exotique"
+  map-matched 310 real edges, **claimed 262**.
+- Verified through the real API: `GET /territory/mine` returns 262 real streets as GeoJSON;
+  `POST /territory/tile-session` + `GET /territory/tiles/{z}/{x}/{y}.mvt` returns an 8 KB
+  Mapbox Vector Tile (content-type application/vnd.mapbox-vector-tile). Backend is fully
+  ready to feed a Mapbox/MapLibre map.
+- Live run map (Mapbox in Expo) remains a FRONTEND follow-up; requires MAPBOX_PUBLIC_TOKEN.
+
 ## Key findings (see RUNCLUB_ANALYSIS.md for detail)
 - F1 (P0): async projection worker not running locally → club feed/notifications/
   leaderboards/achievements empty until outbox is drained. Domain logic is correct
