@@ -35,183 +35,6 @@ def _normalize_tags(tags: Any) -> List[str]:
     return normalized
 
 
-def _journal_word_count(text: str) -> int:
-    return len([token for token in re.split(r'\s+', text.strip()) if token]) if text else 0
-
-
-def _journal_responses_text(responses: Dict[str, str]) -> str:
-    parts = []
-    for key, value in responses.items():
-        value_str = str(value).strip()
-        if value_str:
-            parts.append(f"{key.replace('_', ' ').title()}: {value_str}")
-    return "\n".join(parts)
-
-
-def _journal_entry_text(entry: Dict[str, Any]) -> str:
-    pieces = []
-    title = str(entry.get('title') or '').strip()
-    content = str(entry.get('content') or '').strip()
-    if title:
-        pieces.append(title)
-    if content:
-        pieces.append(content)
-    responses = entry.get('responses') or {}
-    if isinstance(responses, dict):
-        pieces.append(_journal_responses_text(responses))
-    tags = entry.get('tags') or []
-    if isinstance(tags, list) and tags:
-        pieces.append("Tags: " + ", ".join(str(tag) for tag in tags))
-    if entry.get('mood'):
-        pieces.append(f"Mood: {entry.get('mood')}")
-    if entry.get('note'):
-        pieces.append(str(entry.get('note')))
-    return "\n".join(piece for piece in pieces if piece).strip()
-
-
-def _journal_entry_response(doc: Dict[str, Any]) -> Dict[str, Any]:
-    cleaned = clean_doc(doc)
-    cleaned.setdefault('title', None)
-    cleaned.setdefault('content', '')
-    cleaned.setdefault('tags', [])
-    cleaned.setdefault('is_pinned', False)
-    cleaned.setdefault('word_count', _journal_word_count(str(cleaned.get('content') or _journal_entry_text(cleaned))))
-    cleaned.setdefault('entry_type', 'deep')
-    return cleaned
-
-
-def _journal_program_definitions() -> List[Dict[str, Any]]:
-    return [
-        {
-            'id': 'consistency_7',
-            'name': '7-Day Consistency Challenge',
-            'description': 'Build unbreakable daily training habits through structured reflection and accountability.',
-            'duration_days': 7,
-            'category': 'habit',
-            'icon': '🔥',
-        },
-        {
-            'id': 'confidence_14',
-            'name': '14-Day Confidence Builder',
-            'description': 'Develop unshakeable athletic confidence through daily mental training exercises.',
-            'duration_days': 14,
-            'category': 'confidence',
-            'icon': '⭐',
-        },
-        {
-            'id': 'competition_prep_7',
-            'name': 'Race Week Mental Prep',
-            'description': 'Mental preparation program for the week leading up to your competition.',
-            'duration_days': 7,
-            'category': 'competition',
-            'icon': '🏆',
-        },
-        {
-            'id': 'injury_recovery_7',
-            'name': 'Injury Recovery Mindset',
-            'description': 'Stay mentally strong and positive during your injury recovery journey.',
-            'duration_days': 7,
-            'category': 'recovery',
-            'icon': '💪',
-        },
-    ]
-
-
-def _journal_template_definitions() -> List[Dict[str, Any]]:
-    return [
-        {
-            'id': 'gratitude_daily',
-            'name': 'Daily Gratitude',
-            'description': 'A simple gratitude reset for the end of the day.',
-            'category': 'gratitude',
-            'icon': '🙏',
-            'prompts': [
-                {'key': 'wins', 'label': 'What went well today?'},
-                {'key': 'gratitude', 'label': 'What are you grateful for?'},
-                {'key': 'lesson', 'label': 'What did you learn?'},
-            ],
-            'is_cbt': False,
-        },
-        {
-            'id': 'recovery_checkin',
-            'name': 'Recovery Check-In',
-            'description': 'Reflect on training stress, sleep, and recovery habits.',
-            'category': 'post_workout',
-            'icon': '🛌',
-            'prompts': [
-                {'key': 'training', 'label': 'How did training feel today?'},
-                {'key': 'recovery', 'label': 'What helped you recover?'},
-                {'key': 'tomorrow', 'label': 'What will you do differently tomorrow?'},
-            ],
-            'is_cbt': False,
-        },
-        {
-            'id': 'competition_prep',
-            'name': 'Competition Prep',
-            'description': 'A focused journal for race-week clarity and confidence.',
-            'category': 'pre_race',
-            'icon': '🏁',
-            'prompts': [
-                {'key': 'goal', 'label': 'What is your goal for the event?'},
-                {'key': 'nerves', 'label': 'What are you feeling most strongly right now?'},
-                {'key': 'plan', 'label': 'What is your race-day plan?'},
-            ],
-            'is_cbt': False,
-        },
-        {
-            'id': 'cbt_thought_reset',
-            'name': 'CBT Thought Reset',
-            'description': 'A guided template for challenging negative thoughts.',
-            'category': 'cbt',
-            'icon': '🧠',
-            'prompts': [
-                {'key': 'situation', 'label': 'What happened?'},
-                {'key': 'thought', 'label': 'What automatic thought showed up?'},
-                {'key': 'emotion', 'label': 'What emotion did you feel?'},
-                {'key': 'distortion', 'label': 'Which thinking trap fits best?'},
-                {'key': 'evidence', 'label': 'What evidence supports or contradicts the thought?'},
-                {'key': 'reframe', 'label': 'What is a more balanced thought?'},
-                {'key': 'action', 'label': 'What is one small action you can take?'},
-            ],
-            'is_cbt': True,
-        },
-    ]
-
-
-def _journal_template_by_id(template_id: str) -> Optional[Dict[str, Any]]:
-    return next((template for template in _journal_template_definitions() if template['id'] == template_id), None)
-
-
-def _journal_program_by_id(program_id: str) -> Optional[Dict[str, Any]]:
-    return next((program for program in _journal_program_definitions() if program['id'] == program_id), None)
-
-
-def _journal_program_day(enrollment: Dict[str, Any], program_id: str) -> int:
-    program = _journal_program_by_id(program_id)
-    duration = int(program['duration_days']) if program else 7
-    start_date = _parse_iso_datetime(enrollment.get('start_date'))
-    if start_date:
-        days_since_start = (datetime.utcnow().date() - start_date.date()).days + 1
-        return max(1, min(duration, days_since_start))
-    return max(1, min(duration, _to_non_negative_int(enrollment.get('current_day'), 1)))
-
-
-def _journal_entry_date_for(entry: Dict[str, Any]) -> str:
-    return str(entry.get('date') or entry.get('created_at') or datetime.utcnow().strftime('%Y-%m-%d'))
-
-
-def _journal_searchable_text(entry: Dict[str, Any]) -> str:
-    parts = [_journal_entry_text(entry)]
-    if entry.get('entry_type') == 'quick_log':
-        parts.extend([
-            str(entry.get('mood') or ''),
-            str(entry.get('energy') or ''),
-            str(entry.get('stress') or ''),
-            str(entry.get('note') or ''),
-        ])
-    return "\n".join(part for part in parts if part).lower()
-
-
 def _optional_float(value: Any) -> Optional[float]:
     if value is None:
         return None
@@ -233,99 +56,6 @@ def _to_non_negative_float(value: Any, default: float = 0.0) -> float:
         return max(0.0, round(float(value), 1))
     except (TypeError, ValueError):
         return default
-
-
-def _sleep_quality_label(score: Optional[float]) -> str:
-    if score is None:
-        return 'unknown'
-    if score >= 85:
-        return 'excellent'
-    if score >= 70:
-        return 'good'
-    if score >= 55:
-        return 'fair'
-    return 'poor'
-
-
-def _sleep_status_from_score(score: Optional[float]) -> str:
-    if score is None:
-        return 'moderate'
-    if score < 40:
-        return 'low'
-    if score < 70:
-        return 'moderate'
-    return 'high'
-
-
-def _sleep_efficiency_value(value: Any) -> Optional[float]:
-    if value is None:
-        return None
-    try:
-        efficiency = float(value)
-    except (TypeError, ValueError):
-        return None
-    if efficiency > 1.5:
-        efficiency = efficiency / 100.0
-    return max(0.0, min(1.0, efficiency))
-
-
-def _sleep_session_duration_hours(session: Dict[str, Any]) -> float:
-    start = _parse_iso_datetime(session.get('start_time'))
-    end = _parse_iso_datetime(session.get('end_time'))
-    if start and end and end >= start:
-        return round((end - start).total_seconds() / 3600.0, 2)
-    return _to_non_negative_float(session.get('duration_hours'), 0.0)
-
-
-def _sleep_session_metrics(session: Dict[str, Any]) -> Dict[str, Any]:
-    duration_hours = _sleep_session_duration_hours(session)
-    deep_sleep_hours = _to_non_negative_float(session.get('deep_sleep_hours'), 0.0)
-    rem_sleep_hours = _to_non_negative_float(session.get('rem_sleep_hours'), 0.0)
-    efficiency = _sleep_efficiency_value(session.get('efficiency'))
-    if efficiency is None and duration_hours > 0:
-        efficiency = min(1.0, duration_hours / 8.0)
-
-    sleep_quality = session.get('sleep_quality')
-    try:
-        sleep_quality_int = int(sleep_quality) if sleep_quality is not None else None
-    except (TypeError, ValueError):
-        sleep_quality_int = None
-
-    duration_component = min(40.0, (duration_hours / 8.0) * 40.0) if duration_hours > 0 else 0.0
-    efficiency_component = (efficiency * 30.0) if efficiency is not None else (15.0 if duration_hours > 0 else 0.0)
-    stage_ratio = 0.0
-    if duration_hours > 0:
-        stage_ratio = min(1.0, (deep_sleep_hours + rem_sleep_hours) / max(duration_hours, 0.1))
-    stage_component = stage_ratio * 20.0
-    quality_component = (sleep_quality_int * 10.0) if sleep_quality_int is not None else 0.0
-
-    score = round(min(100.0, duration_component + efficiency_component + stage_component + quality_component))
-    sleep_debt_hours = round(max(0.0, 8.0 - duration_hours), 1) if duration_hours > 0 else 0.0
-
-    timestamp = _parse_iso_datetime(session.get('created_at')) or _parse_iso_datetime(session.get('start_time'))
-    date_value = str(session.get('date') or (timestamp.strftime('%Y-%m-%d') if timestamp else datetime.utcnow().strftime('%Y-%m-%d')))
-
-    return {
-        'date': date_value,
-        'duration_hours': duration_hours,
-        'deep_sleep_hours': deep_sleep_hours,
-        'rem_sleep_hours': rem_sleep_hours,
-        'efficiency': efficiency,
-        'sleep_score': score,
-        'sleep_quality': sleep_quality_int,
-        'sleep_quality_label': _sleep_quality_label(score),
-        'status': _sleep_status_from_score(score),
-        'sleep_debt_hours': sleep_debt_hours,
-        'deep_ratio': round((deep_sleep_hours / duration_hours), 2) if duration_hours > 0 else 0.0,
-        'rem_ratio': round((rem_sleep_hours / duration_hours), 2) if duration_hours > 0 else 0.0,
-    }
-
-
-def _sleep_session_response(session: Dict[str, Any]) -> Dict[str, Any]:
-    cleaned = clean_doc(dict(session))
-    cleaned.update(_sleep_session_metrics(cleaned))
-    cleaned.setdefault('quality_label', cleaned.get('sleep_quality_label', 'unknown'))
-    return cleaned
 
 
 def _terra_level_from_xp(xp: float) -> int:
@@ -391,15 +121,30 @@ def _terra_run_duration_seconds(run: Dict[str, Any]) -> int:
         return _to_non_negative_int(run.get('duration'), 0)
     if run.get('duration_sec') is not None:
         return _to_non_negative_int(run.get('duration_sec'), 0)
+    if run.get('elapsed_time_sec') is not None:
+        return _to_non_negative_int(run.get('elapsed_time_sec'), 0)
     return 0
 
 
+# A run claims territory only once it covers at least this distance. Below it the
+# run still counts toward distance and leaderboards, but claims no roads.
+TERRITORY_MIN_KM = 2.5
+
+
 def _terra_run_territory_km2(run: Dict[str, Any]) -> float:
-    if run.get('territory_captured') is not None:
+    """Kilometres of road this run claims.
+
+    Territory is now the actual road you ran, not a bounding-box area: a run
+    claims its full distance once it reaches TERRITORY_MIN_KM, and nothing below
+    that. Derived from distance so old runs (which stored a box value) and new
+    runs behave identically with no migration.
+    """
+    # Canonical activities distinguish recorded distance from verified,
+    # map-matched street ownership. Never fall back to distance for these docs.
+    if run.get('territory_status') is not None:
         return _to_non_negative_float(run.get('territory_captured'), 0.0)
-    if run.get('territory_km2') is not None:
-        return _to_non_negative_float(run.get('territory_km2'), 0.0)
-    return 0.0
+    distance = _terra_run_distance_km(run)
+    return round(distance, 4) if distance >= TERRITORY_MIN_KM else 0.0
 
 
 def _terra_run_xp(run: Dict[str, Any]) -> int:
@@ -494,24 +239,6 @@ def _terra_placeholder_training_plans(current_user: dict) -> List[Dict[str, Any]
             'is_seeded': True,
         },
     ]
-
-
-def _terra_feed_post_response(post: Dict[str, Any]) -> Dict[str, Any]:
-    cleaned = clean_doc(dict(post))
-    cleaned['username'] = cleaned.get('username') or cleaned.get('author_name') or 'Runner'
-    cleaned['content'] = str(cleaned.get('content') or '').strip()
-    cleaned['likes'] = [str(user_id) for user_id in cleaned.get('likes', []) if str(user_id).strip()]
-    cleaned['comments'] = cleaned.get('comments') or []
-    run = cleaned.get('run')
-    if isinstance(run, dict):
-        cleaned['run'] = {
-            'distance': _terra_run_distance_km(run),
-            'duration': _terra_run_duration_seconds(run),
-            'territory_captured': _terra_run_territory_km2(run),
-        }
-    else:
-        cleaned['run'] = None
-    return cleaned
 
 
 def _terra_training_plan_response(plan: Dict[str, Any]) -> Dict[str, Any]:

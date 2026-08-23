@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { GlassCard } from './GlassCard';
 import { Button } from './Button';
 import { api } from '../utils/api';
 import { colors, typography, spacing, borderRadius } from '../utils/theme';
@@ -18,38 +18,82 @@ import { colors, typography, spacing, borderRadius } from '../utils/theme';
 interface WorkoutFeedbackModalProps {
   visible: boolean;
   onClose: () => void;
+  onSubmitted?: () => void;
   workoutId: string;
   workoutTitle: string;
+  initialCompletionPercentage?: number;
+  expectedVersion?: number;
+  estimatedMinutes?: number;
+  mainExercises?: { name: string; exercise_id?: string | null }[];
 }
 
 export const WorkoutFeedbackModal: React.FC<WorkoutFeedbackModalProps> = ({
   visible,
   onClose,
+  onSubmitted,
   workoutId,
   workoutTitle,
+  initialCompletionPercentage = 100,
+  expectedVersion = 1,
+  estimatedMinutes = 60,
+  mainExercises = [],
 }) => {
   const insets = useSafeAreaInsets();
   const [intensity, setIntensity] = useState(5);
-  const [completion, setCompletion] = useState(100);
+  const [completion, setCompletion] = useState(initialCompletionPercentage);
   const [difficulty, setDifficulty] = useState<'too_easy' | 'just_right' | 'too_hard'>('just_right');
   const [energy, setEnergy] = useState<'low' | 'moderate' | 'high'>('moderate');
+  const [painScore, setPainScore] = useState(0);
   const [notes, setNotes] = useState('');
+  const [loads, setLoads] = useState<Record<string, { weight: string; reps: string }>>({});
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!visible) return;
+    setCompletion(initialCompletionPercentage);
+    setIntensity(5);
+    setDifficulty('just_right');
+    setEnergy('moderate');
+    setPainScore(0);
+    setNotes('');
+    setLoads({});
+  }, [initialCompletionPercentage, visible]);
+
+  const setLoad = (name: string, patch: Partial<{ weight: string; reps: string }>) =>
+    setLoads((prev) => ({ ...prev, [name]: { ...(prev[name] || { weight: '', reps: '' }), ...patch } }));
 
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      await api.post(`/workouts/${workoutId}/feedback`, {
-        workout_id: workoutId,
-        intensity_rating: intensity,
-        completion_percentage: completion,
+      const performed = (mainExercises || [])
+        .map((ex) => {
+          const entry = loads[ex.name] || { weight: '', reps: '' };
+          const weight_kg = parseFloat(entry.weight);
+          const reps = parseInt(entry.reps, 10);
+          return {
+            name: ex.name,
+            exercise_id: ex.exercise_id ?? null,
+            weight_kg: Number.isFinite(weight_kg) ? weight_kg : null,
+            reps: Number.isFinite(reps) ? reps : null,
+          };
+        })
+        .filter((p) => p.weight_kg !== null || p.reps !== null);
+      await api.post(`/training/sessions/${workoutId}/complete`, {
+        duration_minutes: estimatedMinutes,
+        session_rpe: intensity,
+        completion_ratio: completion / 100,
+        pain_flag: painScore > 0,
+        expected_version: expectedVersion,
         difficulty_feedback: difficulty,
         energy_level: energy,
         notes: notes || null,
+        performed_exercises: performed,
       });
-      onClose();
+      onSubmitted?.();
+      if (!onSubmitted) onClose();
     } catch (error) {
       console.error('Error submitting feedback:', error);
+      Alert.alert('Could not save workout', 'Please check your connection and try again.');
     } finally {
       setSubmitting(false);
     }
@@ -90,18 +134,42 @@ export const WorkoutFeedbackModal: React.FC<WorkoutFeedbackModalProps> = ({
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            {/* Celebration */}
             <View style={styles.celebration}>
-              <View style={styles.celebrationIcon}>
-                <Ionicons name="trophy" size={48} color={colors.textPrimary} />
-              </View>
-              <Text style={styles.celebrationTitle}>Great Work!</Text>
+              <Text style={styles.celebrationTitle}>Log your session.</Text>
               <Text style={styles.celebrationSubtitle}>{workoutTitle}</Text>
             </View>
 
-            {/* Intensity Rating */}
-            <GlassCard style={styles.section}>
-              <Text style={styles.sectionTitle}>How intense was the workout?</Text>
+            {mainExercises.length > 0 ? (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Working sets (optional)</Text>
+                <Text style={styles.logHint}>Enter the top set you actually lifted — this powers your strength trends.</Text>
+                {mainExercises.map((ex) => (
+                  <View key={ex.name} style={styles.logRow}>
+                    <Text style={styles.logName} numberOfLines={1}>{ex.name}</Text>
+                    <TextInput
+                      style={styles.logInput}
+                      value={loads[ex.name]?.weight || ''}
+                      onChangeText={(t) => setLoad(ex.name, { weight: t })}
+                      keyboardType="numeric"
+                      placeholder="kg"
+                      placeholderTextColor={colors.textTertiary}
+                    />
+                    <Text style={styles.logMul}>×</Text>
+                    <TextInput
+                      style={styles.logInput}
+                      value={loads[ex.name]?.reps || ''}
+                      onChangeText={(t) => setLoad(ex.name, { reps: t })}
+                      keyboardType="numeric"
+                      placeholder="reps"
+                      placeholderTextColor={colors.textTertiary}
+                    />
+                  </View>
+                ))}
+              </View>
+            ) : null}
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Session RPE</Text>
               <View style={styles.sliderContainer}>
                 <Text style={styles.sliderLabel}>1</Text>
                 <View style={styles.intensityDots}>
@@ -118,14 +186,13 @@ export const WorkoutFeedbackModal: React.FC<WorkoutFeedbackModalProps> = ({
                 </View>
                 <Text style={styles.sliderLabel}>10</Text>
               </View>
-              <Text style={styles.intensityValue}>{intensity}/10</Text>
-            </GlassCard>
+              <Text style={styles.fieldHint}>{intensity}/10 · how hard the full session felt</Text>
+            </View>
 
-            {/* Completion */}
-            <GlassCard style={styles.section}>
-              <Text style={styles.sectionTitle}>How much did you complete?</Text>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Completed</Text>
               <View style={styles.completionOptions}>
-                {[25, 50, 75, 100].map((pct) => (
+                {[0, 25, 50, 75, 100].map((pct) => (
                   <TouchableOpacity
                     key={pct}
                     style={[
@@ -143,11 +210,10 @@ export const WorkoutFeedbackModal: React.FC<WorkoutFeedbackModalProps> = ({
                   </TouchableOpacity>
                 ))}
               </View>
-            </GlassCard>
+            </View>
 
-            {/* Difficulty */}
-            <GlassCard style={styles.section}>
-              <Text style={styles.sectionTitle}>How was the difficulty?</Text>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Difficulty</Text>
               <View style={styles.optionRow}>
                 {difficultyOptions.map((opt) => (
                   <TouchableOpacity
@@ -172,11 +238,10 @@ export const WorkoutFeedbackModal: React.FC<WorkoutFeedbackModalProps> = ({
                   </TouchableOpacity>
                 ))}
               </View>
-            </GlassCard>
+            </View>
 
-            {/* Energy Level */}
-            <GlassCard style={styles.section}>
-              <Text style={styles.sectionTitle}>Energy level after workout?</Text>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Energy after</Text>
               <View style={styles.optionRow}>
                 {energyOptions.map((opt) => (
                   <TouchableOpacity
@@ -201,27 +266,49 @@ export const WorkoutFeedbackModal: React.FC<WorkoutFeedbackModalProps> = ({
                   </TouchableOpacity>
                 ))}
               </View>
-            </GlassCard>
+            </View>
 
-            {/* Notes */}
-            <GlassCard style={styles.section}>
-              <Text style={styles.sectionTitle}>Any notes? (Optional)</Text>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Pain or discomfort</Text>
+              <View style={styles.painRow}>
+                {[0, 1, 2, 3, 4, 5].map((score) => (
+                  <TouchableOpacity
+                    key={score}
+                    style={[
+                      styles.painOption,
+                      painScore === score && styles.painOptionActive,
+                    ]}
+                    onPress={() => setPainScore(score)}
+                  >
+                    <Text style={[
+                      styles.painText,
+                      painScore === score && styles.painTextActive,
+                    ]}>
+                      {score}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              <Text style={styles.fieldHint}>0 is none. Use notes for location or movement.</Text>
+            </View>
+
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Notes</Text>
               <TextInput
                 style={styles.notesInput}
-                placeholder="How did you feel? Any exercises to adjust?"
+                placeholder="What felt strong, painful, skipped, or too easy?"
                 placeholderTextColor={colors.textTertiary}
                 value={notes}
                 onChangeText={setNotes}
                 multiline
                 numberOfLines={3}
               />
-            </GlassCard>
+            </View>
 
-            {/* AI Learning Note */}
             <View style={styles.aiNote}>
               <Ionicons name="sparkles" size={16} color={colors.textTertiary} />
               <Text style={styles.aiNoteText}>
-                Your feedback helps SFTC AI personalize future workouts
+                This updates your training history, level assessment, and future blocks.
               </Text>
             </View>
           </ScrollView>
@@ -229,7 +316,7 @@ export const WorkoutFeedbackModal: React.FC<WorkoutFeedbackModalProps> = ({
           {/* Submit Button */}
           <View style={styles.footer}>
             <Button
-              title="Submit Feedback"
+              title="Save Session"
               onPress={handleSubmit}
               loading={submitting}
               fullWidth
@@ -283,16 +370,7 @@ const styles = StyleSheet.create({
   },
   celebration: {
     alignItems: 'center',
-    marginBottom: spacing.xxl,
-  },
-  celebrationIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: colors.separator,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.xl,
   },
   celebrationTitle: {
     ...typography.h2,
@@ -311,6 +389,38 @@ const styles = StyleSheet.create({
     ...typography.bodySemibold,
     color: colors.textPrimary,
     marginBottom: spacing.md,
+  },
+  logHint: {
+    fontSize: 12,
+    color: colors.textTertiary,
+    marginTop: -spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  logRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  logName: {
+    flex: 1,
+    fontSize: 14,
+    color: colors.textPrimary,
+  },
+  logInput: {
+    width: 60,
+    textAlign: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.separatorDark,
+    borderRadius: borderRadius.md,
+    paddingVertical: spacing.sm,
+    fontSize: 15,
+    color: colors.textPrimary,
+    backgroundColor: colors.surfaceSecondary,
+  },
+  logMul: {
+    fontSize: 14,
+    color: colors.textTertiary,
   },
   sliderContainer: {
     flexDirection: 'row',
@@ -337,10 +447,9 @@ const styles = StyleSheet.create({
   intensityDotActive: {
     backgroundColor: colors.textPrimary,
   },
-  intensityValue: {
-    ...typography.h4,
-    color: colors.textPrimary,
-    textAlign: 'center',
+  fieldHint: {
+    ...typography.caption,
+    color: colors.textTertiary,
     marginTop: spacing.md,
   },
   completionOptions: {
@@ -384,6 +493,28 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   optionLabelActive: {
+    color: colors.background,
+  },
+  painRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  painOption: {
+    flex: 1,
+    height: 44,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.separator,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  painOptionActive: {
+    backgroundColor: colors.textPrimary,
+  },
+  painText: {
+    ...typography.bodySemibold,
+    color: colors.textPrimary,
+  },
+  painTextActive: {
     color: colors.background,
   },
   notesInput: {

@@ -1,0 +1,1186 @@
+{
+  "schema_version": "1.0.0",
+  "phase": 9,
+  "templates": [
+    {
+      "template_code": "P9-PERFORMANCE-PREPARATION-BEGINNER-4W",
+      "content_version": 1,
+      "status": "research_derived_candidate",
+      "phase": 9,
+      "category_code": "performance_preparation",
+      "name": "Performance preparation — Beginner four-week reference",
+      "athlete_level": "beginner",
+      "duration_weeks": 4,
+      "purpose": "Give the workout-generation model an exercise-based progression reference for performance preparation, not a mandatory athlete program.",
+      "source_template_ids": [
+        "P9-T01",
+        "P9-T02",
+        "P9-T03",
+        "P9-T04",
+        "P9-T05",
+        "P9-T06",
+        "P9-T07",
+        "P9-T08",
+        "P9-T09",
+        "P9-T10"
+      ],
+      "applicable_scenarios": [
+        "general_preparation",
+        "specific_preparation_preseason",
+        "in_season",
+        "competition_taper",
+        "congested_competition",
+        "re_entry_after_clearance"
+      ],
+      "method_options": [
+        {
+          "method_code": "easy_mode_specific_raise",
+          "block_role": "preparation",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "world_s_greatest_stretch",
+          "block_role": "primary_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "front_back_leg_swing",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        }
+      ],
+      "selection_policy": {
+        "strategy": "quality_methods",
+        "required_primary_count": 1,
+        "supporting_methods_are_candidates": true,
+        "mode_required": false,
+        "cross_training_requires_opt_in": false,
+        "unresolved_behavior": "fail_closed"
+      },
+      "selection_rules": {
+        "use": "Select methods matching the athlete's sport demand, environment, equipment and level; preserve the category objective and weekly progression shape.",
+        "avoid": "Do not include every listed method, invent a method, progress multiple loading variables at once, or use fatigue as proof of effectiveness.",
+        "session_order": "Complete relevant preparation first; perform speed, power and high-skill work before fatiguing strength or conditioning; place low-priority capacity work later.",
+        "dose_application": "The weekly prescription applies to the primary_reference method. Preparation and supporting references use their own released method-dose compatibility; they must not inherit the primary dose blindly."
+      },
+      "weeks": [
+        {
+          "week": 1,
+          "intent": "entry and establish baseline",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "6/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 2,
+          "intent": "accumulate successful exposure",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 3,
+          "intent": "highest development exposure",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 4,
+          "intent": "consolidate and reduce fatigue",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "easy range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        }
+      ],
+      "exercise_progression_policy": "Keep the reference methods stable across four weeks and progress dose or execution quality first. A method change requires the stated progression gate, a compatible substitution, and no new equipment or level conflict.",
+      "week_4_policy": "Consolidation/deload by default. It may become an assessment or competition week only when the sport package and athlete schedule explicitly require it.",
+      "mandatory_stops": [
+        "pain",
+        "acute illness",
+        "unsafe environment or equipment",
+        "technique or output deterioration beyond the released limit",
+        "unresolved schedule conflict"
+      ],
+      "ai_use": "Reference for one-call four-week generation. AI may adapt within released method eligibility and dose bounds; it must not copy blindly or exceed constraints.",
+      "prompt_reference_text": "Performance preparation — Beginner four-week reference. Approved method candidates: Easy Mode-Specific Raise, World's Greatest Stretch, Front-Back Leg Swing. Use this as a flexible exercise-based planning reference: Week 1 (entry and establish baseline): primary reference dose 2 sets/series × 6/side at controlled range, with 30s recovery. Week 2 (accumulate successful exposure): primary reference dose 2 sets/series × 8/side at controlled range, with 30s recovery. Week 3 (highest development exposure): primary reference dose 3 sets/series × 8/side at controlled range, with 30s recovery. Week 4 (consolidate and reduce fatigue): primary reference dose 1 sets/series × 8/side at easy range, with 30s recovery. Progress only after acceptable technique/output, readiness and schedule checks; otherwise repeat or regress. Week 4 consolidates rather than automatically overloading. Apply dose only to the primary reference method; supporting methods retain their own approved dose."
+    },
+    {
+      "template_code": "P9-PERFORMANCE-PREPARATION-INTERMEDIATE-4W",
+      "content_version": 1,
+      "status": "research_derived_candidate",
+      "phase": 9,
+      "category_code": "performance_preparation",
+      "name": "Performance preparation — Intermediate four-week reference",
+      "athlete_level": "intermediate",
+      "duration_weeks": 4,
+      "purpose": "Give the workout-generation model an exercise-based progression reference for performance preparation, not a mandatory athlete program.",
+      "source_template_ids": [
+        "P9-T01",
+        "P9-T02",
+        "P9-T03",
+        "P9-T04",
+        "P9-T05",
+        "P9-T06",
+        "P9-T07",
+        "P9-T08",
+        "P9-T09",
+        "P9-T10"
+      ],
+      "applicable_scenarios": [
+        "general_preparation",
+        "specific_preparation_preseason",
+        "in_season",
+        "competition_taper",
+        "congested_competition",
+        "re_entry_after_clearance"
+      ],
+      "method_options": [
+        {
+          "method_code": "easy_mode_specific_raise",
+          "block_role": "preparation",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "inchworm_walkout",
+          "block_role": "primary_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "lateral_leg_swing",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        }
+      ],
+      "selection_policy": {
+        "strategy": "quality_methods",
+        "required_primary_count": 1,
+        "supporting_methods_are_candidates": true,
+        "mode_required": false,
+        "cross_training_requires_opt_in": false,
+        "unresolved_behavior": "fail_closed"
+      },
+      "selection_rules": {
+        "use": "Select methods matching the athlete's sport demand, environment, equipment and level; preserve the category objective and weekly progression shape.",
+        "avoid": "Do not include every listed method, invent a method, progress multiple loading variables at once, or use fatigue as proof of effectiveness.",
+        "session_order": "Complete relevant preparation first; perform speed, power and high-skill work before fatiguing strength or conditioning; place low-priority capacity work later.",
+        "dose_application": "The weekly prescription applies to the primary_reference method. Preparation and supporting references use their own released method-dose compatibility; they must not inherit the primary dose blindly."
+      },
+      "weeks": [
+        {
+          "week": 1,
+          "intent": "entry and establish baseline",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 2,
+          "intent": "accumulate successful exposure",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 3,
+          "intent": "highest development exposure",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "10/side",
+            "intensity": "active end range",
+            "recovery": "30-45s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 4,
+          "intent": "consolidate and reduce fatigue",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "easy range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        }
+      ],
+      "exercise_progression_policy": "Keep the reference methods stable across four weeks and progress dose or execution quality first. A method change requires the stated progression gate, a compatible substitution, and no new equipment or level conflict.",
+      "week_4_policy": "Consolidation/deload by default. It may become an assessment or competition week only when the sport package and athlete schedule explicitly require it.",
+      "mandatory_stops": [
+        "pain",
+        "acute illness",
+        "unsafe environment or equipment",
+        "technique or output deterioration beyond the released limit",
+        "unresolved schedule conflict"
+      ],
+      "ai_use": "Reference for one-call four-week generation. AI may adapt within released method eligibility and dose bounds; it must not copy blindly or exceed constraints.",
+      "prompt_reference_text": "Performance preparation — Intermediate four-week reference. Approved method candidates: Easy Mode-Specific Raise, Inchworm Walkout, Lateral Leg Swing. Use this as a flexible exercise-based planning reference: Week 1 (entry and establish baseline): primary reference dose 2 sets/series × 8/side at controlled range, with 30s recovery. Week 2 (accumulate successful exposure): primary reference dose 3 sets/series × 8/side at controlled range, with 30s recovery. Week 3 (highest development exposure): primary reference dose 3 sets/series × 10/side at active end range, with 30-45s recovery. Week 4 (consolidate and reduce fatigue): primary reference dose 2 sets/series × 8/side at easy range, with 30s recovery. Progress only after acceptable technique/output, readiness and schedule checks; otherwise repeat or regress. Week 4 consolidates rather than automatically overloading. Apply dose only to the primary reference method; supporting methods retain their own approved dose."
+    },
+    {
+      "template_code": "P9-PERFORMANCE-PREPARATION-ADVANCED-4W",
+      "content_version": 1,
+      "status": "research_derived_candidate",
+      "phase": 9,
+      "category_code": "performance_preparation",
+      "name": "Performance preparation — Advanced four-week reference",
+      "athlete_level": "advanced",
+      "duration_weeks": 4,
+      "purpose": "Give the workout-generation model an exercise-based progression reference for performance preparation, not a mandatory athlete program.",
+      "source_template_ids": [
+        "P9-T01",
+        "P9-T02",
+        "P9-T03",
+        "P9-T04",
+        "P9-T05",
+        "P9-T06",
+        "P9-T07",
+        "P9-T08",
+        "P9-T09",
+        "P9-T10"
+      ],
+      "applicable_scenarios": [
+        "general_preparation",
+        "specific_preparation_preseason",
+        "in_season",
+        "competition_taper",
+        "congested_competition",
+        "re_entry_after_clearance"
+      ],
+      "method_options": [
+        {
+          "method_code": "easy_mode_specific_raise",
+          "block_role": "preparation",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "world_s_greatest_stretch",
+          "block_role": "primary_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "progressive_build_up_run",
+          "block_role": "preparation",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        }
+      ],
+      "selection_policy": {
+        "strategy": "quality_methods",
+        "required_primary_count": 1,
+        "supporting_methods_are_candidates": true,
+        "mode_required": false,
+        "cross_training_requires_opt_in": false,
+        "unresolved_behavior": "fail_closed"
+      },
+      "selection_rules": {
+        "use": "Select methods matching the athlete's sport demand, environment, equipment and level; preserve the category objective and weekly progression shape.",
+        "avoid": "Do not include every listed method, invent a method, progress multiple loading variables at once, or use fatigue as proof of effectiveness.",
+        "session_order": "Complete relevant preparation first; perform speed, power and high-skill work before fatiguing strength or conditioning; place low-priority capacity work later.",
+        "dose_application": "The weekly prescription applies to the primary_reference method. Preparation and supporting references use their own released method-dose compatibility; they must not inherit the primary dose blindly."
+      },
+      "weeks": [
+        {
+          "week": 1,
+          "intent": "entry and establish baseline",
+          "sessions_per_week": "1-2",
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "active end range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 2,
+          "intent": "accumulate successful exposure",
+          "sessions_per_week": "1-2",
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "10/side",
+            "intensity": "active end range",
+            "recovery": "30-45s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 3,
+          "intent": "highest development exposure",
+          "sessions_per_week": "1-2",
+          "prescription_per_primary_method": {
+            "sets_or_series": 4,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "loaded/control",
+            "recovery": "45-60s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 4,
+          "intent": "consolidate and reduce fatigue",
+          "sessions_per_week": "1-2",
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "easy range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        }
+      ],
+      "exercise_progression_policy": "Keep the reference methods stable across four weeks and progress dose or execution quality first. A method change requires the stated progression gate, a compatible substitution, and no new equipment or level conflict.",
+      "week_4_policy": "Consolidation/deload by default. It may become an assessment or competition week only when the sport package and athlete schedule explicitly require it.",
+      "mandatory_stops": [
+        "pain",
+        "acute illness",
+        "unsafe environment or equipment",
+        "technique or output deterioration beyond the released limit",
+        "unresolved schedule conflict"
+      ],
+      "ai_use": "Reference for one-call four-week generation. AI may adapt within released method eligibility and dose bounds; it must not copy blindly or exceed constraints.",
+      "prompt_reference_text": "Performance preparation — Advanced four-week reference. Approved method candidates: Easy Mode-Specific Raise, World's Greatest Stretch, Progressive Build-Up Run. Use this as a flexible exercise-based planning reference: Week 1 (entry and establish baseline): primary reference dose 3 sets/series × 8/side at active end range, with 30s recovery. Week 2 (accumulate successful exposure): primary reference dose 3 sets/series × 10/side at active end range, with 30-45s recovery. Week 3 (highest development exposure): primary reference dose 4 sets/series × 8/side at loaded/control, with 45-60s recovery. Week 4 (consolidate and reduce fatigue): primary reference dose 2 sets/series × 8/side at easy range, with 30s recovery. Progress only after acceptable technique/output, readiness and schedule checks; otherwise repeat or regress. Week 4 consolidates rather than automatically overloading. Apply dose only to the primary reference method; supporting methods retain their own approved dose."
+    },
+    {
+      "template_code": "P9-MOBILITY-RANGE-CAPACITY-BEGINNER-4W",
+      "content_version": 1,
+      "status": "research_derived_candidate",
+      "phase": 9,
+      "category_code": "mobility_range_capacity",
+      "name": "Mobility/range capacity — Beginner four-week reference",
+      "athlete_level": "beginner",
+      "duration_weeks": 4,
+      "purpose": "Give the workout-generation model an exercise-based progression reference for mobility/range capacity, not a mandatory athlete program.",
+      "source_template_ids": [
+        "P9-T11",
+        "P9-T12",
+        "P9-T13"
+      ],
+      "applicable_scenarios": [
+        "general_preparation",
+        "specific_preparation_preseason",
+        "in_season",
+        "competition_taper",
+        "congested_competition",
+        "re_entry_after_clearance"
+      ],
+      "method_options": [
+        {
+          "method_code": "knee_to_wall_ankle_rocks",
+          "block_role": "primary_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "90_90_hip_switch",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "open_book_thoracic_rotation",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        }
+      ],
+      "selection_policy": {
+        "strategy": "quality_methods",
+        "required_primary_count": 1,
+        "supporting_methods_are_candidates": true,
+        "mode_required": false,
+        "cross_training_requires_opt_in": false,
+        "unresolved_behavior": "fail_closed"
+      },
+      "selection_rules": {
+        "use": "Select methods matching the athlete's sport demand, environment, equipment and level; preserve the category objective and weekly progression shape.",
+        "avoid": "Do not include every listed method, invent a method, progress multiple loading variables at once, or use fatigue as proof of effectiveness.",
+        "session_order": "Complete relevant preparation first; perform speed, power and high-skill work before fatiguing strength or conditioning; place low-priority capacity work later.",
+        "dose_application": "The weekly prescription applies to the primary_reference method. Preparation and supporting references use their own released method-dose compatibility; they must not inherit the primary dose blindly."
+      },
+      "weeks": [
+        {
+          "week": 1,
+          "intent": "entry and establish baseline",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "6/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 2,
+          "intent": "accumulate successful exposure",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 3,
+          "intent": "highest development exposure",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 4,
+          "intent": "consolidate and reduce fatigue",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "easy range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        }
+      ],
+      "exercise_progression_policy": "Keep the reference methods stable across four weeks and progress dose or execution quality first. A method change requires the stated progression gate, a compatible substitution, and no new equipment or level conflict.",
+      "week_4_policy": "Consolidation/deload by default. It may become an assessment or competition week only when the sport package and athlete schedule explicitly require it.",
+      "mandatory_stops": [
+        "pain",
+        "acute illness",
+        "unsafe environment or equipment",
+        "technique or output deterioration beyond the released limit",
+        "unresolved schedule conflict"
+      ],
+      "ai_use": "Reference for one-call four-week generation. AI may adapt within released method eligibility and dose bounds; it must not copy blindly or exceed constraints.",
+      "prompt_reference_text": "Mobility/range capacity — Beginner four-week reference. Approved method candidates: Knee-To-Wall Ankle Rocks, 90/90 Hip Switch, Open Book Thoracic Rotation. Use this as a flexible exercise-based planning reference: Week 1 (entry and establish baseline): primary reference dose 2 sets/series × 6/side at controlled range, with 30s recovery. Week 2 (accumulate successful exposure): primary reference dose 2 sets/series × 8/side at controlled range, with 30s recovery. Week 3 (highest development exposure): primary reference dose 3 sets/series × 8/side at controlled range, with 30s recovery. Week 4 (consolidate and reduce fatigue): primary reference dose 1 sets/series × 8/side at easy range, with 30s recovery. Progress only after acceptable technique/output, readiness and schedule checks; otherwise repeat or regress. Week 4 consolidates rather than automatically overloading. Apply dose only to the primary reference method; supporting methods retain their own approved dose."
+    },
+    {
+      "template_code": "P9-MOBILITY-RANGE-CAPACITY-INTERMEDIATE-4W",
+      "content_version": 1,
+      "status": "research_derived_candidate",
+      "phase": 9,
+      "category_code": "mobility_range_capacity",
+      "name": "Mobility/range capacity — Intermediate four-week reference",
+      "athlete_level": "intermediate",
+      "duration_weeks": 4,
+      "purpose": "Give the workout-generation model an exercise-based progression reference for mobility/range capacity, not a mandatory athlete program.",
+      "source_template_ids": [
+        "P9-T11",
+        "P9-T12",
+        "P9-T13"
+      ],
+      "applicable_scenarios": [
+        "general_preparation",
+        "specific_preparation_preseason",
+        "in_season",
+        "competition_taper",
+        "congested_competition",
+        "re_entry_after_clearance"
+      ],
+      "method_options": [
+        {
+          "method_code": "deep_squat_pry",
+          "block_role": "primary_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "cossack_squat",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "wall_slide_with_lift_off",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        }
+      ],
+      "selection_policy": {
+        "strategy": "quality_methods",
+        "required_primary_count": 1,
+        "supporting_methods_are_candidates": true,
+        "mode_required": false,
+        "cross_training_requires_opt_in": false,
+        "unresolved_behavior": "fail_closed"
+      },
+      "selection_rules": {
+        "use": "Select methods matching the athlete's sport demand, environment, equipment and level; preserve the category objective and weekly progression shape.",
+        "avoid": "Do not include every listed method, invent a method, progress multiple loading variables at once, or use fatigue as proof of effectiveness.",
+        "session_order": "Complete relevant preparation first; perform speed, power and high-skill work before fatiguing strength or conditioning; place low-priority capacity work later.",
+        "dose_application": "The weekly prescription applies to the primary_reference method. Preparation and supporting references use their own released method-dose compatibility; they must not inherit the primary dose blindly."
+      },
+      "weeks": [
+        {
+          "week": 1,
+          "intent": "entry and establish baseline",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 2,
+          "intent": "accumulate successful exposure",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "controlled range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 3,
+          "intent": "highest development exposure",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "10/side",
+            "intensity": "active end range",
+            "recovery": "30-45s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 4,
+          "intent": "consolidate and reduce fatigue",
+          "sessions_per_week": 2,
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "easy range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        }
+      ],
+      "exercise_progression_policy": "Keep the reference methods stable across four weeks and progress dose or execution quality first. A method change requires the stated progression gate, a compatible substitution, and no new equipment or level conflict.",
+      "week_4_policy": "Consolidation/deload by default. It may become an assessment or competition week only when the sport package and athlete schedule explicitly require it.",
+      "mandatory_stops": [
+        "pain",
+        "acute illness",
+        "unsafe environment or equipment",
+        "technique or output deterioration beyond the released limit",
+        "unresolved schedule conflict"
+      ],
+      "ai_use": "Reference for one-call four-week generation. AI may adapt within released method eligibility and dose bounds; it must not copy blindly or exceed constraints.",
+      "prompt_reference_text": "Mobility/range capacity — Intermediate four-week reference. Approved method candidates: Deep Squat Pry, Cossack Squat, Wall Slide with Lift-Off. Use this as a flexible exercise-based planning reference: Week 1 (entry and establish baseline): primary reference dose 2 sets/series × 8/side at controlled range, with 30s recovery. Week 2 (accumulate successful exposure): primary reference dose 3 sets/series × 8/side at controlled range, with 30s recovery. Week 3 (highest development exposure): primary reference dose 3 sets/series × 10/side at active end range, with 30-45s recovery. Week 4 (consolidate and reduce fatigue): primary reference dose 2 sets/series × 8/side at easy range, with 30s recovery. Progress only after acceptable technique/output, readiness and schedule checks; otherwise repeat or regress. Week 4 consolidates rather than automatically overloading. Apply dose only to the primary reference method; supporting methods retain their own approved dose."
+    },
+    {
+      "template_code": "P9-MOBILITY-RANGE-CAPACITY-ADVANCED-4W",
+      "content_version": 1,
+      "status": "research_derived_candidate",
+      "phase": 9,
+      "category_code": "mobility_range_capacity",
+      "name": "Mobility/range capacity — Advanced four-week reference",
+      "athlete_level": "advanced",
+      "duration_weeks": 4,
+      "purpose": "Give the workout-generation model an exercise-based progression reference for mobility/range capacity, not a mandatory athlete program.",
+      "source_template_ids": [
+        "P9-T11",
+        "P9-T12",
+        "P9-T13"
+      ],
+      "applicable_scenarios": [
+        "general_preparation",
+        "specific_preparation_preseason",
+        "in_season",
+        "competition_taper",
+        "congested_competition",
+        "re_entry_after_clearance"
+      ],
+      "method_options": [
+        {
+          "method_code": "cossack_squat",
+          "block_role": "primary_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "hip_airplane",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "wall_slide_with_lift_off",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        }
+      ],
+      "selection_policy": {
+        "strategy": "quality_methods",
+        "required_primary_count": 1,
+        "supporting_methods_are_candidates": true,
+        "mode_required": false,
+        "cross_training_requires_opt_in": false,
+        "unresolved_behavior": "fail_closed"
+      },
+      "selection_rules": {
+        "use": "Select methods matching the athlete's sport demand, environment, equipment and level; preserve the category objective and weekly progression shape.",
+        "avoid": "Do not include every listed method, invent a method, progress multiple loading variables at once, or use fatigue as proof of effectiveness.",
+        "session_order": "Complete relevant preparation first; perform speed, power and high-skill work before fatiguing strength or conditioning; place low-priority capacity work later.",
+        "dose_application": "The weekly prescription applies to the primary_reference method. Preparation and supporting references use their own released method-dose compatibility; they must not inherit the primary dose blindly."
+      },
+      "weeks": [
+        {
+          "week": 1,
+          "intent": "entry and establish baseline",
+          "sessions_per_week": "1-2",
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "active end range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 2,
+          "intent": "accumulate successful exposure",
+          "sessions_per_week": "1-2",
+          "prescription_per_primary_method": {
+            "sets_or_series": 3,
+            "repetitions_distance_or_duration": "10/side",
+            "intensity": "active end range",
+            "recovery": "30-45s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 3,
+          "intent": "highest development exposure",
+          "sessions_per_week": "1-2",
+          "prescription_per_primary_method": {
+            "sets_or_series": 4,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "loaded/control",
+            "recovery": "45-60s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 4,
+          "intent": "consolidate and reduce fatigue",
+          "sessions_per_week": "1-2",
+          "prescription_per_primary_method": {
+            "sets_or_series": 2,
+            "repetitions_distance_or_duration": "8/side",
+            "intensity": "easy range",
+            "recovery": "30s"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        }
+      ],
+      "exercise_progression_policy": "Keep the reference methods stable across four weeks and progress dose or execution quality first. A method change requires the stated progression gate, a compatible substitution, and no new equipment or level conflict.",
+      "week_4_policy": "Consolidation/deload by default. It may become an assessment or competition week only when the sport package and athlete schedule explicitly require it.",
+      "mandatory_stops": [
+        "pain",
+        "acute illness",
+        "unsafe environment or equipment",
+        "technique or output deterioration beyond the released limit",
+        "unresolved schedule conflict"
+      ],
+      "ai_use": "Reference for one-call four-week generation. AI may adapt within released method eligibility and dose bounds; it must not copy blindly or exceed constraints.",
+      "prompt_reference_text": "Mobility/range capacity — Advanced four-week reference. Approved method candidates: Cossack Squat, Hip Airplane, Wall Slide with Lift-Off. Use this as a flexible exercise-based planning reference: Week 1 (entry and establish baseline): primary reference dose 3 sets/series × 8/side at active end range, with 30s recovery. Week 2 (accumulate successful exposure): primary reference dose 3 sets/series × 10/side at active end range, with 30-45s recovery. Week 3 (highest development exposure): primary reference dose 4 sets/series × 8/side at loaded/control, with 45-60s recovery. Week 4 (consolidate and reduce fatigue): primary reference dose 2 sets/series × 8/side at easy range, with 30s recovery. Progress only after acceptable technique/output, readiness and schedule checks; otherwise repeat or regress. Week 4 consolidates rather than automatically overloading. Apply dose only to the primary reference method; supporting methods retain their own approved dose."
+    },
+    {
+      "template_code": "P9-RECOVERY-MANAGEMENT-BEGINNER-4W",
+      "content_version": 1,
+      "status": "research_derived_candidate",
+      "phase": 9,
+      "category_code": "recovery_management",
+      "name": "Recovery management — Beginner four-week reference",
+      "athlete_level": "beginner",
+      "duration_weeks": 4,
+      "purpose": "Give the workout-generation model an exercise-based progression reference for recovery management, not a mandatory athlete program.",
+      "source_template_ids": [
+        "P9-T14",
+        "P9-T15",
+        "P9-T16",
+        "P9-T17",
+        "P9-T18"
+      ],
+      "applicable_scenarios": [
+        "general_preparation",
+        "specific_preparation_preseason",
+        "in_season",
+        "competition_taper",
+        "congested_competition",
+        "re_entry_after_clearance"
+      ],
+      "method_options": [
+        {
+          "method_code": "passive_rest",
+          "block_role": "primary_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "very_easy_active_cooldown",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        }
+      ],
+      "selection_policy": {
+        "strategy": "quality_methods",
+        "required_primary_count": 1,
+        "supporting_methods_are_candidates": true,
+        "mode_required": false,
+        "cross_training_requires_opt_in": false,
+        "unresolved_behavior": "fail_closed"
+      },
+      "selection_rules": {
+        "use": "Select methods matching the athlete's sport demand, environment, equipment and level; preserve the category objective and weekly progression shape.",
+        "avoid": "Do not include every listed method, invent a method, progress multiple loading variables at once, or use fatigue as proof of effectiveness.",
+        "session_order": "Complete relevant preparation first; perform speed, power and high-skill work before fatiguing strength or conditioning; place low-priority capacity work later.",
+        "dose_application": "The weekly prescription applies to the primary_reference method. Preparation and supporting references use their own released method-dose compatibility; they must not inherit the primary dose blindly."
+      },
+      "weeks": [
+        {
+          "week": 1,
+          "intent": "entry and establish baseline",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "10min",
+            "intensity": "RPE 1-2",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 2,
+          "intent": "accumulate successful exposure",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "15min",
+            "intensity": "RPE 1-2",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 3,
+          "intent": "highest development exposure",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "20min",
+            "intensity": "RPE 1-2",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 4,
+          "intent": "consolidate and reduce fatigue",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "10min",
+            "intensity": "RPE 1",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        }
+      ],
+      "exercise_progression_policy": "Keep the reference methods stable across four weeks and progress dose or execution quality first. A method change requires the stated progression gate, a compatible substitution, and no new equipment or level conflict.",
+      "week_4_policy": "Consolidation/deload by default. It may become an assessment or competition week only when the sport package and athlete schedule explicitly require it.",
+      "mandatory_stops": [
+        "pain",
+        "acute illness",
+        "unsafe environment or equipment",
+        "technique or output deterioration beyond the released limit",
+        "unresolved schedule conflict"
+      ],
+      "ai_use": "Reference for one-call four-week generation. AI may adapt within released method eligibility and dose bounds; it must not copy blindly or exceed constraints.",
+      "prompt_reference_text": "Recovery management — Beginner four-week reference. Approved method candidates: Passive Rest / No Modality, Very Easy Active Cooldown. Use this as a flexible exercise-based planning reference: Week 1 (entry and establish baseline): primary reference dose 1 sets/series × 10min at RPE 1-2, with none recovery. Week 2 (accumulate successful exposure): primary reference dose 1 sets/series × 15min at RPE 1-2, with none recovery. Week 3 (highest development exposure): primary reference dose 1 sets/series × 20min at RPE 1-2, with none recovery. Week 4 (consolidate and reduce fatigue): primary reference dose 1 sets/series × 10min at RPE 1, with none recovery. Progress only after acceptable technique/output, readiness and schedule checks; otherwise repeat or regress. Week 4 consolidates rather than automatically overloading. Apply dose only to the primary reference method; supporting methods retain their own approved dose."
+    },
+    {
+      "template_code": "P9-RECOVERY-MANAGEMENT-INTERMEDIATE-4W",
+      "content_version": 1,
+      "status": "research_derived_candidate",
+      "phase": 9,
+      "category_code": "recovery_management",
+      "name": "Recovery management — Intermediate four-week reference",
+      "athlete_level": "intermediate",
+      "duration_weeks": 4,
+      "purpose": "Give the workout-generation model an exercise-based progression reference for recovery management, not a mandatory athlete program.",
+      "source_template_ids": [
+        "P9-T14",
+        "P9-T15",
+        "P9-T16",
+        "P9-T17",
+        "P9-T18"
+      ],
+      "applicable_scenarios": [
+        "general_preparation",
+        "specific_preparation_preseason",
+        "in_season",
+        "competition_taper",
+        "congested_competition",
+        "re_entry_after_clearance"
+      ],
+      "method_options": [
+        {
+          "method_code": "passive_rest",
+          "block_role": "primary_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "low_impact_recovery_session",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "optional_foam_rolling",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        }
+      ],
+      "selection_policy": {
+        "strategy": "quality_methods",
+        "required_primary_count": 1,
+        "supporting_methods_are_candidates": true,
+        "mode_required": false,
+        "cross_training_requires_opt_in": false,
+        "unresolved_behavior": "fail_closed"
+      },
+      "selection_rules": {
+        "use": "Select methods matching the athlete's sport demand, environment, equipment and level; preserve the category objective and weekly progression shape.",
+        "avoid": "Do not include every listed method, invent a method, progress multiple loading variables at once, or use fatigue as proof of effectiveness.",
+        "session_order": "Complete relevant preparation first; perform speed, power and high-skill work before fatiguing strength or conditioning; place low-priority capacity work later.",
+        "dose_application": "The weekly prescription applies to the primary_reference method. Preparation and supporting references use their own released method-dose compatibility; they must not inherit the primary dose blindly."
+      },
+      "weeks": [
+        {
+          "week": 1,
+          "intent": "entry and establish baseline",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "15min",
+            "intensity": "RPE 1-2",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 2,
+          "intent": "accumulate successful exposure",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "20min",
+            "intensity": "RPE 1-2",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 3,
+          "intent": "highest development exposure",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "25min",
+            "intensity": "RPE 1-3",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 4,
+          "intent": "consolidate and reduce fatigue",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "15min",
+            "intensity": "RPE 1-2",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        }
+      ],
+      "exercise_progression_policy": "Keep the reference methods stable across four weeks and progress dose or execution quality first. A method change requires the stated progression gate, a compatible substitution, and no new equipment or level conflict.",
+      "week_4_policy": "Consolidation/deload by default. It may become an assessment or competition week only when the sport package and athlete schedule explicitly require it.",
+      "mandatory_stops": [
+        "pain",
+        "acute illness",
+        "unsafe environment or equipment",
+        "technique or output deterioration beyond the released limit",
+        "unresolved schedule conflict"
+      ],
+      "ai_use": "Reference for one-call four-week generation. AI may adapt within released method eligibility and dose bounds; it must not copy blindly or exceed constraints.",
+      "prompt_reference_text": "Recovery management — Intermediate four-week reference. Approved method candidates: Passive Rest / No Modality, Low-Impact Recovery Session, Optional Symptom-Free Foam Rolling. Use this as a flexible exercise-based planning reference: Week 1 (entry and establish baseline): primary reference dose 1 sets/series × 15min at RPE 1-2, with none recovery. Week 2 (accumulate successful exposure): primary reference dose 1 sets/series × 20min at RPE 1-2, with none recovery. Week 3 (highest development exposure): primary reference dose 1 sets/series × 25min at RPE 1-3, with none recovery. Week 4 (consolidate and reduce fatigue): primary reference dose 1 sets/series × 15min at RPE 1-2, with none recovery. Progress only after acceptable technique/output, readiness and schedule checks; otherwise repeat or regress. Week 4 consolidates rather than automatically overloading. Apply dose only to the primary reference method; supporting methods retain their own approved dose."
+    },
+    {
+      "template_code": "P9-RECOVERY-MANAGEMENT-ADVANCED-4W",
+      "content_version": 1,
+      "status": "research_derived_candidate",
+      "phase": 9,
+      "category_code": "recovery_management",
+      "name": "Recovery management — Advanced four-week reference",
+      "athlete_level": "advanced",
+      "duration_weeks": 4,
+      "purpose": "Give the workout-generation model an exercise-based progression reference for recovery management, not a mandatory athlete program.",
+      "source_template_ids": [
+        "P9-T14",
+        "P9-T15",
+        "P9-T16",
+        "P9-T17",
+        "P9-T18"
+      ],
+      "applicable_scenarios": [
+        "general_preparation",
+        "specific_preparation_preseason",
+        "in_season",
+        "competition_taper",
+        "congested_competition",
+        "re_entry_after_clearance"
+      ],
+      "method_options": [
+        {
+          "method_code": "passive_rest",
+          "block_role": "primary_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "low_impact_recovery_session",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        },
+        {
+          "method_code": "optional_foam_rolling",
+          "block_role": "supporting_reference",
+          "applicable_modes": [
+            "all"
+          ],
+          "implementation_note": ""
+        }
+      ],
+      "selection_policy": {
+        "strategy": "quality_methods",
+        "required_primary_count": 1,
+        "supporting_methods_are_candidates": true,
+        "mode_required": false,
+        "cross_training_requires_opt_in": false,
+        "unresolved_behavior": "fail_closed"
+      },
+      "selection_rules": {
+        "use": "Select methods matching the athlete's sport demand, environment, equipment and level; preserve the category objective and weekly progression shape.",
+        "avoid": "Do not include every listed method, invent a method, progress multiple loading variables at once, or use fatigue as proof of effectiveness.",
+        "session_order": "Complete relevant preparation first; perform speed, power and high-skill work before fatiguing strength or conditioning; place low-priority capacity work later.",
+        "dose_application": "The weekly prescription applies to the primary_reference method. Preparation and supporting references use their own released method-dose compatibility; they must not inherit the primary dose blindly."
+      },
+      "weeks": [
+        {
+          "week": 1,
+          "intent": "entry and establish baseline",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "20min",
+            "intensity": "RPE 1-2",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 2,
+          "intent": "accumulate successful exposure",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "25min",
+            "intensity": "RPE 1-2",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 3,
+          "intent": "highest development exposure",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "30min",
+            "intensity": "RPE 1-3",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        },
+        {
+          "week": 4,
+          "intent": "consolidate and reduce fatigue",
+          "sessions_per_week": 1,
+          "prescription_per_primary_method": {
+            "sets_or_series": 1,
+            "repetitions_distance_or_duration": "15min",
+            "intensity": "RPE 1-2",
+            "recovery": "none"
+          },
+          "progression_condition": "Complete the planned exposure with acceptable technique/output, no pain or illness, and no material interference with the next key sport session.",
+          "regression_condition": "If quality, readiness, symptoms or schedule gate fails, repeat the prior successful week or use the category regression; do not progress automatically."
+        }
+      ],
+      "exercise_progression_policy": "Keep the reference methods stable across four weeks and progress dose or execution quality first. A method change requires the stated progression gate, a compatible substitution, and no new equipment or level conflict.",
+      "week_4_policy": "Consolidation/deload by default. It may become an assessment or competition week only when the sport package and athlete schedule explicitly require it.",
+      "mandatory_stops": [
+        "pain",
+        "acute illness",
+        "unsafe environment or equipment",
+        "technique or output deterioration beyond the released limit",
+        "unresolved schedule conflict"
+      ],
+      "ai_use": "Reference for one-call four-week generation. AI may adapt within released method eligibility and dose bounds; it must not copy blindly or exceed constraints.",
+      "prompt_reference_text": "Recovery management — Advanced four-week reference. Approved method candidates: Passive Rest / No Modality, Low-Impact Recovery Session, Optional Symptom-Free Foam Rolling. Use this as a flexible exercise-based planning reference: Week 1 (entry and establish baseline): primary reference dose 1 sets/series × 20min at RPE 1-2, with none recovery. Week 2 (accumulate successful exposure): primary reference dose 1 sets/series × 25min at RPE 1-2, with none recovery. Week 3 (highest development exposure): primary reference dose 1 sets/series × 30min at RPE 1-3, with none recovery. Week 4 (consolidate and reduce fatigue): primary reference dose 1 sets/series × 15min at RPE 1-2, with none recovery. Progress only after acceptable technique/output, readiness and schedule checks; otherwise repeat or regress. Week 4 consolidates rather than automatically overloading. Apply dose only to the primary reference method; supporting methods retain their own approved dose."
+    }
+  ]
+}

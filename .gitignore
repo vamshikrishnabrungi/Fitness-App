@@ -63,6 +63,8 @@ chainlit.md
 
 # Deployment
 .vercel
+deploy/rendered/*.yaml
+deploy/rendered/*.json
 
 # Data and databases
 agenthub/agents/youtube/db
@@ -105,3 +107,25 @@ android-sdk/ -e
 credentials.json
 *.key
 .credentials
+
+# --- Large / copyrighted reference source material (keep OUT of git history) ---
+/*.pdf
+/*.epub
+/*.jpeg
+/*.jpg
+/*.webp
+/pylometrics/
+
+# AI generation scratch artifacts
+backend/anthropic_week1_*.json
+backend/openrouter_week1_*.json
+
+# ...but DO track the env template (overrides the *.env.* rule above)
+!backend/.env.example
+!frontend/.env.example
+
+# Local API key scratch — never commit
+backend/openai_keys_to_test.txt
+
+# Terraform/OpenTofu local provider and state cache
+**/.terraform/

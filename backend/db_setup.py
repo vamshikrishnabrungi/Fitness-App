@@ -1,25 +1,64 @@
 from __future__ import annotations
 
+import json
+import os
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List
 
 from pymongo import ASCENDING, DESCENDING, GEOSPHERE
+
+
+PLANNING_SEED_PATH = Path(__file__).resolve().parent / 'data' / 'sftc_backend_planning_collections.json'
+PLANNING_SEED_COLLECTIONS = {
+    'planning_rules',
+    'sport_profiles',
+    'macro_plan_templates',
+    'competition_week_rules',
+}
 
 
 COLLECTIONS: List[str] = [
     'users',
     'otps',
     'athlete_profiles',
+    'macro_plans',
+    'athlete_states',
     'training_programs',
     'program_blocks',
     'workouts',
     'workout_sessions',
     'exercise_results',
     'exercise_library',
+    'primary_exercise_library',
+    'exercise_variation_library',
+    'exercise_progression_graph',
+    'user_exercise_history',
+    'user_level_assessments',
+    'user_benchmarks',
+    'source_sections',
+    'knowledge_extraction_runs',
+    'training_principles',
+    'programming_rules',
+    'technical_models',
+    'technical_errors',
+    'coaching_progressions',
+    'mobility_drills',
+    'recovery_rules',
+    'nutrition_principles',
+    'glossary_terms',
     'movement_patterns',
     'physical_qualities',
     'sport_profiles',
     'sport_roles',
     'sport_training_rules',
+    'sport_teaching_progressions',
+    'sport_skill_assessments',
+    'sport_level_transition_rules',
+    'planning_rules',
+    'training_protocols',
+    'macro_plan_templates',
+    'competition_week_rules',
     'workout_templates',
     'injury_modifications',
     'progression_rules',
@@ -33,7 +72,6 @@ COLLECTIONS: List[str] = [
     'running_plan_rules',
     'meals',
     'nutrition_targets',
-    'sleep_sessions',
     'health_metrics',
     'injuries',
     'injury_logs',
@@ -41,19 +79,38 @@ COLLECTIONS: List[str] = [
     'moods',
     'daily_snapshots',
     'coach_daily_analyses',
+    'activities',
+    'activity_outbox',
+    'activity_import_jobs',
+    'activity_upload_sessions',
+    'activity_upload_chunks',
+    'activity_insights',
+    'integration_connections',
+    'privacy_settings',
+    'account_deletion_requests',
+    'routes',
+    'segments',
+    'segment_efforts',
+    'street_edges',
+    'territory_ownership',
+    'goals',
+    'challenges',
+    'challenge_entries',
+    'races',
+    'race_entries',
+    'leaderboard_snapshots',
+    'live_location_sessions',
+    'safety_reports',
     'terra_runs',
     'run_clubs',
     'run_club_memberships',
     'terra_reflections',
     'terra_feed_posts',
     'terra_training_plans',
-    'coach_requests',
-    'coach_relationships',
-    'coach_workouts',
-    'coach_meals',
-    'coach_goals',
-    'journal_entries',
     'lessons',
+    'ai_generation_log',
+    'club_activity_events',
+    'sport_library_progress',
 ]
 
 
@@ -73,6 +130,19 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
         {'keys': [('user_id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('sports', ASCENDING)]},
         {'keys': [('city', ASCENDING)]},
+    ],
+    'macro_plans': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('status', ASCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('template_id', ASCENDING)]},
+        {'keys': [('sports', ASCENDING)]},
+    ],
+    'athlete_states': [
+        {'keys': [('user_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('macro_plan_id', ASCENDING)]},
+        {'keys': [('current_level', ASCENDING)]},
+        {'keys': [('updated_at', DESCENDING)]},
     ],
     'training_programs': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
@@ -107,6 +177,122 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
         {'keys': [('difficulty', ASCENDING)]},
         {'keys': [('sport_tags', ASCENDING)]},
         {'keys': [('injury_flags', ASCENDING)]},
+        {'keys': [('source_book_id', ASCENDING)]},
+    ],
+    'primary_exercise_library': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('name', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('base_exercise', ASCENDING)]},
+        {'keys': [('category', ASCENDING)]},
+        {'keys': [('patterns', ASCENDING)]},
+        {'keys': [('qualities', ASCENDING)]},
+        {'keys': [('equipment', ASCENDING)]},
+        {'keys': [('default_user_level', ASCENDING)]},
+        {'keys': [('technical_complexity', ASCENDING)]},
+        {'keys': [('impact_level', ASCENDING)]},
+    ],
+    'exercise_variation_library': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('name', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('base_exercise', ASCENDING)]},
+        {'keys': [('variation_type', ASCENDING)]},
+        {'keys': [('category', ASCENDING)]},
+        {'keys': [('patterns', ASCENDING)]},
+        {'keys': [('qualities', ASCENDING)]},
+        {'keys': [('equipment', ASCENDING)]},
+        {'keys': [('default_user_level', ASCENDING)]},
+        {'keys': [('coaching_requirement', ASCENDING)]},
+    ],
+    'exercise_progression_graph': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('base_exercise', ASCENDING)]},
+        {'keys': [('from_exercise_id', ASCENDING)]},
+        {'keys': [('to_exercise_id', ASCENDING)]},
+        {'keys': [('direction', ASCENDING)]},
+        {'keys': [('min_user_level', ASCENDING)]},
+    ],
+    'user_exercise_history': [
+        {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('exercise_id', ASCENDING), ('date', DESCENDING)]},
+        {'keys': [('workout_id', ASCENDING)]},
+        {'keys': [('source', ASCENDING)]},
+    ],
+    'user_level_assessments': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('status', ASCENDING)]},
+        {'keys': [('current_level', ASCENDING), ('recommended_level', ASCENDING)]},
+    ],
+    'user_benchmarks': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},
+    ],
+    'source_sections': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING), ('section_order', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('domain', ASCENDING)]},
+        {'keys': [('topics', ASCENDING)]},
+    ],
+    'knowledge_extraction_runs': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING), ('created_at', DESCENDING)]},
+    ],
+    'training_principles': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING)]},
+        {'keys': [('domain', ASCENDING)]},
+        {'keys': [('topics', ASCENDING)]},
+    ],
+    'programming_rules': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING)]},
+        {'keys': [('rule_type', ASCENDING)]},
+        {'keys': [('applies_to', ASCENDING)]},
+    ],
+    'technical_models': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING)]},
+        {'keys': [('lift', ASCENDING)]},
+        {'keys': [('phase', ASCENDING)]},
+        {'keys': [('topics', ASCENDING)]},
+    ],
+    'technical_errors': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING)]},
+        {'keys': [('lift', ASCENDING)]},
+        {'keys': [('error_name', ASCENDING)]},
+        {'keys': [('topics', ASCENDING)]},
+    ],
+    'coaching_progressions': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING)]},
+        {'keys': [('lift', ASCENDING)]},
+        {'keys': [('stage', ASCENDING)]},
+        {'keys': [('topics', ASCENDING)]},
+    ],
+    'mobility_drills': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING)]},
+        {'keys': [('addresses', ASCENDING)]},
+        {'keys': [('body_regions', ASCENDING)]},
+    ],
+    'recovery_rules': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING)]},
+        {'keys': [('category', ASCENDING)]},
+        {'keys': [('topics', ASCENDING)]},
+    ],
+    'nutrition_principles': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING)]},
+        {'keys': [('category', ASCENDING)]},
+        {'keys': [('topics', ASCENDING)]},
+    ],
+    'glossary_terms': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('source_book_id', ASCENDING)]},
+        {'keys': [('term', ASCENDING)]},
+        {'keys': [('topics', ASCENDING)]},
     ],
     'movement_patterns': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
@@ -132,6 +318,51 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('sport', ASCENDING)]},
         {'keys': [('condition', ASCENDING)]},
+    ],
+    'sport_teaching_progressions': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('sport', ASCENDING)]},
+        {'keys': [('domain', ASCENDING)]},
+        {'keys': [('level', ASCENDING)]},
+        {'keys': [('role_tags', ASCENDING)]},
+        {'keys': [('source_pack_id', ASCENDING)]},
+    ],
+    'sport_skill_assessments': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('sport', ASCENDING)]},
+        {'keys': [('domain', ASCENDING)]},
+        {'keys': [('level_bands.level', ASCENDING)]},
+        {'keys': [('source_pack_id', ASCENDING)]},
+    ],
+    'sport_level_transition_rules': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('sport', ASCENDING)]},
+        {'keys': [('from_level', ASCENDING), ('to_level', ASCENDING)]},
+        {'keys': [('applies_to', ASCENDING)]},
+        {'keys': [('source_pack_id', ASCENDING)]},
+    ],
+    'planning_rules': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('category', ASCENDING)]},
+        {'keys': [('applies_to', ASCENDING)]},
+        {'keys': [('priority', DESCENDING)]},
+    ],
+    'training_protocols': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('category', ASCENDING)]},
+        {'keys': [('scope', ASCENDING)]},
+        {'keys': [('match.injury_areas', ASCENDING)]},
+    ],
+    'macro_plan_templates': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('name', ASCENDING)]},
+        {'keys': [('applies_when', ASCENDING)]},
+        {'keys': [('macro_length_weeks', ASCENDING)]},
+    ],
+    'competition_week_rules': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('category', ASCENDING)]},
+        {'keys': [('applies_to', ASCENDING)]},
     ],
     'workout_templates': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
@@ -198,10 +429,6 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
     'nutrition_targets': [
         {'keys': [('user_id', ASCENDING), ('effective_from', DESCENDING)]},
     ],
-    'sleep_sessions': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},
-    ],
     'health_metrics': [
         {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},
         {'keys': [('user_id', ASCENDING), ('metric_type', ASCENDING), ('date', DESCENDING)]},
@@ -230,6 +457,112 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
     'coach_daily_analyses': [
         {'keys': [('user_id', ASCENDING), ('date', DESCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('snapshot_id', ASCENDING)]},
+    ],
+    'activities': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('started_at', DESCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('idempotency_key', ASCENDING)], 'kwargs': {'unique': True, 'sparse': True}},
+        {'keys': [('status', ASCENDING), ('processing_status', ASCENDING)]},
+        {'keys': [('leaderboard_eligible', ASCENDING), ('started_at', DESCENDING)]},
+        {'keys': [('route_geojson', GEOSPHERE)], 'kwargs': {'sparse': True}},
+    ],
+    'activity_outbox': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('available_at', ASCENDING)]},
+        {'keys': [('activity_id', ASCENDING), ('event_type', ASCENDING)], 'kwargs': {'unique': True}},
+    ],
+    'activity_import_jobs': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('deduplication_key', ASCENDING)], 'kwargs': {'unique': True, 'sparse': True}},
+        {'keys': [('status', ASCENDING), ('created_at', ASCENDING)]},
+    ],
+    'activity_upload_sessions': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('idempotency_key', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('updated_at', ASCENDING)]},
+    ],
+    'activity_upload_chunks': [
+        {'keys': [('upload_id', ASCENDING), ('sequence', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('created_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 2_592_000}},
+    ],
+    'activity_insights': [
+        {'keys': [('activity_id', ASCENDING), ('user_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+    ],
+    'integration_connections': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('provider', ASCENDING)], 'kwargs': {'unique': True}},
+    ],
+    'privacy_settings': [
+        {'keys': [('user_id', ASCENDING)], 'kwargs': {'unique': True}},
+    ],
+    'account_deletion_requests': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('status', ASCENDING)]},
+        {'keys': [('execute_after', ASCENDING), ('status', ASCENDING)]},
+    ],
+    'routes': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('visibility', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('geometry', GEOSPHERE)], 'kwargs': {'sparse': True}},
+    ],
+    'segments': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('popularity', DESCENDING)]},
+        {'keys': [('geometry', GEOSPHERE)], 'kwargs': {'sparse': True}},
+    ],
+    'segment_efforts': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('segment_id', ASCENDING), ('elapsed_time_sec', ASCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('segment_id', ASCENDING), ('started_at', DESCENDING)]},
+        {'keys': [('activity_id', ASCENDING), ('segment_id', ASCENDING)], 'kwargs': {'unique': True}},
+    ],
+    'street_edges': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('geometry', GEOSPHERE)]},
+    ],
+    'territory_ownership': [
+        {'keys': [('street_edge_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('updated_at', DESCENDING)]},
+        {'keys': [('club_id', ASCENDING), ('updated_at', DESCENDING)]},
+    ],
+    'goals': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('status', ASCENDING), ('period_end', ASCENDING)]},
+    ],
+    'challenges': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('starts_at', ASCENDING), ('ends_at', ASCENDING)]},
+        {'keys': [('club_ids', ASCENDING)]},
+    ],
+    'challenge_entries': [
+        {'keys': [('challenge_id', ASCENDING), ('user_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('challenge_id', ASCENDING), ('score', DESCENDING)]},
+    ],
+    'races': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('starts_at', ASCENDING)]},
+        {'keys': [('route_id', ASCENDING), ('starts_at', DESCENDING)]},
+    ],
+    'race_entries': [
+        {'keys': [('race_id', ASCENDING), ('user_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('race_id', ASCENDING), ('result_elapsed_time_sec', ASCENDING)]},
+    ],
+    'leaderboard_snapshots': [
+        {'keys': [('scope_type', ASCENDING), ('scope_id', ASCENDING), ('period', ASCENDING), ('generated_at', DESCENDING)]},
+        {'keys': [('expires_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 0}},
+    ],
+    'live_location_sessions': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('share_token_hash', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('expires_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 0}},
+    ],
+    'safety_reports': [
+        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('status', ASCENDING), ('created_at', ASCENDING)]},
+        {'keys': [('reporter_user_id', ASCENDING), ('created_at', DESCENDING)]},
     ],
     'terra_runs': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
@@ -261,39 +594,59 @@ INDEXES: Dict[str, List[Dict[str, Any]]] = {
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
     ],
-    'coach_requests': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('status', ASCENDING)]},
-        {'keys': [('coach_id', ASCENDING), ('status', ASCENDING)]},
-    ],
-    'coach_relationships': [
-        {'keys': [('coach_id', ASCENDING), ('client_id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('status', ASCENDING)]},
-    ],
-    'coach_workouts': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('scheduled_date', DESCENDING)]},
-        {'keys': [('coach_id', ASCENDING), ('created_at', DESCENDING)]},
-    ],
-    'coach_meals': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('date', DESCENDING)]},
-    ],
-    'coach_goals': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('client_id', ASCENDING), ('created_at', DESCENDING)]},
-    ],
-    'journal_entries': [
-        {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
-        {'keys': [('user_id', ASCENDING), ('date', DESCENDING)]},
-        {'keys': [('user_id', ASCENDING), ('entry_type', ASCENDING)]},
-        {'keys': [('tags', ASCENDING)]},
-    ],
     'lessons': [
         {'keys': [('id', ASCENDING)], 'kwargs': {'unique': True}},
         {'keys': [('sport', ASCENDING), ('category', ASCENDING)]},
     ],
+    'sport_library_progress': [
+        {'keys': [('user_id', ASCENDING), ('unit_id', ASCENDING)], 'kwargs': {'unique': True}},
+        {'keys': [('user_id', ASCENDING), ('sport', ASCENDING)]},
+    ],
+    'club_activity_events': [
+        {'keys': [('club_ids', ASCENDING), ('created_at', DESCENDING)]},
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        # TTL: activity events auto-expire after 30 days.
+        {'keys': [('created_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 2592000}},
+    ],
+    'ai_generation_log': [
+        {'keys': [('user_id', ASCENDING), ('created_at', DESCENDING)]},
+        # TTL: auto-purge quota records after 2 days (quota window is rolling 24h).
+        {'keys': [('created_at', ASCENDING)], 'kwargs': {'expireAfterSeconds': 172800}},
+    ],
 }
+
+
+async def seed_planning_collections(db: Any, seed_path: Path = PLANNING_SEED_PATH) -> Dict[str, int]:
+    if not seed_path.exists():
+        return {}
+
+    with seed_path.open('r', encoding='utf-8') as handle:
+        payload = json.load(handle)
+
+    seeded_at = datetime.utcnow()
+    counts: Dict[str, int] = {}
+    for collection_name, records in payload.items():
+        if collection_name not in PLANNING_SEED_COLLECTIONS or not isinstance(records, list):
+            continue
+        collection = db[collection_name]
+        count = 0
+        for record in records:
+            if not isinstance(record, dict) or not record.get('id'):
+                continue
+            if collection_name == 'sport_profiles':
+                existing = await collection.find_one({'id': record['id']})
+                if existing and not existing.get('seed_source'):
+                    continue
+            doc = {
+                **record,
+                'seed_source': seed_path.name,
+                'seeded_at': seeded_at,
+                'updated_at': seeded_at,
+            }
+            await collection.replace_one({'id': doc['id']}, doc, upsert=True)
+            count += 1
+        counts[collection_name] = count
+    return counts
 
 
 async def ensure_database_schema(db: Any) -> None:
@@ -308,3 +661,16 @@ async def ensure_database_schema(db: Any) -> None:
             keys = index['keys']
             kwargs = index.get('kwargs', {})
             await collection.create_index(keys, **kwargs)
+
+    # The legacy Mongo planning seed is intentionally opt-in. Runlete's workout
+    # knowledge and deterministic planner are being rebuilt directly in
+    # PostgreSQL; automatically reseeding this prototype content would make
+    # Mongo authoritative again after a cleanup or restart.
+    legacy_seed_enabled = (
+        os.environ.get('LEGACY_MONGO_PLANNING_SEED_ENABLED', 'false')
+        .strip()
+        .lower()
+        in {'1', 'true', 'yes', 'on'}
+    )
+    if legacy_seed_enabled:
+        await seed_planning_collections(db)

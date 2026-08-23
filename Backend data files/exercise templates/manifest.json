@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0.0",
+  "package_code": "runlete_exercise_reference_templates_4w_v1",
+  "status": "research_derived_candidate_not_published",
+  "duration_weeks": 4,
+  "levels": [
+    "beginner",
+    "intermediate",
+    "advanced"
+  ],
+  "category_count": 39,
+  "template_count": 112,
+  "phases": [
+    {
+      "phase": 1,
+      "file": "phase_01_exercise_templates.json",
+      "template_count": 11
+    },
+    {
+      "phase": 2,
+      "file": "phase_02_exercise_templates.json",
+      "template_count": 15
+    },
+    {
+      "phase": 3,
+      "file": "phase_03_exercise_templates.json",
+      "template_count": 15
+    },
+    {
+      "phase": 4,
+      "file": "phase_04_exercise_templates.json",
+      "template_count": 8
+    },
+    {
+      "phase": 5,
+      "file": "phase_05_exercise_templates.json",
+      "template_count": 9
+    },
+    {
+      "phase": 6,
+      "file": "phase_06_exercise_templates.json",
+      "template_count": 9
+    },
+    {
+      "phase": 7,
+      "file": "phase_07_exercise_templates.json",
+      "template_count": 12
+    },
+    {
+      "phase": 8,
+      "file": "phase_08_exercise_templates.json",
+      "template_count": 24
+    },
+    {
+      "phase": 9,
+      "file": "phase_09_exercise_templates.json",
+      "template_count": 9
+    }
+  ],
+  "scenario_overlays_file": "scenario_overlays.json",
+  "availability_file": "category_level_availability.json",
+  "sport_mode_policy_file": "sport_mode_policy.json",
+  "integrity_report_file": "template_integrity_report.json",
+  "catalogue_extension_file": "required_catalogue_extensions.json",
+  "template_schema_file": "exercise_template.schema.json",
+  "design_boundary": "These are exercise-based references for AI planning, not fixed prescriptions and not a production content release."
+}

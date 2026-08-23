@@ -69,11 +69,11 @@ export default function InjuryLogScreen() {
 
         try {
             setSaving(true);
-            await api.post('/health/injuries', {
-                body_region: selectedRegion,
-                pain_level: painLevel,
-                readiness,
-                description: notes.trim() || undefined,
+            await api.post('/health/pain-reports', {
+                region_code: selectedRegion,
+                severity: painLevel,
+                during_activity: false,
+                description: notes.trim() || `Readiness reported as ${readiness}.`,
             });
 
             Alert.alert('Logged', 'Injury has been recorded.', [

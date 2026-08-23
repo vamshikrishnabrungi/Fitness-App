@@ -44,15 +44,6 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="sport"
-        options={{
-          title: 'Sport',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',

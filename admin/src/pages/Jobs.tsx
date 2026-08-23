@@ -1,0 +1,11 @@
+import { useEffect, useState } from 'react';
+import { RefreshCw, RotateCcw } from 'lucide-react';
+import { operationsEvents, replayOperationsEvent, type OperationsEvent } from '../lib/api';
+
+export function Jobs(){
+  const [items,setItems]=useState<OperationsEvent[]>([]),[error,setError]=useState(''),[working,setWorking]=useState('');
+  const load=()=>{setError('');return operationsEvents().then(result=>setItems(result.items)).catch(reason=>setError(reason instanceof Error?reason.message:'Could not load events.'))};
+  useEffect(()=>{void load()},[]);
+  const replay=async(id:string)=>{setWorking(id);setError('');try{await replayOperationsEvent(id);await load()}catch(reason){setError(reason instanceof Error?reason.message:'Replay failed.')}finally{setWorking('')}};
+  return <><header className="topbar"><div><span className="eyebrow">OPERATIONS / EVENTS</span><h1>Retries & replay</h1><p>Unpublished outbox events and consumers that need intervention.</p></div><button className="secondary" onClick={()=>void load()}><RefreshCw size={16}/>Refresh</button></header>{error&&<div className="notice">{error}</div>}<section className="panel"><table><thead><tr><th>EVENT</th><th>AGGREGATE</th><th>PUBLISH</th><th>CONSUMER</th><th>ERROR</th><th>ACTION</th></tr></thead><tbody>{items.map(item=><tr key={`${item.id}-${item.consumer??'publish'}`}><td><strong>{item.event_type}</strong><code>{item.topic} · {item.id.slice(0,8)}</code></td><td><code>{item.aggregate_type}<br/>{item.aggregate_id.slice(0,8)}</code></td><td><span className={`status ${item.published_at?'ready':'draft'}`}>{item.published_at?'published':'waiting'}</span><br/><small>{item.publish_attempts} attempts</small></td><td>{item.consumer?<><span className={`status ${item.consumer_status==='complete'?'ready':'draft'}`}>{item.consumer_status}</span><br/><small>{item.consumer_attempts} attempts</small></>:<span>Not delivered</span>}</td><td><code>{item.consumer_error??item.publish_error??'—'}</code></td><td><button className="secondary" disabled={working===item.id} onClick={()=>void replay(item.id)}><RotateCcw size={14}/>Replay</button></td></tr>)}{!items.length&&<tr><td colSpan={6} className="table-empty">No failed or unpublished events.</td></tr>}</tbody></table></section></>;
+}

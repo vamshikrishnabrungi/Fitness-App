@@ -1,0 +1,19 @@
+{
+  "catalogue_rows": 238,
+  "existing_catalogue_methods_referenced": 147,
+  "required_extension_methods_referenced": 0,
+  "unresolved_method_references": [],
+  "categories": 39,
+  "templates": 112,
+  "four_week_records": 448,
+  "levels_per_category": 3,
+  "scenario_overlays": 24,
+  "unsupported_category_levels": 5,
+  "modality_guarded_templates": 23,
+  "level_violations": [],
+  "ineligible_method_references": [],
+  "dose_compatibility_violations": [],
+  "modality_violations": [],
+  "objective_violations": [],
+  "duplicate_method_lists": []
+}

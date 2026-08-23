@@ -1,0 +1,17 @@
+substitutions:
+  _REGION: europe-west1
+  _REPOSITORY: runlete-production
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: [build, -f, backend/Dockerfile, -t, '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/api:$COMMIT_SHA', .]
+  - name: gcr.io/cloud-builders/docker
+    args: [build, -f, admin/Dockerfile, -t, '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/admin:$COMMIT_SHA', .]
+  - name: '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/api:$COMMIT_SHA'
+    entrypoint: python
+    args: [-c, 'from backend.app.main import app; assert app.openapi()["info"]["version"]']
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/api:$COMMIT_SHA'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/admin:$COMMIT_SHA'
+options:
+  logging: CLOUD_LOGGING_ONLY
+

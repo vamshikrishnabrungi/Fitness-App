@@ -14,6 +14,8 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing } from '../../src/utils/theme';
 import { api } from '../../src/utils/api';
+import { useAuthStore } from '../../src/store/authStore';
+import { ExerciseThumbnail } from '../../src/components/ExerciseThumbnail';
 
 // Workout type
 interface Workout {
@@ -28,51 +30,100 @@ interface Workout {
   ai_generated?: boolean;
   description?: string;
   equipment?: string[];
+  source?: string;
+  week_number?: number;
+  session_number?: number;
+  intensity?: string;
+  adaptation?: {
+    goal?: string;
+    sports?: string[];
+    targets?: string[];
+    sport_transfer?: string[];
+    why_this_session?: string;
+    week_theme?: string;
+    progression_rule?: string;
+  };
+  session_plan?: {
+    why_this_session?: string;
+    adaptation_targets?: string[];
+    sport_transfer?: string[];
+    warmup?: { name?: string }[];
+    main_work?: { name?: string }[];
+    cooldown?: { name?: string }[];
+  };
 }
 
-const SECTION_COPY: Record<string, { title: string; description: string }> = {
-  Strength: {
-    title: 'Lock in and Lift',
-    description: 'These sessions focus on heavy lifts with minimal reps for intentional strength building.',
-  },
-  Cardio: {
-    title: 'Engine Room',
-    description: 'Build stamina and conditioning with focused cardio sessions.',
-  },
-  Recovery: {
-    title: 'Recover and Reset',
-    description: 'Lower intensity work to restore, mobilize, and keep you moving.',
-  },
-  Flexibility: {
-    title: 'Move Better',
-    description: 'Mobility and flexibility sessions to improve range and control.',
-  },
-  Sport: {
-    title: 'Sport Focus',
-    description: 'Sport-specific sessions to sharpen skills and athleticism.',
-  },
-  Workouts: {
-    title: 'Workouts',
-    description: 'Curated sessions based on your plan.',
-  },
+const todayKey = new Date().toISOString().slice(0, 10);
+
+const formatDateLabel = (date?: string) => {
+  if (!date) return 'Plan';
+  const parsed = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return date;
+  return parsed.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 };
 
-// Category config
-const CATEGORY_CONFIG: Record<string, { color: string; icon: string }> = {
-  Strength: { color: '#F97316', icon: 'barbell' },
-  Cardio: { color: '#EF4444', icon: 'heart' },
-  Recovery: { color: '#16A34A', icon: 'leaf' },
-  Flexibility: { color: '#8B5CF6', icon: 'body' },
-  Sport: { color: '#3B82F6', icon: 'football' },
+const humanizeLabel = (value?: string | null) => {
+  if (!value) return '';
+  return value
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+const getWorkoutPurpose = (workout: Workout) => {
+  return (
+    workout.adaptation?.why_this_session ||
+    workout.session_plan?.why_this_session ||
+    workout.description ||
+    'AI-built session from your current program.'
+  );
+};
+
+const getWorkoutTargets = (workout: Workout) => {
+  const targets = workout.adaptation?.targets || workout.session_plan?.adaptation_targets || [];
+  const transfer = workout.adaptation?.sport_transfer || workout.session_plan?.sport_transfer || [];
+  return [...targets, ...transfer].filter(Boolean).map((item) => humanizeLabel(item)).slice(0, 3);
+};
+
+const getPrimaryExerciseName = (workout: Workout) => {
+  const plan = workout.session_plan;
+  return (
+    plan?.main_work?.find((exercise) => exercise.name)?.name ||
+    plan?.warmup?.find((exercise) => exercise.name)?.name ||
+    plan?.cooldown?.find((exercise) => exercise.name)?.name ||
+    workout.exercises?.find((exercise) => exercise?.name)?.name ||
+    workout.title
+  );
+};
+
+const sortBySchedule = (items: Workout[]) => {
+  return [...items].sort((a, b) => {
+    const dateA = a.scheduled_date || '';
+    const dateB = b.scheduled_date || '';
+    if (dateA !== dateB) return dateA.localeCompare(dateB);
+    return (a.session_number || 0) - (b.session_number || 0);
+  });
 };
 
 export default function TrainScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { user } = useAuthStore();
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [query, setQuery] = useState('');
+  const [generationPaused, setGenerationPaused] = useState(false);
+  const initials = useMemo(() => {
+    const source = user?.name?.trim() || user?.email?.split('@')[0] || 'Athlete';
+    const parts = source.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) {
+      return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    }
+    return source.slice(0, 2).toUpperCase();
+  }, [user?.email, user?.name]);
 
   useEffect(() => {
     fetchWorkouts();
@@ -81,8 +132,20 @@ export default function TrainScreen() {
   const fetchWorkouts = async () => {
     try {
       setLoading(true);
-      const res = await api.get<Workout[]>('/workouts');
-      setWorkouts(res || []);
+      const sessions = await api.get<any[]>('/training/history');
+      const res: Workout[] = (sessions || []).map((session) => ({
+        id: session.id,
+        title: session.purpose,
+        category: session.session_type,
+        duration: session.estimated_minutes,
+        difficulty: session.status,
+        exercises: session.items || [],
+        completed: session.status === 'completed',
+        scheduled_date: session.scheduled_for?.slice(0, 10),
+        description: session.explanation,
+      }));
+      setWorkouts(res);
+      setGenerationPaused(false);
     } catch (error) {
       console.error('Error fetching workouts:', error);
       setWorkouts([]);
@@ -97,24 +160,61 @@ export default function TrainScreen() {
     setRefreshing(false);
   };
 
+  const generatePlan = async () => {
+    try {
+      setGenerating(true);
+      await api.post('/training/plans', { weeks: 4, starts_on: null });
+      await fetchWorkouts();
+    } catch (error) {
+      console.error('Error generating training plan:', error);
+    } finally {
+      setGenerating(false);
+    }
+  };
+
   const filteredWorkouts = useMemo(() => {
     const term = query.trim().toLowerCase();
-    if (!term) return workouts;
-    return workouts.filter((w) =>
-      [w.title, w.category, w.difficulty, w.description]
+    const sorted = sortBySchedule(workouts);
+    if (!term) return sorted;
+    return sorted.filter((w) =>
+      [
+        w.title,
+        w.category,
+        w.difficulty,
+        w.description,
+        w.adaptation?.goal,
+        ...(w.adaptation?.sports || []),
+        ...(w.adaptation?.targets || []),
+        ...(w.adaptation?.sport_transfer || []),
+      ]
         .filter(Boolean)
         .some((v) => String(v).toLowerCase().includes(term))
     );
   }, [query, workouts]);
 
-  const groupedWorkouts = useMemo(() => {
-    return filteredWorkouts.reduce((acc, workout) => {
-      const key = workout.category || 'Workouts';
-      if (!acc[key]) acc[key] = [];
-      acc[key].push(workout);
-      return acc;
-    }, {} as Record<string, Workout[]>);
+  const todayWorkout = useMemo(() => {
+    return filteredWorkouts.find((workout) => workout.scheduled_date === todayKey) || filteredWorkouts[0];
   }, [filteredWorkouts]);
+
+  const weekWorkouts = useMemo(() => {
+    return filteredWorkouts.filter((workout) => workout.id !== todayWorkout?.id);
+  }, [filteredWorkouts, todayWorkout?.id]);
+
+  const programMeta = useMemo(() => {
+    const first = workouts[0];
+    const sports = first?.adaptation?.sports || [];
+    const goal = first?.adaptation?.goal;
+    const weekTheme = first?.adaptation?.week_theme;
+    return {
+      title: sports.length ? `${sports.slice(0, 2).map((sport) => humanizeLabel(sport)).join(' + ')} Plan` : 'AI Training Plan',
+      detail: [
+        first?.week_number ? `Week ${first.week_number}` : 'Week 1',
+        `${workouts.length} sessions`,
+        humanizeLabel(goal),
+      ].filter(Boolean).join(' · '),
+      theme: weekTheme || 'Built from your onboarding profile.',
+    };
+  }, [workouts]);
 
   if (loading) {
     return (
@@ -137,7 +237,7 @@ export default function TrainScreen() {
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <View style={styles.avatarCircle}>
-              <Text style={styles.avatarText}>VK</Text>
+              <Text style={styles.avatarText}>{initials}</Text>
             </View>
             <Text style={styles.headerTitle}>Workouts</Text>
           </View>
@@ -160,28 +260,60 @@ export default function TrainScreen() {
           />
         </View>
 
-        {/* Sections */}
-        {Object.keys(groupedWorkouts).length === 0 ? (
+        {generationPaused && (
+          <View style={styles.pausedBanner}>
+            <Ionicons name="pause-circle" size={22} color={colors.brand} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.pausedTitle}>Workout creation is paused</Text>
+              <Text style={styles.pausedSub}>AI plan generation is turned off for now. Your existing workouts still show here.</Text>
+            </View>
+          </View>
+        )}
+
+        {filteredWorkouts.length > 0 && (
+          <View style={styles.planHeader}>
+            <Text style={styles.planEyebrow}>Your Plan</Text>
+            <Text style={styles.planTitle}>{programMeta.title}</Text>
+            <Text style={styles.planMeta}>{programMeta.detail}</Text>
+            <Text style={styles.planTheme} numberOfLines={2}>{programMeta.theme}</Text>
+          </View>
+        )}
+
+        {filteredWorkouts.length === 0 ? (
           <View style={styles.emptyState}>
             <Text style={styles.emptyTitle}>No workouts yet</Text>
-            <Text style={styles.emptySubtitle}>Generate a plan to see workouts here.</Text>
+            <Text style={styles.emptySubtitle}>{generationPaused ? 'Workout creation is paused right now.' : 'Generate a plan to see workouts here.'}</Text>
+            {!generationPaused && (
+              <TouchableOpacity style={styles.generateButton} onPress={generatePlan} disabled={generating}>
+                {generating ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.generateButtonText}>Generate 4-week plan</Text>}
+              </TouchableOpacity>
+            )}
           </View>
         ) : (
-          Object.entries(groupedWorkouts).map(([category, list]) => (
-            <View key={category} style={styles.section}>
-              <Text style={styles.sectionTitle}>{SECTION_COPY[category]?.title || category}</Text>
-              <Text style={styles.sectionDescription}>
-                {SECTION_COPY[category]?.description || 'Recommended sessions for you.'}
-              </Text>
-              {list.map((workout) => (
+          <>
+            {todayWorkout && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>{todayWorkout.scheduled_date === todayKey ? 'Today' : 'Next Session'}</Text>
+                <FeaturedWorkoutCard
+                  workout={todayWorkout}
+                  onPress={() => router.push(`/workout/${todayWorkout.id}`)}
+                />
+              </View>
+            )}
+
+            {weekWorkouts.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>This Week</Text>
+                {weekWorkouts.map((workout) => (
                 <WorkoutRow
                   key={workout.id}
                   workout={workout}
                   onPress={() => router.push(`/workout/${workout.id}`)}
                 />
-              ))}
-            </View>
-          ))
+                ))}
+              </View>
+            )}
+          </>
         )}
 
         <View style={{ height: 100 }} />
@@ -197,9 +329,9 @@ function WorkoutRow({
   workout: Workout;
   onPress: () => void;
 }) {
-  const category = CATEGORY_CONFIG[workout.category] || CATEGORY_CONFIG.Strength;
-  const equipmentLabel = workout.equipment?.length ? workout.equipment.join(', ') : 'Bodyweight';
   const showNew = !workout.completed;
+  const purpose = getWorkoutPurpose(workout);
+  const targets = getWorkoutTargets(workout);
 
   return (
     <TouchableOpacity
@@ -207,8 +339,8 @@ function WorkoutRow({
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <View style={[styles.thumb, { backgroundColor: category.color + '22' }]}>
-        <Ionicons name={category.icon as any} size={22} color={category.color} />
+      <View style={styles.thumb}>
+        <ExerciseThumbnail name={getPrimaryExerciseName(workout)} size={64} />
         {showNew && (
           <View style={styles.newPill}>
             <Text style={styles.newPillText}>New</Text>
@@ -218,13 +350,57 @@ function WorkoutRow({
       <View style={styles.rowContent}>
         <Text style={styles.rowTitle} numberOfLines={2}>{workout.title}</Text>
         <Text style={styles.rowMeta} numberOfLines={1}>
-          {workout.difficulty} · {workout.category} · {equipmentLabel}
+          {formatDateLabel(workout.scheduled_date)} · {humanizeLabel(workout.category)} · {workout.duration} min
         </Text>
-        <Text style={styles.rowDuration}>{workout.duration} min</Text>
+        <Text style={styles.rowPurpose} numberOfLines={2}>{purpose}</Text>
+        {targets.length > 0 && (
+          <View style={styles.chipRow}>
+            {targets.map((target) => (
+              <View key={`${workout.id}-${target}`} style={styles.targetChip}>
+                <Text style={styles.targetChipText} numberOfLines={1}>{target}</Text>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
       <TouchableOpacity style={styles.bookmarkButton} onPress={onPress}>
         <Ionicons name="bookmark-outline" size={18} color="#9CA3AF" />
       </TouchableOpacity>
+    </TouchableOpacity>
+  );
+}
+
+function FeaturedWorkoutCard({
+  workout,
+  onPress,
+}: {
+  workout: Workout;
+  onPress: () => void;
+}) {
+  const purpose = getWorkoutPurpose(workout);
+  const targets = getWorkoutTargets(workout);
+
+  return (
+    <TouchableOpacity style={styles.featuredCard} onPress={onPress} activeOpacity={0.75}>
+      <View style={styles.featuredTop}>
+        <ExerciseThumbnail name={getPrimaryExerciseName(workout)} size={52} style={styles.featuredIcon} />
+        <View style={styles.featuredMeta}>
+          <Text style={styles.featuredDate}>{formatDateLabel(workout.scheduled_date)}</Text>
+          <Text style={styles.featuredInfo}>{humanizeLabel(workout.category)} · {workout.duration} min · {humanizeLabel(workout.intensity || workout.difficulty)}</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={20} color="#A1A1AA" />
+      </View>
+      <Text style={styles.featuredTitle} numberOfLines={2}>{workout.title}</Text>
+      <Text style={styles.featuredPurpose} numberOfLines={3}>{purpose}</Text>
+      {targets.length > 0 && (
+        <View style={styles.chipRow}>
+          {targets.map((target) => (
+            <View key={`${workout.id}-featured-${target}`} style={styles.targetChip}>
+              <Text style={styles.targetChipText} numberOfLines={1}>{target}</Text>
+            </View>
+          ))}
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
@@ -291,39 +467,72 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.textPrimary,
   },
+  planHeader: {
+    backgroundColor: '#F7F6F2',
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 28,
+  },
+  planEyebrow: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#8A8178',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: 8,
+  },
+  planTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.textPrimary,
+    marginBottom: 8,
+  },
+  planMeta: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#59544D',
+    marginBottom: 8,
+  },
+  planTheme: {
+    fontSize: 14,
+    color: '#7A746D',
+    lineHeight: 20,
+  },
+  generateButton: {
+    marginTop: 18,
+    minHeight: 50,
+    borderRadius: 16,
+    paddingHorizontal: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.textPrimary,
+  },
+  generateButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700',
+  },
   // Sections
   section: {
-    marginBottom: spacing.xl,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: 30,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: '700',
     color: colors.textPrimary,
-    marginBottom: 6,
-  },
-  sectionDescription: {
-    fontSize: 13,
-    color: '#6B7280',
-    marginBottom: spacing.lg,
-    lineHeight: 19,
+    marginBottom: 14,
   },
   workoutRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 14,
+    alignItems: 'flex-start',
+    paddingVertical: 18,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0,0,0,0.05)',
   },
   thumb: {
-    width: 78,
-    height: 78,
-    borderRadius: 16,
+    width: 64,
+    height: 64,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: spacing.md,
@@ -333,7 +542,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 8,
     bottom: 8,
-    backgroundColor: '#FEE2E2',
+    backgroundColor: 'rgba(255,255,255,0.82)',
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 3,
@@ -341,28 +550,91 @@ const styles = StyleSheet.create({
   newPillText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#DC2626',
+    color: colors.textPrimary,
   },
   rowContent: {
     flex: 1,
   },
   rowTitle: {
-    fontSize: 15,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '700',
     color: colors.textPrimary,
-    marginBottom: 4,
+    marginBottom: 5,
   },
   rowMeta: {
     fontSize: 12,
     color: '#6B7280',
-    marginBottom: 4,
+    marginBottom: 6,
   },
-  rowDuration: {
-    fontSize: 12,
-    color: '#6B7280',
+  rowPurpose: {
+    fontSize: 13,
+    color: '#6F6A63',
+    lineHeight: 18,
+    marginBottom: 9,
+  },
+  chipRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  targetChip: {
+    backgroundColor: '#F2F1EE',
+    borderRadius: 999,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+    maxWidth: 180,
+  },
+  targetChipText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#625D56',
   },
   bookmarkButton: {
     padding: 6,
+  },
+  featuredCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: '#ECEAE5',
+    padding: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+  },
+  featuredTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 14,
+  },
+  featuredIcon: {
+    marginRight: 12,
+  },
+  featuredMeta: {
+    flex: 1,
+  },
+  featuredDate: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: colors.textPrimary,
+    marginBottom: 3,
+  },
+  featuredInfo: {
+    fontSize: 12,
+    color: '#7A746D',
+  },
+  featuredTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.textPrimary,
+    marginBottom: 8,
+  },
+  featuredPurpose: {
+    fontSize: 14,
+    color: '#625D56',
+    lineHeight: 20,
+    marginBottom: 12,
   },
   emptyState: {
     alignItems: 'center',
@@ -377,5 +649,27 @@ const styles = StyleSheet.create({
   emptySubtitle: {
     fontSize: 13,
     color: '#6B7280',
+  },
+  pausedBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    backgroundColor: colors.brandSoft,
+    borderRadius: 16,
+    padding: spacing.lg,
+    marginHorizontal: spacing.page,
+    marginBottom: spacing.lg,
+  },
+  pausedTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: colors.textPrimary,
+    letterSpacing: -0.2,
+  },
+  pausedSub: {
+    fontSize: 12.5,
+    color: colors.textSecondary,
+    marginTop: 2,
+    lineHeight: 18,
   },
 });

@@ -4,8 +4,8 @@ interface FitnessAssessment {
   pushups: number;
   pullups: number;
   squats: number;
-  plank: number;
-  runPace: string;
+  plank_seconds: number;
+  run_pace_seconds_per_km: number | null;
 }
 
 interface SportDetail {
@@ -42,7 +42,6 @@ interface OnboardingData {
   current_injuries: { area: string; note: string }[];
   pain_areas: string[];
   medical_notes: string;
-  sleep_avg_hours: number | null;
   stress_level: string;
   diet_preference: string;
   dietary_restrictions: string[];
@@ -73,10 +72,10 @@ interface OnboardingState {
   sessionDurationMin: number;
   preferredTrainingTime: string;
   scheduleConstraints: string;
+  startDate: string;
   currentInjuries: { area: string; note: string }[];
   painAreas: string[];
   medicalNotes: string;
-  sleepAvgHours: string;
   stressLevel: string;
   dietPreference: string;
   dietaryRestrictions: string[];
@@ -92,8 +91,8 @@ interface OnboardingState {
   setPrimaryGoal: (goal: string) => void;
   setBodyProfile: (data: Partial<Pick<OnboardingState, 'gender' | 'dateOfBirth' | 'heightCm' | 'weightKg' | 'targetWeightKg' | 'country' | 'city'>>) => void;
   setSportContext: (data: Partial<Pick<OnboardingState, 'sportDetails' | 'competitionLevel' | 'seasonPhase'>>) => void;
-  setSchedule: (data: Partial<Pick<OnboardingState, 'trainingDaysPerWeek' | 'preferredTrainingDays' | 'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints'>>) => void;
-  setHealthContext: (data: Partial<Pick<OnboardingState, 'currentInjuries' | 'painAreas' | 'medicalNotes' | 'sleepAvgHours' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'>>) => void;
+  setSchedule: (data: Partial<Pick<OnboardingState, 'trainingDaysPerWeek' | 'preferredTrainingDays' | 'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'startDate'>>) => void;
+  setHealthContext: (data: Partial<Pick<OnboardingState, 'currentInjuries' | 'painAreas' | 'medicalNotes' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'>>) => void;
   reset: () => void;
   getOnboardingData: () => OnboardingData;
 }
@@ -103,8 +102,8 @@ const initialState: Pick<
   'goals' | 'experience' | 'location' | 'equipment' | 'fitnessAssessment' | 'sports' | 'selectedGoals' |
   'primaryGoal' | 'gender' | 'dateOfBirth' | 'heightCm' | 'weightKg' | 'targetWeightKg' | 'country' | 'city' |
   'sportDetails' | 'competitionLevel' | 'seasonPhase' | 'trainingDaysPerWeek' | 'preferredTrainingDays' |
-  'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'currentInjuries' | 'painAreas' |
-  'medicalNotes' | 'sleepAvgHours' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'
+  'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'startDate' | 'currentInjuries' | 'painAreas' |
+  'medicalNotes' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'
 > = {
   goals: [],
   experience: '',
@@ -114,8 +113,8 @@ const initialState: Pick<
     pushups: 0,
     pullups: 0,
     squats: 0,
-    plank: 0,
-    runPace: '',
+    plank_seconds: 0,
+    run_pace_seconds_per_km: null,
   },
   sports: [],
   selectedGoals: [],
@@ -135,10 +134,10 @@ const initialState: Pick<
   sessionDurationMin: 45,
   preferredTrainingTime: 'evening',
   scheduleConstraints: '',
+  startDate: '',
   currentInjuries: [],
   painAreas: [],
   medicalNotes: '',
-  sleepAvgHours: '',
   stressLevel: 'moderate',
   dietPreference: '',
   dietaryRestrictions: [],
@@ -168,6 +167,13 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
       const parsed = Number(value);
       return Number.isFinite(parsed) && value.trim() !== '' ? parsed : null;
     };
+    const normalizedFitnessAssessment = {
+      pushups: state.fitnessAssessment.pushups,
+      pullups: state.fitnessAssessment.pullups,
+      squats: state.fitnessAssessment.squats,
+      plank_seconds: state.fitnessAssessment.plank_seconds,
+      run_pace_seconds_per_km: state.fitnessAssessment.run_pace_seconds_per_km,
+    };
     const primaryGoal = state.primaryGoal || state.selectedGoals[0] || state.goals[0] || '';
     return {
       onboarding_version: 2,
@@ -178,7 +184,7 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
       experience: state.experience,
       training_location: state.location,
       equipment: state.equipment,
-      fitness_assessment: state.fitnessAssessment,
+      fitness_assessment: normalizedFitnessAssessment,
       sports: state.sports,
       sport_details: state.sportDetails,
       competition_level: state.competitionLevel,
@@ -195,10 +201,10 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
       session_duration_min: state.sessionDurationMin,
       preferred_training_time: state.preferredTrainingTime,
       schedule_constraints: state.scheduleConstraints,
+      start_date: state.startDate || new Date().toISOString().slice(0, 10),
       current_injuries: state.currentInjuries,
       pain_areas: state.painAreas,
       medical_notes: state.medicalNotes,
-      sleep_avg_hours: toNumber(state.sleepAvgHours),
       stress_level: state.stressLevel,
       diet_preference: state.dietPreference,
       dietary_restrictions: state.dietaryRestrictions,

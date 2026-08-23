@@ -1,4 +1,4 @@
-// SFTC Premium Theme - Nike-inspired
+// Runlete Premium Theme - Nike-inspired
 // Generous whitespace, relaxed typography, premium feel
 
 export const colors = {
@@ -9,8 +9,8 @@ export const colors = {
 
   // Text colors
   textPrimary: '#111111',
-  textSecondary: '#757575',
-  textTertiary: '#9E9E9E',
+  textSecondary: '#5E5E63',
+  textTertiary: '#7A7A80',
   textDisabled: '#BDBDBD',
 
   // UI elements
@@ -72,6 +72,20 @@ export const colors = {
   // Subtle accent (legacy)
   accentSubtle: '#F5F5F5',
   accent: '#111111',
+
+  // ===== BRAND (signature coral — energetic Nike accent on white) =====
+  brand: '#FF4E2E',
+  brand2: '#FF7A18',
+  brandSoft: '#FFEDE7',
+
+  // Bold dark feature card (used sparingly on white for hierarchy)
+  featureCard: '#0F0F12',
+  featureCard2: '#1C1C1E',
+
+  // Metallic podium medals
+  medalGold: ['#FCE08A', '#D19A2C'] as [string, string],
+  medalSilver: ['#F1F3F8', '#AEB6C6'] as [string, string],
+  medalBronze: ['#F3B375', '#B06B31'] as [string, string],
 
   // Transparent
   transparent: 'transparent',

@@ -1,606 +1,110 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Svg, { Circle, Path } from 'react-native-svg';
-import { spacing } from '../../src/utils/theme';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { api } from '../../src/utils/api';
+import { colors, spacing } from '../../src/utils/theme';
 
-// Mock data - replace with API later
-const mockStrainData = {
-    strainPercent: 1,
-    duration: 0,
-    totalEnergy: 3485,
-    activities: [],
-    heartRateZones: [
-        { zone: 0, time: '00:00:00', range: '0 – 97 bpm' },
-        { zone: 1, time: '00:00:00', range: '98 – 116 bpm' },
-        { zone: 2, time: '00:00:00', range: '117 – 136 bpm' },
-        { zone: 3, time: '00:00:00', range: '137 – 155 bpm' },
-        { zone: 4, time: '00:00:00', range: '156 – 175 bpm' },
-        { zone: 5, time: '00:00:00', range: '176 – 194 bpm' },
-    ],
-    trends: {
-        strainScore: { value: 1, status: 'below', data: [2, 3, 1, 4, 2, 5, 3, 2, 1] },
-        exerciseDuration: { value: 0, unit: 'm', status: 'normal', progress: 0 },
-        daytimeHR: { value: null, status: 'nodata' },
-        totalEnergy: { value: 3485, unit: 'kJ', status: 'below', data: [3200, 3400, 3100, 3600, 3485] },
-        stepCount: { value: 308, status: 'below', data: [400, 300, 500, 350, 308] },
-    },
+interface ActivitySummary {
+  id: string;
+  title?: string | null;
+  status: string;
+  started_at: string;
+  moving_seconds?: number | null;
+  distance_m?: number | null;
+  calories_kcal?: number | null;
+  average_pace_s_per_km?: number | null;
+}
+
+const duration = (seconds: number) => `${Math.floor(seconds / 60)}m ${Math.round(seconds % 60)}s`;
+const pace = (seconds?: number | null) => {
+  if (!seconds) return '—';
+  return `${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')} /km`;
 };
 
-// Strain Ring Component
-function StrainRing({ percent, size = 200 }: { percent: number; size?: number }) {
-    const strokeWidth = 14;
-    const radius = (size - strokeWidth) / 2;
-    const circumference = 2 * Math.PI * radius;
-    const strokeDashoffset = circumference - (percent / 100) * circumference;
-    const center = size / 2;
-
-    return (
-        <View style={styles.ringContainer}>
-            <Svg width={size} height={size}>
-                {/* Background circle */}
-                <Circle
-                    cx={center}
-                    cy={center}
-                    r={radius}
-                    stroke="#E5E7EB"
-                    strokeWidth={strokeWidth}
-                    fill="none"
-                />
-                {/* Progress arc */}
-                <Circle
-                    cx={center}
-                    cy={center}
-                    r={radius}
-                    stroke="#F59E0B"
-                    strokeWidth={strokeWidth}
-                    fill="none"
-                    strokeDasharray={`${circumference}`}
-                    strokeDashoffset={strokeDashoffset}
-                    strokeLinecap="round"
-                    rotation="-90"
-                    origin={`${center}, ${center}`}
-                />
-                {/* Indicator dot at top */}
-                <Circle
-                    cx={center}
-                    cy={strokeWidth / 2 + 1}
-                    r={10}
-                    fill="#F59E0B"
-                />
-            </Svg>
-            {/* Center content */}
-            <View style={styles.ringCenter}>
-                <Text style={styles.ringValue}>{percent}%</Text>
-                <Text style={styles.ringLabel}>Strain</Text>
-            </View>
-        </View>
-    );
-}
-
-// Sparkline Component
-function Sparkline({ data, color = '#F97316', width = 120, height = 40 }: { data: number[]; color?: string; width?: number; height?: number }) {
-    if (!data || data.length < 2) return null;
-
-    const max = Math.max(...data);
-    const min = Math.min(...data);
-    const range = max - min || 1;
-    const padding = 6;
-
-    const points = data.map((value, index) => {
-        const x = padding + (index / (data.length - 1)) * (width - padding * 2);
-        const y = padding + (1 - (value - min) / range) * (height - padding * 2);
-        return { x, y };
-    });
-
-    let pathD = `M ${points[0].x} ${points[0].y}`;
-    for (let i = 1; i < points.length; i++) {
-        pathD += ` L ${points[i].x} ${points[i].y}`;
-    }
-
-    const lastPoint = points[points.length - 1];
-
-    return (
-        <View style={{ width, height }}>
-            <Svg width={width} height={height}>
-                <Path
-                    d={pathD}
-                    stroke={color}
-                    strokeWidth={2.5}
-                    fill="none"
-                />
-                <Circle
-                    cx={lastPoint.x}
-                    cy={lastPoint.y}
-                    r={5}
-                    fill={color}
-                />
-            </Svg>
-        </View>
-    );
-}
-
-// Progress Line Component
-function ProgressLine({ progress, color = '#F59E0B' }: { progress: number; color?: string }) {
-    return (
-        <View style={styles.progressLineContainer}>
-            <View style={[styles.progressLineTrack]}>
-                <View style={[styles.progressLine, { width: `${Math.max(progress, 5)}%`, backgroundColor: color }]} />
-            </View>
-            <View style={[styles.progressDot, { backgroundColor: color }]} />
-        </View>
-    );
-}
-
 export default function LoadHistoryScreen() {
-    const insets = useSafeAreaInsets();
-    const router = useRouter();
-    const [refreshing, setRefreshing] = useState(false);
-    const [data, setData] = useState(mockStrainData);
+  const router = useRouter();
+  const [items, setItems] = useState<ActivitySummary[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-    const today = new Date();
-    const monthDay = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+  const load = useCallback(async () => {
+    try {
+      setError(null);
+      const page = await api.get<{ items: ActivitySummary[] }>('/activities?limit=100');
+      setItems(page.items.filter((item) => item.status === 'complete'));
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : 'Activity history is unavailable.');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
 
-    const onRefresh = async () => {
-        setRefreshing(true);
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setRefreshing(false);
-    };
+  useFocusEffect(useCallback(() => { void load(); }, [load]));
 
-    const getStatusColor = (status: string) => {
-        if (status === 'below') return '#F97316';
-        if (status === 'normal') return '#16A34A';
-        return '#9CA3AF';
-    };
+  const todayCode = new Date().toDateString();
+  const today = items.filter((item) => new Date(item.started_at).toDateString() === todayCode);
+  const movingSeconds = today.reduce((sum, item) => sum + Number(item.moving_seconds || 0), 0);
+  const distanceKm = today.reduce((sum, item) => sum + Number(item.distance_m || 0), 0) / 1000;
+  const calories = today.reduce((sum, item) => sum + Number(item.calories_kcal || 0), 0);
 
-    const getStatusText = (status: string) => {
-        if (status === 'below') return 'Below normal';
-        if (status === 'normal') return 'Normal range';
-        return 'No data';
-    };
-
-    return (
-        <View style={[styles.container, { paddingTop: insets.top }]}>
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                    <Ionicons name="chevron-back" size={24} color="#1F2937" />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Strain</Text>
-                <TouchableOpacity style={styles.infoButton}>
-                    <Ionicons name="information-circle-outline" size={24} color="#6B7280" />
-                </TouchableOpacity>
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.iconButton}><Ionicons name="chevron-back" size={23} color={colors.textPrimary} /></TouchableOpacity>
+        <View style={{ flex: 1 }}><Text style={styles.title}>Activity load</Text><Text style={styles.subtitle}>Calculated only from processed activities</Text></View>
+      </View>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); void load(); }} />}
+      >
+        {loading ? <ActivityIndicator color={colors.brand} /> : error ? <View style={styles.empty}><Text style={styles.emptyTitle}>Unable to load activity</Text><Text style={styles.emptyBody}>{error}</Text></View> : (
+          <>
+            <View style={styles.grid}>
+              <View style={styles.card}><Text style={styles.value}>{today.length}</Text><Text style={styles.label}>Activities today</Text></View>
+              <View style={styles.card}><Text style={styles.value}>{distanceKm.toFixed(2)}</Text><Text style={styles.label}>Distance (km)</Text></View>
+              <View style={styles.card}><Text style={styles.value}>{Math.round(movingSeconds / 60)}</Text><Text style={styles.label}>Moving minutes</Text></View>
+              <View style={styles.card}><Text style={styles.value}>{Math.round(calories)}</Text><Text style={styles.label}>Estimated kcal</Text></View>
             </View>
-
-            {/* Date Selector */}
-            <TouchableOpacity style={styles.dateSelector}>
-                <Text style={styles.dateText}>Today, {monthDay}</Text>
-                <Ionicons name="chevron-down" size={16} color="#6B7280" />
-            </TouchableOpacity>
-
-            <ScrollView
-                style={styles.scrollView}
-                contentContainerStyle={styles.scrollContent}
-                showsVerticalScrollIndicator={false}
-                refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                }
-            >
-                {/* Strain Ring */}
-                <View style={styles.ringSection}>
-                    <StrainRing percent={data.strainPercent} />
-                </View>
-
-                {/* Stats Tiles */}
-                <View style={styles.statsTiles}>
-                    <View style={styles.statTile}>
-                        <View style={styles.statHeader}>
-                            <Ionicons name="time-outline" size={16} color="#6B7280" />
-                            <Text style={styles.statLabel}>Duration</Text>
-                        </View>
-                        <Text style={styles.statValue}>{data.duration}m</Text>
-                    </View>
-                    <View style={styles.statTile}>
-                        <View style={styles.statHeader}>
-                            <Ionicons name="flash-outline" size={16} color="#6B7280" />
-                            <Text style={styles.statLabel}>Total Energy</Text>
-                        </View>
-                        <View style={styles.statValueRow}>
-                            <Text style={styles.statValue}>{data.totalEnergy.toLocaleString()}</Text>
-                            <Text style={styles.statUnit}> kJ</Text>
-                            <Ionicons name="caret-down" size={14} color="#F97316" style={{ marginLeft: 8 }} />
-                        </View>
-                    </View>
-                </View>
-
-                {/* Timeline Section */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Timeline</Text>
-                    {data.activities.length === 0 ? (
-                        <View style={styles.emptyTimeline}>
-                            <Ionicons name="calendar-outline" size={36} color="#D1D5DB" />
-                            <Text style={styles.emptyTitle}>No activities</Text>
-                            <Text style={styles.emptySubtitle}>There were no activities done this period.</Text>
-                        </View>
-                    ) : (
-                        data.activities.map((activity: any, index: number) => (
-                            <View key={index} style={styles.activityRow}>
-                                <Text>{activity.name}</Text>
-                            </View>
-                        ))
-                    )}
-                </View>
-
-                {/* Heart Rate Zones */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Heart Rate Zones</Text>
-                    <View style={styles.zonesCard}>
-                        {data.heartRateZones.map((zone, index) => (
-                            <View key={index} style={[styles.zoneRow, index < data.heartRateZones.length - 1 && styles.zoneBorder]}>
-                                <Text style={styles.zoneNumber}>{zone.zone}</Text>
-                                <Text style={styles.zoneTime}>{zone.time}</Text>
-                                <Text style={styles.zoneRange}>{zone.range}</Text>
-                            </View>
-                        ))}
-                    </View>
-                </View>
-
-                {/* Trends Section */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Trends</Text>
-
-                    {/* Strain Score Card */}
-                    <TouchableOpacity style={styles.trendCard} onPress={() => router.push('/analytics/strain-detail')}>
-                        <View style={styles.trendHeader}>
-                            <Ionicons name="flame-outline" size={18} color="#F97316" />
-                            <Text style={styles.trendLabel}>Strain Score</Text>
-                            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
-                        </View>
-                        <View style={styles.trendContent}>
-                            <View>
-                                <Text style={styles.trendValue}>{data.trends.strainScore.value}%</Text>
-                                <View style={styles.statusRow}>
-                                    <View style={[styles.statusDot, { backgroundColor: getStatusColor(data.trends.strainScore.status) }]} />
-                                    <Text style={[styles.statusText, { color: getStatusColor(data.trends.strainScore.status) }]}>
-                                        {getStatusText(data.trends.strainScore.status)}
-                                    </Text>
-                                </View>
-                            </View>
-                            <Sparkline data={data.trends.strainScore.data} color="#F97316" width={130} height={45} />
-                        </View>
-                    </TouchableOpacity>
-
-                    {/* Exercise Duration Card */}
-                    <TouchableOpacity style={styles.trendCard} onPress={() => router.push('/analytics/strain-detail?type=duration')}>
-                        <View style={styles.trendHeader}>
-                            <Ionicons name="time-outline" size={18} color="#6B7280" />
-                            <Text style={styles.trendLabel}>Exercise Duration</Text>
-                            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
-                        </View>
-                        <View style={styles.trendContent}>
-                            <View>
-                                <Text style={styles.trendValue}>{data.trends.exerciseDuration.value}m</Text>
-                                <View style={styles.statusRow}>
-                                    <Ionicons name="checkmark-circle" size={14} color="#16A34A" />
-                                    <Text style={[styles.statusText, { color: '#16A34A', marginLeft: 4 }]}>Normal range</Text>
-                                </View>
-                            </View>
-                            <View style={styles.progressContainer}>
-                                <ProgressLine progress={data.trends.exerciseDuration.progress || 5} color="#F59E0B" />
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-                    {/* Daytime HR Card */}
-                    <TouchableOpacity style={styles.trendCard} onPress={() => router.push('/analytics/strain-detail?type=daytime-hr')}>
-                        <View style={styles.trendHeader}>
-                            <Ionicons name="heart" size={18} color="#EF4444" />
-                            <Text style={styles.trendLabel}>Daytime HR</Text>
-                            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
-                        </View>
-                        <View style={styles.trendContent}>
-                            <View>
-                                <Text style={styles.trendValue}>No data</Text>
-                                <View style={styles.statusRow}>
-                                    <Ionicons name="close-circle" size={14} color="#9CA3AF" />
-                                    <Text style={[styles.statusText, { color: '#9CA3AF', marginLeft: 4 }]}>No trends available</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-
-                    {/* Total Energy Card */}
-                    <TouchableOpacity style={styles.trendCard} onPress={() => router.push('/analytics/strain-detail?type=energy')}>
-                        <View style={styles.trendHeader}>
-                            <Ionicons name="flash" size={18} color="#F97316" />
-                            <Text style={styles.trendLabel}>Total Energy</Text>
-                            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
-                        </View>
-                        <View style={styles.trendContent}>
-                            <View>
-                                <Text style={styles.trendValue}>
-                                    {data.trends.totalEnergy.value.toLocaleString()}
-                                    <Text style={styles.trendUnit}> kJ</Text>
-                                </Text>
-                                <View style={styles.statusRow}>
-                                    <View style={[styles.statusDot, { backgroundColor: '#F97316' }]} />
-                                    <Text style={[styles.statusText, { color: '#F97316' }]}>Below normal</Text>
-                                </View>
-                            </View>
-                            <Sparkline data={data.trends.totalEnergy.data} color="#F97316" width={130} height={45} />
-                        </View>
-                    </TouchableOpacity>
-
-
-                    {/* Step Count Card */}
-                    <TouchableOpacity style={styles.trendCard} onPress={() => router.push('/analytics/strain-detail?type=steps')}>
-                        <View style={styles.trendHeader}>
-                            <Ionicons name="footsteps-outline" size={18} color="#F97316" />
-                            <Text style={styles.trendLabel}>Step Count</Text>
-                            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
-                        </View>
-                        <View style={styles.trendContent}>
-                            <View>
-                                <Text style={styles.trendValue}>{data.trends.stepCount.value}</Text>
-                                <View style={styles.statusRow}>
-                                    <View style={[styles.statusDot, { backgroundColor: '#F97316' }]} />
-                                    <Text style={[styles.statusText, { color: '#F97316' }]}>Below normal</Text>
-                                </View>
-                            </View>
-                            <Sparkline data={data.trends.stepCount.data} color="#F97316" width={130} height={45} />
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{ height: 40 }} />
-            </ScrollView>
-        </View>
-    );
+            <View style={styles.notice}><Ionicons name="information-circle-outline" size={19} color="#4569A3" /><Text style={styles.noticeText}>Runlete does not show a strain score until the calculation has enough validated inputs. Heart-rate zones and energy values are never fabricated.</Text></View>
+            <Text style={styles.sectionTitle}>Recent processed activities</Text>
+            {items.slice(0, 20).map((item) => (
+              <TouchableOpacity key={item.id} style={styles.row} onPress={() => router.push(`/run/${item.id}`)}>
+                <View style={{ flex: 1 }}><Text style={styles.rowTitle}>{item.title || 'Run'}</Text><Text style={styles.rowMeta}>{new Date(item.started_at).toLocaleString()}</Text></View>
+                <View style={styles.rowStats}><Text style={styles.rowValue}>{(Number(item.distance_m || 0) / 1000).toFixed(2)} km</Text><Text style={styles.rowMeta}>{duration(Number(item.moving_seconds || 0))} · {pace(item.average_pace_s_per_km)}</Text></View>
+              </TouchableOpacity>
+            ))}
+            {!items.length && <View style={styles.empty}><Ionicons name="walk-outline" size={34} color={colors.textTertiary} /><Text style={styles.emptyTitle}>No processed activities</Text><Text style={styles.emptyBody}>Completed runs will appear after server-side quality processing.</Text></View>}
+          </>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: spacing.lg,
-        paddingVertical: spacing.md,
-    },
-    backButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: '#F3F4F6',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#1F2937',
-    },
-    infoButton: {
-        width: 40,
-        height: 40,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    dateSelector: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 6,
-        paddingBottom: spacing.md,
-    },
-    dateText: {
-        fontSize: 14,
-        color: '#6B7280',
-    },
-    scrollView: {
-        flex: 1,
-    },
-    scrollContent: {
-        paddingHorizontal: spacing.lg,
-    },
-    // Ring Section
-    ringSection: {
-        alignItems: 'center',
-        paddingVertical: spacing.xl,
-    },
-    ringContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    ringCenter: {
-        position: 'absolute',
-        alignItems: 'center',
-    },
-    ringValue: {
-        fontSize: 48,
-        fontWeight: '700',
-        color: '#1F2937',
-    },
-    ringLabel: {
-        fontSize: 16,
-        color: '#9CA3AF',
-        marginTop: 2,
-    },
-    // Stats Tiles
-    statsTiles: {
-        flexDirection: 'row',
-        gap: 12,
-        marginBottom: spacing.xl,
-    },
-    statTile: {
-        flex: 1,
-        backgroundColor: '#F9FAFB',
-        borderRadius: 16,
-        padding: spacing.lg,
-    },
-    statHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 6,
-        marginBottom: 10,
-    },
-    statLabel: {
-        fontSize: 13,
-        color: '#6B7280',
-    },
-    statValue: {
-        fontSize: 32,
-        fontWeight: '700',
-        color: '#1F2937',
-    },
-    statValueRow: {
-        flexDirection: 'row',
-        alignItems: 'baseline',
-    },
-    statUnit: {
-        fontSize: 16,
-        color: '#6B7280',
-    },
-    // Sections
-    section: {
-        marginBottom: spacing.xl,
-    },
-    sectionTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: '#1F2937',
-        marginBottom: spacing.md,
-    },
-    // Empty Timeline
-    emptyTimeline: {
-        alignItems: 'center',
-        paddingVertical: 40,
-    },
-    emptyTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#6B7280',
-        marginTop: spacing.md,
-    },
-    emptySubtitle: {
-        fontSize: 13,
-        color: '#9CA3AF',
-        marginTop: 4,
-        textAlign: 'center',
-    },
-    activityRow: {
-        padding: spacing.md,
-        backgroundColor: '#F9FAFB',
-        borderRadius: 12,
-        marginBottom: 8,
-    },
-    // Heart Rate Zones
-    zonesCard: {
-        backgroundColor: '#F9FAFB',
-        borderRadius: 16,
-        overflow: 'hidden',
-    },
-    zoneRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 16,
-        paddingHorizontal: spacing.lg,
-    },
-    zoneBorder: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#E5E7EB',
-    },
-    zoneNumber: {
-        width: 28,
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#6B7280',
-    },
-    zoneTime: {
-        flex: 1,
-        fontSize: 15,
-        color: '#9CA3AF',
-    },
-    zoneRange: {
-        fontSize: 13,
-        color: '#9CA3AF',
-    },
-    // Trend Cards
-    trendCard: {
-        backgroundColor: '#F9FAFB',
-        borderRadius: 16,
-        padding: spacing.lg,
-        marginBottom: 12,
-    },
-    trendHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        marginBottom: 14,
-    },
-    trendLabel: {
-        flex: 1,
-        fontSize: 14,
-        color: '#6B7280',
-    },
-    trendContent: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-    },
-    trendValue: {
-        fontSize: 32,
-        fontWeight: '700',
-        color: '#1F2937',
-    },
-    trendUnit: {
-        fontSize: 16,
-        fontWeight: '400',
-        color: '#6B7280',
-    },
-    statusRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 4,
-        marginTop: 6,
-    },
-    statusDot: {
-        width: 8,
-        height: 8,
-        borderRadius: 4,
-    },
-    statusText: {
-        fontSize: 13,
-        fontWeight: '500',
-    },
-    progressContainer: {
-        flex: 1,
-        maxWidth: 160,
-        marginLeft: spacing.lg,
-    },
-    progressLineContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    progressLineTrack: {
-        flex: 1,
-        height: 8,
-        backgroundColor: '#E5E7EB',
-        borderRadius: 4,
-    },
-    progressLine: {
-        height: 8,
-        borderRadius: 4,
-    },
-    progressDot: {
-        width: 14,
-        height: 14,
-        borderRadius: 7,
-        marginLeft: -3,
-    },
+  container: { flex: 1, backgroundColor: colors.background },
+  header: { flexDirection: 'row', gap: 12, alignItems: 'center', padding: spacing.page },
+  iconButton: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface },
+  title: { color: colors.textPrimary, fontSize: 20, fontWeight: '900' },
+  subtitle: { color: colors.textSecondary, fontSize: 10.5, marginTop: 2 },
+  content: { padding: spacing.page, paddingTop: 4, paddingBottom: 50 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  card: { width: '48%', minHeight: 112, borderRadius: 18, backgroundColor: colors.surface, padding: 16, justifyContent: 'center' },
+  value: { color: colors.textPrimary, fontSize: 28, fontWeight: '900' },
+  label: { color: colors.textSecondary, fontSize: 10.5, marginTop: 6 },
+  notice: { flexDirection: 'row', gap: 9, borderRadius: 16, padding: 14, marginTop: 16, backgroundColor: '#EDF3FF' },
+  noticeText: { color: '#415474', flex: 1, fontSize: 11, lineHeight: 16 },
+  sectionTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '900', marginTop: 28, marginBottom: 8 },
+  row: { minHeight: 72, flexDirection: 'row', alignItems: 'center', gap: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.separator },
+  rowTitle: { color: colors.textPrimary, fontWeight: '900', fontSize: 12.5 },
+  rowMeta: { color: colors.textSecondary, fontSize: 9.5, marginTop: 4 },
+  rowStats: { alignItems: 'flex-end' },
+  rowValue: { color: colors.textPrimary, fontWeight: '900', fontSize: 12 },
+  empty: { alignItems: 'center', padding: 30, borderRadius: 18, backgroundColor: colors.surface },
+  emptyTitle: { color: colors.textPrimary, fontWeight: '900', marginTop: 8 },
+  emptyBody: { color: colors.textSecondary, fontSize: 11, lineHeight: 16, textAlign: 'center', marginTop: 5 },
 });

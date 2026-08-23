@@ -1,357 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    ScrollView,
-    TouchableOpacity,
-    ActivityIndicator,
-    Dimensions,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Svg, { Path, Line, Circle } from 'react-native-svg';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { api } from '../../src/utils/api';
-import { spacing } from '../../src/utils/theme';
+import { colors, spacing } from '../../src/utils/theme';
 
-const { width } = Dimensions.get('window');
-
-interface BiologyData {
-    vo2_max?: { value: number | null; range?: string; last_updated?: string };
-    hrv_baseline?: { value: number | null; trend?: string; range?: string; last_updated?: string };
-    rhr_baseline?: { value: number | null; trend?: string; range?: string; last_updated?: string };
-    weight?: { value: number | null; trend?: string; last_updated?: string };
-    lean_mass?: { value: number | null; trend?: string; last_updated?: string };
-    body_fat?: { value: number | null; trend?: string; range?: string; last_updated?: string };
-}
-
-// Mini Sparkline Component
-function MiniSparkline({ width: w = 100, height: h = 30, color = '#6B7280' }: { width?: number; height?: number; color?: string }) {
-    // Empty sparkline with just a horizontal line
-    return (
-        <Svg width={w} height={h}>
-            <Line x1={0} y1={h / 2} x2={w} y2={h / 2} stroke={color} strokeWidth={2} />
-            <Circle cx={w} cy={h / 2} r={4} fill={color} />
-        </Svg>
-    );
-}
-
-// Mini Chart Component (for VO2 Max style)
-function MiniChart({ width: w = 120, height: h = 50 }: { width?: number; height?: number }) {
-    return (
-        <Svg width={w} height={h}>
-            {[0, 1, 2, 3].map((i) => (
-                <Line
-                    key={i}
-                    x1={0}
-                    y1={h * (i / 3)}
-                    x2={w}
-                    y2={h * (i / 3)}
-                    stroke="#4B5563"
-                    strokeWidth={1}
-                />
-            ))}
-        </Svg>
-    );
-}
-
-// Gauge Component (for RHR and Body Fat)
-function GaugeArc({ size = 100, progress = 0.5 }: { size?: number; progress?: number }) {
-    const strokeWidth = 8;
-    const radius = (size - strokeWidth) / 2;
-    const circumference = Math.PI * radius; // Half circle
-    const offset = circumference - progress * circumference;
-    const center = size / 2;
-
-    return (
-        <Svg width={size} height={size / 2 + 10}>
-            {/* Background arc */}
-            <Path
-                d={`M ${strokeWidth / 2} ${size / 2} A ${radius} ${radius} 0 0 1 ${size - strokeWidth / 2} ${size / 2}`}
-                stroke="#374151"
-                strokeWidth={strokeWidth}
-                fill="none"
-            />
-            {/* Progress arc */}
-            <Path
-                d={`M ${strokeWidth / 2} ${size / 2} A ${radius} ${radius} 0 0 1 ${size - strokeWidth / 2} ${size / 2}`}
-                stroke="#F59E0B"
-                strokeWidth={strokeWidth}
-                fill="none"
-                strokeDasharray={`${circumference}`}
-                strokeDashoffset={offset}
-                strokeLinecap="round"
-            />
-        </Svg>
-    );
+interface HealthSummary {
+  readiness: number | null;
+  sleep_minutes: number | null;
+  stress: number | null;
+  open_pain_reports: number;
+  connected_metrics: Record<string, { value: number; unit: string; measured_at: string; provider: string }>;
 }
 
 export default function BiologyScreen() {
-    const insets = useSafeAreaInsets();
-    const router = useRouter();
+  const router = useRouter();
+  const [data, setData] = useState<HealthSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const load = useCallback(async () => {
+    try { setData(await api.get<HealthSummary>('/health/summary')); setError(null); }
+    catch (reason) { setError(reason instanceof Error ? reason.message : 'Health metrics are unavailable.'); }
+    finally { setLoading(false); }
+  }, []);
+  useFocusEffect(useCallback(() => { void load(); }, [load]));
 
-    const [loading, setLoading] = useState(true);
-    const [data, setData] = useState<BiologyData | null>(null);
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        try {
-            setLoading(true);
-            const res = await api.get<BiologyData>('/health/biology').catch(() => null);
-            setData(res);
-        } catch (error) {
-            console.error('Error fetching biology:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    if (loading) {
-        return (
-            <View style={[styles.container, styles.centered, { paddingTop: insets.top }]}>
-                <ActivityIndicator size="large" color="#FFFFFF" />
-            </View>
-        );
-    }
-
-    return (
-        <View style={[styles.container, { paddingTop: insets.top }]}>
-            {/* Header */}
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>Biology</Text>
-            </View>
-
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                {/* VO2 Max Card - Full Width */}
-                <View style={styles.fullCard}>
-                    <View style={styles.cardHeader}>
-                        <Ionicons name="fitness" size={18} color="#16A34A" />
-                        <Text style={styles.cardTitle}>VO₂ Max</Text>
-                    </View>
-                    <View style={styles.cardContent}>
-                        <View style={styles.valueSection}>
-                            <Text style={styles.valueText}>No data</Text>
-                            <Text style={styles.rangeText}>No range</Text>
-                        </View>
-                        <View style={styles.chartSection}>
-                            <MiniChart width={140} height={60} />
-                        </View>
-                    </View>
-                </View>
-
-                {/* HRV & RHR Baselines Row */}
-                <View style={styles.cardRow}>
-                    {/* HRV Baselines */}
-                    <View style={styles.halfCard}>
-                        <View style={styles.cardHeader}>
-                            <Ionicons name="pulse" size={16} color="#8B5CF6" />
-                            <Text style={styles.cardTitle}>HRV Baselines</Text>
-                        </View>
-                        <View style={styles.halfCardContent}>
-                            <MiniSparkline width={80} height={30} color="#6B7280" />
-                            <Text style={styles.valueText}>No data</Text>
-                            <View style={styles.trendRow}>
-                                <Ionicons name="close-circle" size={12} color="#6B7280" />
-                                <Text style={styles.trendText}>No trend</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* RHR Baselines */}
-                    <View style={styles.halfCard}>
-                        <View style={styles.cardHeader}>
-                            <Ionicons name="heart" size={16} color="#EF4444" />
-                            <Text style={styles.cardTitle}>RHR Baselines</Text>
-                        </View>
-                        <View style={styles.halfCardContent}>
-                            <Text style={styles.valueText}>No data</Text>
-                            <Text style={styles.rangeTextSmall}>No range</Text>
-                            <GaugeArc size={100} progress={0.5} />
-                            <View style={styles.gaugeButtons}>
-                                <TouchableOpacity style={styles.gaugeButton}>
-                                    <Ionicons name="remove" size={16} color="#3B82F6" />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.gaugeButton}>
-                                    <Ionicons name="add" size={16} color="#EF4444" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-
-                {/* Weight Card - Full Width */}
-                <View style={styles.fullCard}>
-                    <View style={styles.cardHeader}>
-                        <Ionicons name="scale" size={18} color="#9CA3AF" />
-                        <Text style={styles.cardTitle}>Weight</Text>
-                    </View>
-                    <View style={styles.cardContent}>
-                        <View style={styles.valueSection}>
-                            <Text style={styles.valueText}>No data</Text>
-                            <View style={styles.trendRow}>
-                                <Ionicons name="close-circle" size={12} color="#6B7280" />
-                                <Text style={styles.trendText}>No trend</Text>
-                            </View>
-                        </View>
-                        <View style={styles.chartSection}>
-                            <MiniSparkline width={140} height={30} color="#6B7280" />
-                        </View>
-                    </View>
-                </View>
-
-                {/* Lean Body Mass & Body Fat Row */}
-                <View style={styles.cardRow}>
-                    {/* Lean Body Mass */}
-                    <View style={styles.halfCard}>
-                        <View style={styles.cardHeader}>
-                            <Ionicons name="body" size={16} color="#3B82F6" />
-                            <Text style={styles.cardTitle}>Lean Body Mass</Text>
-                        </View>
-                        <View style={styles.halfCardContent}>
-                            <MiniSparkline width={80} height={30} color="#6B7280" />
-                            <Text style={styles.valueText}>No data</Text>
-                            <View style={styles.trendRow}>
-                                <Ionicons name="close-circle" size={12} color="#6B7280" />
-                                <Text style={styles.trendText}>No trend</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* Body Fat */}
-                    <View style={styles.halfCard}>
-                        <View style={styles.cardHeader}>
-                            <Ionicons name="cellular" size={16} color="#F97316" />
-                            <Text style={styles.cardTitle}>Body Fat</Text>
-                        </View>
-                        <View style={styles.halfCardContent}>
-                            <Text style={styles.valueText}>No data</Text>
-                            <Text style={styles.rangeTextSmall}>No range</Text>
-                            <GaugeArc size={100} progress={0.5} />
-                            <View style={styles.gaugeButtons}>
-                                <TouchableOpacity style={styles.gaugeButton}>
-                                    <Ionicons name="remove" size={16} color="#3B82F6" />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.gaugeButton}>
-                                    <Ionicons name="add" size={16} color="#EF4444" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={{ height: 100 }} />
-            </ScrollView>
+  const resting = data?.connected_metrics.resting_hr_bpm;
+  const hrv = data?.connected_metrics.hrv_rmssd_ms;
+  return <SafeAreaView style={styles.container}>
+    <View style={styles.header}><TouchableOpacity onPress={() => router.back()} style={styles.back}><Ionicons name="chevron-back" size={23} color={colors.textPrimary}/></TouchableOpacity><View><Text style={styles.title}>Health measurements</Text><Text style={styles.subtitle}>Check-ins and connected sources</Text></View></View>
+    <ScrollView contentContainerStyle={styles.content}>
+      {loading ? <ActivityIndicator color={colors.brand}/> : error ? <Notice title="Unable to load" body={error}/> : <>
+        <View style={styles.grid}>
+          <Metric label="Readiness" value={data?.readiness != null ? `${data.readiness} / 5` : '—'} source="Daily check-in"/>
+          <Metric label="Sleep" value={data?.sleep_minutes != null ? `${(data.sleep_minutes / 60).toFixed(1)} h` : '—'} source={data?.connected_metrics.sleep_duration_min?.provider || 'Daily check-in'}/>
+          <Metric label="Resting HR" value={resting ? `${resting.value} ${resting.unit}` : '—'} source={resting?.provider || 'No measurement'}/>
+          <Metric label="HRV (RMSSD)" value={hrv ? `${hrv.value} ${hrv.unit}` : '—'} source={hrv?.provider || 'No measurement'}/>
         </View>
-    );
+        <Notice title="No inferred values" body="Runlete displays only measurements you entered or imported with consent. Missing VO₂ max, body composition, or baseline values remain missing until a supported source provides them."/>
+        <Notice title="Health boundary" body="These measurements support training context. They are not a diagnosis, treatment recommendation, or substitute for professional medical care."/>
+      </>}
+    </ScrollView>
+  </SafeAreaView>;
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#111111',
-    },
-    centered: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    header: {
-        alignItems: 'center',
-        paddingVertical: spacing.lg,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#FFFFFF',
-    },
-    content: {
-        flex: 1,
-        paddingHorizontal: spacing.md,
-    },
-    // Full Width Card
-    fullCard: {
-        backgroundColor: '#1F1F1F',
-        borderRadius: 16,
-        padding: spacing.lg,
-        marginBottom: spacing.md,
-    },
-    cardHeader: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        marginBottom: spacing.md,
-    },
-    cardTitle: {
-        fontSize: 14,
-        fontWeight: '500',
-        color: '#FFFFFF',
-    },
-    cardContent: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-    },
-    valueSection: {
-        flex: 1,
-    },
-    valueText: {
-        fontSize: 24,
-        fontWeight: '300',
-        color: '#6B7280',
-        marginBottom: 4,
-    },
-    rangeText: {
-        fontSize: 13,
-        color: '#6B7280',
-    },
-    rangeTextSmall: {
-        fontSize: 12,
-        color: '#6B7280',
-        marginBottom: 8,
-    },
-    chartSection: {
-        alignItems: 'flex-end',
-    },
-    trendRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 4,
-    },
-    trendText: {
-        fontSize: 12,
-        color: '#6B7280',
-    },
-    // Card Row
-    cardRow: {
-        flexDirection: 'row',
-        gap: spacing.md,
-        marginBottom: spacing.md,
-    },
-    halfCard: {
-        flex: 1,
-        backgroundColor: '#1F1F1F',
-        borderRadius: 16,
-        padding: spacing.lg,
-    },
-    halfCardContent: {
-        alignItems: 'flex-start',
-    },
-    // Gauge
-    gaugeButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        marginTop: -10,
-    },
-    gaugeButton: {
-        width: 28,
-        height: 28,
-        borderRadius: 14,
-        backgroundColor: '#2A2A2A',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+function Metric({label,value,source}:{label:string;value:string;source:string}) { return <View style={styles.metric}><Text style={styles.metricLabel}>{label}</Text><Text style={styles.metricValue}>{value}</Text><Text style={styles.metricSource}>{source}</Text></View>; }
+function Notice({title,body}:{title:string;body:string}) { return <View style={styles.notice}><Text style={styles.noticeTitle}>{title}</Text><Text style={styles.noticeBody}>{body}</Text></View>; }
+const styles=StyleSheet.create({container:{flex:1,backgroundColor:colors.background},header:{flexDirection:'row',gap:12,alignItems:'center',padding:spacing.page},back:{width:40,height:40,borderRadius:20,alignItems:'center',justifyContent:'center',backgroundColor:colors.surface},title:{fontSize:20,fontWeight:'900',color:colors.textPrimary},subtitle:{fontSize:10.5,color:colors.textSecondary,marginTop:2},content:{padding:spacing.page,paddingTop:4,paddingBottom:50},grid:{flexDirection:'row',flexWrap:'wrap',gap:10},metric:{width:'48%',minHeight:125,borderRadius:18,padding:16,backgroundColor:colors.surface,justifyContent:'center'},metricLabel:{fontSize:10.5,fontWeight:'800',color:colors.textSecondary},metricValue:{fontSize:24,fontWeight:'900',color:colors.textPrimary,marginTop:7},metricSource:{fontSize:9.5,color:colors.textTertiary,marginTop:7},notice:{borderRadius:18,padding:18,backgroundColor:'#EDF3FF',marginTop:14},noticeTitle:{fontWeight:'900',color:'#334D75'},noticeBody:{fontSize:11.5,lineHeight:17,color:'#415474',marginTop:6}});

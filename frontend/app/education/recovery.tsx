@@ -105,16 +105,6 @@ export default function RecoveryEducationScreen() {
                     <Text style={styles.sectionTitle}>Related</Text>
                     <TouchableOpacity
                         style={styles.relatedButton}
-                        onPress={() => router.push('/education/sleep')}
-                    >
-                        <View style={styles.relatedIcon}>
-                            <Ionicons name="moon" size={20} color="#3B82F6" />
-                        </View>
-                        <Text style={styles.relatedText}>Sleep</Text>
-                        <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.relatedButton}
                         onPress={() => router.push('/health/biology')}
                     >
                         <View style={styles.relatedIcon}>

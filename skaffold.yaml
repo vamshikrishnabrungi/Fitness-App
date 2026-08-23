@@ -1,0 +1,23 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: runlete
+profiles:
+  - name: api
+    manifests:
+      rawYaml:
+        - deploy/rendered/api.yaml
+    deploy:
+      cloudrun: {}
+  - name: worker
+    manifests:
+      rawYaml:
+        - deploy/rendered/worker.yaml
+    deploy:
+      cloudrun: {}
+  - name: admin
+    manifests:
+      rawYaml:
+        - deploy/rendered/admin.yaml
+    deploy:
+      cloudrun: {}

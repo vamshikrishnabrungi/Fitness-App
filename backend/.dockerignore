@@ -1,0 +1,16 @@
+# Keep the image small and secrets out. Runtime seed data (data/, seed_*.py, *.json) is kept.
+.venv/
+**/__pycache__/
+*.pyc
+.env
+.git/
+.pytest_cache/
+# Large non-runtime artifacts
+*.pdf
+*.jpeg
+*.jpg
+sport_research/
+thumbnail_generation/
+sport_generation_samples/
+anthropic_week1_*.json
+openrouter_week1_*.json

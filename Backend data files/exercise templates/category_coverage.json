@@ -1,0 +1,578 @@
+{
+  "schema_version": "1.0.0",
+  "categories": [
+    {
+      "phase": 1,
+      "category_code": "maximum_strength",
+      "name": "Maximum strength",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P1-MAX-FOUNDATION",
+        "P1-MAX-DEVELOPMENT",
+        "P1-MAX-MAINTENANCE"
+      ]
+    },
+    {
+      "phase": 1,
+      "category_code": "yielding_isometric_force",
+      "name": "Yielding isometric force",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P1-ISO-YIELD-CAPACITY"
+      ]
+    },
+    {
+      "phase": 1,
+      "category_code": "overcoming_isometric_force",
+      "name": "Overcoming isometric force",
+      "levels": [
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P1-ISO-OVERCOMING-MAX",
+        "P1-ISO-RAPID-INTENT"
+      ]
+    },
+    {
+      "phase": 1,
+      "category_code": "eccentric_capacity",
+      "name": "Eccentric capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P1-ECC-INTRO",
+        "P1-ECC-DEVELOPMENT",
+        "P1-ECC-MAINTENANCE"
+      ]
+    },
+    {
+      "phase": 2,
+      "category_code": "explosive_strength",
+      "name": "Explosive strength",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P2-T01",
+        "P2-T02"
+      ]
+    },
+    {
+      "phase": 2,
+      "category_code": "vertical_power",
+      "name": "Vertical power",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P2-T03"
+      ]
+    },
+    {
+      "phase": 2,
+      "category_code": "horizontal_power",
+      "name": "Horizontal power",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P2-T04"
+      ]
+    },
+    {
+      "phase": 2,
+      "category_code": "lateral_power",
+      "name": "Lateral power",
+      "levels": [
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P2-T05"
+      ]
+    },
+    {
+      "phase": 2,
+      "category_code": "rotational_power",
+      "name": "Rotational power",
+      "levels": [
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P2-T06"
+      ]
+    },
+    {
+      "phase": 2,
+      "category_code": "upper_body_power",
+      "name": "Upper-body power",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P2-T07"
+      ]
+    },
+    {
+      "phase": 3,
+      "category_code": "landing_capacity",
+      "name": "Landing capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P3-T01",
+        "P3-T02",
+        "P3-T03",
+        "P3-T04"
+      ]
+    },
+    {
+      "phase": 3,
+      "category_code": "extensive_plyometrics",
+      "name": "Extensive plyometrics",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P3-T05",
+        "P3-T06"
+      ]
+    },
+    {
+      "phase": 3,
+      "category_code": "reactive_elastic_strength",
+      "name": "Reactive/elastic strength",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P3-T07",
+        "P3-T10"
+      ]
+    },
+    {
+      "phase": 3,
+      "category_code": "horizontal_bounding",
+      "name": "Horizontal bounding",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P3-T08"
+      ]
+    },
+    {
+      "phase": 3,
+      "category_code": "lateral_elastic_strength",
+      "name": "Lateral elastic strength",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P3-T09"
+      ]
+    },
+    {
+      "phase": 4,
+      "category_code": "acceleration",
+      "name": "Acceleration",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P4-T01",
+        "P4-T02",
+        "P4-T03",
+        "P4-T04",
+        "P4-T05"
+      ]
+    },
+    {
+      "phase": 4,
+      "category_code": "maximum_velocity",
+      "name": "Maximum velocity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P4-T06",
+        "P4-T07"
+      ]
+    },
+    {
+      "phase": 4,
+      "category_code": "speed_endurance",
+      "name": "Speed endurance",
+      "levels": [
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P4-T09",
+        "P4-T10"
+      ]
+    },
+    {
+      "phase": 5,
+      "category_code": "deceleration",
+      "name": "Deceleration",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P5-T01",
+        "P5-T02",
+        "P5-T03",
+        "P5-T04"
+      ]
+    },
+    {
+      "phase": 5,
+      "category_code": "planned_change_of_direction",
+      "name": "Planned change of direction",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P5-T05",
+        "P5-T06",
+        "P5-T07",
+        "P5-T08"
+      ]
+    },
+    {
+      "phase": 5,
+      "category_code": "reactive_agility",
+      "name": "Reactive agility",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P5-T09",
+        "P5-T10",
+        "P5-T11"
+      ]
+    },
+    {
+      "phase": 6,
+      "category_code": "aerobic_capacity",
+      "name": "Aerobic capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P6-T01",
+        "P6-T02",
+        "P6-T03",
+        "P6-T04"
+      ]
+    },
+    {
+      "phase": 6,
+      "category_code": "threshold_capacity",
+      "name": "Threshold capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P6-T06",
+        "P6-T07",
+        "P6-T08",
+        "P6-T12",
+        "P6-T13"
+      ]
+    },
+    {
+      "phase": 6,
+      "category_code": "high_intensity_aerobic_power",
+      "name": "High-intensity aerobic power",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P6-T09",
+        "P6-T10",
+        "P6-T11"
+      ]
+    },
+    {
+      "phase": 7,
+      "category_code": "anaerobic_power",
+      "name": "Anaerobic power",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P7-T01",
+        "P7-T02",
+        "P7-T03"
+      ]
+    },
+    {
+      "phase": 7,
+      "category_code": "anaerobic_capacity",
+      "name": "Anaerobic capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P7-T04",
+        "P7-T05",
+        "P7-T06",
+        "P7-T07",
+        "P7-T08"
+      ]
+    },
+    {
+      "phase": 7,
+      "category_code": "repeated_sprint_ability",
+      "name": "Repeated-sprint ability",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P7-T09",
+        "P7-T10",
+        "P7-T11",
+        "P7-T12"
+      ]
+    },
+    {
+      "phase": 7,
+      "category_code": "repeated_high_intensity_ability",
+      "name": "Repeated high-intensity ability",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P7-T13",
+        "P7-T14",
+        "P7-T15"
+      ]
+    },
+    {
+      "phase": 8,
+      "category_code": "local_muscular_endurance",
+      "name": "Local muscular endurance",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P8-T01",
+        "P8-T02",
+        "P8-T03",
+        "P8-T04"
+      ]
+    },
+    {
+      "phase": 8,
+      "category_code": "calf_soleus_capacity",
+      "name": "Calf–soleus capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P8-T05",
+        "P8-T06",
+        "P8-T07",
+        "P8-T08"
+      ]
+    },
+    {
+      "phase": 8,
+      "category_code": "hamstring_capacity",
+      "name": "Hamstring capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P8-T09",
+        "P8-T10",
+        "P8-T11"
+      ]
+    },
+    {
+      "phase": 8,
+      "category_code": "adductor_capacity",
+      "name": "Adductor capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P8-T12",
+        "P8-T13"
+      ]
+    },
+    {
+      "phase": 8,
+      "category_code": "shoulder_capacity",
+      "name": "Shoulder capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P8-T14",
+        "P8-T15"
+      ]
+    },
+    {
+      "phase": 8,
+      "category_code": "trunk_force_transfer",
+      "name": "Trunk force transfer",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P8-T16",
+        "P8-T17"
+      ]
+    },
+    {
+      "phase": 8,
+      "category_code": "neck_capacity",
+      "name": "Neck capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P8-T18"
+      ]
+    },
+    {
+      "phase": 8,
+      "category_code": "grip_capacity",
+      "name": "Grip capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P8-T17"
+      ]
+    },
+    {
+      "phase": 9,
+      "category_code": "performance_preparation",
+      "name": "Performance preparation",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P9-T01",
+        "P9-T02",
+        "P9-T03",
+        "P9-T04",
+        "P9-T05",
+        "P9-T06",
+        "P9-T07",
+        "P9-T08",
+        "P9-T09",
+        "P9-T10"
+      ]
+    },
+    {
+      "phase": 9,
+      "category_code": "mobility_range_capacity",
+      "name": "Mobility/range capacity",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P9-T11",
+        "P9-T12",
+        "P9-T13"
+      ]
+    },
+    {
+      "phase": 9,
+      "category_code": "recovery_management",
+      "name": "Recovery management",
+      "levels": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "source_template_ids": [
+        "P9-T14",
+        "P9-T15",
+        "P9-T16",
+        "P9-T17",
+        "P9-T18"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "status": "passed",
+  "report": {
+    "catalogue_rows": 238,
+    "existing_catalogue_methods_referenced": 147,
+    "required_extension_methods_referenced": 0,
+    "unresolved_method_references": [],
+    "categories": 39,
+    "templates": 112,
+    "four_week_records": 448,
+    "levels_per_category": 3,
+    "scenario_overlays": 24,
+    "unsupported_category_levels": 5,
+    "modality_guarded_templates": 23,
+    "level_violations": [],
+    "ineligible_method_references": [],
+    "dose_compatibility_violations": [],
+    "modality_violations": [],
+    "objective_violations": [],
+    "duplicate_method_lists": []
+  },
+  "unsupported_references": [
+    {
+      "category_code": "overcoming_isometric_force",
+      "athlete_level": "beginner",
+      "prerequisite_category": "yielding_isometric_force",
+      "reason": "Overcoming-isometric methods in the catalogue require intermediate supervision and setup competence."
+    },
+    {
+      "category_code": "lateral_power",
+      "athlete_level": "beginner",
+      "prerequisite_category": "lateral_elastic_strength",
+      "reason": "No approved beginner method has lateral power as its primary effect."
+    },
+    {
+      "category_code": "lateral_power",
+      "athlete_level": "intermediate",
+      "prerequisite_category": "lateral_elastic_strength",
+      "reason": "The approved primary lateral-power method is advanced; intermediate options train lateral elastic capacity instead."
+    },
+    {
+      "category_code": "rotational_power",
+      "athlete_level": "beginner",
+      "prerequisite_category": "trunk_force_transfer",
+      "reason": "No approved beginner method has rotational power as its primary effect."
+    },
+    {
+      "category_code": "speed_endurance",
+      "athlete_level": "beginner",
+      "prerequisite_category": "acceleration",
+      "reason": "Approved speed-endurance methods require at least intermediate high-speed exposure."
+    }
+  ]
+}

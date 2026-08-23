@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+
+GRAPH_DIR=/var/lib/runlete-valhalla
+mkdir -p "$GRAPH_DIR"
+
+docker run --rm \
+  -v "$GRAPH_DIR:/data" \
+  gcr.io/google.com/cloudsdktool/google-cloud-cli:slim \
+  gcloud storage cp "gs://${graph_bucket}/${graph_object}" /data/graph.tar.gz
+
+tar -xzf "$GRAPH_DIR/graph.tar.gz" -C "$GRAPH_DIR"
+rm -f "$GRAPH_DIR/graph.tar.gz"
+
+docker run -d \
+  --restart=always \
+  --name valhalla \
+  -p 8002:8002 \
+  -v "$GRAPH_DIR:/custom_files:ro" \
+  ghcr.io/gis-ops/docker-valhalla/valhalla:3.5.1

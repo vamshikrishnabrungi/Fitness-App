@@ -16,7 +16,6 @@ import { GlassCard } from '../../src/components/GlassCard';
 import { Badge } from '../../src/components/Badge';
 import { CircularProgress } from '../../src/components/CircularProgress';
 import { StrainCard } from '../../src/components/StrainCard';
-import { MorningCheckInModal } from '../../src/components/MorningCheckInModal';
 import { useAuthStore } from '../../src/store/authStore';
 import { api } from '../../src/utils/api';
 import { colors, typography, spacing, borderRadius } from '../../src/utils/theme';
@@ -42,17 +41,12 @@ interface TrainingLoadData {
 }
 
 interface NutritionData {
-  total_calories: number;
-  total_protein: number;
-  total_carbs: number;
-  total_fat: number;
-  total_fiber: number;
-  calorie_goal: number;
-  protein_goal: number;
-  carbs_goal: number;
-  fat_goal: number;
-  fiber_goal: number;
-  meals: any[];
+  calories_kcal: number;
+  protein_g: number;
+  carbohydrate_g: number;
+  fat_g: number;
+  fibre_g: number;
+  meals: { id: string; name: string; meal_type: string; eaten_at: string; calories_kcal: number; analysis_id?: string | null }[];
 }
 
 interface StrainData {
@@ -83,39 +77,19 @@ export default function HomeScreen() {
   const [nutrition, setNutrition] = useState<NutritionData | null>(null);
   const [runStats, setRunStats] = useState<any>(null);
   const [goals, setGoals] = useState<any[]>([]);
-  const [, setQuickLog] = useState<any>(null);
   const [strain, setStrain] = useState<StrainData | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [showMorningModal, setShowMorningModal] = useState(true); // TODO: Change back to false for production
-
-  const handleMorningCheckInComplete = (data: any) => {
-    setShowMorningModal(false);
-    const moodMap: Record<number, string> = {
-      0: 'very_low',
-      1: 'low',
-      2: 'neutral',
-      3: 'good',
-      4: 'great',
-    };
-    const payload = {
-      mood: moodMap[data.mood] || 'neutral',
-      sleep_quality: data.sleepQuality || 3,
-    };
-    api.post('/log/quick', payload).catch(() => { });
-    setQuickLog({ ...payload, logged: true, lastLogTime: new Date().toISOString() });
-  };
 
   const fetchData = async () => {
     try {
-      const [workoutRes, loadRes, nutritionRes, statsRes, goalsRes, quickLogRes, strainRes, lessonsRes] = await Promise.all([
-        api.get<Workout>('/workouts/today').catch(() => null),
+      const [workoutRes, loadRes, nutritionRes, statsRes, goalsRes, strainRes, lessonsRes] = await Promise.all([
+        api.get<Workout>('/training/sessions/today').catch(() => null),
         api.get<TrainingLoadData>('/training-load').catch(() => null),
-        api.get<NutritionData>('/meals/daily-summary').catch(() => null),
-        api.get<any>('/runs/stats').catch(() => null),
+        api.get<NutritionData>('/nutrition/daily-summary').catch(() => null),
+        api.get<any>('/activities/stats').catch(() => null),
         api.get<any[]>('/goals').catch(() => []),
-        api.get<any>('/log/quick/today').catch(() => null),
-        api.get<StrainData>('/health/strain').catch(() => null),
-        api.get<Lesson[]>('/lessons').catch(() => []),
+        Promise.resolve(null as StrainData | null),
+        Promise.resolve([] as Lesson[]),
       ]);
 
       if (workoutRes) setWorkout(workoutRes);
@@ -123,7 +97,6 @@ export default function HomeScreen() {
       if (nutritionRes) setNutrition(nutritionRes);
       if (statsRes) setRunStats(statsRes);
       if (goalsRes) setGoals(goalsRes);
-      setQuickLog(quickLogRes);
       setStrain(strainRes);
       setLessons(lessonsRes || []);
     } catch (error) {
@@ -149,33 +122,22 @@ export default function HomeScreen() {
   };
 
   // Calculate macro percentages - use real data only, no hardcoded fallbacks
-  const proteinPercent = nutrition?.protein_goal ? Math.round((nutrition.total_protein / nutrition.protein_goal) * 100) : 0;
-  const carbsPercent = nutrition?.carbs_goal ? Math.round((nutrition.total_carbs / nutrition.carbs_goal) * 100) : 0;
-  const fatPercent = nutrition?.fat_goal ? Math.round((nutrition.total_fat / nutrition.fat_goal) * 100) : 0;
-  const fibrePercent = nutrition?.fiber_goal ? Math.round((nutrition.total_fiber / nutrition.fiber_goal) * 100) : 0;
+  const proteinPercent = 0;
+  const carbsPercent = 0;
+  const fatPercent = 0;
+  const fibrePercent = 0;
   const hasRunStats = Boolean(
     runStats &&
     (
-      Number(runStats.total_distance) > 0 ||
-      runStats.average_pace ||
-      runStats.fatigue ||
-      runStats.consistency !== undefined ||
-      runStats.history?.length
+      Number(runStats.distance_km) > 0 || Number(runStats.activities) > 0
     )
   );
 
-  const defaultGoals = [
-    { id: 'default-weight', type: 'weight', current: 78, target: 75, unit: 'kg' },
-    { id: 'default-workout', type: 'workout', current: 3, target: 5, unit: 'days/week' },
-    { id: 'default-sleep', type: 'sleep', current: 7, target: 8, unit: 'hours' },
-    { id: 'default-water', type: 'water', current: 2, target: 3, unit: 'liters' },
-  ];
-  const goalsToDisplay = goals.length > 0 ? goals.slice(0, 4) : defaultGoals;
+  const goalsToDisplay = goals.slice(0, 4);
 
   const goalConfig: Record<string, { icon: string; bg: string; color: string; label: string }> = {
     weight: { icon: 'bar-chart-outline', bg: colors.goalWeight, color: colors.accentOrange, label: 'Weight' },
     workout: { icon: 'flame-outline', bg: colors.goalWorkout, color: colors.statusWarning, label: 'Workout' },
-    sleep: { icon: 'moon-outline', bg: colors.goalSleep, color: colors.accentBlue, label: 'Sleep' },
     water: { icon: 'water-outline', bg: colors.goalWater, color: colors.accentTeal, label: 'Water' },
   };
 
@@ -266,36 +228,22 @@ export default function HomeScreen() {
                       <Ionicons name="walk-outline" size={20} color={colors.textPrimary} />
                       <Text style={styles.activityName}>Run</Text>
                     </View>
-                    {runStats?.average_pace && (
-                      <Badge label={`Pace ${runStats.average_pace}`} variant="outline" size="sm" />
-                    )}
+                    <Badge label={`${runStats.activities} activities`} variant="outline" size="sm" />
                   </View>
                   <View style={styles.statsRow}>
                     <View style={styles.statItem}>
-                      <Text style={styles.statValue}>{runStats?.total_distance ?? '—'}</Text>
+                      <Text style={styles.statValue}>{Number(runStats?.distance_km || 0).toFixed(1)}</Text>
                       <Text style={styles.statLabel}>km</Text>
                     </View>
                     <View style={styles.statItem}>
-                      <Text style={styles.statValue}>{runStats?.fatigue ?? '—'}</Text>
-                      <Text style={styles.statLabel}>Fatigue</Text>
+                      <Text style={styles.statValue}>{Math.round(Number(runStats?.moving_minutes || 0))}</Text>
+                      <Text style={styles.statLabel}>Minutes</Text>
                     </View>
                     <View style={styles.statItem}>
-                      <Text style={styles.statValue}>
-                        {runStats?.consistency !== undefined ? `${runStats.consistency}%` : '—'}
-                      </Text>
-                      <Text style={styles.statLabel}>Consistency</Text>
+                      <Text style={styles.statValue}>{runStats?.activities ?? 0}</Text>
+                      <Text style={styles.statLabel}>Runs</Text>
                     </View>
                   </View>
-                  {runStats?.history?.length ? (
-                    <View style={styles.miniChart}>
-                      {runStats.history.map((point: any, i: number) => (
-                        <View
-                          key={i}
-                          style={[styles.chartBar, { height: Math.max(point.value * 4, 4), backgroundColor: colors.accentBlue }]}
-                        />
-                      ))}
-                    </View>
-                  ) : null}
                 </>
               ) : (
                 <View style={styles.emptyActivity}>
@@ -323,15 +271,10 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>Goals & Trackers</Text>
           <GlassCard style={styles.goalsCard}>
             {goalsToDisplay.map((goal, index) => {
-              const config = goalConfig[goal.type] || goalConfig.weight;
+              const config = goalConfig[goal.goal_type] || goalConfig.weight;
               return (
-                <TouchableOpacity
+                <View
                   key={goal.id || index}
-                  onPress={() => {
-                    if (goal.type === 'sleep') {
-                      router.push('/sleep');
-                    }
-                  }}
                   style={[
                     styles.goalRow,
                     index < goalsToDisplay.length - 1 && styles.goalSeparator,
@@ -346,19 +289,19 @@ export default function HomeScreen() {
                   </View>
                   <View style={styles.goalContent}>
                     <Text style={styles.goalTitle}>
-                      {config.label || goal.type?.charAt(0).toUpperCase() + goal.type?.slice(1)}
+                      {goal.name || config.label}
                     </Text>
                     <Text style={styles.goalValue}>
-                      {goal.current !== undefined
-                        ? `${goal.current} / ${goal.target} ${goal.unit}`
-                        : goal.type === 'sleep' ? 'Set Up Sleep Goal' : `Goal: ${goal.target} ${goal.unit}`
-                      }
+                      {`Target: ${goal.target}${goal.unit ? ` ${goal.unit}` : ''}`}
                     </Text>
                   </View>
                   <Ionicons name="add-circle-outline" size={24} color={colors.textTertiary} />
-                </TouchableOpacity>
+                </View>
               );
             })}
+            {!goalsToDisplay.length && (
+              <Text style={styles.activityNote}>No goals configured yet.</Text>
+            )}
           </GlassCard>
         </View>
 
@@ -378,7 +321,7 @@ export default function HomeScreen() {
               </View>
               <View style={styles.trackFoodContent}>
                 <Text style={styles.trackFoodTitle}>Track Food</Text>
-                <Text style={styles.trackFoodSubtitle}>Eat {nutrition?.calorie_goal || 0} Cal</Text>
+                <Text style={styles.trackFoodSubtitle}>{nutrition ? `${Math.round(nutrition.calories_kcal)} kcal logged today` : 'No meals logged today'}</Text>
               </View>
               <TouchableOpacity
                 style={styles.cameraButton}
@@ -434,20 +377,11 @@ export default function HomeScreen() {
             <View style={styles.calorieBalance}>
               <Text style={styles.calorieLabel}>Calorie Balance</Text>
               <Text style={styles.calorieValue}>
-                {nutrition?.total_calories || 0} / {nutrition?.calorie_goal || 0} kcal
+                {Math.round(nutrition?.calories_kcal || 0)} kcal logged
               </Text>
             </View>
 
             {/* Low Protein Alert - only show if we have nutrition data */}
-            {nutrition && (nutrition.total_protein || 0) < (nutrition.protein_goal || 1) * 0.5 && (
-              <View style={styles.nutritionAlert}>
-                <Ionicons name="bulb-outline" size={16} color={colors.accentOrange} />
-                <Text style={styles.alertText}>You are low on protein today.</Text>
-                <TouchableOpacity onPress={() => router.push('/nutrition')}>
-                  <Ionicons name="add-circle-outline" size={20} color={colors.textTertiary} />
-                </TouchableOpacity>
-              </View>
-            )}
           </GlassCard>
         </View>
 
@@ -458,26 +392,21 @@ export default function HomeScreen() {
             <GlassCard key={index} style={styles.mealLogCard}>
               <View style={styles.mealLogRow}>
                 <Text style={styles.mealLogTime}>
-                  {meal.meal_type === 'dinner' ? '08:00 PM' : '01:30 PM'}
+                  {new Date(meal.eaten_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </Text>
                 <View style={styles.mealLogContent}>
                   <View style={styles.mealLogHeader}>
                     <Ionicons name="restaurant-outline" size={16} color={colors.accentOrange} />
                     <Text style={styles.mealLogType}>
-                      {meal.meal_type?.charAt(0).toUpperCase() + meal.meal_type?.slice(1)}
+                      {meal.meal_type.charAt(0).toUpperCase() + meal.meal_type.slice(1)}
                     </Text>
-                    <Badge
-                      label={meal.status === 'Balanced' ? 'Balanced' : 'Low Protein'}
-                      variant={meal.status === 'Balanced' ? 'success' : 'warning'}
-                      size="sm"
-                    />
+                    {meal.analysis_id && <Badge label="AI estimate confirmed" variant="outline" size="sm" />}
                   </View>
                   <Text style={styles.mealLogCalories}>
-                    <Text style={styles.mealLogCaloriesValue}>{meal.calories || 411}</Text>
-                    {' '} / {nutrition?.calorie_goal || 775} Cal Eaten
+                    <Text style={styles.mealLogCaloriesValue}>{Math.round(meal.calories_kcal)}</Text> kcal
                   </Text>
                   <Text style={styles.mealLogFoods}>
-                    {meal.foods_identified?.join(' • ') || meal.name || 'Roti • Rice'}
+                    {meal.name}
                   </Text>
                 </View>
               </View>
@@ -526,13 +455,6 @@ export default function HomeScreen() {
 
         <View style={{ height: 40 }} />
       </ScrollView>
-
-      {/* Morning Check-in Modal */}
-      <MorningCheckInModal
-        visible={showMorningModal}
-        onClose={() => setShowMorningModal(false)}
-        onComplete={handleMorningCheckInComplete}
-      />
     </View>
   );
 }

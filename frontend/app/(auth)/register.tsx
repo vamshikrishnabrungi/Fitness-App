@@ -33,6 +33,7 @@ export default function RegisterScreen() {
   // Form fields
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
+  const [challengeId, setChallengeId] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
@@ -79,7 +80,8 @@ export default function RegisterScreen() {
       setError('');
       setLoading(true);
       try {
-        await api.post('/auth/request-otp', { email });
+        const result = await api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'register' });
+        setChallengeId(result.challenge_id);
         setStep('details');
         setResendTimer(30);
       } catch (err: any) {
@@ -125,7 +127,7 @@ export default function RegisterScreen() {
         day && month && year
           ? `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
           : undefined;
-      await register(email, password, `${firstName} ${lastName}`, code, {
+      await register(email, password, `${firstName} ${lastName}`, code, challengeId, {
         country: selectedCountry,
         date_of_birth: dob,
         marketing_opt_in: agreeToEmails,
@@ -141,7 +143,7 @@ export default function RegisterScreen() {
   const handleResendCode = () => {
     if (resendTimer === 0) {
       setResendTimer(30);
-      api.post('/auth/request-otp', { email }).catch(() => {});
+      api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'register' }).then(result => setChallengeId(result.challenge_id)).catch(() => {});
     }
   };
 
@@ -172,7 +174,7 @@ export default function RegisterScreen() {
           keyboardShouldPersistTaps="handled"
         >
           {/* Logo */}
-          <Text style={styles.logo}>SFTC</Text>
+          <Text style={styles.logo}>Runlete</Text>
 
           {step === 'email' ? (
             <>
@@ -205,7 +207,7 @@ export default function RegisterScreen() {
 
               {/* Terms */}
               <Text style={styles.termsText}>
-                By continuing, I agree to SFTC&apos;s{' '}
+                By continuing, I agree to Runlete&apos;s{' '}
                 <Text style={styles.link} onPress={() => router.push('/privacy-policy')}>
                   Privacy Policy
                 </Text>{' '}
@@ -227,7 +229,7 @@ export default function RegisterScreen() {
           ) : (
             <>
               {/* Details Step */}
-              <Text style={styles.title}>Now let&apos;s make you a SFTC Member.</Text>
+              <Text style={styles.title}>Now let&apos;s make you a Runlete Member.</Text>
 
               <Text style={styles.sentCodeText}>
                 We&apos;ve sent a code to{'\n'}
@@ -375,7 +377,7 @@ export default function RegisterScreen() {
                   />
                 </View>
               </View>
-              <Text style={styles.dobHint}>Get a SFTC Member Reward on your birthday.</Text>
+              <Text style={styles.dobHint}>Get a Runlete Member Reward on your birthday.</Text>
 
               {/* Checkboxes */}
               <TouchableOpacity
@@ -386,7 +388,7 @@ export default function RegisterScreen() {
                   {agreeToEmails && <Ionicons name="checkmark" size={14} color="#FFFFFF" />}
                 </View>
                 <Text style={styles.checkboxText}>
-                  Sign up for emails to get updates from SFTC on products, offers and your Member benefits.
+                  Sign up for emails to get updates from Runlete on products, offers and your Member benefits.
                 </Text>
               </TouchableOpacity>
 
@@ -398,7 +400,7 @@ export default function RegisterScreen() {
                   {agreeToTerms && <Ionicons name="checkmark" size={14} color="#FFFFFF" />}
                 </View>
                 <Text style={styles.checkboxText}>
-                  I agree to SFTC&apos;s{' '}
+                  I agree to Runlete&apos;s{' '}
                   <Text style={styles.link} onPress={() => router.push('/privacy-policy')}>
                     Privacy Policy
                   </Text>{' '}
