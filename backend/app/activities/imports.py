@@ -46,6 +46,7 @@ def _sample(latitude: Any, longitude: Any, timestamp: Any, **values: Any) -> Sam
         longitude=lon,
         timestamp=occurred,
         altitude=_float(values.get("altitude")),
+        barometric_altitude=_float(values.get("barometric_altitude")),
         speed=_float(values.get("speed")),
         heart_rate=int(float(values["heart_rate"])) if _float(values.get("heart_rate")) is not None else None,
         cadence=_float(values.get("cadence")),

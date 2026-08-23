@@ -66,6 +66,25 @@ plus a separate Admin Studio. Run clubs = the "competition" domain.
   ready to feed a Mapbox/MapLibre map.
 - Live run map (Mapbox in Expo) remains a FRONTEND follow-up; requires MAPBOX_PUBLIC_TOKEN.
 
+### 2026-08-23 (cont. 3) — Elevation pipeline upgrade (barometer/DEM + sustained-climb)
+- Reviewed an external "flip distance authority" analysis: its headline claim was WRONG
+  about this repo (device-smoothed GPS is already authoritative; map-matching is
+  territory-only; tolerance logic already prevents "numbers changed"). The one valid,
+  not-yet-done item was elevation — built it.
+- New `activities/elevation.py`: `sustained_elevation_gain` (forward-fill -> centred
+  moving-average smoothing -> hysteresis threshold, default 3 m) + source resolver
+  `resolve_elevation` with priority device_barometer -> dem_lookup -> gps_altitude ->
+  unavailable. `DemProvider` protocol with `NullDemProvider` and Open-Elevation/OpenTopoData
+  compatible `HttpDemProvider` (env `DEM_PROVIDER_URL`, graceful failure).
+- Wired into `activities/pipeline.py` (`_replace_metrics` now sets real `elevation_gain_m`
+  + `elevation_source`); replaced the naive per-sample >=1 m GPS summation in
+  `process_samples`; added `barometric_altitude` to `Sample` and all decoders
+  (imports.py, worker_router.py, cleaned-store `_sample_dict`); added `dem_provider_url`
+  to config.
+- Verified (`backend/dev_elevation_check.py`): flat road + GPS noise -> old naive reported
+  80 m fake climb, new sustained = 0 m; real ~50 m hill -> 44 m (conservative); barometer
+  and DEM sources chosen correctly; GPS fallback works. Backend healthy.
+
 ## Key findings (see RUNCLUB_ANALYSIS.md for detail)
 - F1 (P0): async projection worker not running locally → club feed/notifications/
   leaderboards/achievements empty until outbox is drained. Domain logic is correct

@@ -81,7 +81,7 @@ async def process_activity(session: AsyncSession, activity_id: UUID, *, force: b
     chunks = (await session.scalars(select(UploadChunk).where(UploadChunk.activity_id == row.id).order_by(UploadChunk.chunk_number))).all()
     try:
         raw = await _load_chunks(chunks)
-        samples = [Sample(latitude=float(x["latitude"]), longitude=float(x["longitude"]), timestamp=datetime.fromisoformat(str(x["timestamp"]).replace("Z", "+00:00")), accuracy=x.get("accuracy"), altitude=x.get("altitude"), speed=x.get("speed"), heart_rate=x.get("heart_rate"), cadence=x.get("cadence"), smoothed_latitude=x.get("smoothed_latitude"), smoothed_longitude=x.get("smoothed_longitude")) for x in raw]
+        samples = [Sample(latitude=float(x["latitude"]), longitude=float(x["longitude"]), timestamp=datetime.fromisoformat(str(x["timestamp"]).replace("Z", "+00:00")), accuracy=x.get("accuracy"), altitude=x.get("altitude"), barometric_altitude=x.get("barometric_altitude"), speed=x.get("speed"), heart_rate=x.get("heart_rate"), cadence=x.get("cadence"), smoothed_latitude=x.get("smoothed_latitude"), smoothed_longitude=x.get("smoothed_longitude")) for x in raw]
         crop = await session.scalar(
             select(ActivityEdit)
             .where(ActivityEdit.activity_id == row.id, ActivityEdit.edit_type == "crop")

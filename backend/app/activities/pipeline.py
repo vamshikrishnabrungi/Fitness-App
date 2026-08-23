@@ -3,7 +3,6 @@ from __future__ import annotations
 import gzip
 import hashlib
 import json
-from datetime import datetime, timezone
 from uuid import UUID
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -14,7 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.app.athletes.models import AthleteProfile
 from backend.app.competition.models import Club
 from backend.app.core.config import get_settings
-from backend.app.maps.models import MatchedEdgeTraversal, OSMGraphVersion, StreetEdge
+from backend.app.maps.models import MatchedEdgeTraversal, StreetEdge
 from backend.app.maps.regions import UnsupportedMapRegion, valhalla_url_for_point
 from backend.app.maps.privacy import hidden_zones_for_athlete, redact_start_and_end
 from backend.app.maps.valhalla import MapMatchError, MatchResult, MatchedWay, match_trace
@@ -30,6 +29,7 @@ from .models import (
     ActivityStreamObject,
     BestEffort,
 )
+from .elevation import get_dem_provider, resolve_elevation
 from .processing import Sample, best_efforts, calories_for_run, haversine_m, kilometre_splits, process_samples
 
 COMPUTATION_VERSION = "activity-v3-device-smoothed-authority"
@@ -45,6 +45,7 @@ def _sample_dict(sample: Sample) -> dict:
         "timestamp": sample.timestamp.isoformat(),
         "accuracy": sample.accuracy,
         "altitude": sample.altitude,
+        "barometric_altitude": sample.barometric_altitude,
         "speed": sample.speed,
         "heart_rate": sample.heart_rate,
         "cadence": sample.cadence,
@@ -189,8 +190,14 @@ async def _replace_metrics(session: AsyncSession, activity: Activity, raw_sample
     activity.distance_m = result.distance_m
     activity.distance_m = result_distance
     activity.distance_source = "device_smoothed_gps"
-    activity.elevation_source = "device_barometer_or_dem_pending"
-    activity.elevation_gain_m = result.elevation_gain_m
+    elevation_gain_m, elevation_source = await resolve_elevation(
+        barometric=[sample.barometric_altitude for sample in result.samples],
+        coordinates=[(sample.latitude, sample.longitude) for sample in result.samples],
+        gps_gain_m=result.elevation_gain_m if any(sample.altitude is not None for sample in result.samples) else None,
+        provider=get_dem_provider(),
+    )
+    activity.elevation_source = elevation_source
+    activity.elevation_gain_m = elevation_gain_m
     activity.average_pace_s_per_km = (
         result.moving_seconds / (result_distance / 1000)
         if result_distance > 0 and result.moving_seconds > 0 else None

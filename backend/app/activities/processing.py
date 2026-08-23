@@ -4,6 +4,8 @@ import math
 from dataclasses import dataclass
 from datetime import datetime
 
+from .elevation import sustained_elevation_gain
+
 
 @dataclass(frozen=True)
 class Sample:
@@ -15,6 +17,9 @@ class Sample:
     speed: float | None = None
     heart_rate: int | None = None
     cadence: float | None = None
+    # Device barometer altitude, when the phone/watch exposes it. Preferred
+    # over GPS altitude and DEM for elevation gain.
+    barometric_altitude: float | None = None
     # Device-provided smoothed coordinates are retained separately from the
     # raw fix. They are the authoritative live-stat source when present.
     smoothed_latitude: float | None = None
@@ -89,6 +94,7 @@ def smooth_samples(rows: list[Sample]) -> tuple[list[Sample], list[str]]:
             speed=row.speed,
             heart_rate=row.heart_rate,
             cadence=row.cadence,
+            barometric_altitude=row.barometric_altitude,
             smoothed_latitude=lat,
             smoothed_longitude=lon,
         ))
@@ -109,6 +115,7 @@ def metric_sample(sample: Sample) -> Sample:
         speed=sample.speed,
         heart_rate=sample.heart_rate,
         cadence=sample.cadence,
+        barometric_altitude=sample.barometric_altitude,
         smoothed_latitude=sample.smoothed_latitude,
         smoothed_longitude=sample.smoothed_longitude,
     )
@@ -144,15 +151,13 @@ def process_samples(rows: list[Sample]) -> ProcessedActivity:
     reasons.extend(smoothing_reasons)
     if len(samples) < 2: raise ValueError("activity requires at least two usable GPS samples")
     elapsed = max(0, int((samples[-1].timestamp - samples[0].timestamp).total_seconds()))
-    distance = 0.0; moving = 0.0; elevation_gain = 0.0
+    distance = 0.0; moving = 0.0
     metric_samples = [metric_sample(sample) for sample in samples]
     for previous, current in zip(metric_samples, metric_samples[1:]):
         dt = (current.timestamp - previous.timestamp).total_seconds(); segment = haversine_m(previous, current); speed = segment / dt if dt else 0
         distance += segment
         if speed >= .5 and dt <= 120: moving += dt
-        if previous.altitude is not None and current.altitude is not None:
-            rise = current.altitude - previous.altitude
-            if rise >= 1.0: elevation_gain += rise
+    elevation_gain = sustained_elevation_gain([sample.altitude for sample in samples])
     accuracy_values = [row.accuracy for row in samples if row.accuracy is not None]
     accuracy_component = max(0.0, 1 - ((sum(accuracy_values) / len(accuracy_values)) / 100)) if accuracy_values else .5
     retention_component = len(samples) / max(1, len(rows))

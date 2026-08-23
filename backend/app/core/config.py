@@ -64,6 +64,7 @@ class Settings:
     openai_workout_model: str
     openai_food_model: str
     mapbox_public_token: str
+    dem_provider_url: str
     valhalla_url: str
     valhalla_urls: tuple[tuple[str, str], ...]
     resend_api_key: str
@@ -131,6 +132,7 @@ def get_settings() -> Settings:
         openai_workout_model=os.getenv("OPENAI_WORKOUT_MODEL", "gpt-4o"),
         openai_food_model=os.getenv("OPENAI_FOOD_MODEL", "gpt-4o"),
         mapbox_public_token=os.getenv("MAPBOX_PUBLIC_TOKEN", ""),
+        dem_provider_url=os.getenv("DEM_PROVIDER_URL", ""),
         valhalla_url=os.getenv("VALHALLA_URL", "http://localhost:8002"),
         valhalla_urls=_url_map("VALHALLA_URLS_JSON"),
         resend_api_key=os.getenv("RESEND_API_KEY", ""),
