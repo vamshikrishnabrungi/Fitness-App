@@ -169,7 +169,7 @@ async def project_activity_territory(session: AsyncSession, activity_id: UUID) -
                 TerritoryScore.athlete_id == activity.athlete_id,
                 TerritoryScore.local_date == traversal.local_date,
             )
-            .with_for_update()
+            .with_for_update(of=TerritoryScore)
             )
         ).first()
         score = score_row[0] if score_row else None

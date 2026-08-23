@@ -32,6 +32,22 @@ plus a separate Admin Studio. Run clubs = the "competition" domain.
   lifecycle end-to-end (create/discover/join/members/challenge/invite/primary/feed).
 - Delivered full analysis + recommendations in `/app/RUNCLUB_ANALYSIS.md`.
 
+### 2026-08-23 (cont.) — Territory-first work (backend)
+- Product decisions locked: street-based territory (not circles); NO minimum claim
+  distance; leaderboard scopes wanted = solo/global, city, city-vs-city, country-vs-country,
+  city club ranking; run city/country derived from GPS location; keep territory rules as-is;
+  live-map Strava accuracy stays out of scope (frontend + Mapbox).
+- Removed the hard 2.5 km territory min-distance gate in `activities/pipeline.py`
+  `_replace_matches` (coverage/confidence/anti-cheat gates retained).
+- **Fixed a real production bug (F7)** in `competition/projection.py`
+  `project_activity_territory`: `SELECT ... FOR UPDATE` over a LEFT OUTER JOIN to
+  `matched_edge_traversals` → Postgres "FOR UPDATE cannot be applied to the nullable side
+  of an outer join". Changed to `.with_for_update(of=TerritoryScore)`. This bug broke
+  territory projection for ANY qualifying run on real Postgres.
+- Built `backend/dev_territory_harness.py`: seeds synthetic OSM region + street edges +
+  matched traversals and drives the real engine. Verified claim → defend → takeover →
+  decay → expire at both athlete and club level with correct decay math.
+
 ## Key findings (see RUNCLUB_ANALYSIS.md for detail)
 - F1 (P0): async projection worker not running locally → club feed/notifications/
   leaderboards/achievements empty until outbox is drained. Domain logic is correct

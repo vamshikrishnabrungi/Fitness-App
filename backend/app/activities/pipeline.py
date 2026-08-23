@@ -318,8 +318,7 @@ async def _replace_matches(session: AsyncSession, activity: Activity, samples: t
     if user and user.birth_date:
         age = today.year - user.birth_date.year - ((today.month, today.day) < (user.birth_date.month, user.birth_date.day))
     activity_passes = (
-        float(activity.distance_m or 0) >= 2500
-        and float(quality.gps_score) >= 0.75
+        float(quality.gps_score) >= 0.75
         and quality.speed_status == "passed"
         and quality.vehicle_status == "passed"
         and match.confidence >= 0.85
@@ -354,8 +353,6 @@ async def _replace_matches(session: AsyncSession, activity: Activity, samples: t
                 qualified_edges.append(edge.id)
     quality.territory_eligible = bool(qualified_edges)
     if not activity_passes:
-        if float(activity.distance_m or 0) < 2500:
-            quality.reasons = sorted(set(quality.reasons + ["territory_minimum_distance_not_met"]))
         if match.confidence < 0.85:
             quality.reasons = sorted(set(quality.reasons + ["matcher_confidence_below_threshold"]))
         if activity.visibility == "private":
