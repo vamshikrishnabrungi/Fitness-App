@@ -1,25 +1,23 @@
-# Test credentials
+# Test Credentials (dev environment)
 
-Backend e2e flow uses OTP-based registration. Codes are stored in the
-`otps` collection (10 min TTL) and logged to backend stdout.
+The Runlete API uses passwordless (OTP/JWT) auth. For local backend testing, mint
+JWTs directly instead of using passwords.
 
-Workflow for creating a test user:
-1. `POST /api/auth/request-otp { "email": "<email>" }`
-2. Read the latest OTP from MongoDB: `db.otps.find({email:'<email>'}).sort({created_at:-1}).limit(1)`
-   (or scrape it from `/var/log/supervisor/backend.out.log`).
-3. `POST /api/auth/register { email, password, name, otp_code }` → returns `access_token`.
+## Mint athlete tokens
+```
+cd /app && python backend/dev_seed_clubs.py
+```
+Seeds two athletes (idempotent) and prints 15-min access tokens:
+- owner@test.dev  → display "Owner Runner"
+- member@test.dev → display "Member Runner"
 
-## Long-lived demo accounts (created during integration testing)
+Use as `Authorization: Bearer <TOKEN>`. All mutations need an `Idempotency-Key` header.
 
-| Purpose | Email pattern | Password |
-| --- | --- | --- |
-| Primary onboarding subject | `alex+<ts>@example.com` | `Pass1234!` |
-| Rival runner (territory takeover) | `rival+<ts>@example.com` | `Pass1234!` |
+## Admin Studio (open access in dev)
+`ADMIN_STUDIO_OPEN_ACCESS=true` → `/api/v1/admin/*` and `/api/v1/moderation/admin*`
+require NO token in dev (auto local admin `0198f000-0000-7000-8000-000000000001`).
 
-Both follow the OTP flow above. Replace `<ts>` with a fresh unix timestamp to
-avoid hitting the unique-email constraint.
-
-## API key
-
-`EMERGENT_LLM_KEY=sk-emergent-41d0274F218D055Ad9` (in `/app/backend/.env`)
-Powers Claude Sonnet 4.5 calls through `emergentintegrations`.
+## Services
+- API:      http://localhost:8001  (supervisor: backend)
+- Postgres: postgresql+asyncpg://runlete:runlete@localhost:5432/runlete (supervisor: postgresql)
+- Redis:    redis://localhost:6379/0 (supervisor: redis)

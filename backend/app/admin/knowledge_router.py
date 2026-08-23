@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+import json
 from datetime import datetime, timezone
 from uuid import UUID
 
@@ -1063,7 +1064,7 @@ async def replace_phases(archetype_id: UUID, content_version: int, body: list[Ph
 @router.post("/weeks", status_code=201)
 async def create_week(body: WeekTemplateDraft, actor: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> dict:
     if body.sessions_minimum > body.sessions_maximum or body.hard_session_maximum > body.sessions_maximum: raise ProblemError(422,"week_bounds_invalid","Invalid week bounds","Session and hard-session bounds are inconsistent.")
-    found=set((await session.scalars(select(Recipe.id).where(Recipe.id.in_(body.recipe_ids)))).all());
+    found=set((await session.scalars(select(Recipe.id).where(Recipe.id.in_(body.recipe_ids)))).all())
     if found != set(body.recipe_ids): raise ProblemError(422,"recipe_missing","Recipe missing","One or more week recipes do not exist.")
     values=body.model_dump(exclude={"recipe_ids"}); row=WeekTemplate(**values,status="draft"); session.add(row); await session.flush(); session.add_all(WeekTemplateSession(week_template_id=row.id,sequence=index,recipe_id=recipe_id,required=True) for index,recipe_id in enumerate(body.recipe_ids,1)); await _audit(session,actor,"knowledge.week_template.created","week_template",row.id,after=body.model_dump(mode="json")); await session.commit(); return {**model_dict(row),"recipe_ids":body.recipe_ids}
 

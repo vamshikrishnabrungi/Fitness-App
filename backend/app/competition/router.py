@@ -268,7 +268,7 @@ async def create_invitation(club_id: UUID, body: InvitationCreate, idempotency_k
 async def revoke_invitation(club_id:UUID,invitation_id:UUID,idempotency_key:str=Header(alias="Idempotency-Key"),user_id:UUID=Depends(current_user_id),session:AsyncSession=Depends(get_session))->None:
     from datetime import datetime,timezone
     from .policies import require_club_role
-    actor=await athlete_id(session,user_id);await require_club_role(session,club_id,actor,{"owner","admin"});row=await session.scalar(select(ClubInvitation).where(ClubInvitation.id==invitation_id,ClubInvitation.club_id==club_id).with_for_update());
+    actor=await athlete_id(session,user_id);await require_club_role(session,club_id,actor,{"owner","admin"});row=await session.scalar(select(ClubInvitation).where(ClubInvitation.id==invitation_id,ClubInvitation.club_id==club_id).with_for_update())
     if row:row.revoked_at=datetime.now(timezone.utc);await session.commit()
 
 

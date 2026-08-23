@@ -140,7 +140,9 @@ async def cells_in_bbox(
 async def club_cells(db: Any, member_ids: Sequence[str]) -> List[Dict[str, Any]]:
     if not member_ids:
         return []
-    return await db.territory_cells.find({'owner_id': {'$in': list(member_ids)}}).to_list(40000)
+    return await db.territory_cells.find(
+        {'owner_id': {'$in': list(member_ids)}}, {'_id': 0}
+    ).to_list(40000)
 
 
 def cells_to_feature_collection(

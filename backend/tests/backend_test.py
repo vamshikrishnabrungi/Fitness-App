@@ -25,7 +25,7 @@ from pymongo import MongoClient
 BASE_URL = (
     os.environ.get("REACT_APP_BACKEND_URL")
     or os.environ.get("EXPO_PUBLIC_BACKEND_URL")
-    or "https://4dab4e2c-2afb-4ed4-8bd5-9ad84ac0fbd8.preview.emergentagent.com"
+    or "https://run-club-build.preview.emergentagent.com"
 ).rstrip("/")
 MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.environ.get("DB_NAME", "sftc_database")
