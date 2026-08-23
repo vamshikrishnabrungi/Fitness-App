@@ -26,6 +26,7 @@ interface Member {
 interface Club {
   id: string;
   name: string;
+  emoji: string;
   membership_role: 'owner' | 'admin';
   version: number;
 }
@@ -42,6 +43,8 @@ const mutationKey = (name: string) => ({
   'Idempotency-Key': `${name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
 });
 
+const CLUB_EMOJIS = ['🏃', '🔥', '⚡', '🏔️', '🌅', '🐺', '🦅', '🚀', '💨', '🏆'];
+
 export default function ClubAdminScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -52,6 +55,7 @@ export default function ClubAdminScreen() {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState<string | null>(null);
+  const [emojiSaving, setEmojiSaving] = useState(false);
 
   const load = useCallback(async () => {
     if (!id) return;
@@ -248,6 +252,23 @@ export default function ClubAdminScreen() {
     ]);
   };
 
+  const saveEmoji = async (next: string) => {
+    if (!club || next === club.emoji) return;
+    setEmojiSaving(true);
+    try {
+      await api.put(
+        `/clubs/${club.id}`,
+        { emoji: next, expected_version: club.version },
+        mutationKey('club-emoji'),
+      );
+      await load();
+    } catch (reason) {
+      Alert.alert('Emoji not updated', reason instanceof Error ? reason.message : 'Please try again.');
+    } finally {
+      setEmojiSaving(false);
+    }
+  };
+
   if (loading || !club) {
     return (
       <SafeAreaView style={styles.loading}>
@@ -273,6 +294,31 @@ export default function ClubAdminScreen() {
           <Text style={styles.noticeText}>
             Membership, role, removal, ownership, and competition changes are written to the audit log.
           </Text>
+        </View>
+
+        <Text style={styles.sectionTitle}>Club emoji</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 22 }}>
+          {CLUB_EMOJIS.map((item) => (
+            <TouchableOpacity
+              key={item}
+              disabled={emojiSaving}
+              accessibilityLabel={`Set club emoji ${item}`}
+              onPress={() => saveEmoji(item)}
+              style={{
+                width: 46,
+                height: 46,
+                borderRadius: 14,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 1.5,
+                borderColor: club.emoji === item ? colors.brand : colors.separator,
+                backgroundColor: club.emoji === item ? '#FFF0EA' : colors.surface,
+                opacity: emojiSaving && club.emoji !== item ? 0.5 : 1,
+              }}
+            >
+              <Text style={{ fontSize: 22 }}>{item}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
         <Text style={styles.sectionTitle}>Invitation links</Text>

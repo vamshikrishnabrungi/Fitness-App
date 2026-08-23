@@ -127,6 +127,14 @@ export default function RunScreen() {
             <Ionicons name="shield-checkmark-outline" size={19} color={colors.textPrimary} />
           </TouchableOpacity>
           <TouchableOpacity
+            accessibilityLabel="Leaderboards"
+            style={styles.iconButton}
+            onPress={() => router.push('/run/leaderboards' as any)}
+            testID="open-leaderboards"
+          >
+            <Ionicons name="trophy-outline" size={19} color={colors.textPrimary} />
+          </TouchableOpacity>
+          <TouchableOpacity
             accessibilityLabel="Notifications"
             style={styles.iconButton}
             onPress={() => router.push('/run/notifications' as any)}

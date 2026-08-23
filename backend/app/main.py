@@ -22,6 +22,7 @@ from backend.app.admin.router import router as admin_router
 from backend.app.maps.router import router as maps_router
 from backend.app.notifications.router import router as notifications_router
 from backend.app.competition.public_router import router as competition_router
+from backend.app.competition.leaderboards_router import router as leaderboards_router
 from backend.app.athletes.goals_router import router as goals_router
 from backend.app.competition.territory_router import router as territory_router
 from backend.app.athletes.analytics_router import router as analytics_router
@@ -76,7 +77,7 @@ async def publish_committed_outbox(request: Request, call_next):
 async def healthz() -> dict[str, str]: return {"status": "ok"}
 
 
-for router in (identity_router, privacy_router, athletes_router, analytics_router, goals_router, training_router, imports_router, activities_router, clubs_router, invitation_router, competition_router, territory_router, nutrition_router, health_router, maps_router, safety_router, notifications_router, moderation_router, admin_router):
+for router in (identity_router, privacy_router, athletes_router, analytics_router, goals_router, training_router, imports_router, activities_router, clubs_router, invitation_router, competition_router, leaderboards_router, territory_router, nutrition_router, health_router, maps_router, safety_router, notifications_router, moderation_router, admin_router):
     app.include_router(router, prefix="/api/v1")
 app.include_router(worker_router)
 

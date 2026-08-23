@@ -261,7 +261,7 @@ async def _project_activity(session: AsyncSession, event: OutboxEvent) -> None:
             source_event_id=event.id,
             club_id=club_id,
             athlete_id=activity.athlete_id,
-            event_type=f"territory_{str(club_id)[:8]}",
+            event_type=f"territory_{club_id.hex[:30]}",
             visibility="club",
             payload={"activity_id": str(activity.id), **counts},
             occurred_at=datetime.now(timezone.utc),
@@ -277,6 +277,54 @@ async def _project_activity(session: AsyncSession, event: OutboxEvent) -> None:
             body=f"Your run claimed {own_counts['claimed']} and defended {own_counts['defended']} road edges for your club.",
             payload={"activity_id": str(activity.id), "club_id": str(attribution.club_id), **own_counts},
         )
+
+    # Takeover alerts: notify every athlete who *lost* streets to this run so
+    # they come back to defend. Athlete-level "loss" rows name the prior owner.
+    lost_rows: list[TerritoryControlHistory] = []
+    with session.no_autoflush:
+        lost_rows = (
+            await session.scalars(
+                select(TerritoryControlHistory).where(
+                    TerritoryControlHistory.reason_activity_id == activity.id,
+                    TerritoryControlHistory.controller_type == "athlete",
+                    TerritoryControlHistory.event_type == "loss",
+                )
+            )
+        ).all()
+    losers: dict[UUID, int] = defaultdict(int)
+    for history in lost_rows:
+        if history.previous_controller_id and history.previous_controller_id != activity.athlete_id:
+            losers[history.previous_controller_id] += 1
+    if losers:
+        taker = athlete_user.display_name if athlete_user else "A rival runner"
+        with session.no_autoflush:
+            loser_users = dict(
+                (
+                    await session.execute(
+                        select(AthleteProfile.id, AthleteProfile.user_id).where(
+                            AthleteProfile.id.in_(list(losers.keys()))
+                        )
+                    )
+                ).all()
+            )
+        for athlete_lost, count in losers.items():
+            recipient = loser_users.get(athlete_lost)
+            if not recipient:
+                continue
+            plural = "streets" if count != 1 else "street"
+            await _add_notification(
+                session,
+                source_event_id=event.id,
+                recipient_user_id=recipient,
+                notification_type="territory_taken",
+                title="You lost ground",
+                body=f"{taker} captured {count} of your {plural}. Run them again to take the territory back.",
+                payload={
+                    "activity_id": str(activity.id),
+                    "edges_lost": count,
+                    "by_athlete_id": str(activity.athlete_id),
+                },
+            )
 
 
 async def _project_club_event(session: AsyncSession, event: OutboxEvent) -> None:

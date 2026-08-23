@@ -587,7 +587,9 @@ export default function ClubDetailScreen() {
                     <View style={styles.eventDot} />
                     <View style={{ flex: 1 }}>
                       <Text style={styles.eventTitle}>
-                        {event.event_type.replaceAll('_', ' ')}
+                        {event.event_type.startsWith('territory_')
+                          ? `Territory update${typeof event.payload?.claimed === 'number' ? ` · +${event.payload.claimed} claimed, ${event.payload.defended ?? 0} defended` : ''}`
+                          : event.event_type.replaceAll('_', ' ')}
                       </Text>
                       <Text style={styles.eventTime}>
                         {new Date(event.occurred_at).toLocaleString()}

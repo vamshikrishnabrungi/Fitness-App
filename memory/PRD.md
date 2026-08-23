@@ -106,6 +106,29 @@ plus a separate Admin Studio. Run clubs = the "competition" domain.
 - NOT built (both layers): the NEW leaderboard scopes (solo/global, city, city-vs-city,
   country-vs-country, city club ranking) — needs backend region-hierarchy endpoints first.
 
+### 2026-08-23 (cont. 5) — City/Country boards + Takeover alerts + Emoji edit
+- NEW leaderboards API `backend/app/competition/leaderboards_router.py` (registered in main.py):
+  `/leaderboards/global` (solo/global athletes), `/leaderboards/regions/{id}?subject=athlete|club`
+  (city top athletes / clubs), `/leaderboards/cities` (city-vs-city), `/leaderboards/countries`
+  (country-vs-country). Live SUM aggregations over leaderboard_facts with tie-aware ranking +
+  `is_me`. Verified with seeded facts: Monaco 73k vs Nice 38k; MC vs FR; city athletes/clubs.
+- NEW UI `frontend/app/run/leaderboards.tsx` (scope tabs Solo/City-vs-City/Country, metric+period
+  chips, tap a city to drill into its runners/clubs) + trophy entry point in the run hub.
+- Takeover alerts: `event_projection` now notifies every athlete who LOST streets to a run
+  (`territory_taken` -> "You lost ground..."). Verified end-to-end via harness+drain.
+- Club emoji edit: emoji picker card added to admin screen (PUT /clubs/{id} with version).
+- Bugs fixed while building/testing:
+  * leaderboard `_base` used raw params instead of resolved metric/period -> cities/countries
+    always empty. Fixed to `_base(m, p)`.
+  * `system_activity_events.event_type = territory_{club_id[:8]}` collided on
+    UNIQUE(source_event_id, event_type) for same-ms uuid7 clubs (Alpha/Beta) -> drain crashed.
+    Fixed to `territory_{club_id.hex[:30]}` (fits String(40); dedup still via deduplication_key).
+    Frontend renders a friendly "Territory update · +N claimed" label.
+- Frontend typecheck: still only the 1 pre-existing unrelated `/(tabs)/sport` error.
+- Reminder: LeaderboardFact.region_id is currently set from the athlete profile region, not
+  per-run GPS; city/country boards are correct but will only reflect GPS once region resolution
+  populates facts from the run location.
+
 ## Key findings (see RUNCLUB_ANALYSIS.md for detail)
 - F1 (P0): async projection worker not running locally → club feed/notifications/
   leaderboards/achievements empty until outbox is drained. Domain logic is correct
