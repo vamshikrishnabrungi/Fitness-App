@@ -14,6 +14,7 @@ class ClubCreate(BaseModel):
     timezone: str = "UTC"
     primary_color: str = Field(default="#FF5533", pattern="^#[0-9A-Fa-f]{6}$")
     secondary_color: str = Field(default="#111827", pattern="^#[0-9A-Fa-f]{6}$")
+    emoji: str = Field(default="🏃", min_length=1, max_length=16)
     rules: str = Field(default="", max_length=10000)
 
 
@@ -27,6 +28,7 @@ class ClubView(BaseModel):
     timezone: str
     primary_color: str
     secondary_color: str
+    emoji: str
     status: str
     membership_status: str | None
     membership_role: str | None
@@ -53,6 +55,7 @@ class ClubUpdate(BaseModel):
     timezone: str | None = Field(default=None, min_length=1, max_length=64)
     primary_color: str | None = Field(default=None, pattern="^#[0-9A-Fa-f]{6}$")
     secondary_color: str | None = Field(default=None, pattern="^#[0-9A-Fa-f]{6}$")
+    emoji: str | None = Field(default=None, min_length=1, max_length=16)
     rules: str | None = Field(default=None, max_length=10000)
     expected_version: int = Field(ge=1)
 

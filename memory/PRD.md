@@ -85,6 +85,27 @@ plus a separate Admin Studio. Run clubs = the "competition" domain.
   80 m fake climb, new sustained = 0 m; real ~50 m hill -> 44 m (conservative); barometer
   and DEM sources chosen correctly; GPS fallback works. Backend healthy.
 
+### 2026-08-23 (cont. 4) — Run club FRONTEND verified + emoji wiring completed
+- Frontend is Expo Router (RN + TS) with a mature Nike-style theme; run-club screens
+  already fully built: clubs list/discovery/search, create, detail with 7 tabs
+  (overview/leaderboard/territory/challenges/races/activity/members), join/primary/
+  challenge+race join, invitation accept, admin, moderation, notifications, plus
+  Mapbox territory/live-run/route map components.
+- Verified the full frontend<->backend CONTRACT against the live API: every screen's
+  reads match the responses (items-wrapping, challenge `metric`+`progress`+`is_joined`,
+  members `athlete.name`, activity `event_type/occurred_at/payload`, leaderboard rows
+  include `is_me` injected by the router, `/challenges|races/{id}/join` work).
+- Fixed the one genuine gap: club `emoji` was picked in the create UI but never sent or
+  stored. Wired end-to-end: Club model column + migration `20260823_08`, ClubCreate/
+  ClubUpdate/ClubView, service view, create.tsx payload; regenerated `src/api/generated.ts`
+  from live OpenAPI. Verified round-trip (create with 🔥 -> persisted -> returned).
+- Frontend typecheck: only 1 error project-wide and it is PRE-EXISTING/unrelated
+  (`/(tabs)/sport` route in home tab). Run-club screens + emoji change are type-clean.
+- Set `frontend/.env` with placeholders: EXPO_PUBLIC_BACKEND_URL (empty -> relative
+  /api/v1 via ingress on web) and EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN (placeholder).
+- NOT built (both layers): the NEW leaderboard scopes (solo/global, city, city-vs-city,
+  country-vs-country, city club ranking) — needs backend region-hierarchy endpoints first.
+
 ## Key findings (see RUNCLUB_ANALYSIS.md for detail)
 - F1 (P0): async projection worker not running locally → club feed/notifications/
   leaderboards/achievements empty until outbox is drained. Domain logic is correct

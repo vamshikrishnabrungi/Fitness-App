@@ -32,7 +32,7 @@ async def club_view(session: AsyncSession, club: Club, athlete_id: UUID) -> Club
             ClubMembership.status == "active",
         )
     )
-    return ClubView(id=club.id, name=club.name, slug=club.slug, description=club.description, rules=club.rules, visibility=club.visibility, timezone=club.timezone, primary_color=club.primary_color, secondary_color=club.secondary_color, status=club.status, membership_status=membership.status if membership else None, membership_role=membership.role if membership else None, is_primary=bool(competitive and competitive.primary_club_id == club.id), member_count=int(member_count or 0), competitive_profile_version=competitive.version if competitive else 1, version=club.version)
+    return ClubView(id=club.id, name=club.name, slug=club.slug, description=club.description, rules=club.rules, visibility=club.visibility, timezone=club.timezone, primary_color=club.primary_color, secondary_color=club.secondary_color, emoji=club.emoji, status=club.status, membership_status=membership.status if membership else None, membership_role=membership.role if membership else None, is_primary=bool(competitive and competitive.primary_club_id == club.id), member_count=int(member_count or 0), competitive_profile_version=competitive.version if competitive else 1, version=club.version)
 
 
 async def create_club(session: AsyncSession, user_id: UUID, body: ClubCreate) -> ClubView:

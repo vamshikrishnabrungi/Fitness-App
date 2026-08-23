@@ -3541,6 +3541,16 @@ export interface components {
             source: string;
             /** Sport Type */
             sport_type: string;
+            /** Surface */
+            surface: string;
+            /** Distance Source */
+            distance_source: string;
+            /** Device Distance M */
+            device_distance_m: number | null;
+            /** Server Confirmation Delta M */
+            server_confirmation_delta_m: number | null;
+            /** Elevation Source */
+            elevation_source: string | null;
             /** Status */
             status: string;
             /** Visibility */
@@ -3671,6 +3681,11 @@ export interface components {
              * @default private
              */
             visibility: string;
+            /**
+             * Surface
+             * @default road
+             */
+            surface: string;
         };
         /** ActivityTransition */
         ActivityTransition: {
@@ -3678,6 +3693,8 @@ export interface components {
             expected_version: number;
             /** Ended At */
             ended_at?: string | null;
+            /** Device Distance M */
+            device_distance_m?: number | null;
         };
         /** ActivityView */
         ActivityView: {
@@ -3957,6 +3974,11 @@ export interface components {
              */
             secondary_color: string;
             /**
+             * Emoji
+             * @default 🏃
+             */
+            emoji: string;
+            /**
              * Rules
              * @default
              */
@@ -3981,6 +4003,8 @@ export interface components {
             primary_color?: string | null;
             /** Secondary Color */
             secondary_color?: string | null;
+            /** Emoji */
+            emoji?: string | null;
             /** Rules */
             rules?: string | null;
             /** Expected Version */
@@ -4009,6 +4033,8 @@ export interface components {
             primary_color: string;
             /** Secondary Color */
             secondary_color: string;
+            /** Emoji */
+            emoji: string;
             /** Status */
             status: string;
             /** Membership Status */

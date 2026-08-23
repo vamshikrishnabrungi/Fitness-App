@@ -23,6 +23,7 @@ class Club(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     timezone: Mapped[str] = mapped_column(String(64), nullable=False)
     primary_color: Mapped[str] = mapped_column(String(7), nullable=False)
     secondary_color: Mapped[str] = mapped_column(String(7), nullable=False)
+    emoji: Mapped[str] = mapped_column(String(16), default="🏃", server_default="🏃", nullable=False)
     avatar_object: Mapped[str | None] = mapped_column(String(500))
     banner_object: Mapped[str | None] = mapped_column(String(500))
     rules: Mapped[str] = mapped_column(Text, default="", nullable=False)

@@ -48,6 +48,7 @@ export default function CreateClubScreen() {
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
         primary_color: '#FF4F2E',
         secondary_color: '#111827',
+        emoji,
       };
       const club = await api.post<{ id: string }>(
         '/clubs',
