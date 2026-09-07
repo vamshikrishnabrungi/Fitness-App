@@ -23,7 +23,7 @@ google-cloud-pubsub==2.31.1
 google-cloud-secret-manager==2.24.0
 google-cloud-logging==3.12.1
 google-cloud-trace==1.16.2
-cloud-sql-python-connector[asyncpg]==1.21.0
+cloud-sql-python-connector[asyncpg]==1.22.0
 osmium==4.2.0
 shapely==2.1.2
 sentry-sdk[fastapi]==2.37.1
