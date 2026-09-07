@@ -3,7 +3,7 @@
 pytest==9.0.2
 flake8==7.3.0
 mypy==1.19.0
-black==25.11.0
+black==26.5.1
 isort==7.0.0
 pymupdf==1.26.5
 ocrmac==1.0.1
