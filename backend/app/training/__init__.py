@@ -1,2 +1,1 @@
-"""Deterministic training planning and completion."""
-
+"""AI-assisted training generation, validation, and completion."""

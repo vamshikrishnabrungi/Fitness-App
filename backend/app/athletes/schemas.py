@@ -178,6 +178,7 @@ class OnboardingCommand(BaseModel):
     height_cm: float | None = Field(default=None, ge=100, le=260)
     weight_kg: float | None = Field(default=None, ge=30, le=350)
     competition_level: str = Field(pattern="^(recreational|club|regional|national|international)$")
+    fitness_level: Literal["beginner", "intermediate", "advanced"] | None = None
     training_age_years: int = Field(ge=0, le=60)
     maximum_session_minutes: int = Field(ge=20, le=300)
     season_phase: str = "general_preparation"

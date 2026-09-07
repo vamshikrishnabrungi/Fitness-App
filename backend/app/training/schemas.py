@@ -8,6 +8,10 @@ from pydantic import BaseModel, Field
 class PlanCreate(BaseModel):
     weeks: Literal[4] = 4
     starts_on: date | None = None
+    fitness_level: Literal["beginner", "intermediate", "advanced"] | None = None
+    training_days_per_week: int | None = Field(default=None, ge=1, le=7)
+    health_context: dict[str, Any] = Field(default_factory=dict)
+    schedule_constraints: str | None = Field(default=None, max_length=2000)
 
 
 class SessionItemView(BaseModel):

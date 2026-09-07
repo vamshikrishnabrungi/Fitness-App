@@ -72,7 +72,7 @@ const humanizeLabel = (value?: string | null) => {
 };
 
 const displayWorkoutTitle = (purpose: string | undefined, category: string | undefined) => {
-  if (!purpose || /^give the deterministic workout compiler/i.test(purpose)) {
+  if (!purpose || /^give the deterministic workout compiler/i.test(purpose) || /^this is a bounded main/i.test(purpose)) {
     return `${humanizeLabel(category) || 'Training'} Session`;
   }
   return purpose;

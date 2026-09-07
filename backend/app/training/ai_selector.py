@@ -92,6 +92,7 @@ def build_selection_packet(state: PlannerInput, draft: PlanDraft) -> dict[str, A
             "weight_class_code": state.weight_class_code,
             "target_date": state.target_date.isoformat() if state.target_date else None,
             "maximum_session_minutes": state.maximum_session_minutes,
+            "additional_context": state.athlete_context,
         },
         "sessions": [
             {
@@ -102,6 +103,7 @@ def build_selection_packet(state: PlannerInput, draft: PlanDraft) -> dict[str, A
                 "purpose": session.definition.purpose,
                 "load_class": session.definition.load_class,
                 "estimated_minutes": session.definition.estimated_minutes,
+                "template_context": session.definition.metadata,
                 "slots": [
                     {
                         "occurrence_id": slot.occurrence_id,
@@ -111,14 +113,23 @@ def build_selection_packet(state: PlannerInput, draft: PlanDraft) -> dict[str, A
                         "training_role": slot.definition.role,
                         "block_type": slot.definition.block_type,
                         "dose_bounds": slot.definition.dose,
+                        "slot_context": slot.definition.metadata,
                         "candidates": [
                             {
                                 "method_id": str(method.id),
                                 "method_version": method.method_version,
                                 "code": method.code,
+                                "name": method.name or method.code,
+                                "equipment": sorted(method.equipment_codes),
+                                "environments": sorted(method.environments),
+                                "dose_units": sorted(method.dose_units),
                                 "technical_cost": method.technical_cost,
                                 "impact_cost": method.impact_cost,
                                 "fatigue_cost": method.fatigue_cost,
+                                "instructions": list(method.instruction_steps),
+                                "coaching_cues": list(method.coaching_cues),
+                                "common_errors": list(method.common_errors),
+                                "safety_boundaries": list(method.safety_boundaries),
                             }
                             for method in slot.candidates
                         ],
@@ -132,7 +143,7 @@ def build_selection_packet(state: PlannerInput, draft: PlanDraft) -> dict[str, A
 
 
 class OpenAIWorkoutSelectionProvider(WorkoutSelectionProvider):
-    """Constrained OpenAI selector. PostgreSQL and deterministic validators stay authoritative."""
+    """Constrained OpenAI selector. PostgreSQL and domain validators stay authoritative."""
 
     async def select(
         self,
@@ -170,7 +181,7 @@ class OpenAIWorkoutSelectionProvider(WorkoutSelectionProvider):
         )
 
 
-SYSTEM_CONSTRAINTS = """You are Runlete's constrained workout-selection component. The reviewed recipe already defines the session structure. Select only method_id values supplied inside that exact slot. Return exactly one selection for every occurrence_id and no others. Use only the supplied prescription fields and values within their fixed values or bounds. Alternatives must come from the same slot and must not repeat the selected method. Never invent an exercise, identifier, dose field, medical instruction, rehabilitation plan, sport technique, or extra session. Return the JSON schema only and use a permitted rationale_code; do not provide chain-of-thought."""
+SYSTEM_CONSTRAINTS = """You are Runlete's constrained workout-selection component. The reviewed templates already define the session structure. Select only method_id values supplied inside that exact slot. Return exactly one selection for every occurrence_id and no others. When several slots share a candidate set, choose distinct methods unless there is only one eligible candidate. Use only the supplied prescription fields and values within their fixed values or bounds. Alternatives must come from the same slot and must not repeat the selected method. Never invent an exercise, identifier, dose field, medical instruction, rehabilitation plan, sport technique, or extra session. Return the JSON schema only and use a permitted rationale_code; do not provide chain-of-thought."""
 
 
 def get_workout_selection_provider() -> WorkoutSelectionProvider:

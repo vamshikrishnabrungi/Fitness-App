@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Animated, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../../src/utils/theme';
 import { useOnboardingStore } from '../../src/store/onboardingStore';
-import { api, ApiError } from '../../src/utils/api';
+import { api } from '../../src/utils/api';
 import { coachColors } from '../../src/components/onboarding/CoachOnboarding';
 
 const LOADING_MESSAGES = [
-  'Saving your goals',
-  'Saving your sport profile',
-  'Recording your equipment access',
-  'Checking your schedule',
-  'Applying privacy defaults',
-  'Finishing your athlete profile',
+  'Saving your athlete profile',
+  'Loading your sport priorities',
+  'Filtering the exercise catalogue',
+  'Building your warm-up and main work',
+  'Asking the coach model to select your session',
+  'Validating your plan',
 ];
 
 export default function GeneratingScreen() {
@@ -25,12 +25,24 @@ export default function GeneratingScreen() {
   const [messageIndex, setMessageIndex] = useState(0);
   const [progress] = useState(new Animated.Value(0));
   const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     const generatePlan = async () => {
       try {
+        setError(null);
+        progress.stopAnimation();
+        progress.setValue(0);
         const onboardingData = getOnboardingData();
-        const dayIndex: Record<string,number> = {monday:0,tuesday:1,wednesday:2,thursday:3,friday:4,saturday:5,sunday:6};
+        const dayIndex: Record<string, number> = {
+          mon: 0, monday: 0,
+          tue: 1, tuesday: 1,
+          wed: 2, wednesday: 2,
+          thu: 3, thursday: 3,
+          fri: 4, friday: 4,
+          sat: 5, saturday: 5,
+          sun: 6, sunday: 6,
+        };
         const sports: { sport: string; roleCode?: string; eventCode?: string; disciplineCode?: string; formatCode?: string }[] = onboardingData.sport_details.length
           ? onboardingData.sport_details
           : onboardingData.sports.map(sport => ({ sport }));
@@ -51,7 +63,8 @@ export default function GeneratingScreen() {
           height_cm: onboardingData.height_cm,
           weight_kg: onboardingData.weight_kg,
           competition_level: onboardingData.competition_level || 'recreational',
-          training_age_years: onboardingData.experience === 'advanced' ? 5 : onboardingData.experience === 'intermediate' ? 2 : 0,
+          fitness_level: onboardingData.fitness_assessment.level,
+          training_age_years: onboardingData.fitness_assessment.level === 'advanced' ? 5 : onboardingData.fitness_assessment.level === 'intermediate' ? 2 : 0,
           maximum_session_minutes: onboardingData.session_duration_min,
           season_phase: onboardingData.season_phase,
           sports: sports.map((item,index)=>({sport_code:item.sport.toLowerCase(),role_code:item.roleCode||null,event_code:item.eventCode||null,discipline_code:item.disciplineCode||null,format_code:item.formatCode||null,weight_class_code:null,is_primary:index===0,weekly_external_minutes:0,sessions_per_week:0})),
@@ -61,26 +74,27 @@ export default function GeneratingScreen() {
           cross_training_consent: false,
           goal: {goal_type:onboardingData.primary_goal || 'general_fitness',target_date:null,target_value:null,target_unit:null},
         });
-        try {
-          await api.post('/training/plans', { weeks: 4, starts_on: null });
-        } catch (planError) {
-          // Onboarding is valid independently of training-content publication.
-          // A sport release may deliberately remain gated while its reviewed
-          // knowledge package is incomplete; that must not strand the athlete
-          // in onboarding or trigger Expo's development error overlay.
-          if (!(planError instanceof ApiError && [409, 422, 503].includes(planError.status ?? 0))) {
-            throw planError;
-          }
-        }
+        await api.post('/training/plans', {
+          weeks: 4,
+          starts_on: onboardingData.start_date,
+          fitness_level: onboardingData.fitness_assessment.level,
+          training_days_per_week: onboardingData.training_days_per_week,
+          schedule_constraints: onboardingData.schedule_constraints || null,
+          health_context: {
+            pain_areas: onboardingData.pain_areas,
+            current_injuries: onboardingData.current_injuries,
+            medical_notes: onboardingData.medical_notes || null,
+            stress_level: onboardingData.stress_level,
+            diet_preference: onboardingData.diet_preference,
+            dietary_restrictions: onboardingData.dietary_restrictions,
+            nutrition_goal: onboardingData.nutrition_goal,
+          },
+        });
         await AsyncStorage.removeItem('needs_onboarding');
         reset();
         router.replace('/(tabs)');
       } catch (err: any) {
         setError(err.message || 'Failed to generate plan');
-        setTimeout(() => {
-          reset();
-          router.replace('/(tabs)');
-        }, 2000);
       }
     };
 
@@ -96,7 +110,7 @@ export default function GeneratingScreen() {
 
     generatePlan();
     return () => clearInterval(messageInterval);
-  }, [getOnboardingData, progress, reset, router]);
+  }, [attempt, getOnboardingData, progress, reset, router]);
 
   const progressWidth = progress.interpolate({
     inputRange: [0, 100],
@@ -110,8 +124,8 @@ export default function GeneratingScreen() {
           <Ionicons name="flash" size={24} color={colors.background} />
         </View>
         <Text style={styles.eyebrow}>SETTING UP RUNLETE</Text>
-        <Text style={styles.title}>Saving your athlete profile.</Text>
-        <Text style={styles.subtitle}>Your goals, schedule, equipment, and sport context are being checked before training becomes available.</Text>
+        <Text style={styles.title}>Building your training plan.</Text>
+        <Text style={styles.subtitle}>Your goals, schedule, health context, sport templates, and eligible exercises are being sent to the coach model before training becomes available.</Text>
 
         <View style={styles.progressTrack}>
           <Animated.View style={[styles.progressFill, { width: progressWidth }]} />
@@ -125,7 +139,10 @@ export default function GeneratingScreen() {
         {error ? (
           <View style={styles.errorBlock}>
             <Text style={styles.errorText}>{error}</Text>
-            <Text style={styles.errorSubtext}>Opening the app now.</Text>
+            <Text style={styles.errorSubtext}>Your onboarding details are saved. Check that the backend is running, then try again.</Text>
+            <TouchableOpacity style={styles.retryButton} onPress={() => setAttempt((current) => current + 1)}>
+              <Text style={styles.retryText}>Try again</Text>
+            </TouchableOpacity>
           </View>
         ) : null}
       </View>
@@ -216,5 +233,18 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: coachColors.muted,
     marginTop: 4,
+  },
+  retryButton: {
+    alignSelf: 'flex-start',
+    marginTop: 16,
+    borderRadius: 999,
+    backgroundColor: colors.textPrimary,
+    paddingHorizontal: 20,
+    paddingVertical: 11,
+  },
+  retryText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.background,
   },
 });

@@ -37,6 +37,7 @@ interface OnboardingData {
   session_duration_min: number;
   preferred_training_time: string;
   schedule_constraints: string;
+  start_date: string;
   current_injuries: { area: string; note: string }[];
   pain_areas: string[];
   medical_notes: string;
@@ -125,7 +126,7 @@ const initialState: Pick<
   seasonPhase: 'general',
   trainingDaysPerWeek: 4,
   preferredTrainingDays: [],
-  sessionDurationMin: 45,
+  sessionDurationMin: 90,
   preferredTrainingTime: 'evening',
   scheduleConstraints: '',
   startDate: '',

@@ -1,7 +1,7 @@
 """Training-plan reads and session lifecycle.
 
-Plan generation lives in reference_service and is deterministic. This module
-contains only persistence views and completion behavior.
+Generation is orchestrated by ``ai_generation_service``. This module contains
+the persistence views and completion behavior shared by the API and worker.
 """
 
 from __future__ import annotations
@@ -150,7 +150,11 @@ async def materialize_next_horizon(
     user_id: UUID,
     plan_id: UUID,
 ) -> PlanView:
-    """Compatibility endpoint; deterministic four-week plans are materialized once."""
+    """Return the already materialized AI plan.
+
+    New plans are generated and persisted as a complete four-week horizon. The
+    endpoint remains for older clients that still request materialization.
+    """
     athlete = await _athlete(session, user_id)
     plan = await session.scalar(select(TrainingPlan).where(
         TrainingPlan.id == plan_id,
@@ -168,8 +172,8 @@ async def materialize_next_horizon(
         raise ProblemError(
             409,
             "legacy_plan_not_materializable",
-            "Plan format is no longer supported",
-            "Create a new deterministic four-week plan.",
+            "Plan is still being prepared",
+            "Retry after the current generation has completed.",
         )
     return await plan_view(session, plan.id, athlete.id)
 

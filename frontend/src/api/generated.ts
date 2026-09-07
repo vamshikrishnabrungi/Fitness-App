@@ -5095,6 +5095,8 @@ export interface components {
             weight_kg?: number | null;
             /** Competition Level */
             competition_level: string;
+            /** Fitness Level */
+            fitness_level?: ("beginner" | "intermediate" | "advanced") | null;
             /** Training Age Years */
             training_age_years: number;
             /** Maximum Session Minutes */
@@ -5197,6 +5199,16 @@ export interface components {
             weeks: 4;
             /** Starts On */
             starts_on?: string | null;
+            /** Fitness Level */
+            fitness_level?: ("beginner" | "intermediate" | "advanced") | null;
+            /** Training Days Per Week */
+            training_days_per_week?: number | null;
+            /** Health Context */
+            health_context?: {
+                [key: string]: unknown;
+            };
+            /** Schedule Constraints */
+            schedule_constraints?: string | null;
         };
         /** PlanView */
         PlanView: {
@@ -5891,6 +5903,14 @@ export interface components {
             };
             /** Alternatives */
             alternatives: string[];
+            /** Instructions */
+            instructions?: string[];
+            /** Coaching Cues */
+            coaching_cues?: string[];
+            /** Common Errors */
+            common_errors?: string[];
+            /** Safety Boundaries */
+            safety_boundaries?: string[];
         };
         /** SimulationRequest */
         SimulationRequest: {

@@ -1,8 +1,8 @@
-"""Deterministic compiler for the imported training reference data.
+"""Legacy pure reference rules used by release tooling and compatibility tests.
 
-The compiler deliberately has no AI/provider dependency. The database adapter
-supplies one exact sport-priority row plus compatible templates and methods;
-this module selects, schedules, and validates a four-week program.
+Runtime plan generation is handled by ``ai_generation_service``. This module
+does not participate in the API generation path and remains available for
+validating historical reference packages.
 """
 
 from __future__ import annotations
@@ -192,6 +192,7 @@ class ReferenceMethod:
     safety_boundaries: tuple[str, ...]
     sport_codes: frozenset[str] = frozenset()
     scope_codes: frozenset[str] = frozenset()
+    block_role: str = "primary_reference"
 
 
 @dataclass(frozen=True)

@@ -46,7 +46,7 @@ export default function HealthScreen() {
       dietPreference,
       nutritionGoal,
     });
-    router.push('/onboarding/assessment');
+    router.push('/onboarding/generating');
   };
 
   return (

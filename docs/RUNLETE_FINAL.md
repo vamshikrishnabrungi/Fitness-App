@@ -27,10 +27,12 @@ There is no Sport tab and no public sport-knowledge API. Existing sport-content
 rows remain preserved in PostgreSQL and may still be maintained through the
 role-gated Admin Studio; packaged JSON is not a runtime or bootstrap source.
 
-Training content is administered separately. Deterministic workout generation
-must remain disabled until its immutable catalogue release and evidence gates
-are satisfied. AI may perform bounded validation or selection tasks; it is not
-the source of truth for training rules or athlete safety.
+Training content is administered separately. The released PostgreSQL catalogue
+and sport templates define the safe candidate set and prescription bounds. When
+onboarding completes, the workout model selects from that bounded set; domain
+validation remains authoritative for exercise eligibility, dosage, scheduling,
+and athlete safety. The legacy deterministic reference compiler is retained
+only for release tooling and compatibility tests, never for API plan creation.
 
 ## 2. Non-negotiable activity decision
 
@@ -168,11 +170,12 @@ atomically through Admin Studio. Stable codes and immutable versions preserve
 provenance.
 
 An import fails when any progression, regression or substitution code cannot be
-resolved. Import success does not enable generation. The complete imported
-dataset is reviewed and activated as one version/hash behind the generator
-feature gate.
+resolved. The complete imported dataset is reviewed and activated as one
+version/hash behind the generator feature gate. Development can enable the
+adapter with `TRAINING_GENERATION_ENABLED=true`; production still requires
+the normal credential, load, and release checks.
 
-### 9.1 Reference compiler contract
+### 9.1 AI training generation contract
 
 The imported training reference system contains 238 stable exercise identities,
 112 four-week category/level references, 448 weekly prescriptions, 864
@@ -185,13 +188,13 @@ The athlete input contract must resolve a canonical level, phase and goal; the
 exact sport event/role/format scope; availability and duration; equipment and
 environment; external load; and unresolved pain state before retrieval.
 
-The deterministic compiler retrieves the exact priority row and released level
-reference, applies sport/scope/mode/equipment/environment gates, binds each
-weekly prescription to a compatible primary exercise, and schedules the
-required one-or-two weekly exposures in the athlete's available windows. A
-focused goal's primary category cannot silently fall back to an unrelated
-objective. It uses at most four categories and removes only the lowest-priority
-optional category when the combined session cannot fit.
+The generation adapter retrieves the exact priority row and released level
+templates, applies sport/scope/mode/equipment/environment gates, and sends the
+resulting template blocks, bounded prescriptions, and eligible exercise
+catalogue to the constrained workout model. The model selects the methods and
+returns one selection for every slot; it cannot invent exercises, identifiers,
+dose fields, or extra sessions. Warm-up and cooldown slots are included in the
+same packet.
 
 Competition uses one familiar physical-preparation exposure weekly and tapers
 volume while retaining the familiar Week-1 intensity and recovery. Readiness 2
@@ -199,27 +202,26 @@ reduces category count and volume. Readiness 1, acute illness and unresolved
 pain stop ordinary generation. Exact dated hard sport loads require a clear day
 of spacing; a weekly summary without exact timing is rejected.
 
-AI is not part of this path. The backend rejects invalid frequency, unsupported
-dose units, missing equipment, unresolved pain, unsafe hard-day spacing,
-session-duration overflow and missing compatible-category coverage before
-persistence. Every item stores its source template/version, method/version,
-explicit dose, scoped recovery, safety boundaries, progression gate and
-regression action. The semantic dataset hash, compiler version, input snapshot,
-validator result and complete decision trace make the result reproducible.
+The backend rejects invalid frequency, unsupported dose units, missing
+equipment, unresolved pain, unsafe hard-day spacing, session-duration overflow
+and missing compatible-category coverage before persistence. Every item stores
+its source template/version, method/version, explicit dose, scoped recovery,
+safety boundaries, progression gate and regression action. The generation run
+stores provider/model metadata, the accepted structured response, input hash,
+validation result and complete decision trace.
 
 ### 9.2 Current training release status
 
-Local implementation and release verification are complete. All 2,592 canonical
-contexts compile; 7,776 bounded constraint attempts resolve compatibly or fail
-with an approved safe error; real PostgreSQL persistence/concurrency/API tests
-pass; and the reproducible 33-case advisory evaluation reports 33 pass. The
-runtime still loads released content only and fails rather than guessing.
+Local implementation and release verification are complete. The runtime loads
+released content only, constrains every model response to that content, and
+fails rather than guessing when the model or catalogue cannot produce a safe
+plan.
 
-Generation remains disabled because local technical readiness does not authorize
-deployment. Credentials exposed during development must be rotated and the user
-must explicitly authorize any feature-flag or production change. This system is
-physical preparation, not diagnosis, rehabilitation, medical clearance, or a
-claim of independent clinical review.
+Development generation is enabled in the local environment after the released
+training dataset is present. Production activation still requires credential
+rotation, environment release checks, and an explicit feature-flag change. This
+system is physical preparation, not diagnosis, rehabilitation, medical
+clearance, or a claim of independent clinical review.
 
 ## 10. Delivery phases and current state
 
@@ -236,10 +238,10 @@ claim of independent clinical review.
 - **Phase 5 — competition:** edge claims, clubs, leaderboards, alerts and
   anti-cheat foundations exist; launch regions require graph/privacy/load canaries.
 - **Phase 6 — training:** released-only normalized retrieval, typed prescription
-  binding, contextual taper/readiness rules, deterministic selection and
-  scheduling, fail-closed validation, semantic hashing and concurrency-safe
-  versioned persistence are implemented. Activation remains gated on credential
-  rotation, environment release checks and explicit feature-flag authorization.
+  binding, constrained AI selection, fail-closed validation, generation-run
+  observability, semantic hashing and concurrency-safe versioned persistence
+  are implemented. Activation remains gated on credential rotation, environment
+  release checks and explicit feature-flag authorization.
 
 ## 11. Release gates
 
@@ -255,8 +257,9 @@ Before production activation:
    same source version; pass matching, privacy and anti-cheat canaries.
 6. Exercise Pub/Sub retry/dead-letter replay, backup restore and Cloud SQL PITR.
 7. Validate Mapbox, APNs/FCM, email delivery, legal text and alert routing.
-8. Enable training only after the immutable dataset validator, deterministic generation suite,
-   generated-example adversarial evaluation, credential rotation, and explicit authorization pass.
+8. Enable training only after the immutable dataset validator, AI selection
+   validation suite, generated-example adversarial evaluation, credential
+   rotation, and explicit authorization pass.
 
 Synthetic tests do not replace field validation.
 

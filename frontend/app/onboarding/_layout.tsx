@@ -10,7 +10,6 @@ export default function OnboardingLayout() {
       <Stack.Screen name="schedule" />
       <Stack.Screen name="equipment" />
       <Stack.Screen name="health" />
-      <Stack.Screen name="assessment" />
       <Stack.Screen name="generating" />
     </Stack>
   );

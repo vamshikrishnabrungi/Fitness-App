@@ -102,7 +102,14 @@ async def complete_onboarding(session: AsyncSession, user_id: UUID, command: Onb
     profile.height_cm = command.height_cm
     profile.weight_kg = command.weight_kg
     profile.competition_level = command.competition_level
-    profile.training_age_years = command.training_age_years
+    # The onboarding level is the explicit training signal used by the
+    # generator. Keep the existing integer field populated for older clients
+    # and analytics that still read training age.
+    profile.training_age_years = (
+        {"beginner": 0, "intermediate": 2, "advanced": 5}[command.fitness_level]
+        if command.fitness_level
+        else command.training_age_years
+    )
     profile.maximum_session_minutes = command.maximum_session_minutes
     profile.season_phase = command.season_phase
     profile.cross_training_consent = command.cross_training_consent

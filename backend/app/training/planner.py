@@ -28,6 +28,16 @@ class CandidateMethod:
     fatigue_cost: int
     dose_units: frozenset[str]
     method_version: int = 1
+    # Athlete-facing catalogue data is carried into the AI packet and then
+    # returned by the read adapter. These fields are optional so the pure
+    # planner tests can continue to use small domain fixtures.
+    name: str = ""
+    equipment_codes: frozenset[str] = frozenset()
+    instruction_steps: tuple[str, ...] = ()
+    coaching_cues: tuple[str, ...] = ()
+    common_errors: tuple[str, ...] = ()
+    safety_boundaries: tuple[str, ...] = ()
+    source_template_code: str | None = None
 
 
 @dataclass(frozen=True)
@@ -39,6 +49,7 @@ class SlotDefinition:
     block_type: str
     dose: dict[str, Any]
     required: bool = True
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -51,6 +62,7 @@ class SessionDefinition:
     slots: tuple[SlotDefinition, ...]
     recipe_version: int = 1
     phase_code: str = "general_preparation"
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -73,6 +85,7 @@ class PlannerInput:
     discipline_code: str | None = None
     format_code: str | None = None
     weight_class_code: str | None = None
+    athlete_context: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -233,10 +246,11 @@ def prepare_horizon(
     scheduled_definitions: list[tuple[datetime, SessionDefinition]],
     methods: list[CandidateMethod],
 ) -> PlanDraft:
-    """Prepare an already-structured materialization horizon for constrained selection.
+    """Prepare scheduled template slots for constrained AI selection.
 
-    The deterministic program builder owns dates, phases and recipes.  This function
-    performs only hard method eligibility and creates the bounded AI packet.
+    Dates and session definitions are supplied by the generation adapter. This
+    function applies hard eligibility checks and creates the bounded AI packet;
+    it never chooses an exercise.
     """
     if state.pain_flag:
         raise PlanInvariantError("unresolved pain requires modification or professional referral before generation")

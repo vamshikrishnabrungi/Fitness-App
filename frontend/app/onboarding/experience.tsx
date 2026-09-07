@@ -63,7 +63,7 @@ const noWebFocus = { outlineStyle: 'none' } as any;
 export default function ExperienceScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { setExperience, setLocation, experience, location } = useOnboardingStore();
+  const { setExperience, setFitnessAssessment, setLocation, experience, location } = useOnboardingStore();
   const [level, setLevel] = useState(experience || 'intermediate');
   const [trainingLocation, setTrainingLocation] = useState(location || 'gym');
 
@@ -78,6 +78,7 @@ export default function ExperienceScreen() {
 
   const handleNext = () => {
     setExperience(level);
+    setFitnessAssessment({ level: level as 'beginner' | 'intermediate' | 'advanced' });
     setLocation(trainingLocation);
     router.push('/onboarding/sports');
   };

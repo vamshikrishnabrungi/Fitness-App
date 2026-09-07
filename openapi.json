@@ -19069,6 +19069,22 @@
             "pattern": "^(recreational|club|regional|national|international)$",
             "title": "Competition Level"
           },
+          "fitness_level": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "beginner",
+                  "intermediate",
+                  "advanced"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fitness Level"
+          },
           "training_age_years": {
             "type": "integer",
             "maximum": 60.0,
@@ -19346,6 +19362,52 @@
               }
             ],
             "title": "Starts On"
+          },
+          "fitness_level": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "beginner",
+                  "intermediate",
+                  "advanced"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fitness Level"
+          },
+          "training_days_per_week": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 7.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Training Days Per Week"
+          },
+          "health_context": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Health Context"
+          },
+          "schedule_constraints": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schedule Constraints"
           }
         },
         "type": "object",
@@ -21274,6 +21336,34 @@
             },
             "type": "array",
             "title": "Alternatives"
+          },
+          "instructions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Instructions"
+          },
+          "coaching_cues": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Coaching Cues"
+          },
+          "common_errors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Common Errors"
+          },
+          "safety_boundaries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Safety Boundaries"
           }
         },
         "type": "object",

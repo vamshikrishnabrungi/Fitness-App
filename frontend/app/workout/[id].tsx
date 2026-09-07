@@ -124,7 +124,7 @@ const compact = (items?: (string | null | undefined)[], limit = 4) =>
   (items || []).filter((item): item is string => Boolean(item && item.trim())).slice(0, limit);
 
 const displayWorkoutTitle = (purpose?: string, category?: string) => {
-  if (!purpose || /^give the deterministic workout compiler/i.test(purpose)) {
+  if (!purpose || /^give the deterministic workout compiler/i.test(purpose) || /^this is a bounded main/i.test(purpose)) {
     return `${(category || 'Training').replace(/[_-]+/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())} Session`;
   }
   return purpose;
@@ -140,11 +140,22 @@ const displayRepetitions = (value: unknown) => {
   return range == null ? undefined : `${range}${dose.per_side ? ' / side' : ''}`;
 };
 
+const displayRange = (value: unknown, unit: string) => {
+  if (typeof value === 'number' || typeof value === 'string') return `${value}${unit}`;
+  if (!value || typeof value !== 'object') return undefined;
+  const range = value as { minimum?: number; maximum?: number };
+  if (range.minimum == null && range.maximum == null) return undefined;
+  const low = range.minimum ?? range.maximum;
+  const high = range.maximum ?? range.minimum;
+  return low === high ? `${low}${unit}` : `${low}-${high}${unit}`;
+};
+
 const prescriptionFor = (exercise: Exercise) => {
   const parts: string[] = [];
   if (exercise.sets) parts.push(`${exercise.sets} sets`);
   if (exercise.reps) parts.push(`${exercise.reps} reps`);
   if (exercise.duration) parts.push(exercise.duration);
+  if (exercise.load_guidance) parts.push(exercise.load_guidance);
   return parts.join(' · ') || 'Quality reps';
 };
 
@@ -167,16 +178,58 @@ export default function WorkoutDetailScreen() {
         exercise_id: item.method_id,
         sets: item.prescription?.sets,
         reps: displayRepetitions(item.prescription?.repetitions),
-        duration: item.prescription?.duration_minutes ? `${item.prescription.duration_minutes} min` : undefined,
-        rest: item.prescription?.recovery_seconds ? `${item.prescription.recovery_seconds}s` : undefined,
+        duration: displayRange(item.prescription?.duration_minutes, ' min')
+          || displayRange(item.prescription?.duration_seconds, 's'),
+        rest: displayRange(item.prescription?.recovery_seconds, 's')
+          || displayRange(item.prescription?.recovery_between_sets_seconds, 's'),
+        load_guidance: displayRange(item.prescription?.load_kg, ' kg')
+          || displayRange(item.prescription?.percentage_1rm, '% 1RM'),
+        rpe: displayRange(item.prescription?.effort_rpe, ' RPE')
+          || displayRange(item.prescription?.rir, ' RIR'),
+        tempo: displayRange(item.prescription?.tempo_seconds, 's tempo'),
         substitutions: item.alternatives || [],
         coaching_notes: item.coaching_cues || [],
         instructions: item.instructions || [],
         common_errors: item.common_errors || [],
         safety_boundaries: item.safety_boundaries || [],
       }));
+      const sectionFor = (blockType: string) => {
+        if (blockType === 'warmup' || blockType === 'preparation') return 'warmup';
+        if (blockType === 'cooldown' || blockType === 'recovery') return 'cooldown';
+        return 'main_work';
+      };
+      const warmup = (session.items || [])
+        .filter((item: any) => sectionFor(item.block_type) === 'warmup')
+        .map((item: any, index: number) => ({ ...exercises[(session.items || []).indexOf(item)], key: `warmup-${index}` }));
+      const mainWork = (session.items || [])
+        .filter((item: any) => sectionFor(item.block_type) === 'main_work')
+        .map((item: any, index: number) => ({ ...exercises[(session.items || []).indexOf(item)], key: `main-${index}` }));
+      const cooldown = (session.items || [])
+        .filter((item: any) => sectionFor(item.block_type) === 'cooldown')
+        .map((item: any, index: number) => ({ ...exercises[(session.items || []).indexOf(item)], key: `cooldown-${index}` }));
       const title = displayWorkoutTitle(session.purpose, session.session_type);
-      setWorkout({id:session.id,title,category:session.session_type,duration:session.estimated_minutes,difficulty:session.status,completed:session.status==='completed',scheduled_date:session.scheduled_for?.slice(0,10),description:session.explanation,exercises,version:session.version,session_plan:{title,category:session.session_type,duration_min:session.estimated_minutes,why_this_session:session.explanation,main_work:exercises}});
+      setWorkout({
+        id: session.id,
+        title,
+        category: session.session_type,
+        duration: session.estimated_minutes,
+        difficulty: session.status,
+        completed: session.status === 'completed',
+        scheduled_date: session.scheduled_for?.slice(0, 10),
+        description: session.explanation,
+        ai_generated: session.session_type === 'ai_training',
+        exercises,
+        version: session.version,
+        session_plan: {
+          title,
+          category: session.session_type,
+          duration_min: session.estimated_minutes,
+          why_this_session: session.explanation,
+          warmup,
+          main_work: mainWork,
+          cooldown,
+        },
+      });
     } catch (error) {
       console.error('Error fetching workout:', error);
       setWorkout(null);
@@ -463,6 +516,18 @@ function ExerciseCard({
           <View style={styles.noteBlock}>
             <Text style={styles.noteLabel}>How to perform</Text>
             {exercise.instructions.slice(0, 4).map((instruction) => <Text key={instruction} style={styles.noteText}>{instruction}</Text>)}
+          </View>
+        )}
+        {exercise.common_errors && exercise.common_errors.length > 0 && (
+          <View style={styles.noteBlock}>
+            <Text style={styles.noteLabel}>Avoid</Text>
+            {exercise.common_errors.slice(0, 3).map((error) => <Text key={error} style={styles.noteText}>{error}</Text>)}
+          </View>
+        )}
+        {exercise.safety_boundaries && exercise.safety_boundaries.length > 0 && (
+          <View style={styles.noteBlock}>
+            <Text style={styles.noteLabel}>Safety</Text>
+            {exercise.safety_boundaries.slice(0, 3).map((boundary) => <Text key={boundary} style={styles.noteText}>{boundary}</Text>)}
           </View>
         )}
         {cues.length > 0 && (
