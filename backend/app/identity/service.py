@@ -1,15 +1,21 @@
 from __future__ import annotations
 
+import asyncio
+import logging
 import secrets
+import smtplib
+import ssl
 from datetime import datetime, timedelta, timezone
+from email.message import EmailMessage
 from uuid import UUID
 
 import httpx
-from sqlalchemy import select, update
+from sqlalchemy import delete, func, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.core.config import get_settings
 from backend.app.core.ids import uuid7
+from backend.app.core.http_client import http_client
 from backend.app.core.problems import ProblemError
 from backend.app.core.security import create_access_token, hash_secret, random_token
 
@@ -17,18 +23,53 @@ from .models import EmailIdentity, OTPChallenge, PrivacySettings, RefreshSession
 from .schemas import OTPRequest, OTPRequestResult, OTPVerify, TokenPair, UserView
 
 
+logger = logging.getLogger(__name__)
+
+
 def normalize_email(email: str) -> str:
     return email.strip().casefold()
 
 
+def _send_otp_smtp(email: str, code: str) -> None:
+    settings = get_settings()
+    if not all((settings.smtp_host, settings.smtp_user, settings.smtp_password)):
+        raise ValueError("SMTP delivery is not fully configured")
+    message = EmailMessage()
+    message["From"] = f"{settings.smtp_from_name} <{settings.smtp_user}>"
+    message["To"] = email
+    message["Subject"] = "Your Runlete sign-in code"
+    message.set_content(f"Your Runlete verification code is {code}. It expires in 10 minutes.")
+    context = ssl.create_default_context()
+    if settings.smtp_secure and settings.smtp_port == 465:
+        with smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=10, context=context) as server:
+            server.login(settings.smtp_user, settings.smtp_password)
+            server.send_message(message)
+        return
+    with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=10) as server:
+        if settings.smtp_secure:
+            server.starttls(context=context)
+        server.login(settings.smtp_user, settings.smtp_password)
+        server.send_message(message)
+
+
 async def _send_otp(email: str, code: str) -> None:
     settings = get_settings()
-    if not settings.resend_api_key:
-        if settings.is_production:
-            raise ProblemError(503, "email_unavailable", "Email unavailable", "Email delivery is not configured.")
+    if settings.otp_debug_enabled:
+        logger.warning("LOCAL OTP for %s: %s", email, code)
         return
-    async with httpx.AsyncClient(timeout=10) as client:
-        response = await client.post(
+    if settings.email_provider == "smtp":
+        try:
+            await asyncio.to_thread(_send_otp_smtp, email, code)
+            return
+        except (OSError, smtplib.SMTPException, ValueError) as exc:
+            logger.exception("SMTP OTP delivery failed")
+            raise ProblemError(
+                503, "email_unavailable", "Email unavailable", "The sign-in email could not be sent."
+            ) from exc
+    if not settings.resend_api_key:
+        raise ProblemError(503, "email_unavailable", "Email unavailable", "Email delivery is not configured.")
+    try:
+        response = await http_client().post(
             "https://api.resend.com/emails",
             headers={"Authorization": f"Bearer {settings.resend_api_key}"},
             json={
@@ -37,14 +78,22 @@ async def _send_otp(email: str, code: str) -> None:
                 "subject": "Your Runlete sign-in code",
                 "text": f"Your Runlete verification code is {code}. It expires in 10 minutes.",
             },
+            timeout=10.0,
         )
-        if response.status_code >= 300:
-            raise ProblemError(503, "email_unavailable", "Email unavailable", "The sign-in email could not be sent.")
+        response.raise_for_status()
+    except httpx.HTTPError as exc:
+        raise ProblemError(503, "email_unavailable", "Email unavailable", "The sign-in email could not be sent.") from exc
 
 
 async def request_otp(session: AsyncSession, command: OTPRequest, ip_hash: str | None) -> OTPRequestResult:
     now = datetime.now(timezone.utc)
     normalized = normalize_email(str(command.email))
+    # Serialize requests for one identity without holding a row lock that does
+    # not exist yet. The lock is released by the short transaction below.
+    await session.execute(
+        text("SELECT pg_advisory_xact_lock(hashtextextended(:identity, 0))"),
+        {"identity": normalized},
+    )
     recent = await session.scalar(
         select(OTPChallenge)
         .where(OTPChallenge.normalized_email == normalized, OTPChallenge.created_at > now - timedelta(minutes=1))
@@ -52,6 +101,36 @@ async def request_otp(session: AsyncSession, command: OTPRequest, ip_hash: str |
     )
     if recent:
         raise ProblemError(429, "otp_rate_limited", "Too many requests", "Wait before requesting another code.")
+    email_hour_count = int(
+        await session.scalar(
+            select(func.count()).select_from(OTPChallenge).where(
+                OTPChallenge.normalized_email == normalized,
+                OTPChallenge.created_at > now - timedelta(hours=1),
+            )
+        ) or 0
+    )
+    if email_hour_count >= 5:
+        raise ProblemError(429, "otp_rate_limited", "Too many requests", "Try again later.")
+    if ip_hash:
+        ip_window_count = int(
+            await session.scalar(
+                select(func.count()).select_from(OTPChallenge).where(
+                    OTPChallenge.requested_ip_hash == ip_hash,
+                    OTPChallenge.created_at > now - timedelta(minutes=10),
+                )
+            ) or 0
+        )
+        if ip_window_count >= 10:
+            raise ProblemError(429, "otp_rate_limited", "Too many requests", "Try again later.")
+    global_minute_count = int(
+        await session.scalar(
+            select(func.count()).select_from(OTPChallenge).where(
+                OTPChallenge.created_at > now - timedelta(minutes=1)
+            )
+        ) or 0
+    )
+    if global_minute_count >= 1_000:
+        raise ProblemError(503, "otp_delivery_budget_exhausted", "Email temporarily unavailable", "Try again shortly.")
     code = f"{secrets.randbelow(1_000_000):06d}"
     challenge = OTPChallenge(
         normalized_email=normalized,
@@ -63,13 +142,18 @@ async def request_otp(session: AsyncSession, command: OTPRequest, ip_hash: str |
     )
     session.add(challenge)
     await session.flush()
-    await _send_otp(str(command.email), code)
     await session.commit()
+    try:
+        await _send_otp(str(command.email), code)
+    except Exception:
+        await session.execute(delete(OTPChallenge).where(OTPChallenge.id == challenge.id))
+        await session.commit()
+        raise
     settings = get_settings()
     return OTPRequestResult(
         challenge_id=challenge.id,
         expires_at=challenge.expires_at,
-        debug_code=code if settings.environment in {"development", "test"} else None,
+        debug_code=code if settings.otp_debug_enabled else None,
     )
 
 
@@ -240,4 +324,3 @@ async def get_user_view(session: AsyncSession, user_id: UUID) -> UserView:
     if user is None or user.status != "active":
         raise ProblemError(404, "user_not_found", "User not found", "The user does not exist.")
     return await _user_view(session, user)
-

@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../../src/utils/theme';
 import { useOnboardingStore } from '../../src/store/onboardingStore';
-import { api } from '../../src/utils/api';
+import { api, ApiError } from '../../src/utils/api';
 import { coachColors } from '../../src/components/onboarding/CoachOnboarding';
 
 const LOADING_MESSAGES = [
@@ -31,9 +31,20 @@ export default function GeneratingScreen() {
       try {
         const onboardingData = getOnboardingData();
         const dayIndex: Record<string,number> = {monday:0,tuesday:1,wednesday:2,thursday:3,friday:4,saturday:5,sunday:6};
-        const sports: { sport: string; role?: string }[] = onboardingData.sport_details.length
+        const sports: { sport: string; roleCode?: string; eventCode?: string; disciplineCode?: string; formatCode?: string }[] = onboardingData.sport_details.length
           ? onboardingData.sport_details
           : onboardingData.sports.map(sport => ({ sport }));
+        const primarySport = sports[0]?.sport.toLowerCase() ?? 'running';
+        const sportVenue: Record<string,string> = {
+          swimming:'pool',running:'road',cycling:'road',football:'field',cricket:'field',
+          basketball:'court',volleyball:'court',badminton:'court',tennis:'court',
+          boxing:'combat_gym',mma:'combat_gym',
+        };
+        const selectedVenue = onboardingData.training_location === 'gym'
+          ? 'gym'
+          : onboardingData.training_location === 'indoor'
+            ? 'home'
+            : (sportVenue[primarySport] ?? 'home');
         await api.put('/onboarding', {
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
           country_code: onboardingData.country?.length === 2 ? onboardingData.country.toUpperCase() : null,
@@ -42,18 +53,29 @@ export default function GeneratingScreen() {
           competition_level: onboardingData.competition_level || 'recreational',
           training_age_years: onboardingData.experience === 'advanced' ? 5 : onboardingData.experience === 'intermediate' ? 2 : 0,
           maximum_session_minutes: onboardingData.session_duration_min,
-          sports: sports.map((item,index)=>({sport_code:item.sport.toLowerCase(),role_code:item.role?.toLowerCase().replace(/\s+/g,'_')||null,event_code:null,discipline_code:null,format_code:null,weight_class_code:null,is_primary:index===0,weekly_external_minutes:0,sessions_per_week:0})),
-          availability: (onboardingData.preferred_training_days.length ? onboardingData.preferred_training_days : ['Monday','Wednesday','Friday'].slice(0,onboardingData.training_days_per_week || 3)).map((day,index)=>({weekday:dayIndex[day.toLowerCase()] ?? index % 7,start_minute:onboardingData.preferred_training_time==='morning'?420:1080,duration_minutes:onboardingData.session_duration_min})),
-          equipment_codes: onboardingData.equipment,
-          environments: [onboardingData.training_location || 'home'],
+          season_phase: onboardingData.season_phase,
+          sports: sports.map((item,index)=>({sport_code:item.sport.toLowerCase(),role_code:item.roleCode||null,event_code:item.eventCode||null,discipline_code:item.disciplineCode||null,format_code:item.formatCode||null,weight_class_code:null,is_primary:index===0,weekly_external_minutes:0,sessions_per_week:0})),
+          availability: (onboardingData.preferred_training_days.length ? onboardingData.preferred_training_days : ['Monday','Wednesday','Friday'].slice(0,onboardingData.training_days_per_week || 3)).map((day,index)=>({weekday:dayIndex[day.toLowerCase()] ?? index % 7,start_minute:onboardingData.preferred_training_time==='morning'?420:1080,duration_minutes:onboardingData.session_duration_min,environments:[selectedVenue]})),
+          equipment_access: onboardingData.equipment.map(equipment_code=>({equipment_code,environments:[selectedVenue]})),
+          method_familiarity: [],
+          cross_training_consent: false,
           goal: {goal_type:onboardingData.primary_goal || 'general_fitness',target_date:null,target_value:null,target_unit:null},
         });
-        await api.post('/training/plans', { weeks: 4, starts_on: null });
+        try {
+          await api.post('/training/plans', { weeks: 4, starts_on: null });
+        } catch (planError) {
+          // Onboarding is valid independently of training-content publication.
+          // A sport release may deliberately remain gated while its reviewed
+          // knowledge package is incomplete; that must not strand the athlete
+          // in onboarding or trigger Expo's development error overlay.
+          if (!(planError instanceof ApiError && [409, 422, 503].includes(planError.status ?? 0))) {
+            throw planError;
+          }
+        }
         await AsyncStorage.removeItem('needs_onboarding');
         reset();
         router.replace('/(tabs)');
       } catch (err: any) {
-        console.error('Error generating plan:', err);
         setError(err.message || 'Failed to generate plan');
         setTimeout(() => {
           reset();

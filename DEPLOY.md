@@ -37,6 +37,16 @@ GCP projects.
 10. Repeat the reviewed plan/apply process for production and use canary Cloud
     Run revisions before shifting traffic.
 
+The GitHub deployment workflow reruns database migrations, backend tests,
+dependency audits, frontend type/lint/export, Admin lint/build and OpenTofu
+validation before it authenticates to GCP. Production dispatches are accepted
+only from `main` and must also pass the configured GitHub Environment approvals.
+The GCP workflow then deploys worker, API and Admin in order and waits for every
+rollout. Mobile store delivery is a separate manual, production-protected EAS
+workflow so a backend release cannot accidentally publish a client binary.
+
+The operator checklist is [`deploy/RELEASE_CHECKLIST.md`](deploy/RELEASE_CHECKLIST.md).
+
 ## Required external inputs
 
 - GCP staging/production project IDs and deployment IAM.
@@ -55,9 +65,8 @@ The OpenAI API key is stored in Secret Manager. OSM and Valhalla require no API 
 Never enable a territory region until its PostGIS claim edges and Valhalla graph
 share a source version and pass matching/privacy tests. Never put secrets in the
 repository or mobile bundle except Mapbox’s permitted public token. Do not
-delete or connect any legacy remote Mongo database without a separate,
-exact-target verification; archived Mongo workout material remains outside the
-runtime until the separate training-content task is finished.
+connect any MongoDB service: no MongoDB client, migration path or compatibility
+runtime is shipped.
 
-More detail: [Runlete running platform](docs/RUNNING_PLATFORM.md) and
+More detail: [Runlete final specification](docs/RUNLETE_FINAL.md) and
 [infrastructure README](infra/terraform/README.md).

@@ -15,7 +15,7 @@ export function ClubTerritoryMap({ clubId }: { clubId: string }) {
   useEffect(() => {
     api
       .post<{ tile_url: string }>('/territory/tile-session', {
-        layer: 'club',
+        scope: 'club',
         club_id: clubId,
       })
       .then((session) => setTileUrl(session.tile_url))

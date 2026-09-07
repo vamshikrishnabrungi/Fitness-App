@@ -1,9 +1,12 @@
+import logging
+import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Request
+from sqlalchemy import text
 
 from backend.app.activities.router import router as activities_router
 from backend.app.activities.import_router import router as imports_router
@@ -11,6 +14,8 @@ from backend.app.athletes.router import router as athletes_router
 from backend.app.competition.router import router as clubs_router
 from backend.app.core.config import get_settings
 from backend.app.core.database import SessionFactory, close_database
+from backend.app.core.http_client import close_http_client
+from backend.app.core.ids import uuid7
 from backend.app.core.security import LOCAL_ADMIN_USER_ID
 from backend.app.identity.models import User
 from backend.app.core.problems import ProblemError, problem_handler
@@ -28,13 +33,13 @@ from backend.app.competition.territory_router import router as territory_router
 from backend.app.athletes.analytics_router import router as analytics_router
 from backend.app.operations.safety_router import router as safety_router
 from backend.app.moderation.router import router as moderation_router
-from backend.app.operations.worker_router import router as worker_router
 from backend.app.operations.outbox import request_outbox_events
 from backend.app.operations.publisher import publish_outbox_ids
 from backend.app.competition.invitation_router import router as invitation_router
 from backend.app.operations.idempotency import idempotency_middleware
 
 
+logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     if settings.admin_studio_open_access:
@@ -43,6 +48,7 @@ async def lifespan(_: FastAPI):
                 session.add(User(id=LOCAL_ADMIN_USER_ID, display_name="Local Admin Studio"))
                 await session.commit()
     yield
+    await close_http_client()
     await close_database()
 
 
@@ -67,19 +73,41 @@ async def publish_committed_outbox(request: Request, call_next):
         response = await call_next(request)
         event_ids = request_outbox_events.get()
         if event_ids and response.status_code < 500:
-            await publish_outbox_ids(tuple(dict.fromkeys(event_ids)))
+            expected = len(set(event_ids))
+            published = await publish_outbox_ids(tuple(dict.fromkeys(event_ids)))
+            if published != expected:
+                logger.error("outbox publication deferred published=%s expected=%s", published, expected)
         return response
     finally:
         request_outbox_events.reset(token)
+
+
+@app.middleware("http")
+async def request_diagnostics(request: Request, call_next):
+    started = time.perf_counter()
+    request_id = request.headers.get("X-Request-ID") or str(uuid7())
+    response = await call_next(request)
+    elapsed_ms = (time.perf_counter() - started) * 1000
+    response.headers["Server-Timing"] = f"app;dur={elapsed_ms:.1f}"
+    response.headers["X-Request-ID"] = request_id
+    if elapsed_ms >= 1_000:
+        logger.warning("slow_request method=%s path=%s status=%s duration_ms=%.1f", request.method, request.url.path, response.status_code, elapsed_ms)
+    return response
 
 
 @app.get("/healthz", include_in_schema=False)
 async def healthz() -> dict[str, str]: return {"status": "ok"}
 
 
+@app.get("/readyz", include_in_schema=False)
+async def readyz() -> dict[str, str]:
+    async with SessionFactory() as session:
+        await session.execute(text("SELECT 1"))
+    return {"status": "ready"}
+
+
 for router in (identity_router, privacy_router, athletes_router, analytics_router, goals_router, training_router, imports_router, activities_router, clubs_router, invitation_router, competition_router, leaderboards_router, territory_router, nutrition_router, health_router, maps_router, safety_router, notifications_router, moderation_router, admin_router):
     app.include_router(router, prefix="/api/v1")
-app.include_router(worker_router)
 
 
 def canonical_openapi() -> dict:

@@ -11,7 +11,8 @@ from backend.app.core.problems import ProblemError
 from backend.app.core.security import current_user_id
 from .models import TrainingPlan, TrainingSession, TrainingWeek
 from .schemas import CompletionCommand, PlanCreate, PlanView, SessionView
-from .service import complete_session, generate_plan, materialize_next_horizon, plan_view, session_view
+from .reference_service import generate_reference_plan
+from .service import complete_session, materialize_next_horizon, plan_view, session_view
 
 router = APIRouter(prefix="/training", tags=["training"])
 
@@ -24,7 +25,7 @@ async def _athlete_id(session: AsyncSession, user_id: UUID) -> UUID:
 
 @router.post("/plans", response_model=PlanView, status_code=201)
 async def create_plan(body: PlanCreate, user_id: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> PlanView:
-    return await generate_plan(session, user_id, body.weeks, body.starts_on)
+    return await generate_reference_plan(session, user_id, body.weeks, body.starts_on)
 
 
 @router.get("/history", response_model=list[SessionView])

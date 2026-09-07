@@ -101,16 +101,15 @@ class HttpDemProvider:
             return []
         results: list[float | None] = [None] * len(coordinates)
         try:
-            import httpx
+            from backend.app.core.http_client import http_client
 
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                for start in range(0, len(coordinates), DEM_BATCH_SIZE):
-                    batch = coordinates[start:start + DEM_BATCH_SIZE]
-                    resp = await client.post(self._url, json={
-                        "locations": [{"latitude": lat, "longitude": lon} for lat, lon in batch]})
-                    resp.raise_for_status()
-                    for i, item in enumerate(resp.json().get("results", [])):
-                        results[start + i] = item.get("elevation")
+            for start in range(0, len(coordinates), DEM_BATCH_SIZE):
+                batch = coordinates[start:start + DEM_BATCH_SIZE]
+                resp = await http_client().post(self._url, json={
+                    "locations": [{"latitude": lat, "longitude": lon} for lat, lon in batch]}, timeout=10.0)
+                resp.raise_for_status()
+                for i, item in enumerate(resp.json().get("results", [])):
+                    results[start + i] = item.get("elevation")
         except Exception:
             return [None] * len(coordinates)
         return results

@@ -49,7 +49,6 @@ async def project_activity_leaderboard_facts(session: AsyncSession, activity: Ac
     attribution = await session.scalar(
         select(ActivityClubAttribution).where(ActivityClubAttribution.activity_id == activity.id)
     )
-    profile = await session.get(AthleteProfile, activity.athlete_id)
     season = await session.scalar(
         select(Season).where(
             Season.starts_on <= activity.started_at.date(),
@@ -70,7 +69,7 @@ async def project_activity_leaderboard_facts(session: AsyncSession, activity: Ac
                     source_id=activity.id,
                     athlete_id=activity.athlete_id,
                     club_id=attribution.club_id if attribution else None,
-                    region_id=profile.region_id if profile else None,
+                    region_id=activity.region_id,
                     metric_code=metric_code,
                     period_code=period_code,
                     value=value,

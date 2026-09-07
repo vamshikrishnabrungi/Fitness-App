@@ -7,6 +7,11 @@ from datetime import datetime
 from .elevation import sustained_elevation_gain
 
 
+ACTIVITY_METRICS_VERSION = "activity-metrics-v1"
+MAX_GPS_ACCURACY_M = 100.0
+MAX_RUNNING_SPEED_MPS = 15.0
+
+
 @dataclass(frozen=True)
 class Sample:
     latitude: float
@@ -133,13 +138,13 @@ def clean_samples(rows: list[Sample]) -> tuple[list[Sample], list[str]]:
         seen.add(key)
         if not (-90 <= row.latitude <= 90 and -180 <= row.longitude <= 180):
             reasons.append("invalid_coordinate_removed"); continue
-        if row.accuracy is not None and row.accuracy > 100:
+        if row.accuracy is not None and row.accuracy > MAX_GPS_ACCURACY_M:
             reasons.append("poor_accuracy_removed"); continue
         if output:
             dt = (row.timestamp - output[-1].timestamp).total_seconds()
             if dt <= 0: continue
             implied_speed = haversine_m(output[-1], row) / dt
-            if implied_speed > 15:
+            if implied_speed > MAX_RUNNING_SPEED_MPS:
                 reasons.append("impossible_jump_removed"); continue
         output.append(row)
     return output, reasons

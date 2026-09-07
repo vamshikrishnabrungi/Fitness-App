@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { api, ApiError } from '../utils/api';
+import { tokenStorage } from '../services/tokenStorage';
 
 // The user profile is cached next to the token so a launch that can't reach the
 // API still renders the real account instead of an empty placeholder.
 const CACHED_USER_KEY = 'auth_user';
 
 const persistSession = async (token: string, refreshToken: string, user: unknown) => {
-  await AsyncStorage.multiSet([
-    ['auth_token', token],
-    ['refresh_token', refreshToken],
-    [CACHED_USER_KEY, JSON.stringify(user)],
+  await Promise.all([
+    tokenStorage.setSession(token, refreshToken),
+    AsyncStorage.setItem(CACHED_USER_KEY, JSON.stringify(user)),
   ]);
 };
 
@@ -50,7 +50,6 @@ interface AuthState {
   loginWithOtp: (challengeId: string, email: string, code: string) => Promise<void>;
   register: (
     email: string,
-    password: string,
     name: string,
     otpCode?: string,
     challengeId?: string,
@@ -83,7 +82,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ user, token: response.access_token, isAuthenticated: true });
   },
 
-  register: async (email: string, _password: string, name: string, otpCode?: string, challengeId?: string, profile?: User['profile']) => {
+  register: async (email: string, name: string, otpCode?: string, challengeId?: string, profile?: User['profile']) => {
     if (!challengeId || !otpCode || !profile?.date_of_birth) throw new ApiError('Verification code and birth date are required.', 422);
     const response = await api.post<{ access_token: string; refresh_token: string; user: User }>('/auth/otp/verify', {
       challenge_id: challengeId,
@@ -99,12 +98,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   logout: async () => {
-    await AsyncStorage.multiRemove(['auth_token', 'refresh_token', CACHED_USER_KEY]);
-    set({ user: null, token: null, isAuthenticated: false });
+    const refreshToken = await tokenStorage.getRefreshToken();
+    try {
+      if (refreshToken) {
+        await api.post('/auth/logout', undefined, { 'X-Refresh-Token': refreshToken });
+      }
+    } finally {
+      await Promise.all([tokenStorage.clearSession(), AsyncStorage.removeItem(CACHED_USER_KEY)]);
+      set({ user: null, token: null, isAuthenticated: false });
+    }
   },
 
   loadAuth: async () => {
-    const token = await AsyncStorage.getItem('auth_token');
+    const token = await tokenStorage.getAccessToken();
     if (!token) {
       set({ isLoading: false });
       return;
@@ -129,7 +135,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         });
         return;
       }
-      await AsyncStorage.multiRemove(['auth_token', 'refresh_token']);
+      await tokenStorage.clearSession();
       set({ user: null, token: null, isAuthenticated: false, isLoading: false });
     }
   },

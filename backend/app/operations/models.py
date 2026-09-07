@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -13,7 +13,10 @@ from backend.app.core.database import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 class OutboxEvent(UUIDPrimaryKeyMixin, Base):
     __tablename__ = "outbox_events"
-    __table_args__ = ({"schema": "operations"},)
+    __table_args__ = (
+        Index("ix_operations_outbox_unpublished_created", "created_at", postgresql_where=text("published_at IS NULL")),
+        {"schema": "operations"},
+    )
 
     topic: Mapped[str] = mapped_column(String(80), nullable=False, index=True)
     event_type: Mapped[str] = mapped_column(String(120), nullable=False)
@@ -68,6 +71,7 @@ class IdempotencyRecord(UUIDPrimaryKeyMixin, Base):
     __tablename__ = "idempotency_records"
     __table_args__ = (
         UniqueConstraint("actor_id", "operation", "key", name="uq_idempotency_actor_operation_key"),
+        Index("ix_operations_idempotency_expires_at", "expires_at"),
         {"schema": "operations"},
     )
 

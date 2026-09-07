@@ -2,6 +2,28 @@ resource "google_compute_security_policy" "edge" {
   name = "${local.name}-edge"
 
   rule {
+    action      = "deny(403)"
+    priority    = 100
+    description = "Block common SQL injection payloads"
+    match {
+      expr {
+        expression = "evaluatePreconfiguredWaf('sqli-v33-stable')"
+      }
+    }
+  }
+
+  rule {
+    action      = "deny(403)"
+    priority    = 110
+    description = "Block common cross-site scripting payloads"
+    match {
+      expr {
+        expression = "evaluatePreconfiguredWaf('xss-v33-stable')"
+      }
+    }
+  }
+
+  rule {
     action   = "throttle"
     priority = 1000
     match {

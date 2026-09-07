@@ -41,7 +41,8 @@ interface OfflineRun {
   ended_at: string;
 }
 
-const RUN_HISTORY_KEY = 'terra_run_history_v1';
+const RUN_HISTORY_KEY = 'runlete_run_history_v2';
+const LEGACY_RUN_HISTORY_KEY = 'terra_run_history_v1';
 
 const durationLabel = (seconds: number) => {
   const hours = Math.floor(seconds / 3600);
@@ -66,10 +67,22 @@ const activityDate = (value?: string) => {
 
 const loadOfflineRuns = async (): Promise<OfflineRun[]> => {
   try {
-    const raw = await AsyncStorage.getItem(RUN_HISTORY_KEY);
+    let raw = await AsyncStorage.getItem(RUN_HISTORY_KEY);
+    if (!raw) {
+      raw = await AsyncStorage.getItem(LEGACY_RUN_HISTORY_KEY);
+      if (raw) {
+        await AsyncStorage.setItem(RUN_HISTORY_KEY, raw);
+        await AsyncStorage.removeItem(LEGACY_RUN_HISTORY_KEY);
+      }
+    }
     const parsed = raw ? JSON.parse(raw) : [];
     return Array.isArray(parsed)
-      ? parsed.filter((item) => item?.id && item?.distance_km).slice(0, 20)
+      ? parsed.filter((item) =>
+          item &&
+          typeof item.id === 'string' &&
+          Number.isFinite(item.distance_km) &&
+          Number.isFinite(item.duration_sec),
+        ).slice(0, 20)
       : [];
   } catch {
     return [];
@@ -90,9 +103,7 @@ export default function RunScreen() {
     setError(null);
     try {
       const [page, pending] = await Promise.all([
-        api
-          .get<ActivityPage | Activity[]>('/activities?limit=50')
-          .catch(() => ({ items: [] } as ActivityPage)),
+        api.get<ActivityPage | Activity[]>('/activities?limit=50'),
         loadOfflineRuns(),
       ]);
       setActivities(Array.isArray(page) ? page : page.items || []);
@@ -114,7 +125,7 @@ export default function RunScreen() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.header}>
-        <View>
+        <View style={styles.headerCopy}>
           <Text style={styles.title}>Run</Text>
           <Text style={styles.subtitle}>Verified activities and road control</Text>
         </View>
@@ -142,11 +153,12 @@ export default function RunScreen() {
             <Ionicons name="notifications-outline" size={19} color={colors.textPrimary} />
           </TouchableOpacity>
           <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Run clubs"
             style={styles.clubsButton}
             onPress={() => router.push('/run/clubs')}
           >
             <Ionicons name="people-outline" size={17} color="#FFFFFF" />
-            <Text style={styles.clubsText}>Clubs</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -193,6 +205,8 @@ export default function RunScreen() {
           <>
             <View style={styles.activityActions}>
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Start a GPS run"
                 style={styles.startButton}
                 onPress={() => router.push('/run/track')}
               >
@@ -200,6 +214,8 @@ export default function RunScreen() {
                 <Text style={styles.startText}>Start run</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Open Run Lab"
                 style={styles.labButton}
                 onPress={() => router.push('/run/explore')}
               >
@@ -222,6 +238,16 @@ export default function RunScreen() {
                 <Ionicons name="cloud-offline-outline" size={30} color={colors.textTertiary} />
                 <Text style={styles.emptyTitle}>Activities unavailable</Text>
                 <Text style={styles.emptyBody}>{error}</Text>
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  style={styles.retryButton}
+                  onPress={() => {
+                    setLoading(true);
+                    void load();
+                  }}
+                >
+                  <Text style={styles.retryText}>Try again</Text>
+                </TouchableOpacity>
               </GlassCard>
             ) : !activities.length && !offline.length ? (
               <GlassCard style={styles.emptyCard}>
@@ -301,27 +327,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.page,
     paddingVertical: spacing.md,
   },
+  headerCopy: { flex: 1, minWidth: 0, paddingRight: 8 },
   title: { ...typography.h2, color: colors.textPrimary },
   subtitle: { ...typography.caption, color: colors.textSecondary, marginTop: 2 },
-  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   iconButton: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
     borderRadius: 14,
     backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
   clubsButton: {
-    height: 40,
+    width: 36,
+    height: 36,
     borderRadius: 14,
     backgroundColor: colors.textPrimary,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 13,
-    gap: 6,
+    justifyContent: 'center',
   },
-  clubsText: { color: '#FFFFFF', fontSize: 11.5, fontWeight: '900' },
   tabs: {
     flexDirection: 'row',
     gap: 8,
@@ -409,4 +435,12 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     marginTop: 5,
   },
+  retryButton: {
+    marginTop: spacing.md,
+    borderRadius: 12,
+    backgroundColor: colors.textPrimary,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+  },
+  retryText: { color: colors.background, fontWeight: '800', fontSize: 12 },
 });

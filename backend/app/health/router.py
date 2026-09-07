@@ -23,7 +23,7 @@ async def check_in(body: CheckInCommand, user_id: UUID = Depends(current_user_id
     row = await session.scalar(select(DailyCheckIn).where(DailyCheckIn.athlete_id == athlete, DailyCheckIn.local_date == body.local_date).with_for_update())
     if row is None: row = DailyCheckIn(athlete_id=athlete, local_date=body.local_date); session.add(row)
     for key, value in body.model_dump(exclude_none=True).items(): setattr(row, key, value)
-    await session.commit(); return {"id": row.id, "local_date": row.local_date, "readiness": row.readiness}
+    await session.commit(); return {"id": row.id, "local_date": row.local_date, "readiness": row.readiness, "acute_illness": row.acute_illness}
 
 
 @router.post("/pain-reports", status_code=201)
@@ -62,7 +62,7 @@ async def summary(user_id: UUID = Depends(current_user_id), session: AsyncSessio
     sleep_minutes = latest.sleep_minutes if latest else None
     if sleep_minutes is None and "sleep_duration_min" in connected_metrics:
         sleep_minutes = int(float(connected_metrics["sleep_duration_min"]["value"]))
-    return {"readiness": latest.readiness if latest else None, "sleep_minutes": sleep_minutes, "stress": latest.stress if latest else None, "open_pain_reports": len(open_pain), "connected_metrics": connected_metrics}
+    return {"readiness": latest.readiness if latest else None, "acute_illness": latest.acute_illness if latest else False, "sleep_minutes": sleep_minutes, "stress": latest.stress if latest else None, "open_pain_reports": len(open_pain), "connected_metrics": connected_metrics}
 
 
 @router.get("/pain-reports")

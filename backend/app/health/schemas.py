@@ -9,6 +9,7 @@ class CheckInCommand(BaseModel):
     mood: int | None = Field(default=None, ge=1, le=5)
     stress: int | None = Field(default=None, ge=1, le=5)
     readiness: int | None = Field(default=None, ge=1, le=5)
+    acute_illness: bool = False
 
 
 class PainCommand(BaseModel):
@@ -23,4 +24,3 @@ def conservative_action(command: PainCommand) -> str:
     if command.severity >= 5 or command.during_activity: return "stop_and_seek_professional_assessment"
     if command.severity > 0: return "modify_and_monitor"
     return "no_pain_reported"
-

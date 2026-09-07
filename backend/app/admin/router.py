@@ -19,11 +19,13 @@ from backend.app.identity.models import AccountDeletionRequest, ConsentRecord, E
 from backend.app.nutrition.models import FoodAnalysis
 from backend.app.operations.models import AuditEvent, ConsumerReceipt, FeatureFlag, Job, OutboxEvent
 from .knowledge_router import router as knowledge_router
+from .sport_content_router import router as sport_content_router
 from .schemas import AdminClubStatusUpdate, AdminUserStatusUpdate, FeatureFlagMutation, OSMGraphCreate, OSMGraphStatusCommand, OSMRegionCreate, RoleMutation
 
 router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_roles("content_editor", "content_publisher", "platform_admin"))])
 
 router.include_router(knowledge_router)
+router.include_router(sport_content_router)
 
 
 @router.get("/users")
@@ -399,10 +401,18 @@ async def role_users(query: str = "", limit: int = 50, session: AsyncSession = D
             or_(func.lower(User.display_name).like(pattern), EmailIdentity.normalized_email.like(pattern))
         )
     rows = (await session.execute(statement)).all()
+    user_ids = [user.id for user, _ in rows]
+    role_rows = (await session.execute(
+        select(UserRole.user_id, UserRole.role)
+        .where(UserRole.user_id.in_(user_ids))
+        .order_by(UserRole.user_id, UserRole.role)
+    )).all() if user_ids else []
+    roles_by_user: dict[UUID, list[str]] = {}
+    for user_id, role in role_rows:
+        roles_by_user.setdefault(user_id, []).append(role)
     output = []
     for user, email in rows:
-        roles = list(await session.scalars(select(UserRole.role).where(UserRole.user_id == user.id).order_by(UserRole.role)))
-        output.append({"id": user.id, "display_name": user.display_name, "email": email.email, "status": user.status, "roles": roles, "version": user.version})
+        output.append({"id": user.id, "display_name": user.display_name, "email": email.email, "status": user.status, "roles": roles_by_user.get(user.id, []), "version": user.version})
     return {"items": output}
 
 

@@ -1,16 +1,14 @@
 import { create } from 'zustand';
 
-interface FitnessAssessment {
-  pushups: number;
-  pullups: number;
-  squats: number;
-  plank_seconds: number;
-  run_pace_seconds_per_km: number | null;
-}
+interface FitnessAssessment { level: 'beginner' | 'intermediate' | 'advanced'; }
 
 interface SportDetail {
   sport: string;
-  role?: string;
+  scopeCode?: string;
+  eventCode?: string;
+  roleCode?: string;
+  disciplineCode?: string;
+  formatCode?: string;
 }
 
 interface OnboardingData {
@@ -110,11 +108,7 @@ const initialState: Pick<
   location: '',
   equipment: [],
   fitnessAssessment: {
-    pushups: 0,
-    pullups: 0,
-    squats: 0,
-    plank_seconds: 0,
-    run_pace_seconds_per_km: null,
+    level: 'intermediate',
   },
   sports: [],
   selectedGoals: [],
@@ -167,13 +161,7 @@ export const useOnboardingStore = create<OnboardingState>((set, get) => ({
       const parsed = Number(value);
       return Number.isFinite(parsed) && value.trim() !== '' ? parsed : null;
     };
-    const normalizedFitnessAssessment = {
-      pushups: state.fitnessAssessment.pushups,
-      pullups: state.fitnessAssessment.pullups,
-      squats: state.fitnessAssessment.squats,
-      plank_seconds: state.fitnessAssessment.plank_seconds,
-      run_pace_seconds_per_km: state.fitnessAssessment.run_pace_seconds_per_km,
-    };
+    const normalizedFitnessAssessment = { level: state.fitnessAssessment.level };
     const primaryGoal = state.primaryGoal || state.selectedGoals[0] || state.goals[0] || '';
     return {
       onboarding_version: 2,

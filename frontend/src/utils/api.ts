@@ -1,21 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
-import { Platform } from 'react-native';
+import { tokenStorage } from '../services/tokenStorage';
 
-// Use the backend URL from environment
-const BACKEND_URL = (process.env.EXPO_PUBLIC_BACKEND_URL || 'http://localhost:8000').replace(/\/$/, '');
-
-const getDevHost = () => {
-  const hostUri =
-    Constants.expoConfig?.hostUri ||
-    Constants.expoConfig?.hostUri ||
-    (Constants as any).manifest?.debuggerHost ||
-    (Constants as any).manifest2?.extra?.expoClient?.hostUri;
-
-  if (!hostUri) return null;
-  const host = hostUri.split('://').pop()?.split('/')[0]?.split(':')[0];
-  return host || null;
-};
+const BACKEND_URL = (process.env.EXPO_PUBLIC_BACKEND_URL || '').replace(/\/$/, '');
+const API_TIMEOUT_MS = 20_000;
 
 /** Thrown by ApiClient so callers can tell "server rejected me" from "server unreachable". */
 export class ApiError extends Error {
@@ -29,36 +15,21 @@ export class ApiError extends Error {
   get isAuthError() { return this.status === 401 || this.status === 403; }
 }
 
+export const apiErrorMessage = (error: unknown, fallback = 'Something went wrong. Please try again.') =>
+  error instanceof Error && error.message ? error.message : fallback;
+
 class ApiClient {
   private baseUrl: string;
+  private refreshPromise: Promise<boolean> | null = null;
+  private pendingGets = new Map<string, Promise<unknown>>();
 
   constructor() {
-    // For local development on web, use the full backend URL
-    // For production or mobile, use relative URLs (proxied by ingress)
-    if (Platform.OS === 'web' && typeof window !== 'undefined' && window.location.hostname === 'localhost') {
-      this.baseUrl = 'http://localhost:8000/api/v1';
-    } else if (Platform.OS !== 'web') {
-      // Prefer the dev machine's *current* address, which Metro reports, over a
-      // hardcoded EXPO_PUBLIC_BACKEND_URL — DHCP reassigns it and a stale value
-      // means every request fails with "Network request failed". Falls back to
-      // the env var (needed for real builds, where there is no Metro host).
-      const devHost = __DEV__ ? getDevHost() : null;
-      if (devHost) {
-        this.baseUrl = `http://${devHost}:8000/api/v1`;
-      } else if (BACKEND_URL) {
-        this.baseUrl = `${BACKEND_URL}/api/v1`;
-      } else {
-        this.baseUrl = '/api/v1';
-      }
-    } else if (BACKEND_URL) {
-      this.baseUrl = `${BACKEND_URL}/api/v1`;
-    } else {
-      this.baseUrl = '/api/v1';
-    }
+    if (!BACKEND_URL) throw new Error('EXPO_PUBLIC_BACKEND_URL is required');
+    this.baseUrl = `${BACKEND_URL}/api/v1`;
   }
 
   private async getToken(): Promise<string | null> {
-    return await AsyncStorage.getItem('auth_token');
+    return tokenStorage.getAccessToken();
   }
 
   private mutationHeaders(headers?: HeadersInit): HeadersInit {
@@ -71,6 +42,34 @@ class ApiClient {
 
   absoluteUrl(endpoint: string): string {
     return `${this.baseUrl}${endpoint}`;
+  }
+
+  private refreshSession(): Promise<boolean> {
+    if (this.refreshPromise) return this.refreshPromise;
+    this.refreshPromise = (async () => {
+      const refreshToken = await tokenStorage.getRefreshToken();
+      if (!refreshToken) return false;
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+      try {
+        const response = await fetch(`${this.baseUrl}/auth/refresh`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Idempotency-Key': `refresh-${Date.now()}-${Math.random().toString(36).slice(2)}` },
+          body: JSON.stringify({ refresh_token: refreshToken }),
+          signal: controller.signal,
+        });
+        if (!response.ok) return false;
+        const refreshed = await response.json() as { access_token: string; refresh_token: string };
+        await tokenStorage.setSession(refreshed.access_token, refreshed.refresh_token);
+        return true;
+      } catch {
+        return false;
+      } finally {
+        clearTimeout(timeout);
+        this.refreshPromise = null;
+      }
+    })();
+    return this.refreshPromise;
   }
 
   async request<T>(endpoint: string, options: RequestInit = {}, retryAuth = true): Promise<T> {
@@ -86,27 +85,41 @@ class ApiClient {
     }
 
     let response: Response;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+    const upstreamSignal = options.signal;
+    const abortFromUpstream = () => controller.abort();
+    upstreamSignal?.addEventListener('abort', abortFromUpstream, { once: true });
     try {
-      response = await fetch(`${this.baseUrl}${endpoint}`, { ...options, headers });
+      response = await fetch(`${this.baseUrl}${endpoint}`, { ...options, headers, signal: controller.signal });
     } catch (e) {
       // fetch only rejects when the request never completed (offline, bad host).
       // status stays null so callers don't mistake this for a rejected token.
-      throw new ApiError(e instanceof Error ? e.message : 'Network request failed', null);
+      throw new ApiError(
+        controller.signal.aborted && !upstreamSignal?.aborted
+          ? 'The server took too long to respond.'
+          : e instanceof Error ? e.message : 'Network request failed',
+        null,
+      );
+    } finally {
+      clearTimeout(timeout);
+      upstreamSignal?.removeEventListener('abort', abortFromUpstream);
     }
 
     if (response.status === 401 && retryAuth && !endpoint.startsWith('/auth/')) {
-      const refreshToken = await AsyncStorage.getItem('refresh_token');
-      if (refreshToken) {
-        try {
-          const refreshed = await this.post<{ access_token: string; refresh_token: string }>('/auth/refresh', { refresh_token: refreshToken }, undefined, false);
-          await AsyncStorage.multiSet([['auth_token', refreshed.access_token], ['refresh_token', refreshed.refresh_token]]);
-          return this.request<T>(endpoint, options, false);
-        } catch { /* fall through to the original authorization error */ }
-      }
+      if (await this.refreshSession()) return this.request<T>(endpoint, options, false);
     }
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ detail: 'Request failed' }));
-      throw new ApiError(error.detail || 'Request failed', response.status);
+      const error = await response.json().catch(() => ({ detail: 'Request failed' })) as {
+        detail?: unknown;
+        title?: unknown;
+      };
+      const detail = typeof error.detail === 'string'
+        ? error.detail
+        : typeof error.title === 'string'
+          ? error.title
+          : 'Request failed';
+      throw new ApiError(detail, response.status);
     }
 
     if (response.status === 204) return undefined as T;
@@ -114,7 +127,15 @@ class ApiClient {
   }
 
   async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'GET' });
+    const existing = this.pendingGets.get(endpoint) as Promise<T> | undefined;
+    if (existing) return existing;
+    const request = this.request<T>(endpoint, { method: 'GET' });
+    this.pendingGets.set(endpoint, request);
+    try {
+      return await request;
+    } finally {
+      if (this.pendingGets.get(endpoint) === request) this.pendingGets.delete(endpoint);
+    }
   }
 
   async post<T>(endpoint: string, data?: any, headers?: HeadersInit, retryAuth = true): Promise<T> {

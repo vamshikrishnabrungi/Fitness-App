@@ -14,7 +14,7 @@ from backend.app.core.database import get_session
 from backend.app.core.pagination import decode_cursor, encode_cursor
 from backend.app.core.problems import ProblemError
 from backend.app.core.security import current_user_id
-from backend.app.core.storage import signed_gcs_url
+from backend.app.core.storage import gcs_object_metadata, signed_gcs_url
 from backend.app.operations.outbox import enqueue_event
 from backend.app.core.encryption import encrypt_json
 from backend.app.health.models import HealthMetricRecord
@@ -218,16 +218,14 @@ async def create_import_upload(
         session.add(row)
         await session.flush()
     try:
-        upload_url = (
-            await signed_gcs_url(
-                project_id=settings.gcp_project_id,
-                bucket=bucket,
-                object_name=object_name,
-                method="PUT",
-                content_type=body.content_type,
-            )
-            if settings.import_bucket
-            else f"http://localhost:4443/upload/storage/v1/b/{bucket}/o?uploadType=media&name={object_name}"
+        if not settings.import_bucket:
+            raise ProblemError(503, "storage_unavailable", "Storage unavailable", "Import storage is not configured.")
+        upload_url = await signed_gcs_url(
+            project_id=settings.gcp_project_id,
+            bucket=bucket,
+            object_name=object_name,
+            method="PUT",
+            content_type=body.content_type,
         )
     except Exception as exc:
         raise ProblemError(503, "storage_signing_failed", "Upload unavailable", "A signed import upload URL could not be created.") from exc
@@ -263,6 +261,13 @@ async def complete_import(
         raise ProblemError(409, "import_not_completable", "Import unavailable", "This import job cannot be completed.")
     if row.version != body.expected_version:
         raise ProblemError(409, "version_conflict", "Version conflict", "Reload the import and try again.")
+    try:
+        metadata = await gcs_object_metadata(project_id=get_settings().gcp_project_id, bucket=row.bucket, object_name=row.object_name)
+    except Exception as exc:
+        raise ProblemError(422, "import_object_missing", "Upload incomplete", "Upload the activity file before completing the import.") from exc
+    if metadata["size"] != row.size_bytes or metadata["size"] > 25 * 1024 * 1024 or metadata["content_type"] != row.content_type:
+        raise ProblemError(422, "import_object_invalid", "Invalid upload", "The uploaded file does not match its manifest.")
+    row.diagnostics_json = {**(row.diagnostics_json or {}), "object_generation": int(metadata["generation"])}
     row.status = "queued"
     row.version += 1
     await enqueue_event(

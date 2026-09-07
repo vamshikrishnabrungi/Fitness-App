@@ -34,9 +34,13 @@ import {
   resumeRunSession,
   startLocationTask,
 } from '../../src/services/runRecorder';
+import {
+  calculateTrackMetrics,
+  GPS_SAMPLE_INTERVAL_MS,
+  haversineM,
+} from '../../src/services/activityMetrics';
 
 const RUN_HISTORY_KEY = 'runlete_run_history_v2';
-const TERRITORY_MIN_KM = 2.5; // a run claims its roads once it reaches this distance
 const DEFAULT_REGION = { latitude: 17.42, longitude: 78.47, latitudeDelta: 0.01, longitudeDelta: 0.01 };
 type LatLng = { latitude: number; longitude: number };
 
@@ -95,16 +99,9 @@ const updateRunHistory = async (id: string, patch: Partial<CompletedRun>) => {
   await persistRunHistory(runs.map((r) => (r.id === id ? { ...r, ...patch } : r)));
 };
 
-const haversineKm = (a: GPSPoint, b: GPSPoint) => {
-  const R = 6371;
-  const dLat = (b.latitude - a.latitude) * (Math.PI / 180);
-  const dLon = (b.longitude - a.longitude) * (Math.PI / 180);
-  const x =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(a.latitude * (Math.PI / 180)) *
-      Math.cos(b.latitude * (Math.PI / 180)) *
-      Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+const removeRunHistory = async (id: string) => {
+  const runs = await loadRunHistory();
+  await persistRunHistory(runs.filter((run) => run.id !== id));
 };
 
 const formatTime = (seconds: number) => {
@@ -124,6 +121,13 @@ const formatPace = (distKm: number, durationSec: number) => {
 };
 
 type ScreenState = 'permission' | 'ready' | 'running' | 'paused' | 'finishing';
+type RunSurface = 'road' | 'trail' | 'park' | 'track';
+const RUN_SURFACES: { key: RunSurface; label: string }[] = [
+  { key: 'road', label: 'Road' },
+  { key: 'trail', label: 'Trail' },
+  { key: 'park', label: 'Park' },
+  { key: 'track', label: 'Track' },
+];
 
 const FEELINGS = [
   { key: 'great', emoji: '✓', label: 'Great' },
@@ -140,6 +144,7 @@ export default function TrackRunScreen() {
   const [gpsReady, setGpsReady] = useState(false);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [defaultVisibility, setDefaultVisibility] = useState<'public' | 'club' | 'private'>('private');
+  const [surface, setSurface] = useState<RunSurface>('road');
 
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
@@ -154,7 +159,7 @@ export default function TrackRunScreen() {
 
   const [showSummary, setShowSummary] = useState(false);
   const [runSummary, setRunSummary] = useState<CompletedRun | null>(null);
-  const [captured, setCaptured] = useState<{ claimed: boolean; road_km: number; threshold_km: number } | null>(null);
+  const [captured, setCaptured] = useState<{ claimed: boolean; road_km: number } | null>(null);
   const [showReflection, setShowReflection] = useState(false);
   const [feeling, setFeeling] = useState('good');
   const [reflectionNotes, setReflectionNotes] = useState('');
@@ -214,26 +219,9 @@ export default function TrackRunScreen() {
   const applySession = (session: PersistedRunSession) => {
     const points = session.points as GPSPoint[];
 
-    let totalDistance = 0;
-    const accepted: GPSPoint[] = [];
-    for (const point of points) {
-      const previous = accepted[accepted.length - 1];
-      if (!previous) {
-        accepted.push(point);
-        continue;
-      }
-      const segmentKm = haversineKm(
-        { ...previous, latitude: previous.smoothed_latitude ?? previous.latitude, longitude: previous.smoothed_longitude ?? previous.longitude },
-        { ...point, latitude: point.smoothed_latitude ?? point.latitude, longitude: point.smoothed_longitude ?? point.longitude },
-      );
-      const deltaSec = Math.max(
-        0,
-        (new Date(point.timestamp).getTime() - new Date(previous.timestamp).getTime()) / 1000,
-      );
-      if (deltaSec > 0 && segmentKm / deltaSec > 0.0125) continue;
-      accepted.push(point);
-      if (segmentKm >= 0.002) totalDistance += segmentKm;
-    }
+    const metrics = calculateTrackMetrics(points);
+    const accepted = metrics.accepted;
+    const totalDistance = metrics.distanceM / 1_000;
 
     const endMs = session.state === 'finishing' ? new Date(session.updatedAt).getTime() : Date.now();
     let pausedSeconds = session.pausedDurationSec;
@@ -255,7 +243,7 @@ export default function TrackRunScreen() {
     setIsLoop(
       accepted.length >= 8 &&
       totalDistance > 0.5 &&
-      haversineKm(accepted[0], accepted[accepted.length - 1]) < 0.1,
+      haversineM(accepted[0], accepted[accepted.length - 1]) < 100,
     );
   };
 
@@ -264,8 +252,8 @@ export default function TrackRunScreen() {
     foregroundLocationSub.current = await Location.watchPositionAsync(
       {
         accuracy: Location.Accuracy.BestForNavigation,
-        timeInterval: 2_000,
-        distanceInterval: 3,
+        timeInterval: GPS_SAMPLE_INTERVAL_MS,
+        distanceInterval: 0,
       },
       (location) => {
         void appendLocations([location]).then(async () => {
@@ -277,7 +265,7 @@ export default function TrackRunScreen() {
   };
 
   const startRun = async () => {
-    await createRunSession(true, defaultVisibility);
+    await createRunSession(true, defaultVisibility, surface);
     setDuration(0);
     setDistance(0);
     setIsLoop(false);
@@ -369,7 +357,6 @@ export default function TrackRunScreen() {
       setCaptured({
         claimed: Number(response.territory_captured ?? 0) > 0,
         road_km: Number(response.territory_captured ?? 0),
-        threshold_km: TERRITORY_MIN_KM,
       });
       await clearActiveRun();
       setRunSummary(completed);
@@ -402,7 +389,9 @@ export default function TrackRunScreen() {
       try {
         await completeResumableRunUpload(pending.session, pending.endedAt);
         await removePendingRun(pending.session.id);
-        await updateRunHistory(pending.session.id, { sync_status: 'synced' });
+        // The authoritative activity now appears from the API. Remove its local
+        // placeholder so history cannot render the same run twice.
+        await removeRunHistory(pending.session.id);
       } catch {
         break;
       }
@@ -459,9 +448,22 @@ export default function TrackRunScreen() {
           <Text style={styles.readySubtitle}>
             {gpsReady ? 'GPS locked. Hit Start when ready.' : 'Acquiring GPS signal…'}
           </Text>
+          <View style={styles.surfaceSelector}>
+            {RUN_SURFACES.map((item) => (
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityState={{ selected: surface === item.key }}
+                key={item.key}
+                onPress={() => setSurface(item.key)}
+                style={[styles.surfaceOption, surface === item.key && styles.surfaceOptionActive]}
+              >
+                <Text style={[styles.surfaceOptionText, surface === item.key && styles.surfaceOptionTextActive]}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
           <View style={styles.readyTips}>
             {[
-              { icon: 'map-outline', text: 'Run 2.5 km+ to claim the roads you cover' },
+              { icon: 'map-outline', text: 'Verified roads and paths can become territory' },
               { icon: 'people-outline', text: 'Your kilometers count for your club' },
               { icon: 'ribbon-outline', text: 'Claimed roads become your territory' },
             ].map((tip) => (
@@ -519,9 +521,7 @@ export default function TrackRunScreen() {
           </View>
           <View style={styles.claimBadge}>
             <Text style={styles.claimBadgeLbl}>
-              {distance >= TERRITORY_MIN_KM
-                ? 'ELIGIBLE FOR MATCHING'
-                : `${Math.max(0, TERRITORY_MIN_KM - distance).toFixed(1)} km TO QUALIFY`}
+              GPS METRICS ACTIVE
             </Text>
             <Text style={styles.claimBadgeVal}>roads verify after save</Text>
           </View>
@@ -598,9 +598,7 @@ export default function TrackRunScreen() {
                 <Text style={styles.xpEarnedLabel}>NO TERRITORY YET</Text>
                 <Text style={styles.xpEarnedValue}>{(runSummary?.distance_km ?? 0).toFixed(2)} km</Text>
                 <Text style={styles.loopBonus}>
-                  {(runSummary?.distance_km ?? 0) >= (captured?.threshold_km ?? TERRITORY_MIN_KM)
-                    ? 'Road matching is pending verification'
-                    : `Run ${captured?.threshold_km ?? TERRITORY_MIN_KM} km+ to qualify for road matching`}
+                  Road matching is pending verification
                 </Text>
               </View>
             )}
@@ -676,6 +674,11 @@ const styles = StyleSheet.create({
   gpsIndicator: { marginBottom: spacing.lg },
   readyTitle: { ...typography.h2, color: 'white', marginBottom: spacing.sm },
   readySubtitle: { ...typography.body, color: 'rgba(255,255,255,0.6)', marginBottom: spacing.xl, textAlign: 'center' },
+  surfaceSelector: { flexDirection: 'row', gap: spacing.xs, marginBottom: spacing.lg },
+  surfaceOption: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: borderRadius.full, backgroundColor: 'rgba(255,255,255,0.08)' },
+  surfaceOptionActive: { backgroundColor: '#FFFFFF' },
+  surfaceOptionText: { color: 'rgba(255,255,255,0.72)', fontSize: 12, fontWeight: '700' },
+  surfaceOptionTextActive: { color: colors.background },
   readyTips: { width: '100%', gap: spacing.md },
   tipRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: 'rgba(255,255,255,0.07)', padding: spacing.md, borderRadius: borderRadius.md },
   tipText: { ...typography.body, color: 'rgba(255,255,255,0.8)' },

@@ -60,10 +60,8 @@ from backend.app.knowledge.models import (
     TrainingReferenceTemplateVersion,
     TrainingReferenceMethod,
     TrainingReferenceWeek,
-    CategoryLevelAvailability,
     SportModePolicy,
-    TrainingModeFallback,
-    ScenarioOverlay,
+    PhaseDosePolicy,
     SportTemplatePriority,
     SportTemplatePriorityItem,
 )
@@ -461,15 +459,14 @@ async def method_media_upload_url(method_id: UUID, content_version: int, body: d
         raise ProblemError(422, "media_type_invalid", "Invalid media", "Choose an image or video file.")
     extension = str(body.get("file_name", "file")).rsplit(".", 1)[-1].lower()[:10]
     settings = get_settings()
-    bucket = settings.exercise_media_bucket or "runlete-exercise-media-local"
+    bucket = settings.exercise_media_bucket
+    if not bucket:
+        raise ProblemError(503, "storage_unavailable", "Storage unavailable", "Exercise media storage is not configured.")
     object_name = f"methods/{method_id}/v{content_version}/{uuid7()}.{extension}"
-    if settings.exercise_media_bucket:
-        try:
-            upload_url = await signed_gcs_url(project_id=settings.gcp_project_id, bucket=bucket, object_name=object_name, method="PUT", content_type=content_type)
-        except Exception as exc:
-            raise ProblemError(503, "storage_signing_failed", "Upload unavailable", "Could not prepare the media upload.") from exc
-    else:
-        upload_url = f"http://localhost:4443/storage/v1/b/{bucket}/o/{object_name}"
+    try:
+        upload_url = await signed_gcs_url(project_id=settings.gcp_project_id, bucket=bucket, object_name=object_name, method="PUT", content_type=content_type)
+    except Exception as exc:
+        raise ProblemError(503, "storage_signing_failed", "Upload unavailable", "Could not prepare the media upload.") from exc
     return {"upload_url": upload_url, "bucket": bucket, "object_name": object_name, "media_type": "image" if content_type.startswith("image/") else "video"}
 
 
@@ -1147,8 +1144,8 @@ async def dataset_status(session: AsyncSession = Depends(get_session)) -> dict:
     models=(
         ("exercises", Method), ("training_templates", TrainingReferenceTemplate),
         ("training_template_versions", TrainingReferenceTemplateVersion), ("sport_priorities", SportTemplatePriority),
-        ("category_availability", CategoryLevelAvailability), ("sport_mode_policies", SportModePolicy),
-        ("mode_fallbacks", TrainingModeFallback), ("scenario_overlays", ScenarioOverlay),
+        ("sport_mode_policies", SportModePolicy),
+        ("phase_dose_policies", PhaseDosePolicy),
     )
     values=(await session.execute(select(*(select(func.count()).select_from(model).scalar_subquery().label(key) for key,model in models)))).one()
     counts={key:int(value or 0) for (key,_),value in zip(models,values)}
@@ -1170,9 +1167,18 @@ async def list_training_reference_templates(
     if category_code: statement=statement.where(TrainingReferenceTemplateVersion.category_code==category_code)
     if athlete_level: statement=statement.where(TrainingReferenceTemplateVersion.athlete_level==athlete_level)
     rows=(await session.execute(statement)).all()
+    priority_rows = (await session.scalars(select(SportTemplatePriority))).all()
+    priority_sports = {row.id: row.sport_code for row in priority_rows}
+    category_sports: dict[str, set[str]] = defaultdict(set)
+    for row in priority_rows:
+        category_sports[row.primary_template_category].add(row.sport_code)
+    if priority_rows:
+        for item in (await session.scalars(select(SportTemplatePriorityItem).where(SportTemplatePriorityItem.priority_id.in_(priority_sports)))).all():
+            category_sports[item.category_code].add(priority_sports[item.priority_id])
     items=[]
     for identity, version, methods, weeks in rows:
-        items.append({"id":identity.id,"code":identity.code,"content_version":version.content_version,"name":version.name,"category_code":version.category_code,"athlete_level":version.athlete_level,"duration_weeks":version.duration_weeks,"method_count":int(methods),"week_count":int(weeks),"status":version.status})
+        used_by_sports = sorted(category_sports[version.category_code])
+        items.append({"id":identity.id,"code":identity.code,"content_version":version.content_version,"name":version.name,"category_code":version.category_code,"athlete_level":version.athlete_level,"duration_weeks":version.duration_weeks,"method_count":int(methods),"week_count":int(weeks),"status":version.status,"used_by_sports":used_by_sports,"usage_scope":"shared" if len(used_by_sports)>1 else "sport_specific"})
     return {"items":items,"total":len(items)}
 
 
@@ -1221,39 +1227,22 @@ async def list_training_policies(
     sport_code: str | None = None,
     session: AsyncSession = Depends(get_session),
 ) -> dict:
-    availability = (await session.scalars(
-        select(CategoryLevelAvailability).order_by(
-            CategoryLevelAvailability.category_code,
-            CategoryLevelAvailability.athlete_level,
-        )
-    )).all()
     mode_statement = select(SportModePolicy).order_by(SportModePolicy.sport_code)
     if sport_code:
         mode_statement = mode_statement.where(SportModePolicy.sport_code == sport_code)
     sport_modes = (await session.scalars(mode_statement)).all()
-    fallbacks = (await session.scalars(
-        select(TrainingModeFallback).order_by(
-            TrainingModeFallback.category_code,
-            TrainingModeFallback.athlete_level,
-            TrainingModeFallback.requested_mode,
-        )
-    )).all()
-    overlays = (await session.scalars(
-        select(ScenarioOverlay).order_by(ScenarioOverlay.code)
+    phase_policies = (await session.scalars(
+        select(PhaseDosePolicy).order_by(PhaseDosePolicy.phase_code)
     )).all()
     all_mode_count = await session.scalar(select(func.count()).select_from(SportModePolicy)) or 0
     return {
         "summary": {
-            "total": len(availability) + int(all_mode_count) + len(fallbacks) + len(overlays),
-            "availability": len(availability),
+            "total": int(all_mode_count) + len(phase_policies),
             "sport_modes": int(all_mode_count),
-            "mode_fallbacks": len(fallbacks),
-            "scenario_overlays": len(overlays),
+            "phase_dose_policies": len(phase_policies),
         },
-        "availability": [model_dict(row) for row in availability],
         "sport_modes": [model_dict(row) for row in sport_modes],
-        "mode_fallbacks": [model_dict(row) for row in fallbacks],
-        "scenario_overlays": [model_dict(row) for row in overlays],
+        "phase_dose_policies": [model_dict(row) for row in phase_policies],
     }
 
 

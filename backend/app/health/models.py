@@ -20,6 +20,7 @@ class DailyCheckIn(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     mood: Mapped[int | None] = mapped_column(Integer)
     stress: Mapped[int | None] = mapped_column(Integer)
     readiness: Mapped[int | None] = mapped_column(Integer)
+    acute_illness: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     sensitive_payload_ciphertext: Mapped[str | None] = mapped_column(Text)
     wrapped_dek: Mapped[str | None] = mapped_column(Text)
     kms_key_version: Mapped[str | None] = mapped_column(String(300))

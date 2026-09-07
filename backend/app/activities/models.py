@@ -5,7 +5,7 @@ from typing import Any
 from uuid import UUID
 
 from geoalchemy2 import Geometry
-from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Integer, Numeric, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, Index, Integer, Numeric, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -17,6 +17,8 @@ class Activity(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     __table_args__ = (
         UniqueConstraint("athlete_id", "source", "source_identity", name="uq_activity_athlete_source_identity"),
         CheckConstraint("status IN ('recording','paused','finishing','uploaded','processing','provisional','complete','rejected')", name="activity_status"),
+        Index("ix_activity_activities_athlete_started", "athlete_id", "started_at"),
+        Index("ix_activity_activities_status_started", "status", "started_at"),
         {"schema": "activity"},
     )
     athlete_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), ForeignKey("athlete.profiles.id", ondelete="CASCADE"), nullable=False, index=True)
@@ -28,6 +30,7 @@ class Activity(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     device_distance_m: Mapped[float | None] = mapped_column(Numeric(12, 2))
     server_confirmation_delta_m: Mapped[float | None] = mapped_column(Numeric(12, 2))
     elevation_source: Mapped[str | None] = mapped_column(String(20))
+    region_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), ForeignKey("activity.geographic_regions.id"), index=True)
     status: Mapped[str] = mapped_column(String(20), default="recording", nullable=False, index=True)
     visibility: Mapped[str] = mapped_column(String(16), default="private", nullable=False)
     title: Mapped[str | None] = mapped_column(String(160))

@@ -15,7 +15,7 @@ import {
 import { useOnboardingStore } from '../../src/store/onboardingStore';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const DURATIONS = [30, 45, 60, 75];
+const DURATIONS = [90, 120, 150];
 
 // Local-date ISO (avoids UTC off-by-one near midnight).
 const toISO = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;

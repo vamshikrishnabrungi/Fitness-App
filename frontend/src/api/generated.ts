@@ -1295,6 +1295,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/leaderboards/global": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Global Leaderboard */
+        get: operations["global_leaderboard_api_v1_leaderboards_global_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/leaderboards/regions/{region_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Region Leaderboard */
+        get: operations["region_leaderboard_api_v1_leaderboards_regions__region_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/leaderboards/cities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cities Leaderboard */
+        get: operations["cities_leaderboard_api_v1_leaderboards_cities_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/leaderboards/countries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Countries Leaderboard */
+        get: operations["countries_leaderboard_api_v1_leaderboards_countries_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/territory/mine": {
         parameters: {
             query?: never;
@@ -3139,6 +3207,159 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/sport-content/articles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Article */
+        post: operations["create_article_api_v1_admin_sport_content_articles_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sport-content/{sport_code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Content */
+        get: operations["list_content_api_v1_admin_sport_content__sport_code__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sport-content/articles/{article_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Article Detail */
+        get: operations["article_detail_api_v1_admin_sport_content_articles__article_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sport-content/articles/{article_id}/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** New Version */
+        post: operations["new_version_api_v1_admin_sport_content_articles__article_id__versions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sport-content/articles/{article_id}/versions/{version}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Save Version */
+        put: operations["save_version_api_v1_admin_sport_content_articles__article_id__versions__version__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sport-content/sources/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Sources */
+        get: operations["list_sources_api_v1_admin_sport_content_sources_all_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sport-content/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Source */
+        post: operations["create_source_api_v1_admin_sport_content_sources_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sport-content/sources/{source_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update Source */
+        put: operations["update_source_api_v1_admin_sport_content_sources__source_id__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sport-content/{sport_code}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Publish */
+        post: operations["publish_api_v1_admin_sport_content__sport_code__publish_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/users": {
         parameters: {
             query?: never;
@@ -3795,12 +4016,20 @@ export interface components {
             training_age_years: number;
             /** Maximum Session Minutes */
             maximum_session_minutes: number;
+            /** Season Phase */
+            season_phase: string;
             /** Sports */
             sports: components["schemas"]["SportInput"][];
             /** Availability */
             availability: components["schemas"]["AvailabilityInput"][];
-            /** Equipment Codes */
-            equipment_codes: string[];
+            /** External Loads */
+            external_loads: components["schemas"]["ExternalLoadInput"][];
+            /** Equipment Access */
+            equipment_access: components["schemas"]["EquipmentAccessInput"][];
+            /** Method Familiarity */
+            method_familiarity: components["schemas"]["MethodFamiliarityInput"][];
+            /** Cross Training Consent */
+            cross_training_consent: boolean;
             active_goal: components["schemas"]["GoalInput"] | null;
             /** Version */
             version: number;
@@ -3813,6 +4042,8 @@ export interface components {
             start_minute: number;
             /** Duration Minutes */
             duration_minutes: number;
+            /** Environments */
+            environments: string[];
         };
         /** BanCommand */
         BanCommand: {
@@ -3840,18 +4071,12 @@ export interface components {
         };
         /** Body_import_gpx_api_v1_routes_import_gpx_post */
         Body_import_gpx_api_v1_routes_import_gpx_post: {
-            /**
-             * File
-             * Format: binary
-             */
+            /** File */
             file: string;
         };
         /** Body_import_recipe_csv_api_v1_admin_knowledge_session_recipes_import_csv_post */
         Body_import_recipe_csv_api_v1_admin_knowledge_session_recipes_import_csv_post: {
-            /**
-             * File
-             * Format: binary
-             */
+            /** File */
             file: string;
         };
         /** Body_preview_structured_dataset_api_v1_admin_knowledge_dataset_imports__dataset_kind__post */
@@ -3861,10 +4086,7 @@ export interface components {
         };
         /** Body_preview_workbook_api_v1_admin_knowledge_imports_post */
         Body_preview_workbook_api_v1_admin_knowledge_imports_post: {
-            /**
-             * File
-             * Format: binary
-             */
+            /** File */
             file: string;
         };
         /**
@@ -3916,6 +4138,11 @@ export interface components {
             stress?: number | null;
             /** Readiness */
             readiness?: number | null;
+            /**
+             * Acute Illness
+             * @default false
+             */
+            acute_illness: boolean;
         };
         /** ChunkUploadRequest */
         ChunkUploadRequest: {
@@ -4251,6 +4478,13 @@ export interface components {
             /** Evidence Claim Version */
             evidence_claim_version: number;
         };
+        /** EquipmentAccessInput */
+        EquipmentAccessInput: {
+            /** Equipment Code */
+            equipment_code: string;
+            /** Environments */
+            environments: string[];
+        };
         /** EvidenceClaimDraft */
         EvidenceClaimDraft: {
             /** Code */
@@ -4329,6 +4563,29 @@ export interface components {
             context?: string | null;
             /** Limitations */
             limitations?: string | null;
+        };
+        /** ExternalLoadInput */
+        ExternalLoadInput: {
+            /** Sport Code */
+            sport_code: string;
+            /**
+             * Load Type
+             * @enum {string}
+             */
+            load_type: "practice" | "competition" | "conditioning" | "other";
+            /**
+             * Starts At
+             * Format: date-time
+             */
+            starts_at: string;
+            /** Duration Minutes */
+            duration_minutes: number;
+            /**
+             * Intensity
+             * @enum {string}
+             */
+            intensity: "recovery" | "easy" | "moderate" | "hard" | "high" | "maximal";
+            recurrence?: components["schemas"]["WeeklyRecurrenceInput"] | null;
         };
         /** FeatureFlagMutation */
         FeatureFlagMutation: {
@@ -4635,6 +4892,23 @@ export interface components {
             /** Aliases */
             aliases?: string[];
         };
+        /** MethodFamiliarityInput */
+        MethodFamiliarityInput: {
+            /** Method Code */
+            method_code: string;
+            /**
+             * Familiarity
+             * @enum {string}
+             */
+            familiarity: "familiar" | "previously_exposed" | "unfamiliar" | "unknown";
+            /**
+             * Successful Exposures
+             * @default 0
+             */
+            successful_exposures: number;
+            /** Last Performed On */
+            last_performed_on?: string | null;
+        };
         /** MethodMediaDraft */
         MethodMediaDraft: {
             /**
@@ -4825,14 +5099,26 @@ export interface components {
             training_age_years: number;
             /** Maximum Session Minutes */
             maximum_session_minutes: number;
+            /**
+             * Season Phase
+             * @default general_preparation
+             */
+            season_phase: string;
             /** Sports */
             sports: components["schemas"]["SportInput"][];
             /** Availability */
             availability: components["schemas"]["AvailabilityInput"][];
-            /** Equipment Codes */
-            equipment_codes?: string[];
-            /** Environments */
-            environments?: string[];
+            /** External Loads */
+            external_loads?: components["schemas"]["ExternalLoadInput"][];
+            /** Equipment Access */
+            equipment_access?: components["schemas"]["EquipmentAccessInput"][];
+            /** Method Familiarity */
+            method_familiarity?: components["schemas"]["MethodFamiliarityInput"][];
+            /**
+             * Cross Training Consent
+             * @default false
+             */
+            cross_training_consent: boolean;
             goal: components["schemas"]["GoalInput"];
         };
         /** OwnershipTransferCommand */
@@ -4906,8 +5192,9 @@ export interface components {
             /**
              * Weeks
              * @default 4
+             * @constant
              */
-            weeks: number;
+            weeks: 4;
             /** Starts On */
             starts_on?: string | null;
         };
@@ -4926,15 +5213,44 @@ export interface components {
             ends_on: string;
             /** Planner Version */
             planner_version: string;
-            /**
-             * Content Release Id
-             * Format: uuid
-             */
-            content_release_id: string;
+            /** Content Release Id */
+            content_release_id: string | null;
+            /** Dataset Hash */
+            dataset_hash?: string | null;
             /** Materialized Through */
             materialized_through: string | null;
+            /** Sport Code */
+            sport_code?: string | null;
+            /** Scope Code */
+            scope_code?: string | null;
+            /** Phase Code */
+            phase_code?: string | null;
+            /** Goal Code */
+            goal_code?: string | null;
+            /** Decision Trace */
+            decision_trace?: {
+                [key: string]: unknown;
+            }[];
+            /** Weeks */
+            weeks?: components["schemas"]["PlanWeekView"][];
             /** Sessions */
             sessions: components["schemas"]["backend__app__training__schemas__SessionView"][];
+        };
+        /** PlanWeekView */
+        PlanWeekView: {
+            /** Week Number */
+            week_number: number;
+            /**
+             * Starts On
+             * Format: date
+             */
+            starts_on: string;
+            /** Planned Load */
+            planned_load: number;
+            /** Deload */
+            deload: boolean;
+            /** Intent */
+            intent: string;
         };
         /** PrimaryClubCommand */
         PrimaryClubCommand: {
@@ -5706,6 +6022,8 @@ export interface components {
         UploadRequest: {
             /** Content Type */
             content_type: string;
+            /** Size Bytes */
+            size_bytes: number;
             /**
              * Retain
              * @default false
@@ -5758,6 +6076,10 @@ export interface components {
             msg: string;
             /** Error Type */
             type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
         };
         /** WeekTemplateDraft */
         WeekTemplateDraft: {
@@ -5807,6 +6129,22 @@ export interface components {
             /** Expected Version */
             expected_version: number;
         };
+        /** WeeklyRecurrenceInput */
+        WeeklyRecurrenceInput: {
+            /**
+             * Frequency
+             * @default weekly
+             * @constant
+             */
+            frequency: "weekly";
+            /**
+             * Interval Weeks
+             * @default 1
+             */
+            interval_weeks: number;
+            /** Until */
+            until?: string | null;
+        };
         /** SessionView */
         backend__app__identity__schemas__SessionView: {
             /**
@@ -5851,6 +6189,8 @@ export interface components {
             purpose: string;
             /** Estimated Minutes */
             estimated_minutes: number;
+            /** Venue Code */
+            venue_code?: string | null;
             /** Status */
             status: string;
             /** Explanation */
@@ -8778,6 +9118,145 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    global_leaderboard_api_v1_leaderboards_global_get: {
+        parameters: {
+            query?: {
+                metric?: string;
+                period?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    region_leaderboard_api_v1_leaderboards_regions__region_id__get: {
+        parameters: {
+            query?: {
+                subject?: string;
+                metric?: string;
+                period?: string;
+            };
+            header?: never;
+            path: {
+                region_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cities_leaderboard_api_v1_leaderboards_cities_get: {
+        parameters: {
+            query?: {
+                metric?: string;
+                period?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    countries_leaderboard_api_v1_leaderboards_countries_get: {
+        parameters: {
+            query?: {
+                metric?: string;
+                period?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
             };
             /** @description Validation Error */
             422: {
@@ -13444,6 +13923,339 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+        };
+    };
+    create_article_api_v1_admin_sport_content_articles_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Unique key used to replay an authenticated mutation safely for 24 hours. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_content_api_v1_admin_sport_content__sport_code__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sport_code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    article_detail_api_v1_admin_sport_content_articles__article_id__get: {
+        parameters: {
+            query?: {
+                version?: number | null;
+            };
+            header?: never;
+            path: {
+                article_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    new_version_api_v1_admin_sport_content_articles__article_id__versions_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Unique key used to replay an authenticated mutation safely for 24 hours. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                article_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_version_api_v1_admin_sport_content_articles__article_id__versions__version__put: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Unique key used to replay an authenticated mutation safely for 24 hours. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                article_id: string;
+                version: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_sources_api_v1_admin_sport_content_sources_all_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    create_source_api_v1_admin_sport_content_sources_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Unique key used to replay an authenticated mutation safely for 24 hours. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_source_api_v1_admin_sport_content_sources__source_id__put: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Unique key used to replay an authenticated mutation safely for 24 hours. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                source_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    publish_api_v1_admin_sport_content__sport_code__publish_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Unique key used to replay an authenticated mutation safely for 24 hours. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                sport_code: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

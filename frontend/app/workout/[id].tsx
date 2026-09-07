@@ -31,6 +31,9 @@ interface Exercise {
   tempo?: string | null;
   notes?: string | null;
   coaching_notes?: string[];
+  instructions?: string[];
+  common_errors?: string[];
+  safety_boundaries?: string[];
   substitutions?: string[];
   library_enrichment?: {
     summary?: string | null;
@@ -120,6 +123,23 @@ const formatDateLabel = (date?: string) => {
 const compact = (items?: (string | null | undefined)[], limit = 4) =>
   (items || []).filter((item): item is string => Boolean(item && item.trim())).slice(0, limit);
 
+const displayWorkoutTitle = (purpose?: string, category?: string) => {
+  if (!purpose || /^give the deterministic workout compiler/i.test(purpose)) {
+    return `${(category || 'Training').replace(/[_-]+/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())} Session`;
+  }
+  return purpose;
+};
+
+const displayRepetitions = (value: unknown) => {
+  if (typeof value === 'number' || typeof value === 'string') return String(value);
+  if (!value || typeof value !== 'object') return undefined;
+  const dose = value as { minimum?: number; maximum?: number; per_side?: boolean };
+  const range = dose.minimum != null && dose.maximum != null && dose.minimum !== dose.maximum
+    ? `${dose.minimum}-${dose.maximum}`
+    : dose.maximum ?? dose.minimum;
+  return range == null ? undefined : `${range}${dose.per_side ? ' / side' : ''}`;
+};
+
 const prescriptionFor = (exercise: Exercise) => {
   const parts: string[] = [];
   if (exercise.sets) parts.push(`${exercise.sets} sets`);
@@ -146,12 +166,17 @@ export default function WorkoutDetailScreen() {
         name: item.method_name,
         exercise_id: item.method_id,
         sets: item.prescription?.sets,
-        reps: item.prescription?.repetitions ? String(item.prescription.repetitions) : undefined,
+        reps: displayRepetitions(item.prescription?.repetitions),
         duration: item.prescription?.duration_minutes ? `${item.prescription.duration_minutes} min` : undefined,
         rest: item.prescription?.recovery_seconds ? `${item.prescription.recovery_seconds}s` : undefined,
         substitutions: item.alternatives || [],
+        coaching_notes: item.coaching_cues || [],
+        instructions: item.instructions || [],
+        common_errors: item.common_errors || [],
+        safety_boundaries: item.safety_boundaries || [],
       }));
-      setWorkout({id:session.id,title:session.purpose,category:session.session_type,duration:session.estimated_minutes,difficulty:session.status,completed:session.status==='completed',scheduled_date:session.scheduled_for?.slice(0,10),description:session.explanation,exercises,version:session.version,session_plan:{title:session.purpose,category:session.session_type,duration_min:session.estimated_minutes,why_this_session:session.explanation,main_work:exercises}});
+      const title = displayWorkoutTitle(session.purpose, session.session_type);
+      setWorkout({id:session.id,title,category:session.session_type,duration:session.estimated_minutes,difficulty:session.status,completed:session.status==='completed',scheduled_date:session.scheduled_for?.slice(0,10),description:session.explanation,exercises,version:session.version,session_plan:{title,category:session.session_type,duration_min:session.estimated_minutes,why_this_session:session.explanation,main_work:exercises}});
     } catch (error) {
       console.error('Error fetching workout:', error);
       setWorkout(null);
@@ -434,6 +459,12 @@ function ExerciseCard({
         </View>
         {exercise.purpose && <Text style={styles.exercisePurpose}>{exercise.purpose}</Text>}
         {exercise.load_guidance && <Text style={styles.exerciseGuidance}>{exercise.load_guidance}</Text>}
+        {exercise.instructions && exercise.instructions.length > 0 && (
+          <View style={styles.noteBlock}>
+            <Text style={styles.noteLabel}>How to perform</Text>
+            {exercise.instructions.slice(0, 4).map((instruction) => <Text key={instruction} style={styles.noteText}>{instruction}</Text>)}
+          </View>
+        )}
         {cues.length > 0 && (
           <View style={styles.noteBlock}>
             <Text style={styles.noteLabel}>Cues</Text>

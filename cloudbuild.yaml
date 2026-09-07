@@ -8,10 +8,12 @@ steps:
     args: [build, -f, admin/Dockerfile, -t, '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/admin:$COMMIT_SHA', .]
   - name: '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/api:$COMMIT_SHA'
     entrypoint: python
+    env:
+      - ENVIRONMENT=test
+      - TEST_DATABASE_URL=postgresql+asyncpg://contract:contract@127.0.0.1:5432/contract
     args: [-c, 'from backend.app.main import app; assert app.openapi()["info"]["version"]']
 images:
   - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/api:$COMMIT_SHA'
   - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/admin:$COMMIT_SHA'
 options:
   logging: CLOUD_LOGGING_ONLY
-

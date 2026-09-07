@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../../src/store/authStore';
-import { api } from '../../src/utils/api';
+import { api, apiErrorMessage } from '../../src/utils/api';
 import { countries } from '../../src/data/countries';
 
 type Step = 'email' | 'details';
@@ -36,9 +36,6 @@ export default function RegisterScreen() {
   const [challengeId, setChallengeId] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [day, setDay] = useState('');
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
@@ -62,15 +59,6 @@ export default function RegisterScreen() {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
-  const validatePassword = (pass: string) => {
-    const hasMinLength = pass.length >= 8;
-    const hasUpperAndLower = /[a-z]/.test(pass) && /[A-Z]/.test(pass);
-    const hasNumber = /\d/.test(pass);
-    return { hasMinLength, hasUpperAndLower, hasNumber, isValid: hasMinLength && hasUpperAndLower && hasNumber };
-  };
-
-  const passwordValidation = validatePassword(password);
-
   const handleContinue = () => {
     const run = async () => {
       if (!validateEmail(email)) {
@@ -80,12 +68,14 @@ export default function RegisterScreen() {
       setError('');
       setLoading(true);
       try {
-        const result = await api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'register' });
+        const normalizedEmail = email.trim().toLowerCase();
+        const result = await api.post<{ challenge_id: string }>('/auth/otp/request', { email: normalizedEmail, purpose: 'register' });
+        setEmail(normalizedEmail);
         setChallengeId(result.challenge_id);
         setStep('details');
         setResendTimer(30);
-      } catch (err: any) {
-        setError(err.message || 'Failed to send code');
+      } catch (err: unknown) {
+        setError(apiErrorMessage(err, 'Failed to send code'));
       } finally {
         setLoading(false);
       }
@@ -94,7 +84,7 @@ export default function RegisterScreen() {
   };
 
   const handleCreateAccount = async () => {
-    if (!code || code.length < 6) {
+    if (!/^\d{6}$/.test(code)) {
       setError('Please enter the verification code');
       return;
     }
@@ -106,12 +96,21 @@ export default function RegisterScreen() {
       setError('Please enter your last name');
       return;
     }
-    if (!passwordValidation.isValid) {
-      setError('Password does not meet requirements');
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
+    const parsedDay = Number(day);
+    const parsedMonth = Number(month);
+    const parsedYear = Number(year);
+    const birthDate = new Date(Date.UTC(parsedYear, parsedMonth - 1, parsedDay));
+    const today = new Date();
+    if (
+      !/^\d{1,2}$/.test(day) ||
+      !/^\d{1,2}$/.test(month) ||
+      !/^\d{4}$/.test(year) ||
+      birthDate.getUTCFullYear() !== parsedYear ||
+      birthDate.getUTCMonth() !== parsedMonth - 1 ||
+      birthDate.getUTCDate() !== parsedDay ||
+      birthDate > today
+    ) {
+      setError('Please enter a valid date of birth');
       return;
     }
     if (!agreeToTerms) {
@@ -123,27 +122,32 @@ export default function RegisterScreen() {
     setLoading(true);
 
     try {
-      const dob =
-        day && month && year
-          ? `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-          : undefined;
-      await register(email, password, `${firstName} ${lastName}`, code, challengeId, {
+      const dob = `${year.padStart(4, '0')}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      await register(email, `${firstName.trim()} ${lastName.trim()}`, code, challengeId, {
         country: selectedCountry,
         date_of_birth: dob,
         marketing_opt_in: agreeToEmails,
       });
       router.replace('/onboarding/goals');
-    } catch (err: any) {
-      setError(err.message || 'Registration failed');
+    } catch (err: unknown) {
+      setError(apiErrorMessage(err, 'Registration failed'));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleResendCode = () => {
-    if (resendTimer === 0) {
+  const handleResendCode = async () => {
+    if (resendTimer > 0 || loading) return;
+    setLoading(true);
+    setError('');
+    try {
+      const result = await api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'register' });
+      setChallengeId(result.challenge_id);
       setResendTimer(30);
-      api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'register' }).then(result => setChallengeId(result.challenge_id)).catch(() => {});
+    } catch (err: unknown) {
+      setError(apiErrorMessage(err, 'Failed to resend code'));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -156,6 +160,7 @@ export default function RegisterScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
+          accessibilityLabel={step === 'email' ? 'Close registration' : 'Back to email'}
           onPress={() => step === 'email' ? router.back() : setStep('email')}
           style={styles.closeButton}
         >
@@ -200,6 +205,9 @@ export default function RegisterScreen() {
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoComplete="email"
+                  accessibilityLabel="Email address"
+                  returnKeyType="go"
+                  onSubmitEditing={handleContinue}
                 />
               </View>
 
@@ -219,11 +227,13 @@ export default function RegisterScreen() {
 
               {/* Continue Button */}
               <TouchableOpacity
-                style={[styles.continueButton, !email && styles.continueButtonDisabled]}
+                accessibilityRole="button"
+                accessibilityState={{ disabled: !email || loading, busy: loading }}
+                style={[styles.continueButton, (!email || loading) && styles.continueButtonDisabled]}
                 onPress={handleContinue}
-                disabled={!email}
+                disabled={!email || loading}
               >
-                <Text style={styles.continueButtonText}>Continue</Text>
+                {loading ? <ActivityIndicator color="#FFFFFF" size="small" /> : <Text style={styles.continueButtonText}>Continue</Text>}
               </TouchableOpacity>
             </>
           ) : (
@@ -248,13 +258,16 @@ export default function RegisterScreen() {
                   onChangeText={setCode}
                   keyboardType="number-pad"
                   maxLength={6}
+                  accessibilityLabel="Six digit registration code"
+                  textContentType="oneTimeCode"
+                  autoComplete="one-time-code"
                 />
-                <TouchableOpacity style={styles.inputIcon}>
+                <TouchableOpacity accessibilityLabel="Resend code" style={styles.inputIcon} onPress={() => void handleResendCode()} disabled={resendTimer > 0 || loading}>
                   <Ionicons name="refresh-outline" size={20} color="#999999" />
                 </TouchableOpacity>
               </View>
 
-              <TouchableOpacity onPress={handleResendCode} disabled={resendTimer > 0}>
+              <TouchableOpacity accessibilityRole="button" onPress={() => void handleResendCode()} disabled={resendTimer > 0 || loading}>
                 <Text style={styles.resendText}>
                   {resendTimer > 0 ? `Resend code in ${resendTimer}s` : 'Resend code'}
                 </Text>
@@ -281,62 +294,6 @@ export default function RegisterScreen() {
                     onChangeText={setLastName}
                     autoCapitalize="words"
                   />
-                </View>
-              </View>
-
-              {/* Password Input */}
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Password*"
-                  placeholderTextColor="#999999"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!showPassword}
-                />
-                <TouchableOpacity
-                  style={styles.inputIcon}
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  <Ionicons
-                    name={showPassword ? "eye-outline" : "eye-off-outline"}
-                    size={20}
-                    color="#999999"
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Confirm Password*"
-                  placeholderTextColor="#999999"
-                  value={confirmPassword}
-                  onChangeText={setConfirmPassword}
-                  secureTextEntry={!showPassword}
-                />
-              </View>
-
-              {/* Password Requirements */}
-              <View style={styles.requirements}>
-                <View style={styles.requirementRow}>
-                  <Ionicons
-                    name={passwordValidation.hasMinLength ? "checkmark" : "close"}
-                    size={14}
-                    color={passwordValidation.hasMinLength ? "#4CAF50" : "#999999"}
-                  />
-                  <Text style={[styles.requirementText, passwordValidation.hasMinLength && styles.requirementMet]}>
-                    Minimum of 8 characters
-                  </Text>
-                </View>
-                <View style={styles.requirementRow}>
-                  <Ionicons
-                    name={passwordValidation.hasUpperAndLower && passwordValidation.hasNumber ? "checkmark" : "close"}
-                    size={14}
-                    color={passwordValidation.hasUpperAndLower && passwordValidation.hasNumber ? "#4CAF50" : "#999999"}
-                  />
-                  <Text style={[styles.requirementText, passwordValidation.hasUpperAndLower && passwordValidation.hasNumber && styles.requirementMet]}>
-                    Uppercase, lowercase letters, and one number
-                  </Text>
                 </View>
               </View>
 
@@ -381,6 +338,8 @@ export default function RegisterScreen() {
 
               {/* Checkboxes */}
               <TouchableOpacity
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: agreeToEmails }}
                 style={styles.checkboxRow}
                 onPress={() => setAgreeToEmails(!agreeToEmails)}
               >
@@ -393,6 +352,8 @@ export default function RegisterScreen() {
               </TouchableOpacity>
 
               <TouchableOpacity
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: agreeToTerms }}
                 style={styles.checkboxRow}
                 onPress={() => setAgreeToTerms(!agreeToTerms)}
               >
@@ -415,6 +376,8 @@ export default function RegisterScreen() {
 
               {/* Create Account Button */}
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityState={{ disabled: loading, busy: loading }}
                 style={[styles.createButton, loading && styles.createButtonLoading]}
                 onPress={handleCreateAccount}
                 disabled={loading}

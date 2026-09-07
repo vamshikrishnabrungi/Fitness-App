@@ -1,0 +1,33 @@
+name: Release Runlete mobile apps
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-production-release
+  cancel-in-progress: false
+
+jobs:
+  build-and-submit:
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+      - run: corepack enable && yarn install --frozen-lockfile
+      - run: yarn typecheck && yarn lint
+      - name: Build signed binaries and submit to stores
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: npx --yes eas-cli@23.2.0 build --platform all --profile production --auto-submit --non-interactive --no-wait

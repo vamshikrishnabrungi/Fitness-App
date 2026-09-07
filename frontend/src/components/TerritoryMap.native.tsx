@@ -15,7 +15,7 @@ import { borderRadius, colors, spacing, typography } from '../utils/theme';
 const MAPBOX_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN || '';
 if (MAPBOX_TOKEN) Mapbox.setAccessToken(MAPBOX_TOKEN);
 
-type Layer = 'me' | 'club' | 'competitors';
+type Layer = 'me' | 'club';
 
 interface TileSession {
   tile_url: string;
@@ -67,13 +67,11 @@ const DEFAULT_CENTER: [number, number] = [78.4867, 17.385];
 const LAYERS: { key: Layer; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
   { key: 'me', label: 'Me', icon: 'person-outline' },
   { key: 'club', label: 'Primary club', icon: 'people-outline' },
-  { key: 'competitors', label: 'Competitors', icon: 'trophy-outline' },
 ];
 
 const lineColor: Record<Layer, string> = {
   me: '#FF5A36',
   club: '#32D6C0',
-  competitors: '#8CA8FF',
 };
 
 const expirationLabel = (value?: string | number) => {
@@ -115,7 +113,7 @@ export function TerritoryMap() {
         }
         const clubId = nextLayer === 'club' ? club?.id : undefined;
         const session = await api.post<TileSession>('/territory/tile-session', {
-          layer: nextLayer,
+          scope: nextLayer === 'me' ? 'mine' : 'club',
           club_id: clubId,
         });
         setTileSession(session);
@@ -199,15 +197,11 @@ export function TerritoryMap() {
       const score =
         layer === 'me'
           ? detail.my_score
-          : layer === 'club'
-            ? detail.primary_club_score
-            : detail.public_score;
+            : detail.primary_club_score;
       const expiresAt =
         layer === 'me'
           ? detail.my_score_expires_at
-          : layer === 'club'
-            ? detail.primary_club_expires_at
-            : detail.public_expires_at;
+            : detail.primary_club_expires_at;
       setSelected((current) => ({ ...current, ...detail, score, expires_at: expiresAt }));
     } catch {
       setSelected({
@@ -308,7 +302,7 @@ export function TerritoryMap() {
                     lineColor[layer],
                   ] as any,
                   lineWidth: ['interpolate', ['linear'], ['zoom'], 8, 2, 14, 5, 18, 9],
-                  lineOpacity: layer === 'competitors' ? 0.62 : 0.94,
+                  lineOpacity: 0.94,
                   lineCap: 'round',
                   lineJoin: 'round',
                 }}
@@ -324,7 +318,7 @@ export function TerritoryMap() {
           </View>
         )}
 
-        {!loading && (error || (layer !== 'competitors' && summary.edgeCount === 0)) && (
+        {!loading && (error || summary.edgeCount === 0) && (
           <View style={styles.mapOverlay}>
             <Ionicons name="trail-sign-outline" size={30} color="#FFFFFF" />
             <Text style={styles.overlayTitle}>
@@ -332,7 +326,7 @@ export function TerritoryMap() {
             </Text>
             <Text style={styles.overlayText}>
               {error ||
-                'Complete an eligible 2.5 km run. Roads appear after GPS verification and map matching.'}
+                'Eligible road and path edges appear after GPS verification and map matching.'}
             </Text>
             {layer === 'club' && !primaryClub && (
               <TouchableOpacity style={styles.overlayButton} onPress={() => router.push('/run/clubs')}>

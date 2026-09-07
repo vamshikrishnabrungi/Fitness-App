@@ -352,8 +352,8 @@ export default function NutritionScreen() {
     setAnalyzing(true);
     try {
       const hash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, base64);
-      const upload = await api.post<{image_id:string;upload_url:string}>('/nutrition/food-images/uploads', {content_type:'image/jpeg',retain:false});
       const blob = await (await fetch(`data:image/jpeg;base64,${base64}`)).blob();
+      const upload = await api.post<{image_id:string;upload_url:string}>('/nutrition/food-images/uploads', {content_type:'image/jpeg',size_bytes:blob.size,retain:false});
       const result = await fetch(upload.upload_url,{method:'PUT',headers:{'Content-Type':'image/jpeg'},body:blob});
       if(!result.ok) throw new Error('Image upload failed');
       const queued = await api.post<{id:string}>('/nutrition/food-analyses', {image_id:upload.image_id,source_object_hash:hash});

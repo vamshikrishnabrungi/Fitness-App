@@ -84,7 +84,7 @@ resource "google_storage_bucket" "buckets" {
   }
 
   dynamic "cors" {
-    for_each = contains(["raw-activity", "imports", "food-images"], each.value) ? [1] : []
+    for_each = contains(["raw-activity", "imports", "exercise-media", "food-images"], each.value) ? [1] : []
     content {
       origin          = ["https://${var.domain}", "https://${var.admin_domain}"]
       method          = ["GET", "HEAD", "PUT"]

@@ -11,12 +11,6 @@ config = context.config
 if config.config_file_name:
     fileConfig(config.config_file_name)
 
-url = (os.environ.get("DATABASE_URL") or config.get_main_option("sqlalchemy.url")).strip()
-if url.startswith("postgres://"):
-    url = "postgresql+asyncpg://" + url[len("postgres://") :]
-elif url.startswith("postgresql://"):
-    url = "postgresql+asyncpg://" + url[len("postgresql://") :]
-config.set_main_option("sqlalchemy.url", url)
 from backend.app.core.database import Base, close_database, engine as app_engine
 import backend.app.models  # noqa: F401,E402
 
@@ -29,8 +23,15 @@ def include_object(object_, name: str | None, type_: str, reflected: bool, compa
 
 
 def run_migrations_offline() -> None:
+    url = os.environ.get("TEST_DATABASE_URL", "").strip()
+    if not url:
+        raise RuntimeError("Offline migrations are supported only with TEST_DATABASE_URL")
+    if url.startswith("postgres://"):
+        url = "postgresql+asyncpg://" + url[len("postgres://") :]
+    elif url.startswith("postgresql://"):
+        url = "postgresql+asyncpg://" + url[len("postgresql://") :]
     context.configure(
-        url=config.get_main_option("sqlalchemy.url"),
+        url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},

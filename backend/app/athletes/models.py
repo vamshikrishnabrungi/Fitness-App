@@ -28,6 +28,8 @@ class AthleteProfile(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     training_age_years: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     maximum_session_minutes: Mapped[int] = mapped_column(Integer, default=60, nullable=False)
     post_clearance_only: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    cross_training_consent: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    season_phase: Mapped[str] = mapped_column(String(32), default="general_preparation", nullable=False)
 
 
 class AthleteSport(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -76,6 +78,7 @@ class AvailabilityWindow(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     weekday: Mapped[int] = mapped_column(Integer, nullable=False)
     start_minute: Mapped[int] = mapped_column(Integer, nullable=False)
     duration_minutes: Mapped[int] = mapped_column(Integer, nullable=False)
+    environments: Mapped[list[str]] = mapped_column(ARRAY(String(30)), default=list, nullable=False)
 
 
 class ExternalLoad(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -98,6 +101,34 @@ class EquipmentAccess(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     athlete_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), ForeignKey("athlete.profiles.id", ondelete="CASCADE"), nullable=False, index=True)
     equipment_code: Mapped[str] = mapped_column(String(60), nullable=False)
     environments: Mapped[list[str]] = mapped_column(ARRAY(String(30)), default=list, nullable=False)
+
+
+class AthleteMethodFamiliarity(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    __tablename__ = "method_familiarity"
+    __table_args__ = (
+        UniqueConstraint("athlete_id", "method_id", name="uq_athlete_method_familiarity"),
+        CheckConstraint(
+            "familiarity IN ('familiar','previously_exposed','unfamiliar','unknown')",
+            name="valid_method_familiarity",
+        ),
+        CheckConstraint("successful_exposures >= 0", name="nonnegative_method_exposures"),
+        {"schema": "athlete"},
+    )
+
+    athlete_id: Mapped[UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("athlete.profiles.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    method_id: Mapped[UUID] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("knowledge.methods.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    familiarity: Mapped[str] = mapped_column(String(24), nullable=False)
+    successful_exposures: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    last_performed_on: Mapped[date | None] = mapped_column(Date)
 
 
 class Assessment(UUIDPrimaryKeyMixin, TimestampMixin, Base):

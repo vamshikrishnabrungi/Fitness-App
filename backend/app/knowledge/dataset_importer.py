@@ -15,15 +15,13 @@ from backend.app.core.ids import uuid7
 
 from .importer import WorkbookImportError
 from .models import (
-    CategoryLevelAvailability,
     Method,
-    ScenarioOverlay,
+    PhaseDosePolicy,
     SourceImport,
     SourceImportRow,
     SportModePolicy,
     SportTemplatePriority,
     SportTemplatePriorityItem,
-    TrainingModeFallback,
     TrainingReferenceMethod,
     TrainingReferenceTemplate,
     TrainingReferenceTemplateVersion,
@@ -119,17 +117,18 @@ def _parse_policies(files: list[tuple[str, bytes]]) -> list[tuple[str, dict[str,
     rows=[]; found=set()
     for name, content in files:
         data=_json(name,content)
-        if "records" in data:
-            found.add("availability")
-            for item in data["records"]: rows.append((f"availability:{item.get('category_code')}:{item.get('athlete_level')}",{"record_type":"availability",**item},[]))
         if "policies" in data:
             found.add("mode_policy")
             for item in data["policies"]: rows.append((f"mode:{item.get('sport_code')}",{"record_type":"mode_policy",**item},[]))
-            for item in data.get("missing_mode_fallbacks",[]): rows.append((f"fallback:{item.get('category_code')}:{item.get('athlete_level')}:{item.get('requested_mode')}",{"record_type":"mode_fallback",**item},[]))
-        if "overlays" in data:
-            found.add("overlay")
-            for item in data["overlays"]: rows.append((f"overlay:{item.get('code')}",{"record_type":"overlay",**item},[]))
-    missing={"availability","mode_policy","overlay"}-found
+        if "phase_policies" in data:
+            found.add("phase_policy")
+            for item in data["phase_policies"]:
+                errors=[]
+                multipliers=item.get("weekly_volume_multipliers")
+                if not isinstance(multipliers,list) or len(multipliers)!=4 or any(not isinstance(value,(int,float)) or isinstance(value,bool) or not 0 < value <= 1 for value in multipliers):
+                    errors.append("weekly_volume_multipliers must contain four numbers greater than zero and no greater than one")
+                rows.append((f"phase:{item.get('phase_code')}",{"record_type":"phase_policy",**item},errors))
+    missing={"mode_policy","phase_policy"}-found
     if missing: raise WorkbookImportError(f"Policy upload is incomplete; missing: {', '.join(sorted(missing))}")
     seen=set(); result=[]
     for reference,payload,errors in rows:
@@ -157,9 +156,6 @@ async def preview_dataset(session: AsyncSession, *, dataset_kind: str, files: li
     elif dataset_kind=="sport_priority_matrix":
         categories=set((await session.scalars(select(TrainingReferenceTemplateVersion.category_code).join(TrainingReferenceTemplate,TrainingReferenceTemplate.id==TrainingReferenceTemplateVersion.template_id).where(TrainingReferenceTemplate.latest_version==TrainingReferenceTemplateVersion.content_version))).all())
         parsed=[(ref,payload,errors+[f"unknown template category: {code}" for code in ({payload.get('primary_template_category')}|{item['category_code'] for item in payload.get('priorities',[])})-categories]) for ref,payload,errors in parsed]
-    elif dataset_kind=="training_policies":
-        template_codes=set((await session.scalars(select(TrainingReferenceTemplate.code))).all())
-        parsed=[(ref,payload,errors+([f"unknown template code: {payload.get('template_code')}"] if payload.get("record_type")=="availability" and payload.get("available") and payload.get("template_code") not in template_codes else [])) for ref,payload,errors in parsed]
     summary={"rows":len(parsed),"valid":sum(not errors for _,_,errors in parsed),"errors":sum(bool(errors) for _,_,errors in parsed)}
     if dataset_kind=="training_templates": summary["templates"]=len(parsed)
     if dataset_kind=="sport_priority_matrix": summary["matrix_rows"]=len(parsed)
@@ -187,7 +183,7 @@ async def _commit_templates(session: AsyncSession, source: SourceImport, rows: l
         session.add(TrainingReferenceTemplateVersion(template_id=identity.id,content_version=version,research_phase=int(payload["phase"]),category_code=payload["category_code"],name=payload["name"],athlete_level=payload["athlete_level"],duration_weeks=int(payload["duration_weeks"]),purpose=payload["purpose"],source_template_ids=payload.get("source_template_ids",[]),applicable_scenarios=payload.get("applicable_scenarios",[]),selection_policy_json=payload["selection_policy"],selection_rules_json=payload["selection_rules"],exercise_progression_policy=payload["exercise_progression_policy"],week_4_policy=payload["week_4_policy"],mandatory_stops=payload.get("mandatory_stops",[]),ai_use=payload["ai_use"],prompt_reference_text=payload["prompt_reference_text"],status=payload.get("status","research_derived_candidate"),source_hash=source.content_hash,created_at=now,updated_at=now,record_version=1))
         for sequence,item in enumerate(payload["method_options"],1):
             method=by_code[item["method_code"]]
-            pending_methods.append({"id":uuid7(),"template_id":identity.id,"template_version":version,"sequence":sequence,"method_id":method.id,"method_version":method.latest_version,"block_role":item["block_role"],"applicable_modes":item.get("applicable_modes",[]),"implementation_note":item.get("implementation_note", "")})
+            pending_methods.append({"id":uuid7(),"template_id":identity.id,"template_version":version,"sequence":sequence,"method_id":method.id,"method_version":method.latest_version,"block_role":item["block_role"],"applicable_modes":item.get("applicable_modes",[]),"sport_codes":item.get("sport_codes",[]),"scope_codes":item.get("scope_codes",[]),"implementation_note":item.get("implementation_note", "")})
         for item in payload["weeks"]:
             pending_weeks.append({"id":uuid7(),"template_id":identity.id,"template_version":version,"week_number":int(item["week"]),"intent":item["intent"],"sessions_per_week":str(item["sessions_per_week"]),"prescription_json":item["prescription_per_primary_method"],"progression_condition":item["progression_condition"],"regression_condition":item["regression_condition"]})
     # The method/week rows reference a composite template-version key. Flush
@@ -201,6 +197,15 @@ async def _commit_templates(session: AsyncSession, source: SourceImport, rows: l
 
 async def _commit_matrix(session: AsyncSession, source: SourceImport, rows: list[SourceImportRow]) -> dict[str,int]:
     existing={(item.sport_code,item.scope_type,item.scope_code,item.phase_code,item.goal_code):item for item in (await session.scalars(select(SportTemplatePriority).with_for_update())).all()}
+    # Replace dependant rank items in one statement. Deleting them row by row
+    # turns an 864-row Cloud SQL import into hundreds of network round trips.
+    existing_ids = [item.id for item in existing.values()]
+    if existing_ids:
+        await session.execute(
+            delete(SportTemplatePriorityItem).where(
+                SportTemplatePriorityItem.priority_id.in_(existing_ids)
+            )
+        )
     retained=set();created=updated=0
     for source_row in rows:
         p=source_row.normalized_payload or {}
@@ -210,7 +215,6 @@ async def _commit_matrix(session: AsyncSession, source: SourceImport, rows: list
             row=SportTemplatePriority(id=uuid7(),sport_code=p["sport_code"],scope_type=p["scope_type"],scope_code=p["scope_code"],phase_code=p["phase_code"],goal_code=p["goal_code"],primary_template_category=p["primary_template_category"],session_block_order=p["session_block_order"],priority_basis=p["priority_basis"],source_hash=source.content_hash);session.add(row);created+=1
         else:
             row.primary_template_category=p["primary_template_category"];row.session_block_order=p["session_block_order"];row.priority_basis=p["priority_basis"];row.source_hash=source.content_hash;row.version+=1;updated+=1
-            await session.execute(delete(SportTemplatePriorityItem).where(SportTemplatePriorityItem.priority_id==row.id))
         session.add_all(SportTemplatePriorityItem(id=uuid7(),priority_id=row.id,rank=item["rank"],category_code=item["category_code"],weight=item["weight"]) for item in p["priorities"])
     stale=[item.id for key,item in existing.items() if key not in retained]
     if stale: await session.execute(delete(SportTemplatePriority).where(SportTemplatePriority.id.in_(stale)))
@@ -218,41 +222,36 @@ async def _commit_matrix(session: AsyncSession, source: SourceImport, rows: list
 
 
 async def _commit_policies(session: AsyncSession, source: SourceImport, rows: list[SourceImportRow]) -> dict[str,int]:
-    counts={"availability":0,"mode_policy":0,"mode_fallback":0,"overlay":0}
-    availability={(x.category_code,x.athlete_level):x for x in (await session.scalars(select(CategoryLevelAvailability).with_for_update())).all()}
+    counts={"mode_policy":0,"phase_policy":0}
     modes={x.sport_code:x for x in (await session.scalars(select(SportModePolicy).with_for_update())).all()}
-    fallbacks={(x.category_code,x.athlete_level,x.requested_mode):x for x in (await session.scalars(select(TrainingModeFallback).with_for_update())).all()}
-    overlays={x.code:x for x in (await session.scalars(select(ScenarioOverlay).with_for_update())).all()}
-    retained={"availability":set(),"mode_policy":set(),"mode_fallback":set(),"overlay":set()}
+    phase_policies={x.phase_code:x for x in (await session.scalars(select(PhaseDosePolicy).with_for_update())).all()}
+    retained={"mode_policy":set(),"phase_policy":set()}
     for source_row in rows:
         p=source_row.normalized_payload or {}; kind=p["record_type"]
-        if kind=="availability":
-            key=(p["category_code"],p["athlete_level"]);retained[kind].add(key);item=availability.get(key)
-            values={"available":p["available"],"template_code":p.get("template_code"),"prerequisite_category":p.get("prerequisite_category"),"reason":p["reason"],"source_hash":source.content_hash}
-            if item is None: session.add(CategoryLevelAvailability(category_code=key[0],athlete_level=key[1],**values))
-            else:
-                for field,value in values.items(): setattr(item,field,value)
-                item.version+=1
-        elif kind=="mode_policy":
+        if kind=="mode_policy":
             key=p["sport_code"];retained[kind].add(key);item=modes.get(key);values={"primary_mode":p["primary_mode"],"cross_training_requires_opt_in":p["cross_training_requires_opt_in"],"source_hash":source.content_hash}
             if item is None: session.add(SportModePolicy(sport_code=key,**values))
             else:
                 for field,value in values.items(): setattr(item,field,value)
                 item.version+=1
-        elif kind=="mode_fallback":
-            key=(p["category_code"],p["athlete_level"],p["requested_mode"]);retained[kind].add(key);item=fallbacks.get(key);values={"fallback_category":p["fallback_category"],"automatic":p["automatic"],"source_hash":source.content_hash}
-            if item is None: session.add(TrainingModeFallback(category_code=key[0],athlete_level=key[1],requested_mode=key[2],**values))
-            else:
-                for field,value in values.items(): setattr(item,field,value)
-                item.version+=1
         else:
-            key=p["code"];retained[kind].add(key);item=overlays.get(key);values={"applies_to":p["applies_to"],"instruction":p["instruction"],"source_hash":source.content_hash}
-            if item is None: session.add(ScenarioOverlay(code=key,**values))
+            key=p["phase_code"];retained[kind].add(key);item=phase_policies.get(key)
+            values={
+                "policy_version":int(p["policy_version"]),
+                "progression_mode":p["progression_mode"],
+                "maximum_categories":int(p["maximum_categories"]),
+                "maximum_sessions_per_week":int(p["maximum_sessions_per_week"]),
+                "weekly_volume_multipliers":[float(value) for value in p["weekly_volume_multipliers"]],
+                "novelty_policy":p["novelty_policy"],
+                "policy_basis":p["policy_basis"],
+                "source_hash":source.content_hash,
+            }
+            if item is None: session.add(PhaseDosePolicy(phase_code=key,**values))
             else:
                 for field,value in values.items(): setattr(item,field,value)
                 item.version+=1
         counts[kind]+=1
-    for kind,model,items in (("availability",CategoryLevelAvailability,availability),("mode_policy",SportModePolicy,modes),("mode_fallback",TrainingModeFallback,fallbacks),("overlay",ScenarioOverlay,overlays)):
+    for kind,model,items in (("mode_policy",SportModePolicy,modes),("phase_policy",PhaseDosePolicy,phase_policies)):
         stale=[item.id for key,item in items.items() if key not in retained[kind]]
         if stale: await session.execute(delete(model).where(model.id.in_(stale)))
     return counts

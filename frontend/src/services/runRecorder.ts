@@ -4,6 +4,10 @@ import * as TaskManager from 'expo-task-manager';
 import * as Crypto from 'expo-crypto';
 import { Platform } from 'react-native';
 import { api } from '../utils/api';
+import {
+  acceptAndSmoothPoint,
+  GPS_SAMPLE_INTERVAL_MS,
+} from './activityMetrics';
 
 export const RUN_LOCATION_TASK = 'runlete-active-run-location-v1';
 export const ACTIVE_RUN_KEY = 'runlete_active_run_v2';
@@ -30,6 +34,7 @@ export interface RecordedPoint {
   cadence?: number;
   smoothed_latitude?: number;
   smoothed_longitude?: number;
+  metric_accepted?: boolean;
 }
 
 export interface PersistedRunSession {
@@ -76,8 +81,6 @@ const locationToPoint = (location: Location.LocationObject): RecordedPoint => ({
   altitude: location.coords.altitude ?? undefined,
   speed: location.coords.speed ?? undefined,
   accuracy: location.coords.accuracy ?? undefined,
-  smoothed_latitude: location.coords.latitude,
-  smoothed_longitude: location.coords.longitude,
 });
 
 const parseSession = (raw: string | null): PersistedRunSession | null => {
@@ -221,26 +224,25 @@ export const appendLocations = async (locations: Location.LocationObject[]) => {
 
     for (const location of locations) {
       const point = locationToPoint(location);
-      if (
-        !Number.isFinite(point.latitude) ||
-        !Number.isFinite(point.longitude) ||
-        (point.accuracy != null && point.accuracy > 100)
-      ) {
+      if (!Number.isFinite(point.latitude) || !Number.isFinite(point.longitude)) continue;
+      let lastPoint: RecordedPoint | undefined;
+      for (let index = session.points.length - 1; index >= 0; index -= 1) {
+        if (session.points[index].metric_accepted !== false) {
+          lastPoint = session.points[index];
+          break;
+        }
+      }
+      const acceptedPoint = acceptAndSmoothPoint(lastPoint, point);
+      if (!acceptedPoint) {
+        // Preserve the raw fix as evidence. It remains excluded from live
+        // metrics and the backend independently applies the same rejection.
+        session.points.push({ ...point, metric_accepted: false });
         continue;
       }
-      const lastPoint = session.points[session.points.length - 1];
-      if (lastPoint && lastPoint.timestamp === point.timestamp) continue;
+      acceptedPoint.metric_accepted = true;
 
-      const nowMs = new Date(point.timestamp).getTime();
-      // Keep raw fixes for evidence, but maintain the same light smoother used
-      // by the server confirmation path for live distance and pace.
-      if (lastPoint) {
-        const accuracy = Math.max(1, Math.min(100, point.accuracy ?? 50));
-        const alpha = Math.max(0.35, Math.min(0.85, 1 - accuracy / 140));
-        point.smoothed_latitude = (lastPoint.smoothed_latitude ?? lastPoint.latitude) + alpha * (point.latitude - (lastPoint.smoothed_latitude ?? lastPoint.latitude));
-        point.smoothed_longitude = (lastPoint.smoothed_longitude ?? lastPoint.longitude) + alpha * (point.longitude - (lastPoint.smoothed_longitude ?? lastPoint.longitude));
-      }
-      const speed = Math.max(0, point.speed ?? 0);
+      const nowMs = new Date(acceptedPoint.timestamp).getTime();
+      const speed = Math.max(0, acceptedPoint.speed ?? 0);
       if (session.autoPauseEnabled) {
         if (session.autoPausedAt) {
           if (speed >= AUTO_RESUME_SPEED_MPS) {
@@ -252,7 +254,7 @@ export const appendLocations = async (locations: Location.LocationObject[]) => {
             session.slowSince = undefined;
           }
         } else if (speed < AUTO_PAUSE_SPEED_MPS) {
-          if (!session.slowSince) session.slowSince = point.timestamp;
+          if (!session.slowSince) session.slowSince = acceptedPoint.timestamp;
           if (nowMs - new Date(session.slowSince).getTime() >= AUTO_PAUSE_AFTER_MS) {
             session.autoPausedAt = session.slowSince;
           }
@@ -261,8 +263,8 @@ export const appendLocations = async (locations: Location.LocationObject[]) => {
         }
       }
 
-      session.points.push(point);
-      latestPoint = point;
+      session.points.push(acceptedPoint);
+      latestPoint = acceptedPoint;
       if (session.points.length > MAX_STORED_POINTS) {
         const overflow = session.points.length - MAX_STORED_POINTS;
         const uploaded = session.uploadedPointCount ?? 0;
@@ -271,7 +273,7 @@ export const appendLocations = async (locations: Location.LocationObject[]) => {
           session.uploadedPointCount = uploaded - overflow;
         }
       }
-      session.updatedAt = point.timestamp;
+      session.updatedAt = acceptedPoint.timestamp;
     }
     await saveActiveRun(session);
     try {
@@ -318,9 +320,9 @@ export const startLocationTask = async (): Promise<boolean> => {
     if (!registered) {
       await Location.startLocationUpdatesAsync(RUN_LOCATION_TASK, {
         accuracy: Location.Accuracy.BestForNavigation,
-        timeInterval: 2_000,
-        distanceInterval: 3,
-        deferredUpdatesDistance: 10,
+        timeInterval: GPS_SAMPLE_INTERVAL_MS,
+        distanceInterval: 0,
+        deferredUpdatesDistance: 0,
         deferredUpdatesInterval: 5_000,
         pausesUpdatesAutomatically: false,
         activityType: Location.ActivityType.Fitness,

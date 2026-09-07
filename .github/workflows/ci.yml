@@ -23,23 +23,47 @@ jobs:
           --health-timeout 5s
           --health-retries 20
     env:
+      ENVIRONMENT: test
       JWT_SECRET: ci-only-jwt-secret-ci-only-jwt-secret
       OTP_PEPPER: ci-only-otp-pepper-ci-only-otp-pepper
-      DATABASE_URL: postgresql+asyncpg://runlete:runlete@127.0.0.1:5432/runlete
+      TEST_DATABASE_URL: postgresql+asyncpg://runlete:runlete@127.0.0.1:5432/runlete
       PGPASSWORD: runlete
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install -r backend/requirements-runtime.txt pytest pglast
+      - run: pip install -r backend/requirements-runtime.txt pytest pglast ruff==0.12.12 mypy==1.17.1
       - name: Migrate clean database
         run: alembic -c alembic.ini upgrade head
       - run: python -m pytest -q tests/production
+      - name: Audit Python runtime dependencies
+        run: pip install pip-audit==2.9.0 && pip-audit -r backend/requirements-runtime.txt
+      - name: Lint deterministic training core
+        run: >-
+          ruff check
+          backend/app/training/reference_compiler.py
+          backend/app/training/reference_prescription.py
+          backend/app/training/reference_service.py
+          backend/app/training/models.py
+          backend/app/training/schemas.py
+          backend/app/athletes/schemas.py
+          backend/app/athletes/service.py
+          backend/app/knowledge/training_contract.py
+          tests/production/test_reference_compiler.py
+          tests/production/test_training_input_contract.py
+          tests/production/test_training_schema_capacity.py
+          --ignore E501,E701,E702,E402
+      - name: Type-check deterministic compiler contract
+        run: >-
+          mypy --ignore-missing-imports --follow-imports=skip
+          backend/app/training/reference_compiler.py
+          backend/app/training/reference_prescription.py
+          backend/app/knowledge/training_contract.py
       - name: Reject removed runtime dependencies and routes
         run: |
-          ! rg -n 'motor|pymongo|celery|MONGO_URL|boto3|S3_' backend/app backend/requirements-runtime.txt
+          ! rg -n 'motor|pymongo|celery|MONGO_URL|boto3|S3_|emergentintegrations' backend/app backend/requirements-runtime.txt
           ! rg -n '/api/terra|/api/workouts|/api/meals|/api/health|/api/lessons' frontend --glob '!node_modules/**'
 
   mobile:
@@ -48,12 +72,12 @@ jobs:
       JWT_SECRET: ci-only-jwt-secret
       EXPO_PUBLIC_BACKEND_URL: http://127.0.0.1:8000/api
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
           cache: pip
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "20"
           cache: yarn
@@ -76,6 +100,9 @@ jobs:
         working-directory: frontend
       - run: yarn lint
         working-directory: frontend
+      - name: Audit mobile runtime dependencies
+        run: yarn audit --groups dependencies --level high
+        working-directory: frontend
       - run: npx expo export --platform web --output-dir dist-web-validation
         working-directory: frontend
       - name: Ensure generated contracts are committed
@@ -84,13 +111,17 @@ jobs:
   admin:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "20"
           cache: npm
           cache-dependency-path: admin/package-lock.json
       - run: npm ci
         working-directory: admin
+      - run: npm run lint
+        working-directory: admin
       - run: npm run build
+        working-directory: admin
+      - run: npm audit --omit=dev --audit-level=high
         working-directory: admin

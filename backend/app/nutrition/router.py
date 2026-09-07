@@ -13,8 +13,7 @@ from backend.app.core.database import get_session
 from backend.app.core.ids import uuid7
 from backend.app.core.problems import ProblemError
 from backend.app.core.security import current_user_id, hash_secret
-from backend.app.core.storage import signed_gcs_url
-from backend.app.operations.models import Job
+from backend.app.core.storage import gcs_object_metadata, signed_gcs_url
 from backend.app.operations.outbox import enqueue_event
 from .models import FoodAnalysis, FoodImage, Meal
 from .schemas import AnalyzeCommand, MealConfirm, UploadRequest, UploadView
@@ -28,7 +27,7 @@ async def daily_summary(
     user_id: UUID = Depends(current_user_id),
     session: AsyncSession = Depends(get_session),
 ) -> dict:
-    from sqlalchemy import func, select
+    from sqlalchemy import select
     athlete = await athlete_id(session, user_id)
     selected_date = local_date or datetime.now(timezone.utc).date()
     starts_at = datetime.combine(selected_date, time.min, timezone.utc)
@@ -69,8 +68,7 @@ async def daily_summary(
 async def _signed_upload(bucket: str, object_name: str, content_type: str) -> str:
     settings = get_settings()
     if not bucket:
-        if settings.is_production: raise ProblemError(503, "storage_unavailable", "Storage unavailable", "Food uploads are not configured.")
-        return f"http://localhost:4443/storage/v1/b/{bucket or 'runlete-food-local'}/o/{object_name}"
+        raise ProblemError(503, "storage_unavailable", "Storage unavailable", "Food uploads are not configured.")
     try:
         return await signed_gcs_url(
             project_id=settings.gcp_project_id,
@@ -90,9 +88,9 @@ def _local_upload_token(image_id: UUID) -> str:
 @router.post("/food-images/uploads", response_model=UploadView, status_code=201)
 async def create_upload(body: UploadRequest, request: Request, user_id: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> UploadView:
     athlete = await athlete_id(session, user_id); settings = get_settings(); now = datetime.now(timezone.utc); image_id = uuid7(); bucket = settings.nutrition_image_bucket or "runlete-food-local"; name = f"athletes/{athlete}/{image_id}"
-    row = FoodImage(id=image_id, athlete_id=athlete, bucket=bucket, object_name=name, content_type=body.content_type, retain=body.retain, expires_at=now + timedelta(days=30 if body.retain else 2))
+    row = FoodImage(id=image_id, athlete_id=athlete, bucket=bucket, object_name=name, content_type=body.content_type, size_bytes=body.size_bytes, retain=body.retain, expires_at=now + timedelta(days=30 if body.retain else 2))
     session.add(row); await session.commit()
-    if settings.is_production:
+    if settings.environment != "test":
         upload_url = await _signed_upload(bucket, name, body.content_type)
     else:
         upload_url = (
@@ -111,7 +109,7 @@ async def upload_local_food_image(
 ) -> Response:
     """Development-only upload target matching production's signed-URL flow."""
     settings = get_settings()
-    if settings.is_production:
+    if settings.environment != "test":
         raise ProblemError(404, "not_found", "Not found", "The endpoint does not exist.")
     if not hmac.compare_digest(token, _local_upload_token(image_id)):
         raise ProblemError(403, "invalid_upload_token", "Upload forbidden", "The upload token is invalid.")
@@ -143,7 +141,16 @@ async def upload_local_food_image(
 async def analyze(body: AnalyzeCommand, user_id: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> dict:
     athlete = await athlete_id(session, user_id); image = await session.get(FoodImage, body.image_id)
     if image is None or image.athlete_id != athlete: raise ProblemError(404, "food_image_not_found", "Image not found", "The food image does not exist.")
-    settings = get_settings(); analysis = FoodAnalysis(image_id=image.id, athlete_id=athlete, status="queued", provider="openai", model_id=settings.openai_food_model, prompt_version="food-openai-v1", schema_version=1, source_object_hash=body.source_object_hash)
+    settings = get_settings()
+    if settings.environment != "test":
+        try:
+            metadata = await gcs_object_metadata(project_id=settings.gcp_project_id, bucket=image.bucket, object_name=image.object_name)
+        except Exception as exc:
+            raise ProblemError(422, "food_image_missing", "Image unavailable", "Upload the image before requesting analysis.") from exc
+        if metadata["size"] != image.size_bytes or metadata["size"] > 20 * 1024 * 1024 or metadata["content_type"] != image.content_type:
+            raise ProblemError(422, "food_image_invalid", "Invalid image", "The uploaded image does not match its manifest.")
+        image.object_generation = int(metadata["generation"])
+    analysis = FoodAnalysis(image_id=image.id, athlete_id=athlete, status="queued", provider="openai", model_id=settings.openai_food_model, prompt_version="food-openai-v1", schema_version=1, source_object_hash=body.source_object_hash)
     session.add(analysis); await session.flush()
     await enqueue_event(session, topic="nutrition", event_type="nutrition.food_analysis.requested", aggregate_type="food_analysis", aggregate_id=analysis.id, payload={"analysis_id": str(analysis.id)})
     await session.commit()
@@ -168,5 +175,10 @@ async def analysis_detail(analysis_id: UUID, user_id: UUID = Depends(current_use
 @router.post("/meals", status_code=201)
 async def confirm_meal(body: MealConfirm, user_id: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> dict:
     athlete = await athlete_id(session, user_id)
+    if body.analysis_id is not None:
+        from sqlalchemy import select
+        analysis = await session.scalar(select(FoodAnalysis).where(FoodAnalysis.id == body.analysis_id, FoodAnalysis.athlete_id == athlete, FoodAnalysis.status == "complete"))
+        if analysis is None:
+            raise ProblemError(404, "food_analysis_not_found", "Analysis not found", "Choose a completed analysis from your account.")
     row = Meal(athlete_id=athlete, analysis_id=body.analysis_id, eaten_at=body.eaten_at, meal_type=body.meal_type, name=body.name, calories_kcal=body.calories_kcal, protein_g=body.protein_g, carbohydrate_g=body.carbohydrate_g, fat_g=body.fat_g, fibre_g=body.fibre_g, confirmed_by_user=True, items_json=body.items)
     session.add(row); await session.commit(); return {"id": row.id, "confirmed": True}

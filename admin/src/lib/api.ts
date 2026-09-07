@@ -10,10 +10,10 @@ export type KnowledgeRelease={id:string;code:string;package_type:string;sport_co
 export type ReleaseCandidate={entity_type:string;entity_id:string;entity_version:number;code:string};
 export type Simulation={id:string;sport_code:string;scenario_code:string;passed:boolean;result_json:Record<string,unknown>;created_at:string};
 export type SourceImport={id:string;source_type:string;source_name:string;status:string;row_count:number;summary_json:Record<string,unknown>;version:number;created_at:string};
-export type DatasetStatus={counts:{exercises:number;training_templates:number;training_template_versions:number;sport_priorities:number;category_availability:number;sport_mode_policies:number;mode_fallbacks:number;scenario_overlays:number}};
-export type TrainingReference={id:string;code:string;content_version:number;name:string;category_code:string;athlete_level:string;duration_weeks:number;method_count:number;week_count:number;status:string};
+export type DatasetStatus={counts:{exercises:number;training_templates:number;training_template_versions:number;sport_priorities:number;sport_mode_policies:number;phase_dose_policies:number}};
+export type TrainingReference={id:string;code:string;content_version:number;name:string;category_code:string;athlete_level:string;duration_weeks:number;method_count:number;week_count:number;status:string;used_by_sports:string[];usage_scope:'shared'|'sport_specific'};
 export type SportTemplatePriority={id:string;sport_code:string;scope_type:string;scope_code:string;phase_code:string;goal_code:string;primary_template_category:string;session_block_order:string[];priority_basis:string;priorities:{rank:number;category_code:string;weight:number}[];version:number};
-export type TrainingPolicies={summary:{total:number;availability:number;sport_modes:number;mode_fallbacks:number;scenario_overlays:number};availability:{id:string;category_code:string;athlete_level:string;available:boolean;template_code:string|null;prerequisite_category:string|null;reason:string;version:number}[];sport_modes:{id:string;sport_code:string;primary_mode:string;cross_training_requires_opt_in:boolean;version:number}[];mode_fallbacks:{id:string;category_code:string;athlete_level:string;requested_mode:string;fallback_category:string;automatic:boolean;version:number}[];scenario_overlays:{id:string;code:string;applies_to:string;instruction:string;version:number}[]};
+export type TrainingPolicies={summary:{total:number;sport_modes:number;phase_dose_policies:number};sport_modes:{id:string;sport_code:string;primary_mode:string;cross_training_requires_opt_in:boolean;version:number}[];phase_dose_policies:{id:string;phase_code:string;policy_version:number;progression_mode:string;maximum_categories:number;maximum_sessions_per_week:number;weekly_volume_multipliers:number[];novelty_policy:string;policy_basis:string;version:number}[]};
 export type OsmGraph={id:string;version_code:string;source_timestamp:string;status:string;activated_at:string|null;version:number};
 export type OsmRegion={id:string;code:string;name:string;pbf_object:string;status:string;version:number;graphs:OsmGraph[]};
 export type ModerationFlag={id:string;athlete_id:string;subject_type:string;subject_id:string;flag_code:string;severity:string;status:string;evidence:Record<string,unknown>;created_at:string;version:number};
@@ -45,15 +45,47 @@ export type EligibilityReport={total:number;eligible:number;items:{id:string;cod
 export type SportCoverage={sport_code:string;counts:Record<string,number>;active_release_id:string|null;coverage_ready:boolean;released:boolean;complete:boolean;missing:string[]};
 export type ConflictReport={duplicate_names:{name:string;count:number}[];orphan_recipe_slots:{id:string;quality:string;role:string}[];progression_error:string|null};
 export type SourceImportDetail=SourceImport&{rows:{id:string;source_reference:string;normalized_payload:Record<string,unknown>;disposition:string;validation_errors:string[];canonical_method_id:string|null;normalized_name?:string|null;linked_method_id?:string|null;reason?:string|null}[]};
+export type SportContentArticle={id:string;slug:string;latest_version:number;published_version:number|null;archived:boolean;record_version:number;status:string;category:string;title:string;summary:string;updated_at:string};
+export type SportContentArticleDetail=SportContentArticle&{sport_code:string;content_version:number;icon:string;audiences:string[];events:string[];sections:Record<string,unknown>[];medical_disclaimer:string;reviewed_on:string;source_ids:string[]};
+export type SportContentSource={id:string;source_key:string;title:string;canonical_url:string;publication_year:number;source_kind:string;editorial_note:string;version:number};
 
-// Local development always uses Vite's same-origin `/api` proxy. This avoids
-// stale shell-level VITE_API_URL values bypassing the proxy and pointing the
-// browser at an old backend port. Deployed builds still use the configured
-// public API origin when one is supplied.
-const base = import.meta.env.DEV ? '' : (import.meta.env.VITE_API_URL ?? '');
-export const adminRoles=()=>['content_editor','content_publisher','moderator','platform_admin'];
+const base = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '');
+const ACCESS_TOKEN_KEY='runlete.admin.access';
+const REFRESH_TOKEN_KEY='runlete.admin.refresh';
+const USER_KEY='runlete.admin.user';
+export type AdminSessionUser={display_name:string;email?:string;roles:string[]};
+export type AdminSession={access_token:string;refresh_token:string;user:AdminSessionUser};
+export const adminSession=():AdminSession|null=>{
+  const access_token=sessionStorage.getItem(ACCESS_TOKEN_KEY);
+  const refresh_token=sessionStorage.getItem(REFRESH_TOKEN_KEY);
+  const rawUser=sessionStorage.getItem(USER_KEY);
+  if(!access_token||!refresh_token||!rawUser)return null;
+  try{return {access_token,refresh_token,user:JSON.parse(rawUser) as AdminSessionUser};}catch{return null;}
+};
+export const setAdminSession=(session:AdminSession)=>{
+  sessionStorage.setItem(ACCESS_TOKEN_KEY,session.access_token);
+  sessionStorage.setItem(REFRESH_TOKEN_KEY,session.refresh_token);
+  sessionStorage.setItem(USER_KEY,JSON.stringify(session.user));
+};
+export const clearAdminSession=()=>{
+  sessionStorage.removeItem(ACCESS_TOKEN_KEY);sessionStorage.removeItem(REFRESH_TOKEN_KEY);sessionStorage.removeItem(USER_KEY);
+};
+export const logoutAdmin=async()=>{
+  const refreshToken=adminSession()?.refresh_token;
+  if(refreshToken)await api<void>('/auth/logout',{method:'POST',headers:{'X-Refresh-Token':refreshToken}});
+};
+export const adminRoles=()=>adminSession()?.user.roles??[];
 export const canAuthor=()=>adminRoles().some(role=>['content_editor','platform_admin'].includes(role));
 export const canPublish=()=>adminRoles().some(role=>['content_publisher','platform_admin'].includes(role));
+export const listSportContent=(sport='running')=>api<{items:SportContentArticle[]}>(`/admin/sport-content/${encodeURIComponent(sport)}`).then(x=>x.items);
+export const createSportContentArticle=(body:Record<string,unknown>)=>api<SportContentArticleDetail>('/admin/sport-content/articles',{method:'POST',body:JSON.stringify(body)});
+export const sportContentDetail=(id:string,version?:number)=>api<SportContentArticleDetail>(`/admin/sport-content/articles/${id}${version?`?version=${version}`:''}`);
+export const createSportContentVersion=(id:string)=>api<{article_id:string;content_version:number;status:string;record_version:number}>(`/admin/sport-content/articles/${id}/versions`,{method:'POST'});
+export const saveSportContentVersion=(article:SportContentArticleDetail,body:Record<string,unknown>)=>api<SportContentArticleDetail>(`/admin/sport-content/articles/${article.id}/versions/${article.content_version}`,{method:'PUT',body:JSON.stringify({...body,expected_record_version:article.record_version})});
+export const listSportContentSources=()=>api<{items:SportContentSource[]}>('/admin/sport-content/sources/all').then(x=>x.items);
+export const createSportContentSource=(body:Record<string,unknown>)=>api<SportContentSource>('/admin/sport-content/sources',{method:'POST',body:JSON.stringify(body)});
+export const updateSportContentSource=(source:SportContentSource,body:Partial<Omit<SportContentSource,'id'|'source_key'|'version'>>)=>api<SportContentSource>(`/admin/sport-content/sources/${source.id}`,{method:'PUT',body:JSON.stringify({...body,expected_version:source.version})});
+export const publishSportContent=(sport:string,body:{title:string;subtitle:string;medical_disclaimer:string})=>api<Record<string,unknown>>(`/admin/sport-content/${encodeURIComponent(sport)}/publish`,{method:'POST',body:JSON.stringify(body)});
 export const isPlatformAdmin=()=>adminRoles().includes('platform_admin');
 export const listAdminUsers=(query='',subscription='all',offset=0,limit=50)=>api<AdminUsersResult>(`/admin/users?query=${encodeURIComponent(query)}&subscription=${encodeURIComponent(subscription)}&offset=${offset}&limit=${limit}`);
 export const adminUserDetail=(id:string)=>api<Record<string,unknown>>(`/admin/users/${id}`);
@@ -66,8 +98,16 @@ export async function api<T>(path:string, init:RequestInit={}):Promise<T>{
   const headers:Record<string,string>={};
   if(!(init.body instanceof FormData)) headers['Content-Type']='application/json';
   Object.assign(headers,init.headers??{});
+  const token=adminSession()?.access_token;
+  if(token&&!headers.Authorization)headers.Authorization=`Bearer ${token}`;
   if(['POST','PUT','PATCH','DELETE'].includes((init.method??'GET').toUpperCase())&&!headers['Idempotency-Key']) headers['Idempotency-Key']=`admin-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const response=await fetch(`${base}/api/v1${path}`,{...init,headers});
+  let response=await fetch(`${base}/api/v1${path}`,{...init,headers});
+  const session=adminSession();
+  if(response.status===401&&session&&!path.startsWith('/auth/')){
+    const refreshed=await fetch(`${base}/api/v1/auth/refresh`,{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':`admin-refresh-${Date.now()}`},body:JSON.stringify({refresh_token:session.refresh_token,device_name:'Runlete Admin Studio'})});
+    if(refreshed.ok){const next=await refreshed.json() as AdminSession;setAdminSession(next);headers.Authorization=`Bearer ${next.access_token}`;response=await fetch(`${base}/api/v1${path}`,{...init,headers});}
+    else{clearAdminSession();window.dispatchEvent(new Event('runlete-admin-session-expired'));}
+  }
   if(!response.ok){const problem=await response.json().catch(()=>({detail:'Unexpected service error'}));throw new Error(problem.detail??'Request failed');}
   return response.status===204?undefined as T:response.json();
 }
@@ -179,4 +219,4 @@ export const roleUsers=(query='')=>api<{items:RoleUser[]}>(`/admin/roles/users?q
 export const grantRole=(userId:string,role:string)=>api(`/admin/roles/users/${userId}`,{method:'POST',headers:{'Idempotency-Key':`role-grant-${userId}-${role}`},body:JSON.stringify({role})});
 export const revokeRole=(userId:string,role:string)=>api(`/admin/roles/users/${userId}/${role}`,{method:'DELETE',headers:{'Idempotency-Key':`role-revoke-${userId}-${role}-${Date.now()}`}});
 export const requestOtp=(email:string)=>api<{challenge_id:string;expires_at:string}>('/auth/otp/request',{method:'POST',body:JSON.stringify({email,purpose:'login'})});
-export const verifyOtp=(challenge_id:string,email:string,code:string)=>api<{access_token:string;refresh_token:string;user:{display_name:string;roles:string[]}}>('/auth/otp/verify',{method:'POST',body:JSON.stringify({challenge_id,email,code,device_name:'Runlete Admin Studio'})});
+export const verifyOtp=(challenge_id:string,email:string,code:string)=>api<AdminSession>('/auth/otp/verify',{method:'POST',body:JSON.stringify({challenge_id,email,code,device_name:'Runlete Admin Studio'})});

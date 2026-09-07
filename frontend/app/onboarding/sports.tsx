@@ -5,14 +5,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing } from '../../src/utils/theme';
 import { useOnboardingStore } from '../../src/store/onboardingStore';
+import { TRAINING_SPORTS } from '../../src/data/trainingSports';
 
-const SPORTS = [
-  'Badminton', 'Basketball', 'Boxing', 'Cricket',
-  'Cycling', 'Football', 'Golf', 'Hockey',
-  'Horse Riding', 'Hyrox', 'MMA', 'Rugby',
-  'Running', 'Swimming', 'Table Tennis', 'Tennis',
-  'Volleyball',
-];
+const SPORTS = TRAINING_SPORTS.map(sport => sport.label);
 
 const noWebFocus = { outlineStyle: 'none' } as any;
 
@@ -20,7 +15,9 @@ export default function SportsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { setSports, sports } = useOnboardingStore();
-  const [selected, setSelected] = useState<string[]>(sports);
+  const [selected, setSelected] = useState<string[]>(
+    sports.filter(sport => SPORTS.includes(sport))
+  );
 
   const toggleSport = (sport: string) => {
     setSelected(current =>

@@ -5,18 +5,35 @@ from datetime import timedelta
 import anyio
 
 
-async def download_gcs_bytes(*, project_id: str, bucket: str, object_name: str) -> bytes:
+async def gcs_object_metadata(*, project_id: str, bucket: str, object_name: str) -> dict[str, object]:
+    """Load trusted object metadata before allocating memory for its contents."""
+
+    def load() -> dict[str, object]:
+        from google.cloud import storage
+
+        blob = storage.Client(project=project_id or None).bucket(bucket).blob(object_name)
+        blob.reload()
+        return {"size": int(blob.size or 0), "content_type": blob.content_type or "", "generation": int(blob.generation or 0)}
+
+    return await anyio.to_thread.run_sync(load)
+
+
+async def download_gcs_bytes(*, project_id: str, bucket: str, object_name: str, max_bytes: int, generation: int | None = None) -> bytes:
     """Read an object without exposing it to an external AI provider by URL."""
 
     def download() -> bytes:
         from google.cloud import storage
 
-        return (
-            storage.Client(project=project_id or None)
-            .bucket(bucket)
-            .blob(object_name)
-            .download_as_bytes()
-        )
+        blob = storage.Client(project=project_id or None).bucket(bucket).blob(object_name)
+        blob.reload()
+        if int(blob.size or 0) <= 0 or int(blob.size or 0) > max_bytes:
+            raise ValueError("object size is outside the permitted range")
+        if generation is not None and int(blob.generation or 0) != generation:
+            raise ValueError("object generation changed after validation")
+        content = blob.download_as_bytes(end=max_bytes - 1, if_generation_match=generation)
+        if len(content) > max_bytes:
+            raise ValueError("object exceeds the permitted size")
+        return content
 
     return await anyio.to_thread.run_sync(download)
 

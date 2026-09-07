@@ -12,6 +12,18 @@ from backend.app.core.database import SessionFactory
 from backend.app.operations.models import OutboxEvent
 
 
+_publisher = None
+
+
+def _publisher_client():
+    global _publisher
+    if _publisher is None:
+        from google.cloud import pubsub_v1
+
+        _publisher = pubsub_v1.PublisherClient()
+    return _publisher
+
+
 async def publish_outbox_ids(event_ids: tuple[UUID, ...]) -> int:
     settings = get_settings()
     if not event_ids or not settings.gcp_project_id:
@@ -28,9 +40,7 @@ async def publish_outbox_ids(event_ids: tuple[UUID, ...]) -> int:
         return 0
 
     def publish() -> None:
-        from google.cloud import pubsub_v1
-
-        publisher = pubsub_v1.PublisherClient()
+        publisher = _publisher_client()
         futures = []
         for row in rows:
             topic = publisher.topic_path(

@@ -117,12 +117,14 @@ async def _download_import(job: ImportJob) -> bytes:
     def download() -> bytes:
         from google.cloud import storage
 
-        return (
-            storage.Client(project=settings.gcp_project_id or None)
-            .bucket(job.bucket)
-            .blob(job.object_name)
-            .download_as_bytes()
-        )
+        blob = storage.Client(project=settings.gcp_project_id or None).bucket(job.bucket).blob(job.object_name)
+        blob.reload()
+        if int(blob.size or 0) != job.size_bytes:
+            raise ActivityImportError("Uploaded file size does not match the import manifest")
+        generation = (job.diagnostics_json or {}).get("object_generation")
+        if generation is not None and int(blob.generation or 0) != int(generation):
+            raise ActivityImportError("Uploaded file changed after completion")
+        return blob.download_as_bytes(end=job.size_bytes - 1, if_generation_match=int(generation) if generation is not None else None)
 
     return await anyio.to_thread.run_sync(download)
 
@@ -286,11 +288,18 @@ async def process_food_analysis(session: AsyncSession, analysis_id: UUID) -> Non
             project_id=settings.gcp_project_id,
             bucket=image.bucket,
             object_name=image.object_name,
+            max_bytes=20 * 1024 * 1024,
+            generation=image.object_generation,
         )
+        if len(image_bytes) != image.size_bytes:
+            raise ValueError("food image does not match the validated upload manifest")
+        verified_hash = hashlib.sha256(image_bytes).hexdigest()
+        image.content_hash = verified_hash
+        row.source_object_hash = verified_hash
         output=await OpenAIFoodAnalysisProvider().analyze(
             image_bytes=image_bytes,
             content_type=image.content_type,
-            content_hash=row.source_object_hash,
+            content_hash=verified_hash,
         )
         row.result_json=output.result.model_dump(mode="json");row.confidence=output.result.overall_confidence;row.latency_ms=output.latency_ms;row.input_tokens=output.input_tokens;row.output_tokens=output.output_tokens;row.status="complete"
     except Exception as exc:

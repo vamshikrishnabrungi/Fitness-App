@@ -21,6 +21,8 @@ node_modules/
 
 # Testing
 /coverage
+.pytest_cache/
+**/.pytest_cache/
 
 # Next.js
 /.next/
@@ -86,19 +88,8 @@ test_result.md
 **/.metro-cache/
 
 # Mobile development
-android-sdk/ -e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
+android-sdk/
+
 # Environment files
 *.env
 *.env.*

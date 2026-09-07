@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta, timezone
+import json
 from uuid import UUID
 
 import jwt
-from fastapi import APIRouter, Depends, Query, Response
-from sqlalchemy import select, text
+from fastapi import APIRouter, Depends, Query, Request, Response
+from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.core.config import get_settings
@@ -18,15 +19,17 @@ router = APIRouter(prefix="/territory", tags=["territory"])
 
 
 async def _features(session: AsyncSession, *, athlete: UUID | None = None, club: UUID | None = None) -> dict:
-    query = select(TerritoryCurrentControl, StreetEdge).join(StreetEdge, StreetEdge.id == TerritoryCurrentControl.edge_id)
+    query = select(
+        TerritoryCurrentControl,
+        StreetEdge,
+        func.ST_AsGeoJSON(StreetEdge.geometry).label("geometry_json"),
+    ).join(StreetEdge, StreetEdge.id == TerritoryCurrentControl.edge_id)
     if athlete: query = query.where(TerritoryCurrentControl.controller_type == "athlete", TerritoryCurrentControl.athlete_id == athlete)
     if club: query = query.where(TerritoryCurrentControl.controller_type == "club", TerritoryCurrentControl.club_id == club)
     rows = (await session.execute(query.limit(5000))).all()
-    from sqlalchemy import func
     features = []
-    for control, edge in rows:
-        geometry = await session.scalar(select(func.ST_AsGeoJSON(edge.geometry)))
-        features.append({"type": "Feature", "id": str(edge.id), "geometry": __import__('json').loads(geometry), "properties": {"edge_id": str(edge.id), "controller_type": control.controller_type, "controller_id": str(control.athlete_id or control.club_id), "score": float(control.score), "expires_at": control.expires_at.isoformat(), "state": "expiring" if control.expires_at < datetime.now(timezone.utc) + timedelta(days=3) else "controlled"}})
+    for control, edge, geometry in rows:
+        features.append({"type": "Feature", "id": str(edge.id), "geometry": json.loads(geometry), "properties": {"edge_id": str(edge.id), "controller_type": control.controller_type, "controller_id": str(control.athlete_id or control.club_id), "score": float(control.score), "expires_at": control.expires_at.isoformat(), "state": "expiring" if control.expires_at < datetime.now(timezone.utc) + timedelta(days=3) else "controlled"}})
     return {"type": "FeatureCollection", "features": features}
 
 
@@ -71,7 +74,7 @@ async def edge(edge_id: UUID, user_id: UUID = Depends(current_user_id), session:
 
 
 @router.post("/tile-session")
-async def tile_session(body: dict, user_id: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> dict:
+async def tile_session(body: dict, request: Request, user_id: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> dict:
     athlete = await athlete_id(session, user_id); settings = get_settings(); now = datetime.now(timezone.utc); scope = body.get("scope", "mine"); club_id = body.get("club_id")
     if scope not in {"mine", "club"}:
         raise ProblemError(422, "territory_scope_invalid", "Invalid map scope", "Use mine or club territory scope.")
@@ -83,7 +86,8 @@ async def tile_session(body: dict, user_id: UUID = Depends(current_user_id), ses
         await _authorize_club_map(session, club_uuid, athlete)
         club_id = str(club_uuid)
     token = jwt.encode({"sub": str(athlete), "scope": scope, "club_id": club_id, "iat": int(now.timestamp()), "exp": int((now + timedelta(minutes=15)).timestamp()), "iss": settings.jwt_issuer, "aud": "runlete-tiles"}, settings.jwt_secret, algorithm="HS256")
-    return {"tile_url": f"/api/v1/territory/tiles/{{z}}/{{x}}/{{y}}.mvt?token={token}", "expires_at": now + timedelta(minutes=15)}
+    base_url = str(request.base_url).rstrip("/")
+    return {"tile_url": f"{base_url}/api/v1/territory/tiles/{{z}}/{{x}}/{{y}}.mvt?token={token}", "expires_at": now + timedelta(minutes=15)}
 
 
 @router.get("/tiles/{z}/{x}/{y}.mvt", include_in_schema=True)

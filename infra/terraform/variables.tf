@@ -43,6 +43,11 @@ variable "iap_oauth_client_secret" {
   sensitive = true
 }
 
+variable "iap_jwt_audience" {
+  type        = string
+  description = "Expected aud claim for X-Goog-IAP-JWT-Assertion on the Admin API backend."
+}
+
 variable "iap_access_members" {
   description = "IAM principals allowed through Admin Studio IAP, e.g. user:owner@example.com or group:admins@example.com."
   type        = set(string)
@@ -88,6 +93,12 @@ variable "api_max_instances" {
 variable "worker_max_instances" {
   type    = number
   default = 30
+}
+
+variable "training_generation_enabled" {
+  type        = bool
+  default     = false
+  description = "Explicit release gate for deterministic training generation. Keep false until a reviewed catalogue release is active."
 }
 
 variable "valhalla_machine_type" {

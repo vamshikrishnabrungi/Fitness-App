@@ -56,16 +56,6 @@ interface StrainData {
   history?: { day: string; value: number }[];
 }
 
-interface Lesson {
-  id: string;
-  sport: string;
-  title: string;
-  category: string;
-  description?: string | null;
-  difficulty?: string | null;
-  duration?: number | null;
-}
-
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -78,18 +68,16 @@ export default function HomeScreen() {
   const [runStats, setRunStats] = useState<any>(null);
   const [goals, setGoals] = useState<any[]>([]);
   const [strain, setStrain] = useState<StrainData | null>(null);
-  const [lessons, setLessons] = useState<Lesson[]>([]);
 
   const fetchData = async () => {
     try {
-      const [workoutRes, loadRes, nutritionRes, statsRes, goalsRes, strainRes, lessonsRes] = await Promise.all([
+      const [workoutRes, loadRes, nutritionRes, statsRes, goalsRes, strainRes] = await Promise.all([
         api.get<Workout>('/training/sessions/today').catch(() => null),
         api.get<TrainingLoadData>('/training-load').catch(() => null),
         api.get<NutritionData>('/nutrition/daily-summary').catch(() => null),
         api.get<any>('/activities/stats').catch(() => null),
         api.get<any[]>('/goals').catch(() => []),
         Promise.resolve(null as StrainData | null),
-        Promise.resolve([] as Lesson[]),
       ]);
 
       if (workoutRes) setWorkout(workoutRes);
@@ -98,7 +86,6 @@ export default function HomeScreen() {
       if (statsRes) setRunStats(statsRes);
       if (goalsRes) setGoals(goalsRes);
       setStrain(strainRes);
-      setLessons(lessonsRes || []);
     } catch (error) {
       console.error('Error fetching home data:', error);
     }
@@ -292,7 +279,11 @@ export default function HomeScreen() {
                       {goal.name || config.label}
                     </Text>
                     <Text style={styles.goalValue}>
-                      {`Target: ${goal.target}${goal.unit ? ` ${goal.unit}` : ''}`}
+                      {goal.target != null
+                        ? `Target: ${goal.target}${goal.unit ? ` ${goal.unit}` : ''}`
+                        : goal.target_date
+                          ? `Target date: ${goal.target_date}`
+                          : 'Target not set'}
                     </Text>
                   </View>
                   <Ionicons name="add-circle-outline" size={24} color={colors.textTertiary} />
@@ -423,35 +414,6 @@ export default function HomeScreen() {
             </GlassCard>
           )}
         </View>
-
-        {/* ═══════════ 11. SPORT IQ ═══════════ */}
-        {lessons.length > 0 && (
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Sport IQ</Text>
-              <TouchableOpacity onPress={() => router.push('/(tabs)/sport')}>
-                <Text style={styles.openLink}>Open</Text>
-              </TouchableOpacity>
-            </View>
-            <GlassCard>
-              <Text style={styles.sportIqTitle}>Sport IQ</Text>
-              <Text style={styles.sportIqSubtitle}>Recommended lessons</Text>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.lessonsScroll}
-              >
-                {lessons.slice(0, 3).map((lesson, i) => (
-                  <TouchableOpacity key={lesson.id || i} style={styles.lessonChip}>
-                    <View style={styles.lessonChipIcon}>
-                      <Ionicons name="fitness-outline" size={16} color={colors.accentOrange} />
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </GlassCard>
-          </View>
-        )}
 
         <View style={{ height: 40 }} />
       </ScrollView>
@@ -873,34 +835,5 @@ const styles = StyleSheet.create({
     ...typography.captionMedium,
     color: colors.textPrimary,
     marginRight: spacing.xs,
-  },
-  sportIqTitle: {
-    ...typography.bodySemibold,
-    color: colors.textPrimary,
-  },
-  sportIqSubtitle: {
-    ...typography.caption,
-    color: colors.textTertiary,
-    marginTop: spacing.xs,
-    marginBottom: spacing.md,
-  },
-  lessonsScroll: {
-    gap: spacing.sm,
-  },
-  lessonChip: {
-    backgroundColor: colors.accentOrangeLight,
-    width: 80,
-    height: 60,
-    borderRadius: borderRadius.lg,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  lessonChipIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.background,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

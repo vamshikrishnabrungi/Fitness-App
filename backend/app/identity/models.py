@@ -4,7 +4,7 @@ from datetime import date, datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import Boolean, CheckConstraint, Date, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, CheckConstraint, Date, DateTime, ForeignKey, Index, Integer, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -39,6 +39,8 @@ class OTPChallenge(UUIDPrimaryKeyMixin, Base):
     __tablename__ = "otp_challenges"
     __table_args__ = (
         CheckConstraint("attempt_count >= 0", name="otp_attempt_nonnegative"),
+        Index("ix_identity_otp_email_created", "normalized_email", "created_at"),
+        Index("ix_identity_otp_challenges_ip_created", "requested_ip_hash", "created_at"),
         {"schema": "identity"},
     )
 

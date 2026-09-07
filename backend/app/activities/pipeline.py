@@ -7,13 +7,13 @@ from uuid import UUID
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import anyio
-from sqlalchemy import delete, func, select, text, update
+from sqlalchemy import case, delete, func, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.athletes.models import AthleteProfile
 from backend.app.competition.models import Club
 from backend.app.core.config import get_settings
-from backend.app.maps.models import MatchedEdgeTraversal, StreetEdge
+from backend.app.maps.models import GeographicRegion, MatchedEdgeTraversal, StreetEdge
 from backend.app.maps.regions import UnsupportedMapRegion, valhalla_url_for_point
 from backend.app.maps.privacy import hidden_zones_for_athlete, redact_start_and_end
 from backend.app.maps.valhalla import MapMatchError, MatchResult, MatchedWay, match_trace
@@ -30,9 +30,9 @@ from .models import (
     BestEffort,
 )
 from .elevation import get_dem_provider, resolve_elevation
-from .processing import Sample, best_efforts, calories_for_run, haversine_m, kilometre_splits, process_samples
+from .processing import ACTIVITY_METRICS_VERSION, Sample, best_efforts, calories_for_run, haversine_m, kilometre_splits, process_samples
 
-COMPUTATION_VERSION = "activity-v3-device-smoothed-authority"
+COMPUTATION_VERSION = "activity-v4-metrics-v1-device"
 MATCHER_VERSION = "valhalla-confidence-v1"
 CONFIRMATION_TOLERANCE_M = 25.0
 CONFIRMATION_TOLERANCE_RATIO = 0.02
@@ -126,15 +126,20 @@ async def _replace_metrics(session: AsyncSession, activity: Activity, raw_sample
     await session.execute(delete(ActivityQuality).where(ActivityQuality.activity_id == activity.id, ActivityQuality.computation_version == COMPUTATION_VERSION))
     for split in kilometre_splits(result.samples):
         session.add(ActivitySplit(activity_id=activity.id, split_type="kilometre", sequence=split.sequence, distance_m=split.distance_m, elapsed_seconds=split.elapsed_seconds))
-    for effort in best_efforts(result.samples):
-        previous = await session.scalar(
-            select(func.min(BestEffort.elapsed_seconds)).where(
-                BestEffort.athlete_id == activity.athlete_id,
-                BestEffort.distance_code == effort.distance_code,
-                BestEffort.quality_passed.is_(True),
-                BestEffort.activity_id != activity.id,
-            )
+    efforts = best_efforts(result.samples)
+    previous_rows = (await session.execute(
+        select(BestEffort.distance_code, func.min(BestEffort.elapsed_seconds))
+        .where(
+            BestEffort.athlete_id == activity.athlete_id,
+            BestEffort.distance_code.in_([effort.distance_code for effort in efforts]),
+            BestEffort.quality_passed.is_(True),
+            BestEffort.activity_id != activity.id,
         )
+        .group_by(BestEffort.distance_code)
+    )).all() if efforts else []
+    previous_by_distance = {code: elapsed for code, elapsed in previous_rows}
+    for effort in efforts:
+        previous = previous_by_distance.get(effort.distance_code)
         is_pr = previous is None or effort.elapsed_seconds < float(previous)
         if is_pr:
             await session.execute(
@@ -175,20 +180,22 @@ async def _replace_metrics(session: AsyncSession, activity: Activity, raw_sample
     activity.paused_seconds = result.paused_seconds
     # Distance remains the device-smoothed GPS metric. Server processing only
     # confirms it and records the small verification delta.
+    # Native recordings submit the exact device-smoothed distance shown live.
+    # Imports and legacy records without that value use the server replay.
     if activity.device_distance_m is None:
         activity.device_distance_m = result.distance_m
-    delta = result.distance_m - float(activity.device_distance_m)
+        reasons.append("device_distance_missing_server_replay_used")
+    final_distance_m = float(activity.device_distance_m)
+    delta = result.distance_m - final_distance_m
     activity.server_confirmation_delta_m = delta
-    allowed_delta = max(CONFIRMATION_TOLERANCE_M, float(activity.device_distance_m) * CONFIRMATION_TOLERANCE_RATIO)
+    allowed_delta = max(CONFIRMATION_TOLERANCE_M, final_distance_m * CONFIRMATION_TOLERANCE_RATIO)
     if abs(delta) > allowed_delta:
         reasons.append("server_metric_confirmation_outside_tolerance")
-        # Never replace the number the athlete saw live. The server result is
-        # retained only as evidence for diagnostics and reprocessing.
-        result_distance = float(activity.device_distance_m)
     else:
-        result_distance = result.distance_m
-    activity.distance_m = result.distance_m
-    activity.distance_m = result_distance
+        reasons.append("server_metric_confirmation_within_tolerance")
+    # The confirmation result is evidence, never a replacement for the number
+    # already shown to the athlete.
+    activity.distance_m = final_distance_m
     activity.distance_source = "device_smoothed_gps"
     elevation_gain_m, elevation_source = await resolve_elevation(
         barometric=[sample.barometric_altitude for sample in result.samples],
@@ -199,10 +206,28 @@ async def _replace_metrics(session: AsyncSession, activity: Activity, raw_sample
     activity.elevation_source = elevation_source
     activity.elevation_gain_m = elevation_gain_m
     activity.average_pace_s_per_km = (
-        result.moving_seconds / (result_distance / 1000)
-        if result_distance > 0 and result.moving_seconds > 0 else None
+        result.moving_seconds / (final_distance_m / 1000)
+        if final_distance_m > 0 and result.moving_seconds > 0 else None
     )
-    activity.calories_kcal = calories_for_run(result.distance_m, float(athlete.weight_kg) if athlete and athlete.weight_kg else None)
+    activity.calories_kcal = calories_for_run(final_distance_m, float(athlete.weight_kg) if athlete and athlete.weight_kg else None)
+    # Regional competition stores only a containing administrative region, not
+    # the coordinate used to resolve it. The middle accepted fix avoids using a
+    # likely home/start point and exact coordinates never enter leaderboard facts.
+    midpoint = result.samples[len(result.samples) // 2]
+    point = func.ST_SetSRID(func.ST_MakePoint(midpoint.longitude, midpoint.latitude), 4326)
+    activity.region_id = await session.scalar(
+        select(GeographicRegion.id)
+        .where(func.ST_Covers(GeographicRegion.boundary, point))
+        .order_by(
+            case(
+                (GeographicRegion.region_type == "city", 0),
+                (GeographicRegion.region_type == "country", 1),
+                else_=2,
+            ),
+            GeographicRegion.id,
+        )
+        .limit(1)
+    )
     activity.average_hr = result.average_hr
     activity.average_cadence = result.average_cadence
     activity.computation_version = COMPUTATION_VERSION
@@ -269,12 +294,15 @@ async def _candidate_edges(session: AsyncSession, match: MatchResult, way: Match
         """
     )
     rows = (await session.execute(statement, {"path": path_json, "way_id": way.way_id})).all()
-    output: list[tuple[StreetEdge, float]] = []
-    for edge_id, coverage in rows:
-        edge = await session.get(StreetEdge, edge_id)
-        if edge is not None:
-            output.append((edge, max(0.0, min(1.0, float(coverage or 0)))))
-    return output
+    edges = {
+        edge.id: edge
+        for edge in (await session.scalars(select(StreetEdge).where(StreetEdge.id.in_([row[0] for row in rows])))).all()
+    } if rows else {}
+    return [
+        (edges[edge_id], max(0.0, min(1.0, float(coverage or 0))))
+        for edge_id, coverage in rows
+        if edge_id in edges
+    ]
 
 
 async def _replace_matches(session: AsyncSession, activity: Activity, samples: tuple[Sample, ...], quality: ActivityQuality) -> list[UUID]:

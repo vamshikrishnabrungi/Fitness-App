@@ -16,19 +16,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../../src/store/authStore';
-import { api } from '../../src/utils/api';
+import { api, apiErrorMessage } from '../../src/utils/api';
 import { countries } from '../../src/data/countries';
 
 type Step = 'email' | 'code';
-type AuthMethod = 'otp' | 'password';
 
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { login, loginWithOtp } = useAuthStore();
+  const { loginWithOtp } = useAuthStore();
 
   const [step, setStep] = useState<Step>('email');
-  const [authMethod, setAuthMethod] = useState<AuthMethod>('otp');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -36,8 +34,6 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [challengeId, setChallengeId] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState('India');
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [countryQuery, setCountryQuery] = useState('');
@@ -65,12 +61,14 @@ export default function LoginScreen() {
       setError('');
       setLoading(true);
       try {
-        const result = await api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'login' });
+        const normalizedEmail = email.trim().toLowerCase();
+        const result = await api.post<{ challenge_id: string }>('/auth/otp/request', { email: normalizedEmail, purpose: 'login' });
+        setEmail(normalizedEmail);
         setChallengeId(result.challenge_id);
         setStep('code');
         setResendTimer(30);
-      } catch (err: any) {
-        setError(err.message || 'Failed to send code');
+      } catch (err: unknown) {
+        setError(apiErrorMessage(err, 'Failed to send code'));
       } finally {
         setLoading(false);
       }
@@ -79,43 +77,34 @@ export default function LoginScreen() {
   };
 
   const handleSignIn = async () => {
-    if (authMethod === 'otp') {
-      if (!code || code.length < 6) {
-        setError('Please enter the 6-digit code');
-        return;
-      }
-      setError('');
-      setLoading(true);
-      try {
-        await loginWithOtp(challengeId, email, code);
-        router.replace('/(tabs)');
-      } catch (err: any) {
-        setError(err.message || 'Invalid code');
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      if (!password) {
-        setError('Please enter your password');
-        return;
-      }
-      setError('');
-      setLoading(true);
-      try {
-        await login(email, password);
-        router.replace('/(tabs)');
-      } catch (err: any) {
-        setError(err.message || 'Login failed');
-      } finally {
-        setLoading(false);
-      }
+    if (!/^\d{6}$/.test(code)) {
+      setError('Please enter the 6-digit code');
+      return;
+    }
+    setError('');
+    setLoading(true);
+    try {
+      await loginWithOtp(challengeId, email, code);
+      router.replace('/(tabs)');
+    } catch (err: unknown) {
+      setError(apiErrorMessage(err, 'Invalid code'));
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleResendCode = () => {
-    if (resendTimer === 0) {
+  const handleResendCode = async () => {
+    if (resendTimer > 0 || loading) return;
+    setLoading(true);
+    setError('');
+    try {
+      const result = await api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'login' });
+      setChallengeId(result.challenge_id);
       setResendTimer(30);
-      api.post<{ challenge_id: string }>('/auth/otp/request', { email, purpose: 'login' }).then(result => setChallengeId(result.challenge_id)).catch(() => {});
+    } catch (err: unknown) {
+      setError(apiErrorMessage(err, 'Failed to resend code'));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,6 +124,7 @@ export default function LoginScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
+          accessibilityLabel={step === 'email' ? 'Close sign in' : 'Back to email'}
           onPress={() => step === 'email' ? router.back() : setStep('email')}
           style={styles.closeButton}
         >
@@ -179,6 +169,9 @@ export default function LoginScreen() {
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoComplete="email"
+                  accessibilityLabel="Email address"
+                  returnKeyType="go"
+                  onSubmitEditing={handleContinue}
                 />
               </View>
 
@@ -198,21 +191,20 @@ export default function LoginScreen() {
 
               {/* Continue Button */}
               <TouchableOpacity
-                style={[styles.continueButton, !email && styles.buttonDisabled]}
+                accessibilityRole="button"
+                accessibilityState={{ disabled: !email || loading, busy: loading }}
+                style={[styles.continueButton, (!email || loading) && styles.buttonDisabled]}
                 onPress={handleContinue}
-                disabled={!email}
+                disabled={!email || loading}
               >
-                <Text style={styles.buttonText}>Continue</Text>
+                {loading ? <ActivityIndicator color="#FFFFFF" size="small" /> : <Text style={styles.buttonText}>Continue</Text>}
               </TouchableOpacity>
             </>
           ) : (
             <>
               {/* Code/Password Step */}
               <Text style={styles.title}>
-                {authMethod === 'otp'
-                  ? 'Enter the 6-digit code sent to your email.'
-                  : 'Sign in with your password.'
-                }
+                Enter the 6-digit code sent to your email.
               </Text>
 
               <Text style={styles.emailRow}>
@@ -221,8 +213,7 @@ export default function LoginScreen() {
                 <Text style={styles.editLink} onPress={() => setStep('email')}>Edit</Text>
               </Text>
 
-              {authMethod === 'otp' ? (
-                <>
+              <>
                   {/* OTP Input */}
                   <View style={styles.inputContainer}>
                     <TextInput
@@ -233,52 +224,28 @@ export default function LoginScreen() {
                       onChangeText={setCode}
                       keyboardType="number-pad"
                       maxLength={6}
+                      accessibilityLabel="Six digit sign-in code"
+                      textContentType="oneTimeCode"
+                      autoComplete="one-time-code"
                     />
-                    <TouchableOpacity style={styles.inputIcon} onPress={handleResendCode}>
+                    <TouchableOpacity accessibilityLabel="Resend code" style={styles.inputIcon} onPress={() => void handleResendCode()} disabled={resendTimer > 0 || loading}>
                       <Ionicons name="refresh-outline" size={20} color="#999999" />
                     </TouchableOpacity>
                   </View>
 
-                  <TouchableOpacity onPress={handleResendCode} disabled={resendTimer > 0}>
+                  <TouchableOpacity accessibilityRole="button" onPress={() => void handleResendCode()} disabled={resendTimer > 0 || loading}>
                     <Text style={styles.resendText}>
                       {resendTimer > 0 ? `Resend code in ${resendTimer}s` : 'Resend code'}
                     </Text>
                   </TouchableOpacity>
-                </>
-              ) : (
-                <>
-                  {/* Password Input */}
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Password*"
-                      placeholderTextColor="#999999"
-                      value={password}
-                      onChangeText={setPassword}
-                      secureTextEntry={!showPassword}
-                    />
-                    <TouchableOpacity
-                      style={styles.inputIcon}
-                      onPress={() => setShowPassword(!showPassword)}
-                    >
-                      <Ionicons
-                        name={showPassword ? "eye-outline" : "eye-off-outline"}
-                        size={20}
-                        color="#999999"
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  <TouchableOpacity>
-                    <Text style={styles.forgotPassword}>Forgot Password?</Text>
-                  </TouchableOpacity>
-                </>
-              )}
+              </>
 
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
               {/* Sign In Button */}
               <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityState={{ disabled: loading, busy: loading }}
                 style={[styles.signInButton, loading && styles.buttonLoading]}
                 onPress={handleSignIn}
                 disabled={loading}
@@ -290,15 +257,6 @@ export default function LoginScreen() {
                 )}
               </TouchableOpacity>
 
-              {/* Toggle Auth Method */}
-              <TouchableOpacity
-                style={styles.usePasswordButton}
-                onPress={() => setAuthMethod(authMethod === 'otp' ? 'password' : 'otp')}
-              >
-                <Text style={styles.usePasswordText}>
-                  {authMethod === 'otp' ? 'Use Password' : 'Use Code'}
-                </Text>
-              </TouchableOpacity>
             </>
           )}
         </ScrollView>

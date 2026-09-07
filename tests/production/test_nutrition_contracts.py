@@ -3,8 +3,8 @@ from datetime import datetime, timezone
 import pytest
 from pydantic import ValidationError
 
-from backend.app.nutrition.models import Meal
-from backend.app.nutrition.schemas import MealConfirm
+from backend.app.nutrition.models import FoodImage, Meal
+from backend.app.nutrition.schemas import MealConfirm, UploadRequest
 
 
 def test_confirmed_meal_requires_a_closed_meal_type() -> None:
@@ -37,3 +37,11 @@ def test_confirmed_meal_rejects_unknown_meal_type() -> None:
 def test_meal_type_is_part_of_the_relational_model() -> None:
     assert Meal.__table__.c.meal_type.nullable is False
     assert Meal.__table__.c.meal_type.type.length == 16
+
+
+def test_food_upload_size_is_bounded_and_persisted() -> None:
+    assert UploadRequest(content_type="image/jpeg", size_bytes=1024).size_bytes == 1024
+    with pytest.raises(ValidationError):
+        UploadRequest(content_type="image/jpeg", size_bytes=20 * 1024 * 1024 + 1)
+    assert FoodImage.__table__.c.size_bytes.nullable is False
+    assert "object_generation" in FoodImage.__table__.c

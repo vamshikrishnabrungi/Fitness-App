@@ -9,6 +9,7 @@ locals {
     REDIS_URL                   = "redis://${google_redis_instance.cache.host}:${google_redis_instance.cache.port}/0"
     RAW_ACTIVITY_BUCKET         = google_storage_bucket.buckets["raw-activity"].name
     IMPORT_BUCKET               = google_storage_bucket.buckets["imports"].name
+    EXERCISE_MEDIA_BUCKET       = google_storage_bucket.buckets["exercise-media"].name
     NUTRITION_IMAGE_BUCKET      = google_storage_bucket.buckets["food-images"].name
     EXPORT_BUCKET               = google_storage_bucket.buckets["exports"].name
     VALHALLA_GRAPH_BUCKET       = google_storage_bucket.buckets["valhalla-graphs"].name
@@ -16,8 +17,9 @@ locals {
     OPENAI_WORKOUT_MODEL        = "gpt-4o"
     OPENAI_FOOD_MODEL           = "gpt-4o"
     VALHALLA_URLS_JSON          = jsonencode({ for key, rule in google_compute_forwarding_rule.valhalla : key => "http://${rule.ip_address}:8002" })
-    TRAINING_GENERATION_ENABLED = "true"
+    TRAINING_GENERATION_ENABLED = tostring(var.training_generation_enabled)
     ALLOWED_ORIGINS             = "https://${var.admin_domain},https://${var.domain}"
+    ADMIN_IAP_AUDIENCE          = var.iap_jwt_audience
   }
   common_secret_env = {
     DATABASE_PASSWORD = "database-password"
@@ -68,7 +70,7 @@ resource "google_cloud_run_v2_service" "api" {
       }
 
       dynamic "env" {
-        for_each = local.common_runtime_env
+        for_each = merge(local.common_runtime_env, { DATABASE_POOL_SIZE = "2", DATABASE_MAX_OVERFLOW = "1" })
         content {
           name  = env.key
           value = env.value
@@ -138,7 +140,7 @@ resource "google_cloud_run_v2_service" "worker" {
     containers {
       image   = var.api_image
       command = ["uvicorn"]
-      args    = ["backend.app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+      args    = ["backend.app.worker_main:app", "--host", "0.0.0.0", "--port", "8080"]
       ports {
         container_port = 8080
       }
@@ -148,7 +150,7 @@ resource "google_cloud_run_v2_service" "worker" {
       }
 
       dynamic "env" {
-        for_each = local.common_runtime_env
+        for_each = merge(local.common_runtime_env, { DATABASE_POOL_SIZE = "1", DATABASE_MAX_OVERFLOW = "1" })
         content {
           name  = env.key
           value = env.value
@@ -166,6 +168,25 @@ resource "google_cloud_run_v2_service" "worker" {
             }
           }
         }
+      }
+
+      startup_probe {
+        http_get {
+          path = "/healthz"
+        }
+        initial_delay_seconds = 2
+        timeout_seconds       = 2
+        period_seconds        = 5
+        failure_threshold     = 12
+      }
+
+      liveness_probe {
+        http_get {
+          path = "/healthz"
+        }
+        timeout_seconds   = 2
+        period_seconds    = 30
+        failure_threshold = 3
       }
     }
   }
@@ -225,7 +246,7 @@ resource "google_cloud_run_v2_job" "migrate" {
         }
 
         dynamic "env" {
-          for_each = local.common_runtime_env
+          for_each = merge(local.common_runtime_env, { DATABASE_POOL_SIZE = "1", DATABASE_MAX_OVERFLOW = "0" })
           content {
             name  = env.key
             value = env.value

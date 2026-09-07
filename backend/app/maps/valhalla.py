@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import httpx
 
 from backend.app.activities.processing import Sample
+from backend.app.core.http_client import http_client
 from backend.app.maps.polyline import InvalidPolyline, decode_polyline6
 
 
@@ -80,8 +81,9 @@ async def match_trace(base_url: str, samples: tuple[Sample, ...]) -> MatchResult
         },
     }
     try:
-        async with httpx.AsyncClient(timeout=30) as client:
-            response = await client.post(f"{base_url.rstrip('/')}/trace_attributes", json=request)
+        response = await http_client().post(
+            f"{base_url.rstrip('/')}/trace_attributes", json=request, timeout=30.0
+        )
         response.raise_for_status()
         data = response.json()
     except (httpx.HTTPError, ValueError) as exc:

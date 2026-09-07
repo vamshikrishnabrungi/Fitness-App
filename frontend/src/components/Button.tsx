@@ -19,6 +19,8 @@ interface ButtonProps {
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   fullWidth?: boolean;
+  accessibilityHint?: string;
+  testID?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -30,6 +32,8 @@ export const Button: React.FC<ButtonProps> = ({
   loading = false,
   style,
   fullWidth = false,
+  accessibilityHint,
+  testID,
 }) => {
   const getContainerStyle = () => {
     const baseStyles: StyleProp<ViewStyle>[] = [styles.container];
@@ -98,6 +102,9 @@ export const Button: React.FC<ButtonProps> = ({
       accessible={true}
       accessibilityRole="button"
       accessibilityLabel={title}
+      accessibilityHint={accessibilityHint}
+      accessibilityState={{ disabled: disabled || loading, busy: loading }}
+      testID={testID}
       // Web-specific attributes
       {...(typeof window !== 'undefined' && {
         role: 'button',

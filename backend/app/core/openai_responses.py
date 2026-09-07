@@ -6,6 +6,7 @@ from typing import Any
 import httpx
 
 from .config import get_settings
+from .http_client import http_client
 
 
 class OpenAIResponseError(RuntimeError):
@@ -53,7 +54,6 @@ async def create_structured_response(
             {"role": "system", "content": system},
             {"role": "user", "content": user_content},
         ],
-        "reasoning": {"effort": "low"},
         "text": {
             "format": {
                 "type": "json_schema",
@@ -65,16 +65,18 @@ async def create_structured_response(
         "max_output_tokens": max_output_tokens,
         "store": False,
     }
+    if model.startswith(("gpt-5", "o1", "o3", "o4")):
+        payload["reasoning"] = {"effort": "low"}
     try:
-        async with httpx.AsyncClient(timeout=httpx.Timeout(120.0, connect=15.0)) as client:
-            response = await client.post(
-                "https://api.openai.com/v1/responses",
-                headers={
-                    "Authorization": f"Bearer {settings.openai_api_key}",
-                    "Content-Type": "application/json",
-                },
-                json=payload,
-            )
+        response = await http_client().post(
+            "https://api.openai.com/v1/responses",
+            headers={
+                "Authorization": f"Bearer {settings.openai_api_key}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+            timeout=httpx.Timeout(120.0, connect=10.0),
+        )
         response.raise_for_status()
         body = response.json()
     except httpx.HTTPStatusError as exc:

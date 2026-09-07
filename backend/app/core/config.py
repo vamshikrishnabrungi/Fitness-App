@@ -39,11 +39,14 @@ def _url_map(name: str) -> tuple[tuple[str, str], ...]:
 @dataclass(frozen=True)
 class Settings:
     environment: str
-    database_url: str
+    test_database_url: str
     cloud_sql_instance: str
+    cloud_sql_ip_type: str
     database_user: str
     database_password: str
     database_name: str
+    database_pool_size: int
+    database_max_overflow: int
     redis_url: str
     jwt_secret: str
     jwt_issuer: str
@@ -69,12 +72,20 @@ class Settings:
     valhalla_urls: tuple[tuple[str, str], ...]
     resend_api_key: str
     resend_from: str
+    email_provider: str
+    smtp_host: str
+    smtp_port: int
+    smtp_secure: bool
+    smtp_user: str
+    smtp_password: str
+    smtp_from_name: str
     sentry_dsn: str
     expo_access_token: str
     kms_key_name: str
-    local_envelope_key: str
     generation_enabled: bool
     admin_studio_open_access: bool
+    admin_iap_audience: str
+    otp_debug_enabled: bool
 
     @property
     def is_production(self) -> bool:
@@ -89,30 +100,74 @@ class Settings:
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    environment = os.getenv("ENVIRONMENT", "development")
+    environment = os.getenv("ENVIRONMENT", "development").strip().lower()
+    if environment not in {"development", "staging", "production", "test"}:
+        raise RuntimeError("ENVIRONMENT must be development, staging, production, or test")
+    cloud_sql_instance = os.getenv("CLOUD_SQL_INSTANCE", "").strip()
+    test_database_url = os.getenv("TEST_DATABASE_URL", "").strip()
+    if environment == "test":
+        if not test_database_url:
+            raise RuntimeError("TEST_DATABASE_URL is required in the test environment")
+    elif not cloud_sql_instance:
+        raise RuntimeError("CLOUD_SQL_INSTANCE is required outside the test environment")
+    cloud_sql_ip_type = os.getenv(
+        "CLOUD_SQL_IP_TYPE", "PRIVATE" if environment in {"staging", "production"} else "PUBLIC"
+    ).strip().upper()
+    if cloud_sql_ip_type not in {"PRIVATE", "PUBLIC"}:
+        raise RuntimeError("CLOUD_SQL_IP_TYPE must be PRIVATE or PUBLIC")
     secret = os.getenv("JWT_SECRET", "")
     otp_pepper = os.getenv("OTP_PEPPER", "")
     if environment == "production" and (len(secret) < 32 or len(otp_pepper) < 32):
         raise RuntimeError("JWT_SECRET and OTP_PEPPER must each contain at least 32 characters")
-    if environment == "production" and os.getenv("CLOUD_SQL_INSTANCE") and not os.getenv("DATABASE_PASSWORD"):
-        raise RuntimeError("DATABASE_PASSWORD is required when Cloud SQL connector mode is enabled")
+    if environment != "test" and not os.getenv("DATABASE_PASSWORD"):
+        raise RuntimeError("DATABASE_PASSWORD is required for Cloud SQL")
+    redis_url = os.getenv("REDIS_URL", "").strip()
+    if environment != "test" and not redis_url:
+        raise RuntimeError("REDIS_URL is required outside the test environment")
+    if environment != "test":
+        required_gcp = {
+            "GOOGLE_CLOUD_PROJECT": os.getenv("GOOGLE_CLOUD_PROJECT", ""),
+            "KMS_KEY_NAME": os.getenv("KMS_KEY_NAME", ""),
+            "RAW_ACTIVITY_BUCKET": os.getenv("RAW_ACTIVITY_BUCKET", ""),
+            "IMPORT_BUCKET": os.getenv("IMPORT_BUCKET", ""),
+            "EXERCISE_MEDIA_BUCKET": os.getenv("EXERCISE_MEDIA_BUCKET", ""),
+            "NUTRITION_IMAGE_BUCKET": os.getenv("NUTRITION_IMAGE_BUCKET", ""),
+            "EXPORT_BUCKET": os.getenv("EXPORT_BUCKET", ""),
+            "VALHALLA_GRAPH_BUCKET": os.getenv("VALHALLA_GRAPH_BUCKET", ""),
+        }
+        missing = sorted(name for name, value in required_gcp.items() if not value.strip())
+        if missing:
+            raise RuntimeError(f"Managed GCP configuration is incomplete: {', '.join(missing)}")
+        if not os.getenv("VALHALLA_URL", "").strip() and not os.getenv("VALHALLA_URLS_JSON", "").strip():
+            raise RuntimeError("VALHALLA_URL or VALHALLA_URLS_JSON is required outside tests")
     admin_studio_open_access = os.getenv(
         "ADMIN_STUDIO_OPEN_ACCESS",
-        "true" if environment.lower() == "development" else "false",
+        "false",
     ).lower() == "true"
-    if environment.lower() == "production" and admin_studio_open_access:
-        raise RuntimeError("ADMIN_STUDIO_OPEN_ACCESS cannot be enabled in production")
+    otp_debug_enabled = os.getenv("OTP_DEBUG_ENABLED", "false").lower() == "true"
+    if environment in {"staging", "production"} and (admin_studio_open_access or otp_debug_enabled):
+        raise RuntimeError("Admin open access and OTP debugging are forbidden in staging and production")
+    email_provider = os.getenv("EMAIL_PROVIDER", "resend").strip().lower()
+    if email_provider not in {"resend", "smtp"}:
+        raise RuntimeError("EMAIL_PROVIDER must be resend or smtp")
+    admin_iap_audience = os.getenv("ADMIN_IAP_AUDIENCE", "").strip()
+    if environment in {"staging", "production"} and not admin_iap_audience:
+        raise RuntimeError("ADMIN_IAP_AUDIENCE is required in staging and production")
+    database_pool_size = int(os.getenv("DATABASE_POOL_SIZE", "5"))
+    database_max_overflow = int(os.getenv("DATABASE_MAX_OVERFLOW", "5"))
+    if not 1 <= database_pool_size <= 20 or not 0 <= database_max_overflow <= 20:
+        raise RuntimeError("Database pool settings exceed the supported per-instance bounds")
     return Settings(
         environment=environment,
-        database_url=os.getenv(
-            "DATABASE_URL",
-            "postgresql+asyncpg://runlete:runlete@localhost:5432/runlete",
-        ),
-        cloud_sql_instance=os.getenv("CLOUD_SQL_INSTANCE", ""),
+        test_database_url=test_database_url,
+        cloud_sql_instance=cloud_sql_instance,
+        cloud_sql_ip_type=cloud_sql_ip_type,
         database_user=os.getenv("DATABASE_USER", "runlete"),
         database_password=os.getenv("DATABASE_PASSWORD", ""),
         database_name=os.getenv("DATABASE_NAME", "runlete"),
-        redis_url=os.getenv("REDIS_URL", "redis://localhost:6379/0"),
+        database_pool_size=database_pool_size,
+        database_max_overflow=database_max_overflow,
+        redis_url=redis_url,
         jwt_secret=secret or "development-only-change-me-development-only",
         jwt_issuer=os.getenv("JWT_ISSUER", "runlete-api"),
         jwt_audience=os.getenv("JWT_AUDIENCE", "runlete-mobile"),
@@ -133,14 +188,22 @@ def get_settings() -> Settings:
         openai_food_model=os.getenv("OPENAI_FOOD_MODEL", "gpt-4o"),
         mapbox_public_token=os.getenv("MAPBOX_PUBLIC_TOKEN", ""),
         dem_provider_url=os.getenv("DEM_PROVIDER_URL", ""),
-        valhalla_url=os.getenv("VALHALLA_URL", "http://localhost:8002"),
+        valhalla_url=os.getenv("VALHALLA_URL", ""),
         valhalla_urls=_url_map("VALHALLA_URLS_JSON"),
         resend_api_key=os.getenv("RESEND_API_KEY", ""),
         resend_from=os.getenv("RESEND_FROM", "Runlete <noreply@runlete.com>"),
+        email_provider=email_provider,
+        smtp_host=os.getenv("SMTP_HOST", ""),
+        smtp_port=int(os.getenv("SMTP_PORT", "465")),
+        smtp_secure=os.getenv("SMTP_SECURE", "true").lower() == "true",
+        smtp_user=os.getenv("INFO_EMAIL_USER", ""),
+        smtp_password=os.getenv("INFO_EMAIL_PASS", ""),
+        smtp_from_name=os.getenv("SMTP_FROM_NAME", "Runlete"),
         sentry_dsn=os.getenv("SENTRY_DSN", ""),
         expo_access_token=os.getenv("EXPO_ACCESS_TOKEN", ""),
         kms_key_name=os.getenv("KMS_KEY_NAME", ""),
-        local_envelope_key=os.getenv("LOCAL_ENVELOPE_KEY", "development-envelope-key-change-me"),
         generation_enabled=os.getenv("TRAINING_GENERATION_ENABLED", "false").lower() == "true",
         admin_studio_open_access=admin_studio_open_access,
+        admin_iap_audience=admin_iap_audience,
+        otp_debug_enabled=otp_debug_enabled,
     )

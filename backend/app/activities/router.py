@@ -217,18 +217,17 @@ async def chunk_upload_url(activity_id: UUID, body: ChunkUploadRequest, user_id:
     from backend.app.core.problems import ProblemError
     athlete = await athlete_id(session, user_id); activity = await session.scalar(select(Activity).where(Activity.id == activity_id, Activity.athlete_id == athlete))
     if activity is None: raise ProblemError(404, "activity_not_found", "Activity not found", "The activity does not exist.")
-    settings = get_settings(); bucket = settings.raw_activity_bucket or "runlete-raw-local"; object_name = f"activities/{athlete}/{activity.id}/chunks/{body.chunk_number:06d}-{body.content_hash}.json"; expires = datetime.now(timezone.utc) + timedelta(minutes=15)
-    if settings.raw_activity_bucket:
-        try:
-            url = await signed_gcs_url(
-                project_id=settings.gcp_project_id,
-                bucket=bucket,
-                object_name=object_name,
-                method="PUT",
-                content_type=body.content_type,
-            )
-        except Exception as exc: raise ProblemError(503, "storage_signing_failed", "Upload unavailable", "A signed upload URL could not be created.") from exc
-    else: url = f"http://localhost:4443/upload/storage/v1/b/{bucket}/o?uploadType=media&name={object_name}"
+    settings = get_settings(); bucket = settings.raw_activity_bucket; object_name = f"activities/{athlete}/{activity.id}/chunks/{body.chunk_number:06d}-{body.content_hash}.json"; expires = datetime.now(timezone.utc) + timedelta(minutes=15)
+    if not bucket: raise ProblemError(503, "storage_unavailable", "Storage unavailable", "Activity storage is not configured.")
+    try:
+        url = await signed_gcs_url(
+            project_id=settings.gcp_project_id,
+            bucket=bucket,
+            object_name=object_name,
+            method="PUT",
+            content_type=body.content_type,
+        )
+    except Exception as exc: raise ProblemError(503, "storage_signing_failed", "Upload unavailable", "A signed upload URL could not be created.") from exc
     existing = await session.scalar(select(UploadChunk).where(UploadChunk.activity_id == activity.id, UploadChunk.chunk_number == body.chunk_number).with_for_update())
     if existing is None: session.add(UploadChunk(activity_id=activity.id, chunk_number=body.chunk_number, object_name=object_name, content_hash=body.content_hash, sample_count=body.sample_count))
     elif existing.content_hash != body.content_hash: raise ProblemError(409, "chunk_conflict", "Upload conflict", "This chunk number already has different content.")

@@ -10,4 +10,13 @@ tofu plan -var-file=production.tfvars
 tofu apply -var-file=production.tfvars
 ```
 
-Before apply, enable billing, delegate DNS, publish immutable API/Admin images, configure the IAP OAuth brand/client, and create secret versions for Mapbox, Resend and Sentry. Production deletion protection is enabled for Cloud SQL and Cloud Run.
+Before apply, enable billing, delegate DNS, publish immutable API/Admin images,
+configure the IAP OAuth brand/client and the exact Admin API backend-service
+audience as `iap_jwt_audience`, and supply sensitive Terraform variables
+through an encrypted CI workspace rather than a committed `.tfvars` file. Be
+aware that values managed by Terraform are present in encrypted remote state.
+Production deletion protection is enabled for Cloud SQL and Cloud Run.
+
+`training_generation_enabled` defaults to `false`. Do not override it until an
+approved immutable catalogue release has passed the gates in
+[`docs/RUNLETE_FINAL.md`](../../docs/RUNLETE_FINAL.md).

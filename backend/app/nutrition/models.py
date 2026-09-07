@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, Numeric, String, UniqueConstraint
+from sqlalchemy import BigInteger, Boolean, DateTime, ForeignKey, Integer, Numeric, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -18,6 +18,8 @@ class FoodImage(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     bucket: Mapped[str] = mapped_column(String(120), nullable=False)
     object_name: Mapped[str] = mapped_column(String(500), nullable=False)
     content_hash: Mapped[str | None] = mapped_column(String(64))
+    size_bytes: Mapped[int] = mapped_column(Integer, nullable=False)
+    object_generation: Mapped[int | None] = mapped_column(BigInteger)
     content_type: Mapped[str] = mapped_column(String(80), nullable=False)
     retain: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

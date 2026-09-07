@@ -12,7 +12,7 @@ const cards:{kind:Kind;number:number;title:string;description:string;accept:stri
  {kind:'exercises',number:1,title:'Exercise catalogue',description:'Creates new exercises and creates a new immutable version for matching stable exercise codes.',accept:'.csv',multiple:false,expected:'curated_exercises.csv'},
  {kind:'training_templates',number:2,title:'Four-week references',description:'Stores category- and level-specific four-week progressions linked to canonical exercise IDs.',accept:'.json',multiple:true,expected:'Select phase_01 through phase_09 JSON files together'},
  {kind:'sport_priority_matrix',number:3,title:'Sport priority matrix',description:'Stores sport, role/event, phase and goal category rankings plus session block order.',accept:'.csv',multiple:false,expected:'sport_role_phase_goal_priority_matrix.csv'},
- {kind:'training_policies',number:4,title:'Policies and fallbacks',description:'Stores category availability, sport modes, fallbacks and scenario overlays.',accept:'.json',multiple:true,expected:'Select availability, sport mode and scenario overlay JSON files together'},
+ {kind:'training_policies',number:4,title:'Mode and phase policies',description:'Stores each sport’s primary training mode and the four phase-dose policies.',accept:'.json',multiple:true,expected:'Select sport_mode_policy.json and phase_dose_policies.json together'},
 ];
 
 export function Imports(){
@@ -23,7 +23,7 @@ export function Imports(){
  async function upload(kind:Kind,files:File[]){if(!files.length)return;setWorking(kind);setError('');try{const preview=kind==='exercises'?await previewExerciseDocument(files[0]):await previewStructuredDataset(kind,files);setPreviews(value=>({...value,[kind]:preview}));await load()}catch(reason){setError((reason as Error).message)}finally{setWorking(null)}}
  async function commit(kind:Kind){const preview=previews[kind];if(!preview)return;setWorking(kind);setError('');try{if(kind==='exercises')await commitWorkbook(preview);else await commitStructuredDataset(preview);setPreviews(value=>({...value,[kind]:{...preview,status:'committed'}}));await load()}catch(reason){setError((reason as Error).message)}finally{setWorking(null)}}
  const counts=status?.counts;
- const countFor=(kind:Kind)=>kind==='exercises'?counts?.exercises:kind==='training_templates'?counts?.training_templates:kind==='sport_priority_matrix'?counts?.sport_priorities:(counts?.category_availability??0)+(counts?.sport_mode_policies??0)+(counts?.mode_fallbacks??0)+(counts?.scenario_overlays??0);
+ const countFor=(kind:Kind)=>kind==='exercises'?counts?.exercises:kind==='training_templates'?counts?.training_templates:kind==='sport_priority_matrix'?counts?.sport_priorities:(counts?.sport_mode_policies??0)+(counts?.phase_dose_policies??0);
  return <>
   <Header eyebrow="TRAINING DATA" title="Data imports" description="Preview, validate and commit the four datasets used by workout generation." actions={<button className="secondary" onClick={()=>void load()}><RefreshCw size={16}/>Refresh status</button>}/>
   <PageGuide title="How to import training data" steps={["Upload in order: exercises, four-week references, sport priority matrix, then policies.","Preview validates every row and does not alter active data.","Open validation details if errors are reported. Commit is blocked until every row is valid.","Re-uploading the same file is idempotent. Changed canonical content creates a new immutable version."]}/>

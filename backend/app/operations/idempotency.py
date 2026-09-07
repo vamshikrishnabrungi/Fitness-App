@@ -18,6 +18,7 @@ from .models import IdempotencyRecord
 
 
 MAX_REPLAY_BODY_BYTES = 512 * 1024
+MAX_BUFFERED_MUTATION_BYTES = 2 * 1024 * 1024
 PROCESSING_LEASE = timedelta(minutes=5)
 RECORD_TTL = timedelta(hours=24)
 
@@ -73,7 +74,17 @@ async def idempotency_middleware(request: Request, call_next) -> Response:
     if len(key) > 180:
         return _problem(request, 400, "idempotency_key_invalid", "Invalid idempotency key", "Idempotency-Key must be at most 180 characters.")
 
+    content_length = request.headers.get("content-length")
+    if content_length:
+        try:
+            declared_size = int(content_length)
+        except ValueError:
+            return _problem(request, 400, "content_length_invalid", "Invalid request", "Content-Length must be an integer.")
+        if declared_size > MAX_BUFFERED_MUTATION_BYTES:
+            return _problem(request, 413, "request_too_large", "Request too large", "Use a signed or resumable upload for large content.")
     body = await request.body()
+    if len(body) > MAX_BUFFERED_MUTATION_BYTES:
+        return _problem(request, 413, "request_too_large", "Request too large", "Use a signed or resumable upload for large content.")
     operation = f"{request.method}:{request.url.path}"
     digest = hashlib.sha256(
         b"\x00".join(

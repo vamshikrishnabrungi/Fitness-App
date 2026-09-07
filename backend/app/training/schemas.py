@@ -1,12 +1,12 @@
 from datetime import date, datetime
-from typing import Any
+from typing import Any, Literal
 from uuid import UUID
 
 from pydantic import BaseModel, Field
 
 
 class PlanCreate(BaseModel):
-    weeks: int = Field(default=4, ge=1, le=52)
+    weeks: Literal[4] = 4
     starts_on: date | None = None
 
 
@@ -18,6 +18,10 @@ class SessionItemView(BaseModel):
     block_type: str
     prescription: dict[str, Any]
     alternatives: list[UUID]
+    instructions: list[str] = Field(default_factory=list)
+    coaching_cues: list[str] = Field(default_factory=list)
+    common_errors: list[str] = Field(default_factory=list)
+    safety_boundaries: list[str] = Field(default_factory=list)
 
 
 class SessionView(BaseModel):
@@ -26,6 +30,7 @@ class SessionView(BaseModel):
     session_type: str
     purpose: str
     estimated_minutes: int
+    venue_code: str | None = None
     status: str
     explanation: str
     items: list[SessionItemView]
@@ -41,12 +46,27 @@ class CompletionCommand(BaseModel):
     expected_version: int = Field(ge=1)
 
 
+class PlanWeekView(BaseModel):
+    week_number: int
+    starts_on: date
+    planned_load: float
+    deload: bool
+    intent: str
+
+
 class PlanView(BaseModel):
     id: UUID
     status: str
     starts_on: str
     ends_on: str
     planner_version: str
-    content_release_id: UUID
+    content_release_id: UUID | None
+    dataset_hash: str | None = None
     materialized_through: date | None
+    sport_code: str | None = None
+    scope_code: str | None = None
+    phase_code: str | None = None
+    goal_code: str | None = None
+    decision_trace: list[dict[str, Any]] = Field(default_factory=list)
+    weeks: list[PlanWeekView] = Field(default_factory=list)
     sessions: list[SessionView]

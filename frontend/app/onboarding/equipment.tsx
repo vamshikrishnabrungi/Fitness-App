@@ -15,28 +15,46 @@ import {
 import { useOnboardingStore } from '../../src/store/onboardingStore';
 
 const EQUIPMENT = [
-  'Dumbbells', 'Barbell', 'Kettlebells', 'Pull-up Bar',
-  'Resistance Bands', 'Bench', 'Squat Rack', 'Treadmill',
-  'Bike', 'Rower', 'Jump Rope', 'None',
-];
+  { label: 'Dumbbells', code: 'dumbbells' },
+  { label: 'Barbell', code: 'barbell' },
+  { label: 'Kettlebells', code: 'kettlebell' },
+  { label: 'Pull-up Bar', code: 'pull_up_bar' },
+  { label: 'Resistance Bands', code: 'resistance_band' },
+  { label: 'Bench', code: 'bench' },
+  { label: 'Squat Rack', code: 'squat_rack' },
+  { label: 'Treadmill', code: 'treadmill' },
+  { label: 'Bike', code: 'cycle_ergometer' },
+  { label: 'Rower', code: 'rowing_ergometer' },
+  { label: 'Jump Rope', code: 'jump_rope' },
+  { label: 'None / bodyweight', code: 'bodyweight' },
+] as const;
+
+const EQUIPMENT_CODES = new Map(EQUIPMENT.flatMap(item => [
+  [item.code.toLowerCase(), item.code],
+  [item.label.toLowerCase(), item.code],
+]));
 
 export default function EquipmentScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { setEquipment, location, equipment } = useOnboardingStore();
-  const [selected, setSelected] = useState<string[]>(equipment.filter(item => item !== 'full_gym'));
+  const [selected, setSelected] = useState<string[]>(
+    equipment
+      .filter(item => item !== 'full_gym')
+      .map(item => EQUIPMENT_CODES.get(item.toLowerCase()) ?? item),
+  );
   const isGym = location === 'gym';
 
-  const toggleEquipment = (item: string) => {
-    if (item === 'None') {
-      setSelected(current => current.includes(item) ? [] : ['None']);
+  const toggleEquipment = (code: string) => {
+    if (code === 'bodyweight') {
+      setSelected(current => current.includes(code) ? [] : ['bodyweight']);
       return;
     }
     setSelected(current => {
-      const withoutNone = current.filter(value => value !== 'None');
-      return withoutNone.includes(item)
-        ? withoutNone.filter(value => value !== item)
-        : [...withoutNone, item];
+      const withoutBodyweightOnly = current.filter(value => value !== 'bodyweight');
+      return withoutBodyweightOnly.includes(code)
+        ? withoutBodyweightOnly.filter(value => value !== code)
+        : [...withoutBodyweightOnly, code];
     });
   };
 
@@ -73,10 +91,10 @@ export default function EquipmentScreen() {
               <View style={coachLayout.chipGrid}>
                 {EQUIPMENT.map(item => (
                   <CoachChip
-                    key={item}
-                    label={item}
-                    selected={selected.includes(item)}
-                    onPress={() => toggleEquipment(item)}
+                    key={item.code}
+                    label={item.label}
+                    selected={selected.includes(item.code)}
+                    onPress={() => toggleEquipment(item.code)}
                   />
                 ))}
               </View>

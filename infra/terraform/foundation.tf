@@ -14,6 +14,8 @@ locals {
     "cloudkms.googleapis.com",
     "cloudscheduler.googleapis.com",
     "compute.googleapis.com",
+    "containeranalysis.googleapis.com",
+    "containerscanning.googleapis.com",
     "iamcredentials.googleapis.com",
     "iap.googleapis.com",
     "logging.googleapis.com",
@@ -116,13 +118,10 @@ resource "google_service_account" "pubsub" {
 
 resource "google_project_iam_member" "api_roles" {
   for_each = toset([
-    "roles/cloudkms.cryptoKeyEncrypterDecrypter",
     "roles/cloudsql.client",
     "roles/cloudtrace.agent",
     "roles/logging.logWriter",
     "roles/pubsub.publisher",
-    "roles/secretmanager.secretAccessor",
-    "roles/storage.objectUser",
   ])
   project = var.project_id
   role    = each.value
@@ -131,18 +130,60 @@ resource "google_project_iam_member" "api_roles" {
 
 resource "google_project_iam_member" "worker_roles" {
   for_each = toset([
-    "roles/cloudkms.cryptoKeyEncrypterDecrypter",
     "roles/cloudsql.client",
     "roles/cloudtrace.agent",
     "roles/logging.logWriter",
     "roles/pubsub.publisher",
     "roles/pubsub.subscriber",
-    "roles/secretmanager.secretAccessor",
-    "roles/storage.objectAdmin",
   ])
   project = var.project_id
   role    = each.value
   member  = "serviceAccount:${google_service_account.worker.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "api_secret_access" {
+  for_each  = google_secret_manager_secret.runtime
+  project   = var.project_id
+  secret_id = each.value.secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.api.email}"
+}
+
+resource "google_kms_crypto_key_iam_member" "api_health_key" {
+  crypto_key_id = google_kms_crypto_key.health.id
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member        = "serviceAccount:${google_service_account.api.email}"
+}
+
+resource "google_kms_crypto_key_iam_member" "worker_health_key" {
+  crypto_key_id = google_kms_crypto_key.health.id
+  role          = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member        = "serviceAccount:${google_service_account.worker.email}"
+}
+
+resource "google_secret_manager_secret_iam_member" "worker_secret_access" {
+  for_each  = google_secret_manager_secret.runtime
+  project   = var.project_id
+  secret_id = each.value.secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.worker.email}"
+}
+
+resource "google_storage_bucket_iam_member" "api_object_access" {
+  for_each = {
+    for key, bucket in google_storage_bucket.buckets : key => bucket
+    if contains(["raw-activity", "imports", "food-images", "exports", "exercise-media"], key)
+  }
+  bucket = each.value.name
+  role   = "roles/storage.objectUser"
+  member = "serviceAccount:${google_service_account.api.email}"
+}
+
+resource "google_storage_bucket_iam_member" "worker_object_access" {
+  for_each = google_storage_bucket.buckets
+  bucket   = each.value.name
+  role     = "roles/storage.objectUser"
+  member   = "serviceAccount:${google_service_account.worker.email}"
 }
 
 resource "google_project_iam_member" "pubsub_token_creator" {

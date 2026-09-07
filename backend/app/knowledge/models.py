@@ -89,6 +89,97 @@ class EvidenceClaimSource(UUIDPrimaryKeyMixin, Base):
     locator: Mapped[str | None] = mapped_column(String(300))
 
 
+class SportKnowledgeSource(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    """Reusable athlete-education source, separate from generator evidence claims."""
+
+    __tablename__ = "sport_knowledge_sources"
+    __table_args__ = (
+        UniqueConstraint("source_key", name="uq_sport_knowledge_source_key"),
+        UniqueConstraint("canonical_url", name="uq_sport_knowledge_source_url"),
+        CheckConstraint("publication_year BETWEEN 1900 AND 2200", name="sport_knowledge_source_year"),
+        {"schema": "knowledge"},
+    )
+    source_key: Mapped[str] = mapped_column(String(100), nullable=False)
+    title: Mapped[str] = mapped_column(Text, nullable=False)
+    canonical_url: Mapped[str] = mapped_column(Text, nullable=False)
+    publication_year: Mapped[int] = mapped_column(Integer, nullable=False)
+    source_kind: Mapped[str] = mapped_column(String(50), nullable=False)
+    editorial_note: Mapped[str] = mapped_column(Text, nullable=False)
+
+
+class SportKnowledgeArticle(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    __tablename__ = "sport_knowledge_articles"
+    __table_args__ = (
+        UniqueConstraint("sport_code", "slug", name="uq_sport_knowledge_article_slug"),
+        {"schema": "knowledge"},
+    )
+    sport_code: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
+    slug: Mapped[str] = mapped_column(String(120), nullable=False)
+    latest_version: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
+    published_version: Mapped[int | None] = mapped_column(Integer)
+    archived: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+
+class SportKnowledgeArticleVersion(Base):
+    __tablename__ = "sport_knowledge_article_versions"
+    __table_args__ = (
+        PrimaryKeyConstraint("article_id", "content_version", name="pk_sport_knowledge_article_versions"),
+        ForeignKeyConstraint(["article_id"], ["knowledge.sport_knowledge_articles.id"], ondelete="CASCADE"),
+        CheckConstraint("status IN ('draft','in_review','published','retired')", name="sport_knowledge_article_version_status"),
+        {"schema": "knowledge"},
+    )
+    article_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), nullable=False)
+    content_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    category: Mapped[str] = mapped_column(String(80), nullable=False)
+    title: Mapped[str] = mapped_column(String(220), nullable=False)
+    summary: Mapped[str] = mapped_column(Text, nullable=False)
+    icon: Mapped[str] = mapped_column(String(50), nullable=False)
+    audiences: Mapped[list[str]] = mapped_column(ARRAY(String(40)), nullable=False)
+    events: Mapped[list[str]] = mapped_column(ARRAY(String(50)), nullable=False)
+    sections: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, nullable=False)
+    medical_disclaimer: Mapped[str] = mapped_column(Text, nullable=False)
+    reviewed_on: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    status: Mapped[str] = mapped_column(String(24), default="draft", nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    record_version: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
+
+
+class SportKnowledgeArticleSource(Base):
+    __tablename__ = "sport_knowledge_article_sources"
+    __table_args__ = (
+        PrimaryKeyConstraint("article_id", "article_version", "source_id", name="pk_sport_knowledge_article_sources"),
+        ForeignKeyConstraint(
+            ["article_id", "article_version"],
+            ["knowledge.sport_knowledge_article_versions.article_id", "knowledge.sport_knowledge_article_versions.content_version"],
+            ondelete="CASCADE",
+        ),
+        {"schema": "knowledge"},
+    )
+    article_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), nullable=False)
+    article_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    source_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), ForeignKey("knowledge.sport_knowledge_sources.id", ondelete="RESTRICT"), nullable=False)
+
+
+class SportKnowledgeRelease(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    __tablename__ = "sport_knowledge_releases"
+    __table_args__ = (
+        UniqueConstraint("sport_code", "release_version", name="uq_sport_knowledge_release_version"),
+        CheckConstraint("status IN ('published','retired')", name="sport_knowledge_release_status"),
+        {"schema": "knowledge"},
+    )
+    sport_code: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
+    release_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    title: Mapped[str] = mapped_column(String(180), nullable=False)
+    subtitle: Mapped[str] = mapped_column(Text, nullable=False)
+    medical_disclaimer: Mapped[str] = mapped_column(Text, nullable=False)
+    article_manifest: Mapped[dict[str, int]] = mapped_column(JSONB, nullable=False)
+    content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    status: Mapped[str] = mapped_column(String(24), nullable=False)
+    published_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    published_by: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), ForeignKey("identity.users.id", ondelete="SET NULL"))
+
+
 class KnowledgeTerm(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     __tablename__ = "terms"
     __table_args__ = (
@@ -169,6 +260,7 @@ class MethodVersion(Base):
     cues: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False)
     common_errors: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False)
     safety_boundaries: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False)
+    source_hash: Mapped[str | None] = mapped_column(String(64))
     wording_original: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     status: Mapped[str] = mapped_column(String(24), default="draft", nullable=False)
     generator_eligible: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
@@ -569,6 +661,8 @@ class TrainingReferenceMethod(UUIDPrimaryKeyMixin, Base):
     method_version: Mapped[int] = mapped_column(Integer, nullable=False)
     block_role: Mapped[str] = mapped_column(String(32), nullable=False)
     applicable_modes: Mapped[list[str]] = mapped_column(ARRAY(String(40)), default=list, nullable=False)
+    sport_codes: Mapped[list[str]] = mapped_column(ARRAY(String(40)), default=list, nullable=False)
+    scope_codes: Mapped[list[str]] = mapped_column(ARRAY(String(80)), default=list, nullable=False)
     implementation_note: Mapped[str] = mapped_column(Text, default="", nullable=False)
 
 
@@ -590,18 +684,6 @@ class TrainingReferenceWeek(UUIDPrimaryKeyMixin, Base):
     regression_condition: Mapped[str] = mapped_column(Text, nullable=False)
 
 
-class CategoryLevelAvailability(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    __tablename__ = "category_level_availability"
-    __table_args__ = (UniqueConstraint("category_code", "athlete_level", name="uq_category_level_availability"), {"schema": "knowledge"})
-    category_code: Mapped[str] = mapped_column(String(80), nullable=False)
-    athlete_level: Mapped[str] = mapped_column(String(24), nullable=False)
-    available: Mapped[bool] = mapped_column(Boolean, nullable=False)
-    template_code: Mapped[str | None] = mapped_column(String(100))
-    prerequisite_category: Mapped[str | None] = mapped_column(String(80))
-    reason: Mapped[str] = mapped_column(Text, nullable=False)
-    source_hash: Mapped[str] = mapped_column(String(64), nullable=False)
-
-
 class SportModePolicy(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     __tablename__ = "sport_mode_policies"
     __table_args__ = (UniqueConstraint("sport_code", name="uq_sport_mode_policy"), {"schema": "knowledge"})
@@ -611,23 +693,26 @@ class SportModePolicy(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     source_hash: Mapped[str] = mapped_column(String(64), nullable=False)
 
 
-class TrainingModeFallback(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    __tablename__ = "training_mode_fallbacks"
-    __table_args__ = (UniqueConstraint("category_code", "athlete_level", "requested_mode", name="uq_training_mode_fallback"), {"schema": "knowledge"})
-    category_code: Mapped[str] = mapped_column(String(80), nullable=False)
-    athlete_level: Mapped[str] = mapped_column(String(24), nullable=False)
-    requested_mode: Mapped[str] = mapped_column(String(40), nullable=False)
-    fallback_category: Mapped[str] = mapped_column(String(80), nullable=False)
-    automatic: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    source_hash: Mapped[str] = mapped_column(String(64), nullable=False)
-
-
-class ScenarioOverlay(UUIDPrimaryKeyMixin, TimestampMixin, Base):
-    __tablename__ = "scenario_overlays"
-    __table_args__ = (UniqueConstraint("code", name="uq_scenario_overlay_code"), {"schema": "knowledge"})
-    code: Mapped[str] = mapped_column(String(80), nullable=False)
-    applies_to: Mapped[str] = mapped_column(String(180), nullable=False)
-    instruction: Mapped[str] = mapped_column(Text, nullable=False)
+class PhaseDosePolicy(UUIDPrimaryKeyMixin, TimestampMixin, Base):
+    __tablename__ = "phase_dose_policies"
+    __table_args__ = (
+        UniqueConstraint("phase_code", name="uq_phase_dose_policy"),
+        CheckConstraint(
+            "progression_mode IN ('development','maintain_week_1','competition_taper')",
+            name="valid_phase_progression_mode",
+        ),
+        CheckConstraint("maximum_categories BETWEEN 1 AND 8", name="valid_phase_category_limit"),
+        CheckConstraint("maximum_sessions_per_week BETWEEN 1 AND 7", name="valid_phase_session_limit"),
+        {"schema": "knowledge"},
+    )
+    phase_code: Mapped[str] = mapped_column(String(60), nullable=False)
+    policy_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    progression_mode: Mapped[str] = mapped_column(String(32), nullable=False)
+    maximum_categories: Mapped[int] = mapped_column(Integer, nullable=False)
+    maximum_sessions_per_week: Mapped[int] = mapped_column(Integer, nullable=False)
+    weekly_volume_multipliers: Mapped[list[float]] = mapped_column(JSONB, nullable=False)
+    novelty_policy: Mapped[str] = mapped_column(String(40), nullable=False)
+    policy_basis: Mapped[str] = mapped_column(Text, nullable=False)
     source_hash: Mapped[str] = mapped_column(String(64), nullable=False)
 
 

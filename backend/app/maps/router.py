@@ -16,6 +16,7 @@ from backend.app.activities.service import athlete_id
 from backend.app.activities.models import Activity
 from backend.app.athletes.models import AthleteProfile
 from backend.app.core.database import get_session
+from backend.app.core.http_client import http_client
 from backend.app.core.pagination import decode_cursor, encode_cursor
 from backend.app.core.problems import ProblemError
 from backend.app.core.security import current_user_id
@@ -293,8 +294,7 @@ async def generate_route(
         "round_trip": {"distance": body.target_distance_km * 1000, "seed": 7},
     }
     try:
-        async with httpx.AsyncClient(timeout=15) as client:
-            response = await client.post(f"{valhalla_url}/route", json=request)
+        response = await http_client().post(f"{valhalla_url}/route", json=request, timeout=15.0)
         response.raise_for_status()
         data = response.json()
     except Exception as exc:

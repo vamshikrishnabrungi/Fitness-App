@@ -13,6 +13,7 @@ import {
 } from '../../src/components/onboarding/CoachOnboarding';
 import { useOnboardingStore } from '../../src/store/onboardingStore';
 import { useAuthStore } from '../../src/store/authStore';
+import { trainingSport } from '../../src/data/trainingSports';
 
 const GENDERS = [
   { id: 'female', label: 'Female' },
@@ -21,8 +22,8 @@ const GENDERS = [
   { id: 'prefer_not_to_say', label: 'Prefer not to say' },
 ];
 
-const LEVELS = ['recreational', 'school', 'college', 'club', 'state', 'pro'];
-const PHASES = ['off_season', 'pre_season', 'in_season', 'general'];
+const LEVELS = ['recreational', 'club', 'regional', 'national', 'international'];
+const PHASES = ['general_preparation', 'specific_preparation', 'competition', 'transition'];
 const label = (value: string) => value.replaceAll('_', ' ');
 
 export default function ProfileScreen() {
@@ -36,6 +37,13 @@ export default function ProfileScreen() {
   const [targetWeightKg, setTargetWeightKg] = useState(store.targetWeightKg);
   const [competitionLevel, setCompetitionLevel] = useState(store.competitionLevel);
   const [seasonPhase, setSeasonPhase] = useState(store.seasonPhase);
+  const [sportDetails, setSportDetails] = useState(() =>
+    store.sports.map(sport => {
+      const existing = store.sportDetails.find(item => item.sport === sport);
+      const first = trainingSport(sport)?.scopes[0];
+      return existing || { sport, scopeCode: first?.code, ...first };
+    })
+  );
 
   // Date of birth is collected at registration; carry it through so onboarding doesn't overwrite it with an empty value.
   useEffect(() => {
@@ -50,7 +58,7 @@ export default function ProfileScreen() {
     store.setSportContext({
       competitionLevel,
       seasonPhase,
-      sportDetails: store.sports.map(sport => ({ sport })),
+      sportDetails,
     });
     router.push('/onboarding/schedule' as any);
   };
@@ -101,6 +109,32 @@ export default function ProfileScreen() {
               <CoachChip key={phase} label={label(phase)} selected={seasonPhase === phase} onPress={() => setSeasonPhase(phase)} />
             ))}
           </View>
+
+          <View style={coachLayout.divider} />
+
+          {store.sports.map(sportName => {
+            const sport = trainingSport(sportName);
+            const selected = sportDetails.find(item => item.sport === sportName)?.scopeCode;
+            if (!sport) return null;
+            return (
+              <React.Fragment key={sport.code}>
+                <CoachSection title={`${sport.label} ${sport.scopeLabel}`} />
+                <View style={coachLayout.chipGrid}>
+                  {sport.scopes.map(scope => (
+                    <CoachChip
+                      key={scope.code}
+                      label={scope.label}
+                      selected={selected === scope.code}
+                      onPress={() => setSportDetails(current => [
+                        ...current.filter(item => item.sport !== sportName),
+                        { sport: sportName, scopeCode: scope.code, ...scope },
+                      ])}
+                    />
+                  ))}
+                </View>
+              </React.Fragment>
+            );
+          })}
         </CoachCard>
       </ScrollView>
       <CoachBottom bottomInset={insets.bottom} onPress={handleNext} />

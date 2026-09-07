@@ -8,3 +8,6 @@ release from dropping Terraform-managed environment variables, secrets, networki
 scaling, or service identities.
 
 Files under `deploy/rendered/` are ephemeral CI artifacts and must not be committed.
+
+Use [`RELEASE_CHECKLIST.md`](RELEASE_CHECKLIST.md) before dispatch, during smoke
+verification and for rollback ownership.

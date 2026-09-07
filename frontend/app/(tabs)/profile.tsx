@@ -99,7 +99,7 @@ export default function ProfileScreen() {
           />
         </View>
 
-        {/* Training */}
+        {/* Tools */}
         <View style={styles.sectionDivider} />
         <View style={styles.settingsGroup}>
           <SettingsRow

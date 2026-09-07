@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from collections.abc import AsyncIterator
 from datetime import datetime, timezone
 from typing import Any
@@ -46,34 +47,47 @@ class TimestampMixin:
 
 settings = get_settings()
 cloud_sql_connector: Any | None = None
-if settings.cloud_sql_instance:
+if settings.environment == "test":
+    engine = create_async_engine(
+        settings.test_database_url,
+        pool_pre_ping=True,
+        pool_size=settings.database_pool_size,
+        max_overflow=settings.database_max_overflow,
+        pool_timeout=10,
+        pool_recycle=1_800,
+    )
+else:
     from google.cloud.sql.connector import Connector, IPTypes, RefreshStrategy
 
-    cloud_sql_connector = Connector(refresh_strategy=RefreshStrategy.LAZY)
-
     async def _cloud_sql_connection() -> Any:
+        global cloud_sql_connector
+        if cloud_sql_connector is None:
+            # The connector binds to the currently running event loop. Creating
+            # it at module import breaks under Uvicorn, which installs its loop
+            # only after importing the application.
+            cloud_sql_connector = Connector(
+                loop=asyncio.get_running_loop(),
+                refresh_strategy=RefreshStrategy.LAZY,
+            )
         return await cloud_sql_connector.connect_async(
             settings.cloud_sql_instance,
             "asyncpg",
             user=settings.database_user,
             password=settings.database_password,
             db=settings.database_name,
-            ip_type=IPTypes.PRIVATE,
+            ip_type=IPTypes[settings.cloud_sql_ip_type],
+            command_timeout=30,
+            server_settings={"statement_timeout": "30000", "idle_in_transaction_session_timeout": "30000"},
         )
 
     engine = create_async_engine(
         "postgresql+asyncpg://",
         async_creator=_cloud_sql_connection,
         pool_pre_ping=True,
-        pool_size=5,
-        max_overflow=5,
-    )
-else:
-    engine = create_async_engine(
-        settings.database_url,
-        pool_pre_ping=True,
-        pool_size=5,
-        max_overflow=5,
+        pool_size=settings.database_pool_size,
+        max_overflow=settings.database_max_overflow,
+        pool_timeout=10,
+        pool_recycle=1_800,
     )
 SessionFactory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 

@@ -42,6 +42,7 @@ class FoodAnalysisResult(BaseModel):
 
 class UploadRequest(BaseModel):
     content_type: str = Field(pattern="^image/(jpeg|png|webp)$")
+    size_bytes: int = Field(gt=0, le=20 * 1024 * 1024)
     retain: bool = False
 
 

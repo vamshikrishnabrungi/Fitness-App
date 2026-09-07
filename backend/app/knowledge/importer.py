@@ -31,6 +31,20 @@ class WorkbookImportError(ValueError):
     pass
 
 
+def find_unresolved_relation_codes(
+    payloads: Any,
+    known_codes: set[str],
+) -> list[str]:
+    """Return stable relation codes that cannot be resolved in the catalogue."""
+    return sorted({
+        target
+        for payload in payloads
+        for field in ("progression_codes", "regression_codes", "substitution_codes")
+        for target in payload.get(field, [])
+        if target not in known_codes
+    })
+
+
 DOCUMENT_FIELDS = {
     "exercise name": "canonical_name", "name": "canonical_name", "code": "code",
     "type": "method_type", "movement pattern": "movement_pattern", "aliases": "aliases",
@@ -482,6 +496,7 @@ async def commit_import(session: AsyncSession, source_import: SourceImport, acto
             method.latest_version = content_version
             method.archived = False
             method.version += 1
+        approval_status = str((row.source_payload or {}).get("approval_status", "")).strip().lower()
         version = MethodVersion(
             method_id=method.id,
             content_version=content_version,
@@ -505,8 +520,9 @@ async def commit_import(session: AsyncSession, source_import: SourceImport, acto
             cues=payload["cues"],
             common_errors=payload["common_errors"],
             safety_boundaries=payload["safety_boundaries"],
+            source_hash=source_import.content_hash,
             wording_original=True,
-            status="catalogue_validated",
+            status="released" if approval_status == "approved" else "catalogue_validated",
             generator_eligible=row.disposition != "specialist",
             created_at=now,
             updated_at=now,
@@ -541,6 +557,13 @@ async def commit_import(session: AsyncSession, source_import: SourceImport, acto
     # CSV relations use stable method codes. Persist progression direction as
     # lower -> higher; regressions therefore reverse their stored direction.
     all_methods = {row.code: row for row in (await session.scalars(select(Method))).all()}
+    unresolved_relation_codes = find_unresolved_relation_codes(imported_payloads.values(), set(all_methods))
+    if unresolved_relation_codes:
+        raise WorkbookImportError(
+            "exercise catalogue contains unresolved relation codes: "
+            + ", ".join(unresolved_relation_codes[:20])
+            + (" …" if len(unresolved_relation_codes) > 20 else "")
+        )
     created_relations: set[tuple[UUID, UUID, str, str]] = {tuple(item) for item in (await session.execute(select(MethodRelation.from_method_id, MethodRelation.to_method_id, MethodRelation.relation_type, MethodRelation.objective_code))).all()}
     for source_code, payload in imported_payloads.items():
         source_method = imported_methods[source_code]

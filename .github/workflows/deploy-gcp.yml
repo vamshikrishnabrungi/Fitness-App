@@ -13,16 +13,78 @@ concurrency:
   group: deploy-${{ inputs.environment }}
   cancel-in-progress: false
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgis:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_DB: runlete
+          POSTGRES_USER: runlete
+          POSTGRES_PASSWORD: runlete
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U runlete -d runlete"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      ENVIRONMENT: test
+      JWT_SECRET: release-validation-jwt-secret-release-validation
+      OTP_PEPPER: release-validation-otp-pepper-release-validation
+      TEST_DATABASE_URL: postgresql+asyncpg://runlete:runlete@127.0.0.1:5432/runlete
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Require main for production
+        if: inputs.environment == 'production'
+        run: test "$GITHUB_REF" = "refs/heads/main"
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+      - run: pip install -r backend/requirements-runtime.txt pytest pglast
+      - run: alembic -c alembic.ini upgrade head
+      - run: python -m pytest -q tests/production
+      - run: corepack enable && yarn install --frozen-lockfile
+        working-directory: frontend
+      - run: yarn typecheck && yarn lint
+        working-directory: frontend
+      - run: npx expo export --platform web --output-dir /tmp/runlete-release-web
+        working-directory: frontend
+      - run: npm ci && npm run lint && npm run build
+        working-directory: admin
+      - uses: opentofu/setup-opentofu@9d84900f3238fab8cd84ce47d658d25dd008be2f # v1
+      - run: tofu fmt -check -recursive && tofu init -backend=false && tofu validate
+        working-directory: infra/terraform
+
   build-and-release:
+    needs: validate
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: google-github-actions/auth@v2
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: google-github-actions/auth@c200f3691d83b41bf9bbd8638997a462592937ed # v2
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
-      - uses: google-github-actions/setup-gcloud@v2
+      - uses: google-github-actions/setup-gcloud@e427ad8a34f8676edf47cf7d7925499adf3eb74f # v2
+      - name: Validate release configuration
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          GCP_DEPLOY_SERVICE_ACCOUNT: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+        run: |
+          test -n "$GCP_PROJECT_ID"
+          test -n "$GCP_WORKLOAD_IDENTITY_PROVIDER"
+          test -n "$GCP_DEPLOY_SERVICE_ACCOUNT"
+          test -n "$API_BASE_URL"
       - name: Submit immutable images
         run: |
           gcloud builds submit \
@@ -59,14 +121,34 @@ jobs:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           GCP_REGION: europe-west1
           ENVIRONMENT: ${{ inputs.environment }}
-      - name: Create Cloud Deploy releases
+      - name: Deploy services in compatibility order
         run: |
+          set -euo pipefail
           API_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/runlete-${ENVIRONMENT}/api:${GITHUB_SHA}"
           ADMIN_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/runlete-${ENVIRONMENT}/admin:${GITHUB_SHA}"
-          gcloud deploy releases create "api-${GITHUB_RUN_ID}" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --delivery-pipeline "runlete-${ENVIRONMENT}-api" --images "api=${API_IMAGE}"
-          gcloud deploy releases create "worker-${GITHUB_RUN_ID}" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --delivery-pipeline "runlete-${ENVIRONMENT}-worker" --images "worker=${API_IMAGE}"
-          gcloud deploy releases create "admin-${GITHUB_RUN_ID}" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --delivery-pipeline "runlete-${ENVIRONMENT}-admin" --images "admin=${ADMIN_IMAGE}"
+          deploy_and_wait() {
+            component="$1"
+            image="$2"
+            release="${component}-${GITHUB_RUN_ID}"
+            rollout="${component}-${GITHUB_RUN_ID}"
+            gcloud deploy releases create "$release" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --delivery-pipeline "runlete-${ENVIRONMENT}-${component}" --images "${component}=${image}" --to-target "runlete-${ENVIRONMENT}-${component}" --rollout-id "$rollout"
+            for attempt in $(seq 1 60); do
+              state="$(gcloud deploy rollouts describe "$rollout" --release "$release" --delivery-pipeline "runlete-${ENVIRONMENT}-${component}" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --format='value(state)')"
+              case "$state" in
+                SUCCEEDED) return 0 ;;
+                FAILED|HALTED|CANCELLED) echo "${component} rollout ended in ${state}" >&2; return 1 ;;
+              esac
+              sleep 10
+            done
+            echo "${component} rollout timed out" >&2
+            return 1
+          }
+          deploy_and_wait worker "$API_IMAGE"
+          deploy_and_wait api "$API_IMAGE"
+          curl --fail --retry 8 --retry-all-errors --retry-delay 5 "${API_BASE_URL%/}/readyz"
+          deploy_and_wait admin "$ADMIN_IMAGE"
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           GCP_REGION: europe-west1
           ENVIRONMENT: ${{ inputs.environment }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}

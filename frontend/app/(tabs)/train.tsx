@@ -71,6 +71,13 @@ const humanizeLabel = (value?: string | null) => {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
+const displayWorkoutTitle = (purpose: string | undefined, category: string | undefined) => {
+  if (!purpose || /^give the deterministic workout compiler/i.test(purpose)) {
+    return `${humanizeLabel(category) || 'Training'} Session`;
+  }
+  return purpose;
+};
+
 const getWorkoutPurpose = (workout: Workout) => {
   return (
     workout.adaptation?.why_this_session ||
@@ -135,7 +142,7 @@ export default function TrainScreen() {
       const sessions = await api.get<any[]>('/training/history');
       const res: Workout[] = (sessions || []).map((session) => ({
         id: session.id,
-        title: session.purpose,
+        title: displayWorkoutTitle(session.purpose, session.session_type),
         category: session.session_type,
         duration: session.estimated_minutes,
         difficulty: session.status,
