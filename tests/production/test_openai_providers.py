@@ -6,30 +6,29 @@ from uuid import uuid4
 
 from backend.app.core.openai_responses import StructuredResponse
 from backend.app.nutrition.provider import OpenAIFoodAnalysisProvider
-from backend.app.training.ai_selector import OpenAIWorkoutSelectionProvider
+from backend.app.training.ai_selector import OpenAIWorkoutGenerationProvider
 
 
-def test_openai_workout_provider_parses_only_structured_ids(monkeypatch) -> None:
-    slot_id = uuid4()
+def test_openai_workout_provider_parses_catalog_and_generated_exercises(monkeypatch) -> None:
     method_id = uuid4()
 
     async def fake_response(**kwargs):
         assert kwargs["model"]
-        assert kwargs["schema_name"] == "runlete_workout_selection"
+        assert kwargs["schema_name"] == "runlete_four_week_workout_program"
+        session = {
+            "week_number": 1, "session_number": 1, "scheduled_for": "2026-09-14T07:00:00+00:00",
+            "title": "Strength", "purpose": "Build strength", "load_class": "moderate", "estimated_minutes": 90,
+            "blocks": [{"block_type": "warmup", "title": "Warm-up", "purpose": "Prepare", "estimated_minutes": 90,
+                "exercises": [{"exercise": {"source": "catalog", "method_id": str(method_id), "method_version": 1},
+                    "prescription": {"sets": 3, "reps": 5}, "estimated_minutes": 90, "coaching_note": ""}]}],
+        }
         return StructuredResponse(
             text=json.dumps(
                 {
-                    "schema_version": "1.0",
-                    "selections": [
-                        {
-                            "occurrence_id": "w1-s1-a",
-                            "slot_id": str(slot_id),
-                            "method_id": str(method_id),
-                            "prescription": {"sets": 3, "repetitions": 5},
-                            "alternative_method_ids": [],
-                            "rationale_code": "objective_fit",
-                        }
-                    ],
+                    "schema_version": "3.0", "program_title": "Test", "program_summary": "Test plan",
+                    "generated_exercises": [],
+                    "weeks": [{"week_number": week, "theme": "Build", "progression_rule": "Progress", "deload": False,
+                               "sessions": [{**session, "week_number": week}]} for week in range(1, 5)],
                 }
             ),
             model="gpt-4o",
@@ -38,9 +37,10 @@ def test_openai_workout_provider_parses_only_structured_ids(monkeypatch) -> None
         )
 
     monkeypatch.setattr("backend.app.training.ai_selector.create_structured_response", fake_response)
-    result = asyncio.run(OpenAIWorkoutSelectionProvider().select(packet={"sessions": []}))
+    result = asyncio.run(OpenAIWorkoutGenerationProvider().generate(packet={}))
     assert result.provider == "openai"
-    assert result.output.selections[0].method_id == method_id
+    assert result.output.weeks[0].sessions[0].blocks[0].block_type == "warmup"
+    assert result.output.weeks[0].sessions[0].blocks[0].exercises[0].exercise.method_id == method_id
     assert result.input_tokens == 100
 
 

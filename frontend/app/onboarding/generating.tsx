@@ -14,8 +14,8 @@ const LOADING_MESSAGES = [
   'Loading your sport priorities',
   'Filtering the exercise catalogue',
   'Building your warm-up and main work',
-  'Asking the coach model to select your session',
-  'Validating your plan',
+  'Asking the coach to design all four weeks',
+  'Adding instructions, cues, and progressions',
 ];
 
 export default function GeneratingScreen() {
@@ -72,9 +72,15 @@ export default function GeneratingScreen() {
           equipment_access: onboardingData.equipment.map(equipment_code=>({equipment_code,environments:[selectedVenue]})),
           method_familiarity: [],
           cross_training_consent: false,
+          health_context: {
+            pain_areas: onboardingData.pain_areas,
+            current_injuries: onboardingData.current_injuries,
+            medical_notes: onboardingData.medical_notes || null,
+            stress_level: onboardingData.stress_level,
+          },
           goal: {goal_type:onboardingData.primary_goal || 'general_fitness',target_date:null,target_value:null,target_unit:null},
         });
-        await api.post('/training/plans', {
+        await api.postLongRunning('/training/plans', {
           weeks: 4,
           starts_on: onboardingData.start_date,
           fitness_level: onboardingData.fitness_assessment.level,
@@ -94,7 +100,8 @@ export default function GeneratingScreen() {
         reset();
         router.replace('/(tabs)');
       } catch (err: any) {
-        setError(err.message || 'Failed to generate plan');
+        const message = typeof err?.message === 'string' ? err.message : '';
+        setError(message && message.length <= 180 ? message : 'We couldn’t finish your training plan. Please try again.');
       }
     };
 
@@ -104,7 +111,7 @@ export default function GeneratingScreen() {
 
     Animated.timing(progress, {
       toValue: 100,
-      duration: 40000,
+      duration: 150000,
       useNativeDriver: false,
     }).start();
 

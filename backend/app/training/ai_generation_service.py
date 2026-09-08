@@ -2,9 +2,9 @@
 
 The database owns the released sport priorities, templates, exercise catalogue,
 prescription bounds, and safety metadata. This module turns that reviewed data
-into a bounded selection packet, asks the workout model to choose methods, and
-persists only selections that pass the domain validator. No workout choice is
-made by a deterministic compiler.
+into a compact reference packet, asks the workout model to author the complete
+four-week plan, and persists catalog references alongside plan-scoped generated
+exercise definitions.
 """
 
 from __future__ import annotations
@@ -24,10 +24,10 @@ from backend.app.core.config import get_settings
 from backend.app.core.ids import uuid7
 from backend.app.core.openai_responses import OpenAIResponseError
 from backend.app.core.problems import ProblemError
-from backend.app.knowledge.models import Method, MethodVersion
+from backend.app.knowledge.models import Method, MethodEffect, MethodVersion
 from backend.app.operations.outbox import enqueue_event
 
-from .ai_selector import PROMPT_VERSION, RESPONSE_SCHEMA_VERSION, build_selection_packet, get_workout_selection_provider
+from .ai_selector import PROMPT_VERSION, RESPONSE_SCHEMA_VERSION, AIWorkoutProgram, build_generation_packet, get_workout_generation_provider
 from .models import SessionItem, TrainingGenerationRun, TrainingPhase, TrainingPlan, TrainingSession, TrainingWeek
 from .planner import (
     CandidateMethod,
@@ -35,14 +35,13 @@ from .planner import (
     PlannerInput,
     SessionDefinition,
     SlotDefinition,
-    finalize_plan,
     prepare_horizon,
 )
 from .reference_prescription import bind_prescription_to_method
 from .reference_service import _load_reference_inputs
 
 
-PLANNER_VERSION = "ai-selection-v1"
+PLANNER_VERSION = "ai-full-program-v3"
 LEVEL_RANK = {"beginner": 1, "intermediate": 2, "advanced": 3}
 MAIN_ROLES = frozenset({"primary_reference", "supporting_reference"})
 WARMUP_CODES = ("world_s_greatest_stretch", "easy_mode_specific_raise", "a_skip")
@@ -126,6 +125,7 @@ def _candidate_from_reference(
     role: str,
     template_code: str,
     details: MethodVersion | None = None,
+    quality_tags: tuple[str, ...] = (),
 ) -> CandidateMethod:
     return CandidateMethod(
         id=method.method_id,
@@ -133,7 +133,7 @@ def _candidate_from_reference(
         quality=quality,
         role=role,
         equipment=frozenset(),
-        environments=frozenset(method.environments),
+        environments=frozenset(),
         level_rank=LEVEL_RANK.get(method.minimum_level, 3),
         technical_cost=method.technical_cost,
         impact_cost=method.impact_cost,
@@ -147,6 +147,21 @@ def _candidate_from_reference(
         common_errors=tuple(details.common_errors) if details else (),
         safety_boundaries=tuple(details.safety_boundaries) if details else tuple(method.safety_boundaries),
         source_template_code=template_code,
+        selection_tags=(
+            {
+                "qualities": list(quality_tags),
+                "equipment": sorted(method.equipment),
+                "environments": sorted(method.environments),
+                "method_type": details.method_type,
+                "movement_pattern": details.movement_pattern,
+                "surfaces": list(details.surfaces),
+                "force_directions": list(details.force_directions),
+                "contractions": list(details.contractions),
+                "speed_intent": details.speed_intent,
+                "supervision_required": details.supervision_required,
+            }
+            if details else {"qualities": list(quality_tags)}
+        ),
     )
 
 
@@ -164,14 +179,21 @@ async def _catalog_methods(session: AsyncSession, codes: tuple[str, ...]) -> dic
     return {code: (version, code) for version, code in rows}
 
 
-def _catalog_candidate(version: MethodVersion, code: str, *, quality: str, role: str) -> CandidateMethod:
+def _catalog_candidate(
+    version: MethodVersion,
+    code: str,
+    *,
+    quality: str,
+    role: str,
+    quality_tags: tuple[str, ...] = (),
+) -> CandidateMethod:
     return CandidateMethod(
         id=version.method_id,
         code=code,
         quality=quality,
         role=role,
         equipment=frozenset(),
-        environments=frozenset(version.environments),
+        environments=frozenset(),
         level_rank=LEVEL_RANK.get(version.level_minimum, 3),
         technical_cost=version.technical_cost,
         impact_cost=version.impact_cost,
@@ -184,7 +206,102 @@ def _catalog_candidate(version: MethodVersion, code: str, *, quality: str, role:
         coaching_cues=tuple(version.cues),
         common_errors=tuple(version.common_errors),
         safety_boundaries=tuple(version.safety_boundaries),
+        selection_tags={
+            "qualities": list(quality_tags),
+            "equipment": list(version.equipment_codes),
+            "environments": list(version.environments),
+            "method_type": version.method_type,
+            "movement_pattern": version.movement_pattern,
+            "surfaces": list(version.surfaces),
+            "force_directions": list(version.force_directions),
+            "contractions": list(version.contractions),
+            "speed_intent": version.speed_intent,
+            "supervision_required": version.supervision_required,
+        },
     )
+
+
+async def _supplemental_methods(
+    session: AsyncSession,
+    context: Any,
+    quality_codes: set[str],
+) -> list[CandidateMethod]:
+    """Load a bounded quality-matched pool beyond the reference templates.
+
+    This is the hybrid portion of generation: sport templates establish the
+    required qualities and dose shapes, while the coach may choose another
+    released exercise that satisfies the same quality, level, equipment,
+    environment, and dose contract.
+    """
+    if not quality_codes:
+        return []
+    rows = (await session.execute(
+        select(MethodVersion, Method.code, MethodEffect.quality_code)
+        .join(Method, Method.id == MethodVersion.method_id)
+        .join(
+            MethodEffect,
+            (MethodEffect.method_id == MethodVersion.method_id)
+            & (MethodEffect.method_version == MethodVersion.content_version),
+        )
+        .where(
+            MethodVersion.content_version == Method.latest_version,
+            MethodVersion.status == "released",
+            MethodVersion.generator_eligible.is_(True),
+            MethodEffect.quality_code.in_(quality_codes),
+        )
+        .order_by(
+            MethodEffect.quality_code,
+            MethodVersion.technical_cost,
+            MethodVersion.impact_cost,
+            MethodVersion.fatigue_cost,
+            Method.code,
+        )
+    )).all()
+    grouped: dict[str, list[CandidateMethod]] = defaultdict(list)
+    for version, code, quality_code in rows:
+        if LEVEL_RANK.get(version.level_minimum, 99) > LEVEL_RANK.get(context.athlete_level, 0):
+            continue
+        equipment = frozenset(version.equipment_codes)
+        environments = frozenset(version.environments)
+        if not _equipment_allowed(equipment, _available_equipment(context)):
+            continue
+        if not _environment_allowed(environments, context, code=code, block_type="main_work"):
+            continue
+        grouped[quality_code].append(CandidateMethod(
+            id=version.method_id,
+            code=code,
+            quality=quality_code,
+            role="primary",
+            equipment=frozenset(),
+            environments=frozenset(),
+            level_rank=LEVEL_RANK.get(version.level_minimum, 3),
+            technical_cost=version.technical_cost,
+            impact_cost=version.impact_cost,
+            fatigue_cost=version.fatigue_cost,
+            dose_units=frozenset(version.accepted_dose_units),
+            method_version=version.content_version,
+            name=version.canonical_name,
+            equipment_codes=equipment,
+            instruction_steps=tuple(version.instructions),
+            coaching_cues=tuple(version.cues),
+            common_errors=tuple(version.common_errors),
+            safety_boundaries=tuple(version.safety_boundaries),
+            source_template_code=None,
+            selection_tags={
+                "qualities": [quality_code],
+                "equipment": list(version.equipment_codes),
+                "environments": list(version.environments),
+                "method_type": version.method_type,
+                "movement_pattern": version.movement_pattern,
+                "surfaces": list(version.surfaces),
+                "force_directions": list(version.force_directions),
+                "contractions": list(version.contractions),
+                "speed_intent": version.speed_intent,
+                "supervision_required": version.supervision_required,
+                "source": "released_quality_matched_supplement",
+            },
+        ))
+    return [method for quality in sorted(grouped) for method in grouped[quality][:12]]
 
 
 def _template_slots(
@@ -194,6 +311,7 @@ def _template_slots(
     *,
     block_type: str,
     method_details: dict[tuple[UUID, int], MethodVersion] | None = None,
+    method_quality_tags: dict[tuple[UUID, int], tuple[str, ...]] | None = None,
 ) -> list[tuple[SlotDefinition, list[CandidateMethod]]]:
     week = next((item for item in template.weeks if item.week_number == week_number), template.weeks[0])
     grouped: dict[tuple[str, ...], list[tuple[Any, dict[str, Any]]]] = defaultdict(list)
@@ -221,6 +339,7 @@ def _template_slots(
                 role="primary",
                 template_code=template.code,
                 details=(method_details or {}).get((row.method_id, row.method_version)),
+                quality_tags=(method_quality_tags or {}).get((row.method_id, row.method_version), ()),
             )
             for row, bound in rows
         ]
@@ -244,6 +363,10 @@ def _template_slots(
                     "category_code": template.category_code,
                     "purpose": template.purpose,
                     "reference_week": week_number,
+                    "week_intent": week.intent,
+                    "progression_condition": week.progression_condition,
+                    "regression_condition": week.regression_condition,
+                    "week_4_policy": template.week_4_policy if week_number == 4 else None,
                     "slot_index": slot_offset + 1,
                     "slot_count": slot_count,
                 },
@@ -258,6 +381,7 @@ def _catalog_slots(
     *,
     block_type: str,
     context: Any | None = None,
+    method_quality_tags: dict[tuple[UUID, int], tuple[str, ...]] | None = None,
 ) -> list[tuple[SlotDefinition, list[CandidateMethod]]]:
     candidates: list[CandidateMethod] = []
     for code in codes:
@@ -272,7 +396,13 @@ def _catalog_slots(
                 continue
             if not _environment_allowed(environments, context, code=code, block_type=block_type):
                 continue
-        candidates.append(_catalog_candidate(version, name, quality=block_type, role=block_type))
+        candidates.append(_catalog_candidate(
+            version,
+            name,
+            quality=block_type,
+            role=block_type,
+            quality_tags=(method_quality_tags or {}).get((version.method_id, version.content_version), ()),
+        ))
     if not candidates:
         return []
     slot = SlotDefinition(
@@ -321,6 +451,43 @@ def _context_snapshot(context: Any, priority: Any, overrides: dict[str, Any]) ->
     }
 
 
+def _program_warnings(program: AIWorkoutProgram, packet: dict[str, Any]) -> list[str]:
+    """Return concise semantic issues for the single model repair attempt.
+
+    The structured-output schema handles shape and type correctness. These
+    checks provide feedback to the model but do not rewrite or reject its plan.
+    """
+    warnings: list[str] = []
+    requirements = packet["output_requirements"]
+    expected_sessions = requirements["sessions_per_week"]
+    target_minutes = requirements["session_duration_minutes"]
+    catalog = {
+        (value["method_id"], value["method_version"])
+        for value in packet["candidate_catalog"].values()
+    }
+    definitions = {item.generated_exercise_id for item in program.generated_exercises}
+    if [week.week_number for week in program.weeks] != [1, 2, 3, 4]:
+        warnings.append("weeks must be numbered exactly 1, 2, 3, 4")
+    for week in program.weeks:
+        if len(week.sessions) != expected_sessions:
+            warnings.append(f"week {week.week_number} must contain exactly {expected_sessions} sessions")
+        for planned in week.sessions:
+            block_minutes = sum(block.estimated_minutes for block in planned.blocks)
+            if planned.estimated_minutes != target_minutes or block_minutes != target_minutes:
+                warnings.append(
+                    f"week {week.week_number} session {planned.session_number} duration must be {target_minutes}; "
+                    f"session={planned.estimated_minutes}, blocks={block_minutes}"
+                )
+            for block in planned.blocks:
+                for occurrence in block.exercises:
+                    reference = occurrence.exercise
+                    if reference.source == "catalog" and (str(reference.method_id), reference.method_version) not in catalog:
+                        warnings.append(f"unknown catalog exercise {reference.method_id}:{reference.method_version}")
+                    if reference.source == "generated" and reference.generated_exercise_id not in definitions:
+                        warnings.append(f"missing generated exercise definition {reference.generated_exercise_id}")
+    return list(dict.fromkeys(warnings))
+
+
 async def generate_ai_plan(
     session: AsyncSession,
     user_id: UUID,
@@ -349,17 +516,49 @@ async def generate_ai_plan(
     normalized_start = starts_on or (date.today() + timedelta(days=(7 - date.today().weekday()) % 7))
     try:
         context, priority, templates_by_category, dataset_hash, content_release_id = await _load_reference_inputs(
-            session, athlete=athlete, primary=primary, goal=goal, starts_on=normalized_start
+            session,
+            athlete=athlete,
+            primary=primary,
+            goal=goal,
+            starts_on=normalized_start,
+            athlete_level_override=fitness_level,
         )
     except (ValueError, RuntimeError) as exc:
         raise ProblemError(422, "training_inputs_unresolved", "A safe plan could not be created", str(exc)) from exc
 
     chosen_level = fitness_level if fitness_level in LEVEL_RANK else context.athlete_level
+    stored_health_context = dict(athlete.health_context_json or {})
+    stored_health_context.update(health_context or {})
     additional_context = {
         "fitness_level": chosen_level,
+        "competition_level": athlete.competition_level,
+        "height_cm": float(athlete.height_cm) if athlete.height_cm is not None else None,
+        "weight_kg": float(athlete.weight_kg) if athlete.weight_kg is not None else None,
+        "season_phase": context.phase_code,
         "training_days_per_week": training_days_per_week,
-        "health": health_context or {},
+        "health": stored_health_context,
         "schedule_constraints": schedule_constraints,
+        "availability": [
+            {
+                "weekday": item.weekday,
+                "start_minute": item.start_minute,
+                "duration_minutes": item.duration_minutes,
+                "environments": sorted(item.environments),
+            }
+            for item in context.availability
+        ],
+        "external_schedule": list(context.external_schedule),
+        "readiness": context.readiness,
+        "acute_illness": context.acute_illness,
+        "scenario_codes": sorted(context.scenario_codes),
+        "competition_dates": [value.isoformat() for value in context.competition_dates],
+        "days_to_competition": context.days_to_competition,
+        "sport_requirements": [asdict(item) for item in priority.ranked_categories],
+        "phase_policy": {
+            "progression_mode": context.phase_policy.progression_mode,
+            "weekly_volume_multipliers": list(context.phase_policy.weekly_volume_multipliers),
+            "novelty_policy": context.phase_policy.novelty_policy,
+        },
     }
     context = replace(context, athlete_level=chosen_level)
     max_sessions = context.phase_policy.maximum_sessions_per_week
@@ -389,8 +588,30 @@ async def generate_ai_plan(
             select(MethodVersion).where(tuple_(MethodVersion.method_id, MethodVersion.content_version).in_(reference_keys))
         )).all()
         method_details = {(row.method_id, row.content_version): row for row in rows}
+    quality_keys = reference_keys | {
+        (version.method_id, version.content_version)
+        for version, _code in catalog.values()
+    }
+    method_quality_tags: dict[tuple[UUID, int], tuple[str, ...]] = defaultdict(tuple)
+    if quality_keys:
+        quality_rows = (await session.execute(
+            select(MethodEffect.method_id, MethodEffect.method_version, MethodEffect.quality_code)
+            .where(tuple_(MethodEffect.method_id, MethodEffect.method_version).in_(quality_keys))
+            .order_by(MethodEffect.method_id, MethodEffect.method_version, MethodEffect.quality_code)
+        )).all()
+        grouped_quality_tags: dict[tuple[UUID, int], list[str]] = defaultdict(list)
+        for method_id, method_version, quality_code in quality_rows:
+            grouped_quality_tags[(method_id, method_version)].append(quality_code)
+        method_quality_tags = {
+            key: tuple(dict.fromkeys(values))
+            for key, values in grouped_quality_tags.items()
+        }
 
-    methods: list[CandidateMethod] = []
+    methods = await _supplemental_methods(
+        session,
+        context,
+        {template.category_code for template in selected_templates},
+    )
     scheduled_definitions: list[tuple[datetime, SessionDefinition]] = []
     try:
         zone = ZoneInfo(athlete.timezone)
@@ -413,12 +634,19 @@ async def generate_ai_plan(
                 context,
                 block_type="warmup",
                 method_details=method_details,
+                method_quality_tags=method_quality_tags,
             ) if preparation_templates else []
             if warmup:
                 slots.append(warmup[0][0])
                 slot_candidates.extend(warmup[0][1])
             else:
-                fallback = _catalog_slots(catalog, WARMUP_CODES, block_type="warmup", context=context)
+                fallback = _catalog_slots(
+                    catalog,
+                    WARMUP_CODES,
+                    block_type="warmup",
+                    context=context,
+                    method_quality_tags=method_quality_tags,
+                )
                 if fallback:
                     slots.append(fallback[0][0])
                     slot_candidates.extend(fallback[0][1])
@@ -429,10 +657,17 @@ async def generate_ai_plan(
                     context,
                     block_type="main_work",
                     method_details=method_details,
+                    method_quality_tags=method_quality_tags,
                 ):
                     slots.append(slot)
                     slot_candidates.extend(candidates)
-            cooldown = _catalog_slots(catalog, COOLDOWN_CODES, block_type="cooldown", context=context)
+            cooldown = _catalog_slots(
+                catalog,
+                COOLDOWN_CODES,
+                block_type="cooldown",
+                context=context,
+                method_quality_tags=method_quality_tags,
+            )
             if cooldown:
                 slots.append(cooldown[0][0])
                 slot_candidates.extend(cooldown[0][1])
@@ -469,7 +704,7 @@ async def generate_ai_plan(
         role_code=primary.role_code,
         target_date=goal.target_date,
         available_slots=tuple((item.weekday, item.start_minute, item.duration_minutes) for item in context.availability),
-        equipment=frozenset(),
+        equipment=frozenset(context.equipment),
         environments=frozenset(context.environments),
         maximum_session_minutes=athlete.maximum_session_minutes,
         external_hard_days=frozenset(value.weekday() for value in context.external_hard_dates),
@@ -486,23 +721,57 @@ async def generate_ai_plan(
     except PlanInvariantError as exc:
         raise ProblemError(422, "training_plan_unresolved", "A safe plan could not be created", str(exc)) from exc
 
-    packet = build_selection_packet(planner_input, draft)
-    provider = get_workout_selection_provider()
-    validation_errors: list[str] | None = None
+    existing = await session.scalar(select(TrainingPlan).where(
+        TrainingPlan.athlete_id == athlete.id,
+        TrainingPlan.input_hash == draft.input_hash,
+        TrainingPlan.dataset_hash == dataset_hash,
+        TrainingPlan.planner_version == PLANNER_VERSION,
+    ))
+    if existing is not None:
+        if existing.status != "active":
+            await session.execute(
+                update(TrainingPlan)
+                .where(TrainingPlan.athlete_id == athlete.id, TrainingPlan.status == "active")
+                .values(status="superseded")
+            )
+            existing.status = "active"
+            await session.commit()
+        from backend.app.training.service import plan_view
+        return await plan_view(session, existing.id, athlete.id)
+
+    packet = build_generation_packet(planner_input, draft)
+    # OpenAI generation can take longer than Cloud SQL's idle-in-transaction
+    # timeout. Release the read transaction before the network call; the
+    # accepted response is validated against this immutable packet and all
+    # writes happen in a fresh transaction below.
+    await session.commit()
+    provider = get_workout_generation_provider()
     selected_result = None
-    result = None
+    validation_warnings: list[str] = []
     for attempt in range(1, 3):
         try:
-            selected_result = await provider.select(packet=packet, validation_errors=validation_errors)
-            result = finalize_plan(draft, selected_result.output.to_domain())
-            break
+            repair_context = None
+            if attempt == 2:
+                repair_context = {
+                    "validation_issues": validation_warnings,
+                    "previous_program": selected_result.output.model_dump(mode="json") if selected_result else None,
+                }
+            candidate_result = await provider.generate(packet=packet, repair_context=repair_context)
+            candidate_warnings = _program_warnings(candidate_result.output, packet)
+            selected_result = candidate_result
+            validation_warnings = candidate_warnings
+            if not candidate_warnings or attempt == 2:
+                break
         except OpenAIResponseError as exc:
             raise ProblemError(502, "ai_generation_failed", "Workout generation failed", str(exc)) from exc
-        except (PlanInvariantError, ValueError) as exc:
-            validation_errors = [str(exc)]
-            if attempt == 2:
-                raise ProblemError(422, "ai_selection_unresolved", "The workout model returned an unsafe selection", str(exc)) from exc
-    if result is None or selected_result is None:
+        except ValueError as exc:
+            raise ProblemError(
+                502,
+                "ai_generation_failed",
+                "Workout generation failed",
+                "The coach model returned a response that could not be displayed. Please try again.",
+            ) from exc
+    if selected_result is None:
         raise ProblemError(502, "ai_generation_failed", "Workout generation failed", "The workout model did not return a usable plan.")
 
     input_snapshot = _context_snapshot(context, priority, additional_context)
@@ -521,24 +790,14 @@ async def generate_ai_plan(
         )
         .values(status="superseded")
     )
-    existing = await session.scalar(select(TrainingPlan).where(
-        TrainingPlan.athlete_id == athlete.id,
-        TrainingPlan.input_hash == result.input_hash,
-        TrainingPlan.dataset_hash == dataset_hash,
-        TrainingPlan.planner_version == PLANNER_VERSION,
-    ))
-    if existing is not None:
-        await session.commit()
-        from backend.app.training.service import plan_view
-        return await plan_view(session, existing.id, athlete.id)
     plan_number = int(await session.scalar(select(func.coalesce(func.max(TrainingPlan.plan_number), 0)).where(TrainingPlan.athlete_id == athlete.id)) or 0) + 1
     plan = TrainingPlan(
         id=uuid7(), athlete_id=athlete.id, plan_number=plan_number, status="active", goal_id=goal.id,
         content_release_id=content_release_id, dataset_hash=dataset_hash, planner_version=PLANNER_VERSION,
-        input_hash=result.input_hash, input_snapshot_json=input_snapshot, starts_on=result.starts_on,
-        ends_on=result.ends_on, decision_trace_json=result.trace,
-        validation_json={"passed": True, "ai_used": True, "provider": selected_result.provider, "attempt_count": attempt},
-        activated_at=datetime.now(timezone.utc), materialized_through=result.ends_on, selection_horizon_weeks=4,
+        input_hash=draft.input_hash, input_snapshot_json=input_snapshot, starts_on=draft.starts_on,
+        ends_on=draft.ends_on, decision_trace_json=[{"decision": "ai_authored_full_program", "prompt_version": PROMPT_VERSION}],
+        validation_json={"passed": not validation_warnings, "warnings": validation_warnings, "ai_used": True, "provider": selected_result.provider, "attempt_count": attempt},
+        activated_at=datetime.now(timezone.utc), materialized_through=draft.ends_on, selection_horizon_weeks=4,
     )
     session.add(plan)
     await session.flush()
@@ -550,41 +809,62 @@ async def generate_ai_plan(
     session.add(phase)
     await session.flush()
     weeks_by_number: dict[int, TrainingWeek] = {}
+    generated_weeks = {week.week_number: week for week in selected_result.output.weeks}
     for week_number in range(1, weeks + 1):
         week_start = plan.starts_on + timedelta(days=(week_number - 1) * 7)
+        generated_week = generated_weeks.get(week_number)
         row = TrainingWeek(
             id=uuid7(), plan_id=plan.id, phase_id=phase.id, week_number=week_number,
-            starts_on=week_start, planned_load=0, deload=False,
-            structure_json={"intent": "AI-selected from released sport templates", "session_count": session_count, "ai_selected": True},
+            starts_on=week_start, planned_load=0, deload=generated_week.deload if generated_week else False,
+            structure_json={
+                "intent": generated_week.theme if generated_week else "AI-generated training week",
+                "progression_rule": generated_week.progression_rule if generated_week else "",
+                "session_count": session_count,
+                "ai_selected": True,
+            },
             materialization_status="materialized",
         )
         session.add(row)
         weeks_by_number[week_number] = row
     await session.flush()
-    method_by_key = {(method.id, method.method_version): method for method in methods}
+    generated_by_id = {item.generated_exercise_id: item.model_dump(mode="json") for item in selected_result.output.generated_exercises}
     session_rows: list[TrainingSession] = []
     item_rows: list[SessionItem] = []
     load_by_week: dict[int, int] = defaultdict(int)
-    for sequence, planned in enumerate(result.sessions, 1):
-        week_number = min(weeks, max(1, ((planned.scheduled_for.date() - plan.starts_on).days // 7) + 1))
+    flattened_sessions = [item for week in selected_result.output.weeks for item in week.sessions]
+    for sequence, planned in enumerate(flattened_sessions, 1):
+        week_number = planned.week_number
+        try:
+            scheduled_for = datetime.fromisoformat(planned.scheduled_for.replace("Z", "+00:00"))
+        except ValueError:
+            scheduled_for = draft.sessions[sequence - 1].scheduled_for if sequence <= len(draft.sessions) else datetime.combine(plan.starts_on + timedelta(days=(week_number - 1) * 7), datetime.min.time(), timezone.utc)
         session_row = TrainingSession(
             id=uuid7(), week_id=weeks_by_number[week_number].id, athlete_id=athlete.id,
             recipe_id=None, recipe_version=None, sequence=((sequence - 1) % session_count) + 1,
-            scheduled_for=planned.scheduled_for, session_type="ai_training", purpose=planned.definition.purpose,
-            estimated_minutes=planned.definition.estimated_minutes, load_class=planned.definition.load_class,
+            scheduled_for=scheduled_for, session_type="ai_training", purpose=planned.purpose,
+            estimated_minutes=planned.estimated_minutes, load_class=planned.load_class,
             venue_code=None, status="scheduled",
-            explanation="Selected by Runlete AI from the released sport templates and eligible exercise catalogue.",
+            explanation=planned.title,
         )
         session_rows.append(session_row)
-        load_by_week[week_number] += len(planned.items)
-        for item_sequence, planned_item in enumerate(planned.items, 1):
-            method = method_by_key[(planned_item.method_id, planned_item.method_version)]
+        occurrences = [(block, occurrence) for block in planned.blocks for occurrence in block.exercises]
+        load_by_week[week_number] += len(occurrences)
+        for item_sequence, (block, planned_item) in enumerate(occurrences, 1):
+            reference = planned_item.exercise
+            is_catalog = reference.source == "catalog"
+            generated = None if is_catalog else generated_by_id.get(reference.generated_exercise_id)
+            prescription = dict(planned_item.prescription)
+            prescription["estimated_minutes"] = planned_item.estimated_minutes
+            if planned_item.circuit is not None:
+                prescription["circuit"] = planned_item.circuit.model_dump(mode="json")
             item_rows.append(SessionItem(
-                id=uuid7(), session_id=session_row.id, method_id=planned_item.method_id,
-                method_version=planned_item.method_version, slot_id=None, sequence=item_sequence,
-                block_type=planned_item.block_type, prescription_json=planned_item.prescription,
-                substitution_methods_json=[{"id": str(value)} for value in planned_item.alternatives],
-                decision_trace_json=planned_item.trace + [{"source_template_code": method.source_template_code, "ai": True}],
+                id=uuid7(), session_id=session_row.id,
+                method_id=reference.method_id if is_catalog else None,
+                method_version=reference.method_version if is_catalog else None,
+                generated_exercise_json=generated, slot_id=None, sequence=item_sequence,
+                block_type=block.block_type, prescription_json=prescription,
+                substitution_methods_json=[],
+                decision_trace_json=[{"ai": True, "source": reference.source, "coaching_note": planned_item.coaching_note}],
             ))
     session.add_all(session_rows)
     await session.flush()
@@ -593,14 +873,14 @@ async def generate_ai_plan(
         row.planned_load = load_by_week[week_number]
     generation_run = TrainingGenerationRun(
         id=uuid7(), athlete_id=athlete.id, content_release_id=content_release_id, plan_id=plan.id,
-        horizon_starts_on=result.starts_on, horizon_ends_on=result.ends_on,
+        horizon_starts_on=draft.starts_on, horizon_ends_on=draft.ends_on,
         provider=selected_result.provider, model_id=selected_result.model_id,
         prompt_version=PROMPT_VERSION, response_schema_version=RESPONSE_SCHEMA_VERSION,
-        planner_version=PLANNER_VERSION, input_hash=result.input_hash, status="accepted",
+        planner_version=PLANNER_VERSION, input_hash=draft.input_hash, status="accepted",
         attempt_count=attempt, latency_ms=selected_result.latency_ms,
         input_tokens=selected_result.input_tokens, output_tokens=selected_result.output_tokens,
         accepted_output_json=selected_result.output.model_dump(mode="json"),
-        validation_json={"passed": True, "errors": []},
+        validation_json={"passed": not validation_warnings, "warnings": validation_warnings},
     )
     session.add(generation_run)
     await enqueue_event(

@@ -4030,6 +4030,10 @@ export interface components {
             method_familiarity: components["schemas"]["MethodFamiliarityInput"][];
             /** Cross Training Consent */
             cross_training_consent: boolean;
+            /** Health Context */
+            health_context?: {
+                [key: string]: unknown;
+            };
             active_goal: components["schemas"]["GoalInput"] | null;
             /** Version */
             version: number;
@@ -5121,6 +5125,10 @@ export interface components {
              * @default false
              */
             cross_training_consent: boolean;
+            /** Health Context */
+            health_context?: {
+                [key: string]: unknown;
+            };
             goal: components["schemas"]["GoalInput"];
         };
         /** OwnershipTransferCommand */
@@ -5887,14 +5895,17 @@ export interface components {
              */
             id: string;
             /**
-             * Method Id
-             * Format: uuid
+             * Source
+             * @default catalog
+             * @enum {string}
              */
-            method_id: string;
+            source: "catalog" | "generated";
+            /** Method Id */
+            method_id?: string | null;
             /** Method Name */
             method_name: string;
             /** Method Version */
-            method_version: number;
+            method_version?: number | null;
             /** Block Type */
             block_type: string;
             /** Prescription */
@@ -5911,6 +5922,16 @@ export interface components {
             common_errors?: string[];
             /** Safety Boundaries */
             safety_boundaries?: string[];
+            /** Description */
+            description?: string | null;
+            /** Equipment */
+            equipment?: string[];
+            /** Regressions */
+            regressions?: string[];
+            /** Progressions */
+            progressions?: string[];
+            /** Contraindications */
+            contraindications?: string[];
         };
         /** SimulationRequest */
         SimulationRequest: {
@@ -6215,6 +6236,12 @@ export interface components {
             status: string;
             /** Explanation */
             explanation: string;
+            /** Week Number */
+            week_number?: number | null;
+            /** Week Theme */
+            week_theme?: string | null;
+            /** Progression Rule */
+            progression_rule?: string | null;
             /** Items */
             items: components["schemas"]["SessionItemView"][];
             /** Version */

@@ -43,6 +43,7 @@ async def create_structured_response(
     schema: dict[str, Any],
     strict: bool,
     max_output_tokens: int,
+    timeout_seconds: float = 120.0,
 ) -> StructuredResponse:
     settings = get_settings()
     if not settings.openai_api_key:
@@ -75,7 +76,7 @@ async def create_structured_response(
                 "Content-Type": "application/json",
             },
             json=payload,
-            timeout=httpx.Timeout(120.0, connect=10.0),
+            timeout=httpx.Timeout(timeout_seconds, connect=10.0),
         )
         response.raise_for_status()
         body = response.json()

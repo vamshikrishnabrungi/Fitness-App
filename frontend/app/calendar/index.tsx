@@ -271,8 +271,8 @@ export default function CalendarScreen() {
                             {/* Workouts */}
                             {renderLogSection('Workouts', 'fitness-outline', dayLogs.workouts, (workout) => (
                                 <View style={styles.workoutItem}>
-                                    <Text style={styles.workoutName}>{workout.name || 'Workout'}</Text>
-                                    <Text style={styles.workoutDuration}>{workout.duration} min</Text>
+                                    <Text style={styles.workoutName}>{workout.explanation || workout.purpose || 'Workout'}</Text>
+                                    <Text style={styles.workoutDuration}>{workout.estimated_minutes || 0} min</Text>
                                 </View>
                             ))}
 

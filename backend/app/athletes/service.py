@@ -59,6 +59,7 @@ async def get_profile(session: AsyncSession, user_id: UUID) -> AthleteProfileVie
         competition_level=profile.competition_level, training_age_years=profile.training_age_years,
         maximum_session_minutes=profile.maximum_session_minutes, season_phase=profile.season_phase,
         cross_training_consent=profile.cross_training_consent,
+        health_context=dict(profile.health_context_json or {}),
         sports=[SportInput.model_validate(x, from_attributes=True) for x in sports],
         availability=[AvailabilityInput.model_validate(x, from_attributes=True) for x in slots],
         external_loads=[
@@ -113,6 +114,7 @@ async def complete_onboarding(session: AsyncSession, user_id: UUID, command: Onb
     profile.maximum_session_minutes = command.maximum_session_minutes
     profile.season_phase = command.season_phase
     profile.cross_training_consent = command.cross_training_consent
+    profile.health_context_json = command.health_context
     if not created_profile:
         await session.execute(delete(AthleteSport).where(AthleteSport.athlete_id == profile.id))
         await session.execute(delete(AvailabilityWindow).where(AvailabilityWindow.athlete_id == profile.id))

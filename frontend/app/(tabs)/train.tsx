@@ -142,14 +142,14 @@ export default function TrainScreen() {
       const sessions = await api.get<any[]>('/training/history');
       const res: Workout[] = (sessions || []).map((session) => ({
         id: session.id,
-        title: displayWorkoutTitle(session.purpose, session.session_type),
+        title: displayWorkoutTitle(session.explanation, session.session_type),
         category: session.session_type,
         duration: session.estimated_minutes,
         difficulty: session.status,
         exercises: session.items || [],
         completed: session.status === 'completed',
         scheduled_date: session.scheduled_for?.slice(0, 10),
-        description: session.explanation,
+        description: session.purpose,
       }));
       setWorkouts(res);
       setGenerationPaused(false);
@@ -170,7 +170,7 @@ export default function TrainScreen() {
   const generatePlan = async () => {
     try {
       setGenerating(true);
-      await api.post('/training/plans', { weeks: 4, starts_on: null });
+      await api.postLongRunning('/training/plans', { weeks: 4, starts_on: null });
       await fetchWorkouts();
     } catch (error) {
       console.error('Error generating training plan:', error);

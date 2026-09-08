@@ -1,5 +1,6 @@
-from datetime import datetime, timezone
+from datetime import datetime, time, timedelta, timezone
 from uuid import UUID
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import select
@@ -64,17 +65,21 @@ async def materialize(plan_id: UUID, user_id: UUID = Depends(current_user_id), s
 
 @router.get("/sessions/today", response_model=SessionView | None)
 async def today(user_id: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> SessionView | None:
-    athlete_id = await _athlete_id(session, user_id)
-    now = datetime.now(timezone.utc)
+    athlete = await session.scalar(select(AthleteProfile).where(AthleteProfile.user_id == user_id))
+    if athlete is None:
+        raise ProblemError(409, "onboarding_required", "Onboarding required", "Complete onboarding first.")
+    local_day = datetime.now(ZoneInfo(athlete.timezone)).date()
+    day_start = datetime.combine(local_day, time.min, ZoneInfo(athlete.timezone)).astimezone(timezone.utc)
+    day_end = day_start + timedelta(days=1)
     row = await session.scalar(
         select(TrainingSession)
         .join(TrainingWeek, TrainingWeek.id == TrainingSession.week_id)
         .join(TrainingPlan, TrainingPlan.id == TrainingWeek.plan_id)
         .where(
-            TrainingSession.athlete_id == athlete_id,
+            TrainingSession.athlete_id == athlete.id,
             TrainingPlan.status == "active",
-            TrainingSession.scheduled_for >= now.replace(hour=0, minute=0, second=0),
-            TrainingSession.scheduled_for < now.replace(hour=0, minute=0, second=0) + __import__('datetime').timedelta(days=1),
+            TrainingSession.scheduled_for >= day_start,
+            TrainingSession.scheduled_for < day_end,
         )
         .order_by(TrainingSession.scheduled_for)
     )

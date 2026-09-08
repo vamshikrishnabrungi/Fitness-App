@@ -16,9 +16,10 @@ class PlanCreate(BaseModel):
 
 class SessionItemView(BaseModel):
     id: UUID
-    method_id: UUID
+    source: Literal["catalog", "generated"] = "catalog"
+    method_id: UUID | None = None
     method_name: str
-    method_version: int
+    method_version: int | None = None
     block_type: str
     prescription: dict[str, Any]
     alternatives: list[UUID]
@@ -26,6 +27,11 @@ class SessionItemView(BaseModel):
     coaching_cues: list[str] = Field(default_factory=list)
     common_errors: list[str] = Field(default_factory=list)
     safety_boundaries: list[str] = Field(default_factory=list)
+    description: str | None = None
+    equipment: list[str] = Field(default_factory=list)
+    regressions: list[str] = Field(default_factory=list)
+    progressions: list[str] = Field(default_factory=list)
+    contraindications: list[str] = Field(default_factory=list)
 
 
 class SessionView(BaseModel):
@@ -37,6 +43,9 @@ class SessionView(BaseModel):
     venue_code: str | None = None
     status: str
     explanation: str
+    week_number: int | None = None
+    week_theme: str | None = None
+    progression_rule: str | None = None
     items: list[SessionItemView]
     version: int
 

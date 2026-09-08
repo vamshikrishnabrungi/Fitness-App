@@ -28,9 +28,10 @@ class CandidateMethod:
     fatigue_cost: int
     dose_units: frozenset[str]
     method_version: int = 1
-    # Athlete-facing catalogue data is carried into the AI packet and then
-    # returned by the read adapter. These fields are optional so the pure
-    # planner tests can continue to use small domain fixtures.
+    # Athlete-facing catalogue data is retained for the read adapter. Compact
+    # selection tags are sent to the AI; instructions and safety copy are
+    # loaded server-side after a method is selected. These fields are optional
+    # so the pure planner tests can continue to use small domain fixtures.
     name: str = ""
     equipment_codes: frozenset[str] = frozenset()
     instruction_steps: tuple[str, ...] = ()
@@ -38,6 +39,7 @@ class CandidateMethod:
     common_errors: tuple[str, ...] = ()
     safety_boundaries: tuple[str, ...] = ()
     source_template_code: str | None = None
+    selection_tags: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -119,6 +121,7 @@ class MethodSelection:
     prescription: dict[str, Any]
     alternative_method_ids: tuple[UUID, ...]
     rationale_code: str
+    circuit: dict[str, Any] | None = None
 
 
 @dataclass
@@ -154,16 +157,25 @@ def canonical_hash(value: Any) -> str:
 
 def _eligible_methods(slot: SlotDefinition, methods: list[CandidateMethod], state: PlannerInput) -> tuple[CandidateMethod, ...]:
     required_units = set(slot.dose)
-    eligible = [
-        method
-        for method in methods
-        if method.quality == slot.quality
-        and method.role == slot.role
-        and method.level_rank <= state.level_rank
-        and method.equipment.issubset(state.equipment)
-        and (not method.environments or bool(method.environments & state.environments))
-        and required_units.issubset(method.dose_units)
-    ]
+    source_template = slot.metadata.get("template_code")
+    catalog_slot = slot.metadata.get("source") == "released_exercise_catalog"
+    eligible_by_key: dict[tuple[UUID, int], CandidateMethod] = {}
+    for method in methods:
+        if source_template and method.source_template_code not in {None, source_template}:
+            continue
+        if catalog_slot and method.source_template_code is not None:
+            continue
+        if not (
+            method.quality == slot.quality
+            and method.role == slot.role
+            and method.level_rank <= state.level_rank
+            and method.equipment.issubset(state.equipment)
+            and (not method.environments or bool(method.environments & state.environments))
+            and required_units.issubset(method.dose_units)
+        ):
+            continue
+        eligible_by_key.setdefault((method.id, method.method_version), method)
+    eligible = list(eligible_by_key.values())
     eligible.sort(key=lambda method: (method.code, str(method.id)))
     if slot.required and not eligible:
         raise PlanInvariantError(f"no eligible approved method for required slot {slot.code}")
@@ -341,6 +353,8 @@ def finalize_plan(draft: PlanDraft, selections: list[MethodSelection]) -> PlanRe
     planned_sessions: list[PlannedSession] = []
     for draft_session in draft.sessions:
         used: set[UUID] = set()
+        circuit_shapes: dict[str, tuple[int, int, int, int]] = {}
+        circuit_orders: dict[str, set[int]] = {}
         items: list[PlannedItem] = []
         for candidate_slot in draft_session.slots:
             selected = received[candidate_slot.occurrence_id]
@@ -353,10 +367,38 @@ def finalize_plan(draft: PlanDraft, selections: list[MethodSelection]) -> PlanRe
             if selected.method_id in used:
                 raise PlanInvariantError("a method cannot appear twice in one session")
             used.add(selected.method_id)
+            selected_candidate = next(method for method in candidate_slot.candidates if method.id == selected.method_id)
             if set(selected.prescription) != set(slot.dose):
                 raise PlanInvariantError(f"prescription fields do not match released dose schema for slot {slot.code}")
             for unit, specification in slot.dose.items():
                 _validate_dose_value(unit, specification, selected.prescription[unit])
+            prescription = dict(selected.prescription)
+            if selected.circuit is not None:
+                if slot.block_type != "main_work":
+                    raise PlanInvariantError("circuits may contain only main-work exercises")
+                circuit = selected.circuit
+                if not (2 <= circuit["rounds"] <= 10 and 10 <= circuit["work_seconds"] <= 300):
+                    raise PlanInvariantError("circuit dose is outside safe bounds")
+                if not (0 <= circuit["rest_seconds"] <= 300 and 0 <= circuit["rest_between_rounds_seconds"] <= 600):
+                    raise PlanInvariantError("circuit recovery is outside safe bounds")
+                if selected_candidate.quality in {"maximum_strength", "maximum_velocity", "explosive_strength"}:
+                    raise PlanInvariantError(f"{selected_candidate.quality} exercises cannot be placed in a fatigue circuit")
+                if selected_candidate.technical_cost >= 4 or selected_candidate.impact_cost >= 4:
+                    raise PlanInvariantError("high-technical-cost or high-impact exercises cannot be placed in a circuit")
+                circuit_id = circuit["circuit_id"]
+                shape = (
+                    circuit["rounds"],
+                    circuit["work_seconds"],
+                    circuit["rest_seconds"],
+                    circuit["rest_between_rounds_seconds"],
+                )
+                if circuit_id in circuit_shapes and circuit_shapes[circuit_id] != shape:
+                    raise PlanInvariantError("all exercises in a circuit must use the same timing")
+                if circuit["order"] in circuit_orders.setdefault(circuit_id, set()):
+                    raise PlanInvariantError("circuit exercise order must be unique")
+                circuit_shapes[circuit_id] = shape
+                circuit_orders[circuit_id].add(circuit["order"])
+                prescription["circuit"] = dict(circuit)
             alternatives = list(selected.alternative_method_ids)
             if len(alternatives) > 3 or len(set(alternatives)) != len(alternatives):
                 raise PlanInvariantError(f"invalid alternatives for slot {slot.code}")
@@ -367,7 +409,7 @@ def finalize_plan(draft: PlanDraft, selections: list[MethodSelection]) -> PlanRe
                     slot.id,
                     selected.method_id,
                     slot.block_type,
-                    dict(selected.prescription),
+                    prescription,
                     alternatives,
                     [
                         {
@@ -380,6 +422,11 @@ def finalize_plan(draft: PlanDraft, selections: list[MethodSelection]) -> PlanRe
                     next(method.method_version for method in candidate_slot.candidates if method.id == selected.method_id),
                 )
             )
+        for circuit_id, orders in circuit_orders.items():
+            if len(orders) < 2:
+                raise PlanInvariantError(f"circuit {circuit_id} must contain at least two exercises")
+            if sorted(orders) != list(range(1, len(orders) + 1)):
+                raise PlanInvariantError(f"circuit {circuit_id} order must start at 1 and remain contiguous")
         planned_sessions.append(PlannedSession(draft_session.scheduled_for, draft_session.definition, items))
 
     trace = list(draft.trace)

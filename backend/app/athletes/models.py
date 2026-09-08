@@ -30,6 +30,7 @@ class AthleteProfile(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     post_clearance_only: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     cross_training_consent: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     season_phase: Mapped[str] = mapped_column(String(32), default="general_preparation", nullable=False)
+    health_context_json: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict, nullable=False)
 
 
 class AthleteSport(UUIDPrimaryKeyMixin, TimestampMixin, Base):

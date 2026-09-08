@@ -121,12 +121,20 @@ class SessionItem(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     __tablename__ = "session_items"
     __table_args__ = (
         UniqueConstraint("session_id", "sequence", name="uq_session_item_sequence"),
+        CheckConstraint(
+            "((method_id IS NOT NULL AND method_version IS NOT NULL AND generated_exercise_json IS NULL) OR "
+            "(method_id IS NULL AND method_version IS NULL AND generated_exercise_json IS NOT NULL))",
+            name="ck_session_item_exercise_source",
+        ),
         ForeignKeyConstraint(["method_id", "method_version"], ["knowledge.method_versions.method_id", "knowledge.method_versions.content_version"], ondelete="RESTRICT"),
         {"schema": "training"},
     )
     session_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), ForeignKey("training.sessions.id", ondelete="CASCADE"), nullable=False)
-    method_id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), nullable=False)
-    method_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    method_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True))
+    method_version: Mapped[int | None] = mapped_column(Integer)
+    # SQL NULL identifies catalog-backed rows. JSONB's default would encode
+    # Python None as JSON `null`, which does not satisfy the source constraint.
+    generated_exercise_json: Mapped[dict[str, Any] | None] = mapped_column(JSONB(none_as_null=True))
     slot_id: Mapped[UUID | None] = mapped_column(PGUUID(as_uuid=True), ForeignKey("knowledge.recipe_slots.id"))
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
     block_type: Mapped[str] = mapped_column(String(80), nullable=False)

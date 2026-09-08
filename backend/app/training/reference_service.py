@@ -349,9 +349,10 @@ async def _load_reference_inputs(
     primary: AthleteSport,
     goal: AthleteGoal,
     starts_on: date,
+    athlete_level_override: str | None = None,
 ) -> tuple[CompilerContext, PriorityContext, dict[str, tuple[ReferenceTemplate, ...]], str, UUID]:
     base_level = athlete_level(athlete.competition_level)
-    level = "beginner" if athlete.post_clearance_only else base_level
+    level = "beginner" if athlete.post_clearance_only else (athlete_level_override or base_level)
     scope_type, scope_code = sport_scope_key(
         primary.sport_code,
         event_code=primary.event_code,

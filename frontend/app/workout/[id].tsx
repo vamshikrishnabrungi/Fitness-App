@@ -16,7 +16,8 @@ import { WorkoutFeedbackModal } from '../../src/components/WorkoutFeedbackModal'
 import { api } from '../../src/utils/api';
 import { colors, typography, spacing, borderRadius, shadows } from '../../src/utils/theme';
 
-type WorkoutSectionName = 'warmup' | 'main_work' | 'cooldown';
+type WorkoutSectionName = string;
+type LegacySectionName = 'warmup' | 'main_work' | 'cooldown';
 
 interface Exercise {
   name: string;
@@ -29,11 +30,26 @@ interface Exercise {
   load_guidance?: string | null;
   rpe?: string | null;
   tempo?: string | null;
+  circuit?: {
+    circuit_id?: string;
+    order?: number;
+    rounds?: number;
+    work_seconds?: number;
+    rest_seconds?: number;
+    transition_seconds?: number;
+    rest_between_exercises_seconds?: number;
+    rest_between_rounds_seconds?: number;
+  } | null;
   notes?: string | null;
   coaching_notes?: string[];
   instructions?: string[];
   common_errors?: string[];
   safety_boundaries?: string[];
+  contraindications?: string[];
+  regressions?: string[];
+  progressions?: string[];
+  equipment?: string[];
+  block_type?: string;
   substitutions?: string[];
   library_enrichment?: {
     summary?: string | null;
@@ -95,7 +111,7 @@ interface SectionBlock {
   exercises: Exercise[];
 }
 
-const sectionCopy: Record<WorkoutSectionName, Omit<SectionBlock, 'key' | 'exercises'>> = {
+const sectionCopy: Record<LegacySectionName, Omit<SectionBlock, 'key' | 'exercises'>> = {
   warmup: {
     title: 'Prepare',
     subtitle: 'Raise temperature, open the right ranges, and rehearse the pattern.',
@@ -111,6 +127,26 @@ const sectionCopy: Record<WorkoutSectionName, Omit<SectionBlock, 'key' | 'exerci
     subtitle: 'Downshift the system and leave the session clean.',
     icon: 'leaf-outline',
   },
+};
+
+const blockCopy: Record<string, Omit<SectionBlock, 'key' | 'exercises'>> = {
+  dynamic_warmup: sectionCopy.warmup,
+  warmup: sectionCopy.warmup,
+  preparation: sectionCopy.warmup,
+  mobility: { title: 'Mobility', subtitle: 'Prepare the ranges needed for today’s work.', icon: 'body-outline' },
+  activation: { title: 'Activation', subtitle: 'Switch on the muscles and positions used in the session.', icon: 'flash-outline' },
+  speed: { title: 'Speed', subtitle: 'Fast, high-quality work with full control and recovery.', icon: 'speedometer-outline' },
+  plyometrics: { title: 'Plyometrics', subtitle: 'Develop elastic force and landing quality.', icon: 'trending-up-outline' },
+  power: { title: 'Power', subtitle: 'Produce force quickly while technique remains sharp.', icon: 'flash-outline' },
+  main_strength: sectionCopy.main_work,
+  main_work: sectionCopy.main_work,
+  accessory: { title: 'Accessory Work', subtitle: 'Support balance, durability, and the main training goal.', icon: 'construct-outline' },
+  isometrics: { title: 'Isometrics', subtitle: 'Build control and strength in key positions.', icon: 'pause-outline' },
+  conditioning: { title: 'Conditioning', subtitle: 'Develop the energy-system demand selected for your sport.', icon: 'heart-outline' },
+  circuit: { title: 'Circuit', subtitle: 'Complete each movement in order using the listed work and rest times.', icon: 'repeat-outline' },
+  cooldown: sectionCopy.cooldown,
+  recovery: sectionCopy.cooldown,
+  stretching: { title: 'Stretching', subtitle: 'Downshift and restore comfortable range after training.', icon: 'leaf-outline' },
 };
 
 const formatDateLabel = (date?: string) => {
@@ -156,6 +192,10 @@ const prescriptionFor = (exercise: Exercise) => {
   if (exercise.reps) parts.push(`${exercise.reps} reps`);
   if (exercise.duration) parts.push(exercise.duration);
   if (exercise.load_guidance) parts.push(exercise.load_guidance);
+  if (exercise.circuit?.rounds) parts.push(`${exercise.circuit.rounds} rounds`);
+  if (exercise.circuit?.work_seconds) parts.push(`${exercise.circuit.work_seconds}s work`);
+  const circuitRest = exercise.circuit?.rest_between_exercises_seconds ?? exercise.circuit?.rest_seconds;
+  if (circuitRest != null) parts.push(`${circuitRest}s off`);
   return parts.join(' · ') || 'Quality reps';
 };
 
@@ -177,37 +217,36 @@ export default function WorkoutDetailScreen() {
         name: item.method_name,
         exercise_id: item.method_id,
         sets: item.prescription?.sets,
-        reps: displayRepetitions(item.prescription?.repetitions),
+        reps: displayRepetitions(item.prescription?.reps ?? item.prescription?.repetitions ?? item.prescription?.reps_per_side),
         duration: displayRange(item.prescription?.duration_minutes, ' min')
           || displayRange(item.prescription?.duration_seconds, 's'),
-        rest: displayRange(item.prescription?.recovery_seconds, 's')
+        rest: displayRange(item.prescription?.rest_seconds, 's')
+          || displayRange(item.prescription?.recovery_seconds, 's')
           || displayRange(item.prescription?.recovery_between_sets_seconds, 's'),
         load_guidance: displayRange(item.prescription?.load_kg, ' kg')
           || displayRange(item.prescription?.percentage_1rm, '% 1RM'),
-        rpe: displayRange(item.prescription?.effort_rpe, ' RPE')
+        rpe: typeof item.prescription?.intensity === 'string' ? item.prescription.intensity
+          : displayRange(item.prescription?.effort_rpe, ' RPE')
           || displayRange(item.prescription?.rir, ' RIR'),
-        tempo: displayRange(item.prescription?.tempo_seconds, 's tempo'),
+        tempo: typeof item.prescription?.tempo === 'string' ? item.prescription.tempo
+          : displayRange(item.prescription?.tempo_seconds, 's tempo'),
+        circuit: item.prescription?.circuit || null,
         substitutions: item.alternatives || [],
         coaching_notes: item.coaching_cues || [],
         instructions: item.instructions || [],
         common_errors: item.common_errors || [],
         safety_boundaries: item.safety_boundaries || [],
+        contraindications: item.contraindications || [],
+        regressions: item.regressions || [],
+        progressions: item.progressions || [],
+        equipment: item.equipment || [],
+        purpose: item.description || null,
+        block_type: item.block_type,
       }));
-      const sectionFor = (blockType: string) => {
-        if (blockType === 'warmup' || blockType === 'preparation') return 'warmup';
-        if (blockType === 'cooldown' || blockType === 'recovery') return 'cooldown';
-        return 'main_work';
-      };
-      const warmup = (session.items || [])
-        .filter((item: any) => sectionFor(item.block_type) === 'warmup')
-        .map((item: any, index: number) => ({ ...exercises[(session.items || []).indexOf(item)], key: `warmup-${index}` }));
-      const mainWork = (session.items || [])
-        .filter((item: any) => sectionFor(item.block_type) === 'main_work')
-        .map((item: any, index: number) => ({ ...exercises[(session.items || []).indexOf(item)], key: `main-${index}` }));
-      const cooldown = (session.items || [])
-        .filter((item: any) => sectionFor(item.block_type) === 'cooldown')
-        .map((item: any, index: number) => ({ ...exercises[(session.items || []).indexOf(item)], key: `cooldown-${index}` }));
-      const title = displayWorkoutTitle(session.purpose, session.session_type);
+      const warmup = exercises.filter((item) => ['dynamic_warmup', 'warmup', 'preparation', 'mobility', 'activation'].includes(item.block_type || ''));
+      const mainWork = exercises.filter((item) => !['dynamic_warmup', 'warmup', 'preparation', 'mobility', 'activation', 'cooldown', 'recovery', 'stretching'].includes(item.block_type || ''));
+      const cooldown = exercises.filter((item) => ['cooldown', 'recovery', 'stretching'].includes(item.block_type || ''));
+      const title = displayWorkoutTitle(session.explanation, session.session_type);
       setWorkout({
         id: session.id,
         title,
@@ -216,15 +255,20 @@ export default function WorkoutDetailScreen() {
         difficulty: session.status,
         completed: session.status === 'completed',
         scheduled_date: session.scheduled_for?.slice(0, 10),
-        description: session.explanation,
+        description: session.purpose,
         ai_generated: session.session_type === 'ai_training',
         exercises,
+        equipment: Array.from(new Set(exercises.flatMap((exercise) => exercise.equipment || []))),
         version: session.version,
+        adaptation: {
+          week_theme: session.week_theme,
+          progression_rule: session.progression_rule,
+        },
         session_plan: {
           title,
           category: session.session_type,
           duration_min: session.estimated_minutes,
-          why_this_session: session.explanation,
+          why_this_session: session.purpose,
           warmup,
           main_work: mainWork,
           cooldown,
@@ -244,8 +288,21 @@ export default function WorkoutDetailScreen() {
 
   const sections = useMemo<SectionBlock[]>(() => {
     if (!workout) return [];
+    if (workout.exercises?.some((exercise) => exercise.block_type)) {
+      const order: string[] = [];
+      const grouped = new Map<string, Exercise[]>();
+      workout.exercises.forEach((exercise) => {
+        const key = exercise.block_type || 'main_work';
+        if (!grouped.has(key)) {
+          grouped.set(key, []);
+          order.push(key);
+        }
+        grouped.get(key)?.push(exercise);
+      });
+      return order.map((key) => ({ key, ...(blockCopy[key] || { title: key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase()), subtitle: 'Complete the prescribed work with control.', icon: 'barbell-outline' as const }), exercises: grouped.get(key) || [] }));
+    }
     const plan = workout.session_plan;
-    const fromPlan: SectionBlock[] = (['warmup', 'main_work', 'cooldown'] as WorkoutSectionName[])
+    const fromPlan: SectionBlock[] = (['warmup', 'main_work', 'cooldown'] as LegacySectionName[])
       .map((key) => ({
         key,
         ...sectionCopy[key],
@@ -530,6 +587,12 @@ function ExerciseCard({
             {exercise.safety_boundaries.slice(0, 3).map((boundary) => <Text key={boundary} style={styles.noteText}>{boundary}</Text>)}
           </View>
         )}
+        {exercise.contraindications && exercise.contraindications.length > 0 && (
+          <View style={styles.noteBlock}>
+            <Text style={styles.noteLabel}>Do not perform when</Text>
+            {exercise.contraindications.slice(0, 3).map((item) => <Text key={item} style={styles.noteText}>{item}</Text>)}
+          </View>
+        )}
         {cues.length > 0 && (
           <View style={styles.noteBlock}>
             <Text style={styles.noteLabel}>Cues</Text>
@@ -539,6 +602,8 @@ function ExerciseCard({
         {substitutions.length > 0 && (
           <Text style={styles.substitutionText}>Swap: {substitutions.join(' · ')}</Text>
         )}
+        {exercise.regressions && exercise.regressions.length > 0 && <Text style={styles.substitutionText}>Easier option: {exercise.regressions[0]}</Text>}
+        {exercise.progressions && exercise.progressions.length > 0 && <Text style={styles.substitutionText}>Progression: {exercise.progressions[0]}</Text>}
       </View>
     </TouchableOpacity>
   );

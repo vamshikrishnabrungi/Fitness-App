@@ -36,7 +36,8 @@ async def _athlete(session: AsyncSession, user_id: UUID) -> AthleteProfile:
 
 def _session_view_from_items(
     row: TrainingSession,
-    items: list[tuple[SessionItem, MethodVersion]],
+    items: list[tuple[SessionItem, MethodVersion | None]],
+    week: TrainingWeek | None = None,
 ) -> SessionView:
     return SessionView(
         id=row.id,
@@ -47,19 +48,31 @@ def _session_view_from_items(
         venue_code=row.venue_code,
         status=row.status,
         explanation=row.explanation,
+        week_number=week.week_number if week is not None else None,
+        week_theme=week.structure_json.get("intent") if week is not None else None,
+        progression_rule=week.structure_json.get("progression_rule") if week is not None else None,
         items=[
             SessionItemView(
                 id=item.id,
-                method_id=method.method_id,
-                method_name=method.canonical_name,
-                method_version=method.content_version,
+                source="catalog" if method is not None else "generated",
+                method_id=method.method_id if method is not None else None,
+                method_name=method.canonical_name if method is not None else (item.generated_exercise_json or {}).get("name", "Generated exercise"),
+                method_version=method.content_version if method is not None else None,
                 block_type=item.block_type,
                 prescription=item.prescription_json,
                 alternatives=[UUID(value["id"]) for value in item.substitution_methods_json],
-                instructions=method.instructions,
-                coaching_cues=method.cues,
-                common_errors=method.common_errors,
-                safety_boundaries=method.safety_boundaries,
+                instructions=method.instructions if method is not None else (item.generated_exercise_json or {}).get("instructions", []),
+                coaching_cues=method.cues if method is not None else (item.generated_exercise_json or {}).get("coaching_cues", []),
+                common_errors=method.common_errors if method is not None else [
+                    value if isinstance(value, str) else f"{value.get('mistake', '')}: {value.get('correction', '')}".strip(": ")
+                    for value in (item.generated_exercise_json or {}).get("common_mistakes", [])
+                ],
+                safety_boundaries=method.safety_boundaries if method is not None else (item.generated_exercise_json or {}).get("safety_information", []),
+                description=None if method is not None else (item.generated_exercise_json or {}).get("description"),
+                equipment=[] if method is not None else (item.generated_exercise_json or {}).get("equipment", []),
+                regressions=[] if method is not None else (item.generated_exercise_json or {}).get("regressions", []),
+                progressions=[] if method is not None else (item.generated_exercise_json or {}).get("progressions", []),
+                contraindications=[] if method is not None else (item.generated_exercise_json or {}).get("contraindications", []),
             )
             for item, method in items
         ],
@@ -68,9 +81,10 @@ def _session_view_from_items(
 
 
 async def session_view(session: AsyncSession, row: TrainingSession) -> SessionView:
+    week = await session.get(TrainingWeek, row.week_id)
     items = list((await session.execute(
         select(SessionItem, MethodVersion)
-        .join(
+        .outerjoin(
             MethodVersion,
             and_(
                 MethodVersion.method_id == SessionItem.method_id,
@@ -80,7 +94,7 @@ async def session_view(session: AsyncSession, row: TrainingSession) -> SessionVi
         .where(SessionItem.session_id == row.id)
         .order_by(SessionItem.sequence)
     )).all())
-    return _session_view_from_items(row, items)
+    return _session_view_from_items(row, items, week)
 
 
 async def plan_view(session: AsyncSession, plan_id: UUID, athlete_id: UUID) -> PlanView:
@@ -103,7 +117,7 @@ async def plan_view(session: AsyncSession, plan_id: UUID, athlete_id: UUID) -> P
     )).all()
     item_rows = (await session.execute(
         select(SessionItem, MethodVersion)
-        .join(
+        .outerjoin(
             MethodVersion,
             and_(
                 MethodVersion.method_id == SessionItem.method_id,
@@ -113,10 +127,11 @@ async def plan_view(session: AsyncSession, plan_id: UUID, athlete_id: UUID) -> P
         .where(SessionItem.session_id.in_([row.id for row in sessions]))
         .order_by(SessionItem.session_id, SessionItem.sequence)
     )).all() if sessions else ()
-    items_by_session: dict[UUID, list[tuple[SessionItem, MethodVersion]]] = defaultdict(list)
+    items_by_session: dict[UUID, list[tuple[SessionItem, MethodVersion | None]]] = defaultdict(list)
     for item, method in item_rows:
         items_by_session[item.session_id].append((item, method))
     inputs = plan.input_snapshot_json or {}
+    week_by_id = {week.id: week for week in weeks}
     return PlanView(
         id=plan.id,
         status=plan.status,
@@ -141,7 +156,7 @@ async def plan_view(session: AsyncSession, plan_id: UUID, athlete_id: UUID) -> P
             )
             for week in weeks
         ],
-        sessions=[_session_view_from_items(row, items_by_session[row.id]) for row in sessions],
+        sessions=[_session_view_from_items(row, items_by_session[row.id], week_by_id.get(row.week_id)) for row in sessions],
     )
 
 

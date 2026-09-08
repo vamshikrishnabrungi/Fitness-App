@@ -72,7 +72,7 @@ class ApiClient {
     return this.refreshPromise;
   }
 
-  async request<T>(endpoint: string, options: RequestInit = {}, retryAuth = true): Promise<T> {
+  async request<T>(endpoint: string, options: RequestInit = {}, retryAuth = true, timeoutMs = API_TIMEOUT_MS): Promise<T> {
     const token = await this.getToken();
     
     const headers: HeadersInit = {
@@ -86,7 +86,7 @@ class ApiClient {
 
     let response: Response;
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
     const upstreamSignal = options.signal;
     const abortFromUpstream = () => controller.abort();
     upstreamSignal?.addEventListener('abort', abortFromUpstream, { once: true });
@@ -107,7 +107,7 @@ class ApiClient {
     }
 
     if (response.status === 401 && retryAuth && !endpoint.startsWith('/auth/')) {
-      if (await this.refreshSession()) return this.request<T>(endpoint, options, false);
+      if (await this.refreshSession()) return this.request<T>(endpoint, options, false, timeoutMs);
     }
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'Request failed' })) as {
@@ -144,6 +144,14 @@ class ApiClient {
       body: data ? JSON.stringify(data) : undefined,
       headers: this.mutationHeaders(headers),
     }, retryAuth);
+  }
+
+  async postLongRunning<T>(endpoint: string, data?: any, timeoutMs = 300_000): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'POST',
+      body: data ? JSON.stringify(data) : undefined,
+      headers: this.mutationHeaders(),
+    }, true, timeoutMs);
   }
 
   async put<T>(endpoint: string, data?: any, headers?: HeadersInit): Promise<T> {

@@ -15972,6 +15972,11 @@
             "type": "boolean",
             "title": "Cross Training Consent"
           },
+          "health_context": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Health Context"
+          },
           "active_goal": {
             "anyOf": [
               {
@@ -19149,6 +19154,11 @@
             "title": "Cross Training Consent",
             "default": false
           },
+          "health_context": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Health Context"
+          },
           "goal": {
             "$ref": "#/components/schemas/GoalInput"
           }
@@ -21307,9 +21317,25 @@
             "format": "uuid",
             "title": "Id"
           },
-          "method_id": {
+          "source": {
             "type": "string",
-            "format": "uuid",
+            "enum": [
+              "catalog",
+              "generated"
+            ],
+            "title": "Source",
+            "default": "catalog"
+          },
+          "method_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Method Id"
           },
           "method_name": {
@@ -21317,7 +21343,14 @@
             "title": "Method Name"
           },
           "method_version": {
-            "type": "integer",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Method Version"
           },
           "block_type": {
@@ -21364,14 +21397,51 @@
             },
             "type": "array",
             "title": "Safety Boundaries"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "equipment": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Equipment"
+          },
+          "regressions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Regressions"
+          },
+          "progressions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Progressions"
+          },
+          "contraindications": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Contraindications"
           }
         },
         "type": "object",
         "required": [
           "id",
-          "method_id",
           "method_name",
-          "method_version",
           "block_type",
           "prescription",
           "alternatives"
@@ -22171,6 +22241,39 @@
           "explanation": {
             "type": "string",
             "title": "Explanation"
+          },
+          "week_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Week Number"
+          },
+          "week_theme": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Week Theme"
+          },
+          "progression_rule": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progression Rule"
           },
           "items": {
             "items": {

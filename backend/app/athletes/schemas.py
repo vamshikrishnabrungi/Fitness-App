@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Literal
+from typing import Any, Literal
 from uuid import UUID
 
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -188,6 +188,7 @@ class OnboardingCommand(BaseModel):
     equipment_access: list[EquipmentAccessInput] = Field(default_factory=list, max_length=100)
     method_familiarity: list[MethodFamiliarityInput] = Field(default_factory=list, max_length=500)
     cross_training_consent: bool = False
+    health_context: dict[str, Any] = Field(default_factory=dict)
     goal: GoalInput
 
     @model_validator(mode="after")
@@ -224,5 +225,6 @@ class AthleteProfileView(BaseModel):
     equipment_access: list[EquipmentAccessInput]
     method_familiarity: list[MethodFamiliarityInput]
     cross_training_consent: bool
+    health_context: dict[str, Any] = Field(default_factory=dict)
     active_goal: GoalInput | None
     version: int

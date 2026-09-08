@@ -72,7 +72,7 @@ export default function HomeScreen() {
   const fetchData = async () => {
     try {
       const [workoutRes, loadRes, nutritionRes, statsRes, goalsRes, strainRes] = await Promise.all([
-        api.get<Workout>('/training/sessions/today').catch(() => null),
+        api.get<any>('/training/sessions/today').catch(() => null),
         api.get<TrainingLoadData>('/training-load').catch(() => null),
         api.get<NutritionData>('/nutrition/daily-summary').catch(() => null),
         api.get<any>('/activities/stats').catch(() => null),
@@ -80,7 +80,19 @@ export default function HomeScreen() {
         Promise.resolve(null as StrainData | null),
       ]);
 
-      if (workoutRes) setWorkout(workoutRes);
+      if (workoutRes) {
+        setWorkout({
+          id: workoutRes.id,
+          title: workoutRes.explanation || workoutRes.purpose || 'Training Session',
+          category: workoutRes.session_type,
+          duration: workoutRes.estimated_minutes,
+          difficulty: workoutRes.status,
+          equipment: Array.from(new Set((workoutRes.items || []).flatMap((item: any) => item.equipment || []))) as string[],
+          exercises: workoutRes.items || [],
+        });
+      } else {
+        setWorkout(null);
+      }
       if (loadRes) setTrainingLoad(loadRes);
       if (nutritionRes) setNutrition(nutritionRes);
       if (statsRes) setRunStats(statsRes);
