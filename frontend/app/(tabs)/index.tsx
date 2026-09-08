@@ -19,6 +19,7 @@ import { StrainCard } from '../../src/components/StrainCard';
 import { useAuthStore } from '../../src/store/authStore';
 import { api } from '../../src/utils/api';
 import { colors, typography, spacing, borderRadius } from '../../src/utils/theme';
+import { distanceFromKm, usePreferencesStore } from '../../src/store/preferencesStore';
 
 interface Workout {
   id: string;
@@ -60,6 +61,7 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuthStore();
+  const distanceUnit = usePreferencesStore(state => state.distanceUnit);
 
   const [refreshing, setRefreshing] = useState(false);
   const [workout, setWorkout] = useState<Workout | null>(null);
@@ -231,8 +233,8 @@ export default function HomeScreen() {
                   </View>
                   <View style={styles.statsRow}>
                     <View style={styles.statItem}>
-                      <Text style={styles.statValue}>{Number(runStats?.distance_km || 0).toFixed(1)}</Text>
-                      <Text style={styles.statLabel}>km</Text>
+                      <Text style={styles.statValue}>{distanceFromKm(Number(runStats?.distance_km || 0), distanceUnit).toFixed(1)}</Text>
+                      <Text style={styles.statLabel}>{distanceUnit}</Text>
                     </View>
                     <View style={styles.statItem}>
                       <Text style={styles.statValue}>{Math.round(Number(runStats?.moving_minutes || 0))}</Text>

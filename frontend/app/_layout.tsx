@@ -7,16 +7,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { colors } from '../src/utils/theme';
 import { registerCompetitionNotifications } from '../src/services/notifications';
+import { usePreferencesStore } from '../src/store/preferencesStore';
 
 export default function RootLayout() {
   const { isAuthenticated, isLoading, loadAuth } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
   const navState = useRootNavigationState();
+  const loadPreferences = usePreferencesStore(state => state.load);
 
   useEffect(() => {
     loadAuth();
   }, [loadAuth]);
+
+  useEffect(() => {
+    if (!isLoading) loadPreferences(isAuthenticated);
+  }, [isAuthenticated, isLoading, loadPreferences]);
 
   useEffect(() => {
     const run = async () => {

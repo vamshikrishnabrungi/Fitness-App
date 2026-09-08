@@ -5,6 +5,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { api } from '../../src/utils/api';
 import { colors, spacing } from '../../src/utils/theme';
+import { distanceFromKm, usePreferencesStore } from '../../src/store/preferencesStore';
 
 interface ActivitySummary {
   id: string;
@@ -18,9 +19,10 @@ interface ActivitySummary {
 }
 
 const duration = (seconds: number) => `${Math.floor(seconds / 60)}m ${Math.round(seconds % 60)}s`;
-const pace = (seconds?: number | null) => {
+const pace = (seconds: number | null | undefined, unit: 'km' | 'mi') => {
   if (!seconds) return '—';
-  return `${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, '0')} /km`;
+  const adjusted = unit === 'mi' ? seconds * 1.609344 : seconds;
+  return `${Math.floor(adjusted / 60)}:${String(Math.round(adjusted % 60)).padStart(2, '0')} /${unit}`;
 };
 
 export default function LoadHistoryScreen() {
@@ -29,6 +31,7 @@ export default function LoadHistoryScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const distanceUnit = usePreferencesStore(state => state.distanceUnit);
 
   const load = useCallback(async () => {
     try {
@@ -65,7 +68,7 @@ export default function LoadHistoryScreen() {
           <>
             <View style={styles.grid}>
               <View style={styles.card}><Text style={styles.value}>{today.length}</Text><Text style={styles.label}>Activities today</Text></View>
-              <View style={styles.card}><Text style={styles.value}>{distanceKm.toFixed(2)}</Text><Text style={styles.label}>Distance (km)</Text></View>
+              <View style={styles.card}><Text style={styles.value}>{distanceFromKm(distanceKm, distanceUnit).toFixed(2)}</Text><Text style={styles.label}>Distance ({distanceUnit})</Text></View>
               <View style={styles.card}><Text style={styles.value}>{Math.round(movingSeconds / 60)}</Text><Text style={styles.label}>Moving minutes</Text></View>
               <View style={styles.card}><Text style={styles.value}>{Math.round(calories)}</Text><Text style={styles.label}>Estimated kcal</Text></View>
             </View>
@@ -74,7 +77,7 @@ export default function LoadHistoryScreen() {
             {items.slice(0, 20).map((item) => (
               <TouchableOpacity key={item.id} style={styles.row} onPress={() => router.push(`/run/${item.id}`)}>
                 <View style={{ flex: 1 }}><Text style={styles.rowTitle}>{item.title || 'Run'}</Text><Text style={styles.rowMeta}>{new Date(item.started_at).toLocaleString()}</Text></View>
-                <View style={styles.rowStats}><Text style={styles.rowValue}>{(Number(item.distance_m || 0) / 1000).toFixed(2)} km</Text><Text style={styles.rowMeta}>{duration(Number(item.moving_seconds || 0))} · {pace(item.average_pace_s_per_km)}</Text></View>
+                <View style={styles.rowStats}><Text style={styles.rowValue}>{distanceFromKm(Number(item.distance_m || 0) / 1000, distanceUnit).toFixed(2)} {distanceUnit}</Text><Text style={styles.rowMeta}>{duration(Number(item.moving_seconds || 0))} · {pace(item.average_pace_s_per_km, distanceUnit)}</Text></View>
               </TouchableOpacity>
             ))}
             {!items.length && <View style={styles.empty}><Ionicons name="walk-outline" size={34} color={colors.textTertiary} /><Text style={styles.emptyTitle}>No processed activities</Text><Text style={styles.emptyBody}>Completed runs will appear after server-side quality processing.</Text></View>}

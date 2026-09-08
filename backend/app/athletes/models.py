@@ -31,6 +31,15 @@ class AthleteProfile(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     cross_training_consent: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     season_phase: Mapped[str] = mapped_column(String(32), default="general_preparation", nullable=False)
     health_context_json: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict, nullable=False)
+    distance_unit: Mapped[str] = mapped_column(String(2), default="km", nullable=False)
+    running_experience: Mapped[str] = mapped_column(String(20), default="beginner", nullable=False)
+    runs_per_week: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    weekly_distance_m: Mapped[float] = mapped_column(Numeric(10, 2), default=0, nullable=False)
+    longest_recent_run_m: Mapped[float] = mapped_column(Numeric(10, 2), default=0, nullable=False)
+    recent_race_event: Mapped[str | None] = mapped_column(String(40))
+    recent_race_time_seconds: Mapped[int | None] = mapped_column(Integer)
+    training_interruption: Mapped[str] = mapped_column(String(24), default="none", nullable=False)
+    terrains: Mapped[list[str]] = mapped_column(ARRAY(String(30)), default=list, nullable=False)
 
 
 class AthleteSport(UUIDPrimaryKeyMixin, TimestampMixin, Base):
@@ -61,6 +70,9 @@ class AthleteGoal(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     target_value: Mapped[float | None] = mapped_column(Numeric(12, 3))
     target_unit: Mapped[str | None] = mapped_column(String(24))
     target_date: Mapped[date | None] = mapped_column(Date)
+    target_event: Mapped[str | None] = mapped_column(String(40))
+    target_distance_m: Mapped[float | None] = mapped_column(Numeric(12, 2))
+    target_time_seconds: Mapped[int | None] = mapped_column(Integer)
     priority: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     status: Mapped[str] = mapped_column(String(20), default="active", nullable=False)
 

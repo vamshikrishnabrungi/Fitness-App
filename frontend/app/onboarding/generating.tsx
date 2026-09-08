@@ -8,10 +8,19 @@ import { colors } from '../../src/utils/theme';
 import { useOnboardingStore } from '../../src/store/onboardingStore';
 import { api } from '../../src/utils/api';
 import { coachColors } from '../../src/components/onboarding/CoachOnboarding';
+import { distanceToMetres } from '../../src/data/running';
 
+const parseTimeSeconds = (value: string) => {
+  if (!value.trim()) return null;
+  const parts = value.split(':').map(Number);
+  if (parts.some(part => !Number.isFinite(part))) return null;
+  if (parts.length === 2) return parts[0] * 60 + parts[1];
+  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  return null;
+};
 const LOADING_MESSAGES = [
   'Saving your athlete profile',
-  'Loading your sport priorities',
+  'Loading your running priorities',
   'Filtering the exercise catalogue',
   'Building your warm-up and main work',
   'Asking the coach to design all four weeks',
@@ -43,60 +52,57 @@ export default function GeneratingScreen() {
           sat: 5, saturday: 5,
           sun: 6, sunday: 6,
         };
-        const sports: { sport: string; roleCode?: string; eventCode?: string; disciplineCode?: string; formatCode?: string }[] = onboardingData.sport_details.length
-          ? onboardingData.sport_details
-          : onboardingData.sports.map(sport => ({ sport }));
-        const primarySport = sports[0]?.sport.toLowerCase() ?? 'running';
-        const sportVenue: Record<string,string> = {
-          swimming:'pool',running:'road',cycling:'road',football:'field',cricket:'field',
-          basketball:'court',volleyball:'court',badminton:'court',tennis:'court',
-          boxing:'combat_gym',mma:'combat_gym',
-        };
-        const selectedVenue = onboardingData.training_location === 'gym'
-          ? 'gym'
-          : onboardingData.training_location === 'indoor'
-            ? 'home'
-            : (sportVenue[primarySport] ?? 'home');
+        const runVenue = onboardingData.terrains.includes('track') ? 'track'
+          : onboardingData.terrains.includes('trail') ? 'trail' : 'road';
+        const strengthVenue = onboardingData.strength_access === 'full_gym' ? 'gym' : 'home';
+        const maximumMinutes = Math.max(45, ...onboardingData.availability.map(slot => slot.minutes));
+        const targetDistanceM = onboardingData.target_distance == null ? null : distanceToMetres(onboardingData.target_distance, onboardingData.distance_unit);
+        const weeklyDistanceM = distanceToMetres(onboardingData.weekly_distance, onboardingData.distance_unit);
+        const longestRunM = distanceToMetres(onboardingData.longest_recent_run, onboardingData.distance_unit);
         await api.put('/onboarding', {
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
           country_code: onboardingData.country?.length === 2 ? onboardingData.country.toUpperCase() : null,
           height_cm: onboardingData.height_cm,
           weight_kg: onboardingData.weight_kg,
-          competition_level: onboardingData.competition_level || 'recreational',
-          fitness_level: onboardingData.fitness_assessment.level,
-          training_age_years: onboardingData.fitness_assessment.level === 'advanced' ? 5 : onboardingData.fitness_assessment.level === 'intermediate' ? 2 : 0,
-          maximum_session_minutes: onboardingData.session_duration_min,
-          season_phase: onboardingData.season_phase,
-          sports: sports.map((item,index)=>({sport_code:item.sport.toLowerCase(),role_code:item.roleCode||null,event_code:item.eventCode||null,discipline_code:item.disciplineCode||null,format_code:item.formatCode||null,weight_class_code:null,is_primary:index===0,weekly_external_minutes:0,sessions_per_week:0})),
-          availability: (onboardingData.preferred_training_days.length ? onboardingData.preferred_training_days : ['Monday','Wednesday','Friday'].slice(0,onboardingData.training_days_per_week || 3)).map((day,index)=>({weekday:dayIndex[day.toLowerCase()] ?? index % 7,start_minute:onboardingData.preferred_training_time==='morning'?420:1080,duration_minutes:onboardingData.session_duration_min,environments:[selectedVenue]})),
-          equipment_access: onboardingData.equipment.map(equipment_code=>({equipment_code,environments:[selectedVenue]})),
-          method_familiarity: [],
-          cross_training_consent: false,
+          fitness_level: onboardingData.experience_level,
+          runs_per_week: onboardingData.runs_per_week,
+          weekly_distance_m: weeklyDistanceM,
+          longest_recent_run_m: longestRunM,
+          recent_race_event: onboardingData.recent_race_event,
+          recent_race_time_seconds: parseTimeSeconds(onboardingData.recent_race_time),
+          training_interruption: onboardingData.training_interruption,
+          distance_unit: onboardingData.distance_unit,
+          terrains: onboardingData.terrains,
+          maximum_session_minutes: maximumMinutes,
+          season_phase: 'general_preparation',
+          target_event: onboardingData.target_event || 'run_walk',
+          availability: onboardingData.availability.map(slot=>({weekday:dayIndex[slot.day.toLowerCase()] ?? 0,start_minute:slot.preferredTime==='morning'?420:slot.preferredTime==='afternoon'?780:1080,duration_minutes:slot.minutes,environments:[runVenue]})),
+          equipment_access: onboardingData.equipment.map(equipment_code=>({equipment_code,environments:[strengthVenue]})),
           health_context: {
             pain_areas: onboardingData.pain_areas,
-            current_injuries: onboardingData.current_injuries,
+            current_injuries: onboardingData.pain_areas.map(area=>({area,note:onboardingData.medical_notes})),
             medical_notes: onboardingData.medical_notes || null,
             stress_level: onboardingData.stress_level,
           },
-          goal: {goal_type:onboardingData.primary_goal || 'general_fitness',target_date:null,target_value:null,target_unit:null},
+          goal: {goal_type:onboardingData.goal_type || 'general_fitness',target_date:onboardingData.target_date,target_event:onboardingData.target_event,target_distance_m:targetDistanceM,target_time_seconds:parseTimeSeconds(onboardingData.target_time),target_value:null,target_unit:null},
         });
         await api.postLongRunning('/training/plans', {
           weeks: 4,
           starts_on: onboardingData.start_date,
-          fitness_level: onboardingData.fitness_assessment.level,
-          training_days_per_week: onboardingData.training_days_per_week,
+          fitness_level: onboardingData.experience_level,
+          training_days_per_week: onboardingData.availability.length,
           schedule_constraints: onboardingData.schedule_constraints || null,
           health_context: {
             pain_areas: onboardingData.pain_areas,
-            current_injuries: onboardingData.current_injuries,
+            current_injuries: onboardingData.pain_areas.map(area=>({area,note:onboardingData.medical_notes})),
             medical_notes: onboardingData.medical_notes || null,
             stress_level: onboardingData.stress_level,
             diet_preference: onboardingData.diet_preference,
-            dietary_restrictions: onboardingData.dietary_restrictions,
             nutrition_goal: onboardingData.nutrition_goal,
           },
         });
         await AsyncStorage.removeItem('needs_onboarding');
+        await AsyncStorage.setItem('distance_unit', onboardingData.distance_unit);
         reset();
         router.replace('/(tabs)');
       } catch (err: any) {

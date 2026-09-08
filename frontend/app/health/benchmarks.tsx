@@ -129,7 +129,7 @@ export default function BenchmarksScreen() {
         >
           <Text style={styles.intro}>
             Log a few test results so your coach prescribes loads from your real strength and gates
-            return-to-sport on objective symmetry — not guesses. Re-test every few weeks.
+            return-to-running on objective symmetry rather than guesses. Re-test every few weeks.
           </Text>
 
           {/* Strength */}

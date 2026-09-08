@@ -12,11 +12,8 @@ from backend.app.knowledge.training_contract import (
 
 
 def test_contract_covers_exactly_all_matrix_sports():
-    assert set(SPORT_SCOPE_VALUES) == {
-        "badminton", "basketball", "boxing", "cricket", "cycling", "football",
-        "mma", "running", "swimming", "tennis", "volleyball",
-    }
-    assert sum(len(values) for _, values in SPORT_SCOPE_VALUES.values()) == 54
+    assert set(SPORT_SCOPE_VALUES) == {"running"}
+    assert sum(len(values) for _, values in SPORT_SCOPE_VALUES.values()) == 13
 
 
 @pytest.mark.parametrize(
@@ -44,13 +41,13 @@ def test_ui_aliases_normalize_to_matrix_codes():
 
 def test_sport_scope_is_required_and_exact():
     assert sport_scope_key(
-        "swimming",
-        event_code="middle_distance",
-        discipline_code="freestyle",
+        "running",
+        event_code="1500m",
+        discipline_code=None,
         role_code=None,
         format_code=None,
-    ) == ("event_discipline", "middle_distance:freestyle")
-    with pytest.raises(ValueError, match="requires a valid role"):
+    ) == ("event", "1500m")
+    with pytest.raises(ValueError, match="not supported"):
         sport_scope_key("football", event_code=None, role_code=None, discipline_code=None, format_code=None)
     with pytest.raises(ValidationError):
         SportInput(sport_code="running", event_code="ultramarathon", is_primary=True)
@@ -58,11 +55,14 @@ def test_sport_scope_is_required_and_exact():
 
 def test_onboarding_normalizes_goal_phase_and_scope():
     command = OnboardingCommand(
-        competition_level="club",
-        training_age_years=2,
+        fitness_level="intermediate",
+        runs_per_week=3,
+        weekly_distance_m=20_000,
+        longest_recent_run_m=8_000,
+        terrains=["road"],
+        target_event="5k",
         maximum_session_minutes=60,
         season_phase="pre_season",
-        sports=[SportInput(sport_code="running", event_code="5k", is_primary=True)],
         availability=[{
             "weekday": 0,
             "start_minute": 420,

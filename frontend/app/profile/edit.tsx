@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '../../src/store/authStore';
 import { colors, typography, spacing, borderRadius } from '../../src/utils/theme';
+import { api } from '../../src/utils/api';
+
+type RunnerProfile = { weight_kg: number | null; height_cm: number | null; version: number };
 
 export default function EditProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -15,6 +18,15 @@ export default function EditProfileScreen() {
   const [weight, setWeight] = useState(user?.profile?.weight_kg != null ? String(user.profile.weight_kg) : '');
   const [height, setHeight] = useState(user?.profile?.height_cm != null ? String(user.profile.height_cm) : '');
   const [saving, setSaving] = useState(false);
+  const [runnerProfile, setRunnerProfile] = useState<RunnerProfile | null>(null);
+
+  useEffect(() => {
+    api.get<RunnerProfile>('/athletes/me').then(profile => {
+      setRunnerProfile(profile);
+      setWeight(profile.weight_kg == null ? '' : String(profile.weight_kg));
+      setHeight(profile.height_cm == null ? '' : String(profile.height_cm));
+    }).catch(() => undefined);
+  }, []);
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -23,15 +35,14 @@ export default function EditProfileScreen() {
     }
     setSaving(true);
     try {
-      // Spread the existing profile so we don't wipe onboarding data (goals, sport, etc.).
-      await updateProfile({
-        name: name.trim(),
-        profile: {
-          ...(user?.profile ?? {}),
-          weight_kg: weight ? Number(weight) : undefined,
-          height_cm: height ? Number(height) : undefined,
-        },
-      });
+      await updateProfile({ name: name.trim() });
+      if (runnerProfile) {
+        await api.patch<RunnerProfile>('/athletes/me', {
+          weight_kg: weight ? Number(weight) : null,
+          height_cm: height ? Number(height) : null,
+          expected_version: runnerProfile.version,
+        });
+      }
       router.back();
     } catch (error) {
       console.error('Failed to save profile:', error);

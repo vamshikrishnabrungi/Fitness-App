@@ -5,8 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.core.database import get_session
 from backend.app.core.security import current_user_id
-from .schemas import AthleteProfileView, OnboardingCommand
-from .service import complete_onboarding, get_profile
+from .schemas import AthleteProfileUpdate, AthleteProfileView, OnboardingCommand
+from .service import complete_onboarding, get_profile, update_profile
 
 router = APIRouter(tags=["athletes"])
 
@@ -20,3 +20,7 @@ async def onboarding(body: OnboardingCommand, user_id: UUID = Depends(current_us
 async def me(user_id: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> AthleteProfileView:
     return await get_profile(session, user_id)
 
+
+@router.patch("/athletes/me", response_model=AthleteProfileView)
+async def update_me(body: AthleteProfileUpdate, user_id: UUID = Depends(current_user_id), session: AsyncSession = Depends(get_session)) -> AthleteProfileView:
+    return await update_profile(session, user_id, body)

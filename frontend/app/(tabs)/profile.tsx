@@ -15,6 +15,7 @@ import { LogoutModal } from '../../src/components/LogoutModal';
 import { useAuthStore } from '../../src/store/authStore';
 import { api } from '../../src/utils/api';
 import { colors, typography, spacing } from '../../src/utils/theme';
+import { distanceFromKm, usePreferencesStore } from '../../src/store/preferencesStore';
 
 interface ProfileStats { activities: number; distance_km: number; moving_minutes: number }
 
@@ -22,6 +23,7 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { user, logout } = useAuthStore();
+  const distanceUnit = usePreferencesStore(state => state.distanceUnit);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [stats, setStats] = useState<ProfileStats | null>(null);
 
@@ -78,8 +80,8 @@ export default function ProfileScreen() {
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{Number(stats?.distance_km || 0).toFixed(1)}</Text>
-              <Text style={styles.statLabel}>Kilometres</Text>
+              <Text style={styles.statValue}>{distanceFromKm(Number(stats?.distance_km || 0), distanceUnit).toFixed(1)}</Text>
+              <Text style={styles.statLabel}>{distanceUnit === 'mi' ? 'Miles' : 'Kilometres'}</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statItem}>

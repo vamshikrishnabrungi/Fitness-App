@@ -16,17 +16,10 @@ TRAINING_VENUES = frozenset({
     "pool",
     "track",
     "field",
-    "court",
     "road",
     "trail",
-    "combat_gym",
 })
 VENUE_ALIASES = {
-    "combat": "combat_gym",
-    "boxing_gym": "combat_gym",
-    "mma_gym": "combat_gym",
-    "ring": "combat_gym",
-    "mat": "combat_gym",
     "trail_supported": "trail",
 }
 
@@ -165,6 +158,9 @@ class GoalInput(BaseModel):
     target_value: float | None = None
     target_unit: str | None = None
     target_date: date | None = None
+    target_event: str | None = None
+    target_distance_m: float | None = Field(default=None, ge=0, le=1_000_000)
+    target_time_seconds: int | None = Field(default=None, ge=1, le=604_800)
 
     @field_validator("goal_type")
     @classmethod
@@ -177,30 +173,28 @@ class OnboardingCommand(BaseModel):
     country_code: str | None = Field(default=None, min_length=2, max_length=2)
     height_cm: float | None = Field(default=None, ge=100, le=260)
     weight_kg: float | None = Field(default=None, ge=30, le=350)
-    competition_level: str = Field(pattern="^(recreational|club|regional|national|international)$")
-    fitness_level: Literal["beginner", "intermediate", "advanced"] | None = None
-    training_age_years: int = Field(ge=0, le=60)
+    fitness_level: Literal["beginner", "intermediate", "advanced"]
+    runs_per_week: int = Field(ge=0, le=14)
+    weekly_distance_m: float = Field(ge=0, le=500_000)
+    longest_recent_run_m: float = Field(ge=0, le=500_000)
+    recent_race_event: str | None = Field(default=None, max_length=40)
+    recent_race_time_seconds: int | None = Field(default=None, ge=1, le=604_800)
+    training_interruption: Literal["none", "under_1_month", "1_to_3_months", "over_3_months"] = "none"
+    distance_unit: Literal["km", "mi"] = "km"
+    terrains: list[str] = Field(min_length=1, max_length=6)
     maximum_session_minutes: int = Field(ge=20, le=300)
     season_phase: str = "general_preparation"
-    sports: list[SportInput] = Field(min_length=1, max_length=4)
+    target_event: str
     availability: list[AvailabilityInput] = Field(min_length=1, max_length=21)
-    external_loads: list[ExternalLoadInput] = Field(default_factory=list, max_length=100)
     equipment_access: list[EquipmentAccessInput] = Field(default_factory=list, max_length=100)
-    method_familiarity: list[MethodFamiliarityInput] = Field(default_factory=list, max_length=500)
-    cross_training_consent: bool = False
     health_context: dict[str, Any] = Field(default_factory=dict)
     goal: GoalInput
 
     @model_validator(mode="after")
     def one_primary(self):
-        if sum(1 for sport in self.sports if sport.is_primary) != 1:
-            raise ValueError("exactly one sport must be primary")
         equipment_codes = [row.equipment_code for row in self.equipment_access]
         if len(equipment_codes) != len(set(equipment_codes)):
             raise ValueError("equipment access must contain unique equipment codes")
-        method_codes = [row.method_code for row in self.method_familiarity]
-        if len(method_codes) != len(set(method_codes)):
-            raise ValueError("method familiarity must contain unique method codes")
         return self
 
     @field_validator("season_phase")
@@ -219,6 +213,15 @@ class AthleteProfileView(BaseModel):
     training_age_years: int
     maximum_session_minutes: int
     season_phase: str
+    distance_unit: Literal["km", "mi"]
+    running_experience: Literal["beginner", "intermediate", "advanced"]
+    runs_per_week: int
+    weekly_distance_m: float
+    longest_recent_run_m: float
+    recent_race_event: str | None
+    recent_race_time_seconds: int | None
+    training_interruption: str
+    terrains: list[str]
     sports: list[SportInput]
     availability: list[AvailabilityInput]
     external_loads: list[ExternalLoadInput]
@@ -228,3 +231,10 @@ class AthleteProfileView(BaseModel):
     health_context: dict[str, Any] = Field(default_factory=dict)
     active_goal: GoalInput | None
     version: int
+
+
+class AthleteProfileUpdate(BaseModel):
+    height_cm: float | None = Field(default=None, ge=100, le=260)
+    weight_kg: float | None = Field(default=None, ge=30, le=350)
+    distance_unit: Literal["km", "mi"] | None = None
+    expected_version: int = Field(ge=1)

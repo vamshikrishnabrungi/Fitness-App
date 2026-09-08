@@ -18,6 +18,7 @@ import { Button } from '../../src/components/Button';
 import { LiveRunMap } from '../../src/components/LiveRunMap';
 import { api } from '../../src/utils/api';
 import { colors, typography, spacing, borderRadius } from '../../src/utils/theme';
+import { distanceFromKm, distanceLabel, usePreferencesStore } from '../../src/store/preferencesStore';
 import {
   appendLocations,
   clearActiveRun,
@@ -137,6 +138,7 @@ const FEELINGS = [
 ];
 
 export default function TrackRunScreen() {
+  const distanceUnit = usePreferencesStore(state => state.distanceUnit);
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
@@ -517,7 +519,7 @@ export default function TrackRunScreen() {
         <View style={styles.distRow}>
           <View>
             <Text style={styles.metaLabel}>DISTANCE</Text>
-            <Text style={styles.distanceValue}>{distance.toFixed(2)}<Text style={styles.distanceUnit}> km</Text></Text>
+            <Text style={styles.distanceValue}>{distanceFromKm(distance, distanceUnit).toFixed(2)}<Text style={styles.distanceUnit}> {distanceUnit}</Text></Text>
           </View>
           <View style={styles.claimBadge}>
             <Text style={styles.claimBadgeLbl}>
@@ -534,12 +536,12 @@ export default function TrackRunScreen() {
           <View style={styles.statDivider} />
           <View style={styles.statBlock}>
             <Text style={styles.metaLabel}>PACE</Text>
-            <Text style={styles.statValue}>{formatPace(distance, duration)}</Text>
+            <Text style={styles.statValue}>{formatPace(distanceFromKm(distance, distanceUnit), duration)}</Text>
           </View>
           <View style={styles.statDivider} />
           <View style={styles.statBlock}>
-            <Text style={styles.metaLabel}>km/h</Text>
-            <Text style={[styles.statValue, { color: colors.accentTeal }]}>{currentSpeed.toFixed(1)}</Text>
+            <Text style={styles.metaLabel}>{distanceUnit}/h</Text>
+            <Text style={[styles.statValue, { color: colors.accentTeal }]}>{distanceFromKm(currentSpeed, distanceUnit).toFixed(1)}</Text>
           </View>
         </View>
         <View style={styles.controlsRow}>
@@ -572,8 +574,8 @@ export default function TrackRunScreen() {
             </Text>
             <View style={styles.summaryRow}>
               <View style={styles.summaryStat}>
-                <Text style={styles.summaryStatVal}>{runSummary?.distance_km.toFixed(2)}</Text>
-                <Text style={styles.summaryStatLbl}>km</Text>
+                <Text style={styles.summaryStatVal}>{distanceFromKm(runSummary?.distance_km ?? 0, distanceUnit).toFixed(2)}</Text>
+                <Text style={styles.summaryStatLbl}>{distanceUnit}</Text>
               </View>
               <View style={styles.summaryStat}>
                 <Text style={styles.summaryStatVal}>{formatTime(runSummary?.duration_sec ?? 0)}</Text>
@@ -590,13 +592,13 @@ export default function TrackRunScreen() {
                 <Text style={styles.captureTitle}>ROAD CLAIMED!</Text>
                 <Text style={styles.captureNames}>This route is now your territory</Text>
                 <View style={styles.captureRewards}>
-                  <View style={styles.crw}><Text style={styles.crwV}>{captured.road_km.toFixed(2)}</Text><Text style={styles.crwL}>km of road</Text></View>
+                  <View style={styles.crw}><Text style={styles.crwV}>{distanceFromKm(captured.road_km, distanceUnit).toFixed(2)}</Text><Text style={styles.crwL}>{distanceUnit} of road</Text></View>
                 </View>
               </View>
             ) : (
               <View style={styles.xpEarned}>
                 <Text style={styles.xpEarnedLabel}>NO TERRITORY YET</Text>
-                <Text style={styles.xpEarnedValue}>{(runSummary?.distance_km ?? 0).toFixed(2)} km</Text>
+                <Text style={styles.xpEarnedValue}>{distanceLabel(runSummary?.distance_km ?? 0, distanceUnit)}</Text>
                 <Text style={styles.loopBonus}>
                   Road matching is pending verification
                 </Text>
@@ -605,7 +607,7 @@ export default function TrackRunScreen() {
             <View style={styles.summaryMetaRow}>
               <Ionicons name="map-outline" size={16} color="rgba(255,255,255,0.7)" />
               <Text style={styles.summaryMetaText}>
-                {(runSummary?.territory_captured ?? 0).toFixed(2)} km of roads · {runSummary?.calories} cal
+                {distanceLabel(runSummary?.territory_captured ?? 0, distanceUnit)} of roads · {runSummary?.calories} cal
               </Text>
             </View>
             <Button

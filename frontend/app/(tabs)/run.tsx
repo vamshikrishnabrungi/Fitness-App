@@ -16,6 +16,7 @@ import { GlassCard } from '../../src/components/GlassCard';
 import { TerritoryMap } from '../../src/components/TerritoryMap';
 import { api, ApiError } from '../../src/utils/api';
 import { colors, spacing, typography } from '../../src/utils/theme';
+import { distanceLabel, usePreferencesStore } from '../../src/store/preferencesStore';
 
 type Tab = 'territory' | 'activities';
 
@@ -98,6 +99,7 @@ export default function RunScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const distanceUnit = usePreferencesStore(state => state.distanceUnit);
 
   const load = useCallback(async () => {
     setError(null);
@@ -284,7 +286,7 @@ export default function RunScreen() {
                             {activity.title || activityDate(activity.started_at)}
                           </Text>
                           <Text style={styles.activityMeta}>
-                            {distance.toFixed(2)} km · {durationLabel(duration)}
+                            {distanceLabel(distance, distanceUnit)} · {durationLabel(duration)}
                           </Text>
                           <Text style={styles.territoryStatus}>
                             Roads: {territoryStatus.replaceAll('_', ' ')}
@@ -303,7 +305,7 @@ export default function RunScreen() {
                     <View style={{ flex: 1 }}>
                       <Text style={styles.activityTitle}>{activityDate(run.ended_at)}</Text>
                       <Text style={styles.activityMeta}>
-                        {run.distance_km.toFixed(2)} km · {durationLabel(run.duration_sec)}
+                        {distanceLabel(run.distance_km, distanceUnit)} · {durationLabel(run.duration_sec)}
                       </Text>
                       <Text style={styles.offlineStatus}>Waiting to upload · no verified roads yet</Text>
                     </View>

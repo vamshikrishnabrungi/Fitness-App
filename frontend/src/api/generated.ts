@@ -280,7 +280,8 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /** Update Me */
+        patch: operations["update_me_api_v1_athletes_me_patch"];
         trace?: never;
     };
     "/api/v1/profile/stats": {
@@ -3995,6 +3996,17 @@ export interface components {
             /** Expected Version */
             expected_version: number;
         };
+        /** AthleteProfileUpdate */
+        AthleteProfileUpdate: {
+            /** Height Cm */
+            height_cm?: number | null;
+            /** Weight Kg */
+            weight_kg?: number | null;
+            /** Distance Unit */
+            distance_unit?: ("km" | "mi") | null;
+            /** Expected Version */
+            expected_version: number;
+        };
         /** AthleteProfileView */
         AthleteProfileView: {
             /**
@@ -4018,6 +4030,30 @@ export interface components {
             maximum_session_minutes: number;
             /** Season Phase */
             season_phase: string;
+            /**
+             * Distance Unit
+             * @enum {string}
+             */
+            distance_unit: "km" | "mi";
+            /**
+             * Running Experience
+             * @enum {string}
+             */
+            running_experience: "beginner" | "intermediate" | "advanced";
+            /** Runs Per Week */
+            runs_per_week: number;
+            /** Weekly Distance M */
+            weekly_distance_m: number;
+            /** Longest Recent Run M */
+            longest_recent_run_m: number;
+            /** Recent Race Event */
+            recent_race_event: string | null;
+            /** Recent Race Time Seconds */
+            recent_race_time_seconds: number | null;
+            /** Training Interruption */
+            training_interruption: string;
+            /** Terrains */
+            terrains: string[];
             /** Sports */
             sports: components["schemas"]["SportInput"][];
             /** Availability */
@@ -4626,6 +4662,12 @@ export interface components {
             target_unit?: string | null;
             /** Target Date */
             target_date?: string | null;
+            /** Target Event */
+            target_event?: string | null;
+            /** Target Distance M */
+            target_distance_m?: number | null;
+            /** Target Time Seconds */
+            target_time_seconds?: number | null;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -5097,12 +5139,35 @@ export interface components {
             height_cm?: number | null;
             /** Weight Kg */
             weight_kg?: number | null;
-            /** Competition Level */
-            competition_level: string;
-            /** Fitness Level */
-            fitness_level?: ("beginner" | "intermediate" | "advanced") | null;
-            /** Training Age Years */
-            training_age_years: number;
+            /**
+             * Fitness Level
+             * @enum {string}
+             */
+            fitness_level: "beginner" | "intermediate" | "advanced";
+            /** Runs Per Week */
+            runs_per_week: number;
+            /** Weekly Distance M */
+            weekly_distance_m: number;
+            /** Longest Recent Run M */
+            longest_recent_run_m: number;
+            /** Recent Race Event */
+            recent_race_event?: string | null;
+            /** Recent Race Time Seconds */
+            recent_race_time_seconds?: number | null;
+            /**
+             * Training Interruption
+             * @default none
+             * @enum {string}
+             */
+            training_interruption: "none" | "under_1_month" | "1_to_3_months" | "over_3_months";
+            /**
+             * Distance Unit
+             * @default km
+             * @enum {string}
+             */
+            distance_unit: "km" | "mi";
+            /** Terrains */
+            terrains: string[];
             /** Maximum Session Minutes */
             maximum_session_minutes: number;
             /**
@@ -5110,21 +5175,12 @@ export interface components {
              * @default general_preparation
              */
             season_phase: string;
-            /** Sports */
-            sports: components["schemas"]["SportInput"][];
+            /** Target Event */
+            target_event: string;
             /** Availability */
             availability: components["schemas"]["AvailabilityInput"][];
-            /** External Loads */
-            external_loads?: components["schemas"]["ExternalLoadInput"][];
             /** Equipment Access */
             equipment_access?: components["schemas"]["EquipmentAccessInput"][];
-            /** Method Familiarity */
-            method_familiarity?: components["schemas"]["MethodFamiliarityInput"][];
-            /**
-             * Cross Training Consent
-             * @default false
-             */
-            cross_training_consent: boolean;
             /** Health Context */
             health_context?: {
                 [key: string]: unknown;
@@ -6888,6 +6944,42 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AthleteProfileView"];
+                };
+            };
+        };
+    };
+    update_me_api_v1_athletes_me_patch: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Unique key used to replay an authenticated mutation safely for 24 hours. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AthleteProfileUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AthleteProfileView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

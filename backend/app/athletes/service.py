@@ -26,6 +26,7 @@ from .schemas import (
     MethodFamiliarityInput,
     OnboardingCommand,
     SportInput,
+    AthleteProfileUpdate,
 )
 
 
@@ -58,6 +59,11 @@ async def get_profile(session: AsyncSession, user_id: UUID) -> AthleteProfileVie
         weight_kg=float(profile.weight_kg) if profile.weight_kg is not None else None,
         competition_level=profile.competition_level, training_age_years=profile.training_age_years,
         maximum_session_minutes=profile.maximum_session_minutes, season_phase=profile.season_phase,
+        distance_unit=profile.distance_unit, running_experience=profile.running_experience,
+        runs_per_week=profile.runs_per_week, weekly_distance_m=float(profile.weekly_distance_m),
+        longest_recent_run_m=float(profile.longest_recent_run_m), recent_race_event=profile.recent_race_event,
+        recent_race_time_seconds=profile.recent_race_time_seconds,
+        training_interruption=profile.training_interruption, terrains=list(profile.terrains),
         cross_training_consent=profile.cross_training_consent,
         health_context=dict(profile.health_context_json or {}),
         sports=[SportInput.model_validate(x, from_attributes=True) for x in sports],
@@ -102,27 +108,40 @@ async def complete_onboarding(session: AsyncSession, user_id: UUID, command: Onb
     profile.country_code = command.country_code.upper() if command.country_code else None
     profile.height_cm = command.height_cm
     profile.weight_kg = command.weight_kg
-    profile.competition_level = command.competition_level
+    profile.competition_level = {"beginner": "recreational", "intermediate": "club", "advanced": "regional"}[command.fitness_level]
     # The onboarding level is the explicit training signal used by the
     # generator. Keep the existing integer field populated for older clients
     # and analytics that still read training age.
     profile.training_age_years = (
         {"beginner": 0, "intermediate": 2, "advanced": 5}[command.fitness_level]
-        if command.fitness_level
-        else command.training_age_years
     )
     profile.maximum_session_minutes = command.maximum_session_minutes
     profile.season_phase = command.season_phase
-    profile.cross_training_consent = command.cross_training_consent
+    profile.cross_training_consent = False
     profile.health_context_json = command.health_context
+    profile.distance_unit = command.distance_unit
+    profile.running_experience = command.fitness_level
+    profile.runs_per_week = command.runs_per_week
+    profile.weekly_distance_m = command.weekly_distance_m
+    profile.longest_recent_run_m = command.longest_recent_run_m
+    profile.recent_race_event = command.recent_race_event
+    profile.recent_race_time_seconds = command.recent_race_time_seconds
+    profile.training_interruption = command.training_interruption
+    profile.terrains = command.terrains
     if not created_profile:
         await session.execute(delete(AthleteSport).where(AthleteSport.athlete_id == profile.id))
         await session.execute(delete(AvailabilityWindow).where(AvailabilityWindow.athlete_id == profile.id))
         await session.execute(delete(EquipmentAccess).where(EquipmentAccess.athlete_id == profile.id))
         await session.execute(delete(AthleteMethodFamiliarity).where(AthleteMethodFamiliarity.athlete_id == profile.id))
         await session.execute(delete(ExternalLoad).where(ExternalLoad.athlete_id == profile.id))
-    for sport in command.sports:
-        session.add(AthleteSport(athlete_id=profile.id, **sport.model_dump()))
+    session.add(AthleteSport(
+        athlete_id=profile.id,
+        sport_code="running",
+        event_code=command.target_event,
+        is_primary=True,
+        weekly_external_minutes=0,
+        sessions_per_week=len(command.availability),
+    ))
     for slot in command.availability:
         session.add(AvailabilityWindow(athlete_id=profile.id, **slot.model_dump()))
     all_available_environments = sorted({
@@ -138,37 +157,40 @@ async def complete_onboarding(session: AsyncSession, user_id: UUID, command: Onb
             equipment_code=code,
             environments=environments,
         ))
-    if command.method_familiarity:
-        requested_codes = {row.method_code for row in command.method_familiarity}
-        methods = (await session.scalars(select(Method).where(Method.code.in_(requested_codes)))).all()
-        methods_by_code = {row.code: row for row in methods}
-        missing = sorted(requested_codes - methods_by_code.keys())
-        if missing:
-            raise ProblemError(
-                422,
-                "unknown_training_method",
-                "Unknown training method",
-                f"Method familiarity references unknown codes: {', '.join(missing)}",
-            )
-        for item in command.method_familiarity:
-            session.add(AthleteMethodFamiliarity(
-                athlete_id=profile.id,
-                method_id=methods_by_code[item.method_code].id,
-                familiarity=item.familiarity,
-                successful_exposures=item.successful_exposures,
-                last_performed_on=item.last_performed_on,
-            ))
-    for load in command.external_loads:
-        payload = load.model_dump(exclude={"recurrence"})
-        recurrence = load.recurrence.model_dump(mode="json") if load.recurrence else None
-        session.add(ExternalLoad(
-            athlete_id=profile.id,
-            recurrence_json=recurrence,
-            **payload,
-        ))
-    if not created_profile:
-        await session.execute(delete(AthleteGoal).where(AthleteGoal.athlete_id == profile.id, AthleteGoal.status == "active"))
-    session.add(AthleteGoal(athlete_id=profile.id, **command.goal.model_dump()))
+    active_goal = await session.scalar(
+        select(AthleteGoal)
+        .where(AthleteGoal.athlete_id == profile.id, AthleteGoal.status == "active")
+        .order_by(AthleteGoal.priority, AthleteGoal.created_at)
+        .limit(1)
+    )
+    if active_goal is None:
+        session.add(AthleteGoal(athlete_id=profile.id, **command.goal.model_dump()))
+    else:
+        for field, value in command.goal.model_dump().items():
+            setattr(active_goal, field, value)
+        active_goal.version += 1
     user.onboarding_completed = True
+    await session.commit()
+    return await get_profile(session, user_id)
+
+
+async def update_profile(session: AsyncSession, user_id: UUID, command: AthleteProfileUpdate) -> AthleteProfileView:
+    profile = await session.scalar(
+        select(AthleteProfile)
+        .where(AthleteProfile.user_id == user_id)
+        .with_for_update()
+    )
+    if profile is None:
+        raise ProblemError(404, "athlete_not_found", "Runner profile not found", "Complete onboarding first.")
+    if profile.version != command.expected_version:
+        raise ProblemError(409, "version_conflict", "Profile changed", "Reload your profile and try again.")
+    fields = command.model_fields_set
+    if "height_cm" in fields:
+        profile.height_cm = command.height_cm
+    if "weight_kg" in fields:
+        profile.weight_kg = command.weight_kg
+    if command.distance_unit is not None:
+        profile.distance_unit = command.distance_unit
+    profile.version += 1
     await session.commit()
     return await get_profile(session, user_id)

@@ -340,10 +340,6 @@ def _normalized_method_environments(method: ReferenceMethod) -> frozenset[str]:
         "cycle_ergometer": "gym",
     }
     environments = {aliases.get(value, value) for value in method.environments}
-    # A combat gym is a gym subtype, not an assertion that the method is
-    # combat-specific. Venue-scoped equipment still has to satisfy the method.
-    if "gym" in environments:
-        environments.add("combat_gym")
     return frozenset(environments)
 
 

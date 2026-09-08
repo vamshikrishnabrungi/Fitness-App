@@ -14,23 +14,17 @@ from backend.app.training.planner import canonical_hash
 from .models import (
     ContentRelease,
     ContentReview,
-    DemandFact,
     DemandFactVersion,
-    EvidenceClaim,
     EvidenceClaimVersion,
-    Method,
     MethodConstraint,
     MethodEffect,
     MethodRelation,
     MethodVersion,
     PhaseTemplate,
     PhysicalQuality,
-    PrescriptionRule,
     PrescriptionRuleEvidenceClaim,
     PrescriptionRuleVersion,
-    ProgramArchetype,
     ProgramArchetypeVersion,
-    Recipe,
     RecipeBlock,
     RecipeSlot,
     RecipeVersion,
@@ -49,20 +43,7 @@ from .validation import (
 from .sport_requirements import package_coverage_errors
 
 
-LAUNCH_SPORTS = {
-    "badminton",
-    "basketball",
-    "boxing",
-    "cricket",
-    "cycling",
-    "football",
-    "mma",
-    "running",
-    "swimming",
-    "tennis",
-    "volleyball",
-    "hyrox",
-}
+LAUNCH_SPORTS = {"running"}
 
 VERSIONED_ENTITY_TYPES = {
     "method",
@@ -255,12 +236,28 @@ async def validate_release(session: AsyncSession, release: ContentRelease) -> li
         sport_taxa = [row for row in groups["sport_taxon"] if row.sport_code == release.sport_code]
         if not any(row.taxon_type == "sport" for row in sport_taxa):
             raise ReleaseValidationError("sport release has no root sport taxonomy")
-        if release.sport_code == "hyrox" and any(row.visible for row in sport_taxa):
-            raise ReleaseValidationError("HYROX must remain hidden until its package is explicitly enabled")
-        archetypes=list(groups["program_archetype"]); archetype_conditions=[and_(PhaseTemplate.archetype_id==row.archetype_id,PhaseTemplate.archetype_version==row.content_version) for row in archetypes]
-        phases=(await session.scalars(select(PhaseTemplate).where(or_(*archetype_conditions)))).all() if archetype_conditions else []
-        coverage_errors=package_coverage_errors(release.sport_code,demands=list(groups["demand_fact"]),priorities=list(groups["sport_quality_priority"]),recipes=list(groups["recipe"]),phases=phases,week_templates=list(groups["week_template"]))
-        if coverage_errors: raise ReleaseValidationError("sport package coverage failed: " + "; ".join(coverage_errors))
+        archetypes = list(groups["program_archetype"])
+        archetype_conditions = [
+            and_(
+                PhaseTemplate.archetype_id == row.archetype_id,
+                PhaseTemplate.archetype_version == row.content_version,
+            )
+            for row in archetypes
+        ]
+        phases = (
+            (await session.scalars(select(PhaseTemplate).where(or_(*archetype_conditions)))).all()
+            if archetype_conditions else []
+        )
+        coverage_errors = package_coverage_errors(
+            release.sport_code,
+            demands=list(groups["demand_fact"]),
+            priorities=list(groups["sport_quality_priority"]),
+            recipes=list(groups["recipe"]),
+            phases=phases,
+            week_templates=list(groups["week_template"]),
+        )
+        if coverage_errors:
+            raise ReleaseValidationError("sport package coverage failed: " + "; ".join(coverage_errors))
 
     reviewed = (await session.scalars(select(ContentReview).where(ContentReview.entity_id.in_([item.entity_id for item in items]), ContentReview.decision == "approved"))).all()
     approved_keys = {(row.entity_type, row.entity_id, row.entity_version) for row in reviewed}

@@ -36,9 +36,7 @@ interface Workout {
   intensity?: string;
   adaptation?: {
     goal?: string;
-    sports?: string[];
     targets?: string[];
-    sport_transfer?: string[];
     why_this_session?: string;
     week_theme?: string;
     progression_rule?: string;
@@ -46,7 +44,6 @@ interface Workout {
   session_plan?: {
     why_this_session?: string;
     adaptation_targets?: string[];
-    sport_transfer?: string[];
     warmup?: { name?: string }[];
     main_work?: { name?: string }[];
     cooldown?: { name?: string }[];
@@ -83,14 +80,13 @@ const getWorkoutPurpose = (workout: Workout) => {
     workout.adaptation?.why_this_session ||
     workout.session_plan?.why_this_session ||
     workout.description ||
-    'AI-built session from your current program.'
+    'Built for your current running block.'
   );
 };
 
 const getWorkoutTargets = (workout: Workout) => {
   const targets = workout.adaptation?.targets || workout.session_plan?.adaptation_targets || [];
-  const transfer = workout.adaptation?.sport_transfer || workout.session_plan?.sport_transfer || [];
-  return [...targets, ...transfer].filter(Boolean).map((item) => humanizeLabel(item)).slice(0, 3);
+  return targets.filter(Boolean).map((item) => humanizeLabel(item)).slice(0, 3);
 };
 
 const getPrimaryExerciseName = (workout: Workout) => {
@@ -190,9 +186,7 @@ export default function TrainScreen() {
         w.difficulty,
         w.description,
         w.adaptation?.goal,
-        ...(w.adaptation?.sports || []),
         ...(w.adaptation?.targets || []),
-        ...(w.adaptation?.sport_transfer || []),
       ]
         .filter(Boolean)
         .some((v) => String(v).toLowerCase().includes(term))
@@ -209,11 +203,10 @@ export default function TrainScreen() {
 
   const programMeta = useMemo(() => {
     const first = workouts[0];
-    const sports = first?.adaptation?.sports || [];
     const goal = first?.adaptation?.goal;
     const weekTheme = first?.adaptation?.week_theme;
     return {
-      title: sports.length ? `${sports.slice(0, 2).map((sport) => humanizeLabel(sport)).join(' + ')} Plan` : 'AI Training Plan',
+      title: 'Running Plan',
       detail: [
         first?.week_number ? `Week ${first.week_number}` : 'Week 1',
         `${workouts.length} sessions`,

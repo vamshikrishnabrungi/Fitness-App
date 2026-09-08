@@ -362,10 +362,17 @@ async def _load_reference_inputs(
     )
     phase_code = normalize_phase(athlete.season_phase)
     goal_code = normalize_goal(goal.goal_type)
+    reference_scope_code = {
+        "800m": "400m",
+        "1500m": "5k",
+        "mile": "5k",
+        "trail": "10k",
+        "ultra": "marathon",
+    }.get(scope_code, scope_code)
     priority_row = await session.scalar(select(SportTemplatePriority).where(
         SportTemplatePriority.sport_code == primary.sport_code,
         SportTemplatePriority.scope_type == scope_type,
-        SportTemplatePriority.scope_code == scope_code,
+        SportTemplatePriority.scope_code == reference_scope_code,
         SportTemplatePriority.phase_code == phase_code,
         SportTemplatePriority.goal_code == goal_code,
     ))

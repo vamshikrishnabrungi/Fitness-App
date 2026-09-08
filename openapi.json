@@ -928,6 +928,62 @@
             "HTTPBearer": []
           }
         ]
+      },
+      "patch": {
+        "tags": [
+          "athletes"
+        ],
+        "summary": "Update Me",
+        "operationId": "update_me_api_v1_athletes_me_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AthleteProfileUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AthleteProfileView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 180
+            },
+            "description": "Unique key used to replay an authenticated mutation safely for 24 hours."
+          }
+        ]
       }
     },
     "/api/v1/profile/stats": {
@@ -15873,6 +15929,61 @@
         ],
         "title": "AppealDecisionCommand"
       },
+      "AthleteProfileUpdate": {
+        "properties": {
+          "height_cm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 260.0,
+                "minimum": 100.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height Cm"
+          },
+          "weight_kg": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 350.0,
+                "minimum": 30.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Kg"
+          },
+          "distance_unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "km",
+                  "mi"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distance Unit"
+          },
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "expected_version"
+        ],
+        "title": "AthleteProfileUpdate"
+      },
       "AthleteProfileView": {
         "properties": {
           "id": {
@@ -15932,6 +16043,68 @@
           "season_phase": {
             "type": "string",
             "title": "Season Phase"
+          },
+          "distance_unit": {
+            "type": "string",
+            "enum": [
+              "km",
+              "mi"
+            ],
+            "title": "Distance Unit"
+          },
+          "running_experience": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced"
+            ],
+            "title": "Running Experience"
+          },
+          "runs_per_week": {
+            "type": "integer",
+            "title": "Runs Per Week"
+          },
+          "weekly_distance_m": {
+            "type": "number",
+            "title": "Weekly Distance M"
+          },
+          "longest_recent_run_m": {
+            "type": "number",
+            "title": "Longest Recent Run M"
+          },
+          "recent_race_event": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recent Race Event"
+          },
+          "recent_race_time_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recent Race Time Seconds"
+          },
+          "training_interruption": {
+            "type": "string",
+            "title": "Training Interruption"
+          },
+          "terrains": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Terrains"
           },
           "sports": {
             "items": {
@@ -16003,6 +16176,15 @@
           "training_age_years",
           "maximum_session_minutes",
           "season_phase",
+          "distance_unit",
+          "running_experience",
+          "runs_per_week",
+          "weekly_distance_m",
+          "longest_recent_run_m",
+          "recent_race_event",
+          "recent_race_time_seconds",
+          "training_interruption",
+          "terrains",
           "sports",
           "availability",
           "external_loads",
@@ -17841,6 +18023,43 @@
               }
             ],
             "title": "Target Date"
+          },
+          "target_event": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Event"
+          },
+          "target_distance_m": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Distance M"
+          },
+          "target_time_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 604800.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Time Seconds"
           }
         },
         "type": "object",
@@ -19069,32 +19288,86 @@
             ],
             "title": "Weight Kg"
           },
-          "competition_level": {
-            "type": "string",
-            "pattern": "^(recreational|club|regional|national|international)$",
-            "title": "Competition Level"
-          },
           "fitness_level": {
+            "type": "string",
+            "enum": [
+              "beginner",
+              "intermediate",
+              "advanced"
+            ],
+            "title": "Fitness Level"
+          },
+          "runs_per_week": {
+            "type": "integer",
+            "maximum": 14.0,
+            "minimum": 0.0,
+            "title": "Runs Per Week"
+          },
+          "weekly_distance_m": {
+            "type": "number",
+            "maximum": 500000.0,
+            "minimum": 0.0,
+            "title": "Weekly Distance M"
+          },
+          "longest_recent_run_m": {
+            "type": "number",
+            "maximum": 500000.0,
+            "minimum": 0.0,
+            "title": "Longest Recent Run M"
+          },
+          "recent_race_event": {
             "anyOf": [
               {
                 "type": "string",
-                "enum": [
-                  "beginner",
-                  "intermediate",
-                  "advanced"
-                ]
+                "maxLength": 40
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Fitness Level"
+            "title": "Recent Race Event"
           },
-          "training_age_years": {
-            "type": "integer",
-            "maximum": 60.0,
-            "minimum": 0.0,
-            "title": "Training Age Years"
+          "recent_race_time_seconds": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 604800.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recent Race Time Seconds"
+          },
+          "training_interruption": {
+            "type": "string",
+            "enum": [
+              "none",
+              "under_1_month",
+              "1_to_3_months",
+              "over_3_months"
+            ],
+            "title": "Training Interruption",
+            "default": "none"
+          },
+          "distance_unit": {
+            "type": "string",
+            "enum": [
+              "km",
+              "mi"
+            ],
+            "title": "Distance Unit",
+            "default": "km"
+          },
+          "terrains": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 6,
+            "minItems": 1,
+            "title": "Terrains"
           },
           "maximum_session_minutes": {
             "type": "integer",
@@ -19107,14 +19380,9 @@
             "title": "Season Phase",
             "default": "general_preparation"
           },
-          "sports": {
-            "items": {
-              "$ref": "#/components/schemas/SportInput"
-            },
-            "type": "array",
-            "maxItems": 4,
-            "minItems": 1,
-            "title": "Sports"
+          "target_event": {
+            "type": "string",
+            "title": "Target Event"
           },
           "availability": {
             "items": {
@@ -19125,14 +19393,6 @@
             "minItems": 1,
             "title": "Availability"
           },
-          "external_loads": {
-            "items": {
-              "$ref": "#/components/schemas/ExternalLoadInput"
-            },
-            "type": "array",
-            "maxItems": 100,
-            "title": "External Loads"
-          },
           "equipment_access": {
             "items": {
               "$ref": "#/components/schemas/EquipmentAccessInput"
@@ -19140,19 +19400,6 @@
             "type": "array",
             "maxItems": 100,
             "title": "Equipment Access"
-          },
-          "method_familiarity": {
-            "items": {
-              "$ref": "#/components/schemas/MethodFamiliarityInput"
-            },
-            "type": "array",
-            "maxItems": 500,
-            "title": "Method Familiarity"
-          },
-          "cross_training_consent": {
-            "type": "boolean",
-            "title": "Cross Training Consent",
-            "default": false
           },
           "health_context": {
             "additionalProperties": true,
@@ -19165,10 +19412,13 @@
         },
         "type": "object",
         "required": [
-          "competition_level",
-          "training_age_years",
+          "fitness_level",
+          "runs_per_week",
+          "weekly_distance_m",
+          "longest_recent_run_m",
+          "terrains",
           "maximum_session_minutes",
-          "sports",
+          "target_event",
           "availability",
           "goal"
         ],

@@ -1,6 +1,6 @@
 # Training Generation Architecture
 
-This document is the source of truth for Runlete's four-week workout generation flow.
+This document is the source of truth for Runlete's running-only, four-week training generation flow.
 
 ## End-to-end flow
 
@@ -8,16 +8,16 @@ This document is the source of truth for Runlete's four-week workout generation 
 flowchart TD
     U[User completes onboarding] --> FE1[Mobile onboarding store]
     FE1 --> O[PUT /api/v1/onboarding]
-    O --> AP[(Athlete profile<br/>sport, goal, schedule,<br/>equipment, health context)]
+    O --> AP[(Runner profile<br/>event, baseline, goal, schedule,<br/>terrain, equipment, health context)]
     O --> G[POST /api/v1/training/plans<br/>5-minute client timeout]
 
-    G --> L[Load athlete, primary sport,<br/>active goal and availability]
-    L --> R[Load released sport knowledge]
-    R --> R1[Ranked sport requirements]
+    G --> L[Load runner, target event,<br/>active goal and availability]
+    L --> R[Load released running knowledge]
+    R --> R1[Ranked running requirements]
     R --> R2[Relevant reference templates]
     R --> R3[Released exercise catalogue]
 
-    R1 --> F[Filter by sport, role, event,<br/>level, equipment, environment,<br/>health and schedule]
+    R1 --> F[Filter by event, goal, level,<br/>equipment, terrain, health,<br/>schedule and previous-block results]
     R2 --> F
     R3 --> F
 
@@ -67,7 +67,7 @@ flowchart LR
     C[Compact candidate catalogue] --> PACKET
     O[Four-week output requirements] --> PACKET
 
-    A1[Level, goal, sport,<br/>role, event, health,<br/>equipment, environment] --> A
+    A1[Experience, running baseline,<br/>goal, event, health, terrain,<br/>equipment and prior-block adherence] --> A
     C1[ID, version, name,<br/>quality, role, tags,<br/>allowed applications,<br/>dose boundaries] --> C
 ```
 
@@ -81,7 +81,7 @@ Terra acts as the program architect and strength-and-conditioning coach. It must
 2. Generate exactly the requested sessions per week.
 3. Preserve the supplied session dates.
 4. Make every session fit the selected 90, 120, or 150-minute duration.
-5. Use the athlete's health context, experience, equipment, environment, sport, role, event, and goals.
+5. Use the runner's health context, baseline mileage, recent longest run, interruption, equipment, terrain, target event, and goals.
 6. Use templates as programming references rather than fixed plans.
 7. Create appropriate warm-up, mobility, activation, speed, plyometric, power, strength, accessory, isometric, conditioning, circuit, cooldown, and stretching blocks.
 8. Provide sets, reps, time or distance, intensity, rest, tempo, and circuit timing where applicable.
@@ -116,6 +116,8 @@ The API schema must be valid before the backend can persist or display the respo
 - References to generated exercise definitions
 
 The backend does not normalize or rewrite the model's coaching content. If these checks report issues, Terra receives one repair request. The second returned program is persisted even when semantic warnings remain, and those warnings are recorded in the plan and generation run.
+
+When a later block is requested, the packet also includes the preceding active block's planned and completed session counts, adherence, average completion ratio, average session RPE, and pain-flag count. The new block becomes the sole active plan while the prior block remains available for history.
 
 Transport, authentication, malformed JSON, or database failures remain request failures because there is no usable program to display.
 
@@ -230,6 +232,8 @@ The backend creates a canonical hash from the athlete context, plan start, sched
 - `backend/app/training/service.py` — catalog/generated exercise read adapter
 - `backend/app/training/router.py` — training API routes
 - `backend/alembic/versions/20260908_26_generated_plan_exercises.py` — generated-exercise migration
+- `backend/alembic/versions/20260908_27_running_only_profiles.py` — runner profile and race-goal fields
+- `backend/alembic/versions/20260908_28_running_only_knowledge.py` — destructive non-running knowledge pruning
 - `frontend/app/onboarding/generating.tsx` — onboarding generation request and progress UI
 - `frontend/src/utils/api.ts` — long-running request support
 - `frontend/app/workout/[id].tsx` — workout sections and exercise content display

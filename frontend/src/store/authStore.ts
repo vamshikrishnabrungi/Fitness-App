@@ -23,7 +23,7 @@ interface User {
   birth_date?: string;
   roles: string[];
   version: number;
-  profile: {
+  profile?: {
     sport?: string;
     goals?: string[];
     equipment?: string[];

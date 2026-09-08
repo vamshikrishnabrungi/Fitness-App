@@ -1,30 +1,24 @@
 import { create } from 'zustand';
 
-interface FitnessAssessment { level: 'beginner' | 'intermediate' | 'advanced'; }
+export type RunnerLevel = 'beginner' | 'intermediate' | 'advanced';
+export type DistanceUnit = 'km' | 'mi';
+export type DayAvailability = { day: string; minutes: number; preferredTime: 'morning' | 'afternoon' | 'evening' };
 
-interface SportDetail {
-  sport: string;
-  scopeCode?: string;
-  eventCode?: string;
-  roleCode?: string;
-  disciplineCode?: string;
-  formatCode?: string;
-}
-
-interface OnboardingData {
-  onboarding_version: number;
-  onboarding_completed_at: string;
-  goals: string[];
-  selected_goals: string[];
-  primary_goal: string;
-  experience: string;
-  training_location: string;
-  equipment: string[];
-  fitness_assessment: FitnessAssessment;
-  sports: string[];
-  sport_details: SportDetail[];
-  competition_level: string;
-  season_phase: string;
+export interface RunnerOnboardingData {
+  onboarding_version: 3;
+  goal_type: string;
+  target_event: string | null;
+  target_distance: number | null;
+  target_date: string | null;
+  target_time: string;
+  distance_unit: DistanceUnit;
+  experience_level: RunnerLevel;
+  runs_per_week: number;
+  weekly_distance: number;
+  longest_recent_run: number;
+  recent_race_event: string | null;
+  recent_race_time: string;
+  training_interruption: string;
   gender: string;
   date_of_birth: string;
   height_cm: number | null;
@@ -32,172 +26,64 @@ interface OnboardingData {
   target_weight_kg: number | null;
   country: string;
   city: string;
-  training_days_per_week: number;
-  preferred_training_days: string[];
-  session_duration_min: number;
-  preferred_training_time: string;
-  schedule_constraints: string;
+  availability: DayAvailability[];
   start_date: string;
-  current_injuries: { area: string; note: string }[];
+  schedule_constraints: string;
+  terrains: string[];
+  strength_access: 'full_gym' | 'home_equipment' | 'bodyweight';
+  equipment: string[];
   pain_areas: string[];
   medical_notes: string;
   stress_level: string;
   diet_preference: string;
-  dietary_restrictions: string[];
   nutrition_goal: string;
 }
 
-interface OnboardingState {
-  goals: string[];
-  experience: string;
-  location: string;
-  equipment: string[];
-  fitnessAssessment: FitnessAssessment;
-  sports: string[];
-  selectedGoals: string[];
-  primaryGoal: string;
-  gender: string;
-  dateOfBirth: string;
-  heightCm: string;
-  weightKg: string;
-  targetWeightKg: string;
-  country: string;
-  city: string;
-  sportDetails: SportDetail[];
-  competitionLevel: string;
-  seasonPhase: string;
-  trainingDaysPerWeek: number;
-  preferredTrainingDays: string[];
-  sessionDurationMin: number;
-  preferredTrainingTime: string;
-  scheduleConstraints: string;
-  startDate: string;
-  currentInjuries: { area: string; note: string }[];
-  painAreas: string[];
-  medicalNotes: string;
-  stressLevel: string;
-  dietPreference: string;
-  dietaryRestrictions: string[];
-  nutritionGoal: string;
-  
-  setGoals: (goals: string[]) => void;
-  setExperience: (experience: string) => void;
-  setLocation: (location: string) => void;
-  setEquipment: (equipment: string[]) => void;
-  setFitnessAssessment: (assessment: FitnessAssessment) => void;
-  setSports: (sports: string[]) => void;
-  setSelectedGoals: (goals: string[]) => void;
-  setPrimaryGoal: (goal: string) => void;
-  setBodyProfile: (data: Partial<Pick<OnboardingState, 'gender' | 'dateOfBirth' | 'heightCm' | 'weightKg' | 'targetWeightKg' | 'country' | 'city'>>) => void;
-  setSportContext: (data: Partial<Pick<OnboardingState, 'sportDetails' | 'competitionLevel' | 'seasonPhase'>>) => void;
-  setSchedule: (data: Partial<Pick<OnboardingState, 'trainingDaysPerWeek' | 'preferredTrainingDays' | 'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'startDate'>>) => void;
-  setHealthContext: (data: Partial<Pick<OnboardingState, 'currentInjuries' | 'painAreas' | 'medicalNotes' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'>>) => void;
+interface OnboardingState extends Omit<RunnerOnboardingData, 'onboarding_version' | 'height_cm' | 'weight_kg' | 'target_weight_kg'> {
+  height_cm: string;
+  weight_kg: string;
+  target_weight_kg: string;
+  setGoal: (data: Partial<Pick<OnboardingState, 'goal_type' | 'target_event' | 'target_distance' | 'target_date' | 'target_time' | 'distance_unit'>>) => void;
+  setBaseline: (data: Partial<Pick<OnboardingState, 'experience_level' | 'runs_per_week' | 'weekly_distance' | 'longest_recent_run' | 'recent_race_event' | 'recent_race_time' | 'training_interruption'>>) => void;
+  setBodyProfile: (data: Partial<Pick<OnboardingState, 'gender' | 'date_of_birth' | 'height_cm' | 'weight_kg' | 'target_weight_kg' | 'country' | 'city'>>) => void;
+  setSchedule: (data: Partial<Pick<OnboardingState, 'availability' | 'start_date' | 'schedule_constraints'>>) => void;
+  setAccess: (data: Partial<Pick<OnboardingState, 'terrains' | 'strength_access' | 'equipment'>>) => void;
+  setHealth: (data: Partial<Pick<OnboardingState, 'pain_areas' | 'medical_notes' | 'stress_level' | 'diet_preference' | 'nutrition_goal'>>) => void;
   reset: () => void;
-  getOnboardingData: () => OnboardingData;
+  getOnboardingData: () => RunnerOnboardingData;
 }
 
-const initialState: Pick<
-  OnboardingState,
-  'goals' | 'experience' | 'location' | 'equipment' | 'fitnessAssessment' | 'sports' | 'selectedGoals' |
-  'primaryGoal' | 'gender' | 'dateOfBirth' | 'heightCm' | 'weightKg' | 'targetWeightKg' | 'country' | 'city' |
-  'sportDetails' | 'competitionLevel' | 'seasonPhase' | 'trainingDaysPerWeek' | 'preferredTrainingDays' |
-  'sessionDurationMin' | 'preferredTrainingTime' | 'scheduleConstraints' | 'startDate' | 'currentInjuries' | 'painAreas' |
-  'medicalNotes' | 'stressLevel' | 'dietPreference' | 'dietaryRestrictions' | 'nutritionGoal'
-> = {
-  goals: [],
-  experience: '',
-  location: '',
-  equipment: [],
-  fitnessAssessment: {
-    level: 'intermediate',
-  },
-  sports: [],
-  selectedGoals: [],
-  primaryGoal: '',
-  gender: '',
-  dateOfBirth: '',
-  heightCm: '',
-  weightKg: '',
-  targetWeightKg: '',
-  country: '',
-  city: '',
-  sportDetails: [],
-  competitionLevel: 'recreational',
-  seasonPhase: 'general',
-  trainingDaysPerWeek: 4,
-  preferredTrainingDays: [],
-  sessionDurationMin: 90,
-  preferredTrainingTime: 'evening',
-  scheduleConstraints: '',
-  startDate: '',
-  currentInjuries: [],
-  painAreas: [],
-  medicalNotes: '',
-  stressLevel: 'moderate',
-  dietPreference: '',
-  dietaryRestrictions: [],
-  nutritionGoal: '',
+const initialState = {
+  goal_type: '', target_event: null, target_distance: null, target_date: null, target_time: '', distance_unit: 'km' as DistanceUnit,
+  experience_level: 'beginner' as RunnerLevel, runs_per_week: 0, weekly_distance: 0, longest_recent_run: 0,
+  recent_race_event: null, recent_race_time: '', training_interruption: 'none',
+  gender: '', date_of_birth: '', height_cm: '', weight_kg: '', target_weight_kg: '', country: '', city: '',
+  availability: [] as DayAvailability[], start_date: '', schedule_constraints: '',
+  terrains: ['road'], strength_access: 'bodyweight' as const, equipment: ['bodyweight'],
+  pain_areas: [] as string[], medical_notes: '', stress_level: 'moderate', diet_preference: 'balanced', nutrition_goal: 'performance',
 };
 
 export const useOnboardingStore = create<OnboardingState>((set, get) => ({
   ...initialState,
-
-  setGoals: (goals) => set({ goals }),
-  setSelectedGoals: (selectedGoals) => set({ selectedGoals }),
-  setPrimaryGoal: (primaryGoal) => set({ primaryGoal }),
-  setExperience: (experience) => set({ experience }),
-  setLocation: (location) => set({ location }),
-  setEquipment: (equipment) => set({ equipment }),
-  setFitnessAssessment: (fitnessAssessment) => set({ fitnessAssessment }),
-  setSports: (sports) => set({ sports }),
-  setBodyProfile: (data) => set(data),
-  setSportContext: (data) => set(data),
-  setSchedule: (data) => set(data),
-  setHealthContext: (data) => set(data),
+  setGoal: data => set(data), setBaseline: data => set(data), setBodyProfile: data => set(data),
+  setSchedule: data => set(data), setAccess: data => set(data), setHealth: data => set(data),
   reset: () => set(initialState),
-  
   getOnboardingData: () => {
     const state = get();
-    const toNumber = (value: string) => {
-      const parsed = Number(value);
-      return Number.isFinite(parsed) && value.trim() !== '' ? parsed : null;
-    };
-    const normalizedFitnessAssessment = { level: state.fitnessAssessment.level };
-    const primaryGoal = state.primaryGoal || state.selectedGoals[0] || state.goals[0] || '';
+    const numberOrNull = (value: string) => value.trim() && Number.isFinite(Number(value)) ? Number(value) : null;
     return {
-      onboarding_version: 2,
-      onboarding_completed_at: new Date().toISOString(),
-      goals: state.goals,
-      selected_goals: state.selectedGoals,
-      primary_goal: primaryGoal,
-      experience: state.experience,
-      training_location: state.location,
-      equipment: state.equipment,
-      fitness_assessment: normalizedFitnessAssessment,
-      sports: state.sports,
-      sport_details: state.sportDetails,
-      competition_level: state.competitionLevel,
-      season_phase: state.seasonPhase,
-      gender: state.gender,
-      date_of_birth: state.dateOfBirth,
-      height_cm: toNumber(state.heightCm),
-      weight_kg: toNumber(state.weightKg),
-      target_weight_kg: toNumber(state.targetWeightKg),
-      country: state.country,
-      city: state.city,
-      training_days_per_week: state.trainingDaysPerWeek,
-      preferred_training_days: state.preferredTrainingDays,
-      session_duration_min: state.sessionDurationMin,
-      preferred_training_time: state.preferredTrainingTime,
-      schedule_constraints: state.scheduleConstraints,
-      start_date: state.startDate || new Date().toISOString().slice(0, 10),
-      current_injuries: state.currentInjuries,
-      pain_areas: state.painAreas,
-      medical_notes: state.medicalNotes,
-      stress_level: state.stressLevel,
-      diet_preference: state.dietPreference,
-      dietary_restrictions: state.dietaryRestrictions,
-      nutrition_goal: state.nutritionGoal,
+      onboarding_version: 3, goal_type: state.goal_type, target_event: state.target_event,
+      target_distance: state.target_distance, target_date: state.target_date, target_time: state.target_time,
+      distance_unit: state.distance_unit, experience_level: state.experience_level, runs_per_week: state.runs_per_week,
+      weekly_distance: state.weekly_distance, longest_recent_run: state.longest_recent_run,
+      recent_race_event: state.recent_race_event, recent_race_time: state.recent_race_time,
+      training_interruption: state.training_interruption, gender: state.gender, date_of_birth: state.date_of_birth,
+      height_cm: numberOrNull(state.height_cm), weight_kg: numberOrNull(state.weight_kg), target_weight_kg: numberOrNull(state.target_weight_kg),
+      country: state.country, city: state.city, availability: state.availability,
+      start_date: state.start_date || new Date().toISOString().slice(0, 10), schedule_constraints: state.schedule_constraints,
+      terrains: state.terrains, strength_access: state.strength_access, equipment: state.equipment,
+      pain_areas: state.pain_areas, medical_notes: state.medical_notes, stress_level: state.stress_level,
+      diet_preference: state.diet_preference, nutrition_goal: state.nutrition_goal,
     };
   },
 }));

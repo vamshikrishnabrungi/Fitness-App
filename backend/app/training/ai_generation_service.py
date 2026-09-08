@@ -15,7 +15,7 @@ from datetime import date, datetime, timedelta, timezone
 from typing import Any
 from uuid import UUID, NAMESPACE_URL, uuid5
 
-from sqlalchemy import func, select, tuple_, update
+from sqlalchemy import Integer, func, select, tuple_, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -28,7 +28,7 @@ from backend.app.knowledge.models import Method, MethodEffect, MethodVersion
 from backend.app.operations.outbox import enqueue_event
 
 from .ai_selector import PROMPT_VERSION, RESPONSE_SCHEMA_VERSION, AIWorkoutProgram, build_generation_packet, get_workout_generation_provider
-from .models import SessionItem, TrainingGenerationRun, TrainingPhase, TrainingPlan, TrainingSession, TrainingWeek
+from .models import SessionCompletion, SessionItem, TrainingGenerationRun, TrainingPhase, TrainingPlan, TrainingSession, TrainingWeek
 from .planner import (
     CandidateMethod,
     PlanInvariantError,
@@ -80,13 +80,9 @@ def _environment_allowed(
     if not environments:
         return True
     available = set(context.environments)
-    if "gym" in available:
-        available.add("combat_gym")
-    if "combat_gym" in available:
-        available.add("gym")
     # Basic mobility and stretching are safe in any outdoor training space,
-    # even when the athlete's selected sport venue is road, track, or court.
-    outdoor = bool(available & {"road", "trail", "track", "field", "court"})
+    # even when the runner's selected venue is road, trail, track, or field.
+    outdoor = bool(available & {"road", "trail", "track", "field"})
     if block_type in {"warmup", "cooldown"} and code in STRETCH_CODES and outdoor:
         return True
     return "all" in environments or bool(environments & available)
@@ -460,7 +456,10 @@ def _program_warnings(program: AIWorkoutProgram, packet: dict[str, Any]) -> list
     warnings: list[str] = []
     requirements = packet["output_requirements"]
     expected_sessions = requirements["sessions_per_week"]
-    target_minutes = requirements["session_duration_minutes"]
+    duration_ceilings = {
+        item["scheduled_for"]: item["duration_minutes"]
+        for item in packet["reference_templates_and_schedule"]
+    }
     catalog = {
         (value["method_id"], value["method_version"])
         for value in packet["candidate_catalog"].values()
@@ -473,9 +472,10 @@ def _program_warnings(program: AIWorkoutProgram, packet: dict[str, Any]) -> list
             warnings.append(f"week {week.week_number} must contain exactly {expected_sessions} sessions")
         for planned in week.sessions:
             block_minutes = sum(block.estimated_minutes for block in planned.blocks)
-            if planned.estimated_minutes != target_minutes or block_minutes != target_minutes:
+            ceiling = duration_ceilings.get(planned.scheduled_for)
+            if block_minutes != planned.estimated_minutes or ceiling is None or planned.estimated_minutes > ceiling:
                 warnings.append(
-                    f"week {week.week_number} session {planned.session_number} duration must be {target_minutes}; "
+                    f"week {week.week_number} session {planned.session_number} must not exceed its {ceiling}-minute ceiling; "
                     f"session={planned.estimated_minutes}, blocks={block_minutes}"
                 )
             for block in planned.blocks:
@@ -529,12 +529,62 @@ async def generate_ai_plan(
     chosen_level = fitness_level if fitness_level in LEVEL_RANK else context.athlete_level
     stored_health_context = dict(athlete.health_context_json or {})
     stored_health_context.update(health_context or {})
+    previous_plan = await session.scalar(
+        select(TrainingPlan)
+        .where(TrainingPlan.athlete_id == athlete.id, TrainingPlan.status == "active")
+        .order_by(TrainingPlan.plan_number.desc())
+        .limit(1)
+    )
+    previous_block: dict[str, Any] | None = None
+    if previous_plan is not None and normalized_start > previous_plan.starts_on:
+        planned_sessions = int(await session.scalar(
+            select(func.count(TrainingSession.id))
+            .join(TrainingWeek, TrainingWeek.id == TrainingSession.week_id)
+            .where(TrainingWeek.plan_id == previous_plan.id)
+        ) or 0)
+        completion_row = (await session.execute(
+            select(
+                func.count(SessionCompletion.id),
+                func.avg(SessionCompletion.completion_ratio),
+                func.avg(SessionCompletion.session_rpe),
+                func.sum(func.cast(SessionCompletion.pain_flag, Integer)),
+            )
+            .join(TrainingSession, TrainingSession.id == SessionCompletion.session_id)
+            .join(TrainingWeek, TrainingWeek.id == TrainingSession.week_id)
+            .where(TrainingWeek.plan_id == previous_plan.id)
+        )).one()
+        completed_sessions = int(completion_row[0] or 0)
+        previous_block = {
+            "plan_number": previous_plan.plan_number,
+            "starts_on": previous_plan.starts_on.isoformat(),
+            "ends_on": previous_plan.ends_on.isoformat(),
+            "planned_sessions": planned_sessions,
+            "completed_sessions": completed_sessions,
+            "session_adherence": round(completed_sessions / planned_sessions, 3) if planned_sessions else 0,
+            "average_completion_ratio": round(float(completion_row[1]), 3) if completion_row[1] is not None else None,
+            "average_session_rpe": round(float(completion_row[2]), 2) if completion_row[2] is not None else None,
+            "pain_flagged_sessions": int(completion_row[3] or 0),
+        }
     additional_context = {
         "fitness_level": chosen_level,
         "competition_level": athlete.competition_level,
         "height_cm": float(athlete.height_cm) if athlete.height_cm is not None else None,
         "weight_kg": float(athlete.weight_kg) if athlete.weight_kg is not None else None,
         "season_phase": context.phase_code,
+        "runner_baseline": {
+            "experience": athlete.running_experience,
+            "runs_per_week": athlete.runs_per_week,
+            "weekly_distance_m": float(athlete.weekly_distance_m),
+            "longest_recent_run_m": float(athlete.longest_recent_run_m),
+            "recent_race_event": athlete.recent_race_event,
+            "recent_race_time_seconds": athlete.recent_race_time_seconds,
+            "training_interruption": athlete.training_interruption,
+            "terrains": list(athlete.terrains),
+            "distance_unit_preference": athlete.distance_unit,
+            "target_event": goal.target_event,
+            "target_distance_m": float(goal.target_distance_m) if goal.target_distance_m is not None else None,
+            "target_time_seconds": goal.target_time_seconds,
+        },
         "training_days_per_week": training_days_per_week,
         "health": stored_health_context,
         "schedule_constraints": schedule_constraints,
@@ -553,6 +603,7 @@ async def generate_ai_plan(
         "scenario_codes": sorted(context.scenario_codes),
         "competition_dates": [value.isoformat() for value in context.competition_dates],
         "days_to_competition": context.days_to_competition,
+        "previous_four_week_block": previous_block,
         "sport_requirements": [asdict(item) for item in priority.ranked_categories],
         "phase_policy": {
             "progression_mode": context.phase_policy.progression_mode,
@@ -679,7 +730,7 @@ async def generate_ai_plan(
                 session_type="ai_training",
                 purpose=f"AI-selected {primary.sport_code.replace('_', ' ')} training",
                 load_class="moderate",
-                estimated_minutes=athlete.maximum_session_minutes,
+                estimated_minutes=window.duration_minutes,
                 slots=tuple(slots),
                 recipe_version=1,
                 phase_code=context.phase_code,
@@ -778,15 +829,13 @@ async def generate_ai_plan(
     input_snapshot["templates"] = [template.code for template in selected_templates]
     input_snapshot["session_count_per_week"] = session_count
     input_snapshot["generation"] = {"provider": selected_result.provider, "model": selected_result.model_id, "prompt_version": PROMPT_VERSION}
-    # A newly generated plan replaces any older reference or legacy plan for
-    # the athlete. Its rows remain available for audit/history, but cannot be
-    # mistaken for the current program by the mobile client.
+    # A newly generated block replaces the current block. Older blocks remain
+    # available for history and adaptation summaries, but only one can be active.
     await session.execute(
         update(TrainingPlan)
         .where(
             TrainingPlan.athlete_id == athlete.id,
             TrainingPlan.status == "active",
-            TrainingPlan.planner_version != PLANNER_VERSION,
         )
         .values(status="superseded")
     )

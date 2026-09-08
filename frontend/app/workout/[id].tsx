@@ -142,7 +142,7 @@ const blockCopy: Record<string, Omit<SectionBlock, 'key' | 'exercises'>> = {
   main_work: sectionCopy.main_work,
   accessory: { title: 'Accessory Work', subtitle: 'Support balance, durability, and the main training goal.', icon: 'construct-outline' },
   isometrics: { title: 'Isometrics', subtitle: 'Build control and strength in key positions.', icon: 'pause-outline' },
-  conditioning: { title: 'Conditioning', subtitle: 'Develop the energy-system demand selected for your sport.', icon: 'heart-outline' },
+  conditioning: { title: 'Running Conditioning', subtitle: 'Develop the energy system required for your running goal.', icon: 'heart-outline' },
   circuit: { title: 'Circuit', subtitle: 'Complete each movement in order using the listed work and rest times.', icon: 'repeat-outline' },
   cooldown: sectionCopy.cooldown,
   recovery: sectionCopy.cooldown,
@@ -419,7 +419,7 @@ export default function WorkoutDetailScreen() {
         {(targets.length > 0 || sportTransfer.length > 0 || injuryNotes.length > 0) && (
           <View style={styles.contextGrid}>
             {targets.length > 0 && <InfoBlock title="Targets" items={targets} />}
-            {sportTransfer.length > 0 && <InfoBlock title="Sport Transfer" items={sportTransfer} />}
+            {sportTransfer.length > 0 && <InfoBlock title="Running Benefit" items={sportTransfer} />}
             {injuryNotes.length > 0 && <InfoBlock title="Safety" items={injuryNotes} />}
           </View>
         )}

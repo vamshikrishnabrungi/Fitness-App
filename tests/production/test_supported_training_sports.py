@@ -7,19 +7,7 @@ from backend.app.athletes.schemas import SportInput
 from backend.app.knowledge.sports import SUPPORTED_TRAINING_SPORTS
 
 
-EXPECTED_SPORTS = {
-    "badminton",
-    "basketball",
-    "boxing",
-    "cricket",
-    "cycling",
-    "football",
-    "mma",
-    "running",
-    "swimming",
-    "tennis",
-    "volleyball",
-}
+EXPECTED_SPORTS = {"running"}
 
 
 def test_supported_sports_match_committed_training_dataset() -> None:

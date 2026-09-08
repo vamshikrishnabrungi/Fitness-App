@@ -14,7 +14,7 @@ import {
 } from '../../src/components/onboarding/CoachOnboarding';
 import { useOnboardingStore } from '../../src/store/onboardingStore';
 
-const PAIN_AREAS = ['knee', 'ankle', 'hip', 'back', 'shoulder', 'neck', 'wrist'];
+const PAIN_AREAS = ['foot', 'achilles', 'ankle', 'shin', 'calf', 'knee', 'hamstring', 'hip', 'back'];
 const STRESS_LEVELS = ['low', 'moderate', 'high'];
 const DIETS = ['balanced', 'vegetarian', 'vegan', 'eggetarian', 'high_protein'];
 const NUTRITION_GOALS = ['performance', 'fat_loss', 'muscle_gain', 'maintenance'];
@@ -25,11 +25,11 @@ export default function HealthScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const store = useOnboardingStore();
-  const [painAreas, setPainAreas] = useState<string[]>(store.painAreas);
-  const [medicalNotes, setMedicalNotes] = useState(store.medicalNotes);
-  const [stressLevel, setStressLevel] = useState(store.stressLevel);
-  const [dietPreference, setDietPreference] = useState(store.dietPreference || 'balanced');
-  const [nutritionGoal, setNutritionGoal] = useState(store.nutritionGoal || 'performance');
+  const [painAreas, setPainAreas] = useState<string[]>(store.pain_areas);
+  const [medicalNotes, setMedicalNotes] = useState(store.medical_notes);
+  const [stressLevel, setStressLevel] = useState(store.stress_level);
+  const [dietPreference, setDietPreference] = useState(store.diet_preference || 'balanced');
+  const [nutritionGoal, setNutritionGoal] = useState(store.nutrition_goal || 'performance');
 
   const togglePainArea = (area: string) => {
     setPainAreas(current =>
@@ -38,13 +38,12 @@ export default function HealthScreen() {
   };
 
   const handleNext = () => {
-    store.setHealthContext({
-      painAreas,
-      currentInjuries: painAreas.map(area => ({ area, note: medicalNotes })),
-      medicalNotes,
-      stressLevel,
-      dietPreference,
-      nutritionGoal,
+    store.setHealth({
+      pain_areas: painAreas,
+      medical_notes: medicalNotes,
+      stress_level: stressLevel,
+      diet_preference: dietPreference,
+      nutrition_goal: nutritionGoal,
     });
     router.push('/onboarding/generating');
   };

@@ -68,6 +68,10 @@ GOAL_ALIASES: dict[str, TrainingGoal] = {
     "conditioning": "conditioning",
     "endurance": "conditioning",
     "lose_weight": "conditioning",
+    "target_race": "conditioning",
+    "start_running": "conditioning",
+    "build_endurance": "conditioning",
+    "return_to_running": "general_performance",
 }
 
 PHASE_ALIASES: dict[str, TrainingPhase] = {
@@ -83,24 +87,7 @@ PHASE_ALIASES: dict[str, TrainingPhase] = {
 
 # These values are the exact scope keys in the production priority matrix.
 SPORT_SCOPE_VALUES: dict[str, tuple[str, frozenset[str]]] = {
-    "badminton": ("format", frozenset({"singles", "doubles"})),
-    "basketball": ("role", frozenset({"guard", "wing", "big"})),
-    "boxing": ("format", frozenset({"amateur", "professional"})),
-    "cricket": ("role", frozenset({"batter", "pace_bowler", "spin_bowler", "wicketkeeper", "all_rounder"})),
-    "cycling": ("event", frozenset({"fitness_endurance", "road_endurance", "sprint", "time_trial"})),
-    "football": ("role", frozenset({"goalkeeper", "central_defender", "fullback_wingback", "central_midfielder", "winger", "striker"})),
-    "mma": ("format", frozenset({"three_round", "five_round"})),
-    "running": ("event", frozenset({"100m", "200m", "400m", "5k", "10k", "half_marathon", "marathon", "run_walk"})),
-    "swimming": (
-        "event_discipline",
-        frozenset(
-            f"{event}:{discipline}"
-            for event in ("sprint", "middle_distance", "distance")
-            for discipline in ("freestyle", "backstroke", "breaststroke", "butterfly", "individual_medley")
-        ),
-    ),
-    "tennis": ("format", frozenset({"singles", "doubles"})),
-    "volleyball": ("role", frozenset({"setter", "outside_hitter", "middle_blocker", "opposite", "libero"})),
+    "running": ("event", frozenset({"100m", "200m", "400m", "800m", "1500m", "mile", "5k", "10k", "half_marathon", "marathon", "trail", "ultra", "run_walk"})),
 }
 
 
