@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useOnboardingStore } from '../../store/onboardingStore';
 import { colors, spacing } from '../../utils/theme';
 
 export const coachColors = {
@@ -31,9 +30,7 @@ const noWebFocus = { outlineStyle: 'none' } as any;
 
 export function CoachProgress({ step }: { step: number }) {
   const router = useRouter();
-  const raceOnboarding = useOnboardingStore(state => state.goal_type === 'target_race');
-  const total = raceOnboarding ? 8 : 7;
-  const visibleStep = !raceOnboarding && step > 1 ? step - 1 : step;
+  const total = 4;
   return (
     <View style={styles.progressWrap}>
       {step > 1 ? (
@@ -49,9 +46,9 @@ export function CoachProgress({ step }: { step: number }) {
         </TouchableOpacity>
       ) : null}
       <View style={styles.progressTrack}>
-        <View style={[styles.progressFill, { width: `${(visibleStep / total) * 100}%` }]} />
+        <View style={[styles.progressFill, { width: `${(step / total) * 100}%` }]} />
       </View>
-      <Text style={styles.progressText}>{visibleStep} of {total}</Text>
+      <Text style={styles.progressText}>{step} of {total}</Text>
     </View>
   );
 }

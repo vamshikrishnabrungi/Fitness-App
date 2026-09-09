@@ -61,15 +61,15 @@ export default function GeneratingScreen() {
         const longestRunM = distanceToMetres(onboardingData.longest_recent_run, onboardingData.distance_unit);
         await api.put('/onboarding', {
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-          country_code: onboardingData.country?.length === 2 ? onboardingData.country.toUpperCase() : null,
+          country_code: null,
           height_cm: onboardingData.height_cm,
           weight_kg: onboardingData.weight_kg,
           fitness_level: onboardingData.experience_level,
           runs_per_week: onboardingData.runs_per_week,
           weekly_distance_m: weeklyDistanceM,
           longest_recent_run_m: longestRunM,
-          recent_race_event: onboardingData.recent_race_event,
-          recent_race_time_seconds: parseTimeSeconds(onboardingData.recent_race_time),
+          recent_race_event: null,
+          recent_race_time_seconds: null,
           training_interruption: onboardingData.training_interruption,
           distance_unit: onboardingData.distance_unit,
           terrains: onboardingData.terrains,
@@ -88,7 +88,6 @@ export default function GeneratingScreen() {
         });
         await api.postLongRunning('/training/plans', {
           weeks: 4,
-          starts_on: onboardingData.start_date,
           fitness_level: onboardingData.experience_level,
           training_days_per_week: onboardingData.availability.length,
           schedule_constraints: onboardingData.schedule_constraints || null,
@@ -97,8 +96,6 @@ export default function GeneratingScreen() {
             current_injuries: onboardingData.pain_areas.map(area=>({area,note:onboardingData.medical_notes})),
             medical_notes: onboardingData.medical_notes || null,
             stress_level: onboardingData.stress_level,
-            diet_preference: onboardingData.diet_preference,
-            nutrition_goal: onboardingData.nutrition_goal,
           },
         });
         await AsyncStorage.removeItem('needs_onboarding');

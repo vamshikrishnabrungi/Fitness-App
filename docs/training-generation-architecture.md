@@ -12,15 +12,11 @@ Supported event codes are `run_walk`, `100m`, `200m`, `400m`, `800m`, `1500m`, `
 
 ```mermaid
 flowchart LR
-    A[1. Goal<br/>race, consistency,<br/>speed, or endurance] --> R{Race goal?}
-    R -->|Yes| B[2. Race details<br/>road, track, trail, or ultra;<br/>relevant distance, date and time]
-    R -->|No| C
-    B --> C[Current baseline<br/>experience, runs per week,<br/>weekly distance, longest run,<br/>training interruption]
-    C --> D[4. Body context<br/>gender, height, weight,<br/>optional target weight]
-    D --> E[5. Weekly availability<br/>days, time of day,<br/>45 to 150 minute ceilings]
-    E --> F[6. Running access<br/>terrain, strength access,<br/>available equipment]
-    F --> G[7. Health and recovery<br/>pain areas, restrictions,<br/>stress and nutrition]
-    G --> H[Generate plan]
+    A[1. Goal<br/>race, consistency,<br/>speed, or endurance] --> B[Inline race details when needed<br/>road, track, trail, or ultra;<br/>distance, date and time]
+    B --> C[2. Running background<br/>experience, runs per week,<br/>weekly distance, longest run,<br/>training interruption]
+    C --> D[3. Availability and access<br/>days, 90 to 150 minute ceilings,<br/>terrain and strength equipment]
+    D --> E[4. Health and recovery<br/>optional height and weight,<br/>pain, restrictions and stress]
+    E --> F[Generate plan]
 ```
 
 The mobile onboarding store owns temporary form state. The generation screen converts the selected unit to metres, converts time strings to seconds, derives the allowed running and strength environments, and sends two authenticated requests:
@@ -221,7 +217,7 @@ The `today` endpoint calculates the runner's local day from the stored timezone.
 - `backend/alembic/versions/20260908_28_running_only_knowledge.py` — non-running knowledge pruning
 - `frontend/src/store/onboardingStore.ts` — temporary runner onboarding state
 - `frontend/src/store/preferencesStore.ts` — distance-unit preference
-- `frontend/app/onboarding/*.tsx` — seven-screen runner onboarding flow
+- `frontend/app/onboarding/*.tsx` — four-screen runner onboarding flow
 - `frontend/app/onboarding/generating.tsx` — profile and plan requests
 - `frontend/app/workout/[id].tsx` — block and exercise content display
 - `frontend/app/(tabs)/index.tsx` — today's training
