@@ -15,12 +15,15 @@ const DISTANCES = {
   road: [['5k', '5K'], ['10k', '10K'], ['half_marathon', 'Half marathon'], ['marathon', 'Marathon']],
   track: [['100m', '100 m'], ['200m', '200 m'], ['400m', '400 m'], ['800m', '800 m'], ['1500m', '1500 m'], ['mile', 'Mile']],
 } as const;
-const RECORD_TARGETS: Record<string, { value: string; label: string }> = {
-  '100m': { value: '00:00:09.58', label: '9.58' }, '200m': { value: '00:00:19.19', label: '19.19' },
-  '400m': { value: '00:00:43.03', label: '43.03' }, '800m': { value: '00:01:40.91', label: '1:40.91' },
-  '1500m': { value: '00:03:26.00', label: '3:26.00' }, mile: { value: '00:03:43.13', label: '3:43.13' },
-  '5k': { value: '00:12:49', label: '12:49' }, '10k': { value: '00:26:24', label: '26:24' },
-  half_marathon: { value: '00:57:20', label: '57:20' }, marathon: { value: '02:00:35', label: '2:00:35' },
+const RECORD_BOUNDS: Record<string, string> = {
+  '100m': '00:00:09.58', '200m': '00:00:19.19', '400m': '00:00:43.03', '800m': '00:01:40.91',
+  '1500m': '00:03:26.00', mile: '00:03:43.13', '5k': '00:12:49', '10k': '00:26:24',
+  half_marathon: '00:57:20', marathon: '02:00:35',
+};
+const CURRENT_TIME_STARTS: Record<string, string> = {
+  '100m': '00:00:15.00', '200m': '00:00:30.00', '400m': '00:01:00.00', '800m': '00:02:30.00',
+  '1500m': '00:05:00.00', mile: '00:06:00.00', '5k': '00:30:00', '10k': '01:00:00',
+  half_marathon: '02:00:00', marathon: '04:00:00', trail: '01:00:00',
 };
 const startOfToday = () => { const value = new Date(); value.setHours(0, 0, 0, 0); return value; };
 const toLocalIsoDate = (value: Date) => `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
@@ -58,15 +61,15 @@ export default function RaceDetailsScreen() {
   const customDistance = raceType === 'trail'; const preciseTime = raceType === 'track';
   const availableRaceTypes = goal === 'build_endurance' ? RACE_TYPES.filter(([code]) => code !== 'track') : RACE_TYPES;
   const options = useMemo(() => raceType === 'road' || raceType === 'track' ? DISTANCES[raceType] : [], [raceType]);
-  const record = RECORD_TARGETS[event]; const currentSeconds = secondsFor(currentTime); const recordSeconds = record ? secondsFor(parseDuration(record.value)) : 0; const today = startOfToday();
-  const validCurrentTime = !hasCurrentTime || (currentSeconds > 0 && (!record || currentSeconds >= recordSeconds));
+  const recordBound = RECORD_BOUNDS[event]; const currentSeconds = secondsFor(currentTime); const recordSeconds = recordBound ? secondsFor(parseDuration(recordBound)) : 0; const today = startOfToday();
+  const validCurrentTime = !hasCurrentTime || (currentSeconds > 0 && (!recordBound || currentSeconds >= recordSeconds));
   const validDate = !isRace || Boolean(raceDate && raceDate >= today);
   const canContinue = Boolean(raceType && event && (!customDistance || (Number(distance) > 0 && Number(distance) <= 1000)) && validDate && validCurrentTime);
 
   const chooseRaceType = (value: RaceType) => { setRaceType(value); setEvent(value === 'trail' ? value : ''); setDistance(''); setHasCurrentTime(false); };
   const chooseEvent = (value: string) => { setEvent(value); setHasCurrentTime(false); };
   const updateDuration = (part: DurationPart, value: number) => setCurrentTime(current => ({ ...current, [part]: value }));
-  const addCurrentTime = () => { setCurrentTime(record ? parseDuration(record.value) : { hours: 1, minutes: 0, seconds: 0, hundredths: 0 }); setHasCurrentTime(true); };
+  const addCurrentTime = () => { setCurrentTime(parseDuration(CURRENT_TIME_STARTS[event] || '01:00:00')); setHasCurrentTime(true); };
   const handleNext = () => {
     if (!canContinue) return;
     store.setGoal({ goal_type: goal, target_event: event, target_distance: customDistance ? Number(distance) : null,
@@ -85,9 +88,8 @@ export default function RaceDetailsScreen() {
           {raceDate ? <View style={styles.pickerRow}>{Platform.OS === 'android' ? <TouchableOpacity style={styles.valueButton} onPress={() => setShowAndroidDatePicker(true)}><Text style={styles.valueText}>{toLocalIsoDate(raceDate)}</Text></TouchableOpacity> : <DateTimePicker value={raceDate} mode="date" display="compact" minimumDate={today} onChange={(_, value) => value && setRaceDate(value)} />}<TouchableOpacity onPress={() => setRaceDate(null)}><Text style={styles.removeText}>Remove</Text></TouchableOpacity></View> : <TouchableOpacity style={styles.addButton} onPress={() => Platform.OS === 'android' ? setShowAndroidDatePicker(true) : setRaceDate(today)}><Text style={styles.addText}>+ Add race date</Text></TouchableOpacity>}
           <Text style={styles.todayText}>Today is {toLocalIsoDate(today)}. Past dates are unavailable.</Text>
           {showAndroidDatePicker ? <DateTimePicker value={raceDate || today} mode="date" minimumDate={today} onChange={(_, value) => { setShowAndroidDatePicker(false); if (value) setRaceDate(value); }} /> : null}</View> : null}
-          {record ? <View style={styles.recordCard}><Text style={styles.recordLabel}>CURRENT WORLD RECORD · REFERENCE</Text><Text style={styles.recordValue}>{record.label}</Text><Text style={styles.recordNote}>Used to validate times, not as your personal target.</Text></View> : null}
           {collectsCurrentTime ? <View style={styles.sectionGap}><CoachSection title="Your current best time" meta="Optional" />
-            {hasCurrentTime ? <><View style={styles.durationRow}>{!preciseTime ? <DurationStepper label="Hours" value={currentTime.hours} maximum={99} onChange={value => updateDuration('hours', value)} /> : null}<DurationStepper label="Minutes" value={currentTime.minutes} maximum={59} onChange={value => updateDuration('minutes', value)} /><DurationStepper label="Seconds" value={currentTime.seconds} maximum={59} onChange={value => updateDuration('seconds', value)} />{preciseTime ? <DurationStepper label="1/100" value={currentTime.hundredths} maximum={99} onChange={value => updateDuration('hundredths', value)} /> : null}</View><TouchableOpacity onPress={() => setHasCurrentTime(false)}><Text style={styles.removeText}>Remove current time</Text></TouchableOpacity>{!validCurrentTime ? <Text style={styles.errorText}>Current time cannot be faster than the recognized record ({record?.label}).</Text> : null}</> : <TouchableOpacity style={styles.addButton} onPress={addCurrentTime}><Text style={styles.addText}>+ Add current best time</Text></TouchableOpacity>}
+            {hasCurrentTime ? <><View style={styles.durationRow}>{!preciseTime ? <DurationStepper label="Hours" value={currentTime.hours} maximum={99} onChange={value => updateDuration('hours', value)} /> : null}<DurationStepper label="Minutes" value={currentTime.minutes} maximum={59} onChange={value => updateDuration('minutes', value)} /><DurationStepper label="Seconds" value={currentTime.seconds} maximum={59} onChange={value => updateDuration('seconds', value)} />{preciseTime ? <DurationStepper label="1/100" value={currentTime.hundredths} maximum={99} onChange={value => updateDuration('hundredths', value)} /> : null}</View><TouchableOpacity onPress={() => setHasCurrentTime(false)}><Text style={styles.removeText}>Remove current time</Text></TouchableOpacity>{!validCurrentTime ? <Text style={styles.errorText}>Enter a valid current best time.</Text> : null}</> : <TouchableOpacity style={styles.addButton} onPress={addCurrentTime}><Text style={styles.addText}>+ Add current best time</Text></TouchableOpacity>}
           </View> : null}</> : null}
       </CoachCard></ScrollView><CoachBottom bottomInset={insets.bottom} disabled={!canContinue} onPress={handleNext} /></View>;
 }
@@ -96,6 +98,5 @@ const styles = StyleSheet.create({
   sectionGap: { marginTop: 26 }, controlGap: { marginTop: 10 }, pickerRow: { minHeight: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   addButton: { minHeight: 52, borderRadius: 16, backgroundColor: coachColors.control, alignItems: 'center', justifyContent: 'center' }, addText: { color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
   valueButton: { flex: 1, minHeight: 52, borderRadius: 16, backgroundColor: coachColors.control, justifyContent: 'center', paddingHorizontal: 16, marginRight: 16 }, valueText: { color: colors.textPrimary, fontSize: 16, fontWeight: '600' }, removeText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600', marginTop: 10 },
-  recordCard: { marginTop: 26, padding: 16, borderRadius: 16, backgroundColor: colors.featureCard }, recordLabel: { color: colors.textDisabled, fontSize: 10, fontWeight: '700', letterSpacing: 0.7 }, recordValue: { color: colors.background, fontSize: 26, fontWeight: '700', marginTop: 5 }, recordNote: { color: colors.textDisabled, fontSize: 12, marginTop: 3 },
   durationRow: { flexDirection: 'row', gap: 7 }, durationColumn: { flex: 1 }, durationLabel: { color: colors.textSecondary, fontSize: 10, fontWeight: '600', marginBottom: 7, textAlign: 'center' }, stepper: { minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: coachColors.control, borderRadius: 14, paddingHorizontal: 3 }, stepButton: { width: 25, height: 38, alignItems: 'center', justifyContent: 'center' }, stepSymbol: { color: colors.textPrimary, fontSize: 19 }, durationValue: { color: colors.textPrimary, fontSize: 14, fontWeight: '700' }, todayText: { color: colors.textTertiary, fontSize: 11, marginTop: 8 }, errorText: { color: colors.statusWarning, fontSize: 12, marginTop: 8 },
 });

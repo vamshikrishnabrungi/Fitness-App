@@ -34,7 +34,7 @@ The onboarding API creates exactly one primary athlete sport row with `sport_cod
 
 The selected product goal is stored unchanged. `Prepare for a race` collects an event, a required future race date, and an optional current personal-best time. `Run faster` collects the distance to improve and an optional current best. `Run farther` collects the desired road or trail distance. `Build consistency` has no extra details screen and stores `general_running` as its intent. Track times preserve hundredth-second precision.
 
-Recognized records are shown only as references and reject impossible personal-best entries. They are never stored as the runner's target. The target time remains empty unless a future product flow explicitly asks the runner to set one.
+Recognized records are internal validation bounds for impossible personal-best entries and are never displayed during onboarding. They are never stored as the runner's target. The target time remains empty unless a future product flow explicitly asks the runner to set one.
 
 ## End-to-end generation
 
