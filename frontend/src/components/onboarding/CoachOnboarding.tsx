@@ -238,7 +238,7 @@ export const coachLayout = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
-    paddingBottom: 116,
+    paddingBottom: 168,
   },
   chipGrid: {
     flexDirection: 'row',

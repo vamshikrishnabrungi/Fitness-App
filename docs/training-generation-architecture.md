@@ -20,8 +20,8 @@ flowchart LR
     B --> C[2. Running background<br/>experience, runs per week,<br/>weekly distance, longest run,<br/>training interruption]
     S --> C
     N --> C
-    C --> D[3. Availability and access<br/>at least five days, one shared<br/>90 to 150 minute ceiling,<br/>terrain and strength equipment]
-    D --> E[4. Health and recovery<br/>optional height and weight,<br/>pain, restrictions and stress]
+    C --> D[3. Availability and access<br/>minimum 5 days, one shared<br/>90 to 150 minute ceiling,<br/>terrain and strength equipment]
+    D --> E[4. Running health<br/>optional current pain areas]
     E --> F[Generate plan]
 ```
 
@@ -79,7 +79,7 @@ Cloud SQL is authoritative. Generation uses only released running content:
 
 `800m` uses the reviewed `400m` priority family, `1500m` and `mile` use the `5k` family, `trail` uses the `10k` family, and `general_running` uses the `5k` family until event-specific reviewed matrices are published. The actual target event remains in the runner context, so the model adapts the reference family to the requested intent. Sprint and middle-distance race goals use the speed/movement priority family; road and trail race goals use conditioning.
 
-Every onboarding plan uses at least five selected training days. Released phase policies permit at least five sessions per week, so the reference layer cannot silently reduce a five-day request to one or two sessions.
+Every onboarding plan uses a minimum of 5 selected training days. Released phase policies permit at least five sessions per week, so the reference layer cannot silently reduce the request to one or two sessions.
 
 Non-running sport articles, releases, policies, priorities, taxa, templates, and methods without a running relationship are removed by migration `20260908_28_running_only_knowledge.py`.
 

@@ -42,10 +42,10 @@ export default function ScheduleScreen() {
   return <View style={[coachLayout.container, { paddingTop: insets.top }]}>
     <CoachProgress step={store.goal_type !== 'start_running' ? 4 : 3} total={store.goal_type !== 'start_running' ? 5 : 4} />
     <ScrollView style={coachLayout.scrollView} contentContainerStyle={coachLayout.content} showsVerticalScrollIndicator={false}>
-      <CoachCard icon="calendar" eyebrow="YOUR TRAINING WEEK" title="Build your weekly schedule." subtitle="Choose at least five training days and one maximum session length for the week.">
+      <CoachCard icon="calendar" eyebrow="YOUR TRAINING WEEK" title="Build your weekly schedule." subtitle="Choose a minimum of 5 days and one maximum session length for the week.">
         <CoachSection title="Training days" meta={`${slots.length} of 7 selected`} />
         <View style={coachLayout.chipGrid}>{DAYS.map(day => <CoachChip key={day} label={day} selected={slots.some(slot => slot.day === day)} onPress={() => toggleDay(day)} />)}</View>
-        <View style={[styles.selectionStatus, missingDays === 0 && styles.selectionComplete]}><Text style={[styles.selectionText, missingDays === 0 && styles.selectionCompleteText]}>{missingDays ? `Choose ${missingDays} more ${missingDays === 1 ? 'day' : 'days'}` : 'Your five-day minimum is covered'}</Text></View>
+        <View style={[styles.selectionStatus, missingDays === 0 && styles.selectionComplete]}><Text style={[styles.selectionText, missingDays === 0 && styles.selectionCompleteText]}>{missingDays ? `Choose ${missingDays} more ${missingDays === 1 ? 'day' : 'days'} (minimum 5)` : 'Minimum 5 days selected'}</Text></View>
 
         <CoachSection title="Maximum time per session" meta="Applies to every day" style={styles.sectionGap} />
         <View style={styles.durationRow}>{TIMES.map(minutes => <CoachChip key={minutes} label={`${minutes} min`} selected={sessionMinutes === minutes} onPress={() => selectDuration(minutes)} style={styles.durationChip} />)}</View>

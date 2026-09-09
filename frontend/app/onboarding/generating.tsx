@@ -62,8 +62,6 @@ export default function GeneratingScreen() {
         await api.put('/onboarding', {
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
           country_code: null,
-          height_cm: onboardingData.height_cm,
-          weight_kg: onboardingData.weight_kg,
           fitness_level: onboardingData.experience_level,
           runs_per_week: onboardingData.runs_per_week,
           weekly_distance_m: weeklyDistanceM,
@@ -80,9 +78,7 @@ export default function GeneratingScreen() {
           equipment_access: onboardingData.equipment.map(equipment_code=>({equipment_code,environments:[strengthVenue]})),
           health_context: {
             pain_areas: onboardingData.pain_areas,
-            current_injuries: onboardingData.pain_areas.map(area=>({area,note:onboardingData.medical_notes})),
-            medical_notes: onboardingData.medical_notes || null,
-            stress_level: onboardingData.stress_level,
+            current_injuries: onboardingData.pain_areas.map(area=>({area,note:null})),
           },
           goal: {goal_type:onboardingData.goal_type || 'start_running',target_date:onboardingData.target_date,target_event:onboardingData.target_event,target_distance_m:targetDistanceM,target_time_seconds:parseTimeSeconds(onboardingData.target_time),target_value:null,target_unit:null},
         });
@@ -93,9 +89,7 @@ export default function GeneratingScreen() {
           schedule_constraints: onboardingData.schedule_constraints || null,
           health_context: {
             pain_areas: onboardingData.pain_areas,
-            current_injuries: onboardingData.pain_areas.map(area=>({area,note:onboardingData.medical_notes})),
-            medical_notes: onboardingData.medical_notes || null,
-            stress_level: onboardingData.stress_level,
+            current_injuries: onboardingData.pain_areas.map(area=>({area,note:null})),
           },
         });
         await AsyncStorage.removeItem('needs_onboarding');
