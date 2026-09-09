@@ -9,12 +9,10 @@ export const RUNNING_EVENTS = [
 ] as const;
 
 export const RUNNER_GOALS = [
-  { code: 'target_race', label: 'Prepare for a race', description: 'Build toward a target event, date, and optional finish time.' },
-  { code: 'start_running', label: 'Start running', description: 'Build consistency safely from your current level.' },
-  { code: 'run_faster', label: 'Run faster', description: 'Improve speed, pace, and running economy.' },
-  { code: 'build_endurance', label: 'Build endurance', description: 'Run farther and recover better.' },
-  { code: 'return_to_running', label: 'Return to running', description: 'Resume progressively after time away.' },
-  { code: 'general_fitness', label: 'General fitness', description: 'Use running and strength to improve overall fitness.' },
+  { code: 'target_race', label: 'Prepare for a race', description: 'Train for a target event, date, and optional finish time.', icon: 'flag-outline' },
+  { code: 'start_running', label: 'Build consistency', description: 'Start, restart, or make running a regular habit.', icon: 'calendar-outline' },
+  { code: 'run_faster', label: 'Run faster', description: 'Improve speed, pace, and running economy.', icon: 'speedometer-outline' },
+  { code: 'build_endurance', label: 'Run farther', description: 'Build endurance for longer, stronger runs.', icon: 'trending-up-outline' },
 ] as const;
 
 export const distanceToMetres = (value: number, unit: 'km' | 'mi') => value * (unit === 'mi' ? 1609.344 : 1000);

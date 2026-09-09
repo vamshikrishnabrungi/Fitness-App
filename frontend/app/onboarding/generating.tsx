@@ -84,7 +84,7 @@ export default function GeneratingScreen() {
             medical_notes: onboardingData.medical_notes || null,
             stress_level: onboardingData.stress_level,
           },
-          goal: {goal_type:onboardingData.goal_type || 'general_fitness',target_date:onboardingData.target_date,target_event:onboardingData.target_event,target_distance_m:targetDistanceM,target_time_seconds:parseTimeSeconds(onboardingData.target_time),target_value:null,target_unit:null},
+          goal: {goal_type:onboardingData.goal_type || 'start_running',target_date:onboardingData.target_date,target_event:onboardingData.target_event,target_distance_m:targetDistanceM,target_time_seconds:parseTimeSeconds(onboardingData.target_time),target_value:null,target_unit:null},
         });
         await api.postLongRunning('/training/plans', {
           weeks: 4,

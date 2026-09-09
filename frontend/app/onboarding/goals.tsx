@@ -12,6 +12,6 @@ export default function GoalsScreen() {
   const next = () => { if (!goal) return; store.setGoal({ goal_type: goal, target_event: goal === 'target_race' ? store.target_event : null }); router.push('/onboarding/sports'); };
   return <View style={[coachLayout.container,{paddingTop:insets.top}]}><CoachProgress step={1}/><ScrollView style={coachLayout.scrollView} contentContainerStyle={coachLayout.content}>
     <CoachCard icon="flag" eyebrow="YOUR RUNNING GOAL" title="What are you running toward?" subtitle="We will shape your running, strength, mobility, and recovery around this goal.">
-      <CoachSection title="Primary goal"/>{RUNNER_GOALS.map(item=><CoachOption key={item.code} title={item.label} description={item.description} icon="footsteps-outline" selected={goal===item.code} onPress={()=>setGoal(item.code)}/>) }
+      <CoachSection title="Primary goal"/>{RUNNER_GOALS.map(item=><CoachOption key={item.code} title={item.label} description={item.description} icon={item.icon} selected={goal===item.code} onPress={()=>setGoal(item.code)}/>) }
     </CoachCard></ScrollView><CoachBottom bottomInset={insets.bottom} disabled={!goal} onPress={next}/></View>;
 }

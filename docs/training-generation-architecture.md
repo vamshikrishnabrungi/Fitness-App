@@ -12,7 +12,7 @@ Supported event codes are `run_walk`, `100m`, `200m`, `400m`, `800m`, `1500m`, `
 
 ```mermaid
 flowchart LR
-    A[1. Goal<br/>race, start, speed,<br/>endurance, return, fitness] --> B[2. Running event<br/>distance unit, race date,<br/>target distance and time]
+    A[1. Goal<br/>race, consistency,<br/>speed, or endurance] --> B[2. Running event<br/>distance unit, race date,<br/>target distance and time]
     B --> C[3. Current baseline<br/>experience, runs per week,<br/>weekly distance, longest run,<br/>training interruption]
     C --> D[4. Body context<br/>gender, height, weight,<br/>optional target weight]
     D --> E[5. Weekly availability<br/>days, time of day,<br/>45 to 150 minute ceilings]
