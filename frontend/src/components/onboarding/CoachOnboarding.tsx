@@ -10,6 +10,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { colors, spacing } from '../../utils/theme';
 
 export const coachColors = {
@@ -28,8 +29,21 @@ type IconName = keyof typeof Ionicons.glyphMap;
 const noWebFocus = { outlineStyle: 'none' } as any;
 
 export function CoachProgress({ step }: { step: number }) {
+  const router = useRouter();
   return (
     <View style={styles.progressWrap}>
+      {step > 1 ? (
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+          activeOpacity={0.7}
+          hitSlop={8}
+          onPress={() => router.canGoBack() ? router.back() : router.replace('/onboarding/goals')}
+          style={[styles.progressBack, noWebFocus]}
+        >
+          <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
+        </TouchableOpacity>
+      ) : null}
       <View style={styles.progressTrack}>
         <View style={[styles.progressFill, { width: `${(step / 8) * 100}%` }]} />
       </View>
@@ -264,6 +278,13 @@ const styles = StyleSheet.create({
     height: 4,
     borderRadius: 2,
     backgroundColor: colors.separator,
+  },
+  progressBack: {
+    width: 32,
+    height: 40,
+    marginLeft: -8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   progressFill: {
     height: '100%',
