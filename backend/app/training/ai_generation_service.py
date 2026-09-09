@@ -429,7 +429,6 @@ def _context_snapshot(context: Any, priority: Any, overrides: dict[str, Any]) ->
         "availability": [
             {
                 "weekday": item.weekday,
-                "start_minute": item.start_minute,
                 "duration_minutes": item.duration_minutes,
                 "environments": sorted(item.environments),
             }
@@ -591,7 +590,6 @@ async def generate_ai_plan(
         "availability": [
             {
                 "weekday": item.weekday,
-                "start_minute": item.start_minute,
                 "duration_minutes": item.duration_minutes,
                 "environments": sorted(item.environments),
             }

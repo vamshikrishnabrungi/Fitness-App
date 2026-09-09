@@ -64,11 +64,11 @@ def test_onboarding_normalizes_goal_phase_and_scope():
         maximum_session_minutes=60,
         season_phase="pre_season",
         availability=[{
-            "weekday": 0,
-            "start_minute": 420,
-            "duration_minutes": 60,
+            "weekday": weekday,
+            "start_minute": 0,
+            "duration_minutes": 90,
             "environments": ["road"],
-        }],
+        } for weekday in range(5)],
         goal=GoalInput(goal_type="endurance"),
     )
     assert command.season_phase == "specific_preparation"

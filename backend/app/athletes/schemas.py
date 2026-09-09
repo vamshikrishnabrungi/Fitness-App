@@ -185,7 +185,7 @@ class OnboardingCommand(BaseModel):
     maximum_session_minutes: int = Field(ge=20, le=300)
     season_phase: str = "general_preparation"
     target_event: str
-    availability: list[AvailabilityInput] = Field(min_length=1, max_length=21)
+    availability: list[AvailabilityInput] = Field(min_length=5, max_length=7)
     equipment_access: list[EquipmentAccessInput] = Field(default_factory=list, max_length=100)
     health_context: dict[str, Any] = Field(default_factory=dict)
     goal: GoalInput

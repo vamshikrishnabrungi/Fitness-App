@@ -76,7 +76,7 @@ export default function GeneratingScreen() {
           maximum_session_minutes: maximumMinutes,
           season_phase: 'general_preparation',
           target_event: onboardingData.target_event || 'run_walk',
-          availability: onboardingData.availability.map(slot=>({weekday:dayIndex[slot.day.toLowerCase()] ?? 0,start_minute:slot.preferredTime==='morning'?420:slot.preferredTime==='afternoon'?780:1080,duration_minutes:slot.minutes,environments:[runVenue]})),
+          availability: onboardingData.availability.map(slot=>({weekday:dayIndex[slot.day.toLowerCase()] ?? 0,start_minute:0,duration_minutes:slot.minutes,environments:[runVenue]})),
           equipment_access: onboardingData.equipment.map(equipment_code=>({equipment_code,environments:[strengthVenue]})),
           health_context: {
             pain_areas: onboardingData.pain_areas,

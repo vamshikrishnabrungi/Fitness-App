@@ -16,7 +16,7 @@ flowchart LR
     R -->|Yes| B[Conditional race screen<br/>road, track, or trail;<br/>distance, date and current best]
     R -->|No| C
     B --> C[2. Running background<br/>experience, runs per week,<br/>weekly distance, longest run,<br/>training interruption]
-    C --> D[3. Availability and access<br/>days, 90 to 150 minute ceilings,<br/>terrain and strength equipment]
+    C --> D[3. Availability and access<br/>at least five days, one shared<br/>90 to 150 minute ceiling,<br/>terrain and strength equipment]
     D --> E[4. Health and recovery<br/>optional height and weight,<br/>pain, restrictions and stress]
     E --> F[Generate plan]
 ```

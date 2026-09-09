@@ -19389,8 +19389,8 @@
               "$ref": "#/components/schemas/AvailabilityInput"
             },
             "type": "array",
-            "maxItems": 21,
-            "minItems": 1,
+            "maxItems": 7,
+            "minItems": 5,
             "title": "Availability"
           },
           "equipment_access": {
@@ -19644,7 +19644,7 @@
               {
                 "type": "integer",
                 "maximum": 7.0,
-                "minimum": 1.0
+                "minimum": 5.0
               },
               {
                 "type": "null"

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 export type RunnerLevel = 'beginner' | 'intermediate' | 'advanced';
 export type DistanceUnit = 'km' | 'mi';
-export type DayAvailability = { day: string; minutes: number; preferredTime: 'morning' | 'afternoon' | 'evening' };
+export type DayAvailability = { day: string; minutes: number };
 
 export interface RunnerOnboardingData {
   onboarding_version: 4;
