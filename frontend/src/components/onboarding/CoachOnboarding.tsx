@@ -368,6 +368,7 @@ const styles = StyleSheet.create({
   },
   option: {
     minHeight: 76,
+    marginBottom: 10,
     borderRadius: 18,
     borderWidth: 1,
     borderColor: 'transparent',
