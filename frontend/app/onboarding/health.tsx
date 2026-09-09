@@ -27,7 +27,7 @@ export default function HealthScreen() {
 
   return (
     <View style={[coachLayout.container, { paddingTop: insets.top }]}>
-      <CoachProgress step={store.goal_type === 'target_race' ? 5 : 4} total={store.goal_type === 'target_race' ? 5 : 4} />
+      <CoachProgress step={store.goal_type !== 'start_running' ? 5 : 4} total={store.goal_type !== 'start_running' ? 5 : 4} />
       <ScrollView style={coachLayout.scrollView} contentContainerStyle={coachLayout.content} showsVerticalScrollIndicator={false}>
         <CoachCard icon="shield-checkmark" eyebrow="HEALTH AND RECOVERY" title="Anything we should account for?" subtitle="Optional body measurements and current health context help the coach choose safer training loads.">
           <CoachSection title="Body measurements" meta="Optional" />

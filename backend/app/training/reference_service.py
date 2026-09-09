@@ -55,6 +55,19 @@ def _hash(value: object) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def _reference_event_code(event_code: str | None) -> str | None:
+    """Select a reviewed reference family without changing the runner's intent."""
+    return "5k" if event_code == "general_running" else event_code
+
+
+def _generation_goal_code(goal_type: str, event_code: str | None) -> str:
+    """Map product goals to the matching running priority family."""
+    sprint_and_middle_distance = {"100m", "200m", "400m", "800m", "1500m", "mile"}
+    if goal_type == "target_race" and event_code in sprint_and_middle_distance:
+        return "speed_movement"
+    return normalize_goal(goal_type)
+
+
 async def _verify_release_source_hashes(session: AsyncSession, release: ContentRelease) -> None:
     """Fail closed if live generator rows no longer match the published manifest.
 
@@ -353,15 +366,16 @@ async def _load_reference_inputs(
 ) -> tuple[CompilerContext, PriorityContext, dict[str, tuple[ReferenceTemplate, ...]], str, UUID]:
     base_level = athlete_level(athlete.competition_level)
     level = "beginner" if athlete.post_clearance_only else (athlete_level_override or base_level)
+    reference_event_code = _reference_event_code(primary.event_code)
     scope_type, scope_code = sport_scope_key(
         primary.sport_code,
-        event_code=primary.event_code,
+        event_code=reference_event_code,
         role_code=primary.role_code,
         discipline_code=primary.discipline_code,
         format_code=primary.format_code,
     )
     phase_code = normalize_phase(athlete.season_phase)
-    goal_code = normalize_goal(goal.goal_type)
+    goal_code = _generation_goal_code(goal.goal_type, primary.event_code)
     reference_scope_code = {
         "800m": "400m",
         "1500m": "5k",

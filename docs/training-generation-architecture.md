@@ -12,10 +12,14 @@ Supported event codes are `run_walk`, `100m`, `200m`, `400m`, `800m`, `1500m`, `
 
 ```mermaid
 flowchart LR
-    A[1. Goal<br/>race, consistency,<br/>speed, or endurance] --> R{Race goal?}
-    R -->|Yes| B[Conditional race screen<br/>road, track, or trail;<br/>distance, date and current best]
-    R -->|No| C
+    A[1. Goal<br/>race, consistency,<br/>speed, or endurance] --> R{Which goal?}
+    R -->|Race| B[Event details<br/>road, track, or trail;<br/>distance, required date,<br/>optional current best]
+    R -->|Speed| S[Speed details<br/>road, track, or trail;<br/>distance and optional current best]
+    R -->|Endurance| N[Distance details<br/>road or trail and distance]
+    R -->|Consistency| C
     B --> C[2. Running background<br/>experience, runs per week,<br/>weekly distance, longest run,<br/>training interruption]
+    S --> C
+    N --> C
     C --> D[3. Availability and access<br/>at least five days, one shared<br/>90 to 150 minute ceiling,<br/>terrain and strength equipment]
     D --> E[4. Health and recovery<br/>optional height and weight,<br/>pain, restrictions and stress]
     E --> F[Generate plan]
@@ -28,7 +32,9 @@ The mobile onboarding store owns temporary form state. The generation screen con
 
 The onboarding API creates exactly one primary athlete sport row with `sport_code=running`. Users do not submit arbitrary sport codes, roles, sport practice schedules, exercise familiarity, or push-up, pull-up, and squat test counts.
 
-Race onboarding asks for an optional current personal-best time. For fixed road and track events, the recognized fastest performance is stored automatically as the target time; users do not type a target. Track times preserve hundredth-second precision. Trail races use a custom distance and have no universal record target because courses are not comparable.
+The selected product goal is stored unchanged. `Prepare for a race` collects an event, a required future race date, and an optional current personal-best time. `Run faster` collects the distance to improve and an optional current best. `Run farther` collects the desired road or trail distance. `Build consistency` has no extra details screen and stores `general_running` as its intent. Track times preserve hundredth-second precision.
+
+Recognized records are shown only as references and reject impossible personal-best entries. They are never stored as the runner's target. The target time remains empty unless a future product flow explicitly asks the runner to set one.
 
 ## End-to-end generation
 
@@ -71,7 +77,9 @@ Cloud SQL is authoritative. Generation uses only released running content:
 - Exercise methods linked to retained running templates or running physical qualities
 - Phase dose and progression policies
 
-`800m` uses the reviewed `400m` priority family, `1500m` and `mile` use the `5k` family, `trail` uses the `10k` family until event-specific reviewed matrices are published. The actual target event remains in the runner context, so the model adapts the reference family to the requested event.
+`800m` uses the reviewed `400m` priority family, `1500m` and `mile` use the `5k` family, `trail` uses the `10k` family, and `general_running` uses the `5k` family until event-specific reviewed matrices are published. The actual target event remains in the runner context, so the model adapts the reference family to the requested intent. Sprint and middle-distance race goals use the speed/movement priority family; road and trail race goals use conditioning.
+
+Every onboarding plan uses at least five selected training days. Released phase policies permit at least five sessions per week, so the reference layer cannot silently reduce a five-day request to one or two sessions.
 
 Non-running sport articles, releases, policies, priorities, taxa, templates, and methods without a running relationship are removed by migration `20260908_28_running_only_knowledge.py`.
 

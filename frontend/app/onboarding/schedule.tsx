@@ -40,7 +40,7 @@ export default function ScheduleScreen() {
   const missingDays = Math.max(0, 5 - slots.length);
 
   return <View style={[coachLayout.container, { paddingTop: insets.top }]}>
-    <CoachProgress step={store.goal_type === 'target_race' ? 4 : 3} total={store.goal_type === 'target_race' ? 5 : 4} />
+    <CoachProgress step={store.goal_type !== 'start_running' ? 4 : 3} total={store.goal_type !== 'start_running' ? 5 : 4} />
     <ScrollView style={coachLayout.scrollView} contentContainerStyle={coachLayout.content} showsVerticalScrollIndicator={false}>
       <CoachCard icon="calendar" eyebrow="YOUR TRAINING WEEK" title="Build your weekly schedule." subtitle="Choose at least five training days and one maximum session length for the week.">
         <CoachSection title="Training days" meta={`${slots.length} of 7 selected`} />

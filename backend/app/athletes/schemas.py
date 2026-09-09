@@ -165,7 +165,11 @@ class GoalInput(BaseModel):
     @field_validator("goal_type")
     @classmethod
     def validate_goal_type(cls, value: str) -> str:
-        return normalize_goal(value)
+        normalized = value.strip().lower()
+        product_goals = {"target_race", "start_running", "run_faster", "build_endurance"}
+        if normalized in product_goals:
+            return normalized
+        return normalize_goal(normalized)
 
 
 class OnboardingCommand(BaseModel):

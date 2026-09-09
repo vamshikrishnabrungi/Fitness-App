@@ -8,7 +8,7 @@ export const RUNNING_EVENTS = [
 ] as const;
 
 export const RUNNER_GOALS = [
-  { code: 'target_race', label: 'Prepare for a race', description: 'Train for a target event, date, and optional finish time.', icon: 'flag-outline' },
+  { code: 'target_race', label: 'Prepare for a race', description: 'Train for a target event and race date.', icon: 'flag-outline' },
   { code: 'start_running', label: 'Build consistency', description: 'Start, restart, or make running a regular habit.', icon: 'calendar-outline' },
   { code: 'run_faster', label: 'Run faster', description: 'Improve speed, pace, and running economy.', icon: 'speedometer-outline' },
   { code: 'build_endurance', label: 'Run farther', description: 'Build endurance for longer, stronger runs.', icon: 'trending-up-outline' },
