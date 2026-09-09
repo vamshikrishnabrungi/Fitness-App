@@ -60,7 +60,7 @@ export default function ScheduleScreen() {
 
   return (
     <View style={[coachLayout.container, { paddingTop: insets.top }]}>
-      <CoachProgress step={3} />
+      <CoachProgress step={store.goal_type === 'target_race' ? 4 : 3} total={store.goal_type === 'target_race' ? 5 : 4} />
       <ScrollView style={coachLayout.scrollView} contentContainerStyle={coachLayout.content} showsVerticalScrollIndicator={false}>
         <CoachCard icon="calendar" eyebrow="YOUR TRAINING WEEK" title="When and where can you train?" subtitle="Choose your available days, session limits, running surfaces, and strength access.">
           <CoachSection title="Available days" meta={`${slots.length} selected`} />

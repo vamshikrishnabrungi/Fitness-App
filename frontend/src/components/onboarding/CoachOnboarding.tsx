@@ -28,9 +28,8 @@ type IconName = keyof typeof Ionicons.glyphMap;
 
 const noWebFocus = { outlineStyle: 'none' } as any;
 
-export function CoachProgress({ step }: { step: number }) {
+export function CoachProgress({ step, total = 4 }: { step: number; total?: number }) {
   const router = useRouter();
-  const total = 4;
   return (
     <View style={styles.progressWrap}>
       {step > 1 ? (

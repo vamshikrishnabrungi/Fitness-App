@@ -12,7 +12,9 @@ Supported event codes are `run_walk`, `100m`, `200m`, `400m`, `800m`, `1500m`, `
 
 ```mermaid
 flowchart LR
-    A[1. Goal<br/>race, consistency,<br/>speed, or endurance] --> B[Inline race details when needed<br/>road, track, trail, or ultra;<br/>distance, date and time]
+    A[1. Goal<br/>race, consistency,<br/>speed, or endurance] --> R{Race goal?}
+    R -->|Yes| B[Conditional race screen<br/>road, track, trail, or ultra;<br/>distance, date and time]
+    R -->|No| C
     B --> C[2. Running background<br/>experience, runs per week,<br/>weekly distance, longest run,<br/>training interruption]
     C --> D[3. Availability and access<br/>days, 90 to 150 minute ceilings,<br/>terrain and strength equipment]
     D --> E[4. Health and recovery<br/>optional height and weight,<br/>pain, restrictions and stress]

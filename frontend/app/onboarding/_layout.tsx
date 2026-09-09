@@ -4,6 +4,7 @@ export default function OnboardingLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }} initialRouteName="goals">
       <Stack.Screen name="goals" />
+      <Stack.Screen name="race-details" />
       <Stack.Screen name="experience" />
       <Stack.Screen name="schedule" />
       <Stack.Screen name="health" />
