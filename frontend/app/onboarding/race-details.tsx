@@ -4,110 +4,94 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CoachBottom, CoachCard, CoachChip, CoachField, CoachProgress, CoachSection, coachColors, coachLayout } from '../../src/components/onboarding/CoachOnboarding';
-import { colors } from '../../src/utils/theme';
 import { DistanceUnit, useOnboardingStore } from '../../src/store/onboardingStore';
+import { colors } from '../../src/utils/theme';
 
-type RaceType = 'road' | 'track' | 'trail' | 'ultra';
-type DurationPart = 'hours' | 'minutes' | 'seconds';
-const RACE_TYPES = [['road', 'Road'], ['track', 'Track'], ['trail', 'Trail'], ['ultra', 'Ultra']] as const;
+type RaceType = 'road' | 'track' | 'trail';
+type Duration = { hours: number; minutes: number; seconds: number; hundredths: number };
+type DurationPart = keyof Duration;
+const RACE_TYPES = [['road', 'Road'], ['track', 'Track'], ['trail', 'Trail']] as const;
 const DISTANCES = {
   road: [['5k', '5K'], ['10k', '10K'], ['half_marathon', 'Half marathon'], ['marathon', 'Marathon']],
   track: [['100m', '100 m'], ['200m', '200 m'], ['400m', '400 m'], ['800m', '800 m'], ['1500m', '1500 m'], ['mile', 'Mile']],
 } as const;
+const RECORD_TARGETS: Record<string, { value: string; label: string }> = {
+  '100m': { value: '00:00:09.58', label: '9.58' }, '200m': { value: '00:00:19.19', label: '19.19' },
+  '400m': { value: '00:00:43.03', label: '43.03' }, '800m': { value: '00:01:40.91', label: '1:40.91' },
+  '1500m': { value: '00:03:26.00', label: '3:26.00' }, mile: { value: '00:03:43.13', label: '3:43.13' },
+  '5k': { value: '00:12:49', label: '12:49' }, '10k': { value: '00:26:24', label: '26:24' },
+  half_marathon: { value: '00:57:20', label: '57:20' }, marathon: { value: '02:00:35', label: '2:00:35' },
+};
 const startOfToday = () => { const value = new Date(); value.setHours(0, 0, 0, 0); return value; };
 const toLocalIsoDate = (value: Date) => `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
-const fromIsoDate = (value: string | null) => {
-  if (!value) return null;
-  const [year, month, day] = value.split('-').map(Number);
-  const parsed = new Date(year, month - 1, day);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
+const fromIsoDate = (value: string | null) => { if (!value) return null; const [year, month, day] = value.split('-').map(Number); const parsed = new Date(year, month - 1, day); return Number.isNaN(parsed.getTime()) ? null : parsed; };
+const parseDuration = (value: string): Duration => {
+  const [clock, fraction = '0'] = value.split('.'); const parts = clock.split(':').map(Number);
+  if (parts.length !== 3 || parts.some(part => !Number.isFinite(part))) return { hours: 0, minutes: 0, seconds: 0, hundredths: 0 };
+  return { hours: Math.min(parts[0], 99), minutes: Math.min(parts[1], 59), seconds: Math.min(parts[2], 59), hundredths: Math.min(Number(fraction.padEnd(2, '0').slice(0, 2)), 99) };
 };
-const parseDuration = (value: string) => {
-  const parts = value.split(':').map(Number);
-  if (parts.length !== 3 || parts.some(part => !Number.isInteger(part) || part < 0)) return { hours: 0, minutes: 0, seconds: 0 };
-  return { hours: Math.min(parts[0], 99), minutes: Math.min(parts[1], 59), seconds: Math.min(parts[2], 59) };
-};
+const secondsFor = (value: Duration) => value.hours * 3600 + value.minutes * 60 + value.seconds + value.hundredths / 100;
+const serializeDuration = (value: Duration, precise: boolean) => `${String(value.hours).padStart(2, '0')}:${String(value.minutes).padStart(2, '0')}:${String(value.seconds).padStart(2, '0')}${precise ? `.${String(value.hundredths).padStart(2, '0')}` : ''}`;
 const typeForEvent = (event: string | null): RaceType | null => {
-  if (event === 'trail' || event === 'ultra') return event;
+  if (event === 'trail') return 'trail';
   if (DISTANCES.track.some(([code]) => code === event)) return 'track';
   if (DISTANCES.road.some(([code]) => code === event)) return 'road';
   return null;
 };
 
 function DurationStepper({ label, value, maximum, onChange }: { label: string; value: number; maximum: number; onChange: (value: number) => void }) {
-  return <View style={styles.durationColumn}>
-    <Text style={styles.durationLabel}>{label}</Text>
-    <View style={styles.stepper}>
-      <TouchableOpacity accessibilityLabel={`Decrease ${label}`} style={styles.stepButton} onPress={() => onChange(Math.max(0, value - 1))}><Text style={styles.stepSymbol}>−</Text></TouchableOpacity>
-      <Text style={styles.durationValue}>{String(value).padStart(2, '0')}</Text>
-      <TouchableOpacity accessibilityLabel={`Increase ${label}`} style={styles.stepButton} onPress={() => onChange(Math.min(maximum, value + 1))}><Text style={styles.stepSymbol}>+</Text></TouchableOpacity>
-    </View>
-  </View>;
+  return <View style={styles.durationColumn}><Text style={styles.durationLabel}>{label}</Text><View style={styles.stepper}>
+    <TouchableOpacity accessibilityLabel={`Decrease ${label}`} style={styles.stepButton} onPress={() => onChange(Math.max(0, value - 1))}><Text style={styles.stepSymbol}>−</Text></TouchableOpacity>
+    <Text style={styles.durationValue}>{String(value).padStart(2, '0')}</Text>
+    <TouchableOpacity accessibilityLabel={`Increase ${label}`} style={styles.stepButton} onPress={() => onChange(Math.min(maximum, value + 1))}><Text style={styles.stepSymbol}>+</Text></TouchableOpacity>
+  </View></View>;
 }
 
 export default function RaceDetailsScreen() {
-  const router = useRouter();
-  const insets = useSafeAreaInsets();
-  const store = useOnboardingStore();
+  const router = useRouter(); const insets = useSafeAreaInsets(); const store = useOnboardingStore();
   const [raceType, setRaceType] = useState<RaceType | null>(typeForEvent(store.target_event));
-  const [event, setEvent] = useState(store.target_event || '');
-  const [distance, setDistance] = useState(store.target_distance?.toString() || '');
-  const [raceDate, setRaceDate] = useState<Date | null>(fromIsoDate(store.target_date));
-  const [showAndroidDatePicker, setShowAndroidDatePicker] = useState(false);
-  const [duration, setDuration] = useState(parseDuration(store.target_time));
-  const [hasTargetTime, setHasTargetTime] = useState(Boolean(store.target_time));
+  const [event, setEvent] = useState(store.target_event || ''); const [distance, setDistance] = useState(store.target_distance?.toString() || '');
+  const [raceDate, setRaceDate] = useState<Date | null>(fromIsoDate(store.target_date)); const [showAndroidDatePicker, setShowAndroidDatePicker] = useState(false);
+  const [currentTime, setCurrentTime] = useState(parseDuration(store.current_time)); const [hasCurrentTime, setHasCurrentTime] = useState(Boolean(store.current_time));
   const [unit, setUnit] = useState<DistanceUnit>(store.distance_unit);
-  const customDistance = raceType === 'trail' || raceType === 'ultra';
+  const customDistance = raceType === 'trail'; const preciseTime = raceType === 'track';
   const options = useMemo(() => raceType === 'road' || raceType === 'track' ? DISTANCES[raceType] : [], [raceType]);
-  const targetSeconds = duration.hours * 3600 + duration.minutes * 60 + duration.seconds;
-  const today = startOfToday();
-  const canContinue = Boolean(raceType && event && (!customDistance || (Number(distance) > 0 && Number(distance) <= 1000)) && (!raceDate || raceDate >= today) && (!hasTargetTime || targetSeconds > 0));
+  const record = RECORD_TARGETS[event]; const currentSeconds = secondsFor(currentTime); const recordSeconds = record ? secondsFor(parseDuration(record.value)) : 0; const today = startOfToday();
+  const validCurrentTime = !hasCurrentTime || (currentSeconds > 0 && (!record || currentSeconds >= recordSeconds));
+  const canContinue = Boolean(raceType && event && (!customDistance || (Number(distance) > 0 && Number(distance) <= 1000)) && (!raceDate || raceDate >= today) && validCurrentTime);
 
-  const chooseRaceType = (value: RaceType) => { setRaceType(value); setEvent(value === 'trail' || value === 'ultra' ? value : ''); setDistance(''); };
-  const updateDuration = (part: DurationPart, value: number) => setDuration(current => ({ ...current, [part]: value }));
+  const chooseRaceType = (value: RaceType) => { setRaceType(value); setEvent(value === 'trail' ? value : ''); setDistance(''); setHasCurrentTime(false); };
+  const chooseEvent = (value: string) => { setEvent(value); setHasCurrentTime(false); };
+  const updateDuration = (part: DurationPart, value: number) => setCurrentTime(current => ({ ...current, [part]: value }));
+  const addCurrentTime = () => { setCurrentTime(record ? parseDuration(record.value) : { hours: 1, minutes: 0, seconds: 0, hundredths: 0 }); setHasCurrentTime(true); };
   const handleNext = () => {
     if (!canContinue) return;
-    store.setGoal({
-      goal_type: 'target_race', target_event: event, target_distance: customDistance ? Number(distance) : null,
-      target_date: raceDate ? toLocalIsoDate(raceDate) : null,
-      target_time: hasTargetTime ? `${String(duration.hours).padStart(2, '0')}:${String(duration.minutes).padStart(2, '0')}:${String(duration.seconds).padStart(2, '0')}` : '',
-      distance_unit: unit,
-    });
+    store.setGoal({ goal_type: 'target_race', target_event: event, target_distance: customDistance ? Number(distance) : null,
+      target_date: raceDate ? toLocalIsoDate(raceDate) : null, target_time: record?.value || '',
+      current_time: hasCurrentTime ? serializeDuration(currentTime, preciseTime) : '', distance_unit: unit });
     router.push('/onboarding/experience');
   };
 
-  return (
-    <View style={[coachLayout.container, { paddingTop: insets.top }]}>
-      <CoachProgress step={2} total={5} />
-      <ScrollView style={coachLayout.scrollView} contentContainerStyle={coachLayout.content} showsVerticalScrollIndicator={false}>
-        <CoachCard icon="trophy-outline" eyebrow="YOUR RACE" title="What are you training for?" subtitle="Your event and target help the coach balance speed, endurance, strength, and recovery.">
-          <CoachSection title="Race type" />
-          <View style={coachLayout.chipGrid}>{RACE_TYPES.map(([code, label]) => <CoachChip key={code} label={label} selected={raceType === code} onPress={() => chooseRaceType(code)} />)}</View>
-          {options.length ? <View style={styles.sectionGap}><CoachSection title="Distance" /><View style={coachLayout.chipGrid}>{options.map(([code, label]) => <CoachChip key={code} label={label} selected={event === code} onPress={() => setEvent(code)} />)}</View></View> : null}
-          {customDistance ? <View style={styles.sectionGap}><CoachSection title="Race distance" /><CoachField value={distance} onChangeText={value => setDistance(value.replace(/[^0-9.]/g, ''))} placeholder={`Distance (${unit})`} keyboardType="decimal-pad" /><View style={[coachLayout.chipGrid, styles.controlGap]}><CoachChip label="km" selected={unit === 'km'} onPress={() => setUnit('km')} /><CoachChip label="mi" selected={unit === 'mi'} onPress={() => setUnit('mi')} /></View>{Number(distance) > 1000 ? <Text style={styles.errorText}>Enter a distance of 1,000 or less.</Text> : null}</View> : null}
-          {event ? <>
-            <View style={styles.sectionGap}><CoachSection title="Race date" meta={`Today: ${toLocalIsoDate(today)}`} />
-              {raceDate ? <View style={styles.pickerRow}>
-                {Platform.OS === 'android' ? <TouchableOpacity style={styles.valueButton} onPress={() => setShowAndroidDatePicker(true)}><Text style={styles.valueText}>{toLocalIsoDate(raceDate)}</Text></TouchableOpacity> : <DateTimePicker value={raceDate} mode="date" display="compact" minimumDate={today} onChange={(_, value) => value && setRaceDate(value)} />}
-                <TouchableOpacity onPress={() => setRaceDate(null)}><Text style={styles.removeText}>Remove</Text></TouchableOpacity>
-              </View> : <TouchableOpacity style={styles.addButton} onPress={() => Platform.OS === 'android' ? setShowAndroidDatePicker(true) : setRaceDate(today)}><Text style={styles.addText}>+ Add race date</Text></TouchableOpacity>}
-              {showAndroidDatePicker ? <DateTimePicker value={raceDate || today} mode="date" minimumDate={today} onChange={(_, value) => { setShowAndroidDatePicker(false); if (value) setRaceDate(value); }} /> : null}
-            </View>
-            <View style={styles.sectionGap}><CoachSection title="Target finish time" meta="Optional" />
-              {hasTargetTime ? <><View style={styles.durationRow}><DurationStepper label="Hours" value={duration.hours} maximum={99} onChange={value => updateDuration('hours', value)} /><DurationStepper label="Minutes" value={duration.minutes} maximum={59} onChange={value => updateDuration('minutes', value)} /><DurationStepper label="Seconds" value={duration.seconds} maximum={59} onChange={value => updateDuration('seconds', value)} /></View><TouchableOpacity onPress={() => setHasTargetTime(false)}><Text style={styles.removeText}>Remove target time</Text></TouchableOpacity>{targetSeconds === 0 ? <Text style={styles.errorText}>Target time must be greater than zero.</Text> : null}</> : <TouchableOpacity style={styles.addButton} onPress={() => { setDuration({ hours: 1, minutes: 0, seconds: 0 }); setHasTargetTime(true); }}><Text style={styles.addText}>+ Add target finish time</Text></TouchableOpacity>}
-            </View>
-          </> : null}
-        </CoachCard>
-      </ScrollView>
-      <CoachBottom bottomInset={insets.bottom} disabled={!canContinue} onPress={handleNext} />
-    </View>
-  );
+  return <View style={[coachLayout.container, { paddingTop: insets.top }]}><CoachProgress step={2} total={5} />
+    <ScrollView style={coachLayout.scrollView} contentContainerStyle={coachLayout.content} showsVerticalScrollIndicator={false}>
+      <CoachCard icon="trophy-outline" eyebrow="YOUR RACE" title="What are you training for?" subtitle="Choose your event. Your current best is optional; the event record is used as the default target.">
+        <CoachSection title="Race type" /><View style={coachLayout.chipGrid}>{RACE_TYPES.map(([code, label]) => <CoachChip key={code} label={label} selected={raceType === code} onPress={() => chooseRaceType(code)} />)}</View>
+        {options.length ? <View style={styles.sectionGap}><CoachSection title="Distance" /><View style={coachLayout.chipGrid}>{options.map(([code, label]) => <CoachChip key={code} label={label} selected={event === code} onPress={() => chooseEvent(code)} />)}</View></View> : null}
+        {customDistance ? <View style={styles.sectionGap}><CoachSection title="Race distance" /><CoachField value={distance} onChangeText={value => setDistance(value.replace(/[^0-9.]/g, ''))} placeholder={`Distance (${unit})`} keyboardType="decimal-pad" /><View style={[coachLayout.chipGrid, styles.controlGap]}><CoachChip label="km" selected={unit === 'km'} onPress={() => setUnit('km')} /><CoachChip label="mi" selected={unit === 'mi'} onPress={() => setUnit('mi')} /></View>{Number(distance) > 1000 ? <Text style={styles.errorText}>Enter a distance of 1,000 or less.</Text> : null}</View> : null}
+        {event ? <><View style={styles.sectionGap}><CoachSection title="Race date" meta={`Today: ${toLocalIsoDate(today)}`} />
+          {raceDate ? <View style={styles.pickerRow}>{Platform.OS === 'android' ? <TouchableOpacity style={styles.valueButton} onPress={() => setShowAndroidDatePicker(true)}><Text style={styles.valueText}>{toLocalIsoDate(raceDate)}</Text></TouchableOpacity> : <DateTimePicker value={raceDate} mode="date" display="compact" minimumDate={today} onChange={(_, value) => value && setRaceDate(value)} />}<TouchableOpacity onPress={() => setRaceDate(null)}><Text style={styles.removeText}>Remove</Text></TouchableOpacity></View> : <TouchableOpacity style={styles.addButton} onPress={() => Platform.OS === 'android' ? setShowAndroidDatePicker(true) : setRaceDate(today)}><Text style={styles.addText}>+ Add race date</Text></TouchableOpacity>}
+          {showAndroidDatePicker ? <DateTimePicker value={raceDate || today} mode="date" minimumDate={today} onChange={(_, value) => { setShowAndroidDatePicker(false); if (value) setRaceDate(value); }} /> : null}</View>
+          {record ? <View style={styles.recordCard}><Text style={styles.recordLabel}>DEFAULT TARGET · WORLD RECORD</Text><Text style={styles.recordValue}>{record.label}</Text><Text style={styles.recordNote}>Applied automatically for {event.replace('_', ' ')}.</Text></View> : null}
+          <View style={styles.sectionGap}><CoachSection title="Your current best time" meta="Optional" />
+            {hasCurrentTime ? <><View style={styles.durationRow}>{!preciseTime ? <DurationStepper label="Hours" value={currentTime.hours} maximum={99} onChange={value => updateDuration('hours', value)} /> : null}<DurationStepper label="Minutes" value={currentTime.minutes} maximum={59} onChange={value => updateDuration('minutes', value)} /><DurationStepper label="Seconds" value={currentTime.seconds} maximum={59} onChange={value => updateDuration('seconds', value)} />{preciseTime ? <DurationStepper label="1/100" value={currentTime.hundredths} maximum={99} onChange={value => updateDuration('hundredths', value)} /> : null}</View><TouchableOpacity onPress={() => setHasCurrentTime(false)}><Text style={styles.removeText}>Remove current time</Text></TouchableOpacity>{!validCurrentTime ? <Text style={styles.errorText}>Current time cannot be faster than the recognized record ({record?.label}).</Text> : null}</> : <TouchableOpacity style={styles.addButton} onPress={addCurrentTime}><Text style={styles.addText}>+ Add current best time</Text></TouchableOpacity>}
+          </View></> : null}
+      </CoachCard></ScrollView><CoachBottom bottomInset={insets.bottom} disabled={!canContinue} onPress={handleNext} /></View>;
 }
 
 const styles = StyleSheet.create({
   sectionGap: { marginTop: 26 }, controlGap: { marginTop: 10 }, pickerRow: { minHeight: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   addButton: { minHeight: 52, borderRadius: 16, backgroundColor: coachColors.control, alignItems: 'center', justifyContent: 'center' }, addText: { color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
-  valueButton: { flex: 1, minHeight: 52, borderRadius: 16, backgroundColor: coachColors.control, justifyContent: 'center', paddingHorizontal: 16, marginRight: 16 }, valueText: { color: colors.textPrimary, fontSize: 16, fontWeight: '600' },
-  removeText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600', marginTop: 10 }, durationRow: { flexDirection: 'row', gap: 8 }, durationColumn: { flex: 1 }, durationLabel: { color: colors.textSecondary, fontSize: 11, fontWeight: '600', marginBottom: 7, textAlign: 'center' },
-  stepper: { minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: coachColors.control, borderRadius: 14, paddingHorizontal: 5 }, stepButton: { width: 28, height: 38, alignItems: 'center', justifyContent: 'center' }, stepSymbol: { color: colors.textPrimary, fontSize: 20 }, durationValue: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' }, errorText: { color: colors.statusWarning, fontSize: 12, marginTop: 8 },
+  valueButton: { flex: 1, minHeight: 52, borderRadius: 16, backgroundColor: coachColors.control, justifyContent: 'center', paddingHorizontal: 16, marginRight: 16 }, valueText: { color: colors.textPrimary, fontSize: 16, fontWeight: '600' }, removeText: { color: colors.textSecondary, fontSize: 13, fontWeight: '600', marginTop: 10 },
+  recordCard: { marginTop: 26, padding: 16, borderRadius: 16, backgroundColor: colors.featureCard }, recordLabel: { color: colors.textDisabled, fontSize: 10, fontWeight: '700', letterSpacing: 0.7 }, recordValue: { color: colors.background, fontSize: 26, fontWeight: '700', marginTop: 5 }, recordNote: { color: colors.textDisabled, fontSize: 12, marginTop: 3 },
+  durationRow: { flexDirection: 'row', gap: 7 }, durationColumn: { flex: 1 }, durationLabel: { color: colors.textSecondary, fontSize: 10, fontWeight: '600', marginBottom: 7, textAlign: 'center' }, stepper: { minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: coachColors.control, borderRadius: 14, paddingHorizontal: 3 }, stepButton: { width: 25, height: 38, alignItems: 'center', justifyContent: 'center' }, stepSymbol: { color: colors.textPrimary, fontSize: 19 }, durationValue: { color: colors.textPrimary, fontSize: 14, fontWeight: '700' }, errorText: { color: colors.statusWarning, fontSize: 12, marginTop: 8 },
 });

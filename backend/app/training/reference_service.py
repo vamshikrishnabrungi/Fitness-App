@@ -367,7 +367,6 @@ async def _load_reference_inputs(
         "1500m": "5k",
         "mile": "5k",
         "trail": "10k",
-        "ultra": "marathon",
     }.get(scope_code, scope_code)
     priority_row = await session.scalar(select(SportTemplatePriority).where(
         SportTemplatePriority.sport_code == primary.sport_code,

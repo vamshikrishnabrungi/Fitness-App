@@ -4,7 +4,7 @@ SPORT_SCOPE_REQUIREMENTS: dict[str, dict[str, tuple[str, ...]]] = {
     "running": {
         "event_code": (
             "run_walk", "100m", "200m", "400m", "800m", "1500m", "mile",
-            "5k", "10k", "half_marathon", "marathon", "trail", "ultra",
+            "5k", "10k", "half_marathon", "marathon", "trail",
         )
     },
 }

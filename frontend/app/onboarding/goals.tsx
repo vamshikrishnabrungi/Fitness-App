@@ -20,7 +20,7 @@ export default function GoalsScreen() {
       return;
     }
     const defaultEvents: Record<string, string> = { start_running: 'run_walk', run_faster: '5k', build_endurance: '10k' };
-    store.setGoal({ goal_type: goal, target_event: defaultEvents[goal], target_distance: null, target_date: null, target_time: '' });
+    store.setGoal({ goal_type: goal, target_event: defaultEvents[goal], target_distance: null, target_date: null, target_time: '', current_time: '' });
     router.push('/onboarding/experience');
   };
 

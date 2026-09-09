@@ -4,16 +4,16 @@ This document is the source of truth for Runlete's running-only onboarding, trai
 
 ## Product boundary
 
-Runlete supports runners from run/walk through sprinting, middle distance, road distance, marathon, trail, and ultra running. Running, runner-supporting strength, mobility, recovery, nutrition, routes, races, clubs, leaderboards, and health context remain in scope. Training data owned only by another sport is outside the product and must not be offered by onboarding or selected by plan generation.
+Runlete supports runners from run/walk through sprinting, middle distance, road distance, marathon, and trail running. Running, runner-supporting strength, mobility, recovery, nutrition, routes, races, clubs, leaderboards, and health context remain in scope. Training data owned only by another sport is outside the product and must not be offered by onboarding or selected by plan generation.
 
-Supported event codes are `run_walk`, `100m`, `200m`, `400m`, `800m`, `1500m`, `mile`, `5k`, `10k`, `half_marathon`, `marathon`, `trail`, and `ultra`.
+Supported event codes are `run_walk`, `100m`, `200m`, `400m`, `800m`, `1500m`, `mile`, `5k`, `10k`, `half_marathon`, `marathon`, and `trail`.
 
 ## Onboarding flow
 
 ```mermaid
 flowchart LR
     A[1. Goal<br/>race, consistency,<br/>speed, or endurance] --> R{Race goal?}
-    R -->|Yes| B[Conditional race screen<br/>road, track, trail, or ultra;<br/>distance, date and time]
+    R -->|Yes| B[Conditional race screen<br/>road, track, or trail;<br/>distance, date and current best]
     R -->|No| C
     B --> C[2. Running background<br/>experience, runs per week,<br/>weekly distance, longest run,<br/>training interruption]
     C --> D[3. Availability and access<br/>days, 90 to 150 minute ceilings,<br/>terrain and strength equipment]
@@ -27,6 +27,8 @@ The mobile onboarding store owns temporary form state. The generation screen con
 2. `POST /api/v1/training/plans` requests the initial four-week block.
 
 The onboarding API creates exactly one primary athlete sport row with `sport_code=running`. Users do not submit arbitrary sport codes, roles, sport practice schedules, exercise familiarity, or push-up, pull-up, and squat test counts.
+
+Race onboarding asks for an optional current personal-best time. For fixed road and track events, the recognized fastest performance is stored automatically as the target time; users do not type a target. Track times preserve hundredth-second precision. Trail races use a custom distance and have no universal record target because courses are not comparable.
 
 ## End-to-end generation
 
@@ -69,7 +71,7 @@ Cloud SQL is authoritative. Generation uses only released running content:
 - Exercise methods linked to retained running templates or running physical qualities
 - Phase dose and progression policies
 
-`800m` uses the reviewed `400m` priority family, `1500m` and `mile` use the `5k` family, `trail` uses the `10k` family, and `ultra` uses the `marathon` family until event-specific reviewed matrices are published. The actual target event remains in the runner context, so the model adapts the reference family to the requested event.
+`800m` uses the reviewed `400m` priority family, `1500m` and `mile` use the `5k` family, `trail` uses the `10k` family until event-specific reviewed matrices are published. The actual target event remains in the runner context, so the model adapts the reference family to the requested event.
 
 Non-running sport articles, releases, policies, priorities, taxa, templates, and methods without a running relationship are removed by migration `20260908_28_running_only_knowledge.py`.
 

@@ -5,7 +5,6 @@ export const RUNNING_EVENTS = [
   { code: 'mile', label: 'Mile' }, { code: '5k', label: '5K' },
   { code: '10k', label: '10K' }, { code: 'half_marathon', label: 'Half marathon' },
   { code: 'marathon', label: 'Marathon' }, { code: 'trail', label: 'Trail' },
-  { code: 'ultra', label: 'Ultra' },
 ] as const;
 
 export const RUNNER_GOALS = [

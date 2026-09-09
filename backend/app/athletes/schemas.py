@@ -160,7 +160,7 @@ class GoalInput(BaseModel):
     target_date: date | None = None
     target_event: str | None = None
     target_distance_m: float | None = Field(default=None, ge=0, le=1_000_000)
-    target_time_seconds: int | None = Field(default=None, ge=1, le=604_800)
+    target_time_seconds: float | None = Field(default=None, ge=0.01, le=604_800)
 
     @field_validator("goal_type")
     @classmethod
@@ -178,7 +178,7 @@ class OnboardingCommand(BaseModel):
     weekly_distance_m: float = Field(ge=0, le=500_000)
     longest_recent_run_m: float = Field(ge=0, le=500_000)
     recent_race_event: str | None = Field(default=None, max_length=40)
-    recent_race_time_seconds: int | None = Field(default=None, ge=1, le=604_800)
+    recent_race_time_seconds: float | None = Field(default=None, ge=0.01, le=604_800)
     training_interruption: Literal["none", "under_1_month", "1_to_3_months", "over_3_months"] = "none"
     distance_unit: Literal["km", "mi"] = "km"
     terrains: list[str] = Field(min_length=1, max_length=6)
@@ -219,7 +219,7 @@ class AthleteProfileView(BaseModel):
     weekly_distance_m: float
     longest_recent_run_m: float
     recent_race_event: str | None
-    recent_race_time_seconds: int | None
+    recent_race_time_seconds: float | None
     training_interruption: str
     terrains: list[str]
     sports: list[SportInput]

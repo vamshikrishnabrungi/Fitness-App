@@ -28,4 +28,4 @@ def test_running_package_gate_includes_new_event_scopes():
     assert "800m" in event_error
     assert "1500m" in event_error
     assert "trail" in event_error
-    assert "ultra" in event_error
+    assert "ultra" not in event_error

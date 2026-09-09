@@ -37,7 +37,7 @@ class AthleteProfile(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     weekly_distance_m: Mapped[float] = mapped_column(Numeric(10, 2), default=0, nullable=False)
     longest_recent_run_m: Mapped[float] = mapped_column(Numeric(10, 2), default=0, nullable=False)
     recent_race_event: Mapped[str | None] = mapped_column(String(40))
-    recent_race_time_seconds: Mapped[int | None] = mapped_column(Integer)
+    recent_race_time_seconds: Mapped[float | None] = mapped_column(Numeric(10, 2))
     training_interruption: Mapped[str] = mapped_column(String(24), default="none", nullable=False)
     terrains: Mapped[list[str]] = mapped_column(ARRAY(String(30)), default=list, nullable=False)
 
@@ -72,7 +72,7 @@ class AthleteGoal(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     target_date: Mapped[date | None] = mapped_column(Date)
     target_event: Mapped[str | None] = mapped_column(String(40))
     target_distance_m: Mapped[float | None] = mapped_column(Numeric(12, 2))
-    target_time_seconds: Mapped[int | None] = mapped_column(Integer)
+    target_time_seconds: Mapped[float | None] = mapped_column(Numeric(10, 2))
     priority: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     status: Mapped[str] = mapped_column(String(20), default="active", nullable=False)
 

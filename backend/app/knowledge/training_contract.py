@@ -87,7 +87,7 @@ PHASE_ALIASES: dict[str, TrainingPhase] = {
 
 # These values are the exact scope keys in the production priority matrix.
 SPORT_SCOPE_VALUES: dict[str, tuple[str, frozenset[str]]] = {
-    "running": ("event", frozenset({"100m", "200m", "400m", "800m", "1500m", "mile", "5k", "10k", "half_marathon", "marathon", "trail", "ultra", "run_walk"})),
+    "running": ("event", frozenset({"100m", "200m", "400m", "800m", "1500m", "mile", "5k", "10k", "half_marathon", "marathon", "trail", "run_walk"})),
 }
 
 

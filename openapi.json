@@ -16087,7 +16087,7 @@
           "recent_race_time_seconds": {
             "anyOf": [
               {
-                "type": "integer"
+                "type": "number"
               },
               {
                 "type": "null"
@@ -18051,9 +18051,9 @@
           "target_time_seconds": {
             "anyOf": [
               {
-                "type": "integer",
+                "type": "number",
                 "maximum": 604800.0,
-                "minimum": 1.0
+                "minimum": 0.01
               },
               {
                 "type": "null"
@@ -19330,9 +19330,9 @@
           "recent_race_time_seconds": {
             "anyOf": [
               {
-                "type": "integer",
+                "type": "number",
                 "maximum": 604800.0,
-                "minimum": 1.0
+                "minimum": 0.01
               },
               {
                 "type": "null"

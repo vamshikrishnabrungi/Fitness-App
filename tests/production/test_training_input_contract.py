@@ -13,7 +13,7 @@ from backend.app.knowledge.training_contract import (
 
 def test_contract_covers_exactly_all_matrix_sports():
     assert set(SPORT_SCOPE_VALUES) == {"running"}
-    assert sum(len(values) for _, values in SPORT_SCOPE_VALUES.values()) == 13
+    assert sum(len(values) for _, values in SPORT_SCOPE_VALUES.values()) == 12
 
 
 @pytest.mark.parametrize(
@@ -73,6 +73,11 @@ def test_onboarding_normalizes_goal_phase_and_scope():
     )
     assert command.season_phase == "specific_preparation"
     assert command.goal.goal_type == "conditioning"
+
+
+def test_race_times_keep_sprint_precision():
+    goal = GoalInput(goal_type="target_race", target_event="100m", target_time_seconds=9.58)
+    assert goal.target_time_seconds == 9.58
 
 
 def test_external_load_contract_requires_timezone_and_explicit_weekly_recurrence():
